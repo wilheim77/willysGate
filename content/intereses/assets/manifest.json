@@ -1,0 +1,50 @@
+{
+  "$comment": "Asset manifest: the only place that maps game ids to files. Swap art packs by editing this file. URLs are relative to this game's public/ folder.",
+  "tile": {
+    "width": 64,
+    "height": 32,
+    "levelHeight": 16
+  },
+  "tilesets": {
+    "placeholder": {
+      "url": "assets/placeholder/tiles.png",
+      "frameWidth": 64,
+      "frameHeight": 32
+    }
+  },
+  "terrain": {
+    "stone": {
+      "tileset": "placeholder",
+      "frame": 0,
+      "side": "#3c3c42"
+    },
+    "dirt": {
+      "tileset": "placeholder",
+      "frame": 3,
+      "side": "#3a2f25"
+    },
+    "slag": {
+      "tileset": "placeholder",
+      "frame": 4,
+      "side": "#222024"
+    },
+    "wall": {
+      "tileset": "placeholder",
+      "frame": 5,
+      "side": "#2e282c"
+    },
+    "planks": {
+      "tileset": "placeholder",
+      "frame": 6,
+      "side": "#47372a"
+    }
+  },
+  "sprites": {
+    "hero": {
+      "kind": "placeholder",
+      "cloak": "#3b3530",
+      "skin": "#b39b7d",
+      "trim": "#7a2e22"
+    }
+  }
+}

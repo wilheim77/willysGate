@@ -321,7 +321,7 @@
    "tileheight": 32,
    "tilecount": 7,
    "columns": 7,
-   "image": "../../public/assets/placeholder/tiles.png",
+   "image": "../public/assets/placeholder/tiles.png",
    "imagewidth": 448,
    "imageheight": 32,
    "margin": 0,

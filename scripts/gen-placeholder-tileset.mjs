@@ -1,5 +1,5 @@
-// Generates the placeholder isometric tileset (public/assets/placeholder/tiles.png).
-// One 64x32 diamond per tile id, matching the tileset embedded in content/maps/*.json.
+// Generates the placeholder isometric tileset (content/intereses/public/assets/placeholder/tiles.png).
+// One 64x32 diamond per tile id, matching the tileset embedded in content/intereses/maps/*.json.
 // Replace with real art later; see TODO-ART.md.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
@@ -70,9 +70,10 @@ ihdr[9] = 6; // RGBA
 const raw = Buffer.alloc((width * 4 + 1) * TH);
 for (let y = 0; y < TH; y++) px.copy(raw, y * (width * 4 + 1) + 1, y * width * 4, (y + 1) * width * 4);
 
-mkdirSync('public/assets/placeholder', { recursive: true });
+const OUT_DIR = 'content/intereses/public/assets/placeholder';
+mkdirSync(OUT_DIR, { recursive: true });
 writeFileSync(
-  'public/assets/placeholder/tiles.png',
+  `${OUT_DIR}/tiles.png`,
   Buffer.concat([
     Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
     chunk('IHDR', ihdr),

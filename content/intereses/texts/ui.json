@@ -1,0 +1,35 @@
+{
+  "errors": {
+    "unknown_command": "Eso no se puede hacer.",
+    "unknown_entity": "Ese personaje no existe.",
+    "not_your_entity": "Ese no es de los tuyos.",
+    "out_of_bounds": "Ahí no hay nada. Ni siquiera suelo.",
+    "no_path": "No hay forma de llegar hasta ahí.",
+    "out_of_range": "Demasiado lejos para este turno."
+  },
+  "terrain": {
+    "stone": "piedra",
+    "dirt": "tierra",
+    "slag": "escoria",
+    "wall": "muro",
+    "planks": "tablones",
+    "void": "vacío"
+  },
+  "ui": {
+    "save": "Guardar",
+    "load": "Cargar",
+    "export": "Exportar",
+    "import": "Importar",
+    "new": "Nueva",
+    "saved": "Partida guardada.",
+    "saveFailed": "No se pudo guardar: el navegador no permite almacenamiento.",
+    "loaded": "Partida cargada.",
+    "noSave": "No hay ninguna partida guardada.",
+    "exported": "Partida exportada.",
+    "imported": "Partida importada.",
+    "newGame": "Nueva partida. La deuda sigue siendo la misma.",
+    "confirmNew": "¿Empezar de nuevo? Se perderá lo que no hayas guardado.",
+    "height": "altura",
+    "genericError": "Algo ha salido mal."
+  }
+}
