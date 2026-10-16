@@ -13,8 +13,9 @@ applyTheme(game.theme);
 
 const engine = createEngine(game.ruleset, game.id);
 const store = new GameStore(engine, game.newGame(engine, randomSeed()));
-const hud = new Hud(store, game);
 const controlled = game.leaderId;
+// The HUD is created after the scene so its rotate buttons can drive it.
+let hud!: Hud;
 
 const scene = new MapScene(store, game.manifest, {
   controlledEntityId: () => controlled,
@@ -25,6 +26,8 @@ const scene = new MapScene(store, game.manifest, {
     if (!result.ok) hud.sayError(result.error.code);
   },
 });
+
+hud = new Hud(store, game, (direction) => scene.rotate(direction));
 
 new Phaser.Game({
   type: Phaser.AUTO,

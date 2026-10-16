@@ -30,6 +30,8 @@
     "newGame": "Nueva partida. La deuda sigue siendo la misma.",
     "confirmNew": "¿Empezar de nuevo? Se perderá lo que no hayas guardado.",
     "height": "altura",
-    "genericError": "Algo ha salido mal."
+    "genericError": "Algo ha salido mal.",
+    "rotateLeft": "Girar a la izquierda (Q)",
+    "rotateRight": "Girar a la derecha (E)"
   }
 }

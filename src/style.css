@@ -89,6 +89,25 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 #message { color: var(--text); text-align: right; }
 #message.error { color: var(--error); }
 
+/* Camera controls float above the bottom bar; large enough for thumbs. */
+.view-controls {
+  position: fixed;
+  right: 12px;
+  bottom: calc(46px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+
+.view-controls button {
+  width: 48px;
+  height: 48px;
+  font-size: 26px;
+  padding: 0;
+  background: var(--panel);
+  box-shadow: 2px 2px 0 #000;
+}
+
 @media (max-width: 560px) {
   html, body { font-size: 18px; }
   .title { font-size: 22px; }

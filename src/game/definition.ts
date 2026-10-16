@@ -8,7 +8,7 @@ export interface UiTexts {
   ui: Record<
     | 'save' | 'load' | 'export' | 'import' | 'new'
     | 'saved' | 'saveFailed' | 'loaded' | 'noSave' | 'exported' | 'imported'
-    | 'newGame' | 'confirmNew' | 'height' | 'genericError',
+    | 'newGame' | 'confirmNew' | 'height' | 'genericError' | 'rotateLeft' | 'rotateRight',
     string
   >;
 }

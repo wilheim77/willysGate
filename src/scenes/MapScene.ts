@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { type EntityMovedEvent, type GameState, type Vec2, findPath, isEvent, posKey, tileAt } from '../../engine';
 import { type AssetManifest, assetUrl, spriteKey, tilesetKey } from '../assets/manifest';
 import type { GameStore } from '../game/store';
-import { IsoProjection, depthOf } from '../iso';
+import { IsoProjection } from '../iso';
 
 export interface MapSceneHooks {
   /** The player tapped/clicked a tile. */
@@ -75,13 +75,10 @@ export class MapScene extends Phaser.Scene {
     this.tileCentres = [];
 
     const { map } = state;
+    this.iso.setMapSize(map.width, map.height);
     const order: Vec2[] = [];
-    for (let sum = 0; sum <= map.width + map.height - 2; sum++) {
-      for (let x = 0; x <= sum; x++) {
-        const y = sum - x;
-        if (x < map.width && y < map.height) order.push({ x, y });
-      }
-    }
+    for (let y = 0; y < map.height; y++) for (let x = 0; x < map.width; x++) order.push({ x, y });
+    order.sort((a, b) => this.iso.depth(a.x, a.y) - this.iso.depth(b.x, b.y));
 
     for (const pos of order) {
       const tile = tileAt(map, pos)!;
@@ -114,8 +111,8 @@ export class MapScene extends Phaser.Scene {
         ],
         true,
       );
-      g.setDepth(depthOf(pos.x, pos.y));
-      const top = this.add.image(c.x, c.y, tilesetKey(art.tileset), art.frame).setDepth(depthOf(pos.x, pos.y, 1));
+      g.setDepth(this.iso.depth(pos.x, pos.y));
+      const top = this.add.image(c.x, c.y, tilesetKey(art.tileset), art.frame).setDepth(this.iso.depth(pos.x, pos.y, 1));
       this.tileObjects.push(g, top);
       this.tileCentres.push({ pos, centre: c });
     }
@@ -126,7 +123,7 @@ export class MapScene extends Phaser.Scene {
       const img = this.add
         .image(c.x, c.y + 4, spriteKey(entity.spriteId))
         .setOrigin(0.5, 1)
-        .setDepth(depthOf(entity.position.x, entity.position.y, 5));
+        .setDepth(this.iso.depth(entity.position.x, entity.position.y, 5));
       this.sprites.set(entity.id, img);
     }
   }
@@ -150,10 +147,13 @@ export class MapScene extends Phaser.Scene {
         duration: STEP_MS,
         onStart: () => {
           // While crossing two tiles, draw above the one further back.
-          img.setDepth(Math.max(depthOf(from.x, from.y, 5), depthOf(step.x, step.y, 5)));
-          if (step.x !== from.x || step.y !== from.y) img.setFlipX(step.x - from.x < step.y - from.y);
+          img.setDepth(Math.max(this.iso.depth(from.x, from.y, 5), this.iso.depth(step.x, step.y, 5)));
+          const a = this.iso.toView(from.x, from.y);
+          const b = this.iso.toView(step.x, step.y);
+          // Face left when moving towards the left of the screen.
+          if (b.x - a.x !== b.y - a.y) img.setFlipX(b.x - a.x < b.y - a.y);
         },
-        onComplete: () => img.setDepth(depthOf(step.x, step.y, 5)),
+        onComplete: () => img.setDepth(this.iso.depth(step.x, step.y, 5)),
       };
     });
     this.tweens.chain({
@@ -163,6 +163,16 @@ export class MapScene extends Phaser.Scene {
         this.animating--;
       },
     });
+  }
+
+  /** Rotates the view a quarter turn (1 = clockwise, -1 = counter-clockwise), keeping the leader centred. */
+  rotate(direction: 1 | -1): void {
+    if (!this.pathPreview || this.animating > 0) return; // not created yet, or mid-move
+    this.iso.rotation = (this.iso.rotation + direction + 4) % 4;
+    this.pathPreview.clear();
+    this.buildWorld(this.store.state);
+    this.cameras.main.stopFollow();
+    this.focusOn(this.hooks.controlledEntityId(), false);
   }
 
   private focusOn(entityId: string, follow: boolean): void {
@@ -178,29 +188,45 @@ export class MapScene extends Phaser.Scene {
     this.input.addPointer(1);
     const cam = this.cameras.main;
 
+    // A gesture lasts from the first finger down to the last finger up. It only counts as a tap
+    // (move order) if it stayed a single, still pointer the whole time: pinches and drags never move.
+    const downPointers = () => this.input.manager.pointers.filter((ptr) => ptr.isDown);
+    let gestureIsTap = false;
+
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
-      this.dragStart = { x: p.x, y: p.y, scrollX: cam.scrollX, scrollY: cam.scrollY };
-      this.dragging = false;
+      const down = downPointers();
+      if (down.length === 1) {
+        gestureIsTap = true;
+        this.dragStart = { x: p.x, y: p.y, scrollX: cam.scrollX, scrollY: cam.scrollY };
+        this.dragging = false;
+      } else {
+        // Second finger: this gesture is now a pinch.
+        gestureIsTap = false;
+        this.dragStart = null;
+        this.pinchDistance = null;
+      }
     });
 
     this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
-      const p1 = this.input.pointer1;
-      const p2 = this.input.pointer2;
-      if (p1.isDown && p2.isDown) {
+      const down = downPointers();
+      if (down.length >= 2) {
         // Pinch zoom on touch screens.
-        const dist = Phaser.Math.Distance.Between(p1.x, p1.y, p2.x, p2.y);
+        const [a, b] = down as [Phaser.Input.Pointer, Phaser.Input.Pointer];
+        const dist = Phaser.Math.Distance.Between(a.x, a.y, b.x, b.y);
         if (this.pinchDistance) cam.setZoom(Phaser.Math.Clamp(cam.zoom * (dist / this.pinchDistance), MIN_ZOOM, MAX_ZOOM));
         this.pinchDistance = dist;
-        this.dragging = true;
         return;
       }
       this.pinchDistance = null;
 
-      if (p.isDown && this.dragStart) {
+      if (p.isDown) {
+        // After a pinch, the remaining finger restarts the pan from where it is (no jump).
+        this.dragStart ??= { x: p.x, y: p.y, scrollX: cam.scrollX, scrollY: cam.scrollY };
         const dx = p.x - this.dragStart.x;
         const dy = p.y - this.dragStart.y;
         if (this.dragging || Math.hypot(dx, dy) > TAP_SLOP) {
           this.dragging = true;
+          gestureIsTap = false;
           cam.stopFollow();
           cam.setScroll(this.dragStart.scrollX - dx / cam.zoom, this.dragStart.scrollY - dy / cam.zoom);
         }
@@ -212,14 +238,23 @@ export class MapScene extends Phaser.Scene {
     });
 
     this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
-      const wasDrag = this.dragging;
+      this.pinchDistance = null;
+      if (downPointers().length > 0) {
+        // One finger of a pinch lifted; the other may keep panning.
+        this.dragStart = null;
+        return;
+      }
+      const isTap = gestureIsTap;
+      gestureIsTap = false;
       this.dragStart = null;
       this.dragging = false;
-      this.pinchDistance = null;
-      if (wasDrag || this.animating > 0) return;
+      if (!isTap || this.animating > 0) return;
       const tile = this.pickTile(p.worldX, p.worldY);
       if (tile) this.hooks.onTileSelected(tile);
     });
+
+    this.input.keyboard?.on('keydown-Q', () => this.rotate(-1));
+    this.input.keyboard?.on('keydown-E', () => this.rotate(1));
 
     this.input.on('wheel', (_p: Phaser.Input.Pointer, _over: unknown, _dx: number, dy: number) => {
       cam.setZoom(Phaser.Math.Clamp(cam.zoom * (dy > 0 ? 0.9 : 1.1), MIN_ZOOM, MAX_ZOOM));

@@ -33,8 +33,8 @@ Abre http://localhost:5173. Para arrancar otro juego, usa `GAME=<id> npm run dev
 
 ## Controles
 
-- **Ratón:** clic en una casilla para moverte, arrastrar para desplazar la cámara, rueda para el zoom. Al pasar por encima se ve la ruta.
-- **Táctil:** toca una casilla para moverte, arrastra para desplazar la cámara y pellizca para el zoom.
+- **Ratón:** clic en una casilla para moverte, arrastrar para desplazar la cámara, rueda para el zoom, Q/E o los botones ⟲ ⟳ para girar el mapa 90°. Al pasar por encima se ve la ruta.
+- **Táctil:** toca una casilla para moverte, arrastra para desplazar la cámara, pellizca para el zoom y usa los botones ⟲ ⟳ para girar. Pellizcar o arrastrar nunca mueve al personaje.
 
 ## Despliegue
 

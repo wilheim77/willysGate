@@ -153,6 +153,8 @@ Si alguno de estos ganchos obligara a meter lógica de 5e en `engine/`, se avisa
   - Convierte el clic o el toque en la selección de una casilla.
   - Muestra la ruta prevista al pasar el ratón.
   - Permite arrastrar para desplazar la cámara y hacer zoom con la rueda o pellizcando.
+  - **Giro del mapa en pasos de 90°** (botones ⟲ ⟳ o teclas Q/E). Es solo visual: `IsoProjection` traduce las coordenadas del mapa a las de la vista. El `GameState` no cambia. Requisito para el arte: los suelos y los bloques tienen que verse bien desde los cuatro lados, o cada tile necesita variantes por orientación.
+  - **Gestos:** un toque solo cuenta como orden de movimiento si fue un único dedo que no se desplazó. Los pellizcos y los arrastres nunca mueven al personaje.
 - **Assets.** El manifiesto de cada juego (`content/<juego>/assets/manifest.json`) asocia terrenos y `spriteId` con archivos. Para cambiar de pack gráfico solo hay que tocar el manifiesto. Las entradas `placeholder` se dibujan en tiempo de ejecución.
 - **Guardado.** Usa `localStorage` con una clave por juego. La exportación y la importación usan JSON. Al cargar se comprueban el juego, el ruleset y las versiones, y se aplican las migraciones necesarias.
 
