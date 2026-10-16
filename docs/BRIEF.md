@@ -2,11 +2,20 @@
 
 > Copia del encargo inicial (2026-10-16), para que cualquier sesión pueda retomarlo sin el historial de chat. Los cambios de alcance aprobados después se reflejan en `docs/DESIGN.md` y `docs/STORY.md`.
 >
+> **Cambios aprobados el 2026-10-17:**
+> - **Vista cenital 3/4** en lugar de isométrica.
+> - El arte puede ser CC-BY-SA (LPC) además de CC0 y CC-BY, y packs de pago con licencia que permita modificar. Nunca NoDerivatives.
+> - Base de arte: 0x72 DungeonTileset II.
+> - Sprites de 2 direcciones.
+> - Efectos y ambiente como sistemas reutilizables.
+>
+> Ver `docs/DESIGN.md` y `docs/ART_OPTIONS.md`.
+>
 > **Cambio aprobado el 2026-10-16:** el motor se reutilizará para otros juegos con otras reglas, como uno de cazadores de vampiros con Sed, Fe y Luz. Por eso `core/` se divide en `engine/` (genérico), `rulesets/<id>/` y `content/<juego>/`. Ver `docs/DESIGN.md` y `docs/NEW_GAME.md`.
 
 ## Contexto
 
-RPG táctico por turnos para navegador, inspirado en Baldur's Gate 3, con estética retro pixel art isométrica. Proyecto personal, desarrollado con Claude Code (a menudo en la nube y desde el móvil) y con el repo en GitHub. Cada sesión tiene que dejar el repo en un estado coherente, documentado y fácil de retomar.
+RPG táctico por turnos para navegador, inspirado en Baldur's Gate 3, con estética retro pixel art (originalmente isométrica; desde el 2026-10-17, cenital 3/4). Proyecto personal, desarrollado con Claude Code (a menudo en la nube y desde el móvil) y con el repo en GitHub. Cada sesión tiene que dejar el repo en un estado coherente, documentado y fácil de retomar.
 
 El juego **no usa ningún LLM en tiempo de ejecución**: todas las reglas, diálogos y contenidos están escritos de antemano. El coste por partida es cero.
 
@@ -79,7 +88,9 @@ Los commits son pequeños y descriptivos, y los tests del core tienen que pasar 
    - Las 4 clases a nivel 1.
    - IA enemiga.
    - Un encuentro de prueba completo.
+   - *Añadido:* juice de combate, animaciones por código (ataque, golpe, muerte, conjuro), contorno de selección y recoloreado por paleta de enemigos.
 3. **Entorno táctico:** altura, empujar, superficies, línea de visión, cobertura y objetos explosivos.
+   - *Añadido:* la luz se bloquea con muros, el fuego ilumina y las superficies son visuales y animadas.
 4. **Diálogos y exploración:**
    - Motor de diálogos con tiradas visibles, flags e inventario.
    - Interactuables y trampas.
@@ -87,4 +98,5 @@ Los commits son pequeños y descriptivos, y los tests del core tienen que pasar 
    - Reclutamiento de compañeros.
 5. **Contenido del acto:** el acto completo, la subida de nivel hasta 3-4 y el balance de encuentros.
 6. **Pulido:** menús, interfaz, sonido y música CC0, feedback de las tiradas, un tutorial mínimo, revisión de bugs y una partida completa de principio a fin.
+   - **Añadido el 2026-10-17:** partículas de ambiente (niebla, polvo, ceniza, lluvia), corrección de color por escena, viñeta, CRT opcional y ajuste de calidad (bajo, medio, alto).
    - **Añadido el 2026-10-16: introducción y onboarding** para jugadores que no conocen D&D: pantalla de inicio, prólogo cinemático que se puede saltar, primer encuentro como tutorial integrado, tooltips de jerga con % de acierto, glosario, consejos desactivables, dificultad «Historia», botón de feedback y revisión final como jugador novato. Detalle en `docs/DESIGN.md` → «Introducción y onboarding».

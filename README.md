@@ -29,13 +29,14 @@ Abre http://localhost:5173. Para arrancar otro juego, usa `GAME=<id> npm run dev
 | `npm run check` | Typecheck de todas las capas y tests. Hay que pasarlo antes de cada commit. |
 | `npm run coverage` | Cobertura de `engine/` y `rulesets/` |
 | `npm run build:all` | Construye todos los juegos en `dist/<juego>/` y la portada en `dist/index.html` |
-| `npm run art` | Regenera el arte de `art-src/` según `content/<juego>/art/*.json`. Requiere Python 3 y Pillow. |
-| `npm run gen:placeholders` | Regenera el tileset lógico que usa Tiled |
+| `npm run art` | Regenera el arte de cada preset (`content/<juego>/art/<preset>/`) a partir de `art-src/` y el generador LPC |
+| `npm run gen:logic-tiles` | Regenera el tileset lógico que usa Tiled |
 
 ## Controles
 
-- **Ratón:** clic en una casilla para moverte, arrastrar para desplazar la cámara, rueda para el zoom, Q/E o los botones ⟲ ⟳ para girar el mapa 90°. Al pasar por encima se ve la ruta.
-- **Táctil:** toca una casilla para moverte, arrastra para desplazar la cámara, pellizca para el zoom y usa los botones ⟲ ⟳ para girar. Pellizcar o arrastrar nunca mueve al personaje.
+- **Ratón:** clic en una casilla para moverte, arrastrar para desplazar la cámara y rueda para el zoom. Al pasar por encima se ve la ruta.
+- **Táctil:** toca una casilla para moverte, arrastra para desplazar la cámara y pellizca para el zoom. Pellizcar o arrastrar nunca mueve al personaje.
+- **Comparar arte:** añade `?arte=0x72` o `?arte=lpc` a la URL.
 
 ## Despliegue
 
@@ -50,5 +51,6 @@ Cada push a `main` ejecuta `.github/workflows/deploy.yml`, que pasa el typecheck
 | [docs/NEW_GAME.md](docs/NEW_GAME.md) | Cómo crear un juego nuevo sobre el motor |
 | [docs/STORY.md](docs/STORY.md) | Historia aprobada de *Intereses* |
 | [docs/BRIEF.md](docs/BRIEF.md) | Encargo original |
-| [CREDITS.md](CREDITS.md) | Créditos y licencias |
+| [docs/ART_OPTIONS.md](docs/ART_OPTIONS.md) | Catálogo de packs de arte y comparativa |
+| [CREDITS.md](CREDITS.md) | Créditos y licencias (código MIT; arte derivado de LPC CC-BY-SA 3.0) |
 | [TODO-ART.md](TODO-ART.md) | Placeholders pendientes |

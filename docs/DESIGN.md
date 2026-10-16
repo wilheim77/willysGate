@@ -131,11 +131,12 @@ Si alguno de estos ganchos obligara a meter lógica de 5e en `engine/`, se avisa
   - El motor ejecuta las reacciones y emite eventos.
   - Lo que hace cada superficie a quien la pisa (daño, resbalar…) se traduce a efectos genéricos.
 - **Línea de visión y cobertura (Fase 3):** se calculan con la geometría de la cuadrícula y la altura, de forma genérica.
-- **Iluminación (futuro).**
-  - Fuentes de luz como entidades o objetos de mapa con un radio.
-  - Un estado por casilla en `state.systems.lighting`, calculado reutilizando la línea de visión, y una consulta `lightAt(pos)`.
-  - El ruleset decide qué significa la oscuridad (desventaja, Sed…).
-  - No requiere cambiar ninguna otra parte del motor.
+- **Iluminación (base hecha; ampliación en Fase 3).**
+  - `engine/lighting.ts`. Las fuentes de luz pueden ser fijas (antorchas, braseros) o ir con una entidad (`attachedTo`, como la linterna del cobrador). Cada una tiene radio, intensidad y, solo para el render, color y parpadeo.
+  - El estado se guarda en `state.systems.lighting`, junto con la luz ambiente.
+  - Consulta: `lightLevelAt(state, pos)`, de 0 a 1. El ruleset decide qué significa la oscuridad (desventaja, Sed, la Luz del juego de vampiros…).
+  - Los mapas declaran sus luces en la capa de objetos `lights` de Tiled, y la luz ambiente en la propiedad `ambientLight`.
+  - Fase 3: la luz quedará bloqueada por muros (con la línea de visión) y las superficies de fuego serán fuentes de luz.
 - **Diálogos (Fase 4).**
   - Árboles en JSON con un esquema validado.
   - Condiciones genéricas del motor (flags, objetos) más las del ruleset (`dialogueConditions`).
@@ -147,15 +148,19 @@ Si alguno de estos ganchos obligara a meter lógica de 5e en `engine/`, se avisa
 - **Definición del juego.** `content/<juego>/game.ts` exporta un `GameDefinition` (`src/game/definition.ts`): ruleset, manifiesto de assets, tema visual (colores y fuente), textos de la interfaz, `playerId`, `leaderId` y `newGame()`.
 - **Selección del juego.** Vite resuelve el alias `@game` a `content/$GAME/game.ts`. El valor por defecto es `intereses`.
 - **Estado.** `GameStore` guarda el `GameState` y solo cambia mediante `dispatch(cmd)` o `load(state)`. Avisa a la escena y al HUD con los eventos.
-- **`MapScene` (Phaser).**
-  - Pinta el mapa isométrico con altura y ordena el dibujo por profundidad.
-  - Anima los eventos.
-  - Convierte el clic o el toque en la selección de una casilla.
-  - Muestra la ruta prevista al pasar el ratón.
-  - Permite arrastrar para desplazar la cámara y hacer zoom con la rueda o pellizcando.
-  - **Giro del mapa en pasos de 90°** (botones ⟲ ⟳ o teclas Q/E). Es solo visual: `IsoProjection` traduce las coordenadas del mapa a las de la vista. El `GameState` no cambia. Requisito para el arte: los suelos y los bloques tienen que verse bien desde los cuatro lados, o cada tile necesita variantes por orientación.
-  - **Gestos:** un toque solo cuenta como orden de movimiento si fue un único dedo que no se desplazó. Los pellizcos y los arrastres nunca mueven al personaje.
-- **Assets.** El manifiesto de cada juego (`content/<juego>/assets/manifest.json`) asocia terrenos y `spriteId` con archivos. Para cambiar de pack gráfico solo hay que tocar el manifiesto. Las entradas `placeholder` se dibujan en tiempo de ejecución.
+- **`MapScene` (Phaser), vista cenital 3/4.**
+  - Cuadrícula ortogonal. El tamaño de tile lo fija el preset de arte (16 px en 0x72, 32 px en LPC). El zoom se expresa en píxeles de pantalla por tile, así que funciona igual con cualquier pack.
+  - **Altura:** cada nivel sube la casilla `levelHeight` píxeles y muestra debajo una cara de acantilado o de muro. El orden de dibujo es por fila y, dentro de la fila, por altura.
+  - **Legibilidad de la altura:** borde oscuro donde el terreno cae, sombra degradada donde la casilla vecina por el norte o el oeste es más alta (la luz viene del noroeste) y «altura N» en la barra inferior.
+  - **Personajes:**
+    - Sprites de **2 direcciones** con volteo horizontal (0x72), o de 4 direcciones (LPC), según el preset.
+    - Pivote en los pies.
+    - Sombra de contacto dibujada por código.
+    - Reposo con la animación idle del pack o, si no la tiene, el frame de pie con una respiración sutil.
+  - Al pasar el ratón muestra la ruta prevista. Se arrastra para desplazar la cámara y se hace zoom con la rueda o pellizcando. Un toque solo cuenta como orden de movimiento si fue un único dedo que no se desplazó.
+  - **Iluminación:** `src/fx/LightingLayer.ts` pinta el estado de luz del motor. Es una capa de oscuridad con agujeros suaves por cada luz, un brillo aditivo de color y llama visible en las luces fijas. El parpadeo es solo visual.
+  - **Corrección de color:** filtro de cámara (`postFX.addColorMatrix`) con saturación, brillo y tinte, configurable por preset de arte.
+- **Presets de arte.** `GameDefinition.art` contiene varios manifiestos intercambiables (`content/<juego>/assets/<preset>.json`). `?arte=<preset>` en la URL elige uno, lo que sirve para comparar packs sobre el mismo mapa.
 - **Guardado.** Usa `localStorage` con una clave por juego. La exportación y la importación usan JSON. Al cargar se comprueban el juego, el ruleset y las versiones, y se aplican las migraciones necesarias.
 
 ## Introducción y onboarding (planificado para la Fase 6)
@@ -193,25 +198,50 @@ Ninguna de estas piezas cambia lo construido en la Fase 1.
 
 ## Arte
 
-- **Fuentes:** `art-src/<pack>/`, una selección de los packs originales con sus licencias.
-- **Especificación por juego:**
-  - `content/<juego>/art/tiles.json`: para cada terreno, sus variantes de suelo y el medio bloque que forma un nivel de altura;
-  - `content/<juego>/art/characters.json`: los personajes como lista de capas de Spell of Mastery, con un color de equipo.
-- **Construcción:** `npm run art` (Python 3 y Pillow) genera `public/assets/tiles/*.png` y `public/assets/characters/*.png`, y reescribe `terrain`, `tilesets` y los sprites de personaje del manifiesto. Lo generado se sube al repo, así que CI y el navegador no necesitan Python.
-- **Paleta común:** todos los packs pasan por el mismo ajuste de saturación y brillo para que se vean como un solo estilo, más oscuro y desaturado.
-- **Render:**
-  - Cada nivel de altura es un medio bloque de 64×48 (16 px de lateral), y los bloques se apilan.
-  - Los suelos eligen variante por posición, de forma estable.
-  - Los personajes usan la rejilla 4×6 de Spell of Mastery: mirando al sur o al norte, volteados para ir a la derecha, con el ciclo de andar.
-  - Como los bloques y los personajes funcionan en cualquier orientación, girar el mapa no necesita arte adicional.
-- **Tiled:** los mapas siguen usando el tileset lógico (placeholder) para pintar terrenos. El arte real lo decide el manifiesto según el `terrain`.
+Catálogo de packs, licencias y la comparativa 0x72 / LPC en [`ART_OPTIONS.md`](ART_OPTIONS.md).
+
+- **Fuentes:** `art-src/<pack>/`, con un `SOURCE.md` (origen, autor y licencia).
+- **Especificación por juego y preset:** `content/<juego>/art/<preset>/`, con tres tipos de fichero:
+  - `tiles.json`: terrenos. Las celdas se indican como `[col, fila]` o por nombre de una lista de sprites.
+  - `characters.json`: personajes LPC por capas (cuerpo, cabeza, pelo, ropa, armadura, arma) con colores de paleta. Va fijado a un commit del generador LPC.
+  - `sprites.json`: sprites animados que ya vienen en un atlas (0x72), indicando el prefijo de cada uno.
+- **Construcción:** `npm run art` (Node y `pngjs`).
+  - Descarga una sola vez las capas LPC necesarias en `art-src/lpc-generator/`.
+  - Recolorea por paleta exacta, igual que el generador.
+  - Compone las animaciones, incluidas las ampliadas de las armas (tajo de 128 px, estocada de 192 px), centradas sobre el cuerpo de 64 px.
+  - Genera los créditos de cada capa (`CREDITS-characters.csv`) y escribe el manifiesto.
+  - Lo generado se sube al repo.
+- **Idle en LPC:** se usa la animación `idle` del generador si todas las capas la tienen; si no, el frame de pie de `walk` con respiración por código.
+- **Licencias:** lo derivado de LPC (hojas compuestas y recoloreadas) se publica como CC-BY-SA 3.0. El código del proyecto es MIT y es una obra separada que solo carga el arte.
+
+## Efectos y ambiente
+
+Son sistemas reutilizables por los tres juegos, con la configuración en `content/<juego>/`.
+
+**Aviso de arquitectura:** solo lo que influye en las reglas vive en `engine/` (la luz, y en la Fase 3 las superficies). Las partículas, el postprocesado y el juice son puro render y dependen de Phaser, así que van en **`src/fx/`**, la capa genérica del cliente, que es compartida por todos los juegos. Meterlos en `engine/` rompería su pureza (Node, servidor, multijugador).
+
+| Sistema | Dónde | Configuración | Fase |
+|---|---|---|---|
+| Iluminación: oscuridad, antorchas, linterna, parpadeo | `engine/lighting.ts` (estado y nivel de luz) + `src/fx/LightingLayer.ts` | Capa `lights` y `ambientLight` en Tiled | **Hecho (base)** |
+| Luz bloqueada por muros; el fuego de las superficies ilumina; brillo de conjuros | `engine/lighting.ts` + `src/fx/` | Datos de superficies y conjuros | 3 |
+| Juice de combate: screen shake en impactos y críticos, hit-stop, números de daño flotantes, destellos, sangre como decal temporal, transición de cámara al cambiar de turno | `src/fx/juice.ts`, que escucha los eventos del motor | `content/<juego>/fx.json` (intensidades) | 2 |
+| Animaciones por código: ataque con arma que pivota y avanza, golpe con parpadeo blanco y retroceso, muerte con caída, desvanecimiento y partículas, conjuros con brillo y partículas | `src/fx/procedural.ts` | Por sprite en el manifiesto (arma, anclaje) | 2 |
+| Contorno de selección | `src/fx/` (shader o contorno de sprite) | — | 2 |
+| Recoloreado por paleta para variantes de enemigos, facciones y equipo | `scripts/art/` (pipeline reproducible) | `content/<juego>/art/<preset>/palettes.json` | 2 |
+| Superficies visuales animadas: aceite, fuego, agua, hielo, sangre | `src/fx/surfaces.ts` sobre `state.systems.surfaces` | Datos de superficies | 3 |
+| Partículas de ambiente: niebla, polvo, ceniza, lluvia | `src/fx/ambient.ts` | Propiedades del mapa en Tiled | 6 |
+| Corrección de color por escena (desaturado y frío), viñeta, CRT o scanlines desactivable | `src/fx/post.ts` (pipeline de postprocesado) | Por mapa y en opciones | 6 (hoy hay un filtro por preset) |
+| Ajuste de calidad bajo, medio o alto (partículas, luces, postprocesado) | `src/fx/quality.ts` | Opciones del jugador (`localStorage`) | 6 |
 
 ## Mapas (Tiled)
 
-- **Formato:** mapa isométrico de 64×32, con los tilesets incrustados en el JSON.
-- **Capa `ground`:** un tile por casilla. Cada tile del tileset tiene las propiedades `terrain` (string), `height` (int) y `walkable` (bool).
-- **Capa de objetos `spawns`:** objetos punto cuyo nombre es el id del punto de aparición.
-- **Pendiente:** capas de superficies, interactuables y zonas de luz, cuando lleguen sus sistemas.
+- **Formato:** mapa **ortogonal** con los tilesets incrustados.
+- **Tileset lógico:** el tileset es **lógico** (`terrain-logic.png`, generado con `npm run gen:logic-tiles`). Solo sirve para pintar terrenos en el editor. El arte real lo pone el preset según el `terrain`, así que el mismo mapa se ve con cualquier pack.
+- **Capa `ground`:** cada tile del tileset tiene las propiedades `terrain` (string), `height` (int) y `walkable` (bool).
+- **Capa de objetos `spawns`:** puntos con nombre.
+- **Capa de objetos `lights`:** puntos con `radius`, `intensity`, `color` y `flicker`.
+- **Propiedad del mapa `ambientLight`:** valor entre 0 y 1.
+- **Pendiente:** capas de superficies, interactuables y ambiente (niebla, ceniza…).
 
 ## Decisiones tomadas
 
@@ -223,3 +253,8 @@ Ninguna de estas piezas cambia lo construido en la Fase 1.
 | Un solo paquete npm, sin workspaces | Menos complejidad. Las fronteras se hacen cumplir con `tsconfig` y tests. |
 | Phaser 3.90 | Pedido en el encargo. Phaser 4 existe, pero no aporta nada necesario ahora. |
 | Varios juegos en un repo, desplegados en `/willysGate/<juego>/` con una portada en `/willysGate/` | Cada juego tiene su URL sin duplicar el motor |
+| **Vista cenital 3/4 en lugar de isométrica** (2026-10-17) | Hay muchos más assets coherentes para táctico. El motor no cambia: solo el render y el cargador de Tiled. |
+| Sin giro de mapa | En 3/4 el arte está dibujado mirando a cámara |
+| Sprites de 2 direcciones con volteo; 4 direcciones opcionales | En un táctico por turnos basta con izquierda y derecha, y amplía los packs utilizables |
+| La altura es visual: cada casilla sigue siendo una posición lógica | Caídas y empujones simples. La alternativa de acantilados en casillas propias, al estilo RPG Maker, complica las reglas. |
+| Código MIT; arte derivado de LPC CC-BY-SA 3.0 | Obligación de la licencia BY-SA, sin afectar al código |

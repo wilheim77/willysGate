@@ -20,11 +20,14 @@ Se usa en `rulesets/dnd5e/`.
 
 ## Arte y sonido
 
-Las fuentes originales están en `art-src/`. `scripts/build-art.py` las convierte (recorte, transparencia, ajuste de paleta y composición de capas) en el arte que usa cada juego.
+Las fuentes originales están en `art-src/<pack>/`, cada una con su `SOURCE.md`. El arte de cada juego se genera con `npm run art` (ver `docs/DESIGN.md` → Arte). Catálogo y licencias de los packs candidatos en `docs/ART_OPTIONS.md`.
 
-| Asset | Juego | Autor | Licencia | URL | Uso |
+| Asset | Juego / preset | Autor | Licencia | URL | Uso y modificaciones |
 |---|---|---|---|---|---|
-| Isometric Stone Soup (selección de suelos y bloques) | intereses | Screaming Brain Studios, a partir de Dungeon Crawl Stone Soup | CC0 1.0 | https://opengameart.org/content/isometric-stone-soup | Suelos, muros y bloques de altura |
-| Spell of Mastery: Sprite Pack | intereses | NancyGold / Nancy Sadkov (Spell of Mastery) | CC-BY 4.0 | https://nancygold.itch.io/spell-of-mastery-sprite-pack-composer | Personajes compuestos por capas (protagonista). Monstruos, más adelante. |
+| 0x72 DungeonTileset II v1.7 | intereses / `0x72` | Robert (0x72) | CC0 1.0 | https://0x72.itch.io/dungeontileset-ii | Suelos, muros y personajes (caballero, orco, esqueleto). Recortados en un atlas de terreno; el atlas original se usa tal cual. |
+| Universal LPC Spritesheet Character Generator (capas de personaje) | intereses / `lpc` | Varios: Stephen Challener (Redshrike), Johannes Sjölund (wulax), Matthew Krohn (makrohn), bluecarrot16, Benjamin K. Smith (BenCreating), Eliza Wyatt (ElizaWy), JaidynReiman, Evert, TheraHedwig, MuffinElZangano, Durrani, Manuel Riecke (MrBeast), Nila122. Detalle por capa en `content/intereses/public/assets/lpc/characters/CREDITS-characters.csv`. | CC-BY-SA 3.0 / GPL 3.0 (algunas capas también OGA-BY 3.0 o GPL 2.0) | https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator (commit `9bf06be`) | Capas combinadas y recoloreadas por paleta en una hoja por personaje. **La hoja derivada se publica como CC-BY-SA 3.0.** |
+| LPC Tile Atlas | intereses / `lpc` | Varios artistas del Liberated Pixel Cup (lista completa en `art-src/lpc-tile-atlas/Attribution.txt`) | CC-BY-SA 3.0 / GPL 3.0 | https://opengameart.org/content/lpc-tile-atlas | Tiles de terreno recortados en un atlas. **El atlas derivado se publica como CC-BY-SA 3.0.** |
 
-Crédito requerido por CC-BY 4.0: **personajes de «NancyGold / Spell of Mastery»**, CC-BY 4.0. Las capas se han recoloreado y combinado, y se les ha ajustado el brillo y la saturación.
+**Modificaciones en tiempo de ejecución:** todos los presets pasan por un filtro de color de cámara (saturación, brillo, tinte) y una capa de iluminación. No se modifican los ficheros.
+
+**Licencia del arte derivado:** lo generado a partir de LPC (`content/*/public/assets/lpc/`) se distribuye bajo **CC-BY-SA 3.0** con la atribución anterior. El arte CC0 se puede usar sin condiciones. El código del proyecto es MIT (`LICENSE`).
