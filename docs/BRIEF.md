@@ -1,6 +1,8 @@
 # Encargo original del proyecto
 
 > Copia del encargo inicial (2026-10-16), para que cualquier sesión pueda retomarlo sin el historial de chat. Los cambios de alcance aprobados después se reflejan en `docs/DESIGN.md` y `docs/STORY.md`.
+>
+> **Cambio aprobado el 2026-10-16:** el motor se reutilizará para otros juegos con otras reglas, como uno de cazadores de vampiros con Sed, Fe y Luz. Por eso `core/` se divide en `engine/` (genérico), `rulesets/<id>/` y `content/<juego>/`. Ver `docs/DESIGN.md` y `docs/NEW_GAME.md`.
 
 ## Contexto
 
