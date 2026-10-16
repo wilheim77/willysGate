@@ -1,0 +1,12 @@
+{
+  "$comment": "Terrain art for Intereses. Cells are [col, row] of 32x32 tiles in the source atlas (art-src/). 'top' lists floor variants (picked per tile); 'face' is the vertical texture shown under raised tiles (cliffs, wall faces). Built by `npm run art:tiles`.",
+  "atlas": "lpc-tile-atlas/terrain_atlas.png",
+  "tileSize": 32,
+  "terrain": {
+    "stone": { "top": [[16, 26], [17, 26], [18, 26], [16, 27], [17, 27], [18, 27]], "face": [17, 25] },
+    "dirt": { "top": [[9, 20], [10, 20], [9, 21]], "face": [1, 3] },
+    "slag": { "top": [[10, 8]], "face": [1, 3] },
+    "wall": { "top": [[17, 30]], "face": [17, 24] },
+    "planks": { "top": [[16, 20], [17, 20]], "face": [13, 19] }
+  }
+}

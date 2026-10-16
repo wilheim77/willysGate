@@ -4,7 +4,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 
-const TW = 64;
+const TW = 32;
 const TH = 32;
 // Order = Tiled tile id. Dark, desaturated palette.
 const TILES = [
@@ -15,6 +15,9 @@ const TILES = [
   { name: 'slag', rgb: [44, 42, 46] },
   { name: 'wall', rgb: [58, 52, 56] },
   { name: 'planks', rgb: [90, 70, 48] },
+  { name: 'slag h1', rgb: [58, 56, 60] },
+  { name: 'slag h2', rgb: [72, 70, 74] },
+  { name: 'dirt h1', rgb: [95, 78, 60] },
 ];
 
 const width = TW * TILES.length;
@@ -29,11 +32,12 @@ function noise(x, y, t) {
 TILES.forEach((tile, t) => {
   for (let y = 0; y < TH; y++) {
     for (let x = 0; x < TW; x++) {
-      const d = Math.abs(x + 0.5 - TW / 2) / (TW / 2) + Math.abs(y + 0.5 - TH / 2) / (TH / 2);
-      if (d > 1) continue;
+      const edge = x === 0 || y === 0 || x === TW - 1 || y === TH - 1;
       let shade = 0.9 + noise(x, y, t) * 0.2;
-      if (d > 0.93) shade *= 0.6; // outline
-      else if (y < TH / 2 && d > 0.85) shade *= 1.15; // top-edge highlight
+      if (edge) shade *= 0.6;
+      // Raised tiles (h1, h2) get one or two light bars so heights are visible in the editor.
+      const level = tile.name.endsWith('h2') ? 2 : tile.name.endsWith('h1') || tile.name === 'planks' ? 1 : 0;
+      if (level > 0 && y >= 4 && y < 4 + level * 4 && y % 4 < 2) shade *= 1.6;
       if (tile.name === 'planks' && y % 6 === 0) shade *= 0.7;
       const i = (y * width + t * TW + x) * 4;
       px[i] = Math.min(255, tile.rgb[0] * shade);
@@ -70,10 +74,10 @@ ihdr[9] = 6; // RGBA
 const raw = Buffer.alloc((width * 4 + 1) * TH);
 for (let y = 0; y < TH; y++) px.copy(raw, y * (width * 4 + 1) + 1, y * width * 4, (y + 1) * width * 4);
 
-const OUT_DIR = 'content/intereses/public/assets/placeholder';
+const OUT_DIR = 'content/intereses/maps';
 mkdirSync(OUT_DIR, { recursive: true });
 writeFileSync(
-  `${OUT_DIR}/tiles.png`,
+  `${OUT_DIR}/terrain-logic.png`,
   Buffer.concat([
     Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
     chunk('IHDR', ihdr),
@@ -81,4 +85,4 @@ writeFileSync(
     chunk('IEND', Buffer.alloc(0)),
   ]),
 );
-console.log(`Wrote ${TILES.length} placeholder tiles (${width}x${TH}).`);
+console.log(`Wrote ${TILES.length} logic tiles (${width}x${TH}).`);

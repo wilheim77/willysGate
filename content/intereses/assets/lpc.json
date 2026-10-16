@@ -1,0 +1,114 @@
+{
+  "$comment": "Art preset 'lpc' (32px). 'terrain' and character 'sprites' are written by scripts/art/*. URLs are relative to this game's public/ folder.",
+  "tile": {
+    "size": 32,
+    "levelHeight": 12
+  },
+  "tilesets": {
+    "terrain": {
+      "url": "assets/lpc/tiles/terrain.png",
+      "frameWidth": 32,
+      "frameHeight": 32
+    }
+  },
+  "terrain": {
+    "stone": {
+      "tileset": "terrain",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "face": 6
+    },
+    "dirt": {
+      "tileset": "terrain",
+      "frames": [
+        7,
+        8,
+        9
+      ],
+      "face": 10
+    },
+    "slag": {
+      "tileset": "terrain",
+      "frames": [
+        11
+      ],
+      "face": 12
+    },
+    "wall": {
+      "tileset": "terrain",
+      "frames": [
+        13
+      ],
+      "face": 14
+    },
+    "planks": {
+      "tileset": "terrain",
+      "frames": [
+        15,
+        16
+      ],
+      "face": 17
+    }
+  },
+  "sprites": {
+    "hero": {
+      "kind": "lpc",
+      "url": "assets/lpc/characters/hero.png",
+      "animations": {
+        "idle": {
+          "y": 0,
+          "frameSize": 64,
+          "frames": 2,
+          "rows": 4
+        },
+        "walk": {
+          "y": 256,
+          "frameSize": 64,
+          "frames": 9,
+          "rows": 4
+        },
+        "slash": {
+          "y": 512,
+          "frameSize": 128,
+          "frames": 6,
+          "rows": 4
+        },
+        "thrust": {
+          "y": 1024,
+          "frameSize": 64,
+          "frames": 8,
+          "rows": 4
+        },
+        "spellcast": {
+          "y": 1280,
+          "frameSize": 64,
+          "frames": 7,
+          "rows": 4
+        },
+        "shoot": {
+          "y": 1536,
+          "frameSize": 64,
+          "frames": 13,
+          "rows": 4
+        },
+        "hurt": {
+          "y": 1792,
+          "frameSize": 64,
+          "frames": 6,
+          "rows": 1
+        }
+      }
+    }
+  },
+  "grade": {
+    "saturation": -0.45,
+    "brightness": 0.78,
+    "tint": "#e6dccd"
+  }
+}

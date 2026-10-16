@@ -1,8 +1,9 @@
-import { type TiledMapJson, parseTiledMap } from '../../engine';
+import { type TiledMapJson, parseTiledMap, withLighting } from '../../engine';
 import { createCreature, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
-import manifest from './assets/manifest.json';
+import art0x72 from './assets/0x72.json';
+import artLpc from './assets/lpc.json';
 import testMap from './maps/test.json';
 import meta from './meta.json';
 import texts from './texts/ui.json';
@@ -13,7 +14,7 @@ export const game: GameDefinition = {
   id: meta.id,
   title: meta.title,
   ruleset: dnd5e,
-  manifest: manifest as AssetManifest,
+  art: { default: '0x72', presets: { '0x72': art0x72 as AssetManifest, lpc: artLpc as AssetManifest } },
   texts: texts as UiTexts,
   theme: {
     colors: {
@@ -33,8 +34,8 @@ export const game: GameDefinition = {
   playerId: PLAYER,
   leaderId: 'hero',
   newGame(engine, seed) {
-    const { map, spawns } = parseTiledMap('test', testMap as TiledMapJson);
-    return engine.newGame({
+    const { map, spawns, lighting } = parseTiledMap('test', testMap as TiledMapJson);
+    const state = engine.newGame({
       seed,
       map,
       entities: [
@@ -52,6 +53,11 @@ export const game: GameDefinition = {
           tags: ['class:fighter', 'race:human', 'prof:intimidation', 'prof:athletics'],
         }),
       ],
+    });
+    // The collector carries a lantern: the only light that goes everywhere with the party.
+    return withLighting(state, {
+      ...lighting,
+      lights: [...lighting.lights, { id: 'lantern', attachedTo: 'hero', radius: 4, intensity: 0.85, color: '#ffcf8a', flicker: 0.08 }],
     });
   },
 };

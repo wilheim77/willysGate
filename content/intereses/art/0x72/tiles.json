@@ -1,0 +1,13 @@
+{
+  "$comment": "Terrain art for the 0x72 preset. Cells are sprite names from tile_list_v1.7. Build with `npm run art`.",
+  "atlas": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
+  "tileList": "0x72-dungeontileset-ii/tile_list_v1.7",
+  "tileSize": 16,
+  "terrain": {
+    "stone": { "top": ["floor_1", "floor_1", "floor_1", "floor_2", "floor_3", "floor_4"], "face": "wall_mid" },
+    "dirt": { "top": ["floor_5", "floor_6", "floor_7"], "face": "wall_mid" },
+    "slag": { "top": ["floor_8", "floor_7"], "face": "wall_hole_1" },
+    "wall": { "top": ["wall_top_mid"], "face": "wall_mid" },
+    "planks": { "top": ["floor_ladder"], "face": "wall_mid" }
+  }
+}

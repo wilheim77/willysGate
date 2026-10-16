@@ -1,0 +1,251 @@
+{
+  "$comment": "Art preset '0x72' (16px, DungeonTileset II). Written by scripts/art/*. URLs are relative to this game's public/ folder.",
+  "tile": {
+    "size": 16,
+    "levelHeight": 6
+  },
+  "grade": {
+    "saturation": -0.3,
+    "brightness": 0.9,
+    "tint": "#d8dde6"
+  },
+  "tilesets": {
+    "terrain": {
+      "url": "assets/0x72/tiles/terrain.png",
+      "frameWidth": 16,
+      "frameHeight": 16
+    }
+  },
+  "terrain": {
+    "stone": {
+      "tileset": "terrain",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "face": 6
+    },
+    "dirt": {
+      "tileset": "terrain",
+      "frames": [
+        7,
+        8,
+        9
+      ],
+      "face": 10
+    },
+    "slag": {
+      "tileset": "terrain",
+      "frames": [
+        11,
+        12
+      ],
+      "face": 13
+    },
+    "wall": {
+      "tileset": "terrain",
+      "frames": [
+        14
+      ],
+      "face": 15
+    },
+    "planks": {
+      "tileset": "terrain",
+      "frames": [
+        16
+      ],
+      "face": 17
+    }
+  },
+  "sprites": {
+    "hero": {
+      "kind": "frames",
+      "url": "assets/0x72/0x72_DungeonTilesetII_v1.7.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 128,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 144,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 160,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 176,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          }
+        ],
+        "move": [
+          {
+            "x": 192,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 208,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 224,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 240,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          }
+        ],
+        "hit": [
+          {
+            "x": 256,
+            "y": 100,
+            "w": 16,
+            "h": 28
+          }
+        ]
+      }
+    },
+    "orc": {
+      "kind": "frames",
+      "url": "assets/0x72/0x72_DungeonTilesetII_v1.7.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 368,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          },
+          {
+            "x": 384,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          },
+          {
+            "x": 400,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          },
+          {
+            "x": 416,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          }
+        ],
+        "move": [
+          {
+            "x": 432,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          },
+          {
+            "x": 448,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          },
+          {
+            "x": 464,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          },
+          {
+            "x": 480,
+            "y": 177,
+            "w": 16,
+            "h": 23
+          }
+        ]
+      }
+    },
+    "skeleton": {
+      "kind": "frames",
+      "url": "assets/0x72/0x72_DungeonTilesetII_v1.7.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 368,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 384,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 400,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 416,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 432,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 448,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 464,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 480,
+            "y": 88,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    }
+  }
+}

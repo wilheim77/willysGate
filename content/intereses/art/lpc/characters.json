@@ -1,0 +1,22 @@
+{
+  "$comment": "LPC characters for Intereses. Each layer is an item from the Universal LPC generator's sheet_definitions/ (path without .json) with a colour: a variant name or a palette colour (see palette_definitions/). Build with `npm run art:characters`; credits are generated automatically.",
+  "generatorCommit": "9bf06be193b053db256b2536824af426de046aa2",
+  "animations": ["idle", "walk", "slash", "thrust", "spellcast", "shoot", "hurt"],
+  "characters": {
+    "hero": {
+      "bodyType": "male",
+      "layers": [
+        { "item": "body/body", "color": "olive" },
+        { "item": "head/heads/human/heads_human_male", "colors": { "color_1": "olive", "color_2": "brown" } },
+        { "item": "hair/short/hair_unkempt", "color": "ash" },
+        { "item": "legs/pants/legs_pants", "color": "charcoal" },
+        { "item": "feet/boots/feet_boots_basic", "color": "brown" },
+        { "item": "torso/shirts/longsleeve/torso_clothes_longsleeve", "color": "slate" },
+        { "item": "torso/armour/torso_armour_leather", "colors": { "color_1": "leather", "color_2": "iron" } },
+        { "item": "torso/cape/cape_tattered", "color": "charcoal" },
+        { "item": "headwear/coverings/hoods/hat_hood_cloth", "color": "charcoal" },
+        { "item": "weapons/sword/weapon_sword_arming", "color": "iron" }
+      ]
+    }
+  }
+}

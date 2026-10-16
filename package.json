@@ -14,15 +14,17 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "check": "npm run typecheck && npm test",
-    "gen:placeholders": "node scripts/gen-placeholder-tileset.mjs",
-    "art": "python3 scripts/build-art.py"
+    "art": "node scripts/art/build-tiles.ts intereses lpc && node scripts/art/build-characters.ts intereses lpc && node scripts/art/build-tiles.ts intereses 0x72 && node scripts/art/build-atlas-sprites.ts intereses 0x72",
+    "gen:logic-tiles": "node scripts/gen-placeholder-tileset.mjs"
   },
   "dependencies": {
     "phaser": "^3.90.0"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
+    "@types/pngjs": "^6.0.5",
     "@vitest/coverage-v8": "^5.0.5",
+    "pngjs": "^7.0.0",
     "typescript": "^5.9.3",
     "vite": "^8.3.4",
     "vitest": "^5.0.5"

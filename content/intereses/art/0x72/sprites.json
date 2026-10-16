@@ -1,0 +1,12 @@
+{
+  "$comment": "Animated characters taken straight from the 0x72 atlas. 'prefix' is the sprite name before _idle_anim_fN / _run_anim_fN.",
+  "atlas": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
+  "tileList": "0x72-dungeontileset-ii/tile_list_v1.7",
+  "facing": "right",
+  "animations": { "idle": "idle_anim", "move": "run_anim", "hit": "hit_anim" },
+  "sprites": {
+    "hero": { "prefix": "knight_m" },
+    "orc": { "prefix": "orc_warrior" },
+    "skeleton": { "prefix": "skelet" }
+  }
+}
