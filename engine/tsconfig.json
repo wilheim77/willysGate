@@ -1,0 +1,9 @@
+{
+  "//": "The engine must stay pure and generic: no DOM, no Node, no Phaser, no ruleset. Enforced here and in tests/architecture.test.ts.",
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": []
+  },
+  "include": ["."]
+}

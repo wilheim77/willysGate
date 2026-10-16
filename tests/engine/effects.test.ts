@@ -1,0 +1,56 @@
+import { describe, expect, it } from 'vitest';
+import { applyEffects, createEngine, performCheck } from '../../engine';
+import { asciiMap, deepFreeze, makeEntity } from '../fixtures/helpers';
+import { toyRuleset } from '../fixtures/toyRuleset';
+
+const engine = createEngine(toyRuleset, 'toy-game');
+const state = deepFreeze(
+  engine.newGame({
+    seed: 3,
+    map: asciiMap(['..']),
+    entities: [makeEntity({ id: 'h', stats: { will: 2 }, resources: { blood: { current: 5, max: 8 } } })],
+  }),
+);
+
+describe('effects', () => {
+  it('modifies generic resources and clamps to [0, max]', () => {
+    const up = applyEffects(toyRuleset, state, [{ type: 'modifyResource', entityId: 'h', resource: 'blood', delta: 10 }]);
+    expect(up.state.entities.h!.resources.blood).toEqual({ current: 8, max: 8 });
+    expect(up.events).toEqual([{ type: 'resourceChanged', entityId: 'h', resource: 'blood', from: 5, to: 8 }]);
+    const down = applyEffects(toyRuleset, state, [{ type: 'modifyResource', entityId: 'h', resource: 'blood', delta: -99 }]);
+    expect(down.state.entities.h!.resources.blood!.current).toBe(0);
+  });
+
+  it('applies and removes ruleset conditions without stacking', () => {
+    const a = applyEffects(toyRuleset, state, [
+      { type: 'applyCondition', entityId: 'h', condition: 'bitten', remainingTurns: 2 },
+      { type: 'applyCondition', entityId: 'h', condition: 'bitten', remainingTurns: 3 },
+    ]);
+    expect(a.state.entities.h!.conditions).toEqual([{ id: 'bitten', remainingTurns: 3 }]);
+    const b = applyEffects(toyRuleset, a.state, [{ type: 'removeCondition', entityId: 'h', condition: 'bitten' }]);
+    expect(b.state.entities.h!.conditions).toEqual([]);
+    expect(b.events).toEqual([{ type: 'conditionRemoved', entityId: 'h', condition: 'bitten' }]);
+  });
+
+  it('sets story flags', () => {
+    const r = applyEffects(toyRuleset, state, [{ type: 'setFlag', flag: 'met_baron', value: true }]);
+    expect(r.state.flags).toEqual({ met_baron: true });
+  });
+
+  it('throws on resources or conditions the ruleset does not define', () => {
+    expect(() => applyEffects(toyRuleset, state, [{ type: 'modifyResource', entityId: 'h', resource: 'spell_slot_1', delta: -1 }])).toThrow();
+    expect(() => applyEffects(toyRuleset, state, [{ type: 'applyCondition', entityId: 'h', condition: 'prone' }])).toThrow();
+    expect(() => applyEffects(toyRuleset, state, [{ type: 'modifyResource', entityId: 'h', resource: 'faith', delta: 1 }])).toThrow(/no resource/);
+  });
+});
+
+describe('checks', () => {
+  it('delegates to the ruleset and advances the RNG in the state', () => {
+    const { state: next, result } = performCheck(toyRuleset, state, { actorId: 'h', check: 'resist', target: 9 });
+    expect(result.dice[0]!.sides).toBe(6);
+    expect(result.total).toBe(result.dice[0]!.rolls[0]! + result.dice[0]!.rolls[1]! + 2);
+    expect(next.rng).not.toEqual(state.rng);
+    // Same state, same roll: checks are reproducible.
+    expect(performCheck(toyRuleset, state, { actorId: 'h', check: 'resist', target: 9 }).result).toEqual(result);
+  });
+});

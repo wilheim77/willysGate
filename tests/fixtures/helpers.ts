@@ -1,4 +1,4 @@
-import type { Entity, GridMap, Tile } from '../core';
+import type { Entity, GridMap, Tile } from '../../engine';
 
 /**
  * Builds a map from ASCII rows: '.' ground, '1'-'9' raised floor at that height, '#' wall.
@@ -21,8 +21,11 @@ export function makeEntity(overrides: Partial<Entity> & Pick<Entity, 'id'>): Ent
     controllerId: 'player:1',
     factionId: 'party',
     position: { x: 0, y: 0 },
-    speed: 6,
     spriteId: 'hero',
+    stats: {},
+    resources: {},
+    conditions: [],
+    tags: [],
     ...overrides,
   };
 }

@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run typecheck && vite build",
+    "build:all": "npm run typecheck && node scripts/build-all.mjs",
     "preview": "vite preview",
-    "typecheck": "tsc -p core/tsconfig.json && tsc -p tests/tsconfig.json && tsc -p tsconfig.json",
+    "typecheck": "tsc -p engine/tsconfig.json && tsc -p rulesets/tsconfig.json && tsc -p tests/tsconfig.json && tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",

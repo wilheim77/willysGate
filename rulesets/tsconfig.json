@@ -1,0 +1,9 @@
+{
+  "//": "Rulesets are pure TypeScript too: no DOM, no Node, no Phaser. They may import engine/ only.",
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": []
+  },
+  "include": [".", "../engine"]
+}

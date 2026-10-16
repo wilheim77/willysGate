@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { findPath, parseTiledMap, type TiledMapJson } from '../core';
-import testMap from '../content/maps/test.json';
+import { findPath, parseTiledMap, type TiledMapJson } from '../../engine';
+import testMap from '../../content/intereses/maps/test.json';
 
 const tileset = {
   firstgid: 1,

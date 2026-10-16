@@ -1,22 +1,13 @@
 /**
  * Deterministic RNG (sfc32). The full generator state lives in GameState,
  * so a saved game resumes the exact same sequence of rolls.
+ * Only generic dice live here; d20 conventions belong to rulesets.
  */
 export interface RngState {
   a: number;
   b: number;
   c: number;
   d: number;
-}
-
-export type RollMode = 'normal' | 'advantage' | 'disadvantage';
-
-export interface D20Roll {
-  mode: RollMode;
-  /** Every die rolled (two when rolling with advantage or disadvantage). */
-  rolls: number[];
-  /** The die that counts. */
-  kept: number;
 }
 
 /** Hashes a string seed (e.g. typed by the player) into a 32-bit seed. */
@@ -68,20 +59,6 @@ export function rollDie(s: RngState, sides: number): [number, RngState] {
   }
 }
 
-export function rollD20(s: RngState, mode: RollMode = 'normal'): [D20Roll, RngState] {
-  const [first, s1] = rollDie(s, 20);
-  if (mode === 'normal') return [{ mode, rolls: [first], kept: first }, s1];
-  const [second, s2] = rollDie(s1, 20);
-  const kept = mode === 'advantage' ? Math.max(first, second) : Math.min(first, second);
-  return [{ mode, rolls: [first, second], kept }, s2];
-}
-
-/** Advantage and disadvantage cancel out regardless of how many sources of each (5e rule). */
-export function resolveRollMode(hasAdvantage: boolean, hasDisadvantage: boolean): RollMode {
-  if (hasAdvantage === hasDisadvantage) return 'normal';
-  return hasAdvantage ? 'advantage' : 'disadvantage';
-}
-
 /**
  * Convenience wrapper for command handlers that roll several dice in a row.
  * It mutates only its own copy; write `cursor.state` back into the new GameState.
@@ -93,11 +70,5 @@ export class RngCursor {
     const [value, next] = rollDie(this.state, sides);
     this.state = next;
     return value;
-  }
-
-  d20(mode: RollMode = 'normal'): D20Roll {
-    const [roll, next] = rollD20(this.state, mode);
-    this.state = next;
-    return roll;
   }
 }

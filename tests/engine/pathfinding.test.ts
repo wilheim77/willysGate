@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { findPath, posKey, stepCost } from '../core';
-import { asciiMap } from './helpers';
+import { findPath, posKey, stepCost } from '../../engine';
+import { asciiMap } from '../fixtures/helpers';
 
 describe('findPath', () => {
   it('returns an empty path when already there', () => {
@@ -91,6 +91,12 @@ describe('findPath', () => {
     const map = asciiMap(['.....']);
     expect(findPath(map, { x: 0, y: 0 }, { x: 4, y: 0 }, { maxCost: 3 })).toBeNull();
     expect(findPath(map, { x: 0, y: 0 }, { x: 3, y: 0 }, { maxCost: 3 })).not.toBeNull();
+  });
+
+  it('takes movement rules from the caller (ruleset)', () => {
+    const map = asciiMap(['.2']);
+    const rules = { maxStep: 2, climbCost: 0 };
+    expect(findPath(map, { x: 0, y: 0 }, { x: 1, y: 0 }, { rules })!.cost).toBe(1);
   });
 
   it('is deterministic', () => {

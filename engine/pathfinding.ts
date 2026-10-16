@@ -1,11 +1,17 @@
 import { type GridMap, type Vec2, inBounds, posKey, samePos, tileAt } from './grid';
 
-/** Highest elevation change a creature can step up or down without climbing or jumping. */
-export const MAX_STEP = 1;
-/** Extra movement cost for stepping up one level. */
-export const CLIMB_COST = 1;
+/** How elevation affects walking. Supplied by the ruleset. */
+export interface MovementRules {
+  /** Highest elevation change a creature can step up or down without climbing or jumping. */
+  maxStep: number;
+  /** Extra movement cost per level stepped up. */
+  climbCost: number;
+}
+
+export const DEFAULT_MOVEMENT: MovementRules = { maxStep: 1, climbCost: 1 };
 
 export interface PathOptions {
+  rules?: MovementRules;
   /** Tiles that cannot be entered (e.g. occupied by other creatures). Keys from posKey(). */
   blocked?: ReadonlySet<string>;
   /** Give up on paths more expensive than this. */
@@ -30,13 +36,19 @@ const DIRECTIONS: readonly Vec2[] = [
 ];
 
 /** Cost of a single step between adjacent tiles, or null if the step is not allowed. */
-export function stepCost(map: GridMap, from: Vec2, to: Vec2, blocked?: ReadonlySet<string>): number | null {
+export function stepCost(
+  map: GridMap,
+  from: Vec2,
+  to: Vec2,
+  rules: MovementRules = DEFAULT_MOVEMENT,
+  blocked?: ReadonlySet<string>,
+): number | null {
   const a = tileAt(map, from);
   const b = tileAt(map, to);
   if (!a || !b || !b.walkable) return null;
   if (blocked?.has(posKey(to))) return null;
   const dh = b.height - a.height;
-  if (Math.abs(dh) > MAX_STEP) return null;
+  if (Math.abs(dh) > rules.maxStep) return null;
 
   const dx = to.x - from.x;
   const dy = to.y - from.y;
@@ -45,10 +57,10 @@ export function stepCost(map: GridMap, from: Vec2, to: Vec2, blocked?: ReadonlyS
     // No cutting corners: both orthogonal neighbours must be passable at a compatible height.
     for (const side of [{ x: from.x + dx, y: from.y }, { x: from.x, y: from.y + dy }]) {
       const t = tileAt(map, side);
-      if (!t || !t.walkable || Math.abs(t.height - a.height) > MAX_STEP) return null;
+      if (!t || !t.walkable || Math.abs(t.height - a.height) > rules.maxStep) return null;
     }
   }
-  return 1 + (dh > 0 ? CLIMB_COST * dh : 0);
+  return 1 + (dh > 0 ? rules.climbCost * dh : 0);
 }
 
 /** A* over the 8-connected grid. Deterministic: equal-cost ties always resolve the same way. */
@@ -88,7 +100,7 @@ export function findPath(map: GridMap, from: Vec2, to: Vec2, options: PathOption
     const g = gScore.get(ci)!;
     for (const d of DIRECTIONS) {
       const next = { x: current.pos.x + d.x, y: current.pos.y + d.y };
-      const cost = stepCost(map, current.pos, next, options.blocked);
+      const cost = stepCost(map, current.pos, next, options.rules, options.blocked);
       if (cost === null) continue;
       const ni = index(next);
       const tentative = g + cost;
