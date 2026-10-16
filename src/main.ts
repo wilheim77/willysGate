@@ -13,11 +13,13 @@ applyTheme(game.theme);
 
 const engine = createEngine(game.ruleset, game.id);
 const store = new GameStore(engine, game.newGame(engine, randomSeed()));
+const hud = new Hud(store, game);
 const controlled = game.leaderId;
-// The HUD is created after the scene so its rotate buttons can drive it.
-let hud!: Hud;
 
-const scene = new MapScene(store, game.manifest, {
+const requestedArt = new URLSearchParams(location.search).get('arte');
+const manifest = game.art.presets[requestedArt ?? ''] ?? game.art.presets[game.art.default]!;
+
+const scene = new MapScene(store, manifest, game.theme, {
   controlledEntityId: () => controlled,
   onTileHovered: (tile) => hud.showTile(tile),
   onTileSelected: (tile) => {
@@ -26,8 +28,6 @@ const scene = new MapScene(store, game.manifest, {
     if (!result.ok) hud.sayError(result.error.code);
   },
 });
-
-hud = new Hud(store, game, (direction) => scene.rotate(direction));
 
 new Phaser.Game({
   type: Phaser.AUTO,

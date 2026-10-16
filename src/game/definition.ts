@@ -8,7 +8,7 @@ export interface UiTexts {
   ui: Record<
     | 'save' | 'load' | 'export' | 'import' | 'new'
     | 'saved' | 'saveFailed' | 'loaded' | 'noSave' | 'exported' | 'imported'
-    | 'newGame' | 'confirmNew' | 'height' | 'genericError' | 'rotateLeft' | 'rotateRight',
+    | 'newGame' | 'confirmNew' | 'height' | 'genericError',
     string
   >;
 }
@@ -20,6 +20,11 @@ export interface Theme {
   /** Background colour of the game canvas. */
   canvas: string;
   fontFamily: string;
+  /**
+   * Colour grade applied to the whole map by a camera filter, so packs with
+   * different palettes read as one style. Negative saturation desaturates.
+   */
+  colorGrade?: { saturation: number; brightness: number; tint?: string };
   /** Optional stylesheet URL for the font (Google Fonts). */
   fontUrl?: string;
 }
@@ -32,7 +37,11 @@ export interface GameDefinition {
   id: string;
   title: string;
   ruleset: Ruleset;
-  manifest: AssetManifest;
+  /**
+   * Interchangeable art presets (asset manifests). The default is used unless the
+   * URL asks for another with ?arte=<id>, which lets us compare packs on the same map.
+   */
+  art: { default: string; presets: Record<string, AssetManifest> };
   theme: Theme;
   texts: UiTexts;
   /** Controller id of the local player. */

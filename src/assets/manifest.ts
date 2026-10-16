@@ -1,28 +1,41 @@
 export interface TerrainArt {
   tileset: string;
-  /** Top-face frame, or several variants picked per tile (stable per position). */
-  frame?: number;
-  frames?: number[];
-  /**
-   * Half-block sprite (one elevation level tall) stacked under raised tiles.
-   * Without it the renderer draws flat side faces in `side`.
-   */
-  block?: { tileset: string; frame: number };
-  side: string;
+  /** Top-surface variants, picked per tile (stable per position). */
+  frames: number[];
+  /** Vertical texture shown under raised tiles (cliffs, wall faces). */
+  face: number;
+}
+
+export interface LpcAnimation {
+  /** Pixel row where this animation starts in the sheet. */
+  y: number;
+  frameSize: number;
+  frames: number;
+  /** 4 = rows for north, west, south, east; 1 = single row (hurt). */
+  rows: number;
+}
+
+export interface Rect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
 }
 
 export type SpriteArt =
-  | { kind: 'placeholder'; cloak: string; skin: string; trim: string }
+  /** 4-direction character sheet built by scripts/art/build-characters.ts from LPC layers. */
+  | { kind: 'lpc'; url: string; animations: Record<string, LpcAnimation> }
   /**
-   * Spell of Mastery layout: 4 columns x 6 rows. Rows 0-2 face south (towards the
-   * camera), rows 3-5 north. Row 0: idle, alert, falling, dead. Row 1: walk cycle.
-   * Row 2: attack 1-3, cast/point. Drawn facing screen-left; flipped for right.
+   * 2-direction sprite from a packed atlas (e.g. 0x72): frames per logical animation
+   * (idle, move, hit...). Drawn facing `facing`; the renderer flips it for the other side.
    */
-  | { kind: 'character'; url: string; frameWidth: number; frameHeight: number; feetY: number };
+  | { kind: 'frames'; url: string; facing: 'left' | 'right'; animations: Record<string, Rect[]> };
 
 /** Per-game mapping from game ids (terrain, spriteId) to art files. See content/<game>/assets/manifest.json. */
 export interface AssetManifest {
-  tile: { width: number; height: number; levelHeight: number };
+  tile: { size: number; levelHeight: number };
+  /** Colour grade for this art preset (overrides the theme's); see Theme.colorGrade. */
+  grade?: { saturation: number; brightness: number; tint?: string };
   tilesets: Record<string, { url: string; frameWidth: number; frameHeight: number }>;
   terrain: Record<string, TerrainArt>;
   sprites: Record<string, SpriteArt>;

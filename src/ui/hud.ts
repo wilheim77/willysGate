@@ -16,7 +16,6 @@ export class Hud {
   constructor(
     private store: GameStore,
     private game: GameDefinition,
-    onRotate: (direction: 1 | -1) => void,
   ) {
     this.slots = new SaveSlots(store.engine);
     document.querySelector('.title')!.textContent = game.title;
@@ -33,13 +32,6 @@ export class Hud {
     });
     this.fileInput.addEventListener('change', () => void this.importSelected());
 
-    for (const button of document.querySelectorAll<HTMLButtonElement>('.view-controls button')) {
-      const direction = Number(button.dataset.rotate) as 1 | -1;
-      const label = direction === 1 ? game.texts.ui.rotateRight : game.texts.ui.rotateLeft;
-      button.title = label;
-      button.setAttribute('aria-label', label);
-      button.addEventListener('click', () => onRotate(direction));
-    }
   }
 
   say(text: string, isError = false): void {
