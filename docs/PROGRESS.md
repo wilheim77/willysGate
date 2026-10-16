@@ -3,52 +3,58 @@
 ## Estado actual
 
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
-- **Fase 1, Esqueleto técnico:** completada y desplegada con el arte definitivo. **Pendiente de aprobación.**
+- **Fase 1, Esqueleto técnico:** completada y desplegada en **vista cenital 3/4**, con dos presets de arte para comparar. **Pendiente de aprobación** y de la elección de arte definitiva.
 
 ## Hecho
 
 ### Fase 0
-- [x] Elegida la premisa «Intereses». Historia aprobada en [`STORY.md`](STORY.md), con el Elfo como raza jugable y la enemistad entre elfos y enanos.
-- [x] Encargo original guardado en [`BRIEF.md`](BRIEF.md).
+- [x] Historia «Intereses» aprobada ([`STORY.md`](STORY.md)), con el Elfo como raza y la enemistad entre elfos y enanos.
+- [x] Encargo original y cambios aprobados en [`BRIEF.md`](BRIEF.md).
 
 ### Fase 1
-- [x] Vite 8, TypeScript 5, Phaser 3.90 y Vitest 5.
-- [x] **Reestructuración aprobada:** el motor genérico (`engine/`), los rulesets (`rulesets/common`, `rulesets/dnd5e`) y el contenido por juego (`content/intereses/`) están separados. Ver [`DESIGN.md`](DESIGN.md) y [`NEW_GAME.md`](NEW_GAME.md).
-- [x] `engine/`:
-  - `GameState` serializable;
-  - entidades con mapas genéricos de stats, recursos, condiciones y tags;
+- [x] Vite 8, TypeScript 5, Phaser 3.90, Vitest 5 y despliegue de varios juegos en GitHub Pages.
+- [x] Capas `engine/` (genérico), `rulesets/` (`common`, `dnd5e`) y `content/<juego>/`, con un test de arquitectura y un ruleset de juguete sin D&D. Ver [`DESIGN.md`](DESIGN.md) y [`NEW_GAME.md`](NEW_GAME.md).
+- [x] Motor:
+  - `GameState` serializable con stats, recursos y condiciones genéricos;
   - RNG sfc32 con su estado dentro del `GameState`;
-  - A* con altura y reglas de movimiento que fija el ruleset;
-  - comandos con un despachador ampliable por el ruleset;
-  - efectos genéricos y pruebas (checks) con desglose genérico;
-  - guardado y carga con migraciones del motor y del ruleset;
-  - cargador de mapas de Tiled.
-- [x] `rulesets/dnd5e`: atributos, habilidades, competencia, salvaciones, ventaja y desventaja (en `common/d20`), CD de conjuros, condiciones del SRD, condiciones de diálogo y `createCreature`.
-- [x] Tests (99): el motor se prueba con un ruleset de juguete sin D&D, y un test de arquitectura hace cumplir las dependencias entre capas.
-- [x] Cliente genérico:
-  - render isométrico con bloques de altura;
-  - mover con clic o toque, con la ruta previa al pasar el ratón;
-  - desplazar la cámara arrastrando y zoom con la rueda o pellizcando;
-  - HUD de guardar, cargar, exportar, importar y nueva partida.
-
-  Probado en el navegador, en escritorio y en vista móvil.
-- [x] Construcción de varios juegos (`npm run build:all`) y workflow de GitHub Actions para Pages.
-- [x] README, CREDITS (incluida la atribución del SRD 5.1) y TODO-ART.
+  - A* con altura;
+  - comandos y efectos;
+  - pruebas (checks) con desglose genérico;
+  - guardado con migraciones;
+  - cargador de Tiled ortogonal e isométrico;
+  - **sistema de iluminación** (fuentes fijas o llevadas por una entidad, luz ambiente y `lightLevelAt`).
+- [x] **Cambio a vista cenital 3/4** (2026-10-17):
+  - render ortogonal con capas de elevación (caras de acantilado o muro, bordes y sombras);
+  - sin giro de mapa;
+  - sprites de 2 direcciones con volteo, o de 4 (LPC);
+  - sombra de contacto y respiración en reposo por código.
+- [x] Iluminación en el cliente: oscuridad, linterna del protagonista y antorchas con parpadeo. Filtro de color por preset.
+- [x] **Pipelines de arte reproducibles** (`npm run art`):
+  - tiles por preset;
+  - personajes LPC por capas, con créditos generados automáticamente;
+  - sprites de atlas (0x72).
+- [x] Escenas de prueba con el mismo mapa: `?arte=0x72` (por defecto) y `?arte=lpc`. Comparativa en [`ART_OPTIONS.md`](ART_OPTIONS.md).
+- [x] Licencias: código MIT (`LICENSE`); arte derivado de LPC, CC-BY-SA 3.0 (`CREDITS.md`).
+- [x] Tests: 107.
 
 ## Pendiente de la Fase 1
 
-- [x] Repo `wilheim77/willysGate` creado (público), con GitHub Pages desplegado mediante Actions. El juego está en https://wilheim77.github.io/willysGate/intereses/ y la portada en https://wilheim77.github.io/willysGate/.
-- [x] Arte elegido e integrado: Isometric Stone Soup (CC0) y Spell of Mastery (CC-BY 4.0), con `scripts/build-art.py` y el render con bloques de altura y personajes animados.
-- [x] Giro del mapa en pasos de 90° (botones y Q/E). Pellizcar o arrastrar ya no mueve al personaje.
+- [ ] El usuario elige el arte definitivo. La recomendación es 0x72 como base.
+- [ ] El usuario decide el pack de exteriores a 16 px para el pueblo: Ninja Adventure (CC0) o Raguzar.
+- [ ] Confirmar en un móvil real que pellizcar no mueve al personaje.
 
 ## Planificado para más adelante
 
-- **Fase 6, introducción y onboarding** (añadido el 2026-10-16): pantalla de inicio, prólogo cinemático, tutorial integrado, tooltips de jerga con % de acierto, glosario, dificultad «Historia», feedback y revisión como jugador novato. Ver `DESIGN.md` → «Introducción y onboarding», con las piezas genéricas que hay que preparar ya en las Fases 2-4 (eventos por mecánica, `preview` sin RNG, `term` en los desgloses, `settings` en el estado). El guion del prólogo está pendiente como anexo en `STORY.md`.
+- **Efectos y ambiente** (2026-10-17): ver `DESIGN.md` → «Efectos y ambiente».
+  - Fase 2: juice de combate, animaciones por código, contorno de selección y recoloreado por paleta.
+  - Fase 3: la luz se bloquea con muros, el fuego ilumina y las superficies son visuales.
+  - Fase 6: partículas de ambiente, postprocesado por escena, viñeta, CRT y ajuste de calidad.
+- **Introducción y onboarding** (Fase 6): ver `DESIGN.md` → «Introducción y onboarding». El guion del prólogo está pendiente como anexo en `STORY.md`.
 
 ## Decisiones abiertas
 
-- ¿Un cuarto compañero **mago**, opcional, de modo que el jugador recluta 3 de 4? Por ahora no: se mantienen Dorotea, Garrán y Anselmo.
+- ¿Un cuarto compañero **mago** opcional? Por ahora no.
 
 ## Siguiente paso
 
-Esperar la aprobación de la Fase 1 (y la confirmación de que el pellizco funciona bien en un móvil real). Después, presentar el plan de la Fase 2 (combate), que incluirá las piezas genéricas para el onboarding: eventos por mecánica, `preview` sin RNG, `term` en los desgloses y `settings` en el estado.
+Esperar la aprobación de la Fase 1 y la elección de arte. Después, presentar el plan de la Fase 2 (combate), que incluye juice, animaciones por código, recoloreado de enemigos y las piezas genéricas para el onboarding.
