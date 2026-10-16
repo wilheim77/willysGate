@@ -3,7 +3,7 @@
 ## Estado actual
 
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
-- **Fase 1, Esqueleto técnico:** en curso. El código está terminado, falta confirmar que el despliegue en Pages funciona y elegir el pack de arte.
+- **Fase 1, Esqueleto técnico:** completada y desplegada, **pendiente de aprobación** y de la elección del pack de arte.
 
 ## Hecho
 
@@ -37,8 +37,8 @@
 
 ## Pendiente de la Fase 1
 
-- [ ] Crear el repo `wilheim77/willysGate`, hacer push, activar Pages y comprobar la URL desde el móvil.
-- [ ] Buscar 2-3 packs de arte isométrico de fantasía oscura (CC0 o CC-BY) y proponerlos antes de fijar el tamaño de tile.
+- [x] Repo `wilheim77/willysGate` creado (público), con GitHub Pages desplegado mediante Actions. El juego está en https://wilheim77.github.io/willysGate/intereses/ y la portada en https://wilheim77.github.io/willysGate/.
+- [x] Candidatos de arte propuestos (ver `TODO-ART.md`). **Falta que el usuario elija.**
 
 ## Decisiones abiertas
 
@@ -46,4 +46,4 @@
 
 ## Siguiente paso
 
-Cerrar los pendientes de la Fase 1 y esperar su aprobación. Después, presentar el plan de la Fase 2 (combate).
+Esperar la aprobación de la Fase 1 y la elección de arte. Después: integrar el pack elegido (si es la opción A, basta con cambiar el manifiesto y el tileset del mapa) y presentar el plan de la Fase 2 (combate).
