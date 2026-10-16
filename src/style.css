@@ -1,0 +1,97 @@
+:root {
+  --bg: #121014;
+  --panel: #1d1a1e;
+  --iron: #4a4449;
+  --iron-light: #6b6369;
+  --text: #cfc6b4;
+  --muted: #8a8174;
+  --accent: #a3412f;
+  --error: #d0705c;
+  --font: 'VT323', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#game {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+.hud {
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  background: linear-gradient(var(--panel), #161317);
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.hud-top {
+  top: 0;
+  padding-top: max(6px, env(safe-area-inset-top));
+  border-bottom: 3px solid var(--iron);
+  box-shadow: 0 2px 0 #000;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.hud-bottom {
+  bottom: 0;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+  border-top: 3px solid var(--iron);
+  box-shadow: 0 -2px 0 #000;
+  justify-content: space-between;
+  min-height: 34px;
+  color: var(--muted);
+}
+
+.title {
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-shadow: 2px 2px 0 #000;
+}
+
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+
+button {
+  font: inherit;
+  color: var(--text);
+  background: #2a2529;
+  border: 2px solid var(--iron);
+  border-top-color: var(--iron-light);
+  border-left-color: var(--iron-light);
+  padding: 2px 10px;
+  cursor: pointer;
+  min-height: 34px;
+}
+
+button:hover { background: #352f34; }
+button:active { border-color: var(--iron); border-bottom-color: var(--iron-light); border-right-color: var(--iron-light); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+#message { color: var(--text); text-align: right; }
+#message.error { color: var(--error); }
+
+@media (max-width: 560px) {
+  html, body { font-size: 18px; }
+  .title { font-size: 22px; }
+  button { padding: 2px 7px; }
+  #tile-info { display: none; }
+}

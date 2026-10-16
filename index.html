@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#121014" />
+    <title>Cargando…</title>
+  </head>
+  <body>
+    <div id="game"></div>
+    <header class="hud hud-top">
+      <span class="title"></span>
+      <nav></nav>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+    </header>
+    <footer class="hud hud-bottom">
+      <span id="tile-info"></span>
+      <span id="message" role="status" aria-live="polite"></span>
+    </footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
