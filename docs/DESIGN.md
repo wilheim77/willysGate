@@ -158,6 +158,39 @@ Si alguno de estos ganchos obligara a meter lógica de 5e en `engine/`, se avisa
 - **Assets.** El manifiesto de cada juego (`content/<juego>/assets/manifest.json`) asocia terrenos y `spriteId` con archivos. Para cambiar de pack gráfico solo hay que tocar el manifiesto. Las entradas `placeholder` se dibujan en tiempo de ejecución.
 - **Guardado.** Usa `localStorage` con una clave por juego. La exportación y la importación usan JSON. Al cargar se comprueban el juego, el ruleset y las versiones, y se aplican las migraciones necesarias.
 
+## Introducción y onboarding (planificado para la Fase 6)
+
+Público objetivo: amigos que no conocen D&D ni el proyecto. Tienen que poder jugar **sin que nadie les explique nada**.
+
+### Piezas
+
+| Pieza | Descripción | Dónde vive |
+|---|---|---|
+| **Pantalla de inicio** | Título, subtítulo con gancho, «Nueva partida», «Continuar» (solo si hay guardado) y «Cómo se juega». Es lo primero que se ve al abrir la URL de Pages. | Escena `TitleScene` del cliente. Los textos vienen de `content/<juego>/`. |
+| **Prólogo cinemático** | 1-2 minutos de viñetas en pixel art con texto, al estilo de los juegos retro. Se puede saltar y repetir desde el menú. Sitúa el mundo, el conflicto y por qué el protagonista está metido en el lío. Tono Abercrombie desde la primera línea. | Datos en `content/<juego>/cinematics/*.json` (viñetas: imagen, texto, duración) y un reproductor genérico en el cliente. El guion va como anexo en `STORY.md`. |
+| **Tutorial integrado** | El primer encuentro presenta cada mecánica la primera vez que aparece: moverse, atacar, acción adicional, ventaja, altura, empujar, superficies y tiradas de diálogo. Mensajes breves y con el tono del juego, sin pantallas de manual. **Ninguna mecánica aparece sin haberse explicado antes.** | Pasos de tutorial como datos en `content/<juego>/tutorial.json` (disparador, texto, condición). Un sistema genérico del cliente los muestra. |
+| **Tooltips de jerga** | Al pasar el ratón o tocar sobre CA, CD, ventaja, tirada de salvación o el % de acierto, se explica en lenguaje llano. **El % de acierto se muestra antes de atacar.** | Glosario aportado por el ruleset y ampliable por el contenido, más un componente genérico de tooltip. |
+| **Glosario** | En el menú de pausa: reglas, superficies y condiciones. | El mismo glosario. |
+| **Consejos contextuales** | Se pueden desactivar. | Preferencia del navegador (`localStorage`), no del `GameState`. |
+| **Dificultad «Historia»** | Para quien solo quiere ver la trama. | Ajuste guardado en la partida. El ruleset decide qué cambia. |
+| **Botón de feedback** | Opcional: formulario o `mailto`, para reportar bugs o cosas que no se entienden. | URL configurable en `GameDefinition`. Ninguna dirección queda fija en el código. |
+| **Guardado por navegador** | Cada amigo tiene el suyo. | Ya funciona: `localStorage` con una clave por juego. |
+
+**Antes de cerrar la Fase 6:** revisar el juego como un jugador nuevo que nunca ha jugado a D&D y listar cada punto en el que se perdería.
+
+### Qué implica para la arquitectura
+
+Nada de esto obliga a meter reglas de 5e en `engine/`. Sí conviene preparar estas piezas genéricas **cuando se construyan las mecánicas** (Fases 2-4), para no tener que reabrirlas en la Fase 6:
+
+1. **Eventos para todo.** Cada mecánica emite un evento propio cuando ocurre (`combatStarted`, `attackResolved`, `entityPushed`, `surfaceCreated`, `fell`, `checkRolled`…). El tutorial se engancha a esos eventos, que ya son la vía por la que se entera el render.
+2. **Vista previa sin tirar dados.** Un método del ruleset del tipo `preview(state, action)` devuelve la probabilidad de acierto y el desglose (CA del objetivo, modificadores, ventaja) **sin consumir el RNG**. Es lo que pinta el «% de acierto» antes de atacar, y la IA también lo usará para evaluar objetivos. Se añadirá a la interfaz `Ruleset` en la Fase 2.
+3. **Términos enlazados al glosario.** Los desgloses (`CheckResult` y la vista previa) llevarán en cada modificador y en el objetivo un `term` opcional (`'ac'`, `'dc'`, `'advantage'`…) que apunte al glosario. Así cualquier número de la interfaz puede tener tooltip. El ruleset aporta un `glossary` con textos en lenguaje llano y el contenido puede ampliarlo con superficies y términos propios.
+4. **Ajustes de partida en el estado.** `GameState` tendrá un `settings` serializable (por ejemplo, `difficulty: 'story' | 'normal'`) que el ruleset lee. Solo afecta a las reglas, sin campos fijos en el motor.
+5. **Progreso del tutorial en la partida.** Los pasos ya mostrados se guardan como flags con espacio de nombres (`tutorial:attack`…). Si se empieza una partida nueva, el tutorial vuelve a salir. La preferencia de desactivar consejos es del navegador.
+6. **Escenas del cliente.** `main.ts` dejará de arrancar directamente en el mapa: habrá un flujo de inicio → prólogo → juego, con un menú de pausa. Es un cambio solo del cliente.
+
+Ninguna de estas piezas cambia lo construido en la Fase 1.
+
 ## Mapas (Tiled)
 
 - **Formato:** mapa isométrico de 64×32, con los tilesets incrustados en el JSON.

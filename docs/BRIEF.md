@@ -87,3 +87,4 @@ Los commits son pequeños y descriptivos, y los tests del core tienen que pasar 
    - Reclutamiento de compañeros.
 5. **Contenido del acto:** el acto completo, la subida de nivel hasta 3-4 y el balance de encuentros.
 6. **Pulido:** menús, interfaz, sonido y música CC0, feedback de las tiradas, un tutorial mínimo, revisión de bugs y una partida completa de principio a fin.
+   - **Añadido el 2026-10-16: introducción y onboarding** para jugadores que no conocen D&D: pantalla de inicio, prólogo cinemático que se puede saltar, primer encuentro como tutorial integrado, tooltips de jerga con % de acierto, glosario, consejos desactivables, dificultad «Historia», botón de feedback y revisión final como jugador novato. Detalle en `docs/DESIGN.md` → «Introducción y onboarding».

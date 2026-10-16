@@ -277,6 +277,13 @@ Una secuencia de viñetas sobre el destino del barón, Nella, Odda, Hilda, Ciril
 
 ---
 
+## Anexo A: guion del prólogo cinemático
+
+> **Pendiente de proponer y aprobar.** 1-2 minutos de viñetas en pixel art con texto. Tiene que situar el mundo (el Ducado, la Casa Valcárcel), el conflicto (Hondonegra, la deuda del barón) y por qué el protagonista está metido en esto (cobrador a comisión, con una variante por clase). Tono seco, cínico y nada épico desde la primera línea. Se propondrá antes de empezar la Fase 6, o antes si se pide.
+
+---
+
 ## Registro de cambios
 
+- 2026-10-16: se añade como anexo pendiente el guion del prólogo cinemático (onboarding, Fase 6).
 - 2026-10-16: historia aprobada. Se añade **Elfo** como raza jugable, con la enemistad entre elfos y enanos integrada en la trama (clan Hulla, Lisandro elfo y el origen en la Bóveda).

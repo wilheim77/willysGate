@@ -40,6 +40,10 @@
 - [x] Repo `wilheim77/willysGate` creado (público), con GitHub Pages desplegado mediante Actions. El juego está en https://wilheim77.github.io/willysGate/intereses/ y la portada en https://wilheim77.github.io/willysGate/.
 - [x] Candidatos de arte propuestos (ver `TODO-ART.md`). **Falta que el usuario elija.**
 
+## Planificado para más adelante
+
+- **Fase 6, introducción y onboarding** (añadido el 2026-10-16): pantalla de inicio, prólogo cinemático, tutorial integrado, tooltips de jerga con % de acierto, glosario, dificultad «Historia», feedback y revisión como jugador novato. Ver `DESIGN.md` → «Introducción y onboarding», con las piezas genéricas que hay que preparar ya en las Fases 2-4 (eventos por mecánica, `preview` sin RNG, `term` en los desgloses, `settings` en el estado). El guion del prólogo está pendiente como anexo en `STORY.md`.
+
 ## Decisiones abiertas
 
 - ¿Un cuarto compañero **mago**, opcional, de modo que el jugador recluta 3 de 4? Por ahora no: se mantienen Dorotea, Garrán y Anselmo.
