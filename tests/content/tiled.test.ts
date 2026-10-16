@@ -33,6 +33,22 @@ describe('parseTiledMap', () => {
     expect(spawns.hero).toEqual({ x: 1, y: 0 });
   });
 
+  it('converts spawn pixels per axis on orthogonal maps', () => {
+    const json: TiledMapJson = {
+      width: 4,
+      height: 4,
+      tilewidth: 32,
+      tileheight: 16,
+      orientation: 'orthogonal',
+      layers: [
+        { type: 'tilelayer', name: 'ground', data: Array(16).fill(1) },
+        { type: 'objectgroup', name: 'spawns', objects: [{ name: 'hero', x: 70, y: 40 }] },
+      ],
+      tilesets: [tileset],
+    };
+    expect(parseTiledMap('t', json).spawns.hero).toEqual({ x: 2, y: 2 });
+  });
+
   it('ignores Tiled flip flags in gids', () => {
     const json: TiledMapJson = {
       width: 1,

@@ -5,6 +5,7 @@ export * from './state';
 export * from './ruleset';
 export * from './commands';
 export * from './effects';
+export * from './lighting';
 export * from './checks';
 export * from './save';
 export * from './tiled';
