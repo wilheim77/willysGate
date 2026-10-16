@@ -1,0 +1,101 @@
+{
+  "$comment": "Source tiles for each terrain id used by the maps. Built by scripts/build-art.py into public/assets/tiles/. Sheets are relative to art-src/. Floor frames are row-major 64x32 cells; block cells are [row, col] of 64x64 cells (half block = 1 elevation level). A floor/top/block may carry its own 'grade' to override the global one.",
+  "grade": {
+    "saturation": 0.72,
+    "brightness": 0.82
+  },
+  "terrain": {
+    "stone": {
+      "floor": {
+        "sheet": "stone-soup/floors/ISS_Floor_Rect_Gray-64x32.png",
+        "frames": [
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      "block": {
+        "sheet": "stone-soup/blocks/ISS_Block_Brick_Gray-64x64.png",
+        "cell": [
+          0,
+          1
+        ]
+      }
+    },
+    "dirt": {
+      "floor": {
+        "sheet": "stone-soup/floors/ISS_Floor_Pebble_Brown-64x32.png",
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "block": {
+        "sheet": "stone-soup/blocks/ISS_Block_Brick_Dark-64x64.png",
+        "cell": [
+          0,
+          1
+        ]
+      }
+    },
+    "slag": {
+      "floor": {
+        "sheet": "stone-soup/floors/ISS_Floor_Grey_Dirt-64x32.png",
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "block": {
+        "sheet": "stone-soup/blocks/ISS_Block_Stone_1-64x64.png",
+        "cell": [
+          0,
+          1
+        ]
+      }
+    },
+    "wall": {
+      "top": {
+        "sheet": "stone-soup/blocks/ISS_Block_Brick_Dark-64x64.png",
+        "cell": [
+          1,
+          0
+        ]
+      },
+      "block": {
+        "sheet": "stone-soup/blocks/ISS_Block_Brick_Dark-64x64.png",
+        "cell": [
+          0,
+          1
+        ]
+      }
+    },
+    "planks": {
+      "floor": {
+        "sheet": "stone-soup/floors/ISS_Floor_Orc-64x32.png",
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "block": {
+        "sheet": "stone-soup/blocks/ISS_Block_Brick_Brown-64x64.png",
+        "cell": [
+          0,
+          1
+        ],
+        "grade": {
+          "saturation": 0.45,
+          "brightness": 0.55
+        }
+      }
+    }
+  }
+}

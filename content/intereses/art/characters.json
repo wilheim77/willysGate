@@ -1,0 +1,10 @@
+{
+  "$comment": "Characters composed from Spell of Mastery layers (art-src/spell-of-mastery/character-layers), back to front. Built by scripts/build-art.py into public/assets/characters/<id>.png. 'teamColor' recolors the purple team-colour pixels.",
+  "grade": { "saturation": 0.8, "brightness": 0.9 },
+  "characters": {
+    "hero": {
+      "layers": ["t1b", "m1b", "dml", "dmp", "dmc", "dma", "dmh", "p0", "f0", "c1m", "b0", "m1", "m1h", "t1"],
+      "teamColor": "#5a4a3c"
+    }
+  }
+}

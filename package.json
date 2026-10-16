@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "check": "npm run typecheck && npm test",
-    "gen:placeholders": "node scripts/gen-placeholder-tileset.mjs"
+    "gen:placeholders": "node scripts/gen-placeholder-tileset.mjs",
+    "art": "python3 scripts/build-art.py"
   },
   "dependencies": {
     "phaser": "^3.90.0"

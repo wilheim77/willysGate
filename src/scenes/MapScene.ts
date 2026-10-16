@@ -13,6 +13,13 @@ export interface MapSceneHooks {
 }
 
 const STEP_MS = 140;
+/** Frame indices in the Spell of Mastery 4x6 character sheet (see SpriteArt). */
+const CHAR_FRAMES = { idleS: 0, idleN: 12, walkS: [4, 5, 6, 7], walkN: [16, 17, 18, 19] };
+
+type Facing = { north: boolean; right: boolean };
+
+/** Stable per-tile variant choice so floors don't look tiled. */
+const variantHash = (x: number, y: number): number => (Math.imul(x, 73856093) ^ Math.imul(y, 19349663)) >>> 0;
 const TAP_SLOP = 8;
 const MIN_ZOOM = 0.75;
 const MAX_ZOOM = 3;
@@ -21,7 +28,8 @@ const MAX_ZOOM = 3;
 export class MapScene extends Phaser.Scene {
   private tileCentres: { pos: Vec2; centre: Vec2 }[] = [];
   private tileObjects: Phaser.GameObjects.GameObject[] = [];
-  private sprites = new Map<string, Phaser.GameObjects.Image>();
+  private sprites = new Map<string, Phaser.GameObjects.Sprite>();
+  private facing = new Map<string, Facing>();
   private pathPreview!: Phaser.GameObjects.Graphics;
   private animating = 0;
   private dragStart: { x: number; y: number; scrollX: number; scrollY: number } | null = null;
@@ -43,7 +51,7 @@ export class MapScene extends Phaser.Scene {
       this.load.spritesheet(tilesetKey(id), assetUrl(ts.url), { frameWidth: ts.frameWidth, frameHeight: ts.frameHeight });
     }
     for (const [id, art] of Object.entries(this.manifest.sprites)) {
-      if (art.kind === 'spritesheet') {
+      if (art.kind === 'character') {
         this.load.spritesheet(spriteKey(id), assetUrl(art.url), { frameWidth: art.frameWidth, frameHeight: art.frameHeight });
       }
     }
@@ -51,6 +59,7 @@ export class MapScene extends Phaser.Scene {
 
   create(): void {
     this.generatePlaceholderSprites();
+    this.createCharacterAnimations();
     this.pathPreview = this.add.graphics().setDepth(1_000_000);
     this.buildWorld(this.store.state);
 
@@ -86,45 +95,36 @@ export class MapScene extends Phaser.Scene {
       const art = this.manifest.terrain[tile.terrain] ?? this.manifest.terrain.stone!;
       const c = this.iso.tileToWorld(pos.x, pos.y, tile.height);
 
-      // Side faces: raised blocks show their full height; floor tiles get a thin slab edge.
-      const drop = tile.height * this.iso.levelH + 6;
-      const TILE_W = this.iso.tileW;
-      const TILE_H = this.iso.tileH;
-      const side = Phaser.Display.Color.HexStringToColor(art.side).color;
-      const sideDark = Phaser.Display.Color.ValueToColor(side).darken(25).color;
-      const g = this.add.graphics();
-      g.fillStyle(side).fillPoints(
-        [
-          new Phaser.Math.Vector2(c.x - TILE_W / 2, c.y),
-          new Phaser.Math.Vector2(c.x, c.y + TILE_H / 2),
-          new Phaser.Math.Vector2(c.x, c.y + TILE_H / 2 + drop),
-          new Phaser.Math.Vector2(c.x - TILE_W / 2, c.y + drop),
-        ],
-        true,
-      );
-      g.fillStyle(sideDark).fillPoints(
-        [
-          new Phaser.Math.Vector2(c.x, c.y + TILE_H / 2),
-          new Phaser.Math.Vector2(c.x + TILE_W / 2, c.y),
-          new Phaser.Math.Vector2(c.x + TILE_W / 2, c.y + drop),
-          new Phaser.Math.Vector2(c.x, c.y + TILE_H / 2 + drop),
-        ],
-        true,
-      );
-      g.setDepth(this.iso.depth(pos.x, pos.y));
-      const top = this.add.image(c.x, c.y, tilesetKey(art.tileset), art.frame).setDepth(this.iso.depth(pos.x, pos.y, 1));
-      this.tileObjects.push(g, top);
+      const baseDepth = this.iso.depth(pos.x, pos.y);
+      if (art.block) {
+        // Stack one half-block per elevation level; ground-level tiles need none.
+        for (let level = 0; level < tile.height; level++) {
+          const b = this.iso.tileToWorld(pos.x, pos.y, level + 1);
+          const block = this.add
+            .image(b.x, b.y, tilesetKey(art.block.tileset), art.block.frame)
+            .setOrigin(0.5, this.iso.tileH / 2 / (this.iso.tileH + this.iso.levelH))
+            .setDepth(baseDepth + level * 0.1);
+          this.tileObjects.push(block);
+        }
+      } else {
+        this.tileObjects.push(this.drawFlatSides(c, tile.height, art.side).setDepth(baseDepth));
+      }
+      const frame = art.frames ? art.frames[variantHash(pos.x, pos.y) % art.frames.length] : art.frame;
+      const top = this.add.image(c.x, c.y, tilesetKey(art.tileset), frame).setDepth(this.iso.depth(pos.x, pos.y, 1));
+      this.tileObjects.push(top);
       this.tileCentres.push({ pos, centre: c });
     }
 
     for (const entity of Object.values(state.entities)) {
       const tile = tileAt(map, entity.position)!;
       const c = this.iso.tileToWorld(entity.position.x, entity.position.y, tile.height);
-      const img = this.add
-        .image(c.x, c.y + 4, spriteKey(entity.spriteId))
-        .setOrigin(0.5, 1)
-        .setDepth(this.iso.depth(entity.position.x, entity.position.y, 5));
+      const art = this.manifest.sprites[entity.spriteId];
+      const img = this.add.sprite(c.x, c.y + this.feetOffset(entity.spriteId), spriteKey(entity.spriteId));
+      if (art?.kind === 'character') img.setOrigin(0.5, art.feetY / art.frameHeight);
+      else img.setOrigin(0.5, 1);
+      img.setDepth(this.iso.depth(entity.position.x, entity.position.y, 5));
       this.sprites.set(entity.id, img);
+      this.applyFacing(entity.id, this.facing.get(entity.id) ?? { north: false, right: false }, false);
     }
   }
 
@@ -135,6 +135,7 @@ export class MapScene extends Phaser.Scene {
     this.pathPreview.clear();
     this.cameras.main.startFollow(img, true, 0.12, 0.12);
 
+    const spriteId = state.entities[event.entityId]?.spriteId ?? '';
     let prev = event.from;
     const tweens = event.path.map((step) => {
       const from = prev;
@@ -143,15 +144,12 @@ export class MapScene extends Phaser.Scene {
       const c = this.iso.tileToWorld(step.x, step.y, tile.height);
       return {
         x: c.x,
-        y: c.y + 4,
+        y: c.y + this.feetOffset(spriteId),
         duration: STEP_MS,
         onStart: () => {
           // While crossing two tiles, draw above the one further back.
           img.setDepth(Math.max(this.iso.depth(from.x, from.y, 5), this.iso.depth(step.x, step.y, 5)));
-          const a = this.iso.toView(from.x, from.y);
-          const b = this.iso.toView(step.x, step.y);
-          // Face left when moving towards the left of the screen.
-          if (b.x - a.x !== b.y - a.y) img.setFlipX(b.x - a.x < b.y - a.y);
+          this.applyFacing(event.entityId, this.facingFor(event.entityId, from, step), true);
         },
         onComplete: () => img.setDepth(this.iso.depth(step.x, step.y, 5)),
       };
@@ -161,8 +159,68 @@ export class MapScene extends Phaser.Scene {
       tweens,
       onComplete: () => {
         this.animating--;
+        this.applyFacing(event.entityId, this.facing.get(event.entityId) ?? { north: false, right: false }, false);
       },
     });
+  }
+
+  /** Screen direction of a step in the current view. Art faces screen-left; right means flipped. */
+  private facingFor(entityId: string, from: Vec2, to: Vec2): Facing {
+    const prev = this.facing.get(entityId) ?? { north: false, right: false };
+    const a = this.iso.toView(from.x, from.y);
+    const b = this.iso.toView(to.x, to.y);
+    const screenDx = b.x - b.y - (a.x - a.y);
+    const screenDy = b.x + b.y - (a.x + a.y);
+    return { north: screenDy === 0 ? prev.north : screenDy < 0, right: screenDx === 0 ? prev.right : screenDx > 0 };
+  }
+
+  /** Sets facing and plays walk/idle for character sprites; placeholders just flip. */
+  private applyFacing(entityId: string, facing: Facing, walking: boolean): void {
+    this.facing.set(entityId, facing);
+    const img = this.sprites.get(entityId);
+    if (!img) return;
+    img.setFlipX(facing.right);
+    const art = this.manifest.sprites[this.store.state.entities[entityId]?.spriteId ?? ''];
+    if (art?.kind !== 'character') return;
+    const key = img.texture.key;
+    if (walking) img.play(`${key}:walk-${facing.north ? 'n' : 's'}`, true);
+    else img.stop().setFrame(facing.north ? CHAR_FRAMES.idleN : CHAR_FRAMES.idleS);
+  }
+
+  /** Vertical offset from tile centre to where the sprite's anchor sits. */
+  private feetOffset(spriteId: string): number {
+    return this.manifest.sprites[spriteId]?.kind === 'character' ? 2 : 4;
+  }
+
+  private createCharacterAnimations(): void {
+    for (const [id, art] of Object.entries(this.manifest.sprites)) {
+      if (art.kind !== 'character') continue;
+      const key = spriteKey(id);
+      for (const [dir, frames] of [['s', CHAR_FRAMES.walkS], ['n', CHAR_FRAMES.walkN]] as const) {
+        if (this.anims.exists(`${key}:walk-${dir}`)) continue;
+        this.anims.create({
+          key: `${key}:walk-${dir}`,
+          frames: this.anims.generateFrameNumbers(key, { frames: [...frames] }),
+          frameRate: 8,
+          repeat: -1,
+        });
+      }
+    }
+  }
+
+  /** Flat-shaded side faces for terrain without block art (placeholders). */
+  private drawFlatSides(c: Vec2, height: number, sideColor: string): Phaser.GameObjects.Graphics {
+    const w = this.iso.tileW / 2;
+    const h = this.iso.tileH / 2;
+    // Raised blocks show their full height; floor tiles get a thin slab edge.
+    const drop = height * this.iso.levelH + 6;
+    const side = Phaser.Display.Color.HexStringToColor(sideColor).color;
+    const sideDark = Phaser.Display.Color.ValueToColor(side).darken(25).color;
+    const V = Phaser.Math.Vector2;
+    const g = this.add.graphics();
+    g.fillStyle(side).fillPoints([new V(c.x - w, c.y), new V(c.x, c.y + h), new V(c.x, c.y + h + drop), new V(c.x - w, c.y + drop)], true);
+    g.fillStyle(sideDark).fillPoints([new V(c.x, c.y + h), new V(c.x + w, c.y), new V(c.x + w, c.y + drop), new V(c.x, c.y + h + drop)], true);
+    return g;
   }
 
   /** Rotates the view a quarter turn (1 = clockwise, -1 = counter-clockwise), keeping the leader centred. */

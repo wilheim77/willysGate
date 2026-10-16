@@ -10,41 +10,94 @@
       "url": "assets/placeholder/tiles.png",
       "frameWidth": 64,
       "frameHeight": 32
+    },
+    "floors": {
+      "url": "assets/tiles/floors.png",
+      "frameWidth": 64,
+      "frameHeight": 32
+    },
+    "blocks": {
+      "url": "assets/tiles/blocks.png",
+      "frameWidth": 64,
+      "frameHeight": 48
     }
   },
   "terrain": {
     "stone": {
-      "tileset": "placeholder",
-      "frame": 0,
-      "side": "#3c3c42"
+      "tileset": "floors",
+      "side": "#3c3c42",
+      "frames": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "block": {
+        "tileset": "blocks",
+        "frame": 0
+      }
     },
     "dirt": {
-      "tileset": "placeholder",
-      "frame": 3,
-      "side": "#3a2f25"
+      "tileset": "floors",
+      "side": "#3a2f25",
+      "frames": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "block": {
+        "tileset": "blocks",
+        "frame": 1
+      }
     },
     "slag": {
-      "tileset": "placeholder",
-      "frame": 4,
-      "side": "#222024"
+      "tileset": "floors",
+      "side": "#222024",
+      "frames": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "block": {
+        "tileset": "blocks",
+        "frame": 2
+      }
     },
     "wall": {
-      "tileset": "placeholder",
-      "frame": 5,
-      "side": "#2e282c"
+      "tileset": "floors",
+      "side": "#2e282c",
+      "frames": [
+        12
+      ],
+      "block": {
+        "tileset": "blocks",
+        "frame": 3
+      }
     },
     "planks": {
-      "tileset": "placeholder",
-      "frame": 6,
-      "side": "#47372a"
+      "tileset": "floors",
+      "side": "#47372a",
+      "frames": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "block": {
+        "tileset": "blocks",
+        "frame": 4
+      }
     }
   },
   "sprites": {
     "hero": {
-      "kind": "placeholder",
-      "cloak": "#3b3530",
-      "skin": "#b39b7d",
-      "trim": "#7a2e22"
+      "kind": "character",
+      "url": "assets/characters/hero.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
+      "feetY": 94
     }
   }
 }

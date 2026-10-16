@@ -191,6 +191,21 @@ Nada de esto obliga a meter reglas de 5e en `engine/`. Sí conviene preparar est
 
 Ninguna de estas piezas cambia lo construido en la Fase 1.
 
+## Arte
+
+- **Fuentes:** `art-src/<pack>/`, una selección de los packs originales con sus licencias.
+- **Especificación por juego:**
+  - `content/<juego>/art/tiles.json`: para cada terreno, sus variantes de suelo y el medio bloque que forma un nivel de altura;
+  - `content/<juego>/art/characters.json`: los personajes como lista de capas de Spell of Mastery, con un color de equipo.
+- **Construcción:** `npm run art` (Python 3 y Pillow) genera `public/assets/tiles/*.png` y `public/assets/characters/*.png`, y reescribe `terrain`, `tilesets` y los sprites de personaje del manifiesto. Lo generado se sube al repo, así que CI y el navegador no necesitan Python.
+- **Paleta común:** todos los packs pasan por el mismo ajuste de saturación y brillo para que se vean como un solo estilo, más oscuro y desaturado.
+- **Render:**
+  - Cada nivel de altura es un medio bloque de 64×48 (16 px de lateral), y los bloques se apilan.
+  - Los suelos eligen variante por posición, de forma estable.
+  - Los personajes usan la rejilla 4×6 de Spell of Mastery: mirando al sur o al norte, volteados para ir a la derecha, con el ciclo de andar.
+  - Como los bloques y los personajes funcionan en cualquier orientación, girar el mapa no necesita arte adicional.
+- **Tiled:** los mapas siguen usando el tileset lógico (placeholder) para pintar terrenos. El arte real lo decide el manifiesto según el `terrain`.
+
 ## Mapas (Tiled)
 
 - **Formato:** mapa isométrico de 64×32, con los tilesets incrustados en el JSON.

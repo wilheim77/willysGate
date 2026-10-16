@@ -2,11 +2,17 @@
 
 | Placeholder | Juego | Dónde | Qué hace falta |
 |---|---|---|---|
-| Tileset isométrico (piedra, tierra, escoria, muro, tablones) | intereses | `content/intereses/public/assets/placeholder/tiles.png`, generado por `scripts/gen-placeholder-tileset.mjs` | Pack isométrico de fantasía oscura, CC0 o CC-BY, de 64×32 o similar |
-| Laterales de los bloques elevados | intereses | Se dibujan en `MapScene` con los colores `side` del manifiesto | Tiles de bloque o pared con su lateral pintado |
-| Personaje «hero» (figura encapuchada) | intereses | Se dibuja en tiempo de ejecución (`kind: "placeholder"` en el manifiesto) | Spritesheet isométrico con 4 u 8 direcciones y animaciones de andar y quieto |
+| Tileset lógico del editor | intereses | `content/intereses/public/assets/placeholder/tiles.png` | Solo lo usa Tiled para pintar terrenos. El juego pinta el arte real según el manifiesto. Se puede dejar así. |
+| Tablones o andamios (`planks`) | intereses | Suelo «Orc» con bloque de ladrillo oscurecido | Madera de verdad: Stone Soup no tiene. Buscar un tile de madera CC0 o CC-BY a 64×32. |
+| Plataformas elevadas de piedra | intereses | Bloques Brick_Gray | Contrastan poco con el suelo. Valorar un borde o una sombra para que la altura se lea mejor. |
+| Monstruos, PNJ y compañeros | intereses | — | Componerlos en `content/intereses/art/characters.json` (Spell of Mastery) en la Fase 2. |
+| Viñetas del prólogo cinemático | intereses | — | Fase 6. Ver DESIGN → Introducción y onboarding. |
 
-## Candidatos (propuestos el 2026-10-16, pendientes de elegir)
+## Elección (2026-10-16)
+
+Se ha elegido **Isometric Stone Soup** (escenarios) con **Spell of Mastery** (personajes). El Town Pack de Screaming Brain Studios se ha descartado porque sus edificios son modernos.
+
+### Candidatos que se valoraron
 
 | Opción | Packs | Licencia | Encaje |
 |---|---|---|---|

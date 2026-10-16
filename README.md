@@ -29,7 +29,8 @@ Abre http://localhost:5173. Para arrancar otro juego, usa `GAME=<id> npm run dev
 | `npm run check` | Typecheck de todas las capas y tests. Hay que pasarlo antes de cada commit. |
 | `npm run coverage` | Cobertura de `engine/` y `rulesets/` |
 | `npm run build:all` | Construye todos los juegos en `dist/<juego>/` y la portada en `dist/index.html` |
-| `npm run gen:placeholders` | Regenera el tileset placeholder |
+| `npm run art` | Regenera el arte de `art-src/` según `content/<juego>/art/*.json`. Requiere Python 3 y Pillow. |
+| `npm run gen:placeholders` | Regenera el tileset lógico que usa Tiled |
 
 ## Controles
 

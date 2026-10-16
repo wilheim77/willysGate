@@ -20,8 +20,11 @@ Se usa en `rulesets/dnd5e/`.
 
 ## Arte y sonido
 
-Todavía no hay assets de terceros. Todo el arte actual son placeholders generados por el propio proyecto (ver `TODO-ART.md`).
+Las fuentes originales están en `art-src/`. `scripts/build-art.py` las convierte (recorte, transparencia, ajuste de paleta y composición de capas) en el arte que usa cada juego.
 
-| Asset | Juego | Autor | Licencia | URL |
-|---|---|---|---|---|
-| — | — | — | — | — |
+| Asset | Juego | Autor | Licencia | URL | Uso |
+|---|---|---|---|---|---|
+| Isometric Stone Soup (selección de suelos y bloques) | intereses | Screaming Brain Studios, a partir de Dungeon Crawl Stone Soup | CC0 1.0 | https://opengameart.org/content/isometric-stone-soup | Suelos, muros y bloques de altura |
+| Spell of Mastery: Sprite Pack | intereses | NancyGold / Nancy Sadkov (Spell of Mastery) | CC-BY 4.0 | https://nancygold.itch.io/spell-of-mastery-sprite-pack-composer | Personajes compuestos por capas (protagonista). Monstruos, más adelante. |
+
+Crédito requerido por CC-BY 4.0: **personajes de «NancyGold / Spell of Mastery»**, CC-BY 4.0. Las capas se han recoloreado y combinado, y se les ha ajustado el brillo y la saturación.
