@@ -3,7 +3,7 @@
 ## Estado actual
 
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
-- **Fase 1, Esqueleto técnico:** completada y desplegada, **pendiente de aprobación** y de la elección del pack de arte.
+- **Fase 1, Esqueleto técnico:** completada y desplegada con el arte definitivo. **Pendiente de aprobación.**
 
 ## Hecho
 
@@ -38,7 +38,8 @@
 ## Pendiente de la Fase 1
 
 - [x] Repo `wilheim77/willysGate` creado (público), con GitHub Pages desplegado mediante Actions. El juego está en https://wilheim77.github.io/willysGate/intereses/ y la portada en https://wilheim77.github.io/willysGate/.
-- [x] Candidatos de arte propuestos (ver `TODO-ART.md`). **Falta que el usuario elija.**
+- [x] Arte elegido e integrado: Isometric Stone Soup (CC0) y Spell of Mastery (CC-BY 4.0), con `scripts/build-art.py` y el render con bloques de altura y personajes animados.
+- [x] Giro del mapa en pasos de 90° (botones y Q/E). Pellizcar o arrastrar ya no mueve al personaje.
 
 ## Planificado para más adelante
 
@@ -50,4 +51,4 @@
 
 ## Siguiente paso
 
-Esperar la aprobación de la Fase 1 y la elección de arte. Después: integrar el pack elegido (si es la opción A, basta con cambiar el manifiesto y el tileset del mapa) y presentar el plan de la Fase 2 (combate).
+Esperar la aprobación de la Fase 1 (y la confirmación de que el pellizco funciona bien en un móvil real). Después, presentar el plan de la Fase 2 (combate), que incluirá las piezas genéricas para el onboarding: eventos por mecánica, `preview` sin RNG, `term` en los desgloses y `settings` en el estado.
