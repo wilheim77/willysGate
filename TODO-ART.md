@@ -35,6 +35,7 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Retratos de PNJ a 48×48 | intereses, willy | Mazo, Hilda, Nella, Odda, Cirilo, Lisandro, Brea, Ivo y Remedios; Paco, Koldo, Maripuri, Xelda y el Presentador, con el kit `bust-kit.ts` |
 | Pantallas de título | intereses, willy | 320×180 en `assets/title/title.png` (`build-cinematics.ts <juego> title`); falta que el cliente las muestre |
 | Efectos de conjuros | intereses | 18 efectos en `spell-fx.ts` (proyectiles, impactos, rayo, cono, anillos, auras); falta que el cliente los reproduzca según `ART_CATALOG.md` |
+| Animaciones de ataque, lanzamiento y daño | intereses | Derivadas del idle (`build-action-anims.ts`) para el grupo y los enemigos principales; mejorables a mano frame a frame si se piden |
 | Pulido del HUD | intereses | Barra superior en una fila, fichas de iniciativa con retrato, barra de acciones en dos filas, botones de 44 px, paneles de hierro biselado |
 | Objetos interactivos (Fase 4) | intereses | `chest`, `chest_trapped`, `lever`, terrenos `door_closed`/`door_open`, props `trap_armed`/`trap_disarmed` |
 | PNJ de Hondonegra | intereses | `mazo`, `hilda`, `cirilo`, `fanatico_pala`, `nella`, `odda`, `lisandro`, aldeanos; atrezo `tapestry`, `tapestry_crossbow`, `gallows` |

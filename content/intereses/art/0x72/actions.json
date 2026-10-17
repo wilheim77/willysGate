@@ -1,0 +1,16 @@
+{
+  "$comment": "Action animations derived from each sprite's idle frame by scripts/art/build-action-anims.ts (run after the sprite builders): attack (4 frames: wind-up, strike with a smear of the given kind, follow-through, recover), cast (4 frames, glow and rim light in the given colour) and hurt (2 frames: white flash, red flinch). Every frame of these sprites moves to assets/0x72/actors.png; aliases that share the art follow.",
+  "output": "actors.png",
+  "sprites": {
+    "cobrador": { "attack": "thrust", "cast": "#a880f0" },
+    "garran": { "attack": "slash", "cast": "#f4dc8a" },
+    "dorotea": { "attack": "thrust", "cast": "#9ab8c8" },
+    "anselmo": { "attack": "blunt", "cast": "#f4dc8a" },
+    "sinpaga_cuchillero": { "attack": "thrust" },
+    "sinpaga_enmascarado": { "attack": "slash" },
+    "sinpaga_bruto": { "attack": "blunt" },
+    "callado": { "attack": "blunt" },
+    "esqueleto_minero": { "attack": "slash" },
+    "absalon": { "attack": "blunt", "cast": "#c9d1d6" }
+  }
+}

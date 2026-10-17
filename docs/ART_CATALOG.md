@@ -423,3 +423,13 @@ Dibujados por `scripts/art/spell-fx.ts` con rampas de la paleta de 0x72 (fuego, 
 | Curar heridas / Palabra curativa | `fx_healing` | Una vez en cada objetivo curado (16×24, los pies abajo). |
 | Bendición | `fx_bless` | En bucle sobre cada objetivo mientras dure la condición (halo sobre la cabeza). |
 | Expulsar muertos vivientes | `fx_holy_symbol`, `fx_turn_undead` | El destello sobre el lanzador y a la vez el anillo de 64×64 centrado en él (escalar al radio de 30 pies si hace falta). |
+
+# Animaciones de acción (*Intereses*, `actions.json`)
+
+`cobrador`, `garran`, `dorotea`, `anselmo`, `sinpaga_cuchillero`, `sinpaga_enmascarado`, `sinpaga_bruto`, `callado`, `esqueleto_minero` y `absalon` (y los alias `bandit` y `thug`) tienen, además de `idle`, `move` y `hit`, tres animaciones nuevas en `sprites.<id>.animations`:
+
+- `attack` (4 frames, ~10 fps, sin bucle): preparación, golpe con estela del arma (`slash`, tajo en arco; `thrust`, estocada; `blunt`, golpe de arriba abajo con polvo), seguimiento y vuelta a la postura.
+- `cast` (4 frames, ~8 fps, sin bucle): brillo en la mano, el brillo crece y tiñe el borde del cuerpo con el color del conjuro, y se suelta. Lanzar el efecto del conjuro en el frame 3.
+- `hurt` (2 frames, ~12 fps, sin bucle): destello blanco y retroceso con tinte rojo.
+
+Se derivan del frame `idle` de cada personaje con `scripts/art/build-action-anims.ts`, así que conservan el estilo de 0x72. Todos los frames de estos sprites pasan a `assets/0x72/actors.png`. Los frames nuevos son más anchos (relleno simétrico de 4 px, 8 px en los de 32), así que el pivote de los pies no se mueve. Vista previa: [`art-previews/0x72-actions.png`](art-previews/0x72-actions.png). **Petición al cliente:** reproducir `attack`, `cast` y `hurt` cuando lleguen los eventos correspondientes y volver a `idle`.
