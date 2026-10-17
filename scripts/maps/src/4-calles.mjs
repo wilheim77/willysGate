@@ -40,9 +40,9 @@ export default {
     cirilo: [14, 2],
     'fiel_pala-1': [12, 3],
     'fiel_pala-2': [17, 3],
-    // The widows (names pending in cast.json).
-    'viuda-1': [23, 3],
-    'viuda-2': [27, 4],
+    // Benita and Casilda wash clothes in the Lloro; one more widow at home.
+    benita: [28, 16],
+    casilda: [31, 18],
     'viuda-3': [24, 6],
     // The pawnshop.
     lisandro: [7, 16],
@@ -72,14 +72,14 @@ export default {
       // A poisoned dart in the back room's floor, between the partition door and the chest.
       name: 'dardo-trastienda',
       rect: [10, 19, 1, 1],
-      props: { detect: 14, save: 'con', dc: 13, damage: '2d4', type: 'poison', condition: 'poisoned', turns: 3, disarmCheck: 'sleight_of_hand', disarmDc: 13 },
+      props: { marker: 'trap_dart', detect: 14, save: 'con', dc: 13, damage: '2d4', type: 'poison', condition: 'poisoned', turns: 3, disarmCheck: 'sleight_of_hand', disarmDc: 13 },
     },
   ],
   exits: [
     { name: 'a-plaza', rect: [0, 9, 1, 4], to: 'plaza', spawn: 'entry-calles' },
-    { name: 'a-escorial', rect: [33, 9, 1, 4], to: 'escorial', spawn: 'entry-calles' },
+    { name: 'a-escorial', rect: [33, 9, 1, 4], to: 'escorial', spawn: 'entry-calles', props: { requiresFlag: 'audiencia_hecha' } },
   ],
   zones: {
-    scenes: [{ name: 'sermon', rect: [13, 5, 4, 3], props: { dialogue: 'TODO:sermon_cirilo', speaker: 'cirilo', once: true } }],
+    scenes: [{ name: 'sermon', rect: [13, 5, 4, 3], props: { dialogue: 'sermon_cirilo', speaker: 'cirilo', once: true } }],
   },
 };

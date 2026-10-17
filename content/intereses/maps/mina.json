@@ -49,9 +49,9 @@
 6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,20,20,20,1,1,6,6,1,1,1,1,1,1,19,19,6,1,1,1,1,1,1,1,6,
 6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,19,1,1,1,1,1,1,1,1,1,1,1,1,19,19,6,1,1,1,1,1,1,1,6,
 6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,18,1,1,1,1,1,1,1,1,1,1,1,1,19,19,6,1,1,1,1,1,1,1,6,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,15,15,1,1,1,1,1,1,1,1,1,
-15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,15,15,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,1,1,1,1,1,1,1,1,1,6,1,1,1,19,19,6,1,1,1,1,1,1,1,6,
 6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,1,1,1,1,1,1,1,1,1,6,1,1,1,19,19,6,1,1,1,1,1,1,1,6,
 6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,19,19,6,1,1,1,1,1,1,1,6,
@@ -236,11 +236,11 @@
     },
     {
      "id": 14,
-     "name": "todo-mecha",
+     "name": "fuse_charges-1",
      "type": "",
      "point": true,
      "x": 1136,
-     "y": 400,
+     "y": 368,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -248,7 +248,7 @@
     },
     {
      "id": 15,
-     "name": "todo-restos_cuarenta",
+     "name": "remains_forty-1",
      "type": "",
      "point": true,
      "x": 1104,
@@ -260,7 +260,7 @@
     },
     {
      "id": 16,
-     "name": "crate-1",
+     "name": "mine_wagon-1",
      "type": "",
      "point": true,
      "x": 272,
@@ -272,7 +272,7 @@
     },
     {
      "id": 17,
-     "name": "crate-2",
+     "name": "mine_wagon_ore-1",
      "type": "",
      "point": true,
      "x": 624,
@@ -288,7 +288,7 @@
      "type": "",
      "point": true,
      "x": 752,
-     "y": 464,
+     "y": 432,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -296,7 +296,7 @@
     },
     {
      "id": 19,
-     "name": "crate-3",
+     "name": "mine_wagon-2",
      "type": "",
      "point": true,
      "x": 848,
@@ -717,6 +717,11 @@
      "visible": true,
      "properties": [
       {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_rotten_plank"
+      },
+      {
        "name": "detect",
        "type": "int",
        "value": 14
@@ -769,6 +774,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_tripwire"
+      },
       {
        "name": "detect",
        "type": "int",
@@ -969,10 +979,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 22,
-   "columns": 22,
+   "tilecount": 28,
+   "columns": 28,
    "image": "terrain-logic.png",
-   "imagewidth": 704,
+   "imagewidth": 896,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1314,6 +1324,96 @@
        "name": "height",
        "type": "int",
        "value": 0
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
       }
      ]
     }

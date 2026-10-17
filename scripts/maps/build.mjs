@@ -23,6 +23,9 @@ export const TERRAIN_CHARS = {
   '#': 'wall',
   '+': 'door_closed',
   '/': 'door_open',
+  '-': 'rails',
+  '|': 'rails_v',
+  v: 'vault',
 };
 
 function props(obj = {}) {

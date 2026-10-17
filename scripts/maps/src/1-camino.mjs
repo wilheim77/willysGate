@@ -43,6 +43,7 @@ export default {
   id: 'camino',
   name: 'El camino',
   ambientLight: 0.6,
+  properties: { start: true },
   ...c.source(),
   spawns: {
     hero: [3, 9],
@@ -57,9 +58,10 @@ export default {
     'crate-1': [23, 11], // the overturned cart
     'crate-2': [24, 11],
     'barrel_oil-1': [25, 11],
-    'crate-3': [7, 7], // a milestone-sized crate: first cover the player sees
+    'crate-3': [7, 7],
+    'campfire-1': [25, 13], // a milestone-sized crate: first cover the player sees
   },
-  lights: [{ name: 'hoguera-mineros', at: [25, 13], radius: 5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' }],
+  lights: [{ name: 'hoguera-mineros', at: [25, 13], radius: 5, color: '#ff9a4a', flicker: 0.18 }],
   surfaces: [
     { name: 'charco-camino', rect: [14, 8, 2, 2], surface: 'water' },
     { name: 'aceite-carro', rect: [25, 12, 2, 1], surface: 'oil' },
@@ -68,14 +70,16 @@ export default {
     {
       name: 'cepo-furtivo',
       rect: [15, 4, 1, 1],
-      props: { detect: 10, save: 'dex', dc: 11, damage: '1d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 10 },
+      props: { marker: 'trap_beartrap', detect: 10, save: 'dex', dc: 11, damage: '1d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 10 },
     },
   ],
-  exits: [{ name: 'a-hondonegra', rect: [31, 8, 1, 2], to: 'plaza', spawn: 'entry-camino' }],
+  exits: [{ name: 'a-hondonegra', rect: [31, 8, 1, 2], to: 'plaza', spawn: 'entry-camino', props: { requiresFlag: 'prologo_mineros_resuelto' } }],
   zones: {
     // Proposed layer (docs/ENGINE_REQUESTS_INTERESES.md, I1): entering opens the dialogue once.
     scenes: [
-      { name: 'mineros-cortan-el-paso', rect: [16, 7, 2, 5], props: { dialogue: 'camino_mineros', speaker: 'minero_cabecilla', once: true, fight: 'minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3' } },
+      // Both bands run wall to wall (gate: true): nobody walks past Garrán or the miners.
+      { name: 'garran-en-la-cuneta', rect: [6, 0, 1, 18], props: { dialogue: 'camino_garran', speaker: 'garran', once: true, gate: true, protects: 'a-hondonegra' } },
+      { name: 'mineros-cortan-el-paso', rect: [16, 0, 2, 18], props: { dialogue: 'camino_mineros', speaker: 'minero_cabecilla', once: true, gate: true, protects: 'a-hondonegra', fight: 'minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3' } },
     ],
   },
 };

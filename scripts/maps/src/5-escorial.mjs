@@ -25,7 +25,7 @@ c.put(18, 16, 'H', 2);
 // The slag pond: grey runoff.
 c.rect(4, 18, 3, 3, ';', 0);
 // The Pozo del Ahorcado: a ring of stone open to the south.
-c.rect(30, 4, 3, 2, '#').put(31, 5, '.', 0).rect(31, 6, 1, 5, ',', 0);
+c.rect(30, 4, 3, 2, '#').put(31, 5, '.', 0).rect(31, 6, 1, 5, ',', 0); // the well itself is a prop at its mouth
 // The main adit, cut into the rock in the south-east corner and barred with planks.
 c.rect(30, 18, 5, 7, '#');
 c.rect(32, 14, 1, 4, ',', 0).put(32, 18, '+').rect(32, 19, 1, 3, '.', 0);
@@ -52,13 +52,15 @@ export default {
     // The oil cart on the ledge, and scenery.
     'barrel_oil-1': [13, 8],
     'barrel_oil-2': [14, 8],
-    'crate-1': [12, 8],
+    'oil_cart-1': [12, 8],
     'crate-3': [21, 17],
     'barrel-1': [9, 21],
+    'campfire-1': [14, 21],
     'door-bocamina': [32, 18],
+    'well-1': [31, 5],
   },
   lights: [
-    { name: 'hoguera-sinpaga', at: [14, 21], radius: 5, color: '#ff9a4a', flicker: 0.2, prop: 'brazier' },
+    { name: 'hoguera-sinpaga', at: [14, 21], radius: 5, color: '#ff9a4a', flicker: 0.2 },
     { name: 'farol-pozo', at: [30, 6], radius: 3.5, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
     { name: 'antorcha-bocamina', at: [31, 17], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
   ],
@@ -74,25 +76,26 @@ export default {
       // A tripwire across the west track: it tips a hidden jar and pours oil on the track.
       name: 'cuerda-aceite',
       rect: [7, 11, 1, 3],
-      props: { detect: 13, surface: 'oil', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
+      props: { marker: 'trap_tripwire', detect: 13, surface: 'oil', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
     },
     {
       name: 'cepo-sinpaga',
       rect: [22, 13, 1, 1],
-      props: { detect: 12, save: 'dex', dc: 13, damage: '2d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
+      props: { marker: 'trap_beartrap', detect: 12, save: 'dex', dc: 13, damage: '2d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
     },
   ],
-  encounters: [
-    {
-      name: 'sinpaga',
-      rect: [8, 9, 21, 15],
-      participants: ['sinpaga_enmascarado-1', 'sinpaga_enmascarado-2', 'sinpaga_cuchillero-1', 'sinpaga_cuchillero-2', 'sinpaga_cuchillero-3', 'sinpaga_bruto-1'],
-    },
-  ],
+  // The Sinpaga chief talks first (sinpaga_jefe); the fight, if any, is by faction. The band
+  // covers both ways in from the town (plaza and streets), wall to wall.
+  zones: {
+    scenes: [
+      { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },
+    ],
+  },
   exits: [
     { name: 'a-plaza', rect: [3, 0, 3, 1], to: 'plaza', spawn: 'entry-escorial' },
     { name: 'a-calles', rect: [0, 11, 1, 3], to: 'calles', spawn: 'entry-escorial' },
-    { name: 'pozo-del-ahorcado', rect: [31, 5, 1, 1], to: 'mina', spawn: 'entry-pozo' },
-    { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina' },
+    // The mine comes after the night of the torches (D1).
+    { name: 'pozo-del-ahorcado', rect: [31, 6, 1, 1], to: 'mina', spawn: 'entry-pozo', props: { requiresFlag: 'd1_resuelto' } },
+    { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina', props: { requiresFlag: 'd1_resuelto' } },
   ],
 };

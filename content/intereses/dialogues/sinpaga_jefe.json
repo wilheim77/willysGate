@@ -1,0 +1,355 @@
+{
+  "$comment": "Scene 4. Opened by a scene zone at the entrance of the Escorial (speaker sinpaga_enmascarado-1, the chief) instead of the plain encounter, so the fight can be talked out. The fight is by faction (sinpaga); oil cart and the high crests are on the map.",
+  "id": "sinpaga_jefe",
+  "start": "alto",
+  "nodes": {
+    "alto": {
+      "text": "Las escombreras del Escorial son montañas de piedra muerta, grises como ceniza fría. Arriba, en las crestas, hay figuras con trapos en la cara. Abajo, un carro volcado gotea aceite. Alguien ha preparado este sitio para que la gente se queme en él.",
+      "next": "jefe"
+    },
+    "jefe": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "Eh, los del banco. Hasta aquí habéis llegado. Literalmente: un paso más y os cae encima media escombrera, con nosotros detrás.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "Aquí no se pasa. Ni al Pozo ni a ningún sitio. Órdenes.",
+      "choices": [
+        {
+          "id": "quienes",
+          "text": "¿Quiénes sois?",
+          "once": true,
+          "next": "quienes"
+        },
+        {
+          "id": "ordenes",
+          "text": "¿Órdenes de quién?",
+          "once": true,
+          "next": "ordenes"
+        },
+        {
+          "text": "[40 coronas] Las órdenes se pueden revisar.",
+          "when": {
+            "item": "coronas",
+            "atLeast": 40
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -40
+            },
+            {
+              "type": "setFlag",
+              "flag": "sinpaga_pagados",
+              "value": true
+            }
+          ],
+          "next": "pagado"
+        },
+        {
+          "id": "persuadir",
+          "text": "El que os paga os va a vender igual que vendió a los cuarenta. Apartaos y quizá lleguéis a viejos.",
+          "once": true,
+          "when": {
+            "flag": "sinpaga_pagados_por_brea"
+          },
+          "check": {
+            "check": "persuasion",
+            "dc": 14,
+            "success": "convencidos",
+            "failure": "no_convencidos"
+          }
+        },
+        {
+          "id": "libro",
+          "text": "[Libro de Lisandro] Aquí pone cuánto vale lo que guardáis. Y cuánto os paga él. Haced la cuenta.",
+          "once": true,
+          "when": {
+            "flag": "tiene_libro_lisandro"
+          },
+          "next": "libro"
+        },
+        {
+          "id": "intimidar",
+          "text": "Bajad de ahí antes de que tenga que subir yo.",
+          "once": true,
+          "when": {
+            "not": {
+              "inParty": "garran"
+            }
+          },
+          "check": {
+            "check": "intimidation",
+            "dc": 16,
+            "success": "huyen",
+            "failure": "pelea"
+          }
+        },
+        {
+          "id": "intimidar_g",
+          "text": "Bajad de ahí antes de que suba él.",
+          "once": true,
+          "when": {
+            "inParty": "garran"
+          },
+          "check": {
+            "check": "intimidation",
+            "dc": 16,
+            "success": "huyen",
+            "failure": "pelea",
+            "situational": [
+              "advantage"
+            ]
+          }
+        },
+        {
+          "id": "garran",
+          "text": "[Garrán] (Garrán da un paso al frente.)",
+          "once": true,
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "garran"
+        },
+        {
+          "id": "enano",
+          "text": "[Enano] Esas crestas no aguantan peso. Si os movéis mucho, os entierra la escombrera a vosotros.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "next": "enano"
+        },
+        {
+          "text": "Atacar.",
+          "next": "pelea"
+        },
+        {
+          "text": "Retirarse por ahora.",
+          "next": "retirada"
+        }
+      ]
+    },
+    "quienes": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "Los Sinpaga. Mineros a los que el barón no pagó. Nos pusimos el nombre nosotros, para que conste. Si no nos pagan, por lo menos que se sepa quién no cobra.",
+      "next": "hub"
+    },
+    "ordenes": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "De alguien que sí paga. Puntual, cada semana, en plata buena. No preguntamos de dónde sale; para eso hay que tener la tripa llena, y la tenemos desde que no preguntamos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_pagados_por_brea",
+          "value": true
+        }
+      ],
+      "next": "ordenes_2"
+    },
+    "ordenes_2": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "El capataz Brea nos dio trabajo cuando nadie más lo hacía. Vigilar escombros. El mejor oficio que he tenido: los escombros no se quejan.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_brea",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "pagado": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "Cuarenta. Brea paga más, pero de una vez no. Pasad. Y si alguien pregunta, nos habéis matado a todos con mucho estilo.",
+      "next": "paso"
+    },
+    "convencidos": {
+      "text": "El enmascarado se baja el trapo. Debajo hay una cara joven y cansada, de minero de tercera generación. Mira hacia el Pozo y escupe.",
+      "next": "convencidos_2"
+    },
+    "convencidos_2": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "Cuarenta. Mi primo era uno. Y yo cobrando de él. Bajad, bajad al Pozo. Yo no he visto nada. Llevo meses sin ver nada; ya me sale solo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_convencidos",
+          "value": true
+        }
+      ],
+      "next": "paso"
+    },
+    "no_convencidos": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "Todos venden a todos, cobrador. La diferencia es que él paga por adelantado.",
+      "next": "hub"
+    },
+    "libro": {
+      "text": "El enmascarado no sabe leer. Uno de los suyos sí, despacio, moviendo los labios. Cuando llega a la cifra semanal de plata, deja de moverlos.",
+      "next": "libro_2"
+    },
+    "libro_2": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "¿Cuarenta libras por semana? ¿Y a nosotros nos da cinco coronas? Hijo de… Pasad. Nosotros tenemos que hablar con alguien.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_convencidos",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_contra_brea",
+          "value": true
+        }
+      ],
+      "next": "paso"
+    },
+    "huyen": {
+      "text": "Las figuras de las crestas se miran. La escombrera cruje bajo sus pies; el valor también. Uno a uno, se descuelgan por el otro lado y desaparecen.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_huyeron",
+          "value": true
+        }
+      ],
+      "next": "paso"
+    },
+    "garran": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "¿Tizón? Me cago en… ¡Es Tizón, el barrenero! El que…",
+      "next": "garran_2"
+    },
+    "garran_2": {
+      "speaker": "garran",
+      "text": "El que pone las cargas. Sí. Y sé dónde pondría una en esa escombrera para que bajarais todos a la vez.",
+      "next": "garran_3"
+    },
+    "garran_3": {
+      "text": "Nadie se ríe. Todos en el Escorial saben lo que pasa cuando Garrán Tizón dice dónde pondría una carga.",
+      "next": "garran_4"
+    },
+    "garran_4": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "Pasad. Pasad, coño. Pero que conste que fue él quien cerró la Garganta. Pregúntale. Pregúntale con quién cobró.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_huyeron",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "rumor_garran_garganta",
+          "value": true
+        }
+      ],
+      "next": "paso"
+    },
+    "enano": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "¿Qué dice el enano? … ¿Que se nos cae encima? Bajad. ¡Bajad todos, que el enano sabe de piedra!",
+      "next": "enano_2"
+    },
+    "enano_2": {
+      "text": "Bajan. Abajo, sin altura ni escombrera de su parte, son seis hombres con hambre y cuchillos. Y ahora están a tu altura.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_sin_altura",
+          "value": true
+        }
+      ],
+      "next": "enano_3"
+    },
+    "enano_3": {
+      "speaker": "sinpaga_enmascarado-1",
+      "text": "…Espera. Si la escombrera no se cae, ¿por qué hemos bajado?",
+      "choices": [
+        {
+          "text": "Porque sois tontos. (Atacar.)",
+          "next": "pelea"
+        },
+        {
+          "text": "Porque así podemos hablar como gente. Apartaos.",
+          "check": {
+            "check": "persuasion",
+            "dc": 12,
+            "success": "convencidos",
+            "failure": "pelea"
+          }
+        },
+        {
+          "text": "[40 coronas] Y porque así es más fácil cobrar. Tomad.",
+          "when": {
+            "item": "coronas",
+            "atLeast": 40
+          },
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -40
+            },
+            {
+              "type": "setFlag",
+              "flag": "sinpaga_pagados",
+              "value": true
+            }
+          ],
+          "next": "pagado"
+        },
+        {
+          "text": "Retirarse mientras piensan.",
+          "next": "retirada"
+        }
+      ]
+    },
+    "pelea": {
+      "text": "Alguien en la cresta prende una antorcha. Alguien abajo empuja un barril. El Escorial lleva meses esperando esto.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "sinpaga_combate",
+          "value": true
+        },
+        {
+          "type": "startCombat",
+          "factions": [
+            "sinpaga"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "escorial_libre",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    "paso": {
+      "text": "El camino del Pozo del Ahorcado queda libre entre las escombreras. Huele a aceite, a mineral y a algo más: a cuerda nueva.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "escorial_libre",
+          "value": true
+        }
+      ]
+    },
+    "retirada": {
+      "text": "Retrocedes hasta donde las piedras dejan de mirarte. Los Sinpaga no te siguen. No les hace falta: el Escorial es suyo y seguirá aquí."
+    }
+  }
+}

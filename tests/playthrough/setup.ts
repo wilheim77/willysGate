@@ -99,6 +99,7 @@ export function buildWorld(engine: ReturnType<typeof makeEngine>, seed: number, 
     createProp({ id: 'cofre-1', kind: 'chest', position: { x: 10, y: 13 }, spriteId: 'chest_trapped', extraTags: ['dialogue:cofre_prueba'] }),
     // A generic template creature the story fights by faction (scene 1, the trial).
     createMonster({ id: 'fanatico_pala-1', name: 'Fanático de la Pala', monsterId: 'bandit', controllerId: AI, factionId: 'fanaticos', position: { x: 12, y: 13 }, spriteId: 'fanatico_pala' }),
+    createMonster({ id: 'callado-1', name: 'Callado', monsterId: 'zombie', controllerId: AI, factionId: 'callados', position: { x: 13, y: 13 }, spriteId: 'callado', extraTags: ['noncombatant'] }),
     // Story interactables the dialogues change (map spawns <kind>-<x>, dialogue <kind>_<x>).
     createProp({ id: 'chest-libro_cuentas', kind: 'chest', position: { x: 11, y: 13 }, spriteId: 'chest_trapped', extraTags: ['dialogue:chest_libro_cuentas'] }),
   ];

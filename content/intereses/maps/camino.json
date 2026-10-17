@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 19,
+ "nextobjectid": 21,
  "properties": [
   {
    "name": "name",
@@ -22,6 +22,11 @@
    "name": "ambientLight",
    "type": "float",
    "value": 0.6
+  },
+  {
+   "name": "start",
+   "type": "bool",
+   "value": true
   }
  ],
  "layers": [
@@ -209,6 +214,18 @@
      "height": 0,
      "rotation": 0,
      "visible": true
+    },
+    {
+     "id": 13,
+     "name": "campfire-1",
+     "type": "",
+     "point": true,
+     "x": 816,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
     }
    ]
   },
@@ -223,7 +240,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 13,
+     "id": 14,
      "name": "hoguera-mineros",
      "type": "",
      "point": true,
@@ -253,11 +270,6 @@
        "name": "flicker",
        "type": "float",
        "value": 0.18
-      },
-      {
-       "name": "prop",
-       "type": "string",
-       "value": "brazier"
       }
      ]
     }
@@ -285,7 +297,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 14,
+     "id": 15,
      "name": "charco-camino",
      "type": "",
      "x": 448,
@@ -303,7 +315,7 @@
      ]
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "aceite-carro",
      "type": "",
      "x": 800,
@@ -333,7 +345,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 16,
+     "id": 17,
      "name": "cepo-furtivo",
      "type": "",
      "x": 480,
@@ -343,6 +355,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_beartrap"
+      },
       {
        "name": "detect",
        "type": "int",
@@ -398,7 +415,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 17,
+     "id": 18,
      "name": "a-hondonegra",
      "type": "",
      "x": 992,
@@ -417,6 +434,11 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-camino"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "prologo_mineros_resuelto"
       }
      ]
     }
@@ -433,13 +455,51 @@
    "y": 0,
    "objects": [
     {
-     "id": 18,
+     "id": 19,
+     "name": "garran-en-la-cuneta",
+     "type": "",
+     "x": 192,
+     "y": 0,
+     "width": 32,
+     "height": 576,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "camino_garran"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "garran"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "gate",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "protects",
+       "type": "string",
+       "value": "a-hondonegra"
+      }
+     ]
+    },
+    {
+     "id": 20,
      "name": "mineros-cortan-el-paso",
      "type": "",
      "x": 512,
-     "y": 224,
+     "y": 0,
      "width": 64,
-     "height": 160,
+     "height": 576,
      "rotation": 0,
      "visible": true,
      "properties": [
@@ -459,6 +519,16 @@
        "value": true
       },
       {
+       "name": "gate",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "protects",
+       "type": "string",
+       "value": "a-hondonegra"
+      },
+      {
        "name": "fight",
        "type": "string",
        "value": "minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3"
@@ -474,10 +544,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 22,
-   "columns": 22,
+   "tilecount": 28,
+   "columns": 28,
    "image": "terrain-logic.png",
-   "imagewidth": 704,
+   "imagewidth": 896,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -819,6 +889,96 @@
        "name": "height",
        "type": "int",
        "value": 0
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
       }
      ]
     }

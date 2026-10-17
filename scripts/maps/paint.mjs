@@ -1,6 +1,6 @@
 // A tiny canvas to paint map sources with rectangles instead of hand-aligned ASCII.
 // Terrain chars as in build.mjs: '.' stone ',' dirt ';' slag '=' planks 'H' scaffold
-// '#' wall '+' closed door '/' open door ' ' void.
+// '#' wall '+' closed door '/' open door '-' rails '|' rails_v 'v' vault ' ' void.
 export class Canvas {
   constructor(width, height, terrain = ',', h = 0) {
     this.width = width;
