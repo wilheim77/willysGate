@@ -1,6 +1,7 @@
 {
   "$comment": "Epilogue. Opened by the game once d4_resuelta is set and no fight is running. Each vignette picks its variant from D1-D4.",
   "id": "epilogo",
+  "cinematic": true,
   "start": "inicio",
   "nodes": {
     "inicio": {

@@ -82,6 +82,9 @@
     "noncombatant": true,
     "essential": true,
     "dialogue": "juicio_anselmo",
+    "dialogueByMap": {
+      "calles": "cirilo"
+    },
     "scene": "1, 3",
     "note": "Chaplain of the Santa Pala. In the square for the trial (same tree as Anselmo); afterwards his dialogue becomes \"cirilo\". In scene 3 he is at the chapel of the Santa Pala."
   },
@@ -102,7 +105,7 @@
     "spriteId": "odda",
     "faction": "cuadrilla",
     "noncombatant": true,
-    "essential": false,
+    "essential": true,
     "dialogue": "odda_hulla",
     "scene": "1",
     "note": "Dwarf, Nella's right hand. Fights in D1 depending on the choice."
@@ -112,11 +115,11 @@
     "monsterId": "thug",
     "spriteId": "odda",
     "faction": "cuadrilla",
-    "noncombatant": true,
-    "essential": false,
-    "dialogue": "odda_hulla",
+    "noncombatant": false,
+    "essential": true,
+    "dialogue": null,
     "scene": "D1",
-    "note": "Odda at the abbey gate on the night of the torches (D1, defend: d1_abadia). Same character as odda; a separate id because entity ids are unique per world. Added by the map agent; the writer may refine it."
+    "note": "Odda leading the assault on the abbey when the party defends it (abadia: rename the spawn odda to odda_noche). Fights; essential, so she is knocked out, not killed."
   },
   "mazo": {
     "name": "Barón Ulric Mazo",
@@ -176,7 +179,7 @@
   "posadera": {
     "name": "Remedios",
     "monsterId": "commoner",
-    "spriteId": "aldeana",
+    "spriteId": "posadera",
     "faction": "pueblo",
     "noncombatant": true,
     "essential": false,
@@ -211,10 +214,10 @@
     "monsterId": "thug",
     "spriteId": "callado",
     "faction": "callados",
-    "noncombatant": false,
-    "essential": false,
+    "noncombatant": true,
+    "essential": true,
     "dialogue": null,
     "scene": "6",
-    "note": "Garrán's half-brother, a Callado at Brea's side. Speaks in boveda_brea and boveda_collera."
+    "note": "Garrán's half-brother, a Callado at Brea's side. Speaks in boveda_brea and boveda_collera. Noncombatant until boveda_brea starts the fight; essential, so he is knocked out, never killed (D3 decides his fate)."
   }
 }

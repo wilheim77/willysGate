@@ -6,6 +6,6 @@
     { "id": "d1_abadia_final", "when": { "all": [{ "flag": "d1_abadia" }, { "flag": "d1_asalto_terminado" }, { "notFlag": "llave_cripta" }] }, "dialogue": "d1_abadia_final", "partner": "mazo", "map": "abadia" },
     { "id": "collera", "when": { "all": [{ "flag": "brea_derrotado" }, { "notFlag": "d3_resuelta" }] }, "dialogue": "boveda_collera", "map": "boveda" },
     { "id": "cobro", "when": { "all": [{ "flag": "d3_resuelta" }, { "notFlag": "d4_resuelta" }] }, "dialogue": "el_cobro", "partner": "dorotea", "map": "plaza" },
-    { "id": "epilogo", "when": { "flag": "d4_resuelta" }, "dialogue": "epilogo" }
+    { "id": "epilogo", "when": { "all": [{ "flag": "d4_resuelta" }, { "notFlag": "epilogo_visto" }] }, "dialogue": "epilogo" }
   ]
 }

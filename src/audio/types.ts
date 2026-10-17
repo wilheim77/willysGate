@@ -24,16 +24,23 @@ export interface MusicDef {
  * What to do when an engine event of a given type fires. `sfx` plays a fixed sound (or
  * several, layered, when given as an array — e.g. a dice rattle plus the outcome's own
  * sound); `field` + `map` pick the sfx id by looking up one field of the event (e.g.
- * field "damageType" with map { fire: "hitFire", slashing: "hitSlash" }), falling back
- * to `fallback` when the value isn't in the map. `music` switches the music state
- * (crossfades to `music[music]`, or the current map's override — see `maps` below).
- * Any of these can combine, e.g. a sound plus a music switch on the same event.
+ * field "damageType" with map { fire: "hitFire", slashing: "hitSlash" }, or a dotted
+ * path like "result.success" for a nested field), falling back to `fallback` when the
+ * value isn't in the map. `arrayField` + `itemField` (defaulting to `field`) do the same
+ * lookup against every item of an array field instead (e.g. `surfaceChanged.changes[].to`),
+ * playing one sfx per distinct match — for events that report several changes at once.
+ * `music` switches the music state (crossfades to `music[music]`, or the current map's
+ * override — see `maps` below). Any of these can combine, e.g. a sound plus a music
+ * switch on the same event. `events[type]` can be one rule or an array of rules (all of
+ * which run), for when one event needs more than one independent lookup.
  */
 export interface EventRule {
   sfx?: string | string[];
   field?: string;
-  map?: Record<string, string>;
-  fallback?: string;
+  map?: Record<string, string | string[]>;
+  fallback?: string | string[];
+  arrayField?: string;
+  itemField?: string;
   music?: string;
 }
 
@@ -56,10 +63,17 @@ export interface AudioManifest {
   music: Record<string, MusicDef>;
   /** One-shot sound effects by id. */
   sfx: Record<string, SfxDef>;
-  /** Engine event type -> what to do (play an sfx, switch music, or both). */
-  events: Record<string, EventRule>;
+  /** Engine event type -> what to do (play an sfx, switch music, or both); one rule or several. */
+  events: Record<string, EventRule | EventRule[]>;
   /** Per-map ambience and music overrides (see `MapAudioDef`). */
   maps?: Record<string, MapAudioDef>;
+  /**
+   * Picks a one-shot music stinger by a field of the `combatEnded` event (normally
+   * `winner`, a factionId or null) — e.g. { field: "winner", map: { party: "victory" },
+   * fallback: "defeat" }. Plays once (the picked `music[...]` entry should have
+   * `loop: false`), then falls back to the exploration/combat sync automatically.
+   */
+  outcomeMusic?: { field: string; map: Record<string, string>; fallback?: string };
 }
 
 export interface AudioVolumeState {
