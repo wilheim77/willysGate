@@ -79,6 +79,10 @@ export interface Ruleset {
   surfaceReactions?: SurfaceReaction[];
   /** A creature entered a surface tile, or starts its turn on one. */
   onSurface?(state: GameState, entityId: string, surface: string, trigger: 'enter' | 'turnStart', rng: RngCursor): ActionOutcome;
+  /** End of an entity's own turn, before its timed conditions tick down (a nap, a song ending). */
+  onTurnEnd?(state: GameState, entityId: string, rng: RngCursor): ActionOutcome;
+  /** A fight just started (initiative rolled), before the first turn: openers, ambushes, «Silencio». */
+  onCombatStart?(state: GameState, rng: RngCursor): ActionOutcome;
   /** End of a full round in combat (conveyor belts move, tides rise). Runs before surfaces age. */
   onRoundEnd?(state: GameState, round: number, rng: RngCursor): ActionOutcome;
   /** Shoved into something: a wall, or another creature (who may be shoved on: «¡Strike!»). */

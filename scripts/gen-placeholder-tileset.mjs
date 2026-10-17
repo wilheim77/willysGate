@@ -3,23 +3,27 @@
 // Replace with real art later; see TODO-ART.md.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
+import { LOGIC_TILES } from './maps/tileset.mjs';
 
 const TW = 32;
 const TH = 32;
 // Order = Tiled tile id. Dark, desaturated palette.
-const TILES = [
-  { name: 'stone h0', rgb: [74, 74, 80] },
-  { name: 'stone h1', rgb: [88, 88, 96] },
-  { name: 'stone h2', rgb: [104, 104, 112] },
-  { name: 'dirt', rgb: [75, 61, 48] },
-  { name: 'slag', rgb: [44, 42, 46] },
-  { name: 'wall', rgb: [58, 52, 56] },
-  { name: 'planks', rgb: [90, 70, 48] },
-  { name: 'slag h1', rgb: [58, 56, 60] },
-  { name: 'slag h2', rgb: [72, 70, 74] },
-  { name: 'dirt h1', rgb: [95, 78, 60] },
-  { name: 'dirt h2', rgb: [112, 92, 70] },
-];
+// The list itself lives in scripts/maps/tileset.mjs (shared with the map builder).
+const BASE_RGB = {
+  stone: [74, 74, 80],
+  dirt: [75, 61, 48],
+  slag: [44, 42, 46],
+  wall: [58, 52, 56],
+  planks: [90, 70, 48],
+  scaffold: [110, 84, 52],
+  door_closed: [70, 40, 30],
+  door_open: [40, 30, 26],
+};
+const TILES = LOGIC_TILES.map((t) => {
+  const lift = t.walkable === false ? 0 : t.height * 15;
+  const name = t.terrain === 'planks' && t.height === 1 ? 'planks' : `${t.terrain} h${t.height}`;
+  return { name, level: t.walkable === false ? 0 : t.height, planks: t.terrain === 'planks' || t.terrain === 'scaffold', rgb: BASE_RGB[t.terrain].map((c) => c + lift) };
+});
 
 const width = TW * TILES.length;
 const px = Buffer.alloc(width * TH * 4);
@@ -37,9 +41,9 @@ TILES.forEach((tile, t) => {
       let shade = 0.9 + noise(x, y, t) * 0.2;
       if (edge) shade *= 0.6;
       // Raised tiles (h1, h2) get one or two light bars so heights are visible in the editor.
-      const level = tile.name.endsWith('h2') ? 2 : tile.name.endsWith('h1') || tile.name === 'planks' ? 1 : 0;
+      const level = tile.level;
       if (level > 0 && y >= 4 && y < 4 + level * 4 && y % 4 < 2) shade *= 1.6;
-      if (tile.name === 'planks' && y % 6 === 0) shade *= 0.7;
+      if (tile.planks && y % 6 === 0) shade *= 0.7;
       const i = (y * width + t * TW + x) * 4;
       px[i] = Math.min(255, tile.rgb[0] * shade);
       px[i + 1] = Math.min(255, tile.rgb[1] * shade);
