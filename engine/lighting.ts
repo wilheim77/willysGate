@@ -1,4 +1,6 @@
 import type { Vec2 } from './grid';
+import { hasLineOfSight } from './los';
+import { surfacesOf } from './surfaces';
 import type { GameState } from './state';
 
 /**
@@ -30,10 +32,21 @@ export interface LightingState {
 
 export const LIGHTING_SYSTEM = 'lighting';
 
-/** Lighting of a state; maps without lighting data are fully lit. */
+/** Lighting of a state; maps without lighting data are fully lit. Burning surfaces add their own light. */
 export function lightingOf(state: GameState): LightingState {
-  const raw = state.systems[LIGHTING_SYSTEM] as unknown as LightingState | undefined;
-  return raw ?? { ambient: 1, lights: [] };
+  const raw = (state.systems[LIGHTING_SYSTEM] as unknown as LightingState | undefined) ?? { ambient: 1, lights: [] };
+  const fromSurfaces: LightSource[] = Object.entries(surfacesOf(state))
+    .filter(([, s]) => s.light)
+    .map(([key, s]) => {
+      const [x, y] = key.split(',').map(Number) as [number, number];
+      return { id: `surface:${key}`, position: { x, y }, radius: s.light!.radius, intensity: s.light!.intensity, flicker: 0.25, ...(s.light!.color ? { color: s.light!.color } : {}) };
+    });
+  return fromSurfaces.length ? { ...raw, lights: [...raw.lights, ...fromSurfaces] } : raw;
+}
+
+/** Stored lighting only (without surface lights), for editing. */
+export function storedLighting(state: GameState): LightingState {
+  return (state.systems[LIGHTING_SYSTEM] as unknown as LightingState | undefined) ?? { ambient: 1, lights: [] };
 }
 
 export function withLighting(state: GameState, lighting: LightingState): GameState {
@@ -48,7 +61,7 @@ export function lightPosition(state: GameState, light: LightSource): Vec2 | null
 
 /**
  * Light level 0..1 at a tile: the brightest of ambient and each light's linear
- * falloff. Walls do not block light yet; line of sight will be added with LoS (Phase 3).
+ * falloff. Walls block light (line of sight from the source).
  */
 export function lightLevelAt(state: GameState, pos: Vec2): number {
   const { ambient, lights } = lightingOf(state);
@@ -58,6 +71,7 @@ export function lightLevelAt(state: GameState, pos: Vec2): number {
     if (!p) continue;
     const d = Math.hypot(p.x - pos.x, p.y - pos.y);
     if (d >= light.radius) continue;
+    if (!hasLineOfSight(state, p, pos)) continue;
     level = Math.max(level, light.intensity * (1 - d / light.radius));
   }
   return Math.min(1, level);

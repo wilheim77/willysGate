@@ -2,6 +2,8 @@ import type { GameEvent } from './command-types';
 import type { Ruleset } from './ruleset';
 import type { Vec2 } from './grid';
 import type { AppliedCondition, Entity, FlagValue, GameState } from './state';
+import { inBounds, posKey, tileAt } from './grid';
+import { makeSurface, surfaceable, surfacesOf, withSurfaces } from './surfaces';
 
 /**
  * Generic state changes produced by rules (a hit, a spell, a dialogue outcome).
@@ -17,7 +19,14 @@ export type Effect =
   /** Raise or lower a pool's maximum (e.g. a spell granting extra hit points). Current moves with it. */
   | { type: 'modifyResourceMax'; entityId: string; resource: string; delta: number }
   /** Instant relocation (teleport); walking always goes through the move command. */
-  | { type: 'setPosition'; entityId: string; position: Vec2 };
+  | { type: 'setPosition'; entityId: string; position: Vec2 }
+  /** Shove `distance` tiles along (dx, dy); stops at walls, creatures and ledges too high to be pushed up. */
+  | { type: 'push'; entityId: string; dx: number; dy: number; distance: number }
+  /** Lay a surface (oil from a barrel, Grease...) on tiles. */
+  | { type: 'spawnSurface'; tiles: Vec2[]; surface: string; turns?: number }
+  /** An element touches tiles (fire, cold, lightning, water): surfaces react per the ruleset. */
+  | { type: 'applyElement'; tiles: Vec2[]; element: string }
+  | { type: 'clearSurface'; tiles: Vec2[] };
 
 export interface ResourceChangedEvent extends GameEvent {
   type: 'resourceChanged';
@@ -46,7 +55,36 @@ export interface EntityTeleportedEvent extends GameEvent {
   to: Vec2;
 }
 
-export type EffectEvent = ResourceChangedEvent | ConditionChangedEvent | FlagChangedEvent | EntityTeleportedEvent;
+/** Pushed creature: where it went, and what stopped it. */
+export interface EntityPushedEvent extends GameEvent {
+  type: 'entityPushed';
+  entityId: string;
+  from: Vec2;
+  to: Vec2;
+  /** What it hit if stopped early: a creature, a wall, or nothing. */
+  collidedWith?: { entityId?: string; wall?: boolean };
+}
+
+/** Dropped more levels than a step allows: the ruleset decides the damage. */
+export interface EntityFellEvent extends GameEvent {
+  type: 'entityFell';
+  entityId: string;
+  levels: number;
+}
+
+export interface SurfaceChangedEvent extends GameEvent {
+  type: 'surfaceChanged';
+  changes: { tile: Vec2; from: string | null; to: string | null }[];
+}
+
+export type EffectEvent =
+  | ResourceChangedEvent
+  | ConditionChangedEvent
+  | FlagChangedEvent
+  | EntityTeleportedEvent
+  | EntityPushedEvent
+  | EntityFellEvent
+  | SurfaceChangedEvent;
 
 /**
  * Applies effects in order. Unknown entities/resources/conditions are content or
@@ -114,6 +152,83 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
           events.push({ type: 'entityTeleported', entityId: e.id, from: { ...e.position }, to: { ...effect.position } });
           return { ...e, position: { ...effect.position } };
         });
+        break;
+      }
+      case 'push': {
+        const e = next.entities[effect.entityId];
+        if (!e) throw new Error(`Effect targets unknown entity "${effect.entityId}"`);
+        const from = { ...e.position };
+        let pos = from;
+        let collidedWith: EntityPushedEvent['collidedWith'];
+        let dropped = 0;
+        for (let i = 0; i < effect.distance; i++) {
+          const step = { x: pos.x + Math.sign(effect.dx), y: pos.y + Math.sign(effect.dy) };
+          const here = tileAt(next.map, pos)!;
+          const there = tileAt(next.map, step);
+          if (!inBounds(next.map, step) || !there || !there.walkable || there.height - here.height > ruleset.movement.maxStep) {
+            collidedWith = { wall: true };
+            break;
+          }
+          const blocker = Object.values(next.entities).find((o) => o.id !== e.id && o.position.x === step.x && o.position.y === step.y && ruleset.isStanding(o));
+          if (blocker) {
+            collidedWith = { entityId: blocker.id };
+            break;
+          }
+          const drop = here.height - there.height;
+          if (drop > ruleset.movement.maxStep) dropped += drop;
+          pos = step;
+        }
+        if (pos.x !== from.x || pos.y !== from.y || collidedWith) {
+          updateEntity(e.id, (x) => ({ ...x, position: { ...pos } }));
+          events.push({ type: 'entityPushed', entityId: e.id, from, to: { ...pos }, ...(collidedWith ? { collidedWith } : {}) });
+        }
+        if (dropped > 0) events.push({ type: 'entityFell', entityId: e.id, levels: dropped });
+        break;
+      }
+      case 'spawnSurface': {
+        const defs = ruleset.surfaces ?? {};
+        const layer = { ...surfacesOf(next) };
+        const changes: SurfaceChangedEvent['changes'] = [];
+        for (const t of effect.tiles) {
+          if (!surfaceable(next, t)) continue;
+          const key = posKey(t);
+          changes.push({ tile: t, from: layer[key]?.type ?? null, to: effect.surface });
+          layer[key] = makeSurface(defs, effect.surface, effect.turns);
+        }
+        next = withSurfaces(next, layer);
+        if (changes.length) events.push({ type: 'surfaceChanged', changes });
+        break;
+      }
+      case 'applyElement': {
+        const defs = ruleset.surfaces ?? {};
+        const reactions = ruleset.surfaceReactions ?? [];
+        const layer = { ...surfacesOf(next) };
+        const changes: SurfaceChangedEvent['changes'] = [];
+        for (const t of effect.tiles) {
+          if (!surfaceable(next, t)) continue;
+          const key = posKey(t);
+          const current = layer[key]?.type ?? '';
+          const reaction = reactions.find((r) => r.surface === current && r.element === effect.element);
+          if (!reaction) continue;
+          if (reaction.result === null) delete layer[key];
+          else layer[key] = makeSurface(defs, reaction.result);
+          changes.push({ tile: t, from: current || null, to: reaction.result });
+        }
+        next = withSurfaces(next, layer);
+        if (changes.length) events.push({ type: 'surfaceChanged', changes });
+        break;
+      }
+      case 'clearSurface': {
+        const layer = { ...surfacesOf(next) };
+        const changes: SurfaceChangedEvent['changes'] = [];
+        for (const t of effect.tiles) {
+          const key = posKey(t);
+          if (!layer[key]) continue;
+          changes.push({ tile: t, from: layer[key]!.type, to: null });
+          delete layer[key];
+        }
+        next = withSurfaces(next, layer);
+        if (changes.length) events.push({ type: 'surfaceChanged', changes });
         break;
       }
       case 'setFlag': {

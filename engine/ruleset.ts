@@ -3,6 +3,7 @@ import type { Effect } from './effects';
 import type { Vec2 } from './grid';
 import type { MovementRules } from './pathfinding';
 import type { RngCursor } from './rng';
+import type { SurfaceDef, SurfaceReaction } from './surfaces';
 import type { Entity, GameState, JsonValue } from './state';
 
 /**
@@ -62,6 +63,16 @@ export interface Ruleset {
    * (e.g. an opportunity attack) or null to let it pass. The engine handles the timing.
    */
   onLeaveReach?(state: GameState, reactorId: string, moverId: string, rng: RngCursor): ActionOutcome | null;
+
+  // --- Environment ---
+
+  /** Surface types this ruleset knows (oil, fire, ice...) and how elements transform them. */
+  surfaces?: Record<string, SurfaceDef>;
+  surfaceReactions?: SurfaceReaction[];
+  /** A creature entered a surface tile, or starts its turn on one. */
+  onSurface?(state: GameState, entityId: string, surface: string, trigger: 'enter' | 'turnStart', rng: RngCursor): ActionOutcome;
+  /** A creature dropped `levels` levels in one go (pushed off a ledge). */
+  onFall?(state: GameState, entityId: string, levels: number, rng: RngCursor): ActionOutcome;
 
   /** Ruleset bookkeeping when a combat ends (e.g. downed allies get back up). */
   onCombatEnd?(state: GameState, winner: string | null): ActionOutcome;

@@ -2,6 +2,7 @@ import { act, applyOutcome, checkCombatEnd, endTurn, inCombat, isAdjacent, isHos
 import { type BaseCommand, type CommandHandler, type GameEvent, fail, requireControlled } from './command-types';
 import { type Vec2, inBounds, posKey } from './grid';
 import { findPath } from './pathfinding';
+import { surfaceAt } from './surfaces';
 import { RngCursor } from './rng';
 import type { Ruleset } from './ruleset';
 import type { GameState } from './state';
@@ -31,6 +32,15 @@ export function blockedTiles(ruleset: Ruleset, state: GameState, exceptId: strin
   );
 }
 
+/** Extra movement cost of entering a tile, from its surface (rubble, deep water...). */
+export function surfaceCost(ruleset: Ruleset, state: GameState): (p: Vec2) => number {
+  const defs = ruleset.surfaces ?? {};
+  return (p) => {
+    const s = surfaceAt(state, p);
+    return s ? (defs[s.type]?.extraMoveCost ?? 0) : 0;
+  };
+}
+
 const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
   const actor = requireControlled(state, cmd.issuer, cmd.entityId);
   if (!actor.ok) return actor;
@@ -43,7 +53,11 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     if (!ruleset.canAct(entity)) return fail('cannot_act', `${entity.id} cannot act`);
   }
 
-  const result = findPath(state.map, entity.position, cmd.to, { blocked: blockedTiles(ruleset, state, entity.id), rules: ruleset.movement });
+  const result = findPath(state.map, entity.position, cmd.to, {
+    blocked: blockedTiles(ruleset, state, entity.id),
+    rules: ruleset.movement,
+    extraCost: surfaceCost(ruleset, state),
+  });
   if (!result) return fail('no_path', 'No path to destination');
   if (fighting) {
     const left = ruleset.movementBudget(entity, state) - state.turn.movementUsed;
@@ -51,14 +65,9 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
   }
   if (result.path.length === 0) return { ok: true, state, events: [] };
 
-  if (!fighting) {
-    const next: GameState = { ...state, entities: { ...state.entities, [entity.id]: { ...entity, position: { ...cmd.to } } } };
-    const moved: EntityMovedEvent = { type: 'entityMoved', entityId: entity.id, from: { ...entity.position }, path: result.path };
-    return { ok: true, state: next, events: [moved] };
-  }
-
-  // In combat, walk step by step: leaving an enemy's reach gives it a chance to react
-  // (an opportunity attack in 5e). A reaction can stop the move.
+  // Walk step by step: in combat, leaving an enemy's reach gives it a chance to react
+  // (an opportunity attack in 5e); anywhere, stepping into a surface triggers it.
+  // Either can stop the move.
   const rng = new RngCursor(state.rng);
   let next = state;
   const events: GameEvent[] = [];
@@ -73,9 +82,11 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
 
   for (const step of result.path) {
     const mover = next.entities[entity.id]!;
-    const reactors = Object.values(next.entities).filter(
-      (e) => inCombat(next, e.id) && isHostile(e, mover) && ruleset.canAct(e) && isAdjacent(e.position, prev) && !isAdjacent(e.position, step),
-    );
+    const reactors = !fighting
+      ? []
+      : Object.values(next.entities).filter(
+          (e) => inCombat(next, e.id) && isHostile(e, mover) && ruleset.canAct(e) && isAdjacent(e.position, prev) && !isAdjacent(e.position, step),
+        );
     for (const reactor of reactors) {
       const outcome = ruleset.onLeaveReach?.(next, reactor.id, entity.id, rng);
       if (!outcome) continue;
@@ -84,7 +95,7 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
         from = prev;
         segment = [];
       }
-      const r = applyOutcome(ruleset, placeAt(next, prev), outcome);
+      const r = applyOutcome(ruleset, placeAt(next, prev), outcome, rng);
       next = r.state;
       events.push(...r.events);
     }
@@ -92,13 +103,27 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     if (!stillUp || !ruleset.isStanding(stillUp) || !ruleset.canAct(stillUp)) break;
     const tileFrom = next.map.tiles[prev.y * next.map.width + prev.x]!;
     const tileTo = next.map.tiles[step.y * next.map.width + step.x]!;
-    spent += 1 + Math.max(0, tileTo.height - tileFrom.height) * ruleset.movement.climbCost;
+    spent += 1 + Math.max(0, tileTo.height - tileFrom.height) * ruleset.movement.climbCost + surfaceCost(ruleset, next)(step);
     segment.push(step);
     prev = step;
     next = placeAt(next, step);
+    const surface = surfaceAt(next, step);
+    if (surface && ruleset.onSurface) {
+      events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
+      from = step;
+      segment = [];
+      const r = applyOutcome(ruleset, next, ruleset.onSurface(next, entity.id, surface.type, 'enter', rng), rng);
+      next = r.state;
+      events.push(...r.events);
+      const after = next.entities[entity.id];
+      if (!after || !ruleset.isStanding(after) || !ruleset.canAct(after) || (after.position.x !== step.x || after.position.y !== step.y)) {
+        prev = after?.position ?? step;
+        break;
+      }
+    }
   }
   if (segment.length) events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
-  next = { ...placeAt(next, prev), rng: rng.state, turn: { ...next.turn, movementUsed: next.turn.movementUsed + spent } };
+  next = { ...placeAt(next, prev), rng: rng.state, turn: fighting ? { ...next.turn, movementUsed: next.turn.movementUsed + spent } : next.turn };
   const ended = checkCombatEnd(ruleset, next);
   return { ok: true, state: ended.state, events: [...events, ...ended.events] };
 };

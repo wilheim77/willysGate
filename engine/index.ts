@@ -8,6 +8,8 @@ export * from './combat';
 export * from './ai';
 export * from './effects';
 export * from './lighting';
+export * from './los';
+export * from './surfaces';
 export * from './checks';
 export * from './save';
 export * from './tiled';

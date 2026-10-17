@@ -82,4 +82,19 @@ export const toyRuleset: Ruleset = {
     };
   },
   glossary: { umbral: { label: 'Umbral', text: 'El número que hay que igualar o superar con 2d6.' } },
+  surfaces: {
+    holy_water: { label: 'Agua bendita' },
+    burning: { label: 'Fuego', durationRounds: 2, light: { radius: 3, intensity: 1 } },
+    mud: { label: 'Barro', extraMoveCost: 1 },
+  },
+  surfaceReactions: [
+    { surface: 'holy_water', element: 'fire', result: null },
+    { surface: 'mud', element: 'fire', result: 'burning' },
+    { surface: '', element: 'water', result: 'holy_water' },
+  ],
+  onSurface: (state, id, surface) => ({
+    effects: surface === 'burning' ? [{ type: 'modifyResource', entityId: id, resource: 'blood', delta: -1 }] : [],
+    events: [],
+  }),
+  onFall: (state, id, levels) => ({ effects: [{ type: 'modifyResource', entityId: id, resource: 'blood', delta: -levels }], events: [] }),
 };

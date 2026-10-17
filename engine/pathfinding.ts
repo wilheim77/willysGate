@@ -16,6 +16,8 @@ export interface PathOptions {
   blocked?: ReadonlySet<string>;
   /** Give up on paths more expensive than this. */
   maxCost?: number;
+  /** Extra cost to enter a tile (difficult terrain from surfaces, etc.). */
+  extraCost?: (p: Vec2) => number;
 }
 
 export interface PathResult {
@@ -103,7 +105,7 @@ export function findPath(map: GridMap, from: Vec2, to: Vec2, options: PathOption
       const cost = stepCost(map, current.pos, next, options.rules, options.blocked);
       if (cost === null) continue;
       const ni = index(next);
-      const tentative = g + cost;
+      const tentative = g + cost + (options.extraCost?.(next) ?? 0);
       if (tentative > maxCost || closed.has(ni)) continue;
       if (tentative < (gScore.get(ni) ?? Infinity)) {
         gScore.set(ni, tentative);
@@ -185,7 +187,7 @@ export function reachableTiles(map: GridMap, from: Vec2, maxCost: number, option
       const next = { x: current.pos.x + d.x, y: current.pos.y + d.y };
       const step = stepCost(map, current.pos, next, options.rules, options.blocked);
       if (step === null) continue;
-      const cost = current.cost + step;
+      const cost = current.cost + step + (options.extraCost?.(next) ?? 0);
       if (cost > maxCost) continue;
       const key = posKey(next);
       if (cost < (out.get(key)?.cost ?? Infinity)) {

@@ -6,7 +6,8 @@ import {
   fail,
   requireControlled,
 } from './command-types';
-import { type Effect, type EffectEvent, applyEffects } from './effects';
+import { type Effect, type EffectEvent, type EntityFellEvent, type EntityPushedEvent, applyEffects } from './effects';
+import { ageSurfaces, surfaceAt } from './surfaces';
 import { type Vec2, gridDistance } from './grid';
 import { RngCursor } from './rng';
 import { type ActionOutcome, type ActionTarget, type Ruleset, targetIds } from './ruleset';
@@ -71,14 +72,44 @@ export function inCombat(state: GameState, entityId: string): boolean {
   return state.turn.mode === 'combat' && state.turn.order.includes(entityId);
 }
 
-/** Applies an outcome (effects + ruleset events) and returns the merged event list. */
+/**
+ * Applies an outcome (effects + ruleset events) and returns the merged event list.
+ * With an RNG it also resolves knock-on consequences: falls (pushed off a ledge) and
+ * surfaces entered by being pushed, which may cascade (a fall into fire...).
+ */
 export function applyOutcome(
   ruleset: Ruleset,
   state: GameState,
   outcome: ActionOutcome,
+  rng?: RngCursor,
 ): { state: GameState; events: (GameEvent | EffectEvent)[] } {
   const applied = applyEffects(ruleset, state, outcome.effects);
-  return { state: applied.state, events: [...outcome.events, ...applied.events] };
+  let next = applied.state;
+  const events: GameEvent[] = [...outcome.events, ...applied.events];
+  if (!rng) return { state: next, events };
+  let pending: GameEvent[] = applied.events;
+  for (let guard = 0; guard < 8 && pending.length > 0; guard++) {
+    const follow: ActionOutcome[] = [];
+    for (const e of pending) {
+      if (e.type === 'entityFell' && ruleset.onFall) {
+        const ev = e as EntityFellEvent;
+        follow.push(ruleset.onFall(next, ev.entityId, ev.levels, rng));
+      }
+      if (e.type === 'entityPushed' && ruleset.onSurface) {
+        const ev = e as EntityPushedEvent;
+        const surface = surfaceAt(next, ev.to);
+        if (surface && next.entities[ev.entityId]) follow.push(ruleset.onSurface(next, ev.entityId, surface.type, 'enter', rng));
+      }
+    }
+    pending = [];
+    for (const o of follow) {
+      const r = applyEffects(ruleset, next, o.effects);
+      next = r.state;
+      events.push(...o.events, ...r.events);
+      pending.push(...r.events);
+    }
+  }
+  return { state: next, events };
 }
 
 /** Refills every resource the ruleset marks as per-turn. */
@@ -128,7 +159,13 @@ function beginTurn(ruleset: Ruleset, state: GameState, entityId: string, rng: Rn
       const refreshed = applyEffects(ruleset, next, refreshTurnResources(ruleset, entity));
       next = refreshed.state;
       if (ruleset.onTurnStart) {
-        const r = applyOutcome(ruleset, next, ruleset.onTurnStart(next, id, rng));
+        const r = applyOutcome(ruleset, next, ruleset.onTurnStart(next, id, rng), rng);
+        next = r.state;
+        events.push(...r.events);
+      }
+      const standingOn = next.entities[id] && surfaceAt(next, next.entities[id]!.position);
+      if (standingOn && ruleset.onSurface) {
+        const r = applyOutcome(ruleset, next, ruleset.onSurface(next, id, standingOn.type, 'turnStart', rng), rng);
         next = r.state;
         events.push(...r.events);
       }
@@ -202,10 +239,17 @@ export const endTurn: CommandHandler<EndTurnCommand> = (state, cmd, { ruleset })
     .map((c) => ({ type: 'removeCondition', entityId: cmd.entityId, condition: c.id }));
   const expired = applyEffects(ruleset, ticked, expiredEffects);
 
-  const advanced = advanceOrder(expired.state);
+  let advanced = advanceOrder(expired.state);
+  const surfaceEvents: GameEvent[] = [];
+  if (advanced.state.turn.round > expired.state.turn.round) {
+    // A new round: timed surfaces (fire) burn down.
+    const aged = ageSurfaces(advanced.state);
+    advanced = { ...advanced, state: aged.state };
+    if (aged.changed.length) surfaceEvents.push({ type: 'surfaceChanged', changes: aged.changed } as GameEvent);
+  }
   const rng = new RngCursor(advanced.state.rng);
   const begun = beginTurn(ruleset, advanced.state, advanced.nextId, rng);
-  return { ok: true, state: { ...begun.state, rng: rng.state }, events: [...expired.events, ...begun.events] };
+  return { ok: true, state: { ...begun.state, rng: rng.state }, events: [...expired.events, ...surfaceEvents, ...begun.events] };
 };
 
 export const act: CommandHandler<ActCommand> = (state, cmd, { ruleset }) => {
@@ -255,8 +299,8 @@ export const act: CommandHandler<ActCommand> = (state, cmd, { ruleset }) => {
   }));
   const performed: ActionPerformedEvent = { type: 'actionPerformed', actorId: entity.id, actionId: action.id, target: cmd.target };
   const paid = applyEffects(ruleset, { ...state, rng: rng.state }, cost);
-  const resolved = applyOutcome(ruleset, paid.state, outcome);
-  let next = resolved.state;
+  const resolved = applyOutcome(ruleset, paid.state, outcome, rng);
+  let next = { ...resolved.state, rng: rng.state };
   const events: GameEvent[] = [performed, ...paid.events, ...resolved.events];
 
   // Out of combat nobody tracks turns: per-turn resources come straight back.
