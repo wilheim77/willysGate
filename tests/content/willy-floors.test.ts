@@ -57,7 +57,7 @@ describe('Willy: procedural floor 1', () => {
       if (f.rival) rivals++;
     }
     // Floor 1: a rival room half of the time.
-    expect(rivals).toBeGreaterThan(180);
+    expect(rivals).toBeGreaterThan(SEEDS * 0.36); // about half the floors have a rival room
     expect(rivals).toBeLessThan(320);
   });
 
