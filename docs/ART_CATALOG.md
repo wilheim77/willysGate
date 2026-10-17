@@ -468,3 +468,33 @@ Sprites a mano (`hand-sprites.json`, `idle` y `move`, mirando a la derecha; el c
 | `companero-tornillo` | ingeniero | Autómata de hojalata redondeado: una antena, soplete por mano, le falta un tornillo (16×22) |
 | `companero-iker` | funcionario | Becario: camisa grande, corbata torcida, acreditación, gafas, grapadora y termo |
 | `chencho-el-base` | jugador-de-basket | Sprite existente; busto nuevo con la cinta roja |
+
+# Tabla `fx` del manifiesto (las dos partidas)
+
+Cada partida describe cómo se reproduce el efecto de cada conjuro o habilidad en `content/<juego>/art/<preset>/fx.json`. `build-extra-art.ts` y `build-willy-art.ts` lo copian a `fx` del manifiesto con `scripts/art/fx-table.ts`, que comprueba que cada prop nombrado existe. La clave es el id del conjuro o habilidad; las claves que empiezan por `@` son ganchos que no son habilidades (`@critical`: golpe crítico). Las entradas tienen la misma forma que la antigua tabla `SPELL_FX` del cliente:
+
+| `kind` | Campos | Cómo se reproduce |
+|---|---|---|
+| `projectile` | `fx`, `impactFx?`, `tilesPerSec?`, `count?`, `staggerMs?` | Del lanzador al objetivo, girado según la trayectoria; `count` > 1 lanza varios con desfase |
+| `ray` | `fx`, `impactFx?`, `durationMs?` | Estirado a lo largo de la línea lanzador→objetivo durante `durationMs`; luego el impacto |
+| `instant` | `fx` | Una vez en el objetivo (o en el lanzador si no hay objetivo) |
+| `cone` | `fx`, `delayPerTileMs?` | Una vez por casilla afectada, con retardo según la distancia al lanzador |
+| `burst` | `beadFx`, `fx`, `tilesPerSec?` | La cuenta vuela al objetivo y allí estalla `fx` |
+| `ring` | `fx`, `extraFx?` | Centrado en el lanzador |
+
+## Efectos nuevos de *Willy* (`props` de `assets/ninja/extra.png`)
+
+| Id | Uso |
+|---|---|
+| `fx-bombona-volando` | Bombona que gira por el aire (proyectil de *Lanzar bombona*) |
+| `fx-explosion-bombona` | Estallido de 48×48 con núcleo azul de gas, bola naranja, esquirlas y la válvula saliendo despedida |
+| `fx-mate-impacto` | Onda en el suelo con polvo y estrellas (32×16, a los pies): *Mate*, *Alley-oop* |
+| `fx-papeleo` | Lluvia de impresos sobre el objetivo (16×24): *Vuelva usted mañana*, *Formulario por triplicado* |
+| `fx-sello` | El sello baja, golpea y deja la marca roja: *Sello oficial* |
+| `fx-chispazo` | Chispazos en el objetivo al final del *Arco voltaico* |
+
+Vista previa de todos los efectos de *Willy*: [`art-previews/ninja-ability-fx.png`](art-previews/ninja-ability-fx.png).
+
+## Animaciones de acción de *Willy* (`actions.json`)
+
+Las mismas `attack`, `cast` y `hurt` que en *Intereses* (ver «Animaciones de acción»), derivadas con `build-action-anims.ts` para las 9 clases de Willy, los 8 compañeros, Chencho, los enemigos de la Planta 1 (`gaviota-de-lonja`, `rata-portuaria`, `cangrejo-con-casco`, `bocarte-andante`, `mimico`) y los jefes (`jefe-centollo`, `jefe-encargada`, `jefe-giganton`, `jefe-socorrista`, `jefe-presentador`). Sus frames pasan a `assets/ninja/actors.png`. Vista previa: [`art-previews/ninja-actions.png`](art-previews/ninja-actions.png).

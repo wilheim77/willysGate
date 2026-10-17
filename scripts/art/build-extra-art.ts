@@ -18,6 +18,7 @@ import { type Rect, readSpriteList } from './sprite-list.ts';
 import { FLAMES, FLAME_LEGEND, type Key, T, ascii, get, rect, rgb, rng, set } from './pixel.ts';
 import * as env from './environment-art.ts';
 import * as fx from './spell-fx.ts';
+import { applyFxTable } from './fx-table.ts';
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -1358,5 +1359,6 @@ for (const [id, o] of Object.entries(objects)) {
   const animations = Object.fromEntries(Object.entries(o).map(([a, imgs]) => [a, imgs.map(() => rects[i++]!)]));
   manifest.sprites[id] = { kind: 'frames', url, facing: 'right', animations };
 }
+applyFxTable(manifest, gameDir, preset);
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 console.log(`${preset} extra art: ${tiles.length} tiles, ${Object.keys(props).length} props, ${Object.keys(surfaces).length} surfaces, ${Object.keys(objects).length} objects -> art-src/generated/${base}.png`);

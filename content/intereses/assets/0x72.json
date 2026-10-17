@@ -5627,5 +5627,77 @@
       "w": 48,
       "h": 48
     }
+  },
+  "fx": {
+    "fire_bolt": {
+      "kind": "projectile",
+      "fx": "fx_firebolt",
+      "impactFx": "fx_firebolt_impact",
+      "tilesPerSec": 12
+    },
+    "ray_of_frost": {
+      "kind": "ray",
+      "fx": "fx_ray_of_frost",
+      "impactFx": "fx_frost_impact",
+      "durationMs": 400
+    },
+    "shocking_grasp": {
+      "kind": "instant",
+      "fx": "fx_shocking_grasp"
+    },
+    "magic_missile": {
+      "kind": "projectile",
+      "fx": "fx_magic_missile",
+      "impactFx": "fx_magic_missile_impact",
+      "tilesPerSec": 14,
+      "count": 3,
+      "staggerMs": 80
+    },
+    "burning_hands": {
+      "kind": "cone",
+      "fx": "fx_burning_hands",
+      "delayPerTileMs": 40
+    },
+    "thunderwave": {
+      "kind": "ring",
+      "fx": "fx_thunderwave"
+    },
+    "fireball": {
+      "kind": "burst",
+      "beadFx": "fx_fireball_bead",
+      "fx": "fx_fireball",
+      "tilesPerSec": 14
+    },
+    "guiding_bolt": {
+      "kind": "projectile",
+      "fx": "fx_guiding_bolt",
+      "impactFx": "fx_guiding_bolt_impact",
+      "tilesPerSec": 12
+    },
+    "sacred_flame": {
+      "kind": "instant",
+      "fx": "fx_sacred_flame"
+    },
+    "bless": {
+      "kind": "instant",
+      "fx": "fx_bless"
+    },
+    "cure_wounds": {
+      "kind": "instant",
+      "fx": "fx_healing"
+    },
+    "healing_word": {
+      "kind": "instant",
+      "fx": "fx_healing"
+    },
+    "turn_undead": {
+      "kind": "ring",
+      "fx": "fx_turn_undead",
+      "extraFx": "fx_holy_symbol"
+    },
+    "@critical": {
+      "kind": "instant",
+      "fx": "fx_hit_spark"
+    }
   }
 }
