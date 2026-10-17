@@ -21,6 +21,7 @@
 | R12 | RNG derivados por propósito | `engine/rng.ts` | W3 | Todos |
 | R13 | Efectos adicionales, macros de ruleset e **invocaciones** (`spawnEntity` con dueño, controlador, duración e IA) | `engine/effects.ts` + IA | W2-W4 | Todos (refuerzos de jefes, invocaciones de clérigo en *Intereses*) |
 | R14 | Capa `markers` en el cargador de Tiled | `engine/tiled.ts` | W3 | *Intereses* (interactuables) |
+| R15 | **Salto** (mover ignorando `maxStep` y huecos dentro de un presupuesto) y **trazado con rebote** | `engine/pathfinding.ts` + `engine/los.ts` | W2 | Pícaros y monjes de *Intereses*, saltos de vampiros |
 
 Ninguna mete reglas de *Willy* ni de d20 en `engine/`.
 
@@ -347,7 +348,7 @@ Ya previstos: `push`, `spawnSurface`. *Willy* necesita además, genéricos:
 
 ### Invocaciones (`spawnEntity`), ampliado tras la decisión del usuario
 
-La clase **Ingeniero de 5G** construye autómatas y antenas; la Influencer invoca fans; los jefes llaman refuerzos. Hace falta algo más que «crear una entidad»:
+El **Ingeniero** construye autómatas y antenas; el **Jugador de basket** pide tiempo muerto y aparece Chencho, el base; la Influencer invoca fans; el **Funcionario** y el Mimo crean barreras temporales (entidades-objeto sin controlador); los jefes llaman refuerzos. Hace falta algo más que «crear una entidad»:
 
 ```ts
 type SpawnEntityEffect = {
@@ -379,3 +380,59 @@ Y un mecanismo para que el ruleset declare **macros** que se compilan a efectos 
 ## R14. Capa `markers` en Tiled
 
 `parseTiledMap` devuelve también `markers: Marker[]` de una capa de objetos `markers` (puntos y rectángulos, `type` = propiedad `type` o la clase del objeto en Tiled, y el resto de propiedades), además de las propiedades del mapa (`roles`, `minFloor`, `weight`, `cells`). Pequeño y útil para interactuables de *Intereses*.
+
+## R15. Salto y trazado con rebote
+
+**Qué.** Dos piezas genéricas de geometría y movimiento:
+
+1. **Salto:** un movimiento que ignora `maxStep` y las casillas intermedias, dentro de un presupuesto.
+2. **Trazado de proyectil con rebote:** una línea que se refleja en muros.
+
+**Por qué.** El Jugador de basket de *Willy* salta fosos y cornisas, machaca desde arriba y rebota el balón en las paredes para esquivar la cobertura. El pathfinding actual (A* con `maxStep` y `climbCost`) no permite cruzar huecos ni subir más de `maxStep` de golpe, y la línea de visión de la Fase 3 no contempla rebotes. Las reglas concretas (cuánto salta, qué daño hace al aterrizar) son del ruleset; la geometría, del motor.
+
+**Capa.** `engine/pathfinding.ts` (salto) y el módulo de línea de visión de la Fase 3 (rebote).
+
+### Salto
+
+```ts
+export interface JumpRules {
+  maxLength: number;      // tiles, measured along the jump line (Chebyshev or straight lines only — see `lines`)
+  maxUp: number;          // levels it can rise, overriding movement.maxStep
+  safeDown: number;       // levels it can drop without a fall event
+  lines: 'straight' | 'any';   // 'straight' = the 8 grid directions only (what Willy needs)
+  overEntities?: boolean; // may pass over occupied tiles (never land on them)
+  blockedBy?: (tile: Tile, pos: Vec2) => boolean;  // e.g. low ceiling tiles block take-off/landing
+}
+
+/** Landing tiles reachable from `from` with one jump, with the height delta and whether it crosses a gap. */
+export function jumpTargets(map: GridMap, from: Vec2, rules: JumpRules, occupied: ReadonlySet<string>):
+  Array<{ to: Vec2; heightDelta: number; crossesGap: boolean; length: number }>;
+
+// Effect (the ruleset decides when it is allowed and what it costs):
+{ type: 'jump', entityId, to: Vec2, rules: JumpRules }
+// Event:
+jumped { entityId, from, to, heightDelta, crossesGap, length }
+// If heightDelta < -safeDown, the engine emits `fell { levels: -heightDelta - safeDown, cause: 'jump' }`
+// and the ruleset's onFall hook (planned in Phase 2-3) applies the damage.
+```
+
+- Un **hueco** es cualquier casilla no transitable o con `terrain: 'void'` / foso entre el origen y el destino.
+- La trayectoria pasa «por encima» de las casillas intermedias: no activa trampas ni superficies en ellas, pero **sí** queda bloqueada por muros más altos que el punto más alto entre origen y destino + 1 (no se atraviesan paredes).
+- **Techo bajo:** las casillas con la propiedad de Tiled `ceiling: 'low'` (leída en `parseTiledMap` como `Tile.ceiling?`) impiden despegar o aterrizar si `blockedBy` lo indica. Propongo añadir `ceiling?: 'low'` al `Tile` genérico (sin significado en el motor; lo interpreta el ruleset).
+- La IA podrá usar `jumpTargets` para enemigos saltadores (vaquillas, ranas).
+- **Tests:** cruzar un foso de 2, no cruzar uno de 3, subir 2 niveles con `maxUp: 2`, bloqueo por muro intermedio, techo bajo, caída tras bajar más de `safeDown`, determinismo.
+
+### Trazado con rebote
+
+```ts
+/** Traces a projectile from `from` in direction `dir` (or towards `target`) up to `range` tiles,
+ *  reflecting off wall tiles up to `maxBounces` times. Returns the tiles crossed and the first entity hit. */
+export function traceProjectile(state: GameState, from: Vec2, toward: Vec2, opts: { range: number; maxBounces: number; stopAtEntities: boolean }):
+  { path: Vec2[]; bounces: Vec2[]; hitEntityId?: string; endedAt: Vec2 };
+// Event field for the attack: `rebotes: number` and `ignoresCover: boolean` (true after at least one bounce).
+```
+
+- Reflexión en cuadrícula: al entrar en una casilla muro, se invierte la componente del eje del muro (horizontal o vertical); en esquinas, ambas.
+- Lo usa también la habilidad del Ingeniero «Arco voltaico» a nivel 3 (rebote en un autómata).
+- **Tests:** rebote simple en muro vertical y horizontal, esquina, límite de rebotes, alcance total con rebotes, impacto con la primera entidad.
+

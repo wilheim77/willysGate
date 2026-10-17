@@ -84,7 +84,7 @@
         ],
         "debilidad": "Marea baja + empujón contra pilar; el rayo en el agua le hace doble.",
         "xp": 150,
-        "etiquetas": ["rojo"]
+        "etiquetas": ["rojo", "redondo"]
       },
       "escena": "Cásting en la plaza (inicio)."
     },
@@ -189,7 +189,7 @@
         "cofres": { "porRol": { "tesoro": [1, 2], "combate": [0, 1] } }
       },
       "enemigos": {
-        "cabezudo": { "nombre": "Cabezudo", "genero": "m", "tipo": "normal", "coste": 2, "vida": 14, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 4, "rasgos": ["vejiga: golpe que empuja 1", "cabezon: −2 a que le empujen"], "xp": 18, "etiquetas": ["rojo"] },
+        "cabezudo": { "nombre": "Cabezudo", "genero": "m", "tipo": "normal", "coste": 2, "vida": 14, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 4, "rasgos": ["vejiga: golpe que empuja 1", "cabezon: −2 a que le empujen"], "xp": 18, "etiquetas": ["rojo", "redondo"] },
         "musico-de-charanga": { "nombre": "Músico de charanga", "genero": "m", "tipo": "normal", "coste": 2, "vida": 10, "def": 11, "ataque": 3, "dano": "1d4", "movimiento": 4, "rasgos": ["a-distancia 4", "anima: aliados en radio 2 +1 daño"], "xp": 16, "etiquetas": [] },
         "vaquilla": { "nombre": "Vaquilla", "genero": "f", "tipo": "normal", "coste": 3, "vida": 18, "def": 12, "ataque": 5, "dano": "1d8", "movimiento": 6, "rasgos": ["embestida: empuja 2", "persigue-rojo"], "xp": 22, "etiquetas": ["animal"] },
         "feriante": { "nombre": "Feriante", "genero": "m", "tipo": "normal", "coste": 2, "vida": 12, "def": 13, "ataque": 4, "dano": "1d6", "movimiento": 4, "rasgos": ["lanza-petardos", "huye-con-poca-vida"], "xp": 18, "etiquetas": [] },
@@ -251,7 +251,7 @@
         "cofres": { "porRol": { "tesoro": [1, 2], "combate": [0, 1] } }
       },
       "enemigos": {
-        "patito-gigante": { "nombre": "Patito de goma gigante", "genero": "m", "tipo": "normal", "coste": 2, "vida": 16, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 5, "rasgos": ["flota", "chillido: Aturde 1 al morir en radio 1"], "xp": 20, "etiquetas": [] },
+        "patito-gigante": { "nombre": "Patito de goma gigante", "genero": "m", "tipo": "normal", "coste": 2, "vida": 16, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 5, "rasgos": ["flota", "chillido: Aturde 1 al morir en radio 1"], "xp": 20, "etiquetas": ["redondo"] },
         "yeti-de-sauna": { "nombre": "Yeti de sauna", "genero": "m", "tipo": "normal", "coste": 3, "vida": 24, "def": 12, "ataque": 5, "dano": "1d10", "movimiento": 4, "rasgos": ["inmune-frio", "sudoroso: deja agua al moverse"], "xp": 26, "etiquetas": [] },
         "medusa-de-piscina": { "nombre": "Medusa de piscina", "genero": "f", "tipo": "normal", "coste": 2, "vida": 10, "def": 13, "ataque": 5, "dano": "1d6", "movimiento": 3, "rasgos": ["solo-en-agua", "veneno"], "xp": 18, "etiquetas": [] },
         "monitor-de-aquagym": { "nombre": "Monitor de aquagym", "genero": "m", "tipo": "normal", "coste": 2, "vida": 14, "def": 13, "ataque": 4, "dano": "1d6", "movimiento": 5, "rasgos": ["churro: alcance 2 y empuja 1", "arenga: aliados +1 movimiento"], "xp": 20, "etiquetas": [] },

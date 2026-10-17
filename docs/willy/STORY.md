@@ -2,7 +2,7 @@
 
 *Temporada 1: La Tierra*
 
-> Estado: **aprobada por el usuario con cambios (2026-10-17)**: los tres finales, el modo Sin repetición y la clase Ingeniero de 5G. Ver [`PROGRESS.md`](PROGRESS.md) → «Decisiones del usuario».
+> Estado: **aprobada por el usuario con cambios (2026-10-17)**: los tres finales, el modo Sin repetición y las clases Ingeniero, Funcionario y Jugador de basket. Ver [`PROGRESS.md`](PROGRESS.md) → «Decisiones del usuario».
 > Sistemas y números en [`DESIGN.md`](DESIGN.md); reglas en [`RULESET.md`](RULESET.md); prólogo en [`INTRO.md`](INTRO.md).
 
 **Tema:** el fin del mundo como entretenimiento. Sobrevivir no basta: hay que hacerlo con gracia.
@@ -31,8 +31,10 @@ Al fondo de la Planta 5 espera el presentador, **Fausto Brillante**. Quien llega
 - Fuerte por oficio, paciente por carácter y testarudo por ser de Castro.
 - Habla poco. Cuando habla, suele tener razón o hambre.
 - Su único lujo es la **bombona**: no la suelta en todo el juego. Es su arma de partida si elige la clase Butanero, y un objeto de broma recurrente si no.
-- **Raza y clase:** al empezar la Planta 1, el Sistema del concurso le obliga a elegir entre opciones absurdas (ver `RULESET.md`): 6 razas y 7 clases. Willy sigue siendo Willy por dentro, aunque por fuera sea un gnomo de jardín.
-- **La clase especial, Ingeniero de 5G** (dedicada a un amigo del usuario): Willy aparece como el técnico que estaba montando una antena en el tejado de la lonja cuando se acabó el mundo, y al que media comarca culpa del apocalipsis «por lo de las ondas». Construye autómatas de chapa y dispara rayos 5G. El humor es siempre cariñoso: el chiste son los conspiranoicos, nunca el ingeniero, que es el más competente de la mazmorra y el más cansado de dar explicaciones.
+- **Raza y clase:** al empezar la Planta 1, el Sistema del concurso le obliga a elegir entre opciones absurdas (ver `RULESET.md`): 6 razas y 9 clases. Willy sigue siendo Willy por dentro, aunque por fuera sea un gnomo de jardín.
+- **Ingeniero** (clase especial, dedicada a un amigo del usuario): Willy aparece como el técnico que estaba montando una antena en el tejado de la lonja cuando se acabó el mundo, y al que media comarca culpa del apocalipsis «por lo de las ondas». Construye autómatas de chapa y suelda con arcos voltaicos. Tiene una habilidad secreta, «??? (sin estrenar)», que al estrenarla resulta ser **5G**… y no hace nada. El Narrador se ríe («¡Ya sabíamos que el 5G no servía para nada! A lo mejor si lo subes a 6G…»), pero la habilidad sube con el uso a 6G, 7G… hasta **10G**, donde es absurdamente poderosa. Es el chiste recurrente de la clase. El humor es siempre cariñoso: el chiste son los conspiranoicos, nunca el ingeniero, que es el más competente de la mazmorra y el más cansado de dar explicaciones.
+- **Funcionario:** veinte años en la ventanilla 4 del registro de Castro. Lanza impresos que aturden, llena el suelo de expedientes, se toma su pausa del café y no hay quien lo mueva de su sitio. La sátira es sobre la burocracia (los formularios imposibles, el «vuelva usted mañana», el silencio administrativo), no sobre quienes trabajan en ella: el Funcionario es eficaz, puntual y el único que se sabe todos los trámites.
+- **Jugador de basket:** pívot de dos metros cuatro del Club Baloncesto Brazomar, de Regional. Salta fosos, sube cornisas de un salto, machaca desde arriba y rebota el balón en las paredes. Su perdición: los techos bajos y cualquier cosa redonda, a la que no puede evitar tirarle a canasta.
 
 ### El Narrador
 La voz del concurso. Un locutor contratado por Canal Abismo que ha narrado ya cuarenta y tantas temporadas en otros tantos planetas, y se le nota.

@@ -1,8 +1,8 @@
 # Ruleset `willy`: el Reglamento del Concurso
 
 > Estado: **propuesta pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
-> Razas (6) y clases (7, incluida la especial **Ingeniero de 5G**) en `content/willy/data/races.json` y `classes.json`. Objetos en `items.json`.
-> Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden la clase Ingeniero de 5G y los modos de eliminación.
+> Razas (6) y clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `content/willy/data/races.json` y `classes.json`. Objetos en `items.json`.
+> Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden las clases Ingeniero (con la habilidad secreta 5G→10G), Funcionario y Jugador de basket, y los modos de eliminación.
 
 ## Objetivos
 
@@ -141,6 +141,7 @@ El público premia matar con el entorno, así que estas reglas son generosas y c
 | Electrificada | Electrocutado | Se apaga en 1 turno |
 | Canicas | Prueba AGI DIF 13 o Tumbado | — |
 | Red | Enredado | Fuego → desaparece |
+| Expedientes (Funcionario) | Enredado | Fuego → llamas grandes 2 turnos; agua → desaparecen |
 | Cinta (Planta 2) | Te mueve 1 casilla al final de cada ronda | — (es terreno, no superficie) |
 
 ### Condiciones
@@ -163,6 +164,7 @@ El público premia matar con el entorno, así que estas reglas son generosas y c
 | `animado` | Animado | +1 al daño |
 | `dormido` | Dormido | Pierde el turno; se despierta si recibe daño |
 | `petrificado` | Petrificado | No actúa ni recibe daño |
+| `compulsado` | Compulsado | +2 a todas las tiradas e inmune a Aturdido (Sello oficial) |
 | `afortunado` | Afortunado | La próxima tirada: 2d20 y te quedas el mejor (solo objetos y ventajas raras) |
 
 ## Progresión
@@ -225,16 +227,56 @@ Cada habilidad activa (y algunas pasivas) tiene **nivel de habilidad 1-5**, inde
 | Socorrista | +2 AGU, +1 AGI | Arrastrar, agua, curar | Se duerme si no se mueve |
 | Tasador de antigüedades | +2 MAÑ, +1 SUE, +1 CAR, −1 FUE | Críticos, botín, mercado | Romper decorado le da pena |
 | Mimo táctico | +2 AGI, +1 MAÑ, −1 CAR | Paredes, atraer, encerrar | Solo gestos en los diálogos |
-| **Ingeniero de 5G** | +3 MAÑ, +1 AGU, −1 CAR | **Invocador**: autómatas, antena-torreta y rayos en línea | **Cobertura irregular**: salas sin cobertura donde todo le cuesta más; Mamá Clementina desconfía de él |
+| **Ingeniero** | +3 MAÑ, +1 AGU, −1 CAR | **Invocador**: autómatas, antena-torreta, arco voltaico y la habilidad secreta G | **Cobertura irregular**: salas sin cobertura donde la G cuesta más y sube más despacio; Mamá Clementina desconfía de él |
+| **Funcionario** | +2 MAÑ, +1 AGU, +1 CAR, −1 AGI | **Control**: aturdir con papeleo, superficie de expedientes, barreras, inamovible | **Horario de atención al público**: desde la 5.ª ronda todo le cuesta más y no hay pausa del café |
+| **Jugador de basket** | +2 AGI, +1 FUE, −1 MAÑ | **Movilidad vertical**: saltos, mates desde arriba, balón que rebota, alley-oop | **Cosas redondas y techos bajos**: tira a canasta a lo redondo sin querer; no salta en salas de techo bajo |
 
-### Ingeniero de 5G: reglas de las invocaciones
+### Ingeniero: la habilidad secreta «G»
+
+- En la ficha aparece como **«??? (sin estrenar)»**, sin descripción ni coste, hasta que se usa por primera vez. Entonces se revela como **5G** y el Narrador suelta su línea (banco `redG`, línea `g5-01`).
+- A nivel 5G **no hace nada** (1 acción, 0 energía). Es intencionado.
+- **Sube con el uso**, con umbrales propios y **6 niveles** (excepción a la regla general de 5): cuenta cada uso en combate, como mucho uno por turno, **aunque no haga nada**. En salas sin cobertura cuenta medio uso.
+
+| Nivel | Usos | Nombre | Coste | Efecto |
+|---|---|---|---|---|
+| 1 | 0 | 5G | 1 acción | Nada |
+| 2 | 3 | 6G | 1 acción, 1 energía | «Se le cuelga el vídeo»: un enemigo a 4 casillas, Mareado 1 turno |
+| 3 | 7 | 7G | 1 acción, 1 energía | «Latencia cero»: Willy y sus autómatas +1 movimiento y +1 a acertar 2 turnos |
+| 4 | 12 | 8G | 1 acción, 2 energía | «Actualización obligatoria»: enemigos en radio 3 Aturdidos 1 turno (jefes: −1 acción) |
+| 5 | 18 | 9G | 2 acciones, 3 energía | «Cobertura interplanetaria»: toda la sala, 2d6 de rayo y Electrocutados; autómatas a tope de vida |
+| 6 | 25 | 10G | 2 acciones, 4 energía, una vez por planta | «Señal absoluta»: enemigos no jefes Electrocutados y Bailando 3 turnos; jefes −25 % de vida máxima; un patrocinador al azar se hace fan; +60 s de reloj; el Narrador pierde la conexión una frase |
+
+Con un uso por turno, 6G llega en el primer combate largo, 8G hacia la Planta 2 y 10G hacia la Planta 4 si se usa a menudo. Hay un logro por nivel (de «¿Y esto qué hace?» a «Cobertura total: 10G»).
+
+Datos: `classes.json` → `ingeniero` → habilidad `red-g` (`secreta`, `subidaPorUso`, `nombresPorNivel`, `niveles`). La interfaz necesita poder mostrar una habilidad oculta y cambiar su nombre por nivel: es del cliente, con los datos del contenido.
+
+### Ingeniero: reglas de las invocaciones
 
 - **Autómata repetidor** (nivel 1): vida 10, DEF 12, ataque +4, 1d6, movimiento 4. Máximo 1 (2 con la habilidad a nivel 3). Lo controla el jugador y actúa justo después de Willy, con su propio movimiento y 1 acción. Dura hasta el final del combate.
 - **Señal:** a más de 4 casillas de Willy (6 con la Antena plegable) queda Mareado (−2 a todo).
-- **Antena repetidora** (nivel 6): torreta inmóvil 3 turnos con IA aliada; lanza un Rayo 5G gratis al empezar el turno de Willy.
+- **Antena repetidora** (nivel 6): torreta inmóvil 3 turnos con IA aliada; lanza un Arco voltaico gratis al empezar el turno de Willy.
 - Lo que eliminan las invocaciones da XP y audiencia a Willy. Las invocaciones no ganan XP ni suben de nivel; la que sube es la habilidad que las crea (por uso).
 - Si Willy cae o termina el combate, desaparecen (el autómata «se pliega»).
 - Implementación: efecto `spawnEntity` del motor (`ENGINE_REQUESTS.md` → R13) con dueño, controlador, facción, duración y perfil de IA.
+
+### Funcionario: reglas propias
+
+- **Vuelva usted mañana:** el objetivo hace una salvación de AGU contra 10 + MAÑ del Funcionario ÷ 2; si falla, Aturdido 1 turno. Los jefes no se aturden: pierden 1 acción.
+- **Expedientes** (superficie nueva): quien entra o empieza el turno dentro queda Enredado. Con fuego: llamas grandes 2 turnos (como el aceite). Con agua: desaparecen (papel mojado).
+- **Plaza en propiedad** (pasiva): inmune a todo movimiento forzado (empujones, cintas, mareas, Bailando, arrastres). Emite `forcedMoveResisted` para el Narrador y el logro «Inamovible».
+- **Compulsado** (condición nueva): +2 a todas las tiradas e inmune a Aturdido.
+- **Ventanilla cerrada:** una barrera temporal de 3 casillas (entidad-objeto creada con `spawnEntity`, como la pared del Mimo).
+- **Horario de atención al público:** desde la ronda 5 de cada combate, +1 de energía a todas sus habilidades y sin Pausa del café; fuera de combate, +1 s de reloj por interacción.
+
+### Jugador de basket: reglas del salto
+
+- **Salto** (acción `jump`, nueva en el motor: `ENGINE_REQUESTS.md` → R15): mueve en línea recta hasta N casillas **ignorando lo que hay en medio** (huecos, fosos, vacío y, con Maestría, enemigos) y subiendo hasta `maxUp` niveles, por encima del `maxStep` normal. La casilla de llegada debe ser transitable y libre.
+- **Bajar saltando** no hace daño hasta `safeDown` niveles (3 con Gran salto); más allá, daño de caída normal por los niveles que sobren.
+- **Mate:** solo tras saltar este turno o desde más alto que el objetivo. +3 a acertar además del bono de altura (+2 por nivel, máx. +4); deja Tumbado y, desde arriba, empuja 1 hacia abajo (puede provocar caída).
+- **Pase picado:** el balón viaja en línea y puede **rebotar** en muros (1 rebote, 2 a nivel 3). Tras rebotar ignora la cobertura. Necesita trazado con rebote (R15).
+- **Alley-oop:** necesita un aliado que asista (Chencho, el base, invocado con Tiempo muerto; o cualquier invocación aliada). Sin aliado, contra un muro a mitad de daño.
+- **Techo bajo:** propiedad de sala o casilla en Tiled (`ceiling: low`). Ahí no se puede saltar ni hacer Mate; intentarlo dispara el rasgo `techo-bajo`.
+- **Cosas redondas:** las entidades y objetos con la etiqueta `redondo` (bombonas, barriles, balones, cabezudos, patitos, el Centollo…).
 
 ## Modos de eliminación
 
