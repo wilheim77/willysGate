@@ -104,12 +104,15 @@
         { "item": "extintor", "peso": 6 },
         { "item": "tartera-de-mama", "peso": 7 },
         { "item": "rayo-embotellado", "peso": 5 },
-        { "item": "trompeta-de-charanga", "peso": 5 }
+        { "item": "trompeta-de-charanga", "peso": 5 },
+        { "item": "share-embotellado", "peso": 2 }
       ]
     },
     "herramientas": {
       "entradas": [
         { "item": "paraguas", "peso": 8 },
+        { "item": "cana-de-pescar", "peso": 8 },
+        { "item": "rodillo-de-cocina", "peso": 8 },
         { "item": "ballesta-de-feria", "peso": 8 },
         { "item": "antorcha-de-verbena", "peso": 8 },
         { "item": "remo-de-trainera", "peso": 7 },

@@ -6,7 +6,7 @@
 
 - **Fase W0, Diseño:** **completada y aprobada con cambios** (2026-10-17). Ver «Decisiones del usuario».
 - La premisa la definió el usuario: concurso galáctico retransmitido, 5 plantas con reloj, cásting LitRPG, audiencia, patrocinadores, cajas de botín, logros y Narrador.
-- No hay código del juego todavía (ni `game.ts` ni `rulesets/willy/`), a propósito: el build intentaría desplegarlo.
+- **Ruleset `rulesets/willy/` en marcha** (hito 1: núcleo + Butanero, Funcionario y Jugador de basket, con tests). Aún no hay `game.ts`.
 
 ## Hecho (W0)
 
@@ -17,7 +17,7 @@
 | Reglamento d20 propio (atributos visibles, niveles frecuentes, habilidades que suben con el uso) | [`RULESET.md`](RULESET.md) |
 | Diseño completo: procedural, reloj, audiencia, patrocinadores, cajas, logros, Narrador, Camerino, onboarding, arte, fases | [`DESIGN.md`](DESIGN.md) |
 | Peticiones al motor y al cliente (R1-R15) | [`ENGINE_REQUESTS.md`](ENGINE_REQUESTS.md) |
-| Willy siempre humano (rasgos fijos) y 9 clases, incluidas las especiales Ingeniero, Funcionario y Jugador de basket (57 habilidades y mazo de ventajas) | `content/willy/data/willy.json`, `classes.json` |
+| Willy siempre humano (rasgos fijos) y 9 clases, incluidas las especiales Ingeniero, Funcionario y Jugador de basket (57 habilidades y mazo de ventajas) | `rulesets/willy/data/willy.json`, `classes.json` |
 | 5 mazmorreros rivales no humanos (antes razas jugables) | `content/willy/data/rivals.json` |
 | 93 objetos (27 iniciales de clase, 66 de botín, avisos y cosméticos) | `content/willy/data/items.json` |
 | Cajas, tablas de botín, piedad, cofres, botín de enemigos y mercado | `content/willy/data/loot-tables.json` |
@@ -86,3 +86,4 @@ Cuando la sesión principal cierre la Fase 2 del motor:
 |---|---|---|
 | 1 | 2026-10-17 | 15 líneas reescritas (menos «catorce galaxias» y «once mil años»: de 19 y 10 apariciones a 8 y 7), 7 líneas nuevas con guiños a rivales, clases y al presentador, 1 línea floja sustituida. **Logros:** «Zapping» era imposible (la audiencia nunca baja del mínimo de la planta) y ahora pide llegar a ese mínimo; aclaradas 4 descripciones (5G y logros que solo puede conseguir una clase). **Cajas:** dos legendarios (Remo de la Castreña y Llavero de Producción) disponibles desde la primera partida, para que una tirada legendaria nunca se quede sin objetos en un perfil nuevo; sus logros dan ahora una caja de plata. |
 | 2 | 2026-10-17 | **Rivales:** las razas tienen forma en minúscula y con género para mitad de frase (`enFrase`: «gnoma de jardín», «minotaura vegana»); fuera la plantilla que ponía una coletilla con «¡» en minúscula tras «Y»; «influencer de su pueblo» → «influencer de pueblo» (chocaba en primera persona); 18 plantillas de frases nuevas (las 8 situaciones tienen ahora 5 cada una) y 4 líneas nuevas del Narrador para rivales, con versión masculina y femenina donde hacía falta. Comprobado renderizando las 40 plantillas con 3.000 rivales al azar de ambos géneros: ninguna variable sin resolver. **Logros de rivales:** usan las variables del rival (`{rivalNombre}`, `{rivalApodo}`) en lugar de las de enemigo. |
+| 3 | 2026-10-17 | **Botín:** la categoría «herramientas» de bronce solo tenía el paraguas (salía siempre él en las cajas de bronce): añadidas la Caña de pescar del abuelo y el Rodillo de cocina. No había consumibles legendarios: añadido el **Share embotellado** (único; se desbloquea con «Apagón de audiencia»). 4 textos de sabor corregidos o afinados (concordancia «una tuba», extintor). **Apertura de cajas:** 8 líneas nuevas del Narrador (aperturas propias del Tasador, la Influencer y el Funcionario; cajas solo de consumibles; repetidos; Share embotellado). **Logros:** 4 descripciones aclaradas (dónde ocurren: Planta 1 y 2, hielo) y la frase de «Apagón de audiencia» anuncia el desbloqueo. Total: 96 objetos, 417 frases. |
