@@ -1,0 +1,85 @@
+{
+  "$comment": "Bancos de frases del Narrador: logros, cajas de botín y objetos obtenidos. Variables: {logro}, {caja}, {objeto}, {rareza}, {cantidad}, {fichas}. La cabecera de logro se muestra antes de la frase propia de cada logro (achievements.json → narrador).",
+  "version": 1,
+  "bancos": [
+    {
+      "id": "logroCabecera", "evento": "achievementUnlocked", "probabilidad": 1, "prioridad": 5, "memoria": 10,
+      "lineas": [
+        { "id": "lc-01", "texto": "Logro desbloqueado: «{logro}»." },
+        { "id": "lc-02", "texto": "¡Ding! Logro: «{logro}»." },
+        { "id": "lc-03", "texto": "Atención, que hay logro: «{logro}»." },
+        { "id": "lc-04", "texto": "Para tu expediente: «{logro}»." },
+        { "id": "lc-05", "texto": "Logro «{logro}». Lo enmarcamos y lo colgamos en el Camerino." },
+        { "id": "lc-06", "texto": "Producción certifica el logro «{logro}». Con sello y todo." },
+        { "id": "lc-07", "texto": "Nuevo logro: «{logro}». Sí, esto también cuenta.", "si": { "categoria": "estupideces" } },
+        { "id": "lc-08", "texto": "Logro desbloqueado, y encima de los raros: «{logro}». No sé ni cómo has llegado aquí.", "si": { "oculto": true } },
+        { "id": "lc-09", "texto": "Logro «{logro}». El público lo ha votado como «lo más tonto de la semana». Enhorabuena.", "si": { "categoria": "estupideces" } },
+        { "id": "lc-10", "texto": "«{logro}». Un logro de los de verdad. De esos que se cuentan a los nietos. Si hay nietos.", "si": { "categoria": { "en": ["combate", "desafio"] } } },
+        { "id": "lc-11", "texto": "Logro: «{logro}». Usar el escenario así debería estar prohibido. Por suerte, no lo está.", "si": { "categoria": "entorno" } }
+      ]
+    },
+    {
+      "id": "logroConCaja", "evento": "achievementUnlocked", "donde": { "recompensa.caja": { "existe": true } }, "probabilidad": 1, "prioridad": 4, "memoria": 6, "despuesDe": "logroCabecera",
+      "lineas": [
+        { "id": "lk-01", "texto": "Y viene con premio: una caja de {caja}. Mira hacia arriba." },
+        { "id": "lk-02", "texto": "Producción te manda una caja de {caja}. No, no hay que firmar nada." },
+        { "id": "lk-03", "texto": "Caja de {caja} en camino. Se recomienda no estar debajo cuando caiga. Bueno, da igual, no hace daño. Creemos." }
+      ]
+    },
+    {
+      "id": "cajaLlega", "evento": "boxDelivered", "probabilidad": 0.8, "prioridad": 3, "memoria": 8,
+      "lineas": [
+        { "id": "cl-01", "texto": "¡Paquete! Cae del techo en paracaídas, como en las mejores familias." },
+        { "id": "cl-02", "texto": "Una caja baja del cielo. Bueno, del techo. Aquí el cielo es de hormigón." },
+        { "id": "cl-03", "texto": "Envío urgente de Producción. Sin acuse de recibo." },
+        { "id": "cl-04", "texto": "Regalo de {patrocinador}. Con lazo y todo. Qué detalle.", "si": { "origen": "patrocinador" } },
+        { "id": "cl-05", "texto": "La audiencia ha llegado a {espectadores}. Producción lo celebra con una caja. Producción celebra poco, aprovecha.", "si": { "origen": "audiencia" } },
+        { "id": "cl-06", "texto": "Cae una caja en mitad del combate. El público se vuelve loco. Los monstruos, también, pero de otra forma.", "si": { "enCombate": true } }
+      ]
+    },
+    {
+      "id": "cajaAbrir", "evento": "boxOpening", "probabilidad": 1, "prioridad": 4, "memoria": 10,
+      "lineas": [
+        { "id": "ca-b1", "texto": "Una caja de bronce. Huele a cartón y a esperanza moderada.", "si": { "caja": "bronce" } },
+        { "id": "ca-b2", "texto": "Bronce. Dentro puede haber de todo. Sobre todo, cosas de bronce.", "si": { "caja": "bronce" } },
+        { "id": "ca-b3", "texto": "Caja de bronce. No es la de oro, pero tampoco te la ha dado nadie por pena. Bueno, a lo mejor sí.", "si": { "caja": "bronce" } },
+        { "id": "ca-b4", "texto": "Bronce, como la medalla del que llega tercero. Que también tiene mérito, ¿eh?", "si": { "caja": "bronce" } },
+        { "id": "ca-p1", "texto": "¡Caja de plata! Con remaches. Y un lazo azul que nadie sabe atar igual dos veces.", "si": { "caja": "plata" } },
+        { "id": "ca-p2", "texto": "Plata. Esto ya es otra cosa. Esto ya se puede enseñar a la familia.", "si": { "caja": "plata" } },
+        { "id": "ca-p3", "texto": "Caja de plata. El público ha pasado de «bah» a «oh». Es un gran salto.", "si": { "caja": "plata" } },
+        { "id": "ca-o1", "texto": "¡ORO! Que suene la música. Esa música. Sí, esa.", "si": { "caja": "oro" } },
+        { "id": "ca-o2", "texto": "Caja de oro. Pesa. Brilla. Las gradas se han puesto de pie. Algunos no tienen pies, pero se han puesto igual.", "si": { "caja": "oro" } },
+        { "id": "ca-o3", "texto": "Oro. Por un momento, Willy olvida que el mundo se ha acabado. Es la magia de la televisión.", "si": { "caja": "oro" } },
+        { "id": "ca-l1", "texto": "Una caja... legendaria. Zumba. Flota. Huele a ozono. Producción jura que no es radiactiva.", "si": { "caja": "legendaria" } },
+        { "id": "ca-l2", "texto": "LEGENDARIA. Las luces del plató se atenúan solas. Nadie lo ha programado. Da un poco de miedo, la verdad.", "si": { "caja": "legendaria" } },
+        { "id": "ca-l3", "texto": "Legendaria. En cuarenta temporadas he visto pocas. Esta es la más bonita. No se lo digas a las otras.", "si": { "caja": "legendaria" } }
+      ]
+    },
+    {
+      "id": "cajaResultado", "evento": "boxOpened", "probabilidad": 0.9, "prioridad": 3, "memoria": 12,
+      "lineas": [
+        { "id": "cr-01", "texto": "{objeto:el:Mayus}. Bueno. Algo es algo." },
+        { "id": "cr-02", "texto": "Mira lo que había: {objeto:un}. Justo lo que no sabías que necesitabas." },
+        { "id": "cr-03", "texto": "{cantidad} objetos y {fichas} fichas. El capitalismo galáctico funciona." },
+        { "id": "cr-04", "texto": "{objeto:el:Mayus}. De bronce. Como la vida misma.", "si": { "rarezaMax": "bronce" } },
+        { "id": "cr-05", "texto": "Todo bronce. No pasa nada. Lo importante es participar. Eso dicen los que no ganan nunca.", "si": { "rarezaMax": "bronce" } },
+        { "id": "cr-06", "texto": "¡Plata! {objeto:el:Mayus} brilla un poquito. Lo justo.", "si": { "rarezaMax": "plata" } },
+        { "id": "cr-07", "texto": "¡{objeto:el:Mayus}! De oro. El público aplaude, y yo hago como que no me impresiona.", "si": { "rarezaMax": "oro" } },
+        { "id": "cr-08", "texto": "{objeto:el:Mayus}. Legendari{objeto:o}. Única en su especie. Bueno, únic{objeto:o}. Lo que sea, es tuy{objeto:o}.", "si": { "rarezaMax": "legendaria" } },
+        { "id": "cr-09", "texto": "¡LEGENDARIO! Hay coleccionistas en seis sistemas solares tirando el mando contra la pantalla.", "si": { "rarezaMax": "legendaria" } },
+        { "id": "cr-10", "texto": "Garantía cumplida: ocho cajas sin oro y ahí lo tienes. La suerte se puede negociar. Un poco.", "si": { "garantia": "oro" } },
+        { "id": "cr-11", "texto": "Garantía de legendaria. La cadena cumple sus promesas. Esta, al menos.", "si": { "garantia": "legendaria" } },
+        { "id": "cr-12", "texto": "Un objeto maldito. Lo pone bien grande. Tú verás lo que haces con él.", "si": { "hayMaldito": true } },
+        { "id": "cr-13", "texto": "Un Aviso de Producción. No es un objeto: es una orden. Y te va a cambiar la planta.", "si": { "hayAviso": true } }
+      ]
+    },
+    {
+      "id": "objetoMaldito", "evento": "itemEquipped", "donde": { "maldito": true }, "probabilidad": 1, "prioridad": 3, "memoria": 4,
+      "lineas": [
+        { "id": "om-01", "texto": "Te has puesto {objeto:el}. Maldit{objeto:o}. Ahora no te l{objeto:o} quitas hasta el Camerino. Yo te avisé. Bueno, te avisó la etiqueta." },
+        { "id": "om-02", "texto": "{objeto:el:Mayus} se te ha pegado como una mala costumbre. Disfrútalo." },
+        { "id": "om-03", "texto": "Maldito y equipado. Esto es lo que yo llamo vivir peligrosamente. O vivir tontamente." }
+      ]
+    }
+  ]
+}
