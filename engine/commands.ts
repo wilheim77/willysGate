@@ -3,6 +3,7 @@ import { type BaseCommand, type CommandHandler, type GameEvent, fail, requireCon
 import { type Vec2, inBounds, posKey } from './grid';
 import { type PathResult, findPath } from './pathfinding';
 import { surfaceAt } from './surfaces';
+import { type EngineContent, chooseOption, dialogueOf, interact, startDialogue } from './dialogue';
 import { RngCursor } from './rng';
 import type { Ruleset } from './ruleset';
 import type { Entity, GameState } from './state';
@@ -66,6 +67,7 @@ export function movePath(ruleset: Ruleset, state: GameState, moverId: string, to
 }
 
 const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
+  if (dialogueOf(state)) return fail('cannot_act', 'Finish the conversation first');
   const actor = requireControlled(state, cmd.issuer, cmd.entityId);
   if (!actor.ok) return actor;
   const { entity } = actor;
@@ -152,11 +154,11 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
   return { ok: true, state: ended.state, events: [...events, ...ended.events] };
 };
 
-export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act };
+export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act, startDialogue, chooseOption, interact };
 
 /** Validates a command against the state and returns the new state plus events. Pure: never mutates `state`. */
-export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCommand): ReturnType<CommandHandler> {
+export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCommand, content?: EngineContent): ReturnType<CommandHandler> {
   const handler = ENGINE_COMMANDS[command.type] ?? ruleset.commands[command.type];
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
-  return handler(state, command, { ruleset });
+  return handler(state, command, { ruleset, ...(content ? { content } : {}) });
 }

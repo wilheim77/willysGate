@@ -102,7 +102,7 @@ export interface PropSpec {
 }
 
 const PROP_STATS: Record<PropSpec['kind'], { name: string; hp: number; ac: number; tags: string[] }> = {
-  barrel_oil: { name: 'Barril de aceite', hp: 6, ac: 10, tags: ['explosive_oil'] },
+  barrel_oil: { name: 'Barril de aceite', hp: 1, ac: 10, tags: ['explosive_oil'] },
   barrel: { name: 'Barril', hp: 10, ac: 10, tags: [] },
   crate: { name: 'Caja', hp: 12, ac: 11, tags: [] },
 };

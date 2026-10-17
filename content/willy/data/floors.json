@@ -58,7 +58,7 @@
           "tesoro": { "peso": 15, "soloEnRamas": true },
           "trampa": { "peso": 15 },
           "vacia": { "peso": 15 },
-          "rival": { "peso": 0, "segun": "rivals.json → plantas: como mucho una sala por planta, en una rama o en el camino crítico" },
+          "rival": { "peso": 0, "segun": "rival-generator.json → reglas.probabilidadSalaRival (como mucho una sala por planta)" },
           "marea": { "peso": 0 }
         },
         "plantillas": "rooms/castro/",
@@ -122,7 +122,7 @@
           { "id": "p2-cajas-registradoras", "rol": "jefe", "mapa": "fixed/p2-cajas.json", "celdas": [2, 2], "posicion": "finCamino" }
         ],
         "roles": { "combate": { "peso": 55 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 15 },
-          "rival": { "peso": 0, "segun": "rivals.json → plantas: como mucho una sala por planta, en una rama o en el camino crítico" } },
+          "rival": { "peso": 0, "segun": "rival-generator.json → reglas.probabilidadSalaRival (como mucho una sala por planta)" } },
         "plantillas": "rooms/hiper/",
         "presupuestoEnemigos": { "base": 6, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
         "trampas": { "tipos": ["suelo-mojado", "estanteria-inestable"], "porSala": [0, 2] },
@@ -185,7 +185,7 @@
           { "id": "p3-plaza-mayor", "rol": "jefe", "mapa": "fixed/p3-plaza-mayor.json", "celdas": [2, 2], "posicion": "finCamino" }
         ],
         "roles": { "combate": { "peso": 55 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 15 },
-          "rival": { "peso": 0, "segun": "rivals.json → plantas: como mucho una sala por planta, en una rama o en el camino crítico" } },
+          "rival": { "peso": 0, "segun": "rival-generator.json → reglas.probabilidadSalaRival (como mucho una sala por planta)" } },
         "plantillas": "rooms/verbena/",
         "presupuestoEnemigos": { "base": 7, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
         "trampas": { "tipos": ["traca-enterrada", "toro-de-fuego"], "porSala": [0, 2] },
@@ -248,7 +248,7 @@
           { "id": "p4-piscina-olimpica", "rol": "jefe", "mapa": "fixed/p4-piscina.json", "celdas": [2, 2], "posicion": "finCamino" }
         ],
         "roles": { "combate": { "peso": 55 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 15 },
-          "rival": { "peso": 0, "segun": "rivals.json → plantas: como mucho una sala por planta, en una rama o en el camino crítico" } },
+          "rival": { "peso": 0, "segun": "rival-generator.json → reglas.probabilidadSalaRival (como mucho una sala por planta)" } },
         "plantillas": "rooms/balneario/",
         "presupuestoEnemigos": { "base": 8, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
         "trampas": { "tipos": ["suelo-pulido", "chorro-helado"], "porSala": [0, 2] },
@@ -310,7 +310,7 @@
           { "id": "p5-despacho-de-xelda", "rol": "escena", "mapa": "fixed/p5-despacho.json", "celdas": [1, 1], "posicion": { "caminoCriticoPct": [0.5, 0.7] }, "comentario": "Revelación: qué pasa con los ganadores de otras temporadas." },
           { "id": "p5-plato-principal", "rol": "jefe", "mapa": "fixed/p5-plato-principal.json", "celdas": [3, 2], "posicion": "finCamino" }
         ],
-        "roles": { "combate": { "peso": 60 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 10 }, "rival": { "peso": 0, "segun": "rivals.json" } },
+        "roles": { "combate": { "peso": 60 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 10 }, "rival": { "peso": 0, "segun": "rival-generator.json" } },
         "plantillas": "rooms/plato/",
         "presupuestoEnemigos": { "base": 9, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
         "trampas": { "tipos": ["trampilla-de-escenario", "cable-pelado"], "porSala": [0, 2] },

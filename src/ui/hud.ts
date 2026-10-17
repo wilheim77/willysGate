@@ -12,6 +12,8 @@ export class Hud {
   private fileInput = document.querySelector<HTMLInputElement>('#import-file')!;
   private slots: SaveSlots;
   private messageTimer = 0;
+  /** Called after "Nueva": the client opens character creation. */
+  onNewGame: () => void = () => undefined;
 
   constructor(
     private store: GameStore,
@@ -82,6 +84,7 @@ export class Hud {
         if (!confirm(t.confirmNew)) return;
         this.store.load(this.game.newGame(this.store.engine, randomSeed()));
         this.say(t.newGame);
+        this.onNewGame();
         break;
     }
   }

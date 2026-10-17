@@ -43,7 +43,11 @@
 
 ### P3. Rivales y resto de plantas
 
-11. **Mazmorreros rivales** (`rivals.json`): `rival-vanesa` (semigaviota), `rival-ceferino` (gnomo de jardín de cerámica, gorro rojo), `rival-gorka` (orco con corbata), `rival-mariluz` (fantasma translúcida, amable), `rival-asterio` (minotauro grande, 2 tiles de alto).
+11. **Mazmorreros rivales, modulares** (ya no son 5 sprites fijos: se generan por partida). Por capas que se combinan en el juego:
+    - **Cuerpo base por raza** (5), con idle y run, en escala de grises o con colores indexados para recolorear: `rival-cuerpo-semigaviota`, `rival-cuerpo-gnomo-de-jardin`, `rival-cuerpo-orco-de-oficina`, `rival-cuerpo-fantasma-en-practicas` (translúcido), `rival-cuerpo-minotauro-vegano` (2 tiles de alto). Cada uno en dos variantes de silueta (m/f) si sale barato; si no, una.
+    - **Paletas por raza** (5 cada una), con los ids de `rival-generator.json` → `razas[].paletas` (p. ej. `gaviota-patiamarilla`, `gorro-rojo-clasico`, `verde-fluor`, `verde-ectoplasma`, `berrendo`). Recoloreado por el pipeline de paletas.
+    - **Accesorios** superpuestos, con un punto de anclaje por raza (cabeza, cara, mano): cabeza (11: gorra, boina, casco-de-moto, sombrero-de-paja, pañuelo, corona-de-carton, gorro-de-lana, visera, tupé, auriculares, flor), cara (7: gafas-de-sol, monóculo, bigote-postizo, parche, mascarilla, pintura-de-guerra, gafas-de-pasta) y mano (9: paraguas, maletín, palo-de-escoba, sartén, megáfono, raqueta, bolsa-de-pipas, cuchara-de-madera, abanico). Deben leerse a 16 px; mejor exagerados.
+    - **Legendarios** (5, `rivals.json`): pueden ser una combinación fija de capas con algún detalle propio (Vanesa, Don Ceferino, Gorka con corbata, Mari Luz, Asterio).
 12. **El Presentador** (jefe final, `jefe-presentador`): señor elegante, traje impecable, sonrisa de presentador, siempre igual; vampiro alienígena sutil (piel algo pálida, colmillos discretos, un brillo raro en los ojos). Variante «nube de murciélagos con micrófono» para la fase 2. Arena: atriles, panel de preguntas, baldosas de colores. **Homenaje cariñoso**: caricatura amable, sin parecido fotográfico ni nada ofensivo.
 13. **Biomas 2-5 y sus jefes:** Hipermercado Eterno (Doña Rebeca), Verbena (Gigantón de 4 m, cabezudos), Balneario Glaciar (Socorrista Abisal, patitos gigantes), El Plató. Los jefes grandes pueden ser escalados ×2 con retoque.
 

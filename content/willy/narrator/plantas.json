@@ -3,102 +3,402 @@
   "version": 1,
   "bancos": [
     {
-      "id": "entrarPlanta", "evento": "floorEntered", "probabilidad": 1, "prioridad": 4, "memoria": 0,
+      "id": "entrarPlanta",
+      "evento": "floorEntered",
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 0,
       "lineas": [
-        { "id": "ep-1a", "texto": "Planta 1: Castro Sumergido. Tu pueblo, pero bajo tierra y con goteras. Bueno, como siempre, pero bajo tierra.", "si": { "planta": 1 } },
-        { "id": "ep-1b", "texto": "Castro Sumergido. Los guionistas se han documentado mucho: hay hasta un bilbaíno quejándose del precio de los pintxos.", "si": { "planta": 1, "visita": { "min": 2 } } },
-        { "id": "ep-1c", "texto": "Otra vez Castro Sumergido. La mazmorra se ha recolocado desde la última vez. Las gaviotas, no: son las mismas.", "si": { "planta": 1, "visita": { "min": 3 } } },
-        { "id": "ep-2a", "texto": "Planta 2: el Hipermercado Eterno. Abierto veinticuatro horas, trescientos sesenta y cinco días, desde hace once mil años. Las colas de la caja también.", "si": { "planta": 2 } },
-        { "id": "ep-2b", "texto": "El Hipermercado Eterno. Suena el hilo musical. Es la misma canción desde la Temporada 3. Nadie sabe cómo se llama.", "si": { "planta": 2, "visita": { "min": 2 } } },
-        { "id": "ep-3a", "texto": "Planta 3: la Verbena Sin Fin. Farolillos, orquesta, olor a churros y a pólvora. Las fiestas de tu pueblo, pero para siempre. Suena bonito hasta que lo piensas.", "si": { "planta": 3 } },
-        { "id": "ep-3b", "texto": "La Verbena. La orquesta toca «Paquito el Chocolatero» por cuarta vez. No será la última.", "si": { "planta": 3, "visita": { "min": 2 } } },
-        { "id": "ep-4a", "texto": "Planta 4: el Balneario Glaciar. Termas, saunas y piscinas heladas. Trae toalla. Y ganas de vivir.", "si": { "planta": 4 } },
-        { "id": "ep-4b", "texto": "El Balneario. Aquí se viene a relajarse. Nadie se ha relajado aquí jamás.", "si": { "planta": 4, "visita": { "min": 2 } } },
-        { "id": "ep-5a", "texto": "Planta 5: el Plató. Bienvenido a la casa de ¡Mazmorreros! Mira bien: todo es de cartón piedra. Menos los monstruos.", "si": { "planta": 5 } },
-        { "id": "ep-5b", "texto": "El Plató, otra vez. Los técnicos te saludan con la mano. Y luego intentan matarte. Es el oficio.", "si": { "planta": 5, "visita": { "min": 2 } } },
-        { "id": "ep-x1", "texto": "Has llegado cayendo con el derrumbe. Sin Camerino, sin café y con un dolor de espalda que vas a recordar. Bienvenido igualmente.", "si": { "llegada": "derrumbe" }, "prioridadExtra": 2 }
+        {
+          "id": "ep-1a",
+          "texto": "Planta 1: Castro Sumergido. Tu pueblo, pero bajo tierra y con goteras. Bueno, como siempre, pero bajo tierra.",
+          "si": {
+            "planta": 1
+          }
+        },
+        {
+          "id": "ep-1b",
+          "texto": "Castro Sumergido. Los guionistas se han documentado mucho: hay hasta un bilbaíno quejándose del precio de los pintxos.",
+          "si": {
+            "planta": 1,
+            "visita": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "ep-1c",
+          "texto": "Otra vez Castro Sumergido. La mazmorra se ha recolocado desde la última vez. Las gaviotas, no: son las mismas.",
+          "si": {
+            "planta": 1,
+            "visita": {
+              "min": 3
+            }
+          }
+        },
+        {
+          "id": "ep-2a",
+          "texto": "Planta 2: el Hipermercado Eterno. Abierto veinticuatro horas, trescientos sesenta y cinco días, desde hace once mil años. Las colas de la caja también.",
+          "si": {
+            "planta": 2
+          }
+        },
+        {
+          "id": "ep-2b",
+          "texto": "El Hipermercado Eterno. Suena el hilo musical. Es la misma canción desde la Temporada 3. Nadie sabe cómo se llama.",
+          "si": {
+            "planta": 2,
+            "visita": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "ep-3a",
+          "texto": "Planta 3: la Verbena Sin Fin. Farolillos, orquesta, olor a churros y a pólvora. Las fiestas de tu pueblo, pero para siempre. Suena bonito hasta que lo piensas.",
+          "si": {
+            "planta": 3
+          }
+        },
+        {
+          "id": "ep-3b",
+          "texto": "La Verbena. La orquesta toca «Paquito el Chocolatero» por cuarta vez. No será la última.",
+          "si": {
+            "planta": 3,
+            "visita": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "ep-4a",
+          "texto": "Planta 4: el Balneario Glaciar. Termas, saunas y piscinas heladas. Trae toalla. Y ganas de vivir.",
+          "si": {
+            "planta": 4
+          }
+        },
+        {
+          "id": "ep-4b",
+          "texto": "El Balneario. Aquí se viene a relajarse. Nadie se ha relajado aquí jamás.",
+          "si": {
+            "planta": 4,
+            "visita": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "ep-5a",
+          "texto": "Planta 5: el Plató. Bienvenido a la casa de ¡Mazmorreros! Mira bien: todo es de cartón piedra. Menos los monstruos.",
+          "si": {
+            "planta": 5
+          }
+        },
+        {
+          "id": "ep-5b",
+          "texto": "El Plató, otra vez. Los técnicos te saludan con la mano. Y luego intentan matarte. Es el oficio.",
+          "si": {
+            "planta": 5,
+            "visita": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "ep-x1",
+          "texto": "Has llegado cayendo con el derrumbe. Sin Camerino, sin café y con un dolor de espalda que vas a recordar. Bienvenido igualmente.",
+          "si": {
+            "llegada": "derrumbe"
+          },
+          "prioridadExtra": 2
+        }
       ]
     },
     {
-      "id": "relojEmpieza", "evento": "clockStarted", "probabilidad": 0.8, "prioridad": 3, "memoria": 6,
+      "id": "relojEmpieza",
+      "evento": "clockStarted",
+      "probabilidad": 0.8,
+      "prioridad": 3,
+      "memoria": 6,
       "lineas": [
-        { "id": "re-01", "texto": "El reloj corre: {reloj}. A partir de ahora, cada paso cuenta. Literalmente: cuesta un segundo." },
-        { "id": "re-02", "texto": "Producción da la señal. {reloj} para encontrar la bajada. Ni uno más. Bueno, alguno más si encuentras una pausa publicitaria." },
-        { "id": "re-03", "texto": "Reloj en marcha: {reloj}. Recuerda: pensar es gratis. Andar, no." }
+        {
+          "id": "re-01",
+          "texto": "El reloj corre: {reloj}. A partir de ahora, cada paso cuenta. Literalmente: cuesta un segundo."
+        },
+        {
+          "id": "re-02",
+          "texto": "Producción da la señal. {reloj} para encontrar la bajada. Ni uno más. Bueno, alguno más si encuentras una pausa publicitaria."
+        },
+        {
+          "id": "re-03",
+          "texto": "Reloj en marcha: {reloj}. Recuerda: pensar es gratis. Andar, no."
+        }
       ]
     },
     {
-      "id": "relojAviso", "evento": "clockWarning", "probabilidad": 1, "prioridad": 4, "memoria": 6,
+      "id": "relojAviso",
+      "evento": "clockWarning",
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 6,
       "lineas": [
-        { "id": "ra-50a", "texto": "Media planta de reloj. No es para asustarse. Todavía.", "si": { "pct": 50 } },
-        { "id": "ra-50b", "texto": "Queda la mitad del tiempo. Es un buen momento para buscar escaleras. O para ignorarme, como siempre.", "si": { "pct": 50 } },
-        { "id": "ra-50c", "texto": "Mitad del reloj. El público empieza a mirar el techo. Por si acaso.", "si": { "pct": 50 } },
-        { "id": "ra-25a", "texto": "Un cuarto de reloj. Las paredes empiezan a crujir. No es el sonido ambiente. Es de verdad.", "si": { "pct": 25 } },
-        { "id": "ra-25b", "texto": "Quedan {reloj}. Si yo fuera tú, que no lo soy por suerte, iría tirando hacia la salida.", "si": { "pct": 25 } },
-        { "id": "ra-25c", "texto": "Veinticinco por ciento. Seguros La Prudente acaba de llamar a la cadena. Están nerviosos. Les pasa mucho.", "si": { "pct": 25 } },
-        { "id": "ra-10a", "texto": "¡Diez por ciento! ¡Corre! Bueno, anda rápido. Ya me entiendes.", "si": { "pct": 10 } },
-        { "id": "ra-10b", "texto": "Quedan {reloj}. El público se está mordiendo las uñas. Los que tienen uñas. Los demás se muerden lo que pueden.", "si": { "pct": 10 } },
-        { "id": "ra-10c", "texto": "Último aviso. Si el techo te cae encima, no digas que no te lo dije. Te lo he dicho tres veces.", "si": { "pct": 10 } }
+        {
+          "id": "ra-50a",
+          "texto": "Media planta de reloj. No es para asustarse. Todavía.",
+          "si": {
+            "pct": 50
+          }
+        },
+        {
+          "id": "ra-50b",
+          "texto": "Queda la mitad del tiempo. Es un buen momento para buscar escaleras. O para ignorarme, como siempre.",
+          "si": {
+            "pct": 50
+          }
+        },
+        {
+          "id": "ra-50c",
+          "texto": "Mitad del reloj. El público empieza a mirar el techo. Por si acaso.",
+          "si": {
+            "pct": 50
+          }
+        },
+        {
+          "id": "ra-25a",
+          "texto": "Un cuarto de reloj. Las paredes empiezan a crujir. No es el sonido ambiente. Es de verdad.",
+          "si": {
+            "pct": 25
+          }
+        },
+        {
+          "id": "ra-25b",
+          "texto": "Quedan {reloj}. Si yo fuera tú, que no lo soy por suerte, iría tirando hacia la salida.",
+          "si": {
+            "pct": 25
+          }
+        },
+        {
+          "id": "ra-25c",
+          "texto": "Veinticinco por ciento. Seguros La Prudente acaba de llamar a la cadena. Están nerviosos. Les pasa mucho.",
+          "si": {
+            "pct": 25
+          }
+        },
+        {
+          "id": "ra-10a",
+          "texto": "¡Diez por ciento! ¡Corre! Bueno, anda rápido. Ya me entiendes.",
+          "si": {
+            "pct": 10
+          }
+        },
+        {
+          "id": "ra-10b",
+          "texto": "Quedan {reloj}. El público se está mordiendo las uñas. Los que tienen uñas. Los demás se muerden lo que pueden.",
+          "si": {
+            "pct": 10
+          }
+        },
+        {
+          "id": "ra-10c",
+          "texto": "Último aviso. Si el techo te cae encima, no digas que no te lo dije. Te lo he dicho tres veces.",
+          "si": {
+            "pct": 10
+          }
+        }
       ]
     },
     {
-      "id": "derrumbe", "evento": "clockExpired", "probabilidad": 1, "prioridad": 5, "memoria": 4,
+      "id": "derrumbe",
+      "evento": "clockExpired",
+      "probabilidad": 1,
+      "prioridad": 5,
+      "memoria": 4,
       "lineas": [
-        { "id": "de-01", "texto": "Se acabó el tiempo. ¡La planta se derrumba! Empieza por lo más lejano a la salida. Tú eliges: correr o caer." },
-        { "id": "de-02", "texto": "¡Derrumbe! Esto es lo que pasa cuando el reloj llega a cero. Lo pone en el reglamento. Que nadie lee." },
-        { "id": "de-03", "texto": "Cero. La Colmena está extasiada. Tú deberías estar corriendo." }
+        {
+          "id": "de-01",
+          "texto": "Se acabó el tiempo. ¡La planta se derrumba! Empieza por lo más lejano a la salida. Tú eliges: correr o caer."
+        },
+        {
+          "id": "de-02",
+          "texto": "¡Derrumbe! Esto es lo que pasa cuando el reloj llega a cero. Lo pone en el reglamento. Que nadie lee."
+        },
+        {
+          "id": "de-03",
+          "texto": "Cero. La Colmena está extasiada. Tú deberías estar corriendo."
+        }
       ]
     },
     {
-      "id": "salaSeDerrumba", "evento": "roomCollapsing", "probabilidad": 0.5, "prioridad": 3, "memoria": 6,
+      "id": "salaSeDerrumba",
+      "evento": "roomCollapsing",
+      "probabilidad": 0.5,
+      "prioridad": 3,
+      "memoria": 6,
       "lineas": [
-        { "id": "sd-01", "texto": "Otra sala que se va. Adiós, sala. No te conocíamos mucho." },
-        { "id": "sd-02", "texto": "Esa sala ya no existe. Si había algo dentro, ahora está más abajo." },
-        { "id": "sd-03", "texto": "¡Cuidado! La sala en la que estás está temblando. Muévete. Ya.", "si": { "willyDentro": true }, "prioridadExtra": 2 }
+        {
+          "id": "sd-01",
+          "texto": "Otra sala que se va. Adiós, sala. No te conocíamos mucho."
+        },
+        {
+          "id": "sd-02",
+          "texto": "Esa sala ya no existe. Si había algo dentro, ahora está más abajo."
+        },
+        {
+          "id": "sd-03",
+          "texto": "¡Cuidado! La sala en la que estás está temblando. Muévete. Ya.",
+          "si": {
+            "willyDentro": true
+          },
+          "prioridadExtra": 2
+        }
       ]
     },
     {
-      "id": "salirPlanta", "evento": "floorExited", "donde": { "metodo": "escalera" }, "probabilidad": 1, "prioridad": 4, "memoria": 8,
+      "id": "salirPlanta",
+      "evento": "floorExited",
+      "donde": {
+        "metodo": "escalera"
+      },
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 8,
       "lineas": [
-        { "id": "sp-01", "texto": "Planta superada. Sube la audiencia, baja Willy. Así funciona esto." },
-        { "id": "sp-02", "texto": "¡Escaleras! Abajo te espera el Camerino. Y luego, cosas peores." },
-        { "id": "sp-03", "texto": "Fuera con {reloj} de sobra. El público quería más drama, pero bueno, la puntualidad también es un valor.", "si": { "relojRestantePct": { "min": 50 } } },
-        { "id": "sp-04", "texto": "¡Por los pelos! Con {reloj} en el reloj. El regidor se ha tenido que sentar.", "si": { "relojRestantePct": { "max": 10 } } },
-        { "id": "sp-05", "texto": "Fuera, y sin haber visto ni la mitad de la planta. Los guionistas lloran por las salas que nadie ha visto.", "si": { "exploradoPct": { "max": 50 } } },
-        { "id": "sp-06", "texto": "Has visto toda la planta. Todas las salas. Eres un explorador o un cotilla. En Castro no hay diferencia.", "si": { "exploradoPct": 100 } }
+        {
+          "id": "sp-01",
+          "texto": "Planta superada. Sube la audiencia, baja Willy. Así funciona esto."
+        },
+        {
+          "id": "sp-02",
+          "texto": "¡Escaleras! Abajo te espera el Camerino. Y luego, cosas peores."
+        },
+        {
+          "id": "sp-03",
+          "texto": "Fuera con {reloj} de sobra. El público quería más drama, pero bueno, la puntualidad también es un valor.",
+          "si": {
+            "relojRestantePct": {
+              "min": 50
+            }
+          }
+        },
+        {
+          "id": "sp-04",
+          "texto": "¡Por los pelos! Con {reloj} en el reloj. El regidor se ha tenido que sentar.",
+          "si": {
+            "relojRestantePct": {
+              "max": 10
+            }
+          }
+        },
+        {
+          "id": "sp-05",
+          "texto": "Fuera, y sin haber visto ni la mitad de la planta. Los guionistas lloran por las salas que nadie ha visto.",
+          "si": {
+            "exploradoPct": {
+              "max": 50
+            }
+          }
+        },
+        {
+          "id": "sp-06",
+          "texto": "Has visto toda la planta. Todas las salas. Eres un explorador o un cotilla. En Castro no hay diferencia.",
+          "si": {
+            "exploradoPct": 100
+          }
+        }
       ]
     },
     {
-      "id": "caerConDerrumbe", "evento": "floorExited", "donde": { "metodo": "derrumbe" }, "probabilidad": 1, "prioridad": 5, "memoria": 4,
+      "id": "caerConDerrumbe",
+      "evento": "floorExited",
+      "donde": {
+        "metodo": "derrumbe"
+      },
+      "probabilidad": 1,
+      "prioridad": 5,
+      "memoria": 4,
       "lineas": [
-        { "id": "cd-01", "texto": "Y Willy se va con el suelo. Bajada exprés, sin escalas y sin Camerino." },
-        { "id": "cd-02", "texto": "Ha bajado una planta en cuatro segundos. Ni el ascensor más rápido del mundo. Eso sí, el aterrizaje..." },
-        { "id": "cd-03", "texto": "Se lo ha tragado la planta. La Colmena ha sufrido un desmayo colectivo de felicidad." }
+        {
+          "id": "cd-01",
+          "texto": "Y Willy se va con el suelo. Bajada exprés, sin escalas y sin Camerino."
+        },
+        {
+          "id": "cd-02",
+          "texto": "Ha bajado una planta en cuatro segundos. Ni el ascensor más rápido del mundo. Eso sí, el aterrizaje..."
+        },
+        {
+          "id": "cd-03",
+          "texto": "Se lo ha tragado la planta. La Colmena ha sufrido un desmayo colectivo de felicidad."
+        }
       ]
     },
     {
-      "id": "camerino", "evento": "safeZoneEntered", "probabilidad": 1, "prioridad": 3, "memoria": 6,
+      "id": "camerino",
+      "evento": "safeZoneEntered",
+      "probabilidad": 1,
+      "prioridad": 3,
+      "memoria": 6,
       "lineas": [
-        { "id": "cm-01", "texto": "El Camerino. Aquí no corre el reloj y nadie te ataca. Disfruta. Dura poco." },
-        { "id": "cm-02", "texto": "Zona segura. Maripuri a la izquierda, Paco a la derecha y Xelda al fondo, con cara de no haber dormido desde la Temporada 12." },
-        { "id": "cm-03", "texto": "De vuelta en el Camerino. Koldo ya está aquí. Koldo siempre está aquí. Tiene algo que contarte. Siempre tiene algo que contarte." },
-        { "id": "cm-04", "texto": "El último Camerino. Después, el Plató. Respira hondo. Compra lo que puedas. Despídete de Maripuri, por si acaso.", "si": { "planta": 4 } }
+        {
+          "id": "cm-01",
+          "texto": "El Camerino. Aquí no corre el reloj y nadie te ataca. Disfruta. Dura poco."
+        },
+        {
+          "id": "cm-02",
+          "texto": "Zona segura. Maripuri a la izquierda, Paco a la derecha y Xelda al fondo, con cara de no haber dormido desde la Temporada 12."
+        },
+        {
+          "id": "cm-03",
+          "texto": "De vuelta en el Camerino. Koldo ya está aquí. Koldo siempre está aquí. Tiene algo que contarte. Siempre tiene algo que contarte."
+        },
+        {
+          "id": "cm-04",
+          "texto": "El último Camerino. Después, el Plató. Respira hondo. Compra lo que puedas. Despídete de Maripuri, por si acaso.",
+          "si": {
+            "planta": 4
+          }
+        }
       ]
     },
     {
-      "id": "guardar", "evento": "gameSaved", "probabilidad": 0.8, "prioridad": 2, "memoria": 4,
+      "id": "guardar",
+      "evento": "gameSaved",
+      "probabilidad": 0.8,
+      "prioridad": 2,
+      "memoria": 4,
       "lineas": [
-        { "id": "gu-01", "texto": "Parte firmado. Si te eliminan, vuelves aquí. Xelda te lo dice con la mirada; yo te lo digo con palabras." },
-        { "id": "gu-02", "texto": "Partida guardada. Producción tiene una copia. Y tú otra. Y yo otra, por si acaso." },
-        { "id": "gu-03", "texto": "Guardado. Lo que pase a partir de aquí se puede repetir. Lo que no se puede repetir es la vergüenza." }
+        {
+          "id": "gu-01",
+          "texto": "Parte firmado. Si te eliminan, vuelves aquí. Xelda te lo dice con la mirada; yo te lo digo con palabras."
+        },
+        {
+          "id": "gu-02",
+          "texto": "Partida guardada. Producción tiene una copia. Y tú otra. Y yo otra, por si acaso."
+        },
+        {
+          "id": "gu-03",
+          "texto": "Guardado. Lo que pase a partir de aquí se puede repetir. Lo que no se puede repetir es la vergüenza."
+        }
       ]
     },
     {
-      "id": "descansar", "evento": "rested", "probabilidad": 1, "prioridad": 2, "memoria": 6,
+      "id": "descansar",
+      "evento": "rested",
+      "probabilidad": 1,
+      "prioridad": 2,
+      "memoria": 6,
       "lineas": [
-        { "id": "ds-01", "texto": "Un café en el Bar Paco. Vida y energía a tope. El café sigue siendo malo. Hay cosas que ni el fin del mundo cambia." },
-        { "id": "ds-02", "texto": "Paco te pone un pincho sin que se lo pidas. Paco sabe. Paco siempre sabe." },
-        { "id": "ds-03", "texto": "Descansando. Paco te cuenta que la cafetera ha sobrevivido al apocalipsis. Habla de ella con más cariño que de su mujer." }
+        {
+          "id": "ds-01",
+          "texto": "Un café en el Bar Paco. Vida y energía a tope. El café sigue siendo malo. Hay cosas que ni el fin del mundo cambia."
+        },
+        {
+          "id": "ds-02",
+          "texto": "Paco te pone un pincho sin que se lo pidas. Paco sabe. Paco siempre sabe."
+        },
+        {
+          "id": "ds-03",
+          "texto": "Descansando. Paco te cuenta que la cafetera ha sobrevivido al apocalipsis. Habla de ella con más cariño que de su mujer."
+        }
       ]
     },
     {
@@ -113,7 +413,8 @@
           "texto": "¡Competencia! Vanesa la Gaviota, de Laredo. Mitad persona, mitad gaviota, toda mano larga. Vigila la mochila.",
           "si": {
             "rival": "rival-vanesa",
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": true
           }
         },
         {
@@ -121,7 +422,8 @@
           "texto": "Don Ceferino, gnomo de jardín jubilado. Lleva cuarenta años sin moverse y no piensa empezar por ti.",
           "si": {
             "rival": "rival-ceferino",
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": true
           }
         },
         {
@@ -129,7 +431,8 @@
           "texto": "Gorka, de Compras. Orco de oficina, rival declarado y fan de las sinergias. Te va a retar. Delante de cámara. Con copia a todos.",
           "si": {
             "rival": "rival-gorka",
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": true
           }
         },
         {
@@ -137,7 +440,8 @@
           "texto": "Mari Luz, fantasma en prácticas. Muy maja. Se disculpa cada vez que asusta a alguien. Asusta mucho.",
           "si": {
             "rival": "rival-mariluz",
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": true
           }
         },
         {
@@ -145,24 +449,151 @@
           "texto": "Asterio, minotauro vegano. Sabe dónde está la salida. Odia el rojo. Mira tu mono. Ahora mira el mono otra vez. Es naranja. Respira.",
           "si": {
             "rival": "rival-asterio",
+            "primeraVez": true,
+            "legendario": true
+          }
+        },
+        {
+          "id": "rg-01",
+          "texto": "Competencia: {rivalNombre}, {rivalApodo}. {rivalRaza:Mayus}, de {rivalLugar}. Antes del fin del mundo era {rivalOficio}. Ahora es un problema.",
+          "si": {
             "primeraVez": true
           }
         },
         {
+          "id": "rg-02",
+          "texto": "Otra concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
+          "si": {
+            "primeraVez": true,
+            "rival.genero": "f"
+          }
+        },
+        {
+          "id": "rg-03",
+          "texto": "Ojo con {rivalNombre}: {rivalApodo}. Los apodos aquí no se ponen por capricho. Bueno, a veces sí.",
+          "si": {
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rg-04",
+          "texto": "{rivalNombre} ha venido desde {rivalLugar} para ganar. Tú has venido desde Castro para sobrevivir. Veamos quién tiene más ganas.",
+          "si": {
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rg-05",
+          "texto": "Se acerca {rivalNombre} con muy mala cara. {rivalRaza:Mayus}, para más señas, y {rivalMania}. Hay gente para todo.",
+          "si": {
+            "primeraVez": true,
+            "comportamiento": "agresivo"
+          }
+        },
+        {
+          "id": "rg-06",
+          "texto": "{rivalNombre} está mirando el cofre. No a ti: al cofre. Es {rivalOficio}, pero sobre todo es codicios{rival:o}.",
+          "si": {
+            "primeraVez": true,
+            "comportamiento": "codicioso"
+          }
+        },
+        {
+          "id": "rg-07",
+          "texto": "{rivalNombre} te saluda con la mano y una sonrisa. Quiere pactar. O quiere que creas que quiere pactar. En esta mazmorra, eso es lo mismo.",
+          "si": {
+            "primeraVez": true,
+            "comportamiento": {
+              "en": [
+                "aliable",
+                "tramposo"
+              ]
+            }
+          }
+        },
+        {
+          "id": "rg-08",
+          "texto": "{rivalNombre} se ha puesto delante de la cámara y te ha señalado. Duelo en directo. El público ya está aplaudiendo, y eso que aún no ha pasado nada.",
+          "si": {
+            "primeraVez": true,
+            "comportamiento": "fanfarron"
+          }
+        },
+        {
+          "id": "rg-09",
+          "texto": "{rivalNombre} te ha visto y ya está calculando la salida. No es cobardía: es planificación. Bueno, es cobardía.",
+          "si": {
+            "primeraVez": true,
+            "comportamiento": "cobarde"
+          }
+        },
+        {
           "id": "rv-06",
-          "texto": "Otra vez {rival}. En este programa la competencia nunca se jubila. Como el presentador.",
+          "texto": "Otra vez {rivalNombre}. En este programa la competencia nunca se jubila. Como el presentador.",
           "si": {
             "primeraVez": false
           }
         },
         {
           "id": "rv-07",
-          "texto": "{rival} viene como aliado. Lo que une el share, que no lo separe el guion.",
+          "texto": "{rivalNombre} viene como aliad{rival:o}. Lo que une el share, que no lo separe el guion.",
           "si": {
             "comoAliado": true
           }
+        },
+        {
+          "id": "rg-10",
+          "texto": "{rivalNombre} vuelve. La última vez se fue con el botín. Esta vez viene a por ti. Y con el botín puesto.",
+          "si": {
+            "primeraVez": false,
+            "desenlaceAnterior": "huida"
+          }
+        },
+        {
+          "id": "rg-11",
+          "texto": "{rivalNombre} vuelve, y no viene de tu lado. Pactar con alguien que silba cuando habla tenía sus riesgos.",
+          "si": {
+            "traicion": true
+          }
+        },
+        {
+          "id": "rg-02m",
+          "texto": "Otro concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
+          "si": {
+            "primeraVez": true,
+            "rival.genero": "m"
+          }
+        },
+        {
+          "id": "rg-12",
+          "texto": "{rivalNombre} {rivalApellido}. Antes del apocalipsis, {rivalOficio} en {rivalLugar}. Después del apocalipsis, lo mismo, pero con más gritos.",
+          "si": {
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rg-13",
+          "texto": "Una {rivalRaza} te corta el paso. Producción dice que es legal. Producción dice muchas cosas.",
+          "si": {
+            "primeraVez": true,
+            "rival.raza": {
+              "en": [
+                "semigaviota",
+                "fantasma-en-practicas"
+              ]
+            },
+            "rival.genero": "f"
+          }
+        },
+        {
+          "id": "rg-14",
+          "texto": "{rivalNombre} ha cambiado su rol de rival a aliad{rival:o}. En la sala de guionistas se oye un «¿y ahora qué hacemos?».",
+          "si": {
+            "evento": "pacto"
+          }
         }
-      ]
+      ],
+      "comentario": "rv-01…rv-05: rivales legendarios (rivals.json). El resto, para rivales generados (rival-generator.json); variables {rival}, {rivalNombre}, {rivalApodo}, {rivalLugar}, {rivalOficio}, {rivalMania}, {rivalRaza} con el género del rival."
     }
   ]
 }
