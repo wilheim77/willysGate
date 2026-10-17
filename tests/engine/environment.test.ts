@@ -138,3 +138,27 @@ describe('surfaces', () => {
     expect(surfaceAt(engine.deserialize(engine.serialize(s)), { x: 0, y: 0 })?.type).toBe('mud');
   });
 });
+
+describe('smoke and round-end hooks (R20)', () => {
+  it('a sight-blocking surface hides what is behind it', () => {
+    let s = engine.newGame({ seed: 1, map: asciiMap(['.....']), entities: [] });
+    expect(hasLineOfSight(s, { x: 0, y: 0 }, { x: 4, y: 0 })).toBe(true);
+    s = engine.applyEffects(s, [{ type: 'spawnSurface', tiles: [{ x: 2, y: 0 }], surface: 'smoke' }]).state;
+    expect(hasLineOfSight(s, { x: 0, y: 0 }, { x: 4, y: 0 })).toBe(false);
+  });
+
+  it('onRoundEnd runs once per round', () => {
+    let rounds = 0;
+    const rules = { ...toyRuleset, onRoundEnd: () => (rounds++, { effects: [], events: [] }) };
+    const e2 = createEngine(rules, 'test');
+    let s = e2.newGame({ seed: 1, map: asciiMap(['......']), entities: [hunter('a', 0, 0), hunter('z', 5, 0, 'night')] });
+    const started = e2.apply(s, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants: ['a', 'z'] } as never);
+    if (!started.ok) throw new Error();
+    s = started.state;
+    for (let i = 0; i < 4; i++) {
+      const r = e2.apply(s, { type: 'endTurn', issuer: SYSTEM_ISSUER, entityId: s.turn.activeEntityId! } as never);
+      if (r.ok) s = r.state;
+    }
+    expect(rounds).toBe(2);
+  });
+});

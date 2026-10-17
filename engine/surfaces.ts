@@ -22,6 +22,8 @@ export interface SurfaceDef {
   expiresInto?: string;
   /** How bad it is to stand in, roughly in health points: the AI avoids ending moves on it. */
   hazard?: number;
+  /** Thick enough to hide what's behind it (steam, smoke): blocks line of sight through the tile. */
+  blocksSight?: boolean;
 }
 
 /** `surface` is the existing surface ('' for a bare tile); `result` null removes it. */
@@ -37,6 +39,7 @@ export interface SurfaceInstance {
   type: string;
   turnsLeft?: number;
   light?: SurfaceDef['light'];
+  blocksSight?: boolean;
 }
 
 export const SURFACES_SYSTEM = 'surfaces';
@@ -60,6 +63,7 @@ export function makeSurface(defs: Record<string, SurfaceDef>, type: string, turn
   const life = turns ?? def.durationRounds;
   if (life !== undefined) s.turnsLeft = life;
   if (def.light) s.light = def.light;
+  if (def.blocksSight) s.blocksSight = true;
   return s;
 }
 

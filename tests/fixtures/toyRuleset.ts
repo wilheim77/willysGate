@@ -86,6 +86,7 @@ export const toyRuleset: Ruleset = {
     holy_water: { label: 'Agua bendita' },
     burning: { label: 'Fuego', durationRounds: 2, light: { radius: 3, intensity: 1 } },
     mud: { label: 'Barro', extraMoveCost: 1 },
+    smoke: { label: 'Humo', durationRounds: 2, blocksSight: true },
   },
   surfaceReactions: [
     { surface: 'holy_water', element: 'fire', result: null },

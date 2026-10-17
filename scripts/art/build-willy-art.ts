@@ -383,6 +383,12 @@ const tiles: [string, Image][] = [
   ['moqueta_1', carpet(61)], ['moqueta_2', carpet(62)],
   ['tarima_1', stageBoards(71)], ['tarima_2', stageBoards(72)],
   ['plato_muro_techo', studioWallTop()], ['plato_muro_cara', studioWallFace(false)], ['plato_muro_neon', studioWallFace(true)],
+  // Floor 5 arena
+  ['plato_suelo_1', show.studioFloor(81)], ['plato_suelo_2', show.studioFloor(82)],
+  ...([['roja', '#e0302a'], ['azul', '#3a8fd9'], ['verde', '#40c060'], ['amarilla', '#ffe04f']] as const).flatMap(([n, col]) => [
+    [`baldosa_${n}`, show.answerTile(col, false)] as [string, Image], [`baldosa_${n}_luz`, show.answerTile(col, true)] as [string, Image],
+  ]),
+  ['trampilla_abierta', show.trapdoorOpen()], ['gradas_1', show.bleachers(91)], ['gradas_2', show.bleachers(92)],
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; fps: number; loop: boolean; anchor: Anchor; light?: string }> = {
@@ -409,6 +415,11 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'fx-confeti': { frames: [0, 1, 2, 3, 4].map(show.confetti), fps: 12, loop: false, anchor: 'centre' },
   'fx-vapor': { frames: env.steam(), fps: 10, loop: false, anchor: 'floor' },
   'fx-explosion': { frames: env.explosion(), fps: 14, loop: false, anchor: 'centre', light: '#ffb060' },
+  // Floor 5 arena
+  'atril-rojo': { frames: [show.podium('#e0302a', false), show.podium('#e0302a', true)], fps: 0, loop: false, anchor: 'floor' },
+  'atril-azul': { frames: [show.podium('#3a8fd9', false), show.podium('#3a8fd9', true)], fps: 0, loop: false, anchor: 'floor' },
+  'atril-verde': { frames: [show.podium('#40c060', false), show.podium('#40c060', true)], fps: 0, loop: false, anchor: 'floor' },
+  'panel-de-preguntas': { frames: [0, 1, 2, 3].map(show.questionBoard), fps: 0, loop: false, anchor: 'wall', light: '#b45cff' },
 };
 /** Surface overlays (manifest 'surfaces'), with the ids of Willy's ruleset (RULESET.md → Superficies). */
 const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {
@@ -429,6 +440,7 @@ const objects: Record<string, Record<string, Image[]>> = {
   barril: { idle: [env.barrel()], broken: [env.barrelBroken()] },
   'barril-explosivo': { idle: [env.barrelOil()], broken: [env.barrelOilBroken()] },
   carrito: { idle: [show.cart()] },
+  'jefe-presentador-murcielagos': { idle: [0, 1, 2, 3].map(show.batSwarm), move: [0, 1, 2, 3].map(show.batSwarm) },
 };
 const ui: Record<string, Image> = {
   'carta-bronce': cardFrame('bronce'), 'carta-plata': cardFrame('plata'), 'carta-oro': cardFrame('oro'), 'carta-legendaria': cardFrame('legendaria'),

@@ -86,6 +86,85 @@
         28
       ],
       "face": 29
+    },
+    "plato": {
+      "tileset": "terrain",
+      "frames": [
+        30,
+        31
+      ],
+      "face": 32
+    },
+    "baldosa-roja": {
+      "tileset": "terrain",
+      "frames": [
+        33
+      ],
+      "face": 34
+    },
+    "baldosa-roja-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        35
+      ],
+      "face": 36
+    },
+    "baldosa-azul": {
+      "tileset": "terrain",
+      "frames": [
+        37
+      ],
+      "face": 38
+    },
+    "baldosa-azul-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        39
+      ],
+      "face": 40
+    },
+    "baldosa-verde": {
+      "tileset": "terrain",
+      "frames": [
+        41
+      ],
+      "face": 42
+    },
+    "baldosa-verde-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        43
+      ],
+      "face": 44
+    },
+    "baldosa-amarilla": {
+      "tileset": "terrain",
+      "frames": [
+        45
+      ],
+      "face": 46
+    },
+    "baldosa-amarilla-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        47
+      ],
+      "face": 48
+    },
+    "trampilla-abierta": {
+      "tileset": "terrain",
+      "frames": [
+        49
+      ],
+      "face": 50
+    },
+    "gradas": {
+      "tileset": "terrain",
+      "frames": [
+        51,
+        52
+      ],
+      "face": 53
     }
   },
   "sprites": {
@@ -1331,7 +1410,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 755,
+            "y": 847,
             "w": 16,
             "h": 20
           }
@@ -1339,7 +1418,7 @@
         "broken": [
           {
             "x": 16,
-            "y": 755,
+            "y": 847,
             "w": 16,
             "h": 20
           }
@@ -1354,7 +1433,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 775,
+            "y": 867,
             "w": 16,
             "h": 20
           }
@@ -1362,7 +1441,7 @@
         "broken": [
           {
             "x": 16,
-            "y": 775,
+            "y": 867,
             "w": 16,
             "h": 20
           }
@@ -1377,7 +1456,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 795,
+            "y": 887,
             "w": 16,
             "h": 16
           }
@@ -3190,6 +3269,124 @@
           }
         ]
       }
+    },
+    "jefe-presentador": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "jefe-presentador-murcielagos": {
+      "kind": "frames",
+      "url": "assets/ninja/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 32,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 64,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 96,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          }
+        ],
+        "move": [
+          {
+            "x": 128,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 160,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 192,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 224,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          }
+        ]
+      }
     }
   },
   "props": {
@@ -3853,13 +4050,106 @@
       "loop": false,
       "anchor": "centre",
       "light": "#ffb060"
+    },
+    "atril-rojo": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 579,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 16,
+          "y": 579,
+          "w": 16,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "atril-azul": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 599,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 16,
+          "y": 599,
+          "w": 16,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "atril-verde": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 619,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 16,
+          "y": 619,
+          "w": 16,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "panel-de-preguntas": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        },
+        {
+          "x": 48,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        },
+        {
+          "x": 96,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        },
+        {
+          "x": 144,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "wall",
+      "light": "#b45cff"
     }
   },
   "ui": {
     "carta-bronce": {
       "url": "assets/ninja/extra.png",
       "x": 0,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -3867,7 +4157,7 @@
     "carta-plata": {
       "url": "assets/ninja/extra.png",
       "x": 24,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -3875,7 +4165,7 @@
     "carta-oro": {
       "url": "assets/ninja/extra.png",
       "x": 48,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -3883,7 +4173,7 @@
     "carta-legendaria": {
       "url": "assets/ninja/extra.png",
       "x": 72,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -3891,140 +4181,140 @@
     "icono-audiencia": {
       "url": "assets/ninja/extra.png",
       "x": 96,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-reloj": {
       "url": "assets/ninja/extra.png",
       "x": 108,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-ardiendo": {
       "url": "assets/ninja/extra.png",
       "x": 120,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-empapado": {
       "url": "assets/ninja/extra.png",
       "x": 132,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-congelado": {
       "url": "assets/ninja/extra.png",
       "x": 144,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-electrocutado": {
       "url": "assets/ninja/extra.png",
       "x": 156,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-envenenado": {
       "url": "assets/ninja/extra.png",
       "x": 168,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-tumbado": {
       "url": "assets/ninja/extra.png",
       "x": 180,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-aturdido": {
       "url": "assets/ninja/extra.png",
       "x": 192,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-asustado": {
       "url": "assets/ninja/extra.png",
       "x": 204,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-cegado": {
       "url": "assets/ninja/extra.png",
       "x": 216,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-enredado": {
       "url": "assets/ninja/extra.png",
       "x": 228,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-bailando": {
       "url": "assets/ninja/extra.png",
       "x": 240,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-mareado": {
       "url": "assets/ninja/extra.png",
       "x": 252,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-escondido": {
       "url": "assets/ninja/extra.png",
       "x": 264,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-animado": {
       "url": "assets/ninja/extra.png",
       "x": 276,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-dormido": {
       "url": "assets/ninja/extra.png",
       "x": 288,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-petrificado": {
       "url": "assets/ninja/extra.png",
       "x": 300,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-compulsado": {
       "url": "assets/ninja/extra.png",
       "x": 312,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-afortunado": {
       "url": "assets/ninja/extra.png",
       "x": 324,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     }
@@ -4035,25 +4325,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         }
@@ -4066,7 +4356,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 595,
+          "y": 687,
           "w": 16,
           "h": 16
         }
@@ -4079,25 +4369,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         }
@@ -4110,7 +4400,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 627,
+          "y": 719,
           "w": 16,
           "h": 16
         }
@@ -4123,25 +4413,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         }
@@ -4154,25 +4444,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         }
@@ -4185,25 +4475,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         }
@@ -4216,7 +4506,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 691,
+          "y": 783,
           "w": 16,
           "h": 16
         }
@@ -4229,7 +4519,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 707,
+          "y": 799,
           "w": 16,
           "h": 16
         }
@@ -4242,7 +4532,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 723,
+          "y": 815,
           "w": 16,
           "h": 16
         }
@@ -4255,25 +4545,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         }
@@ -4497,6 +4787,20 @@
       "url": "assets/ninja/portraits.png",
       "x": 192,
       "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-presentador": {
+      "url": "assets/ninja/portraits.png",
+      "x": 224,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-presentador-murcielagos": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 128,
       "w": 32,
       "h": 32
     },
