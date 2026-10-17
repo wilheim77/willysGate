@@ -186,6 +186,83 @@ function rampRecolour(src: Image, ramp: Key[]): Image {
 }
 
 /** Thin rim strips (top 3 rows of a cell) for a renderer that draws edges separately. */
+/** Wooden door in a stone frame, as the face of a closed-door tile (planks, iron bands, ring). */
+function doorFace(): Image {
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb('s0'));
+  rect(img, 0, 0, 2, T, rgb('s1'));
+  rect(img, 14, 0, 2, T, rgb('s1'));
+  rect(img, 0, 0, T, 2, rgb('s2'));
+  rect(img, 0, 2, T, 1, rgb('out'));
+  rect(img, 2, 3, 12, 13, rgb('w2'));
+  for (let x = 2; x < 14; x += 3) {
+    rect(img, x, 3, 1, 13, rgb('w0'));
+    rect(img, x + 1, 3, 1, 13, rgb('w3'));
+  }
+  for (const y of [5, 12]) {
+    rect(img, 2, y, 12, 1, rgb('i1'));
+    rect(img, 2, y - 1, 12, 1, rgb('i2'));
+    set(img, 3, y, rgb('i0'));
+    set(img, 12, y, rgb('i0'));
+  }
+  ascii(img, 9, 7, ['.kk.', 'k..k', '.kk.'], { k: 'i2' });
+  rect(img, 1, 3, 1, 13, rgb('out'));
+  rect(img, 14, 3, 1, 13, rgb('out'));
+  return img;
+}
+
+/** Top of a closed-door tile: a wooden lintel between two capstones. */
+function doorTop(): Image {
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb('cap'));
+  rect(img, 3, 2, 10, 12, rgb('w2'));
+  for (let y = 2; y < 14; y += 4) (rect(img, 3, y, 10, 1, rgb('w3')), rect(img, 3, y + 3, 10, 1, rgb('w1')));
+  rect(img, 2, 1, 12, 1, rgb('out'));
+  rect(img, 2, 14, 12, 1, rgb('out'));
+  rect(img, 2, 1, 1, 14, rgb('out'));
+  rect(img, 13, 1, 1, 14, rgb('out'));
+  rect(img, 0, 13, T, 3, rgb('s2'));
+  rect(img, 0, 15, T, 1, rgb('s3'));
+  return img;
+}
+
+/** Top of an open-door tile: floor with a worn threshold and the leaf swung against the jamb. */
+function doorOpenTop(floor: Image): Image {
+  const img = blank(T, T);
+  blit(img, floor, 0, 0);
+  rect(img, 0, 13, T, 3, rgb('w2'));
+  rect(img, 0, 13, T, 1, rgb('w3'));
+  rect(img, 0, 15, T, 1, rgb('w0'));
+  rect(img, 0, 0, 3, 13, rgb('w2'));
+  rect(img, 1, 0, 1, 13, rgb('w3'));
+  rect(img, 3, 0, 1, 13, rgb('out'));
+  set(img, 1, 4, rgb('i2'));
+  set(img, 1, 9, rgb('i2'));
+  return img;
+}
+
+/** Face under a raised open doorway: a dark opening framed in stone. */
+function doorOpenFace(): Image {
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb('void'));
+  rect(img, 0, 0, 2, T, rgb('s1'));
+  rect(img, 14, 0, 2, T, rgb('s1'));
+  rect(img, 0, 0, T, 2, rgb('s2'));
+  rect(img, 0, 2, T, 1, rgb('out'));
+  return img;
+}
+
+/** Trap marker overlay from 0x72's floor spikes: armed (spikes up, glinting) or disarmed (dim). */
+function trapFrame(atlas: Image, list: Record<string, Rect>, frame: number, disarmed = false): Image {
+  const r = list[`floor_spikes_anim_f${frame}`]!;
+  const img = crop(atlas, r.x, r.y, T, T);
+  if (disarmed) {
+    for (let i = 0; i < img.data.length; i += 4) for (let c = 0; c < 3; c++) img.data[i + c] = Math.round(img.data[i + c]! * 0.7);
+    ascii(img, 0, 0, ['k..............k', '.k............k.'], { k: 's1' });
+  }
+  return img;
+}
+
 function rim(lip: [Key, Key, Key]): Image {
   const img = blank(T, T);
   for (let x = 0; x < T; x++) {
@@ -353,6 +430,10 @@ const tiles: [string, Image][] = [
   ['rim_stone', rim(['s1', 's2', 's3'])],
   ['rim_dirt', rim(['d0', 'd2', 'd3'])],
   ['rim_wood', rim(['w2', 'w3', 'w4'])],
+  ['door_closed_top', doorTop()],
+  ['door_closed_face', doorFace()],
+  ['door_open_top', doorOpenTop(crop(atlas, list.floor_1!.x, list.floor_1!.y, T, T))],
+  ['door_open_face', doorOpenFace()],
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps: number; loop: boolean; light?: string }> = {
@@ -365,6 +446,8 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   fx_dust: { frames: [0, 1, 2, 3, 4].map(dustPuff), note: 'Polvareda (pasos, caídas)', anchor: 'floor', fps: 12, loop: false },
   fx_explosion: { frames: env.explosion(), note: 'Explosión (32x32, centrada)', anchor: 'centre', fps: 14, loop: false, light: '#ffb060' },
   fx_steam: { frames: env.steam(), note: 'Vapor (agua y fuego)', anchor: 'floor', fps: 10, loop: false },
+  trap_armed: { frames: [3, 3, 3, 2].map((f) => trapFrame(atlas, list, f)), note: 'Trampa visible armada (pinchos fuera)', anchor: 'floor', fps: 4, loop: true },
+  trap_disarmed: { frames: [trapFrame(atlas, list, 0, true)], note: 'Trampa desarmada (pinchos retraídos, apagada)', anchor: 'floor', fps: 0, loop: false },
 };
 /** Surface overlays (manifest 'surfaces'): drawn over the floor tile, may be translucent. */
 const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {

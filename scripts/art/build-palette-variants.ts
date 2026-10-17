@@ -58,6 +58,8 @@ interface Decal {
   from?: 'top' | 'bottom';
   /** Draw only over transparent pixels (behind the body). */
   behind?: boolean;
+  /** Only stamp on these animations (default: all). */
+  anims?: string[];
 }
 
 interface Rule {
@@ -255,7 +257,7 @@ for (const { id, v, anims } of rows) {
       const pad = v.padTop ?? 0;
       const frame = blank(r.w, r.h + pad);
       blit(frame, recolour(crop(atlas, r.x, r.y, r.w, r.h), v), 0, pad);
-      blit(sheet, stamp(frame, v.decals ?? []), x, y);
+      blit(sheet, stamp(frame, (v.decals ?? []).filter((d) => !d.anims || d.anims.includes(anim))), x, y);
       const placed = { x, y, w: r.w, h: r.h + pad };
       x += r.w;
       return placed;
