@@ -35,7 +35,7 @@ Pantalla de inicio → Prólogo (saltable) → Planta 1 (tutorial + cásting)
 - **Una partida = una temporada**: 5 plantas y un final. Duración objetivo: **3-4 horas** la primera vez (35-50 min por planta).
 - Cada planta: llegar a la **escalera de bajada** antes de que el **reloj** llegue a cero, ganando audiencia por el camino y derrotando al jefe que guarda la escalera.
 - **Modo de eliminación, elegido al empezar** (ver §12): **Con repetición** (normal: si Willy cae, vuelve al último Camerino y la planta se regenera) o **Sin repetición** (hardcore: muerte permanente, la temporada termina).
-- La rejugabilidad viene de la generación procedural, las 6 razas × 7 clases, los logros por navegador, la dificultad Prime time y el modo Sin repetición.
+- La rejugabilidad viene de la generación procedural, las 6 razas × 9 clases, los logros por navegador, la dificultad Prime time y el modo Sin repetición.
 
 ## 2. Qué reutiliza del motor y qué cambia
 
@@ -158,7 +158,9 @@ Reglas completas en `RULESET.md`. Lo que importa para el diseño:
 - **Empujar es barato y fuerte** (1 acción, sin ataques de oportunidad por defecto): el entorno es la mejor arma y la que más audiencia da.
 - Cada planta tiene una **mecánica característica** que añade una forma nueva de usar el entorno (marea, cintas y carritos, pólvora, hielo y vapor, focos y decorados).
 - Los **jefes** tienen un punto débil ligado a esa mecánica (ver `floors.json`).
-- **Invocaciones (Ingeniero de 5G):** el Autómata repetidor y la Antena repetidora son entidades normales creadas con `spawnEntity` (R13). Tienen dueño (`ownerId` = Willy), la facción de Willy y duración (fin del combate o N turnos). El autómata lo **controla el jugador** y actúa justo después de Willy; la antena es una torreta con IA aliada. Lo que eliminan da experiencia y audiencia a Willy, y cuentan para sus logros. Fuera de combate se pliegan. Si Willy cae, desaparecen.
+- **Invocaciones (Ingeniero, Jugador de basket, Influencer):** el Autómata repetidor, la Antena repetidora, Chencho el base y los fans son entidades normales creadas con `spawnEntity` (R13). Tienen dueño (`ownerId` = Willy), la facción de Willy y duración (fin del combate o N turnos). El autómata lo **controla el jugador** y actúa justo después de Willy; la antena es una torreta con IA aliada. Lo que eliminan da experiencia y audiencia a Willy, y cuentan para sus logros. Fuera de combate se pliegan. Si Willy cae, desaparecen.
+- **Movilidad vertical (Jugador de basket):** saltos que cruzan huecos y suben varios niveles, mates desde arriba y balón con rebote. Es la clase que más exprime la altura y los fosos. Necesita la acción genérica de salto y el trazado con rebote del motor (R15). Las plantillas marcan las salas de **techo bajo** (bodegas, alcantarillas, saunas) con `ceiling: low`.
+- **Control (Funcionario):** aturdir a distancia, la superficie **expedientes** (enreda y arde) y barreras temporales. Su pasiva lo hace inmune a todo movimiento forzado, que en este juego es muy fuerte: a cambio, su horario de ventanilla le encarece todo a partir de la quinta ronda.
 - **IA (Fase 2 del motor):** cada enemigo tiene un perfil simple en datos (`agresivo`, `a distancia`, `cobarde`, `guardián`) y **evita** casillas peligrosas para sí mismo, salvo los Bailando y los empujados. Que la IA no se suicide sola es importante: las muertes por entorno tienen que ser mérito del jugador.
 
 ## 6. Audiencia
@@ -231,7 +233,7 @@ Piezas genéricas en el cliente (`src/fx/` y una escena de recompensa): ver `ENG
 
 ## 9. Logros
 
-Datos: `content/willy/data/achievements.json` (**102 logros**, 17 ocultos con pista).
+Datos: `content/willy/data/achievements.json` (**124 logros**, 23 ocultos con pista).
 
 ### Sistema
 
@@ -286,7 +288,7 @@ Y los del juego (`content/willy` + ruleset): `runStarted`, `runEnded`, `floorEnt
 
 ## 10. Narrador
 
-Datos: `content/willy/narrator/*.json` (**313 líneas** en 47 bancos). Motor de plantillas genérico: `ENGINE_REQUESTS.md` → R5.
+Datos: `content/willy/narrator/*.json` (**376 líneas** en 59 bancos). Motor de plantillas genérico: `ENGINE_REQUESTS.md` → R5.
 
 ### Formato de un banco
 
@@ -425,7 +427,9 @@ Todos los textos van con la voz del Narrador: sarcástico, breve, nunca un manua
   - Las 6 razas como variantes visibles de Willy (gaviota, gnomo, orco, fantasma, minotauro): recolores y piezas superpuestas.
   - Jefes grandes (Centollo, Gigantón, Socorrista): no existen a 16 px; escalar monstruos ×2 con retoque o dibujarlos.
   - Biomas modernos (hipermercado, verbena, balneario, plató): tiles propios de la sesión de arte, partiendo de Ninja Adventure (interiores) y Kenney.
-  - Ingeniero de 5G: Autómata repetidor (2 direcciones, idle y golpe) y Antena repetidora, propios; el rayo 5G como efecto de partículas.
+  - Ingeniero: Autómata repetidor (2 direcciones, idle y golpe) y Antena repetidora, propios; arco voltaico y las ondas de la habilidad G (más vistosas por nivel, de un pitido triste en 5G a un estallido de pantalla en 10G) como partículas.
+  - Funcionario: impresos voladores, superficie de expedientes (y su versión en llamas), persiana de ventanilla.
+  - Jugador de basket: balón, animación de salto por código (arco y sombra), Chencho el base (recolor de un personaje de Ninja Adventure).
   - Retratos de los 6 patrocinadores y 4 PNJ del Camerino (32×32).
   - Cajas de botín de 4 niveles con animación y cartas de rareza.
   - Viñetas del prólogo: **hechas** por la sesión de arte.
@@ -471,9 +475,9 @@ Cada fase termina con la aprobación del usuario. **Dep.** indica lo que necesit
 
 | Fase | Contenido | Dep. |
 |---|---|---|
-| **W0. Diseño** (hecha) | Historia, prólogo, reglas, datos (6 razas, 7 clases, 83 objetos, tablas, 102 logros, patrocinadores, audiencia, plantas, tutorial, glosario, 313 frases del Narrador), peticiones al motor | — |
+| **W0. Diseño** (hecha) | Historia, prólogo, reglas, datos (6 razas, 9 clases, 93 objetos, tablas, 124 logros, patrocinadores, audiencia, plantas, tutorial, glosario, 376 frases del Narrador), peticiones al motor | — |
 | **W1. Esqueleto** | `rulesets/willy` (atributos, d20, recursos, condiciones, tests); `game.ts`; preset de arte `ninja`; la calle fija de la Planta 1 jugable con movimiento | Fase 2 del motor (ganchos de turno, `preview`) |
-| **W2. Combate y entorno** | Ataque, empujar, caídas, superficies, 4 enemigos de la Planta 1, IA, sala de tutorial, invocaciones del Ingeniero de 5G | Fases 2 y 3 del motor (combate, superficies, empujar, caídas); R13 (`spawnEntity`) |
+| **W2. Combate y entorno** | Ataque, empujar, caídas, superficies, 4 enemigos de la Planta 1, IA, sala de tutorial, invocaciones (Ingeniero, Basket), salto y rebote del balón | Fases 2 y 3 del motor (combate, superficies, empujar, caídas); R13 (`spawnEntity`); R15 (salto y rebote) |
 | **W3. Procedural** | Generador (R1) + 12 plantillas de Castro + validación con 500 semillas; reloj (R2) y derrumbe | R1, R2, R3 |
 | **W4. Concurso** | Audiencia y patrocinadores (R3), Narrador (R5), cajas de botín y su apertura (R8), inventario (R7) | R3, R5, R7, R8 |
 | **W5. Logros y perfil** | Evaluador (R4), perfil por navegador (R6), pantalla de logros | R4, R6 |
