@@ -16,6 +16,7 @@ import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
 import { setupTutorial } from './ui/tutorialToasts';
+import { setupBarks } from './ui/barks';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
 document.title = game.title;
@@ -35,6 +36,7 @@ const controller = new GameController(store, game, combatHud);
 
 const requestedArt = new URLSearchParams(location.search).get('arte');
 const manifest = game.art.presets[requestedArt ?? ''] ?? game.art.presets[game.art.default]!;
+setupBarks(store, game, manifest);
 
 // Party portraits and character sheets (tap a portrait or an initiative chip).
 const sheet = new CharacterSheet(game, engine.ruleset, manifest);
