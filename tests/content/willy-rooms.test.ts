@@ -67,8 +67,7 @@ describe('Willy room chunks', () => {
         expect(planta, `${id}: no floor with bioma ${id}`).toBeDefined();
         const terrains = ninja.terrain as Record<string, unknown>;
         for (const [ch, e] of Object.entries(biome.terreno)) {
-          // 'void' (a pit or canal) is drawn as nothing.
-          if (e.terrain !== 'void') expect(terrains[e.terrain], `${id} '${ch}' → ${e.terrain}`).toBeDefined();
+          if (e.terrain !== 'void') expect(terrains[e.terrain], `${id} '${ch}' → ${e.terrain}`).toBeDefined(); // void is drawn as nothing
           if (e.surface) expect(SURFACES[e.surface], `${id} '${ch}' surface ${e.surface}`).toBeDefined();
           if (ch.length === 1) expect(MARKERS.includes(ch), `${id}: legend char '${ch}' is a marker`).toBe(false);
         }

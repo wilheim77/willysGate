@@ -1,4 +1,4 @@
-import type { CreationChoices, CreationSpec, DialogueTree, Engine, GameState, MapBuilder, Ruleset } from '../../engine';
+import type { CreationChoices, CreationSpec, DialogueTree, DialogueWhen, Engine, GameState, MapBuilder, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
 
@@ -67,6 +67,8 @@ export interface GameDefinition {
   audio?: AudioManifest;
   /** The game's maps, by id, built the first time the party travels there. */
   maps?: Record<string, MapBuilder>;
+  /** Conversations the game opens by itself, once, when their condition holds (out of combat, idle). */
+  triggers?: { id: string; when: DialogueWhen; dialogue: string; partner?: string; map?: string }[];
   /** A conversation that opens as soon as the protagonist is created. */
   opening?: { dialogue: string; partner?: string };
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */

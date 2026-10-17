@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 34,
+ "nextobjectid": 35,
  "properties": [
   {
    "name": "name",
@@ -757,6 +757,34 @@
    "objects": [
     {
      "id": 33,
+     "name": "callado-pozo",
+     "type": "",
+     "x": 960,
+     "y": 224,
+     "width": 96,
+     "height": 128,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "callado_pozo"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "callado-1"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 34,
      "name": "sinpaga-jefe",
      "type": "",
      "x": 32,

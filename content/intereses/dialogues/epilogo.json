@@ -32,6 +32,12 @@
           "next": "baron_cuadrilla"
         },
         {
+          "when": {
+            "flag": "d4_quemar"
+          },
+          "next": "baron_quemar"
+        },
+        {
           "next": "baron_embargo"
         }
       ]
@@ -63,7 +69,7 @@
       ]
     },
     "baron_refi": {
-      "text": "El barón Ulric Mazo sigue en su sala capitular, comiendo pasas y debiendo dinero. Ahora debe más, a veinte años. Dice que es la primera vez que tiene un futuro.",
+      "text": "El barón Ulric Mazo sigue en su sala capitular, comiendo pasas y debiendo dinero. Ahora debe más, a veinte años. Dice que por fin tiene futuro, aunque sea de otro.",
       "next": [
         {
           "when": {
@@ -90,6 +96,32 @@
     },
     "baron_cuadrilla": {
       "text": "El barón Ulric Mazo vive en la abadía como invitado del pueblo. Le dejan escribir. Le han pedido, por favor, que no lea en voz alta.",
+      "next": [
+        {
+          "when": {
+            "flag": "nella_muerta"
+          },
+          "next": "nella_muerta"
+        },
+        {
+          "when": {
+            "flag": "nella_presa"
+          },
+          "next": "nella_presa"
+        },
+        {
+          "when": {
+            "flag": "mina_del_pueblo"
+          },
+          "next": "nella_mina"
+        },
+        {
+          "next": "nella_resto"
+        }
+      ]
+    },
+    "baron_quemar": {
+      "text": "El barón Ulric Mazo sigue debiendo a la Casa Valcárcel, pero la escritura ardió y el cobrador se fue con la plata. Le ha escrito un poema al banco. El banco no contesta.",
       "next": [
         {
           "when": {

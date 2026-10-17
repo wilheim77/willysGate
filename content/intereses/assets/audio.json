@@ -56,9 +56,10 @@
     },
     "trapSpotted": { "sfx": "trapClick" },
     "trapTriggered": { "sfx": "trapSpring" },
-    "trapDisarmed": { "sfx": "trapClick" },
-    "trapDisarmFailed": { "sfx": "trapSpring" },
+    "trapDisarmed": { "sfx": ["diceRoll", "trapClick"] },
+    "trapDisarmFailed": { "sfx": ["diceRoll", "trapSpring"] },
     "dialogueCheck": { "sfx": "diceRoll" },
+    "dialogueChoice": { "sfx": "uiClick" },
     "dialogueStarted": {
       "field": "treeId",
       "map": {
@@ -66,6 +67,18 @@
         "cofre_prueba": "chestOpen",
         "palanca_almacen": "leverPull"
       }
+    }
+  },
+  "maps": {
+    "camino": { "ambience": { "src": "assets/audio/ambience/camino.ogg", "volume": 0.8 } },
+    "plaza": { "ambience": { "src": "assets/audio/ambience/plaza.ogg", "volume": 0.8 } },
+    "calles": { "ambience": { "src": "assets/audio/ambience/calles.ogg", "volume": 0.8 } },
+    "abadia": { "ambience": { "src": "assets/audio/ambience/abadia.ogg", "volume": 0.8 } },
+    "escorial": { "ambience": { "src": "assets/audio/ambience/escorial.ogg", "volume": 0.8 } },
+    "mina": { "ambience": { "src": "assets/audio/ambience/mina.ogg", "volume": 0.8 } },
+    "boveda": {
+      "ambience": { "src": "assets/audio/ambience/boveda.ogg", "volume": 0.7 },
+      "music": { "combat": { "src": "assets/audio/music/boveda/combat.ogg" } }
     }
   }
 }

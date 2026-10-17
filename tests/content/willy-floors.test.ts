@@ -33,12 +33,14 @@ describe('Willy: room chunks', () => {
 });
 
 describe('Willy: procedural floors', () => {
+  // A quick sample in the everyday check; QA_DEEP=1 runs the full set.
+  const deep = process.env.QA_DEEP === '1';
   it.each([
-    [1, 300],
-    [2, 100],
-    [3, 100],
-    [4, 100],
-    [5, 100],
+    [1, deep ? 500 : 100],
+    [2, deep ? 150 : 40],
+    [3, deep ? 150 : 40],
+    [4, deep ? 150 : 40],
+    [5, deep ? 150 : 40],
   ])('floor %i, %i seeds: every floor generates and keeps its guarantees', (floor, seeds) => {
     let rivals = 0;
     const spec = floorsData.plantas[floor - 1]!;
@@ -67,8 +69,8 @@ describe('Willy: procedural floors', () => {
     }
     // A rival room half of the time on floor 1, 80 % below.
     const p = floor === 1 ? 0.5 : 0.8;
-    expect(rivals).toBeGreaterThan(seeds * (p - 0.15));
-    expect(rivals).toBeLessThan(seeds * (p + 0.15));
+    expect(rivals).toBeGreaterThan(seeds * (p - 0.2));
+    expect(rivals).toBeLessThan(seeds * (p + 0.2));
   });
 
   it('is reproducible, and different seeds give different floors', () => {

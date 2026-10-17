@@ -629,7 +629,7 @@
       {
        "name": "dialogue",
        "type": "string",
-       "value": "TODO:boveda_brea"
+       "value": "boveda_brea"
       },
       {
        "name": "speaker",
@@ -679,7 +679,7 @@
       {
        "name": "trigger",
        "type": "string",
-       "value": "TODO:brea_vuela_polvorin"
+       "value": "brea_vuela_polvorin"
       }
      ]
     },
@@ -707,7 +707,7 @@
       {
        "name": "trigger",
        "type": "string",
-       "value": "TODO:brea_vuela_polvorin"
+       "value": "brea_vuela_polvorin"
       }
      ]
     }

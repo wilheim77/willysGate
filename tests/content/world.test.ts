@@ -42,3 +42,13 @@ describe('Intereses act maps load into the game', () => {
     for (const [id, t] of Object.entries(TEMPLATES)) expect(sprites[t.spriteId], `template ${id}`).toBeDefined();
   });
 });
+
+describe('Intereses story triggers', () => {
+  it('each trigger opens an existing conversation on an existing map', async () => {
+    const { triggers } = (await import('../../content/intereses/triggers.json')).default as { triggers: { id: string; dialogue: string; map?: string }[] };
+    for (const t of triggers) {
+      expect(dialogues[t.dialogue], `trigger ${t.id}`).toBeDefined();
+      if (t.map) expect(ACT_MAPS[t.map], `trigger ${t.id} map`).toBeDefined();
+    }
+  });
+});

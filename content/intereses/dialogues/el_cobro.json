@@ -300,13 +300,13 @@
     },
     "embargo_3": {
       "speaker": "dorotea",
-      "text": "Su comisión: el diez por ciento. Cuatrocientas coronas, más la parte de los intereses. Le apunto que la ha cobrado. Es la única línea de este libro que se escribe con alegría.",
+      "text": "Su comisión: el diez por ciento del principal y de los intereses. Seiscientas noventa y una coronas; los céntimos se los quedo yo, por cortesía. Le apunto que la ha cobrado. Es la única línea de este libro que se escribe con alegría.",
       "effects": [
         {
           "type": "giveItem",
           "owner": "party",
           "item": "coronas",
-          "count": 400
+          "count": 691
         },
         {
           "type": "setFlag",
@@ -537,7 +537,7 @@
       "next": "quemar_anselmo"
     },
     "quemar_anselmo": {
-      "text": "Nadie dice nada más. Ya está todo dicho.",
+      "text": "Se hace el silencio de los finales de cuentas, cuando ya solo falta saber quién paga.",
       "next": [
         {
           "when": {

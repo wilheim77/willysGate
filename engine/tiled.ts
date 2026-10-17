@@ -63,6 +63,8 @@ export interface ParsedMap {
   zones: MapZone[];
   /** Objects of the "markers" layer (R14): a shorthand for zonesOf(..., 'markers'), with `type`. */
   markers: (MapZone & { type: string })[];
+  /** Custom properties of individual spawns (requiresFlag, unlessFlag...). */
+  spawnProperties: Record<string, Record<string, string | number | boolean>>;
   /** Custom properties of the map itself (roles, weight, minFloor...). */
   properties: Record<string, string | number | boolean>;
 }
@@ -108,7 +110,11 @@ export function parseTiledMap(id: string, json: TiledMapJson): ParsedMap {
   // Isometric maps measure both object axes in tile-height pixels; orthogonal ones use each axis' tile size.
   const unitX = json.orientation === 'isometric' ? json.tileheight : (json.tilewidth ?? json.tileheight);
   const toTile = (o: { x: number; y: number }): Vec2 => ({ x: Math.floor(o.x / unitX), y: Math.floor(o.y / json.tileheight) });
-  for (const o of spawnLayer?.objects ?? []) spawns[o.name] = toTile(o);
+  const spawnProperties: Record<string, Record<string, string | number | boolean>> = {};
+  for (const o of spawnLayer?.objects ?? []) {
+    spawns[o.name] = toTile(o);
+    if (o.properties?.length) spawnProperties[o.name] = propsOf(o.properties) as Record<string, string | number | boolean>;
+  }
 
   const lights: LightSource[] = [];
   const lightLayer = json.layers.find((l) => l.type === 'objectgroup' && l.name === 'lights');
@@ -151,6 +157,7 @@ export function parseTiledMap(id: string, json: TiledMapJson): ParsedMap {
     spawns,
     lighting: { ambient: typeof ambient === 'number' ? ambient : 1, lights },
     zones,
+    spawnProperties,
     markers: zones.filter((z) => z.layer === 'markers').map((z) => ({ ...z, type: String(z.properties.type ?? (json.layers.find((l) => l.name === 'markers')?.objects?.find((o) => o.name === z.name) as { type?: string } | undefined)?.type ?? '') })),
     properties: propsOf(json.properties) as Record<string, string | number | boolean>,
   };

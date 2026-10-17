@@ -93,6 +93,8 @@ export default {
     { name: 'brasero-cadalso-1', at: [7, 8], radius: 4.5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
     { name: 'brasero-cadalso-2', at: [14, 9], radius: 4.5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
     { name: 'antorcha-pico-roto', at: [25, 12], radius: 4, color: '#ffb050', flicker: 0.12, prop: 'torch_wall' },
+    { name: 'candil-mercado', at: [4, 9], radius: 3, color: '#ffc070', flicker: 0.12, intensity: 0.8 },
+    { name: 'farol-pozo', at: [19, 12], radius: 3, color: '#ffb050', flicker: 0.12, intensity: 0.8 },
     { name: 'antorcha-abadia', at: [23, 3], radius: 4, color: '#ffb050', flicker: 0.12, prop: 'torch_wall' },
   ],
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
@@ -104,6 +106,9 @@ export default {
   ],
   zones: {
     scenes: [
+      // D1: back in the square once the smuggling access is found; then, after storming the abbey, the gallows.
+      { name: 'noche-antorchas', rect: [1, 4, 25, 15], props: { dialogue: 'noche_antorchas', speaker: 'nella', once: true, requiresFlag: 'acceso_contrabando', unlessFlag: 'd1_resuelto' } },
+      { name: 'd1-horca', rect: [1, 4, 25, 15], props: { dialogue: 'd1_horca', speaker: 'nella', once: true, requiresFlag: 'd1_cuadrilla' } },
       {
         name: 'juicio-anselmo',
         // Opens as soon as the party walks into the square from the road (west half).

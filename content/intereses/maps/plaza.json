@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 34,
+ "nextobjectid": 38,
  "properties": [
   {
    "name": "name",
@@ -477,6 +477,74 @@
     },
     {
      "id": 27,
+     "name": "candil-mercado",
+     "type": "",
+     "point": true,
+     "x": 144,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.8
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "farol-pozo",
+     "type": "",
+     "point": true,
+     "x": 624,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.8
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      }
+     ]
+    },
+    {
+     "id": 29,
      "name": "antorcha-abadia",
      "type": "",
      "point": true,
@@ -538,7 +606,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 30,
      "name": "abrevadero",
      "type": "",
      "x": 512,
@@ -579,7 +647,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 29,
+     "id": 31,
      "name": "a-abadia",
      "type": "",
      "x": 704,
@@ -607,7 +675,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 32,
      "name": "a-calles",
      "type": "",
      "x": 928,
@@ -635,7 +703,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 33,
      "name": "a-escorial",
      "type": "",
      "x": 384,
@@ -663,7 +731,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 34,
      "name": "a-camino",
      "type": "",
      "x": 0,
@@ -698,7 +766,78 @@
    "y": 0,
    "objects": [
     {
-     "id": 33,
+     "id": 35,
+     "name": "noche-antorchas",
+     "type": "",
+     "x": 32,
+     "y": 128,
+     "width": 800,
+     "height": 480,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "noche_antorchas"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "nella"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "acceso_contrabando"
+      },
+      {
+       "name": "unlessFlag",
+       "type": "string",
+       "value": "d1_resuelto"
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "name": "d1-horca",
+     "type": "",
+     "x": 32,
+     "y": 128,
+     "width": 800,
+     "height": 480,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "d1_horca"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "nella"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_cuadrilla"
+      }
+     ]
+    },
+    {
+     "id": 37,
      "name": "juicio-anselmo",
      "type": "",
      "x": 0,

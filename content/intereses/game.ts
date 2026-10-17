@@ -9,6 +9,7 @@ import type { AudioManifest } from '../../src/audio/types';
 import testMap from './maps/test.json';
 import meta from './meta.json';
 import items from './items.json';
+import triggers from './triggers.json';
 import texts from './texts/ui.json';
 import viejoMinero from './dialogues/viejo_minero.json';
 import cofrePrueba from './dialogues/cofre_prueba.json';
@@ -68,6 +69,7 @@ export const game: GameDefinition = {
   maps: Object.fromEntries(Object.keys(ACT_MAPS).map((id) => [id, () => buildMap(id, DIALOGUES)])),
   // The act opens on the road: Dorotea talks first.
   opening: { dialogue: 'camino_dorotea', partner: 'dorotea' },
+  triggers: triggers.triggers as NonNullable<GameDefinition['triggers']>,
   newGame(engine, seed, options) {
     if (options?.start === 'test') return testGame(engine, seed);
     const start = options?.start && ACT_MAPS[options.start] ? options.start : START_MAP;
@@ -78,7 +80,10 @@ export const game: GameDefinition = {
       createCharacter({ id: 'hero', name: 'Cobrador', controllerId: PLAYER, factionId: 'party', position: at('hero'), spriteId: 'cobrador', classId: 'wizard', raceId: 'human', level: 3, abilities: { str: 8, dex: 14, con: 13, int: 15, wis: 12, cha: 10 } }),
       companion('dorotea', 'Dorotea', at('dorotea'), PLAYER, 'party', DIALOGUES.dorotea ? ['dialogue:dorotea'] : []),
     ];
-    let state = engine.newGame({ seed, map: setup.map, entities: [...party, ...setup.entities] });
+    // On the starting map, story-conditional spawns wait as dormant like anywhere else.
+    const absent = (e: Entity) => e.tags.some((t) => t.startsWith('presence:'));
+    let state = engine.newGame({ seed, map: setup.map, entities: [...party, ...setup.entities.filter((e) => !absent(e))] });
+    state = { ...state, systems: { ...state.systems, dormant: Object.fromEntries(setup.entities.filter(absent).map((e) => [e.id, e])) as never } };
     state = { ...state, systems: { ...state.systems, ...(setup.systems ?? {}), spawns: setup.spawns as never } };
     const lighting = lightingOf(state);
     return withLighting(state, { ...lighting, lights: [...lighting.lights.filter((l) => !l.id.startsWith('surface:')), LANTERN] });
