@@ -8,7 +8,7 @@ import plato from '../data/rooms/plato.json';
 import verbena from '../data/rooms/verbena.json';
 import { prop, zone } from '../maps';
 import { Gen } from './random';
-import { RIVAL_RULES, type RivalRecord, generateRival, legendaryEntity, legendaryFor, rivalEntity, rivalKeys } from './rivals';
+import { RIVAL_RULES, type RivalRecord, generateRival, legendaryById, legendaryEntity, legendaryFor, rebuildProfiles, rivalEntity, rivalKeys } from './rivals';
 
 /**
  * Procedural floors (docs/willy/DESIGN.md §3) assembled from hand-made room chunks
@@ -477,17 +477,28 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
     const enemySlots = slots(i, 'e');
     if (room.role === 'rival' && rivalRoom && enemySlots.length) {
       const at = enemySlots.shift()!;
-      const usedLegendaries = new Set(earlier.map((r) => r.legendario).filter((x): x is string => !!x));
-      const legendary = g.chance(RIVAL_RULES.legendaryChance) ? legendaryFor(g, n, usedLegendaries) : undefined;
+      const profiles = rebuildProfiles(runSeed, earlier);
+      // Someone you made a pact with, or who ran away, may come back (with memory of it).
+      const returning = g.shuffle(earlier.filter((r) => r.desenlace === 'pacto' || r.desenlace === 'huida'));
+      const back = returning.length && g.chance(RIVAL_RULES.returnChance) ? returning[0] : undefined;
       let e: Entity;
-      if (legendary) {
-        e = legendaryEntity(legendary, n, at);
-        rival = { id: e.id, planta: n, ranura: i, legendario: legendary.id, plantas: [n] };
+      if (back) {
+        const legend = back.legendario ? legendaryById(back.legendario) : undefined;
+        e = legend ? legendaryEntity(legend, n, at) : rivalEntity(profiles.get(back.id)!, n, at);
+        e = { ...e, tags: [...e.tags, `vuelta:${back.desenlace}`] };
+        rival = { ...back, plantas: [...back.plantas, n] };
       } else {
-        const taken = new Set(earlier.filter((r) => !r.legendario).flatMap((r) => rivalKeys(generateRival(runSeed, r.planta, r.ranura))));
-        const profile = generateRival(runSeed, n, i, taken);
-        e = rivalEntity(profile, n, at);
-        rival = { id: e.id, planta: n, ranura: i, plantas: [n] };
+        const usedLegendaries = new Set(earlier.map((r) => r.legendario).filter((x): x is string => !!x));
+        const legendary = g.chance(RIVAL_RULES.legendaryChance) ? legendaryFor(g, n, usedLegendaries) : undefined;
+        if (legendary) {
+          e = legendaryEntity(legendary, n, at);
+          rival = { id: e.id, planta: n, ranura: i, legendario: legendary.id, plantas: [n] };
+        } else {
+          const taken = new Set([...profiles.values()].flatMap(rivalKeys));
+          const profile = generateRival(runSeed, n, i, taken);
+          e = rivalEntity(profile, n, at);
+          rival = { id: e.id, planta: n, ranura: i, plantas: [n] };
+        }
       }
       entities.push(e);
       foesByRoom[i]!.push(e.id);

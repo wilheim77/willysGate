@@ -5,7 +5,7 @@ import ninja from '../../content/willy/assets/ninja.json';
 import floorsData from '../../content/willy/data/floors.json';
 import { BIOMES, generateFloor, reachable, usableSides } from '../../content/willy/gen/floor';
 import { type RivalRecord, generateRival, rivalEntity, rivalKeys, rivalLine } from '../../content/willy/gen/rivals';
-import { generateRun, maps, newWillyGame } from '../../content/willy/setup';
+import { buildFloor, maps, newWillyGame, rivalsOf } from '../../content/willy/setup';
 
 const key = (p: { x: number; y: number }) => `${p.x},${p.y}`;
 const MARKERS = 'ectbBlPJX';
@@ -78,17 +78,42 @@ describe('Willy: procedural floors', () => {
     expect(JSON.stringify(generateFloor(42, 1).setup.map)).not.toBe(JSON.stringify(generateFloor(43, 1).setup.map));
   });
 
-  it('a new season stashes its five floors and its rivals, all different, in a save that fits', () => {
-    for (let seed = 1; seed < 20; seed++) {
-      const s = newWillyGame(createEngine(willy, 'willy', { dialogues: {}, maps }), seed);
-      const world = s.systems.world as unknown as { stashed: Record<string, { map: unknown }> };
-      for (let n = 1; n <= 5; n++) expect(world.stashed[`planta-${n}`]!.map).toEqual(generateRun(seed).floors[`planta-${n}`]!.map);
-      const rivals = s.systems.rivals as unknown as RivalRecord[];
-      expect(rivals).toEqual(generateRun(seed).rivals);
-      const names = rivals.filter((r) => !r.legendario).map((r) => generateRival(seed, r.planta, r.ranura, new Set()).nombre);
-      expect(names.length).toBeGreaterThan(0);
-      expect(JSON.stringify(s).length).toBeLessThan(1_500_000);
+  it('a new season starts light: floors are generated on arrival, from the seed and the rivals met', () => {
+    const engine = createEngine(willy, 'willy', { dialogues: {}, maps });
+    for (let seed = 1; seed < 15; seed++) {
+      const s = newWillyGame(engine, seed);
+      expect(JSON.stringify(s).length).toBeLessThan(60_000);
+      expect(s.systems.rivals).toEqual([]);
+      const lift = zonesOf(s, 'exits')[0]!;
+      const at = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: { x: lift.x, y: lift.y } } } };
+      const down = engine.apply(at, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: 'planta-1', spawn: 'llegada' } as BaseCommand);
+      if (!down.ok) throw new Error(down.error.message);
+      const expected = generateFloor(seed, 1);
+      expect(down.state.map).toEqual(expected.setup.map);
+      expect(down.state.systems.rivals).toEqual(expected.rival ? [expected.rival] : []);
     }
+  });
+
+  it('a rival you made a pact with may come back on a later floor, and the new ones never repeat', () => {
+    let back = 0;
+    for (let seed = 1; seed <= 60; seed++) {
+      let state = { seed, systems: { rivals: [] } } as unknown as GameState;
+      const seen = new Set<string>();
+      for (let n = 1; n <= 5; n++) {
+        const setup = buildFloor(n, state);
+        const rivals = (setup.systems!.rivals as unknown as RivalRecord[] | undefined) ?? rivalsOf(state);
+        // Every rival so far made a pact.
+        state = { ...state, systems: { rivals: rivals.map((r) => ({ ...r, desenlace: 'pacto' })) } } as unknown as GameState;
+        for (const e of setup.entities.filter((x) => x.tags.includes('rival'))) {
+          if (e.tags.includes('vuelta:pacto')) back++;
+          else {
+            expect(seen.has(e.name), `seed ${seed}: ${e.name}`).toBe(false);
+            seen.add(e.name);
+          }
+        }
+      }
+    }
+    expect(back).toBeGreaterThan(10);
   });
 
   it('down the stairs to the next Camerino, whose lift goes one floor further', () => {

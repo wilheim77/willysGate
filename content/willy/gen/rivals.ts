@@ -117,6 +117,26 @@ export function generateRival(runSeed: number, floor: number, slot: number, take
   };
 }
 
+/**
+ * The generated rivals of a run, rebuilt from their records in the order they were met (each
+ * one was generated avoiding the ones before it, so the order matters).
+ */
+export function rebuildProfiles(runSeed: number, records: readonly RivalRecord[]): Map<string, RivalProfile> {
+  const out = new Map<string, RivalProfile>();
+  const taken = new Set<string>();
+  for (const r of records) {
+    if (r.legendario) continue;
+    const p = generateRival(runSeed, r.planta, r.ranura, taken);
+    for (const k of uniqueKeys(p)) taken.add(k);
+    out.set(r.id, p);
+  }
+  return out;
+}
+
+export function legendaryById(id: string): (typeof legendaries.legendarios)[number] | undefined {
+  return legendaries.legendarios.find((l) => l.id === id);
+}
+
 export function rivalKeys(p: RivalProfile): string[] {
   return uniqueKeys(p);
 }
