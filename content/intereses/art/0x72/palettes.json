@@ -1,0 +1,190 @@
+{
+  "$comment": "Recoloured 0x72 characters for Intereses. 'base' is the atlas prefix; 'map' replaces exact colours; 'adjust' shifts the rest in HSV. Inspect a base's colours with `node scripts/art/build-palette-variants.ts intereses 0x72 --dump <prefix>`. Build with `npm run art`. Catalogue: docs/ART_CATALOG.md.",
+  "atlas": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
+  "tileList": "0x72-dungeontileset-ii/tile_list_v1.7",
+  "facing": "right",
+  "animations": {
+    "idle": "idle_anim",
+    "move": "run_anim",
+    "hit": "hit_anim"
+  },
+  "output": "characters.png",
+  "aliases": {
+    "$comment": "Older placeholder ids used by content (test encounter) -> variant whose art they get.",
+    "bandit": "sinpaga_cuchillero",
+    "thug": "sinpaga_enmascarado"
+  },
+  "variants": {
+    "cobrador": {
+      "base": "doc",
+      "note": "Protagonista: cobrador de deudas encapuchado, capa parda y máscara de cuero",
+      "map": {
+        "#314152": "#4e4038",
+        "#417089": "#8a6a3e",
+        "#483b3a": "#3a302a",
+        "#aa8d7a": "#6e5442",
+        "#d3bfa9": "#97785c"
+      },
+      "rules": [{ "from": "#222222", "to": "#2e2622", "interior": true }]
+    },
+    "dorotea": {
+      "base": "elf_f",
+      "note": "Dorotea Vane: contable del banco, pelo negro recogido, vestido granate oscuro",
+      "map": {
+        "#facb3e": "#3a2a2a",
+        "#ee8e2e": "#241a1c",
+        "#da4e38": "#3c4a5c",
+        "#4ba747": "#5c2834",
+        "#3d734f": "#3a1a24",
+        "#5698cc": "#6d7c86",
+        "#fccba3": "#e3c0a4"
+      }
+    },
+    "garran": {
+      "base": "orc_warrior",
+      "note": "Garrán Tizón: semiorco, antiguo minero; piel gris oliva, cinturón de cuero",
+      "map": {
+        "#3d734f": "#6a7656",
+        "#314152": "#434a3a",
+        "#8f4029": "#6b4a30",
+        "#62232f": "#3e2c22"
+      }
+    },
+    "anselmo": {
+      "base": "dwarf_f",
+      "note": "Fray Anselmo: mediano con hábito pardo de capucha y cordón (falso fraile)",
+      "map": {
+        "#facb3e": "#6e5238",
+        "#ee8e2e": "#4f3a28",
+        "#dc4a7b": "#c2a878",
+        "#9f294e": "#8a7450"
+      }
+    },
+    "sinpaga_cuchillero": {
+      "base": "elf_m",
+      "note": "Bandido Sinpaga: pelo castaño, jubón rojo sucio",
+      "map": {
+        "#facb3e": "#5a3f2e",
+        "#ee8e2e": "#3d2b20",
+        "#4ba747": "#7a3328",
+        "#3d734f": "#4e221e",
+        "#314152": "#2e2a26",
+        "#5698cc": "#3a3030",
+        "#fccba3": "#d4a483",
+        "#e2b694": "#b0866a"
+      }
+    },
+    "sinpaga_enmascarado": {
+      "base": "masked_orc",
+      "note": "Bandido Sinpaga con máscara de calavera, capucha parda y ropa verde oliva",
+      "map": {
+        "#3d734f": "#4f4030",
+        "#314152": "#342b22",
+        "#8f4029": "#5c5b3a",
+        "#62232f": "#3a3826",
+        "#fdf7ed": "#d6cdb6",
+        "#d3bfa9": "#9a8f78"
+      }
+    },
+    "sinpaga_bruto": {
+      "base": "ogre",
+      "note": "Bruto Sinpaga: hombretón con zamarra de cuero (grande, 32x36)",
+      "map": {
+        "#3d734f": "#9c7458",
+        "#314152": "#5e4436",
+        "#8f4029": "#4d4236",
+        "#62232f": "#2e2924",
+        "#fdf7ed": "#e8e0d0"
+      }
+    },
+    "guardia_baron": {
+      "base": "knight_m",
+      "note": "Guardia del barón Mazo: acero mate y penacho granate",
+      "map": {
+        "#72d6ce": "#8e979c",
+        "#417089": "#535c62",
+        "#fdf7ed": "#c9cfd2",
+        "#da4e38": "#7a2424",
+        "#ee8e2e": "#9e3a2a"
+      }
+    },
+    "guardia_baron_sargento": {
+      "base": "knight_f",
+      "note": "Sargento de la guardia: acero ennegrecido, penacho granate",
+      "map": {
+        "#72d6ce": "#6b7277",
+        "#417089": "#3c4246",
+        "#fdf7ed": "#a8b0b4",
+        "#dc4a7b": "#7a2424",
+        "#f78697": "#9e3a2a"
+      }
+    },
+    "minero_cuadrilla": {
+      "base": "dwarf_m",
+      "note": "Minero enano de la Cuadrilla: barba castaña, piel curtida y tiznada",
+      "map": {
+        "#da4e38": "#5e3e2a",
+        "#e46e33": "#7a5236",
+        "#d8a57d": "#b98a68",
+        "#c38d70": "#946a52"
+      }
+    },
+    "callado": {
+      "base": "dwarf_m",
+      "note": "Callado: minero esclavo, piel cenicienta y barba plateada",
+      "map": {
+        "#da4e38": "#8f979e",
+        "#e46e33": "#c4ccd2",
+        "#d8a57d": "#b5aea4",
+        "#c38d70": "#8c867e",
+        "#7b8994": "#d8dee2",
+        "#775c55": "#46434a"
+      }
+    },
+    "callado_palido": {
+      "base": "elf_m",
+      "note": "Callado joven: pálido, pelo ceniza, ojos sin color, harapos grises",
+      "map": {
+        "#facb3e": "#b8bec4",
+        "#ee8e2e": "#7f868c",
+        "#fccba3": "#c9c2b8",
+        "#e2b694": "#9e978e",
+        "#4ba747": "#5a5650",
+        "#3d734f": "#3e3b38",
+        "#314152": "#2a2a2e",
+        "#5698cc": "#e6ecef"
+      }
+    },
+    "absalon": {
+      "base": "big_zombie",
+      "note": "Absalón Brea, capataz (jefe): mole curtida y calva con collar de plata, calzones de cuero (32x36)",
+      "map": {
+        "#aa8d7a": "#a8765a",
+        "#775c55": "#6e4434",
+        "#483b3a": "#3b2a24",
+        "#333333": "#2a2420",
+        "#4ba747": "transparent",
+        "#97da3f": "transparent"
+      },
+      "prune": "#222222",
+      "rules": [{ "from": "#222222", "to": "#c9d1d6", "interior": true, "rows": [9, 9] }]
+    },
+    "esqueleto_minero": {
+      "base": "skelet",
+      "note": "Esqueleto de la mina: hueso amarillento y tiznado",
+      "map": {
+        "#fdf7ed": "#c8bc9c",
+        "#d3bfa9": "#857a62"
+      }
+    },
+    "ahogado": {
+      "base": "ice_zombie",
+      "note": "Ahogado de las galerías inundadas: verde ceniza, piel lívida",
+      "map": {
+        "#72d6ce": "#7d8c7c",
+        "#417089": "#46534a",
+        "#fdf7ed": "#cfd6c4"
+      }
+    }
+  }
+}

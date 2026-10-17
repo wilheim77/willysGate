@@ -5,13 +5,14 @@
 //
 // Cells are [col, row] in a grid of tileSize, sprite names looked up in a
 // "name x y w h" list (e.g. 0x72's tile_list, given as "tileList"), or
-// { "atlas": "<other sheet>", "cell": [col, row] } to mix packs in one preset.
+// { "atlas": "<other sheet>", "cell": [col, row] } to mix packs in one preset, or
+// { "atlas": "<sheet>.png", "sprite": "name" } with a "name x y w h" list in <sheet>.txt.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, isOpaque, readPng, writePng } from './png.ts';
 import { readSpriteList } from './sprite-list.ts';
 
-type Cell = [number, number] | string | { atlas: string; cell: [number, number] };
+type Cell = [number, number] | string | { atlas: string; cell: [number, number] } | { atlas: string; sprite: string };
 
 const [game = 'intereses', preset = 'lpc'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -20,7 +21,7 @@ const spec = JSON.parse(readFileSync(join(gameDir, 'art', preset, 'tiles.json'),
   atlas: string;
   tileList?: string;
   tileSize: number;
-  terrain: Record<string, { top: Cell[]; face: Cell }>;
+  terrain: Record<string, { top: Cell[]; face: Cell; rim?: Cell }>;
 };
 const T = spec.tileSize;
 const atlas = readPng(join(root, 'art-src', spec.atlas));
@@ -32,9 +33,13 @@ const loadAtlas = (path: string): Image => {
 const named = spec.tileList ? readSpriteList(join(root, 'art-src', spec.tileList)) : {};
 
 const frames: Image[] = [];
-const cell = (c: Cell, what: string) => {
+const cell = (c: Cell, what: string, partial = false) => {
   let img: Image;
-  if (!Array.isArray(c) && typeof c === 'object') {
+  if (!Array.isArray(c) && typeof c === 'object' && 'sprite' in c) {
+    const r = readSpriteList(join(root, 'art-src', c.atlas.replace(/\.png$/, '.txt')))[c.sprite];
+    if (!r) throw new Error(`${what}: unknown sprite "${c.sprite}" in ${c.atlas}`);
+    img = crop(loadAtlas(c.atlas), r.x, r.y, T, T);
+  } else if (!Array.isArray(c) && typeof c === 'object') {
     img = crop(loadAtlas(c.atlas), c.cell[0] * T, c.cell[1] * T, T, T);
   } else if (typeof c === 'string') {
     const r = named[c];
@@ -43,17 +48,19 @@ const cell = (c: Cell, what: string) => {
   } else {
     img = crop(atlas, c[0] * T, c[1] * T, T, T);
   }
-  if (!isOpaque(img)) console.warn(`warning: ${what} ${JSON.stringify(c)} has transparent pixels`);
+  if (!partial && !isOpaque(img)) console.warn(`warning: ${what} ${JSON.stringify(c)} has transparent pixels`);
   frames.push(img);
   return frames.length - 1;
 };
 
-const terrain: Record<string, { tileset: string; frames: number[]; face: number }> = {};
+const terrain: Record<string, { tileset: string; frames: number[]; face: number; rim?: number }> = {};
 for (const [id, t] of Object.entries(spec.terrain)) {
   terrain[id] = {
     tileset: 'terrain',
     frames: t.top.map((c) => cell(c, `${id} top`)),
     face: cell(t.face, `${id} face`),
+    // Optional lip strip (top rows of the cell) for renderers that draw platform edges.
+    ...(t.rim ? { rim: cell(t.rim, `${id} rim`, true) } : {}),
   };
 }
 

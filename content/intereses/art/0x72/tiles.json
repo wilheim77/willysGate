@@ -1,98 +1,54 @@
 {
-  "$comment": "Terrain art for the 0x72 preset: dungeon from 0x72 (sprite names from tile_list_v1.7), outdoor ground and cliffs from Ninja Adventure ({atlas, cell}). Build with `npm run art`.",
+  "$comment": "Terrain art for the 0x72 preset: dungeon from 0x72 (sprite names from tile_list_v1.7), outdoor ground from Ninja Adventure ({atlas, cell}), and tiles drawn by scripts/art/build-extra-art.ts ({atlas: generated/..., sprite}). 'rim' is an optional lip strip for the renderer (see docs/ART_CATALOG.md). Build with `npm run art`.",
   "atlas": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
   "tileList": "0x72-dungeontileset-ii/tile_list_v1.7",
   "tileSize": 16,
   "terrain": {
     "stone": {
-      "top": [
-        "floor_1",
-        "floor_1",
-        "floor_1",
-        "floor_2",
-        "floor_3",
-        "floor_4"
-      ],
-      "face": "wall_mid"
+      "top": ["floor_1", "floor_1", "floor_1", "floor_2", "floor_3", "floor_4"],
+      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "stone_face_lip" },
+      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_stone" }
     },
     "dirt": {
       "top": [
-        {
-          "atlas": "ninja-adventure/TilesetFloor.png",
-          "cell": [
-            16,
-            15
-          ]
-        },
-        {
-          "atlas": "ninja-adventure/TilesetFloor.png",
-          "cell": [
-            17,
-            15
-          ]
-        },
-        {
-          "atlas": "ninja-adventure/TilesetFloor.png",
-          "cell": [
-            16,
-            16
-          ]
-        },
-        {
-          "atlas": "ninja-adventure/TilesetFloor.png",
-          "cell": [
-            17,
-            16
-          ]
-        },
-        {
-          "atlas": "ninja-adventure/TilesetFloor.png",
-          "cell": [
-            19,
-            15
-          ]
-        },
-        {
-          "atlas": "ninja-adventure/TilesetFloor.png",
-          "cell": [
-            15,
-            17
-          ]
-        }
+        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [16, 15] },
+        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [17, 15] },
+        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [16, 16] },
+        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [17, 16] },
+        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [19, 15] },
+        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [15, 17] }
       ],
-      "face": {
-        "atlas": "ninja-adventure/TilesetRelief.png",
-        "cell": [
-          5,
-          6
-        ]
-      }
+      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "dirt_face" },
+      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_dirt" }
     },
     "slag": {
-      "top": [
-        "floor_8",
-        "floor_7",
-        "floor_6"
-      ],
-      "face": {
-        "atlas": "ninja-adventure/TilesetRelief.png",
-        "cell": [
-          5,
-          1
-        ]
-      }
+      "top": ["floor_8", "floor_7", "floor_6"],
+      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "slag_face" },
+      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_stone" }
     },
     "wall": {
       "top": [
-        "wall_top_mid"
+        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "wall_top_1" },
+        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "wall_top_2" }
       ],
       "face": "wall_mid"
     },
     "planks": {
       "top": [
-        "floor_ladder"
+        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_1" },
+        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_2" },
+        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_3" }
       ],
-      "face": "wall_mid"
+      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_face" },
+      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_wood" }
+    },
+    "scaffold": {
+      "top": [
+        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "scaffold_1" },
+        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "scaffold_2" }
+      ],
+      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "scaffold_face" },
+      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_wood" }
     }
   }
 }

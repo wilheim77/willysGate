@@ -1,5 +1,5 @@
 {
-  "$comment": "Animated characters taken straight from the 0x72 atlas. 'prefix' is the sprite name before _idle_anim_fN / _run_anim_fN.",
+  "$comment": "Animated characters taken straight from the 0x72 atlas. 'prefix' is the sprite name before _idle_anim_fN / _run_anim_fN. Recoloured characters (dorotea, garran, anselmo, bandit, thug...) live in palettes.json; see docs/ART_CATALOG.md.",
   "atlas": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
   "tileList": "0x72-dungeontileset-ii/tile_list_v1.7",
   "facing": "right",
@@ -20,21 +20,6 @@
     },
     "wizard": {
       "prefix": "wizzard_m"
-    },
-    "dorotea": {
-      "prefix": "elf_f"
-    },
-    "anselmo": {
-      "prefix": "dwarf_m"
-    },
-    "garran": {
-      "prefix": "knight_m"
-    },
-    "bandit": {
-      "prefix": "orc_warrior"
-    },
-    "thug": {
-      "prefix": "masked_orc"
     }
   }
 }
