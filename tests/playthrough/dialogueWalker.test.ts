@@ -3,7 +3,24 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { SYSTEM_ISSUER, dialogueOf, dialogueChoices, type ChooseOptionCommand, type DialogueTree, type GameState, type StartDialogueCommand } from '../../engine';
 import { dnd5e } from '../../rulesets/dnd5e';
-import { buildWorld, loadDialogues, makeEngine } from './setup';
+import { buildMap } from '../../content/intereses/world';
+import { ACT_MAP_IDS, LEGACY_TEST_DIALOGUE_IDS, START, buildWorld, loadDialogues, makeEngine } from './setup';
+
+/** Which real act map actually has the entities this tree's effects name (setEntity,
+ *  setController...), so walking it doesn't fail just because we happened to build the
+ *  wrong map. Falls back to the act's opening map when nothing else matches (which is fine:
+ *  starting a conversation only ever needs "hero" to exist). */
+function bestMapFor(tree: DialogueTree, dialogues: Record<string, DialogueTree>): string {
+  const referenced = new Set(
+    [...JSON.stringify(tree).matchAll(/"entityId"\s*:\s*"([^"]+)"/g)].map((m) => m[1]!).filter((id) => !['hero', 'dorotea', 'party'].includes(id)),
+  );
+  if (referenced.size === 0) return START;
+  for (const mapId of ACT_MAP_IDS) {
+    const ids = new Set(buildMap(mapId, dialogues).entities.map((e) => e.id));
+    if ([...referenced].every((id) => ids.has(id))) return mapId;
+  }
+  return START;
+}
 
 /**
  * Exhaustive dialogue walker: runs the REAL engine commands (startDialogue/chooseOption),
@@ -31,9 +48,10 @@ describe('dialogue walker (QA playthrough harness)', () => {
   const trees = loadDialogues();
 
   for (const tree of Object.values(trees) as DialogueTree[]) {
+    const mapId = LEGACY_TEST_DIALOGUE_IDS.has(tree.id) ? 'test' : bestMapFor(tree, trees);
     for (const seed of SEEDS) {
-      it(`${tree.id} walks exhaustively without error (seed ${seed})`, () => {
-        const world = buildWorld(engine, seed);
+      it(`${tree.id} walks exhaustively without error (seed ${seed}, on map "${mapId}")`, () => {
+        const world = buildWorld(engine, seed, mapId);
         const startCmd: StartDialogueCommand = { type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: tree.id, actorId: 'hero' };
         const start = engine.apply(world, startCmd);
         expect(start.ok, start.ok ? '' : `startDialogue(${tree.id}) failed: ${JSON.stringify(start.error)}`).toBe(true);
