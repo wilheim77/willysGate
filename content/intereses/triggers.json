@@ -1,0 +1,8 @@
+{
+  "$comment": "Conversations the game opens by itself, once, when the party is idle out of combat and the condition holds. map: only on that map.",
+  "triggers": [
+    { "id": "collera", "when": { "all": [{ "flag": "brea_derrotado" }, { "notFlag": "d3_resuelta" }] }, "dialogue": "boveda_collera", "map": "boveda" },
+    { "id": "cobro", "when": { "all": [{ "flag": "d3_resuelta" }, { "notFlag": "d4_resuelta" }] }, "dialogue": "el_cobro", "map": "plaza" },
+    { "id": "epilogo", "when": { "flag": "d4_resuelta" }, "dialogue": "epilogo" }
+  ]
+}

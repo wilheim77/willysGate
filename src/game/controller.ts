@@ -13,6 +13,7 @@ import {
   trapAt,
   trapsOf,
   dialogueOf,
+  evaluateCondition,
   entityAt,
   gridDistance,
   inZone,
@@ -287,6 +288,7 @@ export class GameController {
     if (turn.mode !== 'combat') {
       if (this.checkEncounters()) return;
       if (this.checkScenes()) return;
+      if (this.checkTriggers()) return;
       if (this.checkExits()) return;
       if (this.pendingInteract) {
         const id = this.pendingInteract;
@@ -348,6 +350,21 @@ export class GameController {
       const speaker = z.properties.speaker ? this.state.entities[String(z.properties.speaker)] : undefined;
       if (z.properties.speaker && (!speaker || !this.store.engine.ruleset.isStanding(speaker))) continue;
       const r = this.store.dispatch({ type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: dialogue, actorId: leader.id, markFlag: seen, ...(speaker ? { partnerId: speaker.id } : {}) } as never);
+      if (r.ok) return true;
+    }
+    return false;
+  }
+
+  /** Story beats the game opens itself (the epilogue once the last decision is made). */
+  private checkTriggers(): boolean {
+    const leader = this.state.entities[this.game.leaderId];
+    if (!leader || dialogueOf(this.state)) return false;
+    const ruleset = this.store.engine.ruleset;
+    for (const t of this.game.triggers ?? []) {
+      const seen = `trigger:${t.id}`;
+      if (this.state.flags[seen] || (t.map && t.map !== this.state.map.id) || !this.game.dialogues?.[t.dialogue]) continue;
+      if (!evaluateCondition(ruleset, this.state, leader.id, t.when)) continue;
+      const r = this.store.dispatch({ type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: t.dialogue, actorId: leader.id, markFlag: seen, ...(t.partner && this.state.entities[t.partner] ? { partnerId: t.partner } : {}) } as never);
       if (r.ok) return true;
     }
     return false;
