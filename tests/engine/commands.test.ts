@@ -67,7 +67,7 @@ describe('MoveCommand', () => {
   it('asks the ruleset for the movement budget, in combat only', () => {
     const base = setup();
     expect(engine.apply(base, move({ x: 3, y: 0 })).ok).toBe(true);
-    const combat: GameState = { ...base, turn: { mode: 'combat', round: 1, activeEntityId: 'hunter' } };
+    const combat: GameState = { ...base, turn: { mode: 'combat', round: 1, activeEntityId: 'hunter', order: ['hunter', 'vampire'], initiative: {}, movementUsed: 0 } };
     expect(engine.apply(combat, move({ x: 3, y: 0 }))).toMatchObject({ ok: false, error: { code: 'out_of_range' } });
     expect(engine.apply(combat, move({ x: 2, y: 0 })).ok).toBe(true);
   });

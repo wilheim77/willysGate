@@ -2,7 +2,7 @@ import type { GridMap, Vec2 } from './grid';
 import { type RngState, seedRng } from './rng';
 
 /** Bump when GameState's shape changes, and add a migration in save.ts. */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
 
@@ -54,7 +54,19 @@ export interface TurnState {
   round: number;
   /** Entity whose turn it is in combat; null in exploration. */
   activeEntityId: string | null;
+  /** Combat participants in initiative order (empty in exploration). */
+  order: string[];
+  initiative: Record<string, number>;
+  /** Movement cost already spent by the active entity this turn. */
+  movementUsed: number;
 }
+
+/** Per-game options that rules may read (difficulty...). Serializable, saved with the game. */
+export interface GameSettings {
+  difficulty: 'story' | 'normal' | 'hard';
+}
+
+export const EXPLORATION_TURN: TurnState = { mode: 'exploration', round: 0, activeEntityId: null, order: [], initiative: {}, movementUsed: 0 };
 
 export interface GameState {
   schemaVersion: number;
@@ -68,6 +80,7 @@ export interface GameState {
   entities: Record<string, Entity>;
   flags: Record<string, FlagValue>;
   turn: TurnState;
+  settings: GameSettings;
   /** Per-system state for engine systems added over time (surfaces, lighting...). */
   systems: Record<string, JsonValue>;
 }
@@ -91,7 +104,8 @@ export function createGameState({ gameId, ruleset, seed, map, entities }: NewGam
     map,
     entities: Object.fromEntries(entities.map((e) => [e.id, e])),
     flags: {},
-    turn: { mode: 'exploration', round: 0, activeEntityId: null },
+    turn: { ...EXPLORATION_TURN },
+    settings: { difficulty: 'normal' },
     systems: {},
   };
 }
