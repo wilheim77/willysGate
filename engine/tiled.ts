@@ -1,5 +1,6 @@
 import { type GridMap, type Tile, type Vec2, VOID_TILE } from './grid';
 import type { LightSource, LightingState } from './lighting';
+import type { GameState } from './state';
 
 /**
  * Converts a Tiled JSON map (orthogonal or isometric, embedded tilesets) into a GridMap.
@@ -29,7 +30,7 @@ interface TiledLayer {
   type: string;
   name: string;
   data?: number[];
-  objects?: { id?: number; name: string; x: number; y: number; properties?: TiledProperty[] }[];
+  objects?: { id?: number; name: string; x: number; y: number; width?: number; height?: number; properties?: TiledProperty[] }[];
 }
 
 export interface TiledMapJson {
@@ -43,10 +44,27 @@ export interface TiledMapJson {
   tilesets: TiledTileset[];
 }
 
+/** A named rectangle of tiles from a Tiled object layer (encounter triggers, regions...). */
+export interface MapZone {
+  name: string;
+  layer: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  properties: Record<string, string | number | boolean>;
+}
+
 export interface ParsedMap {
   map: GridMap;
   spawns: Record<string, Vec2>;
   lighting: LightingState;
+  /** Rectangles from every object layer other than spawns/lights. */
+  zones: MapZone[];
+}
+
+export function inZone(zone: MapZone, p: Vec2): boolean {
+  return p.x >= zone.x && p.y >= zone.y && p.x < zone.x + zone.width && p.y < zone.y + zone.height;
 }
 
 const propsOf = (props?: TiledProperty[]): Record<string, unknown> =>
@@ -104,9 +122,40 @@ export function parseTiledMap(id: string, json: TiledMapJson): ParsedMap {
   }
   const ambient = propsOf(json.properties).ambientLight;
 
+  const unitY = json.tileheight;
+  const zones: MapZone[] = [];
+  for (const layer of json.layers) {
+    if (layer.type !== 'objectgroup' || layer.name === 'spawns' || layer.name === 'lights') continue;
+    for (const o of layer.objects ?? []) {
+      if (!o.width || !o.height) continue;
+      zones.push({
+        name: o.name,
+        layer: layer.name,
+        x: Math.floor(o.x / unitX),
+        y: Math.floor(o.y / unitY),
+        width: Math.round(o.width / unitX),
+        height: Math.round(o.height / unitY),
+        properties: propsOf(o.properties) as MapZone['properties'],
+      });
+    }
+  }
+
   return {
     map: { id, width: json.width, height: json.height, tiles },
     spawns,
     lighting: { ambient: typeof ambient === 'number' ? ambient : 1, lights },
+    zones,
   };
+}
+
+export const ZONES_SYSTEM = 'zones';
+
+/** Stores map zones in the state so triggers survive save/load (and a future server sees them). */
+export function withZones(state: GameState, zones: MapZone[]): GameState {
+  return { ...state, systems: { ...state.systems, [ZONES_SYSTEM]: zones as never } };
+}
+
+export function zonesOf(state: GameState, layer?: string): MapZone[] {
+  const zones = (state.systems[ZONES_SYSTEM] as unknown as MapZone[] | undefined) ?? [];
+  return layer ? zones.filter((z) => z.layer === layer) : zones;
 }
