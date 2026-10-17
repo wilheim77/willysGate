@@ -74,6 +74,13 @@ export interface AudioManifest {
    * `loop: false`), then falls back to the exploration/combat sync automatically.
    */
   outcomeMusic?: { field: string; map: Record<string, string>; fallback?: string };
+  /**
+   * Picks a looping music track on `combatStarted` by checking an array field of the
+   * event (normally `order`, the entity ids fighting) against `map`'s keys — the first
+   * key found in the array wins (e.g. a boss entity id turning on its own theme). Falls
+   * back to the normal `music.combat` sync when none of the keys are present.
+   */
+  combatMusicByEntity?: { arrayField: string; map: Record<string, string> };
 }
 
 export interface AudioVolumeState {

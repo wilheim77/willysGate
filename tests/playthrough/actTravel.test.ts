@@ -125,27 +125,37 @@ describe('act travel: every exit, from a fresh game', () => {
     expect(allowed.ok, allowed.ok ? '' : `travel should succeed once the flag is set: ${JSON.stringify((allowed as { error: unknown }).error)}`).toBe(true);
   });
 
-  it('abadia\'s crypt exit to mina stays closed until the crypt door is opened (cripta_abierta)', () => {
-    // Flag name has moved twice now (placeholder "TODO:llave_cripta" -> "llave_cripta" ->
-    // "cripta_abierta"); each rename is content catching up, not a regression, so this test
-    // just checks whatever the map currently says and that something in the real dialogues
-    // actually grants it.
+  it('abadia\'s crypt exit to mina is now gated on the real "cripta_abierta" flag (door_cripta sets it)', () => {
+    // Was a placeholder "TODO:cripta_abierta" (never settable) when this test was first
+    // written; the content has since been finished with the real flag name, granted by
+    // defending the abbey (d1_abadia_final.json). This test now checks the real gate both
+    // ways, and would need updating again if the flag name or its source ever changes.
     const state = buildActWorld(engine, 1, 'abadia');
     const cryptExit = exitsOf(state).find((z) => z.properties.to === 'mina')!;
-    const flagName = String(cryptExit.properties.requiresFlag);
     expect(cryptExit.properties.requiresFlag).toBe('cripta_abierta');
     const setters = Object.entries(engine.content.dialogues).filter(([, tree]) =>
       Object.values(tree.nodes).some(
         (node) =>
-          (node.effects ?? []).some((e) => e.type === 'setFlag' && e.flag === flagName) ||
-          (node.choices ?? []).some((c) => (c.effects ?? []).some((e) => e.type === 'setFlag' && e.flag === flagName)),
+          (node.effects ?? []).some((e) => e.type === 'setFlag' && e.flag === 'cripta_abierta') ||
+          (node.choices ?? []).some((c) => (c.effects ?? []).some((e) => e.type === 'setFlag' && e.flag === 'cripta_abierta')),
       ),
     );
-    expect(setters.length, `nothing in the dialogues grants "${flagName}"`).toBeGreaterThan(0);
+    expect(setters.map(([id]) => id), 'nothing grants cripta_abierta any more').toContain('door_cripta');
 
     const standing: GameState = { ...state, entities: { ...state.entities, hero: { ...state.entities.hero!, position: { x: cryptExit.x, y: cryptExit.y } } } };
-    const cmd = { type: 'travel', issuer: 'player:1', entityId: 'hero', mapId: 'mina', spawn: String(cryptExit.properties.spawn) } as BaseCommand;
-    expect(engine.apply(standing, cmd).ok, 'the crypt should stay closed with no key').toBe(false);
-    expect(engine.apply({ ...standing, flags: { ...standing.flags, [flagName]: true } }, cmd).ok, 'the crypt should open once granted').toBe(true);
+    const blocked = engine.apply(standing, { type: 'travel', issuer: 'player:1', entityId: 'hero', mapId: 'mina', spawn: String(cryptExit.properties.spawn) } as BaseCommand & {
+      entityId: string;
+      mapId: string;
+      spawn: string;
+    });
+    expect(blocked.ok, 'the crypt should stay closed with no key').toBe(false);
+
+    const withKey: GameState = { ...standing, flags: { ...standing.flags, cripta_abierta: true } };
+    const allowed = engine.apply(withKey, { type: 'travel', issuer: 'player:1', entityId: 'hero', mapId: 'mina', spawn: String(cryptExit.properties.spawn) } as BaseCommand & {
+      entityId: string;
+      mapId: string;
+      spawn: string;
+    });
+    expect(allowed.ok, allowed.ok ? '' : `the crypt should open with the key: ${JSON.stringify((allowed as { error: unknown }).error)}`).toBe(true);
   });
 });
