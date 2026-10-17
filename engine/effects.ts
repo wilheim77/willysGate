@@ -33,6 +33,11 @@ export type Effect =
   | { type: 'setController'; entityId: string; controllerId: string; factionId?: string }
   /** Change a map tile (a door opens, a bridge collapses). Omitted fields stay as they are. */
   | { type: 'setTile'; position: Vec2; walkable?: boolean; terrain?: string; height?: number }
+  /**
+   * Change many tiles at once (a cave-in, a collapsing floor). Whoever stands on a tile that
+   * sinks more than a step falls (entityFell), and the ruleset deals the damage.
+   */
+  | { type: 'setTiles'; tiles: Vec2[]; walkable?: boolean; terrain?: string; height?: number }
   /** Change how a thing looks or what it is (a chest opens, a lever flips): sprite, name and tags. */
   /**
    * Bring something into play: a summon, a barrier, reinforcements. In combat it joins the
@@ -321,6 +326,22 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         const updated = { ...e, controllerId: effect.controllerId, factionId: effect.factionId ?? e.factionId };
         next = { ...next, entities: { ...next.entities, [e.id]: updated } };
         events.push({ type: 'controllerChanged', entityId: e.id, controllerId: updated.controllerId, factionId: updated.factionId } as ControllerChangedEvent);
+        break;
+      }
+      case 'setTiles': {
+        for (const p of effect.tiles) {
+          const before = tileAt(next.map, p);
+          if (!before || !inBounds(next.map, p)) continue;
+          const r = applyEffects(ruleset, next, [{ type: 'setTile', position: p, ...(effect.walkable !== undefined ? { walkable: effect.walkable } : {}), ...(effect.terrain !== undefined ? { terrain: effect.terrain } : {}), ...(effect.height !== undefined ? { height: effect.height } : {}) }]);
+          next = r.state;
+          events.push(...r.events);
+          const drop = before.height - (tileAt(next.map, p)?.height ?? before.height);
+          if (drop > ruleset.movement.maxStep) {
+            for (const e of Object.values(next.entities)) {
+              if (e.position.x === p.x && e.position.y === p.y) events.push({ type: 'entityFell', entityId: e.id, levels: drop });
+            }
+          }
+        }
         break;
       }
       case 'setTile': {

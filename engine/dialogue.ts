@@ -107,6 +107,8 @@ export interface StartDialogueCommand extends BaseCommand {
   treeId: string;
   actorId: string;
   partnerId?: string;
+  /** A flag set when it opens (scenes that play once). */
+  markFlag?: string;
 }
 
 export interface ChooseOptionCommand extends BaseCommand {
@@ -243,7 +245,8 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
 /** Scripts (the game itself) open conversations directly; players go through `interact`. */
 export const startDialogue: CommandHandler<StartDialogueCommand> = (state, cmd, { ruleset, content = EMPTY_CONTENT }) => {
   if (cmd.issuer !== SYSTEM_ISSUER) return fail('not_your_entity', 'Only the game starts dialogues directly');
-  return openDialogue(ruleset, content, state, cmd.treeId, cmd.actorId, cmd.partnerId);
+  const marked = cmd.markFlag ? { ...state, flags: { ...state.flags, [cmd.markFlag]: true } } : state;
+  return openDialogue(ruleset, content, marked, cmd.treeId, cmd.actorId, cmd.partnerId);
 };
 
 function openDialogue(ruleset: Ruleset, content: EngineContent, state: GameState, treeId: string, actorId: string, partnerId?: string): CommandResult {
