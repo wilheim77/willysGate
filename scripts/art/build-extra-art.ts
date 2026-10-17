@@ -263,6 +263,38 @@ function trapFrame(atlas: Image, list: Record<string, Rect>, frame: number, disa
   return img;
 }
 
+/** Tapestry with the Mazo crest (a gold mallet); the 'crossbow' variant shows the bolt tip and stock peeking out. */
+function tapestry(crossbow: boolean): Image {
+  const img = blank(T, 24);
+  rect(img, 1, 0, 14, 1, rgb('w1'));
+  rect(img, 0, 1, 16, 1, rgb('w2'));
+  rect(img, 2, 2, 12, 20, rgb('b1'));
+  rect(img, 2, 2, 1, 20, rgb('b0'));
+  rect(img, 13, 2, 1, 20, rgb('b0'));
+  for (let y = 3; y < 21; y += 2) (set(img, 3, y, rgb('f4')), set(img, 12, y, rgb('f4')));
+  ascii(img, 5, 6, ['kkkkkk', 'kYYYYk', 'kkYYkk', '..YY..', '..YY..', '..YY..', '..Yk..'], { k: 'out', Y: 'f4' });
+  for (let x = 2; x < 14; x += 2) (set(img, x, 22, rgb('b1')), set(img, x + 1, 23, rgb('b0')));
+  if (crossbow) {
+    ascii(img, 14, 14, ['k.', 'Ik', 'kk'], { k: 'out', I: 'i2' });
+    ascii(img, 12, 21, ['kOk', '.k.'], { k: 'out', O: 'w3' });
+  }
+  return img;
+}
+
+/** Gallows of the Torre del Cepo square: post, beam, brace and the noose. */
+function gallows(): Image {
+  const img = blank(T, 32);
+  rect(img, 2, 2, 3, 30, rgb('w2'));
+  rect(img, 2, 2, 1, 30, rgb('w3'));
+  rect(img, 2, 2, 13, 3, rgb('w2'));
+  rect(img, 2, 2, 13, 1, rgb('w3'));
+  for (let i = 0; i < 6; i++) set(img, 5 + i, 10 - i, rgb('w1'));
+  rect(img, 12, 5, 1, 6, rgb('d2'));
+  ascii(img, 11, 11, ['.k.', 'k.k', 'k.k', '.k.'], { k: 'd2' });
+  rect(img, 0, 30, 8, 2, rgb('s0'));
+  return img;
+}
+
 function rim(lip: [Key, Key, Key]): Image {
   const img = blank(T, T);
   for (let x = 0; x < T; x++) {
@@ -448,6 +480,9 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   fx_steam: { frames: env.steam(), note: 'Vapor (agua y fuego)', anchor: 'floor', fps: 10, loop: false },
   trap_armed: { frames: [3, 3, 3, 2].map((f) => trapFrame(atlas, list, f)), note: 'Trampa visible armada (pinchos fuera)', anchor: 'floor', fps: 4, loop: true },
   trap_disarmed: { frames: [trapFrame(atlas, list, 0, true)], note: 'Trampa desarmada (pinchos retraídos, apagada)', anchor: 'floor', fps: 0, loop: false },
+  tapestry: { frames: [tapestry(false)], note: 'Tapiz con el escudo de los Mazo', anchor: 'wall', fps: 0, loop: false },
+  tapestry_crossbow: { frames: [tapestry(true)], note: 'Tapiz con una ballesta escondida detrás (asoma la punta)', anchor: 'wall', fps: 0, loop: false },
+  gallows: { frames: [gallows()], note: 'Horca de la Torre del Cepo', anchor: 'floor', fps: 0, loop: false },
 };
 /** Surface overlays (manifest 'surfaces'): drawn over the floor tile, may be translucent. */
 const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {
