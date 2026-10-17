@@ -11,14 +11,17 @@ import {
   gridDistance,
   hasCondition,
   hasTag,
+  isHostile,
   stat,
+  surfaceAt,
 } from '../../engine';
 import { d20Check, resolveRollMode } from '../common/d20';
 import { listActions, performAction, previewAction } from './actions';
+import './more-classes';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, onFall, onSurface } from './environment';
-import { Resolver, type WillyEvent, canAct, chanceD20, dealDamage, pushEntity, standing } from './resolve';
+import { Resolver, type WillyEvent, canAct, chanceD20, dealDamage, heal, pushEntity, standing } from './resolve';
 import { describeEntity } from './sheet';
 
 /**
@@ -68,6 +71,13 @@ const conditions: Record<string, ConditionDef> = {
   corriendo: { label: 'Corriendo', description: 'Otro movimiento completo este turno.' },
   salto: { label: 'En el aire', description: 'Acaba de saltar: puede hacer un mate.' },
   'cafe-tomado': { label: 'Café tomado', description: 'Ya ha hecho la pausa del café en este combate.' },
+  pasodoble: { label: 'Pasodoble', description: '+2 a acertar.' },
+  viral: { label: 'Viral', description: 'El próximo momento espectacular vale el triple de audiencia.' },
+  orquesta: { label: 'Orquesta en directo', description: 'Cada turno, los enemigos bailan y tú te curas.' },
+  'bis-activo': { label: '¡Otra, otra!', description: 'Repitiendo la última canción.' },
+  estudiado: { label: 'Estudiado', description: 'El Tasador le ha echado el ojo: le acierta mejor y con más críticos.' },
+  encajado: { label: 'En una caja invisible', description: 'No puede moverse ni actuar, ni nadie le puede tocar.' },
+  pena: { label: 'Qué pena', description: 'Ha roto algo de época: pierde 1 acción.' },
   eliminado: { label: 'Eliminado', description: 'Fuera del concurso. O de esta planta, al menos.' },
 };
 
@@ -159,11 +169,12 @@ function difficulty(state: GameState, entityId: string, source: string): number 
   return 10 + Math.floor(attr(e, a) / 2);
 }
 
-const NO_MOVE = ['aturdido', 'congelado', 'enredado', 'dormido', 'petrificado', 'eliminado'];
+const NO_MOVE = ['aturdido', 'congelado', 'enredado', 'dormido', 'petrificado', 'eliminado', 'encajado'];
 
-function movementBudget(e: Parameters<Ruleset['movementBudget']>[0]): number {
+function movementBudget(e: Parameters<Ruleset['movementBudget']>[0], state: GameState): number {
   if (NO_MOVE.some((c) => hasCondition(e, c))) return 0;
-  const base = baseMovement(e) - (hasTrait(e, 'clonc') ? 1 : 0);
+  const inWater = hasTrait(e, 'pez') && surfaceAt(state, e.position)?.type === 'agua';
+  const base = baseMovement(e) - (hasTrait(e, 'clonc') ? 1 : 0) + (inWater ? 2 : 0) + (hasCondition(e, 'pasodoble') && skillLevel(e, 'pasodoble') >= 5 ? 2 : 0);
   const total = base * (hasCondition(e, 'corriendo') ? 2 : 1);
   const standUp = hasCondition(e, 'tumbado') ? Math.ceil(base / 2) : 0;
   return Math.max(0, total - standUp);
@@ -184,6 +195,22 @@ function onTurnStart(ruleset: Ruleset, state: GameState, id: string, rng: RngCur
     const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]] as const;
     const [dx, dy] = dirs[rng.die(8) - 1]!;
     pushEntity(r, id, { x: e.position.x - dx, y: e.position.y - dy }, 1);
+  }
+  if (hasCondition(e, 'pena')) {
+    r.apply({ type: 'modifyResource', entityId: id, resource: 'acciones', delta: -1 }, { type: 'removeCondition', entityId: id, condition: 'pena' });
+  }
+  // Orquesta completa: everyone around keeps dancing and the Bardo heals.
+  if (hasCondition(e, 'orquesta')) {
+    heal(r, id, skillLevel(e, 'orquesta-completa') >= 3 ? 5 : 3);
+    for (const v of Object.values(state.entities)) {
+      if (!standing(v) || !isHostile(v, e) || gridDistance(v.position, e.position) > 6) continue;
+      r.apply({ type: 'applyCondition', entityId: v.id, condition: 'bailando', sourceId: id, remainingTurns: 1 });
+      if (skillLevel(e, 'orquesta-completa') >= 4) dealDamage(r, v.id, rng.die(4), 'golpe', id, 'pisoton');
+    }
+  }
+  // «Silencio absoluto» (Mimo): unnoticed at the start of a fight. Ideally on combat start (ENGINE_REQUESTS R20).
+  if (hasTrait(e, 'silencio') && state.turn.mode === 'combat' && state.turn.round === 1 && !hasCondition(e, 'escondido')) {
+    r.apply({ type: 'applyCondition', entityId: id, condition: 'escondido' });
   }
   // «Hablar del tiempo»: the first combat turn on each map, Willy loses an action chatting about the weather.
   const flag = `willy:tiempo:${state.map.id}`;

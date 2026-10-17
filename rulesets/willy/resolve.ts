@@ -15,6 +15,7 @@ import {
   isHostile,
   lightLevelAt,
   simulatePush,
+  surfaceAt,
   tileAt,
 } from '../../engine';
 import { type RollMode, d20Check, resolveRollMode } from '../common/d20';
@@ -104,7 +105,7 @@ export function isCreature(e: Entity): boolean {
   return !e.tags.includes(OBJECT_TAG);
 }
 
-const NO_ACT = ['aturdido', 'dormido', 'petrificado', 'eliminado'];
+const NO_ACT = ['aturdido', 'dormido', 'petrificado', 'eliminado', 'encajado'];
 export function canAct(e: Entity): boolean {
   return standing(e) && !NO_ACT.some((c) => hasCondition(e, c));
 }
@@ -138,6 +139,8 @@ export interface AttackSpec {
   extra?: { label: string; value: number; term?: string }[];
   /** Extra flat damage (ability-specific), added after the roll. */
   extraDamage?: number;
+  /** Natural roll that is a critical (20 by default; the Tasador's Ojo clínico lowers it). */
+  critOn?: number;
 }
 
 /** All visible to-hit modifiers ("+2 desde arriba"), so the preview and the roll agree. */
@@ -154,6 +157,10 @@ export function attackModifiers(state: GameState, attacker: Entity, target: Enti
   if (hasCondition(attacker, 'cegado')) mods.push({ label: 'Cegado', value: -5, term: 'cegado' });
   if (hasCondition(attacker, 'mareado')) mods.push({ label: 'Mareado', value: -2, term: 'mareado' });
   if (hasCondition(attacker, 'compulsado')) mods.push({ label: 'Compulsado', value: 2, term: 'compulsado' });
+  if (hasCondition(attacker, 'pasodoble')) mods.push({ label: 'Pasodoble', value: 2 });
+  if (hasTrait(attacker, 'pez') && surfaceAt(state, attacker.position)?.type === 'agua') mods.push({ label: 'Como pez en el agua', value: 2 });
+  const studied = target.conditions.find((c) => c.id === 'estudiado' && c.sourceId === attacker.id);
+  if (studied) mods.push({ label: 'Ojo clínico', value: skillLevel(attacker, 'ojo-clinico') >= 2 ? 5 : 4 });
   mods.push(...(spec.extra ?? []));
   const mode = resolveRollMode(hasCondition(attacker, 'afortunado'), false);
   return { modifiers: mods.filter((m) => m.value !== 0), mode };
@@ -165,11 +172,20 @@ export function attackPreview(state: GameState, spec: AttackSpec): { chance: num
   const { modifiers, mode } = attackModifiers(state, attacker, target, spec);
   const bonus = modifiers.reduce((s, m) => s + m.value, 0);
   const def = defence(target);
-  const chance = chanceD20(bonus, def, mode);
-  const crit = mode === 'advantage' ? 1 - (19 / 20) ** 2 : 1 / 20;
+  const chance = Math.max(chanceD20(bonus, def, mode), (21 - effectiveCritOn(attacker, target, spec)) / 20);
+  const critOn = effectiveCritOn(attacker, target, spec);
+  const single = (21 - critOn) / 20;
+  const crit = mode === 'advantage' ? 1 - (1 - single) ** 2 : single;
   const dmg = averageDice(spec.dice) + damageBonusFor(attacker, spec) + (spec.extraDamage ?? 0);
   const expected = adjustDamage(target, chance * dmg + crit * (averageDice(spec.dice) - spec.dice.bonus), spec.element);
   return { chance, crit, expected, bonus, def, modifiers };
+}
+
+/** The Tasador's Ojo clínico widens the critical range against a studied target. */
+function effectiveCritOn(attacker: Entity, target: Entity, spec: AttackSpec): number {
+  const studied = target.conditions.some((c) => c.id === 'estudiado' && c.sourceId === attacker.id);
+  const fromStudy = studied ? (skillLevel(attacker, 'ojo-clinico') >= 3 ? 17 : 18) : 20;
+  return Math.min(spec.critOn ?? 20, fromStudy);
 }
 
 function damageBonusFor(attacker: Entity, spec: AttackSpec): number {
@@ -187,13 +203,16 @@ export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; cr
     const dmg = dealDamage(r, target.id, Math.max(1, rollDice(r.rng, spec.dice) + damageBonusFor(attacker, spec)), spec.element, attacker.id, 'golpe');
     return { hit: true, crit: false, damage: dmg };
   }
+  if (hasCondition(attacker, 'escondido')) r.apply({ type: 'removeCondition', entityId: attacker.id, condition: 'escondido' });
   const { modifiers, mode } = attackModifiers(r.state, attacker, target, spec);
   const def = defence(target);
   const roll = d20Check(r.rng, { check: 'ataque', label: spec.label, mode, modifiers, target: def, targetLabel: 'DEF' });
   roll.targetTerm = 'def';
   const natural = roll.dice[0]!.kept[0]!;
-  const hit = natural === 20 || (natural !== 1 && roll.total >= def);
-  const crit = natural === 20;
+  const critOn = effectiveCritOn(attacker, target, spec);
+  const hit = natural >= critOn || (natural !== 1 && roll.total >= def);
+  const crit = natural >= critOn;
+  if (target.conditions.some((c) => c.id === 'estudiado' && c.sourceId === attacker.id)) r.apply({ type: 'removeCondition', entityId: target.id, condition: 'estudiado' });
   roll.success = hit;
   if (crit) roll.outcome = 'critical';
   if (natural === 1) roll.outcome = 'fumble';
@@ -213,6 +232,7 @@ export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; cr
 /** Immunities, wet+lightning, frozen+blunt, glazed gnome. */
 export function adjustDamage(target: Entity, amount: number, element: string): number {
   if (hasTag(target, `inmune:${element}`)) return 0;
+  if (hasCondition(target, 'petrificado') || hasCondition(target, 'encajado')) return 0;
   if (element === 'fuego' && hasCondition(target, 'protegidoFuego')) return 0;
   let a = amount;
   if (element === 'rayo' && hasCondition(target, 'empapado') && !hasTrait(target, 'hijo-del-cantabrico')) a *= 2;
@@ -240,6 +260,12 @@ export function dealDamage(r: Resolver, targetId: string, raw: number, element: 
 
 export function defeat(r: Resolver, id: string, sourceId: string | undefined, cause: string, element?: string): void {
   r.apply({ type: 'applyCondition', entityId: id, condition: 'eliminado' });
+  // «¡Que es de época!»: the Tasador is sad for a turn after breaking scenery.
+  const source = sourceId ? r.state.entities[sourceId] : undefined;
+  if (source && hasTrait(source, 'que-es-de-epoca') && r.entity(id).tags.includes(OBJECT_TAG)) {
+    r.apply({ type: 'applyCondition', entityId: sourceId!, condition: 'pena' });
+    r.emit({ type: 'traitTriggered', entityId: sourceId!, rasgo: 'que-es-de-epoca' } as WillyEvent);
+  }
   const ev: WillyEvent = { type: 'entityDefeated', entityId: id, cause };
   if (sourceId) ev.actorId = sourceId;
   if (element) ev.element = element;
@@ -319,6 +345,13 @@ export function pushEntity(r: Resolver, targetId: string, from: Vec2, distance: 
   const sim = simulatePush(r.ruleset, r.state, targetId, dx, dy, steps);
   const moved = gridDistance(target.position, sim.to);
   if (moved > 0) r.apply({ type: 'push', entityId: targetId, dx, dy, distance: steps });
+  // A petrified enemy that gets pushed shatters (the Tasador's Pieza de museo).
+  if (moved > 0 && hasCondition(target, 'petrificado') && !isBoss(target)) {
+    r.emit({ type: 'collided', entityId: targetId, with: 'roto' } as WillyEvent);
+    r.apply({ type: 'removeCondition', entityId: targetId, condition: 'petrificado' });
+    dealDamage(r, targetId, r.entity(targetId).resources.vida?.current ?? 999, 'golpe', sourceId, 'roto');
+    return { moved };
+  }
   if (!sim.collidedWith) return { moved };
   const beyond = { x: sim.to.x + dx, y: sim.to.y + dy };
   const tile = tileAt(r.state.map, beyond);

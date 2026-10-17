@@ -493,4 +493,5 @@ Además, en el perfil por navegador (R6): `rivalesRecientes: string[]` (últimos
 
 - `SurfaceDef.blocksSight?: boolean`: `hasLineOfSight` lo respeta (el vapor de *Willy* y la niebla de *Intereses*).
 - `Ruleset.onRoundEnd?(state, rng): ActionOutcome`: para cintas transportadoras y mareas (Plantas 1 y 2), que mueven a todo lo que tienen encima al acabar cada ronda.
+- `Ruleset.onTurnEnd?(state, entityId, rng)` y `onCombatStart?(state, rng)`: la «Siesta en la silla» de la Socorrista (si acaba el turno sin moverse) y el «Silencio absoluto» del Mimo (empieza el combate escondido). Hoy el segundo se aplica en su primer turno.
 
