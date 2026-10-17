@@ -168,6 +168,11 @@ export class CreationScreen {
     try {
       this.store.load(this.game.creation!.apply(this.store.engine, this.store.state, choices));
       this.root.hidden = true;
+      // The story starts talking (only where its speaker is present, e.g. not on the test map).
+      const opening = this.game.opening;
+      if (opening && this.game.dialogues?.[opening.dialogue] && (!opening.partner || this.store.state.entities[opening.partner])) {
+        this.store.dispatch({ type: 'startDialogue', issuer: 'system', treeId: opening.dialogue, actorId: this.game.leaderId, ...(opening.partner ? { partnerId: opening.partner } : {}) } as never);
+      }
     } catch (e) {
       console.error(e);
     }

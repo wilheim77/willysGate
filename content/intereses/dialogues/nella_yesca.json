@@ -75,7 +75,7 @@
           "text": "[Garrán] (Garrán se ha quedado mirando a Nella.)",
           "once": true,
           "when": {
-            "flag": "garran_reclutado"
+            "inParty": "garran"
           },
           "next": "garran"
         },

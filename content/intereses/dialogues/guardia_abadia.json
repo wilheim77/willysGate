@@ -1,5 +1,5 @@
 {
-  "$comment": "Scene 1 to 2. The guard at the abbey gate. audiencia_concedida lets the party into the chapter house (script/map change).",
+  "$comment": "Scene 1 to 2. The guard at the abbey gate (plaza). Once the trial is over he lets the party in: audiencia_concedida and travel to the abbey (its scene zone opens the audience). The plaza exit to the abbey should require audiencia_concedida.",
   "id": "guardia_abadia",
   "start": "puerta",
   "nodes": {
@@ -45,6 +45,11 @@
           "type": "setFlag",
           "flag": "audiencia_concedida",
           "value": true
+        },
+        {
+          "type": "travel",
+          "mapId": "abadia",
+          "spawn": "entry-plaza"
         }
       ]
     },

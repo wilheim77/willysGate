@@ -1,5 +1,5 @@
 {
-  "$comment": "Scene 2. Opened by script in the chapter house (partner mazo). Options 1-8 from STORY §9; a failed Intimidation raises later DCs by 2 (abadia_desconfia). The name of Brea comes without a roll (\"¿Quién lleva su mina?\").",
+  "$comment": "Scene 2. Opened by the abbey map scene zone (speaker mazo). Options 1-8 from STORY §9; a failed Intimidation raises later DCs by 2 (abadia_desconfia). The name of Brea comes without a roll (\"¿Quién lleva su mina?\").",
   "id": "audiencia_abadia",
   "start": "sala",
   "nodes": {
@@ -37,7 +37,17 @@
     "m3": {
       "speaker": "mazo",
       "text": "¿Y usted? ¿También habla con decimales, o ha venido a romperme algo?",
-      "next": "a1"
+      "next": [
+        {
+          "when": {
+            "inParty": "anselmo"
+          },
+          "next": "a1"
+        },
+        {
+          "next": "hub"
+        }
+      ]
     },
     "a1": {
       "speaker": "anselmo",
@@ -110,7 +120,7 @@
           "when": {
             "all": [
               {
-                "flag": "garran_reclutado"
+                "inParty": "garran"
               },
               {
                 "notFlag": "abadia_desconfia"
@@ -121,7 +131,7 @@
             "check": "intimidation",
             "dc": 12,
             "success": "miedo",
-            "failure": "ballestas_g",
+            "failure": "ballestas",
             "situational": [
               "advantage"
             ]
@@ -134,7 +144,9 @@
           "when": {
             "all": [
               {
-                "notFlag": "garran_reclutado"
+                "not": {
+                  "inParty": "garran"
+                }
               },
               {
                 "notFlag": "abadia_desconfia"
@@ -342,18 +354,6 @@
       "text": "Ya lo sé, Hilda. Me callo. Pero es que me lo han preguntado con muchísima convicción.",
       "next": "hub"
     },
-    "ballestas_g": {
-      "speaker": "hilda",
-      "text": "En esta sala hay seis ballestas, cobrador. Usted ha contado dos.",
-      "effects": [
-        {
-          "type": "setFlag",
-          "flag": "abadia_desconfia",
-          "value": true
-        }
-      ],
-      "next": "ballestas_g2"
-    },
     "ballestas_g2": {
       "speaker": "garran",
       "text": "Cinco. La sexta está detrás del tapiz y no está cargada.",
@@ -379,7 +379,17 @@
           "value": true
         }
       ],
-      "next": "ballestas_2"
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "ballestas_g2"
+        },
+        {
+          "next": "ballestas_2"
+        }
+      ]
     },
     "ballestas_2": {
       "speaker": "mazo",

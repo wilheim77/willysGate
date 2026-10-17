@@ -1,10 +1,58 @@
 {
-  "$comment": "Scene 1. Tag both cirilo and anselmo with dialogue:juicio_anselmo. Fanatics fanatico_1..3 (faction \"fanaticos\") are noncombatant until the fight. Every resolution recruits Anselmo and sets juicio_resuelto.",
+  "$comment": "Scene 1. Opened by the map scene zone (speaker cirilo); the first time it also describes the square. Tag both cirilo and anselmo with dialogue:juicio_anselmo. Fanatics fanatico_pala-1..3 (faction \"fanaticos\") are noncombatant until the fight. Every resolution recruits Anselmo and sets juicio_resuelto.",
   "id": "juicio_anselmo",
   "start": "escena",
   "nodes": {
     "escena": {
-      "text": "En la plataforma de la Torre del Cepo, un mediano con hábito de fraile tiene la soga al cuello y la boca en marcha. Delante, un capellán flaco con una pala al hombro lee los cargos de un papel que se sabe de memoria. Tres hombres con palas afiladas vigilan que nadie se aburra.",
+      "text": "Hondonegra huele a ceniza mojada y a río enfermo. En medio de la plaza se levanta la Torre del Cepo, y en su plataforma un mediano con hábito de fraile tiene la soga al cuello y la boca en marcha. Delante, un capellán flaco con una pala al hombro lee los cargos de un papel que se sabe de memoria. Tres hombres con palas afiladas vigilan que nadie se aburra.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "llegada_hondonegra",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "notFlag": "plaza_presentada"
+          },
+          "next": "gente"
+        },
+        {
+          "next": "cirilo_1"
+        }
+      ]
+    },
+    "gente": {
+      "text": "Alrededor, el pueblo entero mira sin mirar: mineros sin mina, mujeres de luto con ocho meses de práctica y niños que ya no preguntan. Arriba, en la ladera, la abadía vieja tiene todas las ventanas cerradas.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "plaza_presentada",
+          "value": true
+        }
+      ],
+      "next": "dorotea"
+    },
+    "dorotea": {
+      "speaker": "dorotea",
+      "text": "Un ahorcamiento. Al menos en este pueblo todavía funciona algo.",
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "garran"
+        },
+        {
+          "next": "cirilo_1"
+        }
+      ]
+    },
+    "garran": {
+      "speaker": "garran",
+      "text": "La horca es nueva. La torre no. Lo demás está igual, pero más flaco.",
       "next": "cirilo_1"
     },
     "cirilo_1": {
@@ -562,27 +610,6 @@
           ],
           "addTags": [
             "dialogue:cirilo"
-          ]
-        },
-        {
-          "type": "setEntity",
-          "entityId": "fanatico_1",
-          "removeTags": [
-            "noncombatant"
-          ]
-        },
-        {
-          "type": "setEntity",
-          "entityId": "fanatico_2",
-          "removeTags": [
-            "noncombatant"
-          ]
-        },
-        {
-          "type": "setEntity",
-          "entityId": "fanatico_3",
-          "removeTags": [
-            "noncombatant"
           ]
         },
         {

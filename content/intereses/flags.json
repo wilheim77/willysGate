@@ -104,12 +104,16 @@
   },
   "prologo_mineros_resuelto": {
     "critical": true,
-    "description": "El paso del camino está libre (por las buenas o, tras el combate, por las malas).",
-    "setBy": "script: al ganar el combate contra la facción \"mineros\""
+    "description": "El paso del camino está libre (por las buenas o, al ganar el combate, por onVictory)."
   },
   "llegada_hondonegra": {
     "critical": false,
-    "description": "El grupo ha llegado a la plaza de Hondonegra."
+    "description": "El grupo ha llegado a la plaza de Hondonegra.",
+    "readBy": "scripts"
+  },
+  "plaza_presentada": {
+    "critical": false,
+    "description": "Ya se ha descrito la plaza al empezar el juicio."
   },
   "juicio_resuelto": {
     "critical": true,
@@ -216,8 +220,8 @@
   },
   "audiencia_concedida": {
     "critical": true,
-    "description": "La guardia de la abadía os deja pasar a la audiencia.",
-    "readBy": "script: cambio a la sala capitular"
+    "description": "La guardia de la abadía os deja pasar a la audiencia (y os lleva a la abadía).",
+    "readBy": "mapa: salida de la plaza a la abadía"
   },
   "anselmo_hablo_habito": {
     "critical": false,

@@ -1,5 +1,5 @@
 {
-  "$comment": "Scene 3. Object entity pulpito_santa_pala in the chapel (or opened by script when the party enters during the sermon). New silver and the song, without a roll.",
+  "$comment": "Scene 3. Opened by the calles map scene zone «sermon» (speaker cirilo) in the chapel. New silver and the song, without a roll.",
   "id": "sermon_cirilo",
   "start": "sermon",
   "nodes": {
