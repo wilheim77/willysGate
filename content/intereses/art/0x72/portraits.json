@@ -1,0 +1,35 @@
+{
+  "$comment": "HUD portraits (32x32 busts) built from each sprite's first idle frame by scripts/art/build-portraits.ts. 'tone' picks the backdrop: party (warm), foe (blood red), undead (cold), neutral. Build with `npm run art`.",
+  "size": 32,
+  "tones": {
+    "party": ["#1c1714", "#5a4632"],
+    "foe": ["#1a0d10", "#5a2224"],
+    "undead": ["#0f1318", "#3a4a56"],
+    "neutral": ["#16151a", "#3e3a44"]
+  },
+  "defaultTone": "neutral",
+  "skip": ["barrel", "barrel_oil", "crate"],
+  "sprites": {
+    "cobrador": { "tone": "party" },
+    "hero": { "tone": "party" },
+    "wizard": { "tone": "party" },
+    "garran": { "tone": "party", "headroom": 0 },
+    "dorotea": { "tone": "party" },
+    "anselmo": { "tone": "party", "headroom": -3 },
+    "sinpaga_cuchillero": { "tone": "foe" },
+    "bandit": { "tone": "foe" },
+    "sinpaga_enmascarado": { "tone": "foe" },
+    "thug": { "tone": "foe" },
+    "sinpaga_bruto": { "tone": "foe" },
+    "orc": { "tone": "foe" },
+    "guardia_baron": { "tone": "foe" },
+    "guardia_baron_sargento": { "tone": "foe" },
+    "absalon": { "tone": "foe" },
+    "minero_cuadrilla": { "tone": "neutral" },
+    "callado": { "tone": "undead" },
+    "callado_palido": { "tone": "undead" },
+    "esqueleto_minero": { "tone": "undead" },
+    "skeleton": { "tone": "undead" },
+    "ahogado": { "tone": "undead" }
+  }
+}
