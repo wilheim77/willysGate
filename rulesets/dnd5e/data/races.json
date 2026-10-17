@@ -1,0 +1,8 @@
+{
+  "$comment": "SRD 5.1 races (one subrace each), simplified. Traits are feature ids interpreted by the ruleset.",
+  "human": { "label": "Humano", "abilityBonus": { "str": 1, "dex": 1, "con": 1, "int": 1, "wis": 1, "cha": 1 }, "speed": 6, "traits": [] },
+  "elf": { "label": "Elfo", "abilityBonus": { "dex": 2, "int": 1 }, "speed": 6, "traits": ["darkvision", "fey_ancestry", "keen_senses"], "skills": ["perception"] },
+  "dwarf": { "label": "Enano", "abilityBonus": { "con": 2, "wis": 1 }, "speed": 5, "traits": ["darkvision", "dwarven_resilience", "dwarven_toughness"], "tags": ["resist:poison"] },
+  "halfling": { "label": "Mediano", "abilityBonus": { "dex": 2, "cha": 1 }, "speed": 5, "traits": ["lucky", "brave", "nimble"] },
+  "half_orc": { "label": "Semiorco", "abilityBonus": { "str": 2, "con": 1 }, "speed": 6, "traits": ["darkvision", "relentless_endurance", "savage_attacks"], "skills": ["intimidation"] }
+}

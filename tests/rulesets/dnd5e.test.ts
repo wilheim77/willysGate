@@ -47,7 +47,7 @@ describe('dnd5e checks', () => {
     expect(result.label).toBe('Persuasión');
     expect(result.modifiers).toEqual([
       { label: 'Carisma', value: 3 },
-      { label: 'Competencia', value: 2 },
+      { label: 'Competencia', value: 2, term: 'proficiency' },
     ]);
     expect(result.total).toBe(result.dice[0]!.kept[0]! + 5);
   });
@@ -62,7 +62,7 @@ describe('dnd5e checks', () => {
     expect(result.label).toBe('Salvación de Inteligencia');
     expect(result.modifiers).toEqual([
       { label: 'Inteligencia', value: 3 },
-      { label: 'Competencia', value: 2 },
+      { label: 'Competencia', value: 2, term: 'proficiency' },
     ]);
   });
 

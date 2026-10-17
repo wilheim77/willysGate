@@ -1,17 +1,27 @@
 import {
+  type ActionOutcome,
   type CheckRequest,
   type ConditionDef,
   type Entity,
   type GameState,
+  type GlossaryEntry,
   type ResourceDef,
+  type RngCursor,
   type Ruleset,
   type StatDef,
   type Vec2,
+  gridDistance,
   hasCondition,
   hasTag,
+  isHostile,
   stat,
   tagValue,
 } from '../../engine';
+import { listActions, performAction, previewAction } from './actions';
+import { profBonus } from './character';
+import { SPELLS } from './data';
+import { parseDice, rollDice, sum } from './dice';
+import { Resolver, canReact, dealDamage, die, heal, resolveAttack, rollSave, spellDc, standing } from './resolve';
 import { d20Check, resolveRollMode } from '../common/d20';
 import { ABILITIES, ABILITY_LABELS, type Ability, SKILLS, abilityModifier, proficiencyBonus } from './abilities';
 
@@ -32,12 +42,20 @@ const stats: Record<string, StatDef> = {
 };
 
 const resources: Record<string, ResourceDef> = {
-  hp: { label: 'Puntos de golpe', refresh: 'longRest', visible: true },
+  hp: { label: 'Puntos de golpe', refresh: 'longRest', visible: true, role: 'health' },
   action: { label: 'Acción', refresh: 'turn' },
   bonus_action: { label: 'Acción adicional', refresh: 'turn' },
   reaction: { label: 'Reacción', refresh: 'turn' },
+  extra_action: { label: 'Acción extra (oleada)', refresh: 'never' },
+  sneak_attack: { label: 'Ataque furtivo', refresh: 'turn' },
   spell_slot_1: { label: 'Espacios de conjuro (nv. 1)', refresh: 'longRest', visible: true },
   spell_slot_2: { label: 'Espacios de conjuro (nv. 2)', refresh: 'longRest', visible: true },
+  spell_slot_3: { label: 'Espacios de conjuro (nv. 3)', refresh: 'longRest', visible: true },
+  second_wind: { label: 'Tomar aliento', refresh: 'shortRest' },
+  action_surge: { label: 'Oleada de acción', refresh: 'shortRest' },
+  channel_divinity: { label: 'Canalizar divinidad', refresh: 'shortRest' },
+  relentless: { label: 'Aguante incansable', refresh: 'longRest' },
+  bleed: { label: 'Turnos antes de morir', refresh: 'never' },
 };
 
 const conditions: Record<string, ConditionDef> = {
@@ -46,12 +64,53 @@ const conditions: Record<string, ConditionDef> = {
   frightened: { label: 'Asustado' },
   incapacitated: { label: 'Incapacitado' },
   invisible: { label: 'Invisible' },
-  paralyzed: { label: 'Paralizado' },
+  paralyzed: { label: 'Paralizado', description: 'No puede moverse ni actuar. Los ataques cuerpo a cuerpo contra él son críticos.' },
   poisoned: { label: 'Envenenado', description: 'Desventaja en tiradas de ataque y pruebas de característica.' },
   prone: { label: 'Derribado' },
   restrained: { label: 'Apresado', description: 'Velocidad 0.' },
   stunned: { label: 'Aturdido' },
   unconscious: { label: 'Inconsciente' },
+  deafened: { label: 'Ensordecido' },
+  downed: { label: 'Caído', description: 'A 0 puntos de golpe: se desangra. Si nadie lo cura o estabiliza en 3 turnos, muere.' },
+  stable: { label: 'Estabilizado', description: 'Sigue inconsciente, pero ya no se desangra.' },
+  dead: { label: 'Muerto' },
+  concentrating: { label: 'Concentrado', description: 'Mantiene un conjuro. Si recibe daño, puede perderlo.' },
+  blessed: { label: 'Bendecido', description: '+1d4 a ataques y salvaciones.' },
+  guided: { label: 'Marcado por la saeta', description: 'El siguiente ataque contra él tiene ventaja.' },
+  guided_check: { label: 'Orientado', description: '+1d4 a la siguiente prueba.' },
+  shield_of_faith: { label: 'Escudo de fe', description: '+2 a la CA.' },
+  shielded: { label: 'Escudo', description: '+5 a la CA hasta su siguiente turno.' },
+  mage_armor: { label: 'Armadura de mago', description: 'CA 13 + Destreza.' },
+  slowed: { label: 'Ralentizado', description: '2 casillas menos de movimiento.' },
+  no_reactions: { label: 'Aturdido por la descarga', description: 'No puede usar reacciones.' },
+  dodging: { label: 'Esquivando', description: 'Los ataques contra él tienen desventaja.' },
+  dashing: { label: 'Corriendo', description: 'Movimiento doble este turno.' },
+  disengaged: { label: 'Retirándose', description: 'No provoca ataques de oportunidad.' },
+  turned: { label: 'Expulsado', description: 'Huye del clérigo y no puede acercarse.' },
+  spirit_guardians: { label: 'Espíritus guardianes', description: 'Los enemigos que empiezan su turno cerca reciben daño radiante.' },
+};
+
+const glossary: Record<string, GlossaryEntry> = {
+  ac: { label: 'CA (clase de armadura)', text: 'Lo difícil que es acertarte. Un ataque acierta si el dado más sus bonificadores iguala o supera la CA.' },
+  dc: { label: 'CD (clase de dificultad)', text: 'El número que hay que igualar o superar con el dado más tus bonificadores para que algo salga bien.' },
+  advantage: { label: 'Ventaja', text: 'Tiras dos dados de 20 y te quedas con el mayor. Pasa al atacar desde arriba o contra alguien indefenso.' },
+  disadvantage: { label: 'Desventaja', text: 'Tiras dos dados de 20 y te quedas con el menor. Si tienes ventaja y desventaja a la vez, se anulan.' },
+  saving_throw: { label: 'Tirada de salvación', text: 'Una tirada para resistir algo que te hacen: una bola de fuego, un veneno, un hechizo. Si sale bien, te libras o sufres menos.' },
+  hit_chance: { label: 'Probabilidad de acierto', text: 'Lo que calcula el juego antes de que tires: cuántas veces de cada cien acertarías.' },
+  attack_bonus: { label: 'Bonificador de ataque', text: 'Lo que se suma al dado de 20 al atacar: tu característica más tu competencia.' },
+  proficiency: { label: 'Competencia', text: 'Un extra por saber hacer algo (un arma, una habilidad). Crece con el nivel.' },
+  critical: { label: 'Crítico', text: 'Un 20 natural en el dado: acierto seguro y el doble de dados de daño.' },
+  spell_slot: { label: 'Espacio de conjuro', text: 'Las «balas» de magia. Cada conjuro de nivel 1 o más gasta uno; se recuperan al descansar.' },
+  concentration: { label: 'Concentración', text: 'Algunos conjuros duran mientras te concentras. Solo puedes mantener uno, y si te hieren puedes perderlo.' },
+  action: { label: 'Acción', text: 'Lo principal que haces en tu turno: atacar, lanzar un conjuro, esquivar…' },
+  bonus_action: { label: 'Acción adicional', text: 'Algo rápido además de tu acción, solo si una habilidad lo permite.' },
+  reaction: { label: 'Reacción', text: 'Una respuesta fuera de tu turno, como el ataque de oportunidad. Una por ronda.' },
+  opportunity_attack: { label: 'Ataque de oportunidad', text: 'Si te alejas de un enemigo que está pegado a ti, te ataca gratis. Retirarse lo evita.' },
+  downed: { label: 'Caído', text: 'A 0 puntos de golpe un compañero cae y se desangra: tienes 3 turnos para curarlo o estabilizarlo.' },
+  high_ground: { label: 'Desde arriba', text: 'Atacar desde un terreno más alto da ventaja.' },
+  sneak_attack: { label: 'Ataque furtivo', text: 'El pícaro hace daño extra una vez por turno si tiene ventaja o un aliado junto al objetivo.' },
+  bless: { label: 'Bendición', text: 'Suma 1d4 a ataques y salvaciones mientras dure.' },
+  resistance: { label: 'Resistencia', text: 'Recibe la mitad de daño de ese tipo. Vulnerable: el doble. Inmune: nada.' },
 };
 
 /** Spellcasting ability by class. */
@@ -81,11 +140,14 @@ function resolveCheck(state: GameState, req: CheckRequest, rng: Parameters<Rules
   const advantage = situational.some((t) => ADVANTAGE_TAGS.has(t));
   const disadvantage = situational.some((t) => DISADVANTAGE_TAGS.has(t)) || (!isSave && hasCondition(actor, 'poisoned'));
 
-  const modifiers = [{ label: ABILITY_LABELS[ability], value: abilityModifier(stat(actor, ability, 10)) }];
+  const modifiers: { label: string; value: number; term?: string }[] = [{ label: ABILITY_LABELS[ability], value: abilityModifier(stat(actor, ability, 10)) }];
   if (proficiencyTag && hasTag(actor, proficiencyTag)) {
-    modifiers.push({ label: 'Competencia', value: proficiencyBonus(stat(actor, 'level', 1)) });
+    const expert = hasTag(actor, proficiencyTag.replace('prof:', 'expert:'));
+    modifiers.push({ label: expert ? 'Pericia' : 'Competencia', value: profBonus(actor) * (expert ? 2 : 1), term: 'proficiency' } as never);
   }
-  return d20Check(rng, { check: req.check, label, mode: resolveRollMode(advantage, disadvantage), modifiers, target: req.target });
+  const result = d20Check(rng, { check: req.check, label, mode: resolveRollMode(advantage, disadvantage), modifiers, target: req.target });
+  result.targetTerm = 'dc';
+  return result;
 }
 
 function difficulty(state: GameState, entityId: string, source: string): number {
@@ -99,14 +161,81 @@ function difficulty(state: GameState, entityId: string, source: string): number 
   throw new Error(`dnd5e: unknown difficulty source "${source}"`);
 }
 
+const isAlive = (e: Entity) => !hasCondition(e, 'dead');
+
+/** Start of turn: bleeding out, and damage from enemies' Spirit Guardians. */
+function onTurnStart(ruleset: Ruleset, state: GameState, id: string, rng: RngCursor): ActionOutcome {
+  const r = new Resolver(ruleset, state, rng);
+  const e = state.entities[id]!;
+  if (hasCondition(e, 'downed') && !hasCondition(e, 'stable')) {
+    r.apply({ type: 'modifyResource', entityId: id, resource: 'bleed', delta: -1 });
+    const left = (e.resources.bleed?.current ?? 1) - 1;
+    if (left <= 0) die(r, id);
+    else r.emit({ type: 'bleeding', entityId: id, detail: String(left) } as never);
+    return r.outcome();
+  }
+  if (standing(e)) {
+    for (const guardian of Object.values(state.entities)) {
+      if (!hasCondition(guardian, 'spirit_guardians') || !isHostile(guardian, e) || gridDistance(guardian.position, e.position) > 3) continue;
+      const spell = SPELLS.spirit_guardians!;
+      const damage = parseDice(spell.damage!.dice);
+      const total = sum(rollDice(rng, damage.count, damage.sides));
+      const saved = rollSave(r, id, 'wis', spellDc(guardian, 'wis'));
+      dealDamage(r, id, saved ? Math.floor(total / 2) : total, 'radiant');
+    }
+  }
+  return r.outcome();
+}
+
+/** Opportunity attack with the first melee weapon, unless the mover disengaged. */
+function onLeaveReach(ruleset: Ruleset, state: GameState, reactorId: string, moverId: string, rng: RngCursor): ActionOutcome | null {
+  const reactor = state.entities[reactorId]!;
+  const mover = state.entities[moverId]!;
+  if (!canReact(reactor) || hasCondition(mover, 'disengaged')) return null;
+  const melee = listActions(state, reactorId).find((a) => a.tags.includes('weapon') && a.tags.includes('melee'));
+  if (!melee) return null;
+  const r = new Resolver(ruleset, state, rng);
+  r.apply({ type: 'modifyResource', entityId: reactorId, resource: 'reaction', delta: -1 });
+  r.emit({ type: 'reactionUsed', entityId: reactorId, detail: 'Ataque de oportunidad' } as never);
+  const preview = previewAction(state, reactorId, melee.id, { entityId: moverId });
+  if (preview.valid) {
+    const outcome = performActionOnce(ruleset, r.state, reactorId, melee.id, moverId, rng);
+    r.apply(...outcome.effects);
+    for (const ev of outcome.events) r.emit(ev);
+  }
+  return r.outcome();
+}
+
+/** A single weapon attack (reactions never get Extra Attack). */
+function performActionOnce(ruleset: Ruleset, state: GameState, attackerId: string, actionId: string, targetId: string, rng: RngCursor): ActionOutcome {
+  const attacker = state.entities[attackerId]!;
+  const once = { ...attacker, stats: { ...attacker.stats, multiattack: 1 }, tags: attacker.tags.filter((t) => t !== 'feature:extra_attack') };
+  return performAction(ruleset, { ...state, entities: { ...state.entities, [attackerId]: once } }, attackerId, actionId, { entityId: targetId }, rng);
+}
+
+/** After a fight the winners' fallen get back up with 1 hit point; nobody keeps an unspent surge. */
+function onCombatEnd(ruleset: Ruleset, state: GameState, winner: string | null): ActionOutcome {
+  const r = new Resolver(ruleset, state, null as never);
+  for (const e of Object.values(state.entities)) {
+    if (e.factionId === winner && hasCondition(e, 'downed')) heal(r, e.id, 1);
+    if ((e.resources.extra_action?.current ?? 0) > 0) r.apply({ type: 'modifyResource', entityId: e.id, resource: 'extra_action', delta: -1 });
+  }
+  return r.outcome();
+}
+
 export const dnd5e: Ruleset = {
   id: 'dnd5e',
   version: 1,
   stats,
   resources,
   conditions,
+  glossary,
   movement: { maxStep: 1, climbCost: 1 },
-  movementBudget: (e) => (hasCondition(e, 'restrained') || hasCondition(e, 'paralyzed') ? 0 : stat(e, 'speed', 6)),
+  movementBudget: (e) => {
+    if (['restrained', 'paralyzed', 'stunned', 'downed', 'dead'].some((c) => hasCondition(e, c))) return 0;
+    const speed = stat(e, 'speed', 6) * (hasCondition(e, 'dashing') ? 2 : 1);
+    return Math.max(0, speed - (hasCondition(e, 'slowed') ? 2 : 0));
+  },
   resolveCheck,
   difficulty,
   dialogueConditions: {
@@ -116,6 +245,20 @@ export const dnd5e: Ruleset = {
     proficient: (s, id, p) => hasTag(s.entities[id]!, `prof:${String(p.skill)}`),
   },
   commands: {},
+
+  rollInitiative: (state, id, rng) => {
+    const e = state.entities[id]!;
+    const dex = abilityModifier(stat(e, 'dex', 10));
+    return rng.die(20) + dex + stat(e, 'dex', 10) / 100;
+  },
+  canAct: (e) => standing(e) && !['paralyzed', 'stunned', 'unconscious', 'incapacitated'].some((c) => hasCondition(e, c)),
+  isStanding: (e) => standing(e) && isAlive(e),
+  onTurnStart: (state, id, rng) => onTurnStart(dnd5e, state, id, rng),
+  listActions,
+  previewAction,
+  performAction: (state, actorId, actionId, target, rng) => performAction(dnd5e, state, actorId, actionId, target, rng),
+  onLeaveReach: (state, reactorId, moverId, rng) => onLeaveReach(dnd5e, state, reactorId, moverId, rng),
+  onCombatEnd: (state, winner) => onCombatEnd(dnd5e, state, winner),
 };
 
 export interface CreatureSpec {
@@ -156,4 +299,8 @@ export function createCreature(spec: CreatureSpec): Entity {
 }
 
 export { ABILITIES, ABILITY_LABELS, SKILLS, abilityModifier, proficiencyBonus } from './abilities';
+export { createCharacter, createMonster, armorClass, type CharacterSpec, type MonsterSpec } from './character';
+export { CLASSES, MONSTERS, RACES, SPELLS, WEAPONS } from './data';
+export { areaTiles, DAMAGE_LABELS } from './actions';
+export type { AttackRolledEvent, DamageDealtEvent, FateEvent, HealedEvent, SaveRolledEvent } from './resolve';
 export type { Ability } from './abilities';

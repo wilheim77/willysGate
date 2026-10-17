@@ -1,0 +1,10 @@
+{
+  "$comment": "SRD 5.1 armour. AC = base + DEX modifier (capped by maxDex; null = no cap). 'shield' adds +2.",
+  "none": { "label": "Sin armadura", "base": 10, "maxDex": null },
+  "leather": { "label": "Armadura de cuero", "base": 11, "maxDex": null },
+  "studded_leather": { "label": "Cuero tachonado", "base": 12, "maxDex": null },
+  "chain_shirt": { "label": "Camisa de malla", "base": 13, "maxDex": 2 },
+  "scale_mail": { "label": "Cota de escamas", "base": 14, "maxDex": 2 },
+  "chain_mail": { "label": "Cota de malla", "base": 16, "maxDex": 0 },
+  "splint": { "label": "Armadura de bandas", "base": 17, "maxDex": 0 }
+}
