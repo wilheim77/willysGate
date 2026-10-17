@@ -152,7 +152,7 @@
       ]
     },
     {
-      "id": "willyEliminado", "evento": "runEnded", "donde": { "resultado": "eliminado" }, "probabilidad": 1, "prioridad": 5, "memoria": 6,
+      "id": "willyEliminado", "evento": "runEnded", "donde": { "resultado": "eliminado", "modoEliminacion": "repeticion" }, "probabilidad": 1, "prioridad": 5, "memoria": 6,
       "lineas": [
         { "id": "we-01", "texto": "Willy ha caído. El público guarda un minuto de silencio. Ya está. Era un minuto de silencio galáctico: dura menos." },
         { "id": "we-02", "texto": "Eliminado. Pero tranquilo: Producción no puede permitirse perder a un concursante con tanta audiencia. Vuelves al Camerino." },
@@ -160,6 +160,24 @@
         { "id": "we-04", "texto": "Willy, eliminado. En la cabina hay alguien llorando. No soy yo. Es el técnico. Bueno, un poco yo." },
         { "id": "we-05", "texto": "Eliminado por {enemigo:un}. Qué manera más tonta de irse. Vuelve, que el público quiere revancha.", "si": { "enemigo": { "existe": true } } },
         { "id": "we-06", "texto": "Eliminado por tu propia mano. O por tu propia bombona. Hay que tener talento.", "si": { "actor.id": "willy" } }
+      ]
+    },
+    {
+      "id": "willyEliminadoSinRepeticion", "evento": "runEnded", "donde": { "resultado": "eliminado", "modoEliminacion": "sinRepeticion" }, "probabilidad": 1, "prioridad": 5, "memoria": 6,
+      "lineas": [
+        { "id": "ws-01", "texto": "Y aquí termina la temporada de Willy. Sin repetición, como él quiso. Se apagan los focos. Yo me quedo un rato más, si no os importa." },
+        { "id": "ws-02", "texto": "Eliminado. Esta vez no hay Camerino al que volver. Fue bonito mientras duró. Duró planta {planta}. Es más de lo que llega mucha gente." },
+        { "id": "ws-03", "texto": "Fin de la emisión. El público aplaude de pie. Lo digo en serio: no es un aplauso de compromiso. Esos los distingo." },
+        { "id": "ws-04", "texto": "Eliminado por {enemigo:un}. En directo, sin red, sin repetición. Se acabó. Producción ya está preparando el especial «Lo mejor de Willy». Va a ser cortito.", "si": { "enemigo": { "existe": true } } },
+        { "id": "ws-05", "texto": "Se acabó en el Plató, a un paso de Fausto. Eso no es perder. Eso es dejar al público con ganas. Que es lo más difícil de este oficio.", "si": { "planta": 5 } }
+      ]
+    },
+    {
+      "id": "inicioSinRepeticion", "evento": "runStarted", "donde": { "modoEliminacion": "sinRepeticion" }, "probabilidad": 1, "prioridad": 4, "memoria": 4,
+      "lineas": [
+        { "id": "is-01", "texto": "Modo sin repetición. Una sola vida, una sola toma. Me gusta. Me pone nervioso, pero me gusta." },
+        { "id": "is-02", "texto": "Sin repetición. Si caes, se acaba la temporada. Nada de volver al Camerino. Nada de «esto no ha pasado». Ha pasado todo." },
+        { "id": "is-03", "texto": "Directo de verdad. Producción ha quitado el botón de rebobinar. Lo ha tirado al vacío. Creo que lo ha empujado alguien de la Colmena." }
       ]
     },
     {

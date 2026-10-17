@@ -133,7 +133,45 @@
         { "id": "cs-04", "texto": "Un fantasma socorrista. Rescata a la gente del agua y luego les da un susto de muerte. Perfecto.", "si": { "raza": "fantasma-en-practicas", "clase": "socorrista" } },
         { "id": "cs-05", "texto": "Un gnomo de jardín mimo. Silencioso, quieto e inquietante. Ya era así antes, pero ahora cobra.", "si": { "raza": "gnomo-de-jardin", "clase": "mimo" } },
         { "id": "cs-06", "texto": "Una semigaviota tasadora. Roba cosas y luego te dice cuánto valen. Es el sueño de cualquier gaviota.", "si": { "raza": "semigaviota", "clase": "tasador" } },
-        { "id": "cs-07", "texto": "Un orco de oficina bardo de verbena. Pasodobles y hojas de cálculo. Que Dios nos pille confesados.", "si": { "raza": "orco-de-oficina", "clase": "bardo-de-verbena" } }
+        { "id": "cs-07", "texto": "Un orco de oficina bardo de verbena. Pasodobles y hojas de cálculo. Que Dios nos pille confesados.", "si": { "raza": "orco-de-oficina", "clase": "bardo-de-verbena" } },
+        { "id": "cs-08", "texto": "{raza:Mayus} e ingeniero de 5G. Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.", "si": { "clase": "ingeniero-5g" } },
+        { "id": "cs-09", "texto": "Un fantasma ingeniero de 5G. Invisible e inalámbrico. La conspiración perfecta. Los foros van a arder.", "si": { "raza": "fantasma-en-practicas", "clase": "ingeniero-5g" } }
+      ]
+    },
+    {
+      "id": "construirAutomata", "evento": "skillUsed", "donde": { "habilidad": { "en": ["construir-automata", "despliegue-masivo"] } }, "probabilidad": 0.6, "prioridad": 2, "memoria": 8,
+      "lineas": [
+        { "id": "au-01", "texto": "Un autómata nuevo. Chapa, tornillos sueltos y una luz verde. Es feo. Es leal. Es tuyo." },
+        { "id": "au-02", "texto": "Montado en dos turnos. Ikea tiene mucho que aprender." },
+        { "id": "au-03", "texto": "Otro autómata. Producción pregunta si tiene contrato. Le he dicho que es autónomo. Literalmente." },
+        { "id": "au-04", "texto": "Ha montado un robot en mitad de un combate. Hay ingenieros en la Tierra que tardan tres semanas en montar una antena. Bueno, había.", "si": { "enCombate": true } },
+        { "id": "au-05", "texto": "Tres de golpe. Esto ya no es un concursante: es una subcontrata.", "si": { "habilidad": "despliegue-masivo" } }
+      ]
+    },
+    {
+      "id": "rayo5g", "evento": "skillUsed", "donde": { "habilidad": "rayo-5g" }, "probabilidad": 0.45, "prioridad": 2, "memoria": 10,
+      "lineas": [
+        { "id": "r5-01", "texto": "¡Rayo 5G! Baja latencia, alta velocidad y un olor a pelo quemado que no viene en el folleto." },
+        { "id": "r5-02", "texto": "Rayo 5G. Las teorías de la conspiración tenían razón en una cosa: esto hace daño. A los monstruos." },
+        { "id": "r5-03", "texto": "Banda ancha aplicada a la cara de {enemigo:un}. Tecnología punta." },
+        { "id": "r5-04", "texto": "Rayo al agua. Agua electrificada. El ingeniero lo llama «despliegue de red». Yo lo llamo calamares a la plancha.", "si": { "electrificaAgua": true } },
+        { "id": "r5-05", "texto": "Rayo 5G en zona sin cobertura. Le ha costado el doble y le ha salido la mitad de bonito. Pero ha salido.", "si": { "sinCobertura": true } }
+      ]
+    },
+    {
+      "id": "automataDestruido", "evento": "entityDefeated", "donde": { "objetivo.etiquetas": { "tiene": "automata" } }, "probabilidad": 0.6, "prioridad": 2, "memoria": 6,
+      "lineas": [
+        { "id": "ad-01", "texto": "Autómata caído. Su luz verde se apaga. Un minuto de silencio. Vale, treinta segundos, que era de chapa." },
+        { "id": "ad-02", "texto": "Han roto un autómata. El ingeniero ya está pensando en la versión 2.0. Siempre hay una versión 2.0." },
+        { "id": "ad-03", "texto": "El autómata ha explotado llevándose a quien tenía al lado. Garantía caducada, pero con estilo.", "si": { "exploto": true } }
+      ]
+    },
+    {
+      "id": "sinCobertura", "evento": "roomEntered", "donde": { "sinCobertura": true, "willy.clase": "ingeniero-5g" }, "probabilidad": 0.7, "prioridad": 2, "memoria": 6,
+      "lineas": [
+        { "id": "sc-01", "texto": "Zona sin cobertura. El ingeniero mira el móvil, lo levanta, lo agita. Nada. Como en el pueblo de su suegra." },
+        { "id": "sc-02", "texto": "Sin señal. Los autómatas se miran entre ellos, confusos. Uno se ha puesto a dar vueltas. Es lo que hacemos todos sin cobertura." },
+        { "id": "sc-03", "texto": "Aquí no llega el 5G. Los del gorro de papel de aluminio del público lo celebran. Son pocos, pero gritan mucho." }
       ]
     }
   ]
