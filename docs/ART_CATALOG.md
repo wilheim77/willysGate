@@ -10,7 +10,7 @@ Qué ids puede usar el contenido, de dónde sale cada pieza y qué le falta al r
 | `scripts/art/build-tiles.ts intereses 0x72` | `content/intereses/art/0x72/tiles.json` | `public/assets/0x72/tiles/terrain.png`, `terrain` del manifiesto | Ahora admite celdas `{ "atlas": "<hoja>.png", "sprite": "nombre" }` (con lista `<hoja>.txt`) y un `rim` opcional por terreno. |
 | `scripts/art/build-atlas-sprites.ts intereses 0x72` | `sprites.json` | `sprites` del manifiesto | Sin cambios: personajes 0x72 tal cual. |
 | `scripts/art/build-palette-variants.ts intereses 0x72` | `content/intereses/art/0x72/palettes.json` | `public/assets/0x72/characters.png`, `sprites` del manifiesto | Recolorea personajes 0x72: `map` (color exacto → color, o `transparent`), `adjust` (HSV por rango de tono), `prune` (borra el contorno que queda huérfano), `rules` (solo píxeles interiores o una franja de filas: así se pinta el collar de plata de Absalón). `decals` estampa detalles dibujados a mano (ASCII) en cada frame, relativos a la parte de arriba o de abajo del sprite para que sigan su balanceo; `padTop` añade filas transparentes encima para los que sobresalen (sombrero, pico). `aliases` da el mismo arte a ids antiguos. Para ver los colores de una base: `node scripts/art/build-palette-variants.ts intereses 0x72 --dump doc elf_f`. |
-| `scripts/art/build-hand-sprites.ts intereses 0x72` | `content/intereses/art/0x72/hand-sprites.json` | `public/assets/0x72/hand.png`, `sprites` del manifiesto, `docs/art-previews/0x72-hand.png` | Personajes dibujados a mano como partes ASCII (cuerpo, piernas en varias poses) que se apilan por frame con desplazamientos; sustituye al recolor del mismo id. |
+| `scripts/art/build-hand-sprites.ts intereses 0x72` | `content/intereses/art/0x72/hand-sprites.json` | `public/assets/0x72/hand.png`, `sprites` del manifiesto, `docs/art-previews/intereses-0x72-hand.png` | Personajes dibujados a mano como partes ASCII (cuerpo, piernas en varias poses) que se apilan por frame con desplazamientos; sustituye al recolor del mismo id. |
 | `scripts/art/build-portraits.ts intereses 0x72` | `content/intereses/art/0x72/portraits.json` | `public/assets/0x72/portraits.png`, `portraits` del manifiesto, `docs/art-previews/0x72-portraits.png` | Bustos de 32×32 para el HUD: la parte de arriba del primer frame de idle, a escala entera, sobre un fondo enmarcado cuyo tono distingue grupo (cálido), enemigos (sangre), no muertos (frío) y neutrales. |
 | `scripts/art/build-previews.ts intereses 0x72` | manifiesto | `docs/art-previews/0x72-{characters,terrain,props,surfaces}.png` | Hojas de revisión. |
 | `scripts/art/build-cinematics.ts <juego>` | `content/<juego>/cinematics/intro.spec.json` | `public/assets/cinematics/*.png`, `cinematics/intro.json`, `docs/art-previews/<juego>-intro.png` | Viñetas de 320×180 compuestas con operaciones (degradados con tramado, polígonos, tiles y sprites de los packs, sprites del manifiesto, sprites ASCII dibujados a mano, montañas, casas, lluvia, público, luces, viñeteado, texto pixelado). |
@@ -148,3 +148,29 @@ Formato (`content/<juego>/cinematics/intro.json`, generado):
 - Efectos usados: `fade`, `pan` (`from`/`to` en píxeles de la imagen), `zoom` (`from`/`to`/`centre`), `shake` (`atMs`, `intensity`), `flicker`, `pulse` (`color`), `sink`, `fall` (`scroll`, `shake`), `spotlight`, `crumble`, `confetti`, `blink`, `drop`; partículas opcionales en `effectParams.particles` (`rain`, `steam`). Los que el reproductor no conozca se pueden ignorar sin romper nada.
 - `voice`: `narrador` por defecto; `comunicado` (Willy, viñeta 5) en tono de megafonía. Detalles de la voz sintetizada en `docs/willy/INTRO.md` (rama `willy`).
 - La corrección de color de la cámara se aplica en ejecución: las viñetas no la llevan horneada.
+
+---
+
+# *Willy el mazmorrero* (preset `ninja`)
+
+Encargo: `docs/willy/ART_BRIEF.md`. Especificación en `content/willy/art/ninja/`, salida en `content/willy/public/assets/ninja/` y manifiesto `content/willy/assets/ninja.json` (mismo esquema que *Intereses*). Paleta más saturada y luminosa; mismo tamaño de pixel que 0x72.
+
+## Willy y los PNJ del Camerino (`hand-sprites.json`)
+
+Dibujados a mano como partes ASCII: `willy` es la plantilla (gorra, bigote, cuerpo corpulento; 16×30 con hueco arriba para accesorios) y cada clase la **extiende** con su paleta y accesorios anclados al cuerpo (`extends`, `under`, `over` en `build-hand-sprites.ts`). `idle` 4 y `move` 4 frames. Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-hand.png).
+
+| Id | Aspecto |
+|---|---|
+| `willy-butanero` | Mono naranja con logo y bombona a la espalda |
+| `willy-influencer` | Chaqueta fucsia brillante, vaqueros y palo de selfie con móvil |
+| `willy-bardo-de-verbena` | Camisa roja de orquesta con lentejuelas doradas y teclado colgado |
+| `willy-socorrista` | Gorra roja, camiseta amarilla, bañador rojo, chanclas y silbato |
+| `willy-tasador` | Chaleco, cadena de reloj, guantes blancos y monóculo |
+| `willy-mimo` | Cara blanca, boina negra y camiseta de rayas |
+| `willy-ingeniero` | Casco amarillo con antena, mono gris y soldador |
+| `willy-funcionario` | Camisa azul, corbata roja, manguitos negros y sello |
+| `willy-jugador-de-basket` | Camiseta de tirantes blanca y verde, cinta roja, balón; **3 px más alto** |
+| `paco` | Pelo cano, camisa verde, mandil blanco (el mismo Paco del prólogo) |
+| `koldo` | Chubasquero amarillo y txapela |
+| `maripuri` | Rizos canos, gafas, carmín, bata de flores rosa y zapatillas |
+| `xelda` | Alienígena verde azulada con antenas, **cuatro brazos** y chaqueta morada de staff |
