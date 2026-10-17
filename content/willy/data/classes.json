@@ -1,0 +1,340 @@
+{
+  "$comment": "Clases del cásting y habilidades. Borrador pendiente de aprobación. Cada habilidad sube de nivel con el uso (umbrales en 'umbralesHabilidad'); 'niveles' describe qué gana en los niveles 2-5. Los efectos usan el mismo vocabulario que items.json. Ver docs/willy/RULESET.md.",
+  "version": 1,
+  "recomendada": "butanero",
+  "umbralesHabilidad": [0, 4, 12, 25, 45],
+  "habilidadesBasicas": [
+    {
+      "id": "empujar", "nombre": "Empujar", "coste": { "acciones": 1 },
+      "texto": "Prueba de FUE contra 8 + FUE del objetivo. Si aciertas, lo mueves 1 casilla.",
+      "niveles": { "2": "+2 a la prueba", "3": "Empuja 2 casillas", "4": "+2 a la prueba (total +4)", "5": "Maestría: empuja en línea a dos enemigos seguidos" }
+    },
+    {
+      "id": "lanzar", "nombre": "Lanzar", "coste": { "acciones": 1 },
+      "texto": "Lanza un objeto a 4 casillas o menos.",
+      "niveles": { "2": "+1 de alcance", "3": "+2 de alcance (total +3)", "4": "+2 a acertar", "5": "Maestría: el objeto rebota a un segundo objetivo a 2 casillas" }
+    },
+    {
+      "id": "esquivar", "nombre": "Esquivar", "pasiva": true,
+      "texto": "Sube cada vez que un enemigo falla un ataque contra ti.",
+      "niveles": { "2": "+1 DEF", "3": "+2 DEF y no resbalas en aceite", "4": "+3 DEF", "5": "Maestría: una vez por combate, el primer golpe que te iba a acertar falla" }
+    },
+    {
+      "id": "trepar", "nombre": "Trepar", "coste": { "acciones": 1 },
+      "texto": "Sube un desnivel de 2 niveles con una prueba de AGI DIF 13.",
+      "niveles": { "2": "+3 a la prueba", "3": "Sin prueba", "4": "Trepar no gasta acción", "5": "Maestría: trepas 3 niveles y saltas desde arriba sin daño" }
+    },
+    {
+      "id": "comer-en-combate", "nombre": "Comer en combate", "pasiva": true,
+      "texto": "Sube cada vez que comes algo durante un combate. Mamá Clementina lo aprueba.",
+      "niveles": { "2": "La comida cura +1", "3": "Comer es gratis una vez por turno", "4": "La comida cura +2 (total)", "5": "Maestría: la comida cura el doble" }
+    }
+  ],
+  "clases": [
+    {
+      "id": "butanero",
+      "nombre": "Butanero",
+      "resumen": "Lo que Willy es de verdad. Gas, músculo y escaleras sin ascensor.",
+      "descripcion": "Treinta años subiendo bombonas a quintos te preparan para casi todo. Lo que no te prepara es para que la bombona sea un arma. Pero lo es.",
+      "atributos": { "fue": 2, "agu": 1 },
+      "objetosIniciales": ["bombona-de-butano", "llave-inglesa", "bocadillo-de-chorizo"],
+      "habilidades": [
+        {
+          "id": "lanzar-bombona", "nombre": "Lanzar bombona", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "Lanza la bombona (alcance 4). Explota en radio 1: 2d6 de fuego y deja fuego en el suelo. La bombona vuelve a tu espalda al final del combate.",
+          "efectos": [
+            { "type": "damage", "entityId": "$each", "amount": "2d6", "element": "fuego", "area": { "radio": 1 } },
+            { "type": "spawnSurface", "at": "$tile", "surface": "fuego", "radius": 1 }
+          ],
+          "niveles": { "2": "3d6", "3": "Radio 2", "4": "Deja también Tumbados a los que estaban en el centro", "5": "Maestría: «Reparto doble»: lanzas dos bombonas en el mismo turno" }
+        },
+        {
+          "id": "reparto-a-domicilio", "nombre": "Reparto a domicilio", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Carga hasta 4 casillas en línea recta y golpea con la bombona: 1d8 y empuja 2 casillas.",
+          "niveles": { "2": "Carga 5 casillas", "3": "Empuja 3 casillas", "4": "1d10", "5": "Maestría: atraviesa al primer enemigo y golpea también al segundo" }
+        },
+        {
+          "id": "espalda-de-hierro", "nombre": "Espalda de hierro", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "+2 huecos de mochila y +3 a resistir empujones.",
+          "niveles": {}
+        },
+        {
+          "id": "fuga-de-gas", "nombre": "Fuga de gas", "nivelPersonaje": 3, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "Abre la válvula: nube de gas en radio 2 durante 3 turnos. Si le llega fuego, explota (3d6).",
+          "niveles": { "2": "Radio 3", "3": "La nube Marea a quien empieza el turno dentro", "4": "Explosión 4d6", "5": "Maestría: la explosión empuja 2 casillas hacia fuera" }
+        },
+        {
+          "id": "cadena-de-reparto", "nombre": "Cadena de reparto", "nivelPersonaje": 6, "coste": { "acciones": 2, "energia": 3 },
+          "texto": "Haces rodar tres bombonas en línea recta (6 casillas). Explotan donde chocan.",
+          "niveles": { "2": "8 casillas", "3": "Cuatro bombonas", "4": "Cada explosión 3d6", "5": "Maestría: las bombonas rebotan en los muros una vez" }
+        },
+        {
+          "id": "reparto-urgente", "nombre": "Reparto urgente", "nivelPersonaje": 9, "coste": { "acciones": 2, "energia": 4 },
+          "texto": "Llamas a la central. En el próximo turno caen del techo cinco bombonas en las casillas que elijas.",
+          "niveles": { "2": "Seis bombonas", "3": "Caen este mismo turno", "4": "Siete bombonas", "5": "Maestría: una de ellas es de oro y explota en radio 3" }
+        }
+      ],
+      "desventaja": { "id": "riesgo-laboral", "nombre": "Riesgo laboral", "texto": "Si recibes daño de fuego, 20 % de que la bombona de tu espalda explote: 1d6 a ti y a todo lo que tengas al lado. Al público le encanta.", "mecanica": { "al": "recibirDano", "elemento": "fuego", "probabilidad": 0.2, "efectos": [{ "type": "damage", "entityId": "$each", "amount": "1d6", "element": "fuego", "area": { "radio": 1, "incluyeSelf": true } }] } },
+      "ventajas": ["mono-ignifugo", "brazos-de-quinto-piso", "propina", "valvula-de-seguridad"],
+      "fraseNarrador": "Butanero. Ha elegido ser exactamente lo que ya era. Hay algo hermoso en eso. O algo muy triste."
+    },
+    {
+      "id": "influencer",
+      "nombre": "Influencer de mazmorra",
+      "resumen": "Vive para la cámara. La cámara, de momento, también.",
+      "descripcion": "Tiene un aro de luz, un palo de selfie y la convicción de que todo esto es contenido.",
+      "atributos": { "car": 3, "agi": 1, "agu": -1 },
+      "objetosIniciales": ["palo-de-selfie", "aro-de-luz", "batido-de-proteinas"],
+      "habilidades": [
+        {
+          "id": "flash-del-selfie", "nombre": "Flash del selfie", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Cono de 3 casillas: los enemigos quedan Cegados 1 turno (−5 a atacar).",
+          "niveles": { "2": "Cono de 4", "3": "Cegados 2 turnos", "4": "+1d4 de daño por la vergüenza", "5": "Maestría: los cegados también quedan Mareados" }
+        },
+        {
+          "id": "directo", "nombre": "En directo", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "Ganas un 50 % más de audiencia por todo.",
+          "niveles": {}
+        },
+        {
+          "id": "unboxing", "nombre": "Unboxing", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "Al abrir una caja, el Narrador te deja elegir el orden de las cartas y ganas audiencia extra por cada objeto de plata o mejor.",
+          "niveles": { "2": "+25 % de audiencia por caja", "3": "Las cajas de bronce dan 1 objeto más", "4": "+50 % de audiencia por caja", "5": "Maestría: una vez por planta, vuelves a tirar un objeto de bronce" }
+        },
+        {
+          "id": "colaboracion", "nombre": "Colaboración", "nivelPersonaje": 3, "coste": { "acciones": 2, "energia": 3 },
+          "texto": "Invocas a un fan entusiasta que pelea a tu lado 3 turnos (vida 10, golpe 1d6).",
+          "niveles": { "2": "4 turnos", "3": "Dos fans", "4": "Vida 18", "5": "Maestría: el fan explota en confeti al irse (1d8 en radio 1)" }
+        },
+        {
+          "id": "viral", "nombre": "Viral", "nivelPersonaje": 6, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "El próximo momento espectacular de este combate vale el triple de audiencia.",
+          "niveles": { "2": "Dura dos momentos", "3": "Además, cura 5", "4": "Cuatro veces la audiencia", "5": "Maestría: un patrocinador al azar te manda un regalo" }
+        },
+        {
+          "id": "cancelacion", "nombre": "Cancelación", "nivelPersonaje": 9, "coste": { "acciones": 2, "energia": 4 },
+          "texto": "Un enemigo pierde todas sus mejoras, queda Asustado 3 turnos y sus aliados no se le acercan.",
+          "niveles": { "2": "Alcance 6", "3": "También a los enemigos adyacentes", "4": "Asustado 4 turnos", "5": "Maestría: a los jefes también les afecta (2 turnos)" }
+        }
+      ],
+      "desventaja": { "id": "necesita-likes", "nombre": "Necesita likes", "texto": "Si la audiencia baja del mínimo de la planta, tienes un bajón: −2 a todas las tiradas hasta que se recupere.", "mecanica": { "si": "audiencia<minimoPlanta", "aplicar": "mareado" } },
+      "ventajas": ["filtro-de-belleza", "algoritmo-favorable", "patrocinio-cruzado", "hater-convertido"],
+      "fraseNarrador": "Influencer. Por fin alguien que entiende de qué va este programa. Me das un poco de asco."
+    },
+    {
+      "id": "bardo-de-verbena",
+      "nombre": "Bardo de verbena",
+      "resumen": "Teclista de orquesta de fiestas. Conoce los cuatrocientos pasodobles.",
+      "descripcion": "Ha tocado en todas las fiestas patronales del norte. Sabe que, con la canción adecuada, cualquiera baila. Incluso un esqueleto. Sobre todo un esqueleto.",
+      "atributos": { "car": 2, "man": 1 },
+      "objetosIniciales": ["teclado-casio", "pandereta", "botella-de-kalimotxo"],
+      "habilidades": [
+        {
+          "id": "paquito", "nombre": "Paquito el Chocolatero", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "Los enemigos en radio 2 quedan Bailando 2 turnos: se mueven 1 casilla al azar al empezar el turno. Fosos y fuego incluidos.",
+          "niveles": { "2": "Radio 3", "3": "Bailan hacia donde tú eliges (el más cercano a un peligro)", "4": "3 turnos", "5": "Maestría: los que chocan bailando entre sí quedan Aturdidos" }
+        },
+        {
+          "id": "pasodoble", "nombre": "Pasodoble", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Quedas Animado 3 turnos (+1 al daño) y +2 a acertar.",
+          "niveles": { "2": "+2 al daño", "3": "Afecta también a aliados en radio 2", "4": "4 turnos", "5": "Maestría: mientras dura, te mueves 2 casillas más" }
+        },
+        {
+          "id": "charanga", "nombre": "Charanga", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "Cada tres turnos en combate tocas solo: +audiencia y los enemigos adyacentes pierden 1 de movimiento.",
+          "niveles": {}
+        },
+        {
+          "id": "cancion-del-verano", "nombre": "Canción del verano", "nivelPersonaje": 3, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "Pegadiza hasta el dolor. Enemigos en radio 3 quedan Mareados 2 turnos (−2 a todo).",
+          "niveles": { "2": "Radio 4", "3": "3 turnos", "4": "También pierden 1 acción", "5": "Maestría: el público la corea: +audiencia cada turno que dura" }
+        },
+        {
+          "id": "bis", "nombre": "¡Otra, otra!", "nivelPersonaje": 6, "coste": { "acciones": 1, "energia": 3 },
+          "texto": "Repites gratis la última habilidad que usaste.",
+          "niveles": { "2": "Cuesta 2 de energía", "3": "Puedes elegir otro objetivo", "4": "Cuesta 1 de energía", "5": "Maestría: no cuenta como repetir canción" }
+        },
+        {
+          "id": "orquesta-completa", "nombre": "Orquesta completa", "nivelPersonaje": 9, "coste": { "acciones": 2, "energia": 4 },
+          "texto": "Aparece una orquesta de verbena 3 turnos: cada turno, todos los enemigos Bailan y tú curas 3.",
+          "niveles": { "2": "4 turnos", "3": "Cura 5", "4": "Los enemigos que bailan reciben 1d4 por pisotones", "5": "Maestría: fuegos artificiales al final (2d6 a todos los enemigos)" }
+        }
+      ],
+      "desventaja": { "id": "repertorio-corto", "nombre": "Repertorio corto", "texto": "Usar la misma canción dos turnos seguidos aburre: pierdes audiencia y la segunda vez dura un turno menos.", "mecanica": { "si": "mismaHabilidadSeguida", "audiencia": -200, "duracion": -1 } },
+      "ventajas": ["oido-absoluto", "bolo-pagado", "segunda-voz", "repertorio-ampliado"],
+      "fraseNarrador": "Bardo de verbena. Que alguien le quite el teclado antes de que empiece con la Macarena."
+    },
+    {
+      "id": "socorrista",
+      "nombre": "Socorrista",
+      "resumen": "Silbato, bañador rojo y una tumbona que no comparte.",
+      "descripcion": "Veinte veranos en la playa de Brazomar. Ha sacado del agua a niños, perros y a un concejal. Sabe arrastrar a cualquiera a donde quiera.",
+      "atributos": { "agu": 2, "agi": 1 },
+      "objetosIniciales": ["silbato-de-socorrista", "flotador-de-patito", "crema-solar"],
+      "habilidades": [
+        {
+          "id": "rescate", "nombre": "Rescate", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Arrastras a cualquier criatura a 4 casillas o menos 3 casillas hacia ti. A un aliado lo sacas del peligro; a un enemigo, lo metes.",
+          "efectos": [{ "type": "push", "entityId": "$target", "from": "$self", "distance": -3 }],
+          "niveles": { "2": "Alcance 5", "3": "Puedes soltarlo en cualquier casilla de tu alrededor", "4": "Cura 3 a los aliados rescatados", "5": "Maestría: arrastra a dos criaturas a la vez" }
+        },
+        {
+          "id": "silbatazo", "nombre": "Silbatazo", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Un enemigo a 4 casillas o menos: prueba de AGU DIF 13 o queda Aturdido 1 turno. Si está en agua, sin prueba.",
+          "niveles": { "2": "DIF 15", "3": "Afecta a todos los enemigos en agua a 6 casillas", "4": "DIF 17", "5": "Maestría: los aturdidos en agua quedan además Enredados en algas" }
+        },
+        {
+          "id": "pez", "nombre": "Como pez en el agua", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "En agua tienes +2 de movimiento y +2 a todo. Nunca te afecta Empapado.",
+          "niveles": {}
+        },
+        {
+          "id": "boya", "nombre": "Boya lanzada", "nivelPersonaje": 3, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "Lanzas la boya a 6 casillas: 1d6 y empuja 2 casillas en la dirección que elijas.",
+          "niveles": { "2": "Empuja 3", "3": "Deja un charco de agua donde cae", "4": "1d10", "5": "Maestría: la boya vuelve y golpea a otro enemigo de camino" }
+        },
+        {
+          "id": "reanimacion", "nombre": "Reanimación", "nivelPersonaje": 6, "coste": { "acciones": 2, "energia": 3 },
+          "texto": "Una vez por planta: recuperas la mitad de tu vida máxima (o se la das a un aliado adyacente).",
+          "niveles": { "2": "También quita condiciones negativas", "3": "Dos veces por planta", "4": "Recupera dos tercios", "5": "Maestría: si caes a 0, se activa sola" }
+        },
+        {
+          "id": "bandera-roja", "nombre": "Bandera roja", "nivelPersonaje": 9, "coste": { "acciones": 2, "energia": 4 },
+          "texto": "Ola gigante: todo en radio 3 queda cubierto de agua y los enemigos son empujados 2 casillas hacia fuera.",
+          "niveles": { "2": "Radio 4", "3": "Empuja 3", "4": "Los enemigos quedan Tumbados", "5": "Maestría: la ola deja medusas (superficie tóxica) en el borde" }
+        }
+      ],
+      "desventaja": { "id": "siesta-en-la-silla", "nombre": "Siesta en la silla", "texto": "Si acabas un turno sin moverte, prueba de AGU DIF 10 o te quedas Dormido 1 turno.", "mecanica": { "al": "finTurnoQuieto", "prueba": { "atributo": "agu", "dif": 10 }, "siFalla": "dormido" } },
+      "ventajas": ["bronceado-intimidante", "pulmones-de-acero", "socorrismo-avanzado", "tumbona-portatil"],
+      "fraseNarrador": "Socorrista. Su trabajo es sacar a la gente del agua. Aquí abajo hará justo lo contrario. Me encanta."
+    },
+    {
+      "id": "tasador",
+      "nombre": "Tasador de antigüedades",
+      "resumen": "Monóculo, guantes blancos y la mirada de quien ya sabe cuánto vales.",
+      "descripcion": "Trabajaba en un programa de tasaciones de la tele local. Lo que es la vida: ahora el tasado es él.",
+      "atributos": { "man": 2, "sue": 1, "car": 1, "fue": -1 },
+      "objetosIniciales": ["lupa-de-tasador", "baston-con-pomo", "pastillas-juanola"],
+      "habilidades": [
+        {
+          "id": "ojo-clinico", "nombre": "Ojo clínico", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Estudias a un enemigo: tu próximo ataque contra él tiene +4 y es crítico con 18, 19 o 20.",
+          "niveles": { "2": "+5", "3": "Crítico con 17-20", "4": "Dura dos ataques", "5": "Maestría: ves la vida exacta y las debilidades de todos los enemigos de la sala" }
+        },
+        {
+          "id": "golpe-de-valor", "nombre": "Golpe de valor", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Lanzas un objeto de tu mochila (que se pierde). Daño: su valor en fichas dividido entre 5 (mínimo 1d4).",
+          "niveles": { "2": "Valor / 4", "3": "Alcance 6", "4": "Valor / 3", "5": "Maestría: el objeto no se pierde si es de bronce" }
+        },
+        {
+          "id": "regateo", "nombre": "Regateo", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "Compras un 20 % más barato y vendes un 20 % más caro en Ultramarinos Maripuri.",
+          "niveles": {}
+        },
+        {
+          "id": "peritaje", "nombre": "Peritaje", "nivelPersonaje": 3, "pasiva": true,
+          "texto": "Antes de abrir una caja ves cuál es su objeto más valioso.",
+          "niveles": { "2": "Ves dos objetos", "3": "Ves todos", "4": "Puedes no abrirla y venderla a Maripuri por su valor", "5": "Maestría: una vez por planta, cambias un objeto de la caja por otro de la misma rareza" }
+        },
+        {
+          "id": "subasta", "nombre": "Subasta", "nivelPersonaje": 6, "pasiva": true,
+          "texto": "En las cajas de oro y legendarias eliges 1 objeto entre 3 en vez de recibirlo al azar.",
+          "niveles": {}
+        },
+        {
+          "id": "pieza-de-museo", "nombre": "Pieza de museo", "nivelPersonaje": 9, "coste": { "acciones": 2, "energia": 4 },
+          "texto": "Un enemigo queda Petrificado 2 turnos. Si lo empujas mientras tanto, se rompe (eliminado).",
+          "niveles": { "2": "3 turnos", "3": "Alcance 6", "4": "A dos enemigos", "5": "Maestría: los jefes quedan Petrificados 1 turno" }
+        }
+      ],
+      "desventaja": { "id": "que-es-de-epoca", "nombre": "¡Que es de época!", "texto": "Romper objetos del escenario (barriles, decorado, jarrones) te da tanta pena que pierdes 1 acción el turno siguiente.", "mecanica": { "al": "romperObjeto", "accionesSiguienteTurno": -1 } },
+      "ventajas": ["cliente-habitual", "certificado-de-autenticidad", "ojo-de-halcon", "pieza-unica"],
+      "fraseNarrador": "Tasador de antigüedades. En una mazmorra llena de basura. Valiente. O muy optimista."
+    },
+    {
+      "id": "mimo",
+      "nombre": "Mimo táctico",
+      "resumen": "Cara blanca, rayas y un silencio que da miedo.",
+      "descripcion": "Actuaba en la calle de la Correría. Nadie le echaba monedas. Ahora sus paredes invisibles son de verdad, y le deben muchas.",
+      "atributos": { "agi": 2, "man": 1, "car": -1 },
+      "objetosIniciales": ["guantes-blancos", "maquillaje-de-mimo", "barra-de-pan"],
+      "habilidades": [
+        {
+          "id": "pared-invisible", "nombre": "Pared invisible", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Creas una pared de 1 casilla a 3 casillas o menos, durante 2 turnos. Bloquea el paso y cuenta como muro para los choques.",
+          "niveles": { "2": "Pared de 2 casillas", "3": "3 turnos", "4": "Pared de 3 casillas", "5": "Maestría: puedes crearla bajo un enemigo y lo expulsa 1 casilla" }
+        },
+        {
+          "id": "cuerda-imaginaria", "nombre": "Cuerda imaginaria", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Tiras de un enemigo a 4 casillas o menos: lo atraes 2 casillas.",
+          "efectos": [{ "type": "push", "entityId": "$target", "from": "$self", "distance": -2 }],
+          "niveles": { "2": "Atrae 3", "3": "Puedes tirar hacia un lado en vez de hacia ti", "4": "Alcance 6", "5": "Maestría: atas a dos enemigos y chocan entre sí (1d6 a cada uno)" }
+        },
+        {
+          "id": "silencio", "nombre": "Silencio absoluto", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "Empiezas cada combate Escondido. Los enemigos no te notan hasta que estás a 2 casillas o atacas.",
+          "niveles": {}
+        },
+        {
+          "id": "caja-invisible", "nombre": "Atrapado en una caja", "nivelPersonaje": 3, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "Un enemigo queda encerrado en una caja invisible 2 turnos: no puede moverse ni atacar, ni ser atacado.",
+          "niveles": { "2": "3 turnos", "3": "Puedes empujar la caja con él dentro", "4": "Alcance 6", "5": "Maestría: al romperse la caja, explota en confeti (1d8 en radio 1)" }
+        },
+        {
+          "id": "escalera-imaginaria", "nombre": "Escalera imaginaria", "nivelPersonaje": 6, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Subes o bajas cualquier desnivel sin prueba y sin daño.",
+          "niveles": { "2": "No gasta acción", "3": "Un aliado puede usarla también", "4": "Te quedas 1 turno en lo alto, intocable", "5": "Maestría: atacas desde ella con +4 por altura" }
+        },
+        {
+          "id": "contra-el-viento", "nombre": "Contra el viento", "nivelPersonaje": 9, "coste": { "acciones": 2, "energia": 4 },
+          "texto": "Todos los enemigos en una línea de 6 casillas son empujados 3 casillas.",
+          "niveles": { "2": "Línea de 8", "3": "Empuja 4", "4": "Dos líneas", "5": "Maestría: en cruz, en las cuatro direcciones" }
+        }
+      ],
+      "desventaja": { "id": "voto-de-silencio", "nombre": "Voto de silencio", "texto": "No hablas. En los diálogos solo tienes opciones de gestos, que a veces se entienden mal. Y no puedes «Hacer el ganso» con chistes: solo con mímica (la mitad de audiencia).", "mecanica": { "dialogo": "soloGestos", "multiplicador": { "hacerElGanso": 0.5 } } },
+      "ventajas": ["mimica-convincente", "pared-de-carga", "publico-de-calle", "silencio-incomodo"],
+      "fraseNarrador": "Un mimo. Por fin un concursante que no me interrumpe."
+    }
+  ],
+  "ventajas": {
+    "$comment": "Mazo de ventajas (perks) de niveles pares. Se ofrecen 3: una de la clase, una de la raza (rasgos mejorados) y una general.",
+    "generales": [
+      { "id": "piel-curtida", "nombre": "Piel curtida", "texto": "+6 de vida máxima." },
+      { "id": "manos-rapidas", "nombre": "Manos rápidas", "texto": "Usar un objeto es gratis una vez por turno." },
+      { "id": "carisma-televisivo", "nombre": "Carisma televisivo", "texto": "+2 Carisma y +10 % de audiencia." },
+      { "id": "pies-ligeros", "nombre": "Pies ligeros", "texto": "+1 de movimiento." },
+      { "id": "golpe-bajo", "nombre": "Golpe bajo", "texto": "+3 al daño contra enemigos Tumbados." },
+      { "id": "aprovechado", "nombre": "Aprovechado", "texto": "+1 al daño de choques y caídas que provoques." },
+      { "id": "bolsillos-hondos", "nombre": "Bolsillos hondos", "texto": "+2 huecos de mochila." },
+      { "id": "buena-estrella", "nombre": "Buena estrella", "texto": "+2 Suerte." },
+      { "id": "segundo-aire", "nombre": "Segundo aire", "texto": "Al bajar de un 25 % de vida por primera vez en un combate, recuperas 5." },
+      { "id": "aprendiz-rapido", "nombre": "Aprendiz rápido", "texto": "Tus habilidades suben de nivel con un 25 % menos de usos." }
+    ],
+    "deClase": {
+      "mono-ignifugo": "Recibes la mitad de daño de fuego.",
+      "brazos-de-quinto-piso": "+2 Fuerza y lanzar llega 2 casillas más lejos.",
+      "propina": "Cada enemigo eliminado con fuego da 5 fichas.",
+      "valvula-de-seguridad": "Riesgo laboral solo salta con un 10 %.",
+      "filtro-de-belleza": "+2 DEF mientras la audiencia esté por encima del mínimo.",
+      "algoritmo-favorable": "Los hitos de audiencia dan una caja de un nivel más.",
+      "patrocinio-cruzado": "La afinidad que ganas con un patrocinador sube un 25 % más.",
+      "hater-convertido": "El primer enemigo que te acierte cada combate queda Asustado.",
+      "oido-absoluto": "Tus canciones tienen +1 de radio.",
+      "bolo-pagado": "Cada combate ganado da 10 fichas.",
+      "segunda-voz": "Puedes mantener dos canciones a la vez.",
+      "repertorio-ampliado": "Repertorio corto deja de penalizar.",
+      "bronceado-intimidante": "Los enemigos adyacentes tienen −1 a atacarte.",
+      "pulmones-de-acero": "El silbatazo alcanza 2 casillas más.",
+      "socorrismo-avanzado": "Rescate no gasta energía.",
+      "tumbona-portatil": "Siesta en la silla solo se activa con 1-5 en el d20.",
+      "cliente-habitual": "Maripuri tiene un objeto más a la venta para ti.",
+      "certificado-de-autenticidad": "Los objetos de oro y legendarios valen el doble al venderlos.",
+      "ojo-de-halcon": "Ojo clínico es gratis una vez por combate.",
+      "pieza-unica": "Una vez por partida, eliges el objeto legendario de una caja.",
+      "mimica-convincente": "Los gestos en diálogo se entienden siempre bien.",
+      "pared-de-carga": "Los choques contra tus paredes hacen +1d6.",
+      "publico-de-calle": "Hacer el ganso da audiencia completa.",
+      "silencio-incomodo": "Los enemigos que empiezan el turno junto a ti tienen −2 a todo."
+    }
+  }
+}
