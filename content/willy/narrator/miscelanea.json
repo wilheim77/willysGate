@@ -134,8 +134,12 @@
         { "id": "cs-05", "texto": "Un gnomo de jardín mimo. Silencioso, quieto e inquietante. Ya era así antes, pero ahora cobra.", "si": { "raza": "gnomo-de-jardin", "clase": "mimo" } },
         { "id": "cs-06", "texto": "Una semigaviota tasadora. Roba cosas y luego te dice cuánto valen. Es el sueño de cualquier gaviota.", "si": { "raza": "semigaviota", "clase": "tasador" } },
         { "id": "cs-07", "texto": "Un orco de oficina bardo de verbena. Pasodobles y hojas de cálculo. Que Dios nos pille confesados.", "si": { "raza": "orco-de-oficina", "clase": "bardo-de-verbena" } },
-        { "id": "cs-08", "texto": "{raza:Mayus} e ingeniero de 5G. Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.", "si": { "clase": "ingeniero-5g" } },
-        { "id": "cs-09", "texto": "Un fantasma ingeniero de 5G. Invisible e inalámbrico. La conspiración perfecta. Los foros van a arder.", "si": { "raza": "fantasma-en-practicas", "clase": "ingeniero-5g" } }
+        { "id": "cs-08", "texto": "{raza:Mayus} e ingeniero. Tiene una habilidad que pone «??? (sin estrenar)». Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.", "si": { "clase": "ingeniero" } },
+        { "id": "cs-09", "texto": "Un fantasma ingeniero. Invisible e inalámbrico. Los foros conspiranoicos van a arder. Él solo quería arreglar el router.", "si": { "raza": "fantasma-en-practicas", "clase": "ingeniero" } },
+        { "id": "cs-10", "texto": "Funcionario. El único concursante que ha llegado con su propio sello. Producción le ha pedido que no selle el decorado.", "si": { "clase": "funcionario" } },
+        { "id": "cs-11", "texto": "Un gnomo de jardín funcionario. Inmóvil, imperturbable y con plaza. Nadie lo va a mover de ahí. Nadie.", "si": { "raza": "gnomo-de-jardin", "clase": "funcionario" } },
+        { "id": "cs-12", "texto": "Jugador de basket. Dos metros cuatro. La mazmorra tiene techos de dos metros. Ya me estoy riendo y aún no ha pasado nada.", "si": { "clase": "jugador-de-basket" } },
+        { "id": "cs-13", "texto": "Un gnomo de jardín jugador de basket. Cuarenta centímetros de altura y un mate en el corazón. Producción ha pedido una escalera.", "si": { "raza": "gnomo-de-jardin", "clase": "jugador-de-basket" } }
       ]
     },
     {
@@ -149,13 +153,13 @@
       ]
     },
     {
-      "id": "rayo5g", "evento": "skillUsed", "donde": { "habilidad": "rayo-5g" }, "probabilidad": 0.45, "prioridad": 2, "memoria": 10,
+      "id": "arcoVoltaico", "evento": "skillUsed", "donde": { "habilidad": "arco-voltaico" }, "probabilidad": 0.45, "prioridad": 2, "memoria": 10,
       "lineas": [
-        { "id": "r5-01", "texto": "¡Rayo 5G! Baja latencia, alta velocidad y un olor a pelo quemado que no viene en el folleto." },
-        { "id": "r5-02", "texto": "Rayo 5G. Las teorías de la conspiración tenían razón en una cosa: esto hace daño. A los monstruos." },
+        { "id": "r5-01", "texto": "¡Arco voltaico! Alta tensión, baja paciencia y un olor a pelo quemado que no viene en el folleto." },
+        { "id": "r5-02", "texto": "Chispazo del soldador. No es magia: es oficio. Que es más raro todavía." },
         { "id": "r5-03", "texto": "Banda ancha aplicada a la cara de {enemigo:un}. Tecnología punta." },
         { "id": "r5-04", "texto": "Rayo al agua. Agua electrificada. El ingeniero lo llama «despliegue de red». Yo lo llamo calamares a la plancha.", "si": { "electrificaAgua": true } },
-        { "id": "r5-05", "texto": "Rayo 5G en zona sin cobertura. Le ha costado el doble y le ha salido la mitad de bonito. Pero ha salido.", "si": { "sinCobertura": true } }
+        { "id": "r5-05", "texto": "Arco voltaico en una sala sin cobertura. Al soldador le da igual la cobertura. Al soldador le da igual todo." , "si": { "sinCobertura": true } }
       ]
     },
     {
@@ -167,11 +171,534 @@
       ]
     },
     {
-      "id": "sinCobertura", "evento": "roomEntered", "donde": { "sinCobertura": true, "willy.clase": "ingeniero-5g" }, "probabilidad": 0.7, "prioridad": 2, "memoria": 6,
+      "id": "sinCobertura", "evento": "roomEntered", "donde": { "sinCobertura": true, "willy.clase": "ingeniero" }, "probabilidad": 0.7, "prioridad": 2, "memoria": 6,
       "lineas": [
         { "id": "sc-01", "texto": "Zona sin cobertura. El ingeniero mira el móvil, lo levanta, lo agita. Nada. Como en el pueblo de su suegra." },
         { "id": "sc-02", "texto": "Sin señal. Los autómatas se miran entre ellos, confusos. Uno se ha puesto a dar vueltas. Es lo que hacemos todos sin cobertura." },
-        { "id": "sc-03", "texto": "Aquí no llega el 5G. Los del gorro de papel de aluminio del público lo celebran. Son pocos, pero gritan mucho." }
+        { "id": "sc-03", "texto": "Aquí no llega la señal. Los del gorro de papel de aluminio del público lo celebran. Son pocos, pero gritan mucho." }
+      ]
+    },
+    {
+      "id": "redG",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": "red-g"
+      },
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 12,
+      "lineas": [
+        {
+          "id": "g5-01",
+          "texto": "¡Ya sabíamos que el 5G no servía para nada! A lo mejor si lo subes a 6G…",
+          "si": {
+            "primeraVez": true
+          },
+          "prioridadExtra": 3
+        },
+        {
+          "id": "g5-02",
+          "texto": "5G. Ha sonado un pitido. El ingeniero ha asentido. No ha pasado nada. Bueno, sí: el público se ha reído.",
+          "si": {
+            "nivel": 1
+          }
+        },
+        {
+          "id": "g5-03",
+          "texto": "Otra vez el 5G. Otra vez nada. Hay que admirar la constancia. Hay que admirarla mucho, porque es lo único que hay.",
+          "si": {
+            "nivel": 1
+          }
+        },
+        {
+          "id": "g5-04",
+          "texto": "5G activado. Los conspiranoicos de las gradas se han tapado la cabeza. Tampoco ha pasado nada. Ni a ellos.",
+          "si": {
+            "nivel": 1
+          }
+        },
+        {
+          "id": "g5-05",
+          "texto": "Le da al botón con la fe de quien sabe algo que nosotros no. Nada. Pero la barrita de progreso ha subido. Eso dice él.",
+          "si": {
+            "nivel": 1
+          }
+        },
+        {
+          "id": "g6-01",
+          "texto": "6G. Al monstruo se le ha colgado el vídeo. Se ha quedado mirando la nada con cara de rueda de carga.",
+          "si": {
+            "nivel": 2
+          }
+        },
+        {
+          "id": "g6-02",
+          "texto": "6G: un mareo pequeñito. Es poco, pero es más que nada. Y nada era lo que había.",
+          "si": {
+            "nivel": 2
+          }
+        },
+        {
+          "id": "g7-01",
+          "texto": "7G. Latencia cero. Los autómatas se mueven antes de que el ingeniero termine de pensarlo. Un poco inquietante, la verdad.",
+          "si": {
+            "nivel": 3
+          }
+        },
+        {
+          "id": "g7-02",
+          "texto": "7G. Ahora sí que va rápido. Ojalá el wifi del Bar Paco.",
+          "si": {
+            "nivel": 3
+          }
+        },
+        {
+          "id": "g8-01",
+          "texto": "8G. Actualización obligatoria. Todos los monstruos de alrededor, quietos, viendo una barrita. Como en la vida real.",
+          "si": {
+            "nivel": 4
+          }
+        },
+        {
+          "id": "g8-02",
+          "texto": "8G. «No apague el monstruo mientras se instala la actualización.» Nadie lo apaga. Le pegan, que no es lo mismo.",
+          "si": {
+            "nivel": 4
+          }
+        },
+        {
+          "id": "g9-01",
+          "texto": "9G. Rayos en toda la sala. Los del gorro de papel de aluminio han tenido que admitir que su gorro no sirve.",
+          "si": {
+            "nivel": 5
+          }
+        },
+        {
+          "id": "g9-02",
+          "texto": "9G. Cobertura interplanetaria. Acaba de entrar un mensaje en el móvil de Willy de 2019. Era de su madre.",
+          "si": {
+            "nivel": 5
+          }
+        },
+        {
+          "id": "g10-01",
+          "texto": "10G. SEÑAL ABSOLUTA. Todo baila, todo chispea, el reloj se ha asustado y un patrocinador se ha enamorado. Y yo me he quedado sin con…",
+          "si": {
+            "nivel": 6
+          }
+        },
+        {
+          "id": "g10-02",
+          "texto": "Diez. Ge. Lo he visto con mis propios ojos y todavía no me lo creo. Los conspiranoicos han pedido perdón. Por escrito. En mayúsculas.",
+          "si": {
+            "nivel": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "redGSubeNivel",
+      "evento": "skillLevelUp",
+      "donde": {
+        "habilidad": "red-g"
+      },
+      "probabilidad": 1,
+      "prioridad": 5,
+      "memoria": 0,
+      "lineas": [
+        {
+          "id": "gl-6",
+          "texto": "¡Atención! La habilidad sube a 6G. Y ahora… hace algo. Algo pequeño. Pero algo. El ingeniero se ha emocionado.",
+          "si": {
+            "nivel": 2
+          }
+        },
+        {
+          "id": "gl-7",
+          "texto": "7G desbloqueado. Producción ha llamado para preguntar si eso es legal. Nadie lo sabe. Nadie ha llegado nunca a 7G.",
+          "si": {
+            "nivel": 3
+          }
+        },
+        {
+          "id": "gl-8",
+          "texto": "8G. Ya da miedo. Bueno, siempre dio miedo a cierta gente. Ahora, además, funciona.",
+          "si": {
+            "nivel": 4
+          }
+        },
+        {
+          "id": "gl-9",
+          "texto": "9G. El ingeniero mira la pantalla, se quita las gafas, se las vuelve a poner. Sí. Pone 9G.",
+          "si": {
+            "nivel": 5
+          }
+        },
+        {
+          "id": "gl-10",
+          "texto": "10G. Cobertura total. En catorce galaxias. Y todo empezó con un botón que no hacía nada. Que esto os sirva de lección, conspiranoicos: dadle tiempo a la gente.",
+          "si": {
+            "nivel": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "papeleo",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": {
+          "en": [
+            "vuelva-usted-manana",
+            "formulario-por-triplicado"
+          ]
+        }
+      },
+      "probabilidad": 0.5,
+      "prioridad": 2,
+      "memoria": 10,
+      "lineas": [
+        {
+          "id": "pa-01",
+          "texto": "«Vuelva usted mañana.» Tres palabras. Más eficaces que cualquier espada.",
+          "si": {
+            "habilidad": "vuelva-usted-manana"
+          }
+        },
+        {
+          "id": "pa-02",
+          "texto": "Le ha lanzado un impreso a la cara. El monstruo lo está leyendo. Es el modelo 0-B. Nadie sale del modelo 0-B.",
+          "si": {
+            "habilidad": "vuelva-usted-manana"
+          }
+        },
+        {
+          "id": "pa-03",
+          "texto": "Aturdido por un trámite. El monstruo se pregunta si le falta una firma. Le faltan todas.",
+          "si": {
+            "habilidad": "vuelva-usted-manana"
+          }
+        },
+        {
+          "id": "pa-04",
+          "texto": "Por triplicado. Original, copia rosa y copia amarilla. El suelo es ahora un archivo, y los archivos atrapan.",
+          "si": {
+            "habilidad": "formulario-por-triplicado"
+          }
+        },
+        {
+          "id": "pa-05",
+          "texto": "Expedientes por el suelo. Quien los pise se quedará rellenando casillas. «Marque con una X.» Ya.",
+          "si": {
+            "habilidad": "formulario-por-triplicado"
+          }
+        },
+        {
+          "id": "pa-06",
+          "texto": "El papeleo como arma. No sé si es lo más absurdo o lo más realista que he visto en este programa."
+        }
+      ]
+    },
+    {
+      "id": "expedientesArden",
+      "evento": "surfaceReacted",
+      "donde": {
+        "de": "expedientes",
+        "con": "fuego"
+      },
+      "probabilidad": 1,
+      "prioridad": 3,
+      "memoria": 6,
+      "lineas": [
+        {
+          "id": "ea-01",
+          "texto": "¡Arde el archivo! Treinta años de expedientes en llamas. En algún ministerio galáctico alguien acaba de sentir un escalofrío."
+        },
+        {
+          "id": "ea-02",
+          "texto": "Expedientes al fuego. Los Hermanos Pérez lo llaman combustible. El funcionario lo llama «expurgo reglamentario»."
+        },
+        {
+          "id": "ea-03",
+          "texto": "Arde el papeleo. Por fin algo que se resuelve rápido en una ventanilla."
+        }
+      ]
+    },
+    {
+      "id": "pausaCafe",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": "pausa-del-cafe"
+      },
+      "probabilidad": 0.8,
+      "prioridad": 2,
+      "memoria": 6,
+      "lineas": [
+        {
+          "id": "pc5-01",
+          "texto": "Cartel de «Vuelvo en 5 minutos». Los monstruos lo leen. Lo respetan. No entiendo nada."
+        },
+        {
+          "id": "pc5-02",
+          "texto": "Pausa del café. En mitad del combate. Con su termo. Es un derecho, y él lo ejerce."
+        },
+        {
+          "id": "pc5-03",
+          "texto": "Café con leche, templado, sin azúcar. Ha recuperado fuerzas y la sonrisa. Los monstruos, la paciencia no.",
+          "si": {
+            "enemigosAdyacentes": {
+              "min": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "horarioCierra",
+      "evento": "traitTriggered",
+      "donde": {
+        "rasgo": "horario-de-ventanilla"
+      },
+      "probabilidad": 1,
+      "prioridad": 3,
+      "memoria": 6,
+      "lineas": [
+        {
+          "id": "hc-01",
+          "texto": "Han dado las dos. La ventanilla cierra. Lo que quede de combate se hace con horario de tarde, que no existe."
+        },
+        {
+          "id": "hc-02",
+          "texto": "Quinta ronda: fin del horario de atención al público. A partir de ahora, todo cuesta más. Como en la vida."
+        },
+        {
+          "id": "hc-03",
+          "texto": "El funcionario mira el reloj. Son las dos. Suspira. No es pereza: es el horario. Y el horario es sagrado."
+        }
+      ]
+    },
+    {
+      "id": "movimientoResistido",
+      "evento": "forcedMoveResisted",
+      "donde": {
+        "entityId": "willy"
+      },
+      "probabilidad": 0.5,
+      "prioridad": 2,
+      "memoria": 6,
+      "lineas": [
+        {
+          "id": "mr-01",
+          "texto": "Le han empujado. No se ha movido. La plaza es suya, y él lo sabe."
+        },
+        {
+          "id": "mr-02",
+          "texto": "Ni la cinta, ni el empujón, ni la marea. Más estable que una oposición aprobada."
+        },
+        {
+          "id": "mr-03",
+          "texto": "Intentan moverle. Se ríe. Bueno, no se ríe: rellena un parte de incidencias. Es su forma de reírse."
+        }
+      ]
+    },
+    {
+      "id": "salto",
+      "evento": "jumped",
+      "donde": {
+        "entityId": "willy"
+      },
+      "probabilidad": 0.4,
+      "prioridad": 2,
+      "memoria": 10,
+      "lineas": [
+        {
+          "id": "sa-01",
+          "texto": "¡Qué salto! La gravedad ha mirado para otro lado un momento."
+        },
+        {
+          "id": "sa-02",
+          "texto": "Por encima del foso, sin carrerilla. La Colmena no sabe si aplaudir o llorar.",
+          "si": {
+            "cruzaVacio": true
+          }
+        },
+        {
+          "id": "sa-03",
+          "texto": "Dos niveles de un salto. Las escaleras de esta mazmorra se sienten inútiles.",
+          "si": {
+            "subida": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "sa-04",
+          "texto": "Salto. Aterrizaje. Chirrido de zapatillas. Lo mejor que ha sonado en esta mazmorra en once mil años."
+        }
+      ]
+    },
+    {
+      "id": "mate",
+      "evento": "attackResolved",
+      "donde": {
+        "habilidad": {
+          "en": [
+            "mate",
+            "alley-oop",
+            "mate-del-concurso"
+          ]
+        },
+        "acierto": true
+      },
+      "probabilidad": 0.9,
+      "prioridad": 3,
+      "memoria": 10,
+      "lineas": [
+        {
+          "id": "ma-01",
+          "texto": "¡MATE! ¡Con las dos manos! ¡En la cabeza de {enemigo:un}! Esto no es baloncesto, pero se le parece mucho."
+        },
+        {
+          "id": "ma-02",
+          "texto": "Mate. {enemigo:el:Mayus} se queda en el suelo mirando el techo, que es donde estaba Willy hace un segundo."
+        },
+        {
+          "id": "ma-03",
+          "texto": "¡Posterizado! Ese monstruo va a salir en un póster en catorce galaxias. Y no va a ser su mejor foto.",
+          "si": {
+            "objetivo.tamano": {
+              "en": [
+                "grande",
+                "enorme"
+              ]
+            }
+          }
+        },
+        {
+          "id": "ma-04",
+          "texto": "¡Alley-oop! Pase al aire, salto, remate. Chencho grita como si hubieran ganado la liga. Para Chencho, siempre es la liga.",
+          "si": {
+            "habilidad": "alley-oop"
+          }
+        },
+        {
+          "id": "ma-05",
+          "texto": "¡El Mate del concurso! El jurado: diez, diez, diez, y un nueve de un juez krell que nunca da dieces.",
+          "si": {
+            "habilidad": "mate-del-concurso"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pasePicado",
+      "evento": "attackResolved",
+      "donde": {
+        "habilidad": "pase-picado"
+      },
+      "probabilidad": 0.4,
+      "prioridad": 2,
+      "memoria": 8,
+      "lineas": [
+        {
+          "id": "pp-01",
+          "texto": "Pase picado. El balón vuelve a sus manos como un perro fiel. Un perro naranja de goma."
+        },
+        {
+          "id": "pp-02",
+          "texto": "¡A tablero! Rebote en la pared y a la cara, por detrás de la cobertura. Esto es geometría aplicada.",
+          "si": {
+            "rebotes": {
+              "min": 1
+            }
+          }
+        },
+        {
+          "id": "pp-03",
+          "texto": "Doble rebote. Ni él mismo sabe cómo ha entrado. Pero ha entrado.",
+          "si": {
+            "rebotes": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "pp-04",
+          "texto": "Fallado. El balón rebota tres veces, se para y vuelve rodando. Hasta el balón está avergonzado.",
+          "si": {
+            "acierto": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "cosasRedondas",
+      "evento": "traitTriggered",
+      "donde": {
+        "rasgo": "cosas-redondas"
+      },
+      "probabilidad": 1,
+      "prioridad": 3,
+      "memoria": 8,
+      "lineas": [
+        {
+          "id": "cr5-01",
+          "texto": "Algo redondo. No ha podido evitarlo: tiro a canasta. Que no había canasta da igual."
+        },
+        {
+          "id": "cr5-02",
+          "texto": "Le ha tirado el balón a un patito de goma gigante. Ha sido instintivo. Ha sido precioso. Ha sido inútil.",
+          "si": {
+            "objetivo.plantilla": "patito-gigante"
+          }
+        },
+        {
+          "id": "cr5-03",
+          "texto": "Le ha tirado a canasta al barril de pólvora. Tú sabías cómo iba a acabar esto. Yo también. Él no.",
+          "si": {
+            "objetivo.etiquetas": {
+              "tiene": "explosivo"
+            }
+          }
+        },
+        {
+          "id": "cr5-04",
+          "texto": "Tiro a la cabeza del cabezudo. Cuatro kilos de cartón piedra. Ha sonado a triple.",
+          "si": {
+            "objetivo.plantilla": "cabezudo"
+          }
+        },
+        {
+          "id": "cr5-05",
+          "texto": "El Centollo es redondo. Era cuestión de tiempo.",
+          "si": {
+            "objetivo.plantilla": "jefe-centollo"
+          }
+        }
+      ]
+    },
+    {
+      "id": "techoBajo",
+      "evento": "traitTriggered",
+      "donde": {
+        "rasgo": "techo-bajo"
+      },
+      "probabilidad": 1,
+      "prioridad": 3,
+      "memoria": 6,
+      "lineas": [
+        {
+          "id": "tb-01",
+          "texto": "¡Clonc! Techo bajo. Dos metros cuatro de concursante, dos metros de bodega. Las matemáticas eran claras."
+        },
+        {
+          "id": "tb-02",
+          "texto": "Ha intentado saltar en la sauna. La sauna tiene el techo de madera. La madera ha ganado."
+        },
+        {
+          "id": "tb-03",
+          "texto": "Otra vez con la cabeza en el techo. Ya tiene un chichón con forma de viga."
+        }
       ]
     }
   ]

@@ -8,7 +8,7 @@
       "usar": { "objetivo": "enemigo", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
         { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
       ] },
-      "etiquetas": ["explosivo"], "valor": 0 },
+      "etiquetas": ["explosivo", "redondo"], "valor": 0 },
     { "id": "llave-inglesa", "nombre": "Llave inglesa", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
       "descripcion": "Para apretar reguladores y aflojar mandíbulas.",
       "regla": "Golpe de 1d6.",
@@ -123,6 +123,46 @@
       "usoAlternativo": { "objetivo": "casilla", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
         { "type": "spawnSurface", "at": "$tile", "surface": "canicas", "radius": 1 }
       ] }, "valor": 3 },
+
+    { "id": "sello-de-caucho", "nombre": "Sello de caucho", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+      "descripcion": "«RECIBIDO». Lleva veinte años diciendo lo mismo y nunca se ha equivocado.",
+      "regla": "Golpe de 1d4. El objetivo queda marcado: el próximo Vuelva usted mañana contra él tiene DIF +2.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "golpe" }
+      ] }, "valor": 4 },
+    { "id": "taco-de-formularios", "nombre": "Taco de formularios en blanco", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 3,
+      "descripcion": "Modelo 0-B, «Solicitud de solicitud». Nadie sabe para qué sirve, por eso es tan eficaz.",
+      "regla": "Lanza (alcance 4): una casilla de expedientes. Quien la pisa queda Enredado. Arde.",
+      "usar": { "objetivo": "casilla", "alcance": 4, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$tile", "surface": "expedientes", "radius": 0 }
+      ] }, "valor": 3 },
+    { "id": "termo-de-cafe-con-leche", "nombre": "Termo de café con leche", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 2,
+      "descripcion": "Con su nombre escrito en cinta adhesiva para que nadie se lo beba en la oficina. Aquí tampoco.",
+      "regla": "Recuperas 4 de vida y se te quita Mareado.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "heal", "entityId": "$self", "amount": "4" },
+        { "type": "removeCondition", "entityId": "$self", "condition": "mareado" }
+      ] },
+      "etiquetas": ["comida", "curacion"], "valor": 4 },
+    { "id": "balon-de-baloncesto", "nombre": "Balón de baloncesto", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+      "descripcion": "Firmado por todo el Club Baloncesto Brazomar. La firma más legible es la del utillero.",
+      "regla": "Lo usan Pase picado, Alley-oop y Mate. Lanzarlo sin habilidad: alcance 4, 1d4. Siempre vuelve a tus manos al final del turno.",
+      "usar": { "objetivo": "enemigo", "alcance": 4, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "golpe" }
+      ] },
+      "etiquetas": ["redondo"], "valor": 0 },
+    { "id": "zapatillas-de-baloncesto", "nombre": "Zapatillas de bota alta", "rareza": "bronce", "tipo": "equipo", "ranura": "pies", "inicial": true,
+      "descripcion": "Talla 49. Chirrían en cualquier suelo, incluso en la arena.",
+      "regla": "+1 Agilidad. Gran salto llega 1 casilla más lejos.",
+      "pasivo": [{ "stat": "agi", "delta": 1 }, { "stat": "alcanceSalto", "delta": 1 }], "valor": 4 },
+    { "id": "bebida-isotonica", "nombre": "Bebida isotónica", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 2,
+      "descripcion": "Sabor «azul». Nadie ha sabido nunca a qué sabe el azul, pero repone sales.",
+      "regla": "Recuperas 3 de vida y 2 de energía.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "heal", "entityId": "$self", "amount": "3" },
+        { "type": "modifyResource", "entityId": "$self", "resource": "energia", "delta": 2 }
+      ] },
+      "etiquetas": ["comida", "curacion"], "valor": 4 },
 
     { "id": "tirita-de-dibujos", "nombre": "Tirita de dibujos", "rareza": "bronce", "tipo": "consumible",
       "descripcion": "Con un dragoncito sonriente. Cura poco, pero anima mucho.",
@@ -469,6 +509,18 @@
       "regla": "Cosmético.", "desbloqueo": "logro:papel-de-aluminio", "valor": 0 },
     { "id": "chaleco-de-operadora", "nombre": "Chaleco de operadora", "rareza": "oro", "tipo": "cosmetico", "ranura": "aspecto",
       "descripcion": "Con muchos bolsillos y el logo de una compañía telefónica que ya no existe. Como ninguna, ahora.",
-      "regla": "Cosmético.", "desbloqueo": "logro:despliegue-nacional", "valor": 0 }
+      "regla": "Cosmético.", "desbloqueo": "logro:despliegue-nacional", "valor": 0 },
+    { "id": "manguitos-de-oficina", "nombre": "Manguitos de oficina", "rareza": "plata", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Para no mancharse de tinta las mangas. En la mazmorra, de otras cosas.",
+      "regla": "Cosmético.", "desbloqueo": "logro:vuelva-usted-manana", "valor": 0 },
+    { "id": "visera-de-ventanilla", "nombre": "Visera verde de ventanilla", "rareza": "oro", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "De las de las películas antiguas. Con ella puesta, cualquier trámite parece serio.",
+      "regla": "Cosmético.", "desbloqueo": "logro:plaza-fija", "valor": 0 },
+    { "id": "cinta-de-pelo-ochentera", "nombre": "Cinta de pelo ochentera", "rareza": "plata", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "De rizo, con los colores del Brazomar. Sujeta el sudor y la autoestima.",
+      "regla": "Cosmético.", "desbloqueo": "logro:posterizado", "valor": 0 },
+    { "id": "anillo-de-campeon", "nombre": "Anillo de campeón", "rareza": "oro", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "De plástico dorado, de una máquina de bolas. Willy lo enseña igual que si fuera de la NBA.",
+      "regla": "Cosmético.", "desbloqueo": "logro:anillo-de-campeon", "valor": 0 }
   ]
 }

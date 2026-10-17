@@ -39,6 +39,8 @@
         { "id": "vapor", "nombre": "Vapor", "texto": "Tapa la vista: no se puede atacar a distancia a través de él. Se disipa en 2 turnos.", "narrador": "Como el baño del Bar Paco un sábado." },
         { "id": "toxico", "nombre": "Tóxico", "texto": "Deja Envenenado: 1 de daño por turno durante 3 turnos.", "narrador": "Glorp Ecosoluciones lo desaprueba. Con razón." },
         { "id": "electrificada", "nombre": "Electrificada", "texto": "Agua con corriente: quien está dentro queda Electrocutado (pierde 1 acción) y recibe daño.", "narrador": "Huele a calamares. Siempre huele a calamares." },
+        { "id": "expedientes", "nombre": "Expedientes", "texto": "Papeles por el suelo (los lanza el Funcionario). Quien entra o empieza el turno dentro queda Enredado. Arden muy bien.", "narrador": "El arma más temida del universo: el trámite." },
+        { "id": "salto", "nombre": "Salto", "texto": "Algunas habilidades (las del Jugador de basket) permiten saltar: cruzar huecos y subir más de un nivel de golpe. En las salas de techo bajo no se puede saltar.", "narrador": "La gravedad es una sugerencia. Para algunos." },
         { "id": "cinta", "nombre": "Cintas y escaleras mecánicas", "texto": "Al final de cada ronda mueven 1 casilla a todo lo que tengan encima, también hacia el peligro.", "narrador": "El Hipermercado Eterno: llegar es fácil, salir no." },
         { "id": "foco", "nombre": "Focos", "texto": "Bajo un foco (Planta 5) ganas el doble de audiencia y +2 a atacar, pero te atacan con +2.", "narrador": "La fama tiene un precio. Este." }
       ]
@@ -53,8 +55,8 @@
         { "id": "camerino", "nombre": "Camerino", "texto": "Zona segura entre plantas: tienda de Maripuri, descanso en el Bar Paco, guardado con Xelda y charla con Koldo.", "narrador": "El único sitio donde nadie te quiere matar. Salvo Koldo, de aburrimiento." },
         { "id": "ganso", "nombre": "Hacer el ganso", "texto": "Acción que no sirve para nada salvo para ganar un poco de audiencia. Cada vez da menos en el mismo combate.", "narrador": "El arte en su forma más pura." },
         { "id": "modo-eliminacion", "nombre": "Con repetición / Sin repetición", "texto": "Se elige al empezar. Con repetición: si caes, vuelves al último Camerino y la planta se recoloca. Sin repetición: una sola vida; si caes, se acaba la temporada. Se guarda solo y no se puede volver atrás.", "narrador": "Sin repetición es para valientes. O para gente que no tiene nada mejor que hacer. Las dos cosas me parecen bien." },
-        { "id": "invocacion", "nombre": "Invocaciones", "texto": "Criaturas que crea una habilidad (los autómatas y la antena del Ingeniero de 5G, los fans de la Influencer). Luchan de tu lado, duran un tiempo y desaparecen al acabar el combate. Lo que eliminan cuenta como tuyo.", "narrador": "Mano de obra gratuita. Producción está tomando apuntes." },
-        { "id": "sin-cobertura", "nombre": "Zona sin cobertura", "texto": "Solo afecta al Ingeniero de 5G: en esas salas (marcadas con una antena tachada) sus habilidades cuestan 1 de energía más y sus autómatas están Mareados.", "narrador": "Como el pueblo de tu suegra. Pero con monstruos." },
+        { "id": "invocacion", "nombre": "Invocaciones", "texto": "Criaturas que crea una habilidad (los autómatas y la antena del Ingeniero, los fans de la Influencer, Chencho el base del Jugador de basket). Luchan de tu lado, duran un tiempo y desaparecen al acabar el combate. Lo que eliminan cuenta como tuyo.", "narrador": "Mano de obra gratuita. Producción está tomando apuntes." },
+        { "id": "sin-cobertura", "nombre": "Zona sin cobertura", "texto": "Solo afecta al Ingeniero: en esas salas (marcadas con una antena tachada) su habilidad G cuesta 1 de energía más y sube más despacio, y sus autómatas están Mareados.", "narrador": "Como el pueblo de tu suegra. Pero con monstruos." },
         { "id": "fichas", "nombre": "Fichas", "texto": "La moneda del concurso. Se ganan eliminando enemigos, en cofres y cajas, y vendiendo. Se gastan en Ultramarinos Maripuri.", "narrador": "No se pueden cambiar por euros. Lo hemos preguntado." }
       ]
     },
@@ -89,6 +91,7 @@
         { "id": "mareado", "nombre": "Mareado", "texto": "−2 a todo.", "narrador": "El kalimotxo, seguramente." },
         { "id": "escondido", "nombre": "Escondido", "texto": "Los enemigos no te eligen como objetivo. Se pierde al atacar.", "narrador": "Muy útil. Muy poco televisivo." },
         { "id": "animado", "nombre": "Animado", "texto": "+1 al daño.", "narrador": "Venga, venga, venga." },
+        { "id": "compulsado", "nombre": "Compulsado", "texto": "+2 a todas las tiradas e inmune a Aturdido (Sello oficial del Funcionario).", "narrador": "Con sello. Ahora es oficial." },
         { "id": "dormido", "nombre": "Dormido", "texto": "Pierdes el turno; te despiertas si te hacen daño.", "narrador": "La siesta es sagrada. Incluso aquí." },
         { "id": "petrificado", "nombre": "Petrificado", "texto": "No actúa ni recibe daño. Si lo empujas, se rompe.", "narrador": "Una pieza de museo." }
       ]
