@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 38,
+ "nextobjectid": 37,
  "properties": [
   {
    "name": "name",
@@ -805,39 +805,6 @@
     },
     {
      "id": 36,
-     "name": "d1-horca",
-     "type": "",
-     "x": 32,
-     "y": 128,
-     "width": 800,
-     "height": 480,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "dialogue",
-       "type": "string",
-       "value": "d1_horca"
-      },
-      {
-       "name": "speaker",
-       "type": "string",
-       "value": "nella"
-      },
-      {
-       "name": "once",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "requiresFlag",
-       "type": "string",
-       "value": "d1_cuadrilla"
-      }
-     ]
-    },
-    {
-     "id": 37,
      "name": "juicio-anselmo",
      "type": "",
      "x": 0,

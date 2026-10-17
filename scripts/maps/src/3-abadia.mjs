@@ -115,6 +115,6 @@ export default {
   ],
   zones: {
     scenes: [
-      { name: 'd1-abadia-final', rect: [7, 1, 16, 7], props: { dialogue: 'd1_abadia_final', speaker: 'mazo', once: true, requiresFlag: 'd1_abadia' } },{ name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'audiencia_abadia', speaker: 'mazo', once: true } }],
+      { name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'audiencia_abadia', speaker: 'mazo', once: true } }],
   },
 };

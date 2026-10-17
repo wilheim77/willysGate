@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 39,
+ "nextobjectid": 38,
  "properties": [
   {
    "name": "name",
@@ -869,39 +869,6 @@
    "objects": [
     {
      "id": 37,
-     "name": "d1-abadia-final",
-     "type": "",
-     "x": 224,
-     "y": 32,
-     "width": 512,
-     "height": 224,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "dialogue",
-       "type": "string",
-       "value": "d1_abadia_final"
-      },
-      {
-       "name": "speaker",
-       "type": "string",
-       "value": "mazo"
-      },
-      {
-       "name": "once",
-       "type": "bool",
-       "value": true
-      },
-      {
-       "name": "requiresFlag",
-       "type": "string",
-       "value": "d1_abadia"
-      }
-     ]
-    },
-    {
-     "id": 38,
      "name": "audiencia",
      "type": "",
      "x": 384,
