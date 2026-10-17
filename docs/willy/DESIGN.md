@@ -1,6 +1,6 @@
 # Willy el mazmorrero: diseño
 
-> Estado: **propuesta pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17). La premisa la ha definido el usuario; aquí se concreta.
+> Estado: **aprobado por el usuario con cambios** (Fase 0 de *Willy*, 2026-10-17). Las decisiones del usuario están en [`PROGRESS.md`](PROGRESS.md) → «Decisiones del usuario» y ya están aplicadas aquí.
 > Historia: [`STORY.md`](STORY.md) · Prólogo: [`INTRO.md`](INTRO.md) · Reglas: [`RULESET.md`](RULESET.md) · Peticiones al motor: [`ENGINE_REQUESTS.md`](ENGINE_REQUESTS.md) · Estado: [`PROGRESS.md`](PROGRESS.md)
 
 ## Índice
@@ -34,8 +34,8 @@ Pantalla de inicio → Prólogo (saltable) → Planta 1 (tutorial + cásting)
 
 - **Una partida = una temporada**: 5 plantas y un final. Duración objetivo: **3-4 horas** la primera vez (35-50 min por planta).
 - Cada planta: llegar a la **escalera de bajada** antes de que el **reloj** llegue a cero, ganando audiencia por el camino y derrotando al jefe que guarda la escalera.
-- **No es un roguelite de muerte permanente.** Si Willy cae, vuelve al último Camerino guardado (ver §12). Lo que se repite es la planta, regenerada.
-- La rejugabilidad viene de la generación procedural, las 6 razas × 6 clases, los logros por navegador y la dificultad Prime time.
+- **Modo de eliminación, elegido al empezar** (ver §12): **Con repetición** (normal: si Willy cae, vuelve al último Camerino y la planta se regenera) o **Sin repetición** (hardcore: muerte permanente, la temporada termina).
+- La rejugabilidad viene de la generación procedural, las 6 razas × 7 clases, los logros por navegador, la dificultad Prime time y el modo Sin repetición.
 
 ## 2. Qué reutiliza del motor y qué cambia
 
@@ -158,6 +158,7 @@ Reglas completas en `RULESET.md`. Lo que importa para el diseño:
 - **Empujar es barato y fuerte** (1 acción, sin ataques de oportunidad por defecto): el entorno es la mejor arma y la que más audiencia da.
 - Cada planta tiene una **mecánica característica** que añade una forma nueva de usar el entorno (marea, cintas y carritos, pólvora, hielo y vapor, focos y decorados).
 - Los **jefes** tienen un punto débil ligado a esa mecánica (ver `floors.json`).
+- **Invocaciones (Ingeniero de 5G):** el Autómata repetidor y la Antena repetidora son entidades normales creadas con `spawnEntity` (R13). Tienen dueño (`ownerId` = Willy), la facción de Willy y duración (fin del combate o N turnos). El autómata lo **controla el jugador** y actúa justo después de Willy; la antena es una torreta con IA aliada. Lo que eliminan da experiencia y audiencia a Willy, y cuentan para sus logros. Fuera de combate se pliegan. Si Willy cae, desaparecen.
 - **IA (Fase 2 del motor):** cada enemigo tiene un perfil simple en datos (`agresivo`, `a distancia`, `cobarde`, `guardián`) y **evita** casillas peligrosas para sí mismo, salvo los Bailando y los empujados. Que la IA no se suicide sola es importante: las muertes por entorno tienen que ser mérito del jugador.
 
 ## 6. Audiencia
@@ -230,7 +231,7 @@ Piezas genéricas en el cliente (`src/fx/` y una escena de recompensa): ver `ENG
 
 ## 9. Logros
 
-Datos: `content/willy/data/achievements.json` (**90 logros**, 13 ocultos con pista).
+Datos: `content/willy/data/achievements.json` (**102 logros**, 17 ocultos con pista).
 
 ### Sistema
 
@@ -285,7 +286,7 @@ Y los del juego (`content/willy` + ruleset): `runStarted`, `runEnded`, `floorEnt
 
 ## 10. Narrador
 
-Datos: `content/willy/narrator/*.json` (**287 líneas** en 41 bancos). Motor de plantillas genérico: `ENGINE_REQUESTS.md` → R5.
+Datos: `content/willy/narrator/*.json` (**313 líneas** en 47 bancos). Motor de plantillas genérico: `ENGINE_REQUESTS.md` → R5.
 
 ### Formato de un banco
 
@@ -326,10 +327,40 @@ Datos: `floors.json` → `camerino` y `loot-tables.json` → `mercado`.
 ### Dentro de la partida
 Niveles, atributos, ventajas y habilidades que suben con el uso: `RULESET.md`.
 
-### Eliminación
-- Si la vida llega a 0: escena corta del Narrador y **vuelta al último guardado** (el último Camerino; en la Planta 1, el inicio de la planta tras el cásting).
-- La planta se **regenera** con `intento + 1`. Se pierden el botín y la experiencia ganados desde el guardado, pero **no los logros** (son del perfil).
-- En dificultad Turista: vuelves al inicio de la planta con lo que llevabas.
+### Eliminación: dos modos (decisión del usuario)
+
+El jugador elige el modo al crear la partida y **no se puede cambiar después**. Se guarda en `GameState.settings.eliminationMode` (`repeticion` | `sinRepeticion`) y lo ven los logros, el Narrador y los patrocinadores.
+
+| | **Con repetición** (normal, por defecto) | **Sin repetición** (hardcore) |
+|---|---|---|
+| Si la vida llega a 0 | Escena del Narrador y vuelta al último guardado (último Camerino; en la Planta 1, el inicio de la planta tras el cásting) | Escena de cierre del Narrador y **fin de la temporada**: pantalla de resumen (planta alcanzada, audiencia máxima, patrocinadores, logros de la partida) |
+| La planta | Se regenera con `intento + 1` («la mazmorra se recoloca») | — |
+| Lo que se pierde | Botín y experiencia desde el guardado | La partida entera |
+| Lo que se conserva | Logros y desbloqueos (perfil) | Logros y desbloqueos (perfil). El guardado se borra |
+| Guardado | Manual en el Camerino (Xelda) + autoguardado de suspensión | **Una sola ranura, automática** (ver abajo) |
+| Turista | Vuelves al inicio de la planta con lo que llevabas | No disponible: Sin repetición exige Concursante o Prime time |
+
+**Guardado en Sin repetición (sin trampas):**
+- Una sola ranura por navegador para la partida hardcore, separada de las partidas normales (`willy:hardcore`).
+- Se guarda **automáticamente** tras cada comando que cambia el estado (y al salir de la pestaña). No hay «Guardar», ni «Cargar», ni exportar la partida en curso.
+- Al pulsar «Continuar» se reanuda exactamente donde estaba: como el RNG vive en el estado, cerrar la pestaña antes de una tirada mala no cambia el resultado.
+- Al morir, la ranura se borra en la misma escritura que registra el resultado en el perfil.
+- La ranura lleva un contador de escrituras guardado también en el perfil. Si al cargar el contador de la ranura es menor que el del perfil (alguien ha restaurado una copia antigua desde las herramientas del navegador), la partida se marca «Repetición detectada» y pasa a Con repetición. Sin castigo, pero los logros de Sin repetición ya no cuentan. Es una medida de buena fe, no anti-trampas seria: es un juego entre amigos.
+
+**Cómo reaccionan los demás sistemas:**
+- **Logros:** «Una sola toma» (ganar Sin repetición, caja legendaria) y «Programa cancelado» (caer Sin repetición; consuelo sin premio). «Eliminado, pero poco» solo cuenta en Con repetición.
+- **Narrador:** bancos propios `inicioSinRepeticion` (al empezar) y `willyEliminadoSinRepeticion` (al caer: despedida con cariño, nunca burla). El banco normal `willyEliminado` solo suena en Con repetición.
+- **Audiencia:** en Sin repetición la audiencia de toda la partida vale ×1,25 (el público sabe que va en serio).
+- **Perfil:** guarda la mejor planta alcanzada Sin repetición, que se ve en la pantalla de logros.
+
+### Selector en «Nueva partida»
+
+Tres pasos, una pantalla cada uno, todos con «Atrás»:
+1. **Dificultad:** Turista / Concursante / Prime time (con una línea de explicación cada uno; «Turista» recomendado si es tu primera vez).
+2. **Modo:** «Con repetición: si caes, vuelves al último Camerino» (seleccionado por defecto) / «Sin repetición: si caes, se acaba la temporada». El segundo muestra un aviso: «Una sola vida. Se guarda solo y no se puede volver atrás.» Con Turista, la opción Sin repetición sale desactivada con su motivo.
+3. **Aspecto** (si hay cosméticos desbloqueados) y semilla opcional («Semilla: dejar en blanco para azar»).
+
+Luego, el prólogo (o «¿Ver el prólogo otra vez?»).
 
 ### Perfil por navegador (meta-progresión)
 En `localStorage`, separado de las partidas (ver R6):
@@ -339,7 +370,7 @@ En `localStorage`, separado de las partidas (ver R6):
 - estadísticas (razas y clases jugadas y ganadas, glosario leído, prólogo visto);
 - preferencias (consejos, animaciones reducidas, voz, velocidad de texto).
 
-No hay mejoras de poder permanentes entre partidas: los desbloqueos amplían **variedad**, no fuerza. Así una partida nueva es justa y el juego sigue siendo un juego de habilidad.
+**Decisión del usuario: solo variedad entre partidas, nunca poder permanente.** Los desbloqueos amplían las tablas de botín y el armario de cosméticos; no hay mejoras de atributos, vida ni reloj que se arrastren. Así una partida nueva es justa y el juego sigue siendo de habilidad.
 
 Exportar e importar el perfil junto con las partidas (JSON), como ya hace el guardado.
 
@@ -350,14 +381,15 @@ Público: amigos que no conocen el proyecto ni el LitRPG. Tienen que entender y 
 | Pieza | Cómo es en *Willy* |
 |---|---|
 | **Enlace compartible** | La URL de GitHub Pages (`/willysGate/willy/`) abre directamente en la pantalla de inicio. Cada amigo tiene su guardado y su perfil en su navegador. |
-| **Pantalla de inicio** | Título, subtítulo con gancho («Se acabó el mundo y lo están echando por la tele»), botón grande **«Nueva partida»**, «Continuar» (si hay guardado), **«Cómo se juega»** (siempre visible), «Logros», «Ver el prólogo», «Opciones» y «Enviar comentario». |
+| **Pantalla de inicio** | Título, subtítulo con gancho («Se acabó el mundo y lo están echando por la tele»), botón grande **«Nueva partida»**, «Continuar» (si hay guardado; dos si hay partida normal y Sin repetición), **«Cómo se juega»** (siempre visible), «Logros», «Ver el prólogo» y «Opciones». |
 | **Prólogo** | [`INTRO.md`](INTRO.md): 16 viñetas, 1:48, saltable desde el primer segundo y repetible. Ya ilustrado por la sesión de arte (`content/willy/cinematics/`). |
 | **Tutorial integrado** | Planta 1, `content/willy/tutorial.json`: 28 pasos (abajo). |
 | **Cómo se juega** | 9 páginas cortas (`texts/como-se-juega.json`), cada una cabe en un móvil. |
 | **Glosario** | Menú de pausa (`texts/glossary.json`): básico, personaje, entorno, el concurso (audiencia, patrocinadores, reloj, derrumbe), cajas y estados. Los mismos textos son los **tooltips**: cualquier número de un desglose enlaza a su término. |
 | **Consejos** | Los pasos del tutorial y los avisos del Narrador se pueden desactivar en Opciones (preferencia del navegador). |
-| **Feedback** | Botón «Enviar comentario» (formulario o `mailto`, configurado en `GameDefinition`), en inicio y pausa. Adjunta, si el jugador quiere, la versión, la planta y la semilla. |
-| **Dificultad** | Turista / Concursante / Prime time, elegida al pulsar «Nueva partida» (por defecto Concursante, con «Turista» recomendado si dices que no has jugado nunca a esto). |
+| **Feedback** | **Sin botón por ahora (decisión del usuario).** No se publica ningún correo ni formulario. TODO: si más adelante se quiere, `GameDefinition.feedbackUrl` opcional; si no está definido, el botón no aparece. |
+| **Dificultad y modo** | Turista / Concursante / Prime time y Con repetición / Sin repetición, elegidos al pulsar «Nueva partida» (ver §12, «Selector»). |
+| **Tipografía** | **Press Start 2P** para títulos, rótulos del programa, carteles, la tarjeta de logro y la apertura de cajas. **VT323** para diálogos, el Narrador, tooltips, glosario y menús con texto largo (más legible en móvil). |
 
 ### Secuencia del tutorial (Planta 1)
 
@@ -385,13 +417,15 @@ Todos los textos van con la voz del Narrador: sarcástico, breve, nunca un manua
 - **Tamaño de tile:** 16 px, como *Intereses*: mismo render, mismos pipelines.
 - **Base: Ninja Adventure** (CC0, ya en `art-src/ninja-adventure/`): personajes en 4 direcciones con ataque, cientos de monstruos, efectos, **música y sonido** (resuelve el audio a coste cero). Muy luminoso: encaja con el tono.
 - **Complemento: 0x72 DungeonTileset II** (CC0): muros de mazmorra, cofres, trampas y el mímico (con un filtro de color más alegre).
-- **Tiny Swords / Enemy Pack y LimeZu:** descartados como base (64 px / de pago). LimeZu Modern Interiors (de pago, 16 px) sería el candidato natural para el **Hipermercado** y el **Plató** si Ninja Adventure se queda corto; decidir antes de la fase W3 tras revisar su licencia.
+- **Kenney** (CC0): iconos de interfaz, objetos sueltos y placeholders.
+- **Decisión del usuario: no se compra arte.** Nada de LimeZu ni de Tiny Swords Enemy Pack. Lo que falte lo hace **la sesión de arte** de forma propia (recolores, piezas y dibujos a 16 px con pipelines reproducibles en `scripts/art/`).
 - **Sprites:** 2 direcciones con volteo como mínimo; Ninja Adventure trae 4, que se usarán.
 - **Falta (anotar en `TODO-ART.md` cuando se integre):**
   - Willy con mono naranja y bombona: recolor de un personaje de Ninja Adventure (pipeline de paletas, Fase 2 del motor) y la bombona como sprite propio.
   - Las 6 razas como variantes visibles de Willy (gaviota, gnomo, orco, fantasma, minotauro): recolores y piezas superpuestas.
   - Jefes grandes (Centollo, Gigantón, Socorrista): no existen a 16 px; escalar monstruos ×2 con retoque o dibujarlos.
-  - Biomas modernos (hipermercado, verbena, balneario, plató): tiles propios o LimeZu.
+  - Biomas modernos (hipermercado, verbena, balneario, plató): tiles propios de la sesión de arte, partiendo de Ninja Adventure (interiores) y Kenney.
+  - Ingeniero de 5G: Autómata repetidor (2 direcciones, idle y golpe) y Antena repetidora, propios; el rayo 5G como efecto de partículas.
   - Retratos de los 6 patrocinadores y 4 PNJ del Camerino (32×32).
   - Cajas de botín de 4 niveles con animación y cartas de rareza.
   - Viñetas del prólogo: **hechas** por la sesión de arte.
@@ -410,19 +444,21 @@ export const game: GameDefinition = {
   theme: {
     colors: { bg: '#1b1530', panel: '#2a2147', text: '#fff4e0', accent: '#ff7a1a', muted: '#a99cc7', error: '#ff5577', … },
     canvas: '#1b1530',
-    fontFamily: "'Press Start 2P', monospace",      // o VT323, por legibilidad en móvil
+    fontFamily: "'VT323', monospace",                 // diálogos, Narrador, menús
+    titleFontFamily: "'Press Start 2P', monospace",   // títulos y rótulos del programa (campo nuevo, R9)
+    fontUrl: 'https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap',
   },
   playerId: 'player:1',
   leaderId: 'willy',
-  feedbackUrl: '…',                                 // a decidir por el usuario
+  // feedbackUrl: sin definir (decisión del usuario): no hay botón de feedback.
   // Nuevos campos que dependen de ENGINE_REQUESTS:
   data: { floors, items, lootTables, achievements, sponsors, audience },
   narrator: [combate, logrosYCajas, plantas, miscelanea],
   tutorial, glossary, howToPlay,
   cinematics: { intro },                            // content/willy/cinematics (sesión de arte)
-  saveMode: 'checkpoint',                           // guardar solo en el Camerino
+  saveMode: 'checkpoint',                           // guardar solo en el Camerino; 'permadeath' si Sin repetición
   newGame(engine, seed, options) {
-    // options: dificultad y cosmético elegidos.
+    // options: dificultad, modo de eliminación y cosmético elegidos.
     // 1. Estado con Willy (castreño por defecto hasta el cásting) en la calle fija de la Planta 1.
     // 2. Sistemas: clock, meters (audiencia + 6 patrocinadores), narrator, lootPity, run.
   },
@@ -435,9 +471,9 @@ Cada fase termina con la aprobación del usuario. **Dep.** indica lo que necesit
 
 | Fase | Contenido | Dep. |
 |---|---|---|
-| **W0. Diseño** (esta) | Historia, prólogo, reglas, datos (razas, clases, 78 objetos, tablas, 90 logros, patrocinadores, audiencia, plantas, tutorial, glosario, 287 frases del Narrador), peticiones al motor | — |
+| **W0. Diseño** (hecha) | Historia, prólogo, reglas, datos (6 razas, 7 clases, 83 objetos, tablas, 102 logros, patrocinadores, audiencia, plantas, tutorial, glosario, 313 frases del Narrador), peticiones al motor | — |
 | **W1. Esqueleto** | `rulesets/willy` (atributos, d20, recursos, condiciones, tests); `game.ts`; preset de arte `ninja`; la calle fija de la Planta 1 jugable con movimiento | Fase 2 del motor (ganchos de turno, `preview`) |
-| **W2. Combate y entorno** | Ataque, empujar, caídas, superficies, 4 enemigos de la Planta 1, IA, sala de tutorial | Fases 2 y 3 del motor (combate, superficies, empujar, caídas) |
+| **W2. Combate y entorno** | Ataque, empujar, caídas, superficies, 4 enemigos de la Planta 1, IA, sala de tutorial, invocaciones del Ingeniero de 5G | Fases 2 y 3 del motor (combate, superficies, empujar, caídas); R13 (`spawnEntity`) |
 | **W3. Procedural** | Generador (R1) + 12 plantillas de Castro + validación con 500 semillas; reloj (R2) y derrumbe | R1, R2, R3 |
 | **W4. Concurso** | Audiencia y patrocinadores (R3), Narrador (R5), cajas de botín y su apertura (R8), inventario (R7) | R3, R5, R7, R8 |
 | **W5. Logros y perfil** | Evaluador (R4), perfil por navegador (R6), pantalla de logros | R4, R6 |

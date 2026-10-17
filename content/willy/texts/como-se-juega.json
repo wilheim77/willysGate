@@ -32,11 +32,11 @@
     },
     {
       "titulo": "El Camerino",
-      "texto": "Entre planta y planta: compra y vende con Maripuri, descansa con Paco y guarda la partida con Xelda. Si te eliminan, vuelves al último Camerino guardado."
+      "texto": "Entre planta y planta: compra y vende con Maripuri, descansa con Paco y guarda la partida con Xelda. Si te eliminan, en el modo Con repetición vuelves al último Camerino guardado; en Sin repetición, se acaba la temporada."
     },
     {
       "titulo": "¿Perdido?",
-      "texto": "En el menú de pausa tienes el glosario con todo explicado. Los consejos del Narrador se pueden apagar en Opciones. Y si algo no se entiende, pulsa «Enviar comentario»: nos ayuda mucho."
+      "texto": "En el menú de pausa tienes el glosario con todo explicado. Los consejos del Narrador se pueden apagar en Opciones. Y si algo no se entiende, díselo a quien te pasó el enlace: nos ayuda mucho."
     }
   ]
 }

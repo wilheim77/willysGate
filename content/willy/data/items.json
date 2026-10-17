@@ -106,6 +106,23 @@
         { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
       ] },
       "etiquetas": ["comida", "curacion"], "valor": 1 },
+    { "id": "soldador-de-estano", "nombre": "Soldador de estaño", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+      "descripcion": "La punta está a cuatrocientos grados. El mango, en teoría, no.",
+      "regla": "Golpe de 1d4 de fuego. Fuera de combate, repara 4 de vida a un autómata o antena adyacente.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "fuego" }
+      ] }, "valor": 4 },
+    { "id": "antena-plegable", "nombre": "Antena plegable", "rareza": "bronce", "tipo": "equipo", "ranura": "espalda", "inicial": true,
+      "descripcion": "Se despliega en la mochila como un paraguas. Los vecinos de Castro firmaron tres veces para que la quitara del balcón.",
+      "regla": "+1 Maña. Tus autómatas pierden la señal a 6 casillas en vez de a 4.",
+      "pasivo": [{ "stat": "man", "delta": 1 }, { "stat": "alcanceSenal", "delta": 2 }], "valor": 4 },
+    { "id": "bolsa-de-tornillos", "nombre": "Bolsa de tornillos sueltos", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 3,
+      "descripcion": "Sobraron del último montaje. Siempre sobran. Nadie sabe de dónde.",
+      "regla": "Un autómata o antena adyacente recupera 5 de vida. O lánzala (alcance 3): casillas de radio 1 con tornillos (como canicas).",
+      "usar": { "objetivo": "aliado", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [{ "type": "heal", "entityId": "$target", "amount": "5" }] },
+      "usoAlternativo": { "objetivo": "casilla", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$tile", "surface": "canicas", "radius": 1 }
+      ] }, "valor": 3 },
 
     { "id": "tirita-de-dibujos", "nombre": "Tirita de dibujos", "rareza": "bronce", "tipo": "consumible",
       "descripcion": "Con un dragoncito sonriente. Cura poco, pero anima mucho.",
@@ -446,6 +463,12 @@
       "regla": "Cosmético.", "desbloqueo": "logro:marisco-de-temporada", "valor": 0 },
     { "id": "aureola-de-favorito", "nombre": "Aureola de favorito del público", "rareza": "legendaria", "tipo": "cosmetico", "ranura": "aspecto",
       "descripcion": "Brilla con la luz serena de quien sabe que el público no le dejará morir. Todavía.",
-      "regla": "Cosmético. Brilla un poco (luz de radio 1, sin efecto en las reglas).", "desbloqueo": "logro:expediente-de-oro", "valor": 0 }
+      "regla": "Cosmético. Brilla un poco (luz de radio 1, sin efecto en las reglas).", "desbloqueo": "logro:expediente-de-oro", "valor": 0 },
+    { "id": "gorro-de-papel-de-aluminio", "nombre": "Gorro de papel de aluminio", "rareza": "plata", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Regalo de un espectador preocupado. El ingeniero se lo pone por cortesía. Dice que la cobertura mejora.",
+      "regla": "Cosmético.", "desbloqueo": "logro:papel-de-aluminio", "valor": 0 },
+    { "id": "chaleco-de-operadora", "nombre": "Chaleco de operadora", "rareza": "oro", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Con muchos bolsillos y el logo de una compañía telefónica que ya no existe. Como ninguna, ahora.",
+      "regla": "Cosmético.", "desbloqueo": "logro:despliegue-nacional", "valor": 0 }
   ]
 }

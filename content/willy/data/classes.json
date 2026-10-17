@@ -294,6 +294,81 @@
       "desventaja": { "id": "voto-de-silencio", "nombre": "Voto de silencio", "texto": "No hablas. En los diálogos solo tienes opciones de gestos, que a veces se entienden mal. Y no puedes «Hacer el ganso» con chistes: solo con mímica (la mitad de audiencia).", "mecanica": { "dialogo": "soloGestos", "multiplicador": { "hacerElGanso": 0.5 } } },
       "ventajas": ["mimica-convincente", "pared-de-carga", "publico-de-calle", "silencio-incomodo"],
       "fraseNarrador": "Un mimo. Por fin un concursante que no me interrumpe."
+    },
+    {
+      "id": "ingeniero-5g",
+      "nombre": "Ingeniero de 5G",
+      "resumen": "Instala antenas, construye autómatas y dispara rayos de banda ancha. Y lleva años explicando que no, el 5G no controla mentes.",
+      "descripcion": "Venía de montar una antena en el tejado de la lonja cuando se acabó el mundo. Media comarca le echó la culpa. Él sigue sin entender qué tiene que ver la cobertura con el apocalipsis, pero ya no discute: construye.",
+      "atributos": { "man": 3, "agu": 1, "car": -1 },
+      "objetosIniciales": ["soldador-de-estano", "antena-plegable", "bolsa-de-tornillos"],
+      "invocaciones": {
+        "automata-repetidor": {
+          "nombre": "Autómata repetidor",
+          "genero": "m",
+          "descripcion": "Un cubo de chapa con patas, una antena y una luz verde que parpadea. Obedece. Casi siempre.",
+          "spriteId": "automata-repetidor",
+          "vida": 10, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 4,
+          "duracion": "finDeCombate",
+          "ia": "agresivo",
+          "control": "jugador",
+          "rasgos": ["constructo", "sin-experiencia: lo que elimina da XP a Willy", "fuera de combate se pliega y vuelve a la mochila"],
+          "etiquetas": ["automata", "constructo"]
+        },
+        "antena-repetidora": {
+          "nombre": "Antena repetidora",
+          "genero": "f",
+          "descripcion": "Un mástil de tres metros plantado en mitad de la mazmorra. Sin licencia de obra.",
+          "spriteId": "antena-repetidora",
+          "vida": 12, "def": 10, "movimiento": 0,
+          "duracion": { "turnos": 3 },
+          "ia": "torreta",
+          "control": "ia-aliada",
+          "rasgos": ["inmóvil", "al empezar el turno de Willy lanza un Rayo 5G gratis al enemigo más cercano a 4 casillas o menos"],
+          "etiquetas": ["constructo", "objeto"]
+        }
+      },
+      "habilidades": [
+        {
+          "id": "construir-automata", "nombre": "Construir autómata", "nivelPersonaje": 1, "coste": { "acciones": 2, "energia": 2 },
+          "texto": "Montas un Autómata repetidor en una casilla libre adyacente. Lo controlas tú, actúa justo después de tu turno y dura hasta el final del combate. Máximo 1 a la vez.",
+          "efectos": [{ "type": "spawnEntity", "template": "automata-repetidor", "at": "$tile", "owner": "$self", "controller": "$selfController", "factionId": "$selfFaction", "duration": "combat", "max": 1 }],
+          "niveles": { "2": "Vida 14 y golpe 1d8", "3": "Máximo 2 autómatas a la vez", "4": "Al ser destruidos explotan: 1d6 de rayo en radio 1", "5": "Maestría: «Torre de telefonía»: el primer autómata de cada combate es grande (vida 30, golpe 2d6, empuja 1)" }
+        },
+        {
+          "id": "rayo-5g", "nombre": "Rayo 5G", "nivelPersonaje": 1, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Rayo en línea recta de 4 casillas: 1d8 de rayo a todo lo que atraviesa. Si toca agua, la electrifica.",
+          "efectos": [
+            { "type": "damage", "entityId": "$each", "amount": "1d8", "element": "rayo", "area": { "linea": 4 } },
+            { "type": "spawnSurface", "at": "$line", "surface": "rayo", "soloSobre": "agua" }
+          ],
+          "niveles": { "2": "Línea de 5", "3": "Rebota en un autómata y sigue 3 casillas más en otra dirección", "4": "1d10", "5": "Maestría: «Ancho de banda»: línea de 3 casillas de ancho" }
+        },
+        {
+          "id": "cobertura-total", "nombre": "Cobertura total", "nivelPersonaje": 1, "pasiva": true,
+          "texto": "Tus autómatas a 4 casillas o menos de ti tienen +1 a acertar y al daño. Más lejos, pierden la señal y quedan Mareados.",
+          "niveles": {}
+        },
+        {
+          "id": "actualizacion-de-firmware", "nombre": "Actualización de firmware", "nivelPersonaje": 3, "coste": { "acciones": 1, "energia": 1 },
+          "texto": "Un autómata o antena a 4 casillas recupera 6 de vida y queda Animado 3 turnos.",
+          "niveles": { "2": "Recupera 9", "3": "También le da 1 acción extra este turno", "4": "Afecta a todos tus autómatas", "5": "Maestría: «Versión beta»: el autómata actualizado gana un rasgo al azar (vuela, guardia o embestida) hasta el final del combate" }
+        },
+        {
+          "id": "antena-repetidora", "nombre": "Antena repetidora", "nivelPersonaje": 6, "coste": { "acciones": 1, "energia": 2 },
+          "texto": "Plantas una Antena repetidora a 3 casillas o menos durante 3 turnos. Cada turno dispara sola un Rayo 5G al enemigo más cercano. Cuenta como muro para los choques.",
+          "efectos": [{ "type": "spawnEntity", "template": "antena-repetidora", "at": "$tile", "owner": "$self", "controller": "ai", "factionId": "$selfFaction", "duration": { "turns": 3 }, "max": 1 }],
+          "niveles": { "2": "4 turnos", "3": "Tus autómatas a 3 casillas de la antena nunca pierden la señal", "4": "Dos antenas a la vez", "5": "Maestría: la antena, al desmontarse, lanza un rayo en las cuatro direcciones" }
+        },
+        {
+          "id": "despliegue-masivo", "nombre": "Despliegue masivo", "nivelPersonaje": 9, "coste": { "acciones": 2, "energia": 4 },
+          "texto": "Montas tres autómatas a la vez en casillas libres a 2 o menos, aunque superes el máximo. Duran 3 turnos.",
+          "niveles": { "2": "Duran 4 turnos", "3": "Cuatro autómatas", "4": "Aparecen Animados", "5": "Maestría: al aparecer, cada uno lanza un Rayo 5G gratis" }
+        }
+      ],
+      "desventaja": { "id": "cobertura-irregular", "nombre": "Cobertura irregular", "texto": "En cada planta, una de cada cuatro salas es «zona sin cobertura» (se ve en el mapa con un icono de antena tachada). Ahí tus habilidades de 5G cuestan 1 de energía más y tus autómatas están Mareados. Además, Mamá Clementina empieza la partida con −10 de afinidad: «ha leído cosas en internet».", "mecanica": { "salasSinCoberturaPct": 25, "enSinCobertura": { "costeEnergiaHabilidades5g": 1, "automatas": "mareado" }, "afinidadInicial": { "clementina": -10 } } },
+      "ventajas": ["fibra-optica", "baja-latencia", "ancho-de-banda", "tecnico-de-guardia"],
+      "fraseNarrador": "Ingeniero de 5G. Media galaxia cree que tu antena tiene la culpa del fin del mundo. La otra media no sabe qué es una antena. Hala, a construir."
     }
   ],
   "ventajas": {
@@ -334,7 +409,11 @@
       "mimica-convincente": "Los gestos en diálogo se entienden siempre bien.",
       "pared-de-carga": "Los choques contra tus paredes hacen +1d6.",
       "publico-de-calle": "Hacer el ganso da audiencia completa.",
-      "silencio-incomodo": "Los enemigos que empiezan el turno junto a ti tienen −2 a todo."
+      "silencio-incomodo": "Los enemigos que empiezan el turno junto a ti tienen −2 a todo.",
+      "fibra-optica": "Tus autómatas tienen +6 de vida.",
+      "baja-latencia": "Tus autómatas actúan antes que tú en vez de después, y con +1 de movimiento.",
+      "ancho-de-banda": "Rayo 5G no gasta energía una vez por combate.",
+      "tecnico-de-guardia": "Las zonas sin cobertura ya no te afectan; Mamá Clementina deja de desconfiar (afinidad a 0 si estaba por debajo)."
     }
   }
 }
