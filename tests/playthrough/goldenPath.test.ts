@@ -5,11 +5,13 @@ import {
   SYSTEM_ISSUER,
   dialogueChoices,
   dialogueOf,
+  evaluateCondition,
   nextAiCommand,
   zonesOf,
   type BaseCommand,
   type ChooseOptionCommand,
   type DialogueTree,
+  type DialogueWhen,
   type GameState,
   type MapZone,
   type StartDialogueCommand,
@@ -37,6 +39,24 @@ import { buildActWorld, makeEngine } from './setup';
 const MAX_TOTAL_STEPS = 6000;
 const MAX_STEPS_PER_TREE = 150;
 
+interface Trigger {
+  id: string;
+  when: DialogueWhen;
+  dialogue: string;
+  partner?: string;
+  map?: string;
+}
+
+/** Scripted story beats the game offers by itself once their condition holds (D1 through
+ *  the epilogue): content/intereses/triggers.json, read directly since it's plain data -
+ *  the actual auto-opening is a client/controller concern (src/), out of scope here, but
+ *  the harness can just open them itself the moment their condition is met, same as a real
+ *  idle-out-of-combat check would. */
+function triggers(): Trigger[] {
+  const raw = JSON.parse(readFileSync(join(import.meta.dirname, '..', '..', 'content', 'intereses', 'triggers.json'), 'utf8')) as { triggers: Trigger[] };
+  return raw.triggers;
+}
+
 function criticalFlags(): string[] {
   const raw = JSON.parse(readFileSync(join(import.meta.dirname, '..', '..', 'content', 'intereses', 'flags.json'), 'utf8')) as Record<string, unknown>;
   return Object.entries(raw)
@@ -53,7 +73,10 @@ function dialogueTagsOn(state: GameState, engine: ReturnType<typeof makeEngine>)
   const scened = (zonesOf(state, 'scenes') as MapZone[])
     .map((z) => String(z.properties.dialogue))
     .filter((id) => !id.startsWith('TODO:') && engine.content.dialogues[id]);
-  return [...new Set([...tagged, ...scened])];
+  const triggered = triggers()
+    .filter((t) => (!t.map || t.map === state.map.id) && evaluateCondition(dnd5e, state, 'hero', t.when) && engine.content.dialogues[t.dialogue])
+    .map((t) => t.dialogue);
+  return [...new Set([...tagged, ...scened, ...triggered])];
 }
 
 /** Picks the available choice that sets the most not-yet-seen critical flags, by actually
@@ -160,8 +183,18 @@ describe('golden path: a fresh game, driven as far through the act as it can go'
     for (let hop = 0; hop < 20 && totalSteps < MAX_TOTAL_STEPS && stall < 3; hop++) {
       const beforeTrees = openedTrees.size;
       const beforeMaps = visitedMaps.size;
-      // Run every story dialogue tagged on the current map, at least once.
-      for (const treeId of dialogueTagsOn(state, engine)) runTree(treeId);
+      // Run every story dialogue tagged on the current map, at least once each - but a
+      // dialogue can itself travel elsewhere (e.g. "noche_antorchas" sends the party up to
+      // the abbey), so recompute the list fresh each time and stop this pass the moment the
+      // map underneath it changes (the trees meant for the OLD map are not this map's any
+      // more; the new map's will be picked up on the next hop).
+      for (;;) {
+        const mapBefore = state.map.id;
+        const todo = dialogueTagsOn(state, engine).filter((id) => !openedTrees.has(id));
+        if (!todo.length) break;
+        runTree(todo[0]!);
+        if (state.map.id !== mapBefore) break;
+      }
 
       // Then try to leave through whichever real exit is both unblocked and goes somewhere new.
       const exits = (zonesOf(state, 'exits') as MapZone[]).filter((z) => {
@@ -173,14 +206,11 @@ describe('golden path: a fresh game, driven as far through the act as it can go'
       const exit = fresh ?? exits[0];
       if (!exit) break; // nowhere unblocked to go; this run has gone as far as it can.
 
-      const target = { x: exit.x, y: exit.y };
-      let moveResult: ReturnType<typeof engine.apply>;
-      expect(() => (moveResult = engine.apply(state, { type: 'move', issuer: 'player:1', entityId: 'hero', to: target } as BaseCommand & { entityId: string; to: typeof target })), `move to exit "${exit.name}" threw`).not.toThrow();
-      if (!moveResult!.ok) {
-        log.push(`cannot reach exit "${exit.name}" (${moveResult!.error.code}) - stopping`);
-        break;
-      }
-      state = moveResult!.state;
+      // Teleport onto the exit tile rather than pathfinding there: whether every exit is
+      // actually walkable from wherever the party happens to be is tests/content/
+      // maps.test.ts's job (and actTravel.test.ts's), not this soak's - here we only care
+      // about the dialogue/flag/travel pipeline once standing on the exit.
+      state = { ...state, entities: { ...state.entities, hero: { ...state.entities.hero!, position: { x: exit.x, y: exit.y } } } };
 
       const travelCmd: BaseCommand & { entityId: string; mapId: string; spawn: string } = {
         type: 'travel',
