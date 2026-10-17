@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 27,
+ "nextobjectid": 29,
  "properties": [
   {
    "name": "name",
@@ -192,6 +192,18 @@
     },
     {
      "id": 11,
+     "name": "entry-cripta",
+     "type": "",
+     "point": true,
+     "x": 816,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 12,
      "name": "barrel_oil-1",
      "type": "",
      "point": true,
@@ -203,7 +215,7 @@
      "visible": true
     },
     {
-     "id": 12,
+     "id": 13,
      "name": "barrel_oil-2",
      "type": "",
      "point": true,
@@ -215,7 +227,7 @@
      "visible": true
     },
     {
-     "id": 13,
+     "id": 14,
      "name": "crate-1",
      "type": "",
      "point": true,
@@ -227,7 +239,7 @@
      "visible": true
     },
     {
-     "id": 14,
+     "id": 15,
      "name": "crate-2",
      "type": "",
      "point": true,
@@ -239,7 +251,7 @@
      "visible": true
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "barrel-1",
      "type": "",
      "point": true,
@@ -251,7 +263,7 @@
      "visible": true
     },
     {
-     "id": 16,
+     "id": 17,
      "name": "crate-3",
      "type": "",
      "point": true,
@@ -263,7 +275,7 @@
      "visible": true
     },
     {
-     "id": 17,
+     "id": 18,
      "name": "crate-4",
      "type": "",
      "point": true,
@@ -287,7 +299,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 18,
+     "id": 19,
      "name": "brasero-sala-1",
      "type": "",
      "point": true,
@@ -326,7 +338,7 @@
      ]
     },
     {
-     "id": 19,
+     "id": 20,
      "name": "brasero-sala-2",
      "type": "",
      "point": true,
@@ -365,7 +377,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "antorcha-claustro-1",
      "type": "",
      "point": true,
@@ -404,7 +416,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 22,
      "name": "antorcha-claustro-2",
      "type": "",
      "point": true,
@@ -443,7 +455,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 23,
      "name": "antorcha-puerta-1",
      "type": "",
      "point": true,
@@ -482,7 +494,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 24,
      "name": "antorcha-puerta-2",
      "type": "",
      "point": true,
@@ -521,7 +533,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 25,
      "name": "vela-cripta",
      "type": "",
      "point": true,
@@ -600,7 +612,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 25,
+     "id": 26,
      "name": "a-plaza",
      "type": "",
      "x": 352,
@@ -621,6 +633,34 @@
        "value": "entry-abadia"
       }
      ]
+    },
+    {
+     "id": 27,
+     "name": "escalera-cripta",
+     "type": "",
+     "x": 832,
+     "y": 32,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "mina"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-cripta"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "TODO:llave_cripta"
+      }
+     ]
     }
    ]
   },
@@ -635,7 +675,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 26,
+     "id": 28,
      "name": "audiencia",
      "type": "",
      "x": 384,
