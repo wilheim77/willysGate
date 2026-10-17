@@ -623,7 +623,7 @@
       {
        "name": "requiresFlag",
        "type": "string",
-       "value": "TODO:d2_resuelta"
+       "value": "d2_resuelta"
       }
      ]
     }
@@ -956,7 +956,7 @@
       {
        "name": "dialogue",
        "type": "string",
-       "value": "TODO:galeria_sellada"
+       "value": "galeria_sellada"
       },
       {
        "name": "speaker",

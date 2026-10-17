@@ -130,6 +130,8 @@ O posadera (24,16)
 P guardia_abadia (23,4)
 Q guardia_baron-1 (25,5)
 props: gallows-1, crate-1, crate-2, barrel-1, barrel_oil-1, well-1, barrel-2, crate-3
+scenes noche-antorchas (1,4 25x15) {"dialogue":"noche_antorchas","speaker":"nella","once":true,"requiresFlag":"acceso_contrabando","unlessFlag":"d1_resuelto"}
+scenes d1-horca (1,4 25x15) {"dialogue":"d1_horca","speaker":"nella","once":true,"requiresFlag":"d1_cuadrilla"}
 scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"gate":true,"protects":"a-calles,a-escorial,a-abadia","fight":"fanatico_pala-1,fanatico_pala-2,fanatico_pala-3"}
 ```
 
@@ -158,8 +160,8 @@ W.===G=======..=======I===.W   #12222222222200222222222221#
 WWWWWWWWWWWWW//WWWWWWWWWWWWW   #############00#############
 RRRRRRRRRRRR*RR*RRRRRRRRRRRR   0000000000000000000000000000
 RRRRRRRRRRRxRRRJRxRRRRRRRRRR   0000000000000000000000000000
-WRRRRRRRRRRRRARRRRRRRRRRRRRW   #00000000000000000000000000#
-WWRRRRRRRRRRRRRRRRRRRRRRRRWW   ##000000000000000000000000##
+WRRRRRRRLRRRRARRRRRMRRRRRRRW   #00000000000000000000000000#
+WWRRRRRRRRORRQNRRPRRRRRRRRWW   ##000000000000000000000000##
 WWWWWWWWWWWEEEEEEWWWWWWWWWWW   ###########000000###########
 E a-plaza (11,21) -> plaza:entry-abadia
 E escalera-cripta (26,1) -> mina:entry-cripta
@@ -172,7 +174,16 @@ G guardia_baron-3 (5,15)
 I guardia_baron-4 (22,15)
 J guardia_baron_sargento-1 (15,18)
 K entry-cripta (25,3)
+L minero_cuadrilla-1 (8,19)
+M minero_cuadrilla-2 (19,19)
+N minero_cuadrilla-3 (14,20)
+O hulla-1 (10,20)
+P hulla-2 (17,20)
+Q odda (13,20)
 props: tapestry_crossbow-1, tapestry-1, door-cripta, barrel_oil-1, barrel_oil-2, crate-1, crate-2, barrel-1, crate-3, crate-4
+encounter d1-asalto: guardia_baron-1,guardia_baron-2,guardia_baron-3,guardia_baron-4,guardia_baron_sargento-1,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
+encounter d1-defensa: odda,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
+scenes d1-abadia-final (7,1 16x7) {"dialogue":"d1_abadia_final","speaker":"mazo","once":true,"requiresFlag":"d1_abadia"}
 scenes audiencia (12,4 4x3) {"dialogue":"audiencia_abadia","speaker":"mazo","once":true}
 ```
 
@@ -272,6 +283,7 @@ K sinpaga_cuchillero-3 (18,16)
 L sinpaga_bruto-1 (15,19)
 M callado-1 (31,9)
 props: barrel_oil-1, barrel_oil-2, oil_cart-1, crate-3, barrel-1, campfire-1, door-bocamina, well-1
+scenes callado-pozo (30,7 3x4) {"dialogue":"callado_pozo","speaker":"callado-1","once":true}
 scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enmascarado-1","once":true,"gate":true,"protects":"pozo-del-ahorcado,bocamina"}
 ```
 
@@ -334,7 +346,7 @@ props: fuse_charges-1, remains_forty-1, mine_wagon-1, mine_wagon_ore-1, barrel_o
 encounter callados-andamios: callado-2,callado-3,callado-4,callado_palido-1
 encounter callados-cripta: callado-5,callado-6
 encounter emboscada-sellada: callado-7,callado-8,callado_palido-2
-scenes galeria-sellada (32,12 3x5) {"dialogue":"TODO:galeria_sellada","speaker":"garran","once":true}
+scenes galeria-sellada (32,12 3x5) {"dialogue":"galeria_sellada","speaker":"garran","once":true}
 ```
 
 ### `boveda`
@@ -377,7 +389,7 @@ G callado-11 (10,18)
 I callado_palido-3 (19,12)
 props: resonator-1, resonator-2, resonator-3, resonator-4, powder_keg-1, powder_keg-2, powder_keg-3, lever-polea, pulley-1, inscription-1
 encounter brea: absalon,ivo,callado-9,callado-10,callado-11,callado_palido-3
-scenes brea-habla (3,10 4x5) {"dialogue":"TODO:boveda_brea","speaker":"absalon","once":true}
-collapse derrumbe (13,9 5x6) {"height":0,"terrain":"vault","trigger":"TODO:brea_vuela_polvorin"}
-collapse derrumbe-borde (18,9 1x6) {"height":1,"terrain":"vault","trigger":"TODO:brea_vuela_polvorin"}
+scenes brea-habla (3,10 4x5) {"dialogue":"boveda_brea","speaker":"absalon","once":true}
+collapse derrumbe (13,9 5x6) {"height":0,"terrain":"vault","trigger":"brea_vuela_polvorin"}
+collapse derrumbe-borde (18,9 1x6) {"height":1,"terrain":"vault","trigger":"brea_vuela_polvorin"}
 ```

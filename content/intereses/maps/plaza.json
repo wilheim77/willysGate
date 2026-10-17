@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 34,
+ "nextobjectid": 36,
  "properties": [
   {
    "name": "name",
@@ -699,6 +699,77 @@
    "objects": [
     {
      "id": 33,
+     "name": "noche-antorchas",
+     "type": "",
+     "x": 32,
+     "y": 128,
+     "width": 800,
+     "height": 480,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "noche_antorchas"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "nella"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "acceso_contrabando"
+      },
+      {
+       "name": "unlessFlag",
+       "type": "string",
+       "value": "d1_resuelto"
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "name": "d1-horca",
+     "type": "",
+     "x": 32,
+     "y": 128,
+     "width": 800,
+     "height": 480,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "d1_horca"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "nella"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_cuadrilla"
+      }
+     ]
+    },
+    {
+     "id": 35,
      "name": "juicio-anselmo",
      "type": "",
      "x": 0,

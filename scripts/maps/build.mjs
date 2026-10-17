@@ -105,7 +105,8 @@ export function buildMap(src) {
   const group = (name, objects) => ({ id: layerId++, name, type: 'objectgroup', draworder: 'topdown', opacity: 1, visible: true, x: 0, y: 0, objects });
   const layers = [
     { id: layerId++, name: 'ground', type: 'tilelayer', width, height, x: 0, y: 0, opacity: 1, visible: true, data },
-    group('spawns', Object.entries(src.spawns ?? {}).map(([name, at]) => point(name, at))),
+    // A spawn is [x, y] or { at: [x, y], ...properties } (requiresFlag / unlessFlag / requiresAnyFlag).
+    group('spawns', Object.entries(src.spawns ?? {}).map(([name, s]) => (Array.isArray(s) ? point(name, s) : point(name, s.at, (({ at, ...p }) => p)(s))))),
     group('lights', (src.lights ?? []).map((l) => point(l.name, l.at, { radius: l.radius ?? 4, intensity: l.intensity ?? 1, color: l.color ?? '#ff9a3c', flicker: l.flicker ?? 0.15, ...(l.prop ? { prop: l.prop } : {}) }))),
     group('encounters', (src.encounters ?? []).map((e) => rect(e.name, e.rect, { participants: e.participants.join(','), ...(e.props ?? {}) }))),
     group('surfaces', (src.surfaces ?? []).map((s) => rect(s.name, s.rect, { surface: s.surface }))),

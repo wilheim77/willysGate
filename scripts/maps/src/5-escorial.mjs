@@ -99,6 +99,7 @@ export default {
   // covers both ways in from the town (plaza and streets), wall to wall.
   zones: {
     scenes: [
+      { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true } },
       { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },
     ],
   },
