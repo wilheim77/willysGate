@@ -21,14 +21,14 @@
 | R10 | ✅ **Hecho en el motor** (`engine/world.ts`, comando `travel`). Cambio de mapa conservando entidades | `engine/` | W3 | *Intereses* (pueblo ↔ mina) |
 | R11 | Eventos con causa y campos ricos | `engine/` + rulesets | W2 | Logros y tutorial de cualquier juego |
 | R12 | ✅ **Hecho** (`deriveSeed`). RNG derivados por propósito | `engine/rng.ts` | W3 | Todos |
-| R13 | Efectos adicionales, macros de ruleset e **invocaciones** (`spawnEntity` con dueño, controlador, duración e IA) | `engine/effects.ts` + IA | W2-W4 | Todos (refuerzos de jefes, invocaciones de clérigo en *Intereses*) |
+| R13 | ✅ **Invocaciones hechas y usadas** (`spawnEntity`/`despawnEntity`). Efectos adicionales, macros de ruleset e **invocaciones** (`spawnEntity` con dueño, controlador, duración e IA) | `engine/effects.ts` + IA | W2-W4 | Todos (refuerzos de jefes, invocaciones de clérigo en *Intereses*) |
 | R14 | ✅ **Hecho** (`markers` y propiedades del mapa). Capa `markers` en el cargador de Tiled | `engine/tiled.ts` | W3 | *Intereses* (interactuables) |
 | R15 | **Salto** (mover ignorando `maxStep` y huecos dentro de un presupuesto) y **trazado con rebote** | `engine/pathfinding.ts` + `engine/los.ts` | W2 | Pícaros y monjes de *Intereses*, saltos de vampiros |
 | R16 | **Generador por tablas y plantillas** (PNJ, nombres, frases) con unicidad | `engine/procgen/tables.ts` | W4 | Bandidos y aldeanos de *Intereses*, cazadores de vampiros |
 | R17 | ✅ **Hecho y usado** (`Ruleset.onCollision`; «¡Strike!» en *Willy*). `onCollision` del ruleset en los empujones (choques en cadena, «¡Strike!») | `engine/effects.ts` | W2 | *Intereses* (empujones) |
 | R18 | ✅ **Hecho y usado** (`intoVoid`, `Ruleset.onVoid`). Empujar **al vacío**: casillas `void`/foso que se pueden atravesar al ser empujado | `engine/effects.ts` (`simulatePush`) | W2 | Fosos de la mina de *Intereses* |
 | R19 | ✅ **Hecho y usado** (subida de nivel en `rulesets/willy/progression.ts`). Efecto `modifyStat` (subir atributos y nivel) | `engine/effects.ts` | W5 | Subida de nivel de *Intereses* |
-| R20 | `SurfaceDef.blocksSight` (vapor) y gancho `onRoundEnd` (cintas transportadoras, mareas) | `engine/surfaces.ts`, `engine/los.ts`, `engine/combat.ts` | W3 | Niebla y humo en *Intereses* |
+| R20 | ✅ en parte: `blocksSight`, `onTurnEnd` y `onCombatStart` hechos y usados; falta `onRoundEnd`. `SurfaceDef.blocksSight` (vapor) y gancho `onRoundEnd` (cintas transportadoras, mareas) | `engine/surfaces.ts`, `engine/los.ts`, `engine/combat.ts` | W3 | Niebla y humo en *Intereses* |
 
 Ninguna mete reglas de *Willy* ni de d20 en `engine/`.
 

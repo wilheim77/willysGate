@@ -1,0 +1,369 @@
+{
+  "$comment": "Scene 3. Lisandro Fuss (elf) in his pawnshop. The bar on the counter gives the new-silver clue without a roll. Elves get advantage reading him; dwarves get a pressure option and worse prices.",
+  "id": "lisandro_fuss",
+  "start": "tienda",
+  "nodes": {
+    "tienda": {
+      "text": "La casa de empeños es la única tienda de Hondonegra con los cristales limpios. Detrás del mostrador, un elfo de edad imposible pesa un anillo de boda en una balanza de oro. Lo pesa dos veces. A la segunda pesa menos.",
+      "choices": [
+        {
+          "text": "(Acercarse al mostrador.)",
+          "when": {
+            "all": [
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "elf"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "dwarf"
+                  }
+                }
+              }
+            ]
+          },
+          "next": "hola"
+        },
+        {
+          "text": "[Elfo] (Acercarse al mostrador.)",
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "next": "hola_elfo"
+        },
+        {
+          "text": "[Enano] (Acercarse al mostrador.)",
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "next": "hola_enano"
+        },
+        {
+          "text": "Irse."
+        }
+      ]
+    },
+    "hola": {
+      "speaker": "lisandro",
+      "text": "Lisandro Fuss, para servirles. Compro, vendo, presto y olvido. Lo último cobra aparte.",
+      "next": "hub"
+    },
+    "hola_elfo": {
+      "speaker": "lisandro",
+      "text": "Vaya. Por fin alguien con quien se puede hablar a largo plazo. Lisandro Fuss. Siéntese, si quiere; aquí las sillas son para los que no tienen prisa.",
+      "next": "hub"
+    },
+    "hola_enano": {
+      "speaker": "lisandro",
+      "text": "Un enano. Le advierto que en esta casa los intereses se calculan por siglos de rencor. Para usted, tarifa especial. Lisandro Fuss, a su servicio, que no a sus órdenes.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "lisandro_desprecia_enano",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "lisandro",
+      "text": "¿En qué puedo ayudarles?",
+      "choices": [
+        {
+          "id": "negocio",
+          "text": "¿Cómo va el negocio?",
+          "once": true,
+          "next": "negocio"
+        },
+        {
+          "id": "banco",
+          "text": "Trabajamos para la Casa Valcárcel.",
+          "once": true,
+          "next": "banco"
+        },
+        {
+          "id": "mostrador",
+          "text": "(Mirar lo que hay sobre el mostrador.)",
+          "once": true,
+          "next": "mostrador"
+        },
+        {
+          "id": "mirar",
+          "text": "(Observarle mientras habla de la plata.)",
+          "once": true,
+          "when": {
+            "all": [
+              {
+                "flag": "lisandro_hablo_negocio"
+              },
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "elf"
+                  }
+                }
+              }
+            ]
+          },
+          "check": {
+            "check": "insight",
+            "dc": 14,
+            "success": "mirar_ok",
+            "failure": "mirar_mal"
+          }
+        },
+        {
+          "id": "mirar_elfo",
+          "text": "[Elfo] (Observarle: entre elfos, los gestos se leen mejor.)",
+          "once": true,
+          "when": {
+            "all": [
+              {
+                "flag": "lisandro_hablo_negocio"
+              },
+              {
+                "rule": "race",
+                "params": {
+                  "is": "elf"
+                }
+              }
+            ]
+          },
+          "check": {
+            "check": "insight",
+            "dc": 14,
+            "success": "mirar_ok",
+            "failure": "mirar_mal",
+            "situational": [
+              "advantage"
+            ]
+          }
+        },
+        {
+          "id": "bisabuelo",
+          "text": "[Elfo] Conocí al bisabuelo del barón. Debía dinero.",
+          "once": true,
+          "when": {
+            "all": [
+              {
+                "rule": "race",
+                "params": {
+                  "is": "elf"
+                }
+              },
+              {
+                "flag": "elfo_conocia_bisabuelo"
+              }
+            ]
+          },
+          "next": "bisabuelo"
+        },
+        {
+          "id": "apretar",
+          "text": "[Enano] Sé lo que cobra tu gente por un préstamo. Mi gente cobra por otras cosas, y no acepta pagarés.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "check": {
+            "check": "intimidation",
+            "dc": 14,
+            "success": "apretar_ok",
+            "failure": "apretar_mal",
+            "situational": [
+              "advantage"
+            ]
+          }
+        },
+        {
+          "id": "robo",
+          "text": "Parece nervioso, Lisandro.",
+          "once": true,
+          "when": {
+            "flag": "lisandro_sabe_robo"
+          },
+          "next": "robo"
+        },
+        {
+          "id": "prestamo",
+          "text": "Necesito un préstamo.",
+          "once": true,
+          "next": "prestamo"
+        },
+        {
+          "text": "Nada más. Buenas tardes."
+        }
+      ]
+    },
+    "negocio": {
+      "speaker": "lisandro",
+      "text": "Bien, gracias. En los pueblos que se mueren el dinero cambia mucho de manos. Es justamente por eso que se mueren.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "lisandro_hablo_negocio",
+          "value": true
+        }
+      ],
+      "next": "negocio_2"
+    },
+    "negocio_2": {
+      "speaker": "lisandro",
+      "text": "Compro lo que les queda: alianzas, herramientas, la plata de la abuela. A precio justo. El precio justo es el que acepta quien tiene hambre.",
+      "next": "hub"
+    },
+    "banco": {
+      "speaker": "lisandro",
+      "text": "Lo sé. Todo el pueblo lo sabe. Y yo un poco antes, por oficio. Les deseo suerte con el barón: es un hombre encantador que no ha pagado nada en su vida, y lo hace con mucho estilo.",
+      "next": "hub"
+    },
+    "mostrador": {
+      "text": "Sobre un paño de terciopelo hay una barra de plata del tamaño de un dedo. No tiene marca de ceca. Brilla como si la hubieran fundido ayer. Lisandro la tapa con el paño, sin prisa, como quien tapa una tos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_nueva",
+          "value": true
+        }
+      ],
+      "next": "mostrador_2"
+    },
+    "mostrador_2": {
+      "speaker": "lisandro",
+      "text": "Material antiguo. De familia. No está a la venta.",
+      "next": "hub"
+    },
+    "mirar_ok": {
+      "text": "Cuando habla de la plata, Lisandro no mira la plata: mira hacia la ventana que da a la escombrera, hacia el Pozo del Ahorcado. Es la mirada de quien espera una entrega.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_pozo",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "lisandro_sospechoso",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "mirar_mal": {
+      "text": "Lisandro sonríe con seis siglos de práctica. Lees en su cara exactamente lo que él ha decidido que leas.",
+      "next": "hub"
+    },
+    "bisabuelo": {
+      "speaker": "lisandro",
+      "text": "¿Al bisabuelo Mazo? Yo le presté al abuelo. Esta familia es una inversión a largo plazo, como un roble. Se planta, se espera y un día se tala.",
+      "next": "bisabuelo_2"
+    },
+    "bisabuelo_2": {
+      "speaker": "lisandro",
+      "text": "Entre nosotros, que tenemos tiempo: este valle va a dar mucho más de lo que el barón imagina. Mucho más. Cuando acabe esto, venga a verme. A los que esperan siempre les queda algo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_lisandro_sabe",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "lisandro_ofrece_trato",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "apretar_ok": {
+      "speaker": "lisandro",
+      "text": "No hace falta ponerse… mineral. Pregunte. Le diré lo que pueda. La plata de mi mostrador llega de noche y no la trae nadie con quien yo hable. ¿Contento? Ahora salga de mi tienda antes de que empiece a calcularle intereses por ocuparla.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_lisandro_sabe",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "lisandro_sospechoso",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "apretar_mal": {
+      "speaker": "lisandro",
+      "text": "Qué ruido hacen los enanos cuando amenazan. Igual que cuando talan. Su préstamo, si algún día lo necesita, irá al treinta por ciento.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "lisandro_ofendido",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "robo": {
+      "speaker": "lisandro",
+      "text": "Alguien ha entrado en mi trastienda. Alguien con botas y sin delicadeza. No acuso a nadie. Apunto. Como su contable.",
+      "next": "robo_2"
+    },
+    "robo_2": {
+      "speaker": "dorotea",
+      "text": "Le apunto que me apunta, señor Fuss.",
+      "next": "hub"
+    },
+    "prestamo": {
+      "speaker": "lisandro",
+      "text": "Veinte coronas, a devolver con lo que usted cobre. Al quince por ciento. Al treinta, si es usted enano o me ha caído mal, que suele coincidir.",
+      "choices": [
+        {
+          "text": "Acepto.",
+          "when": {
+            "notFlag": "deuda_con_lisandro"
+          },
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": 20
+            },
+            {
+              "type": "setFlag",
+              "flag": "deuda_con_lisandro",
+              "value": true
+            }
+          ],
+          "next": "prestamo_si"
+        },
+        {
+          "text": "No, gracias.",
+          "next": "hub"
+        }
+      ]
+    },
+    "prestamo_si": {
+      "speaker": "lisandro",
+      "text": "Firme aquí. Y aquí. Y aquí, que es donde dice que lo ha leído. No lo ha leído, pero así consta.",
+      "next": "hub"
+    }
+  }
+}

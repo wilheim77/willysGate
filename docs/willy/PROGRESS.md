@@ -6,7 +6,8 @@
 
 - **Fase W0, Diseño:** **completada y aprobada con cambios** (2026-10-17). Ver «Decisiones del usuario».
 - La premisa la definió el usuario: concurso galáctico retransmitido, 5 plantas con reloj, cásting LitRPG, audiencia, patrocinadores, cajas de botín, logros y Narrador.
-- **Ruleset `rulesets/willy/`:** hito 1 (núcleo + Butanero, Funcionario, Jugador de basket) y hito 2 (Influencer, Bardo, Socorrista, Tasador, Mimo, Ingeniero) hechos, con tests. Lo que falta espera al motor (invocaciones, barreras) o al juego (audiencia, valor de objetos). Aún no hay `game.ts`.
+- **Ruleset `rulesets/willy/`:** completo para las 9 clases, con invocaciones y barreras, ganchos de fin de turno e inicio de combate, subida de nivel, y los arreglos de la revisión 4. Falta lo que es del juego (audiencia, valor de objetos) y el salto real del motor (R15). Explota también los barriles `explosivo` al romperse.
+- **Primera versión jugable (`content/willy/game.ts`):** cásting (clase y puntos) → Camerino (Maripuri, Paco, Xelda y Koldo; ascensor de servicio) → prueba hecha a mano de la Planta 1, «Castro Sumergido» (muelle con altura, canal al vacío, charcos de agua, barril de gas; dos ratas, una gaviota y un cangrejo). Mapas construidos en código con los ids de terreno de `ninja.json` (`content/willy/maps.ts`); arranque y cásting en `content/willy/setup.ts`, sin imports del cliente, para que los tests no toquen `src/`. Textos de interfaz en `texts/ui.json`. `GAME=willy npx vite build` compila. **Falta en el cliente:** que `GameDefinition` lleve `maps` y que `src/main.ts` los pase a `createEngine` (sin eso el ascensor no viaja); pedido a la sesión principal.
 
 ## Hecho (W0)
 
@@ -71,9 +72,8 @@ W0 **aprobada** con estos cambios, ya aplicados en los documentos y los datos:
 
 ## Siguiente paso
 
-Cuando la sesión principal cierre la Fase 2 del motor:
-- **W1**: crear `rulesets/willy/` (con tests), `content/willy/game.ts`, el preset de arte `ninja` y la calle fija de la Planta 1.
-- Mientras tanto, la sesión principal puede valorar las peticiones de `ENGINE_REQUESTS.md`; las más baratas y útiles para los dos juegos son R10 (cambio de mapa), R12 (RNG derivados), R14 (capa `markers`) y R11 (eventos con causa, ya en la Fase 2).
+- Cuando llegue R15 (salto y rebote del motor): cambiar los saltos con `setPosition` por el salto real y añadir el rebote del Pase picado.
+- Después: plantas procedurales, el sistema de audiencia y patrocinadores, el Narrador y el valor de los objetos (Golpe de valor).
 
 ## Notas para retomar
 

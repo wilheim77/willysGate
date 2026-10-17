@@ -349,6 +349,342 @@
           "lever_right"
         ]
       }
+    },
+    "mazo": {
+      "base": "elf_m",
+      "note": "El barón Ulric Mazo: culto y cobarde; jubón de terciopelo morado con ribete dorado, pelo castaño claro, aro de oro y pluma de poeta",
+      "map": {
+        "#facb3e": "#b8905a",
+        "#ee8e2e": "#8a6a40",
+        "#4ba747": "#6a2a7a",
+        "#3d734f": "#4a1a5a",
+        "#314152": "#2e2430",
+        "#5698cc": "#6a7a88"
+      },
+      "decals": [
+        {
+          "rows": [
+            "Y.Y.Y",
+            "YYYYY"
+          ],
+          "legend": {
+            "Y": "#f0c040"
+          },
+          "x": 5,
+          "y": 0,
+          "from": "top"
+        },
+        {
+          "rows": [
+            "..W",
+            ".Wk",
+            "Wk."
+          ],
+          "legend": {
+            "W": "#f4f4f0",
+            "k": "#222222"
+          },
+          "x": 12,
+          "y": -9,
+          "from": "bottom"
+        }
+      ]
+    },
+    "hilda": {
+      "base": "elf_f",
+      "note": "Hilda Cardo, la senescal: moño gris, vestido gris verdoso sobrio y el manojo de llaves de la abadía",
+      "map": {
+        "#facb3e": "#8a8a90",
+        "#ee8e2e": "#5a5a62",
+        "#4ba747": "#4a5a48",
+        "#3d734f": "#34402e",
+        "#da4e38": "#5a5a62",
+        "#5698cc": "#4a5a6a",
+        "#fccba3": "#e8c0a0"
+      },
+      "decals": [
+        {
+          "rows": [
+            "kYk",
+            "Y.Y",
+            "kYk"
+          ],
+          "legend": {
+            "k": "#222222",
+            "Y": "#d8b048"
+          },
+          "x": 11,
+          "y": -8,
+          "from": "bottom"
+        }
+      ]
+    },
+    "cirilo": {
+      "base": "wizzard_m",
+      "note": "Cirilo Hondo, capellán de la Santa Pala: capucha y sotana pardas, barba gris descuidada y la pala sagrada",
+      "map": {
+        "#5698cc": "#6a5034",
+        "#5956bd": "#4a3624",
+        "#fdf7ed": "#b8b4ac",
+        "#d3bfa9": "#8a8680",
+        "#b58057": "#c8946a",
+        "#8a503e": "#9a6448"
+      },
+      "decals": [
+        {
+          "rows": [
+            ".k.",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kkk",
+            "kSk",
+            "kSk",
+            "kSk",
+            ".k."
+          ],
+          "legend": {
+            "k": "#222222",
+            "W": "#9a6a44",
+            "S": "#aab4bc"
+          },
+          "x": -1,
+          "y": -15,
+          "from": "bottom"
+        }
+      ]
+    },
+    "fanatico_pala": {
+      "base": "wizzard_f",
+      "note": "Fanático de la Santa Pala: capucha de arpillera ocre, pelo oscuro y una pala",
+      "map": {
+        "#5698cc": "#a8884a",
+        "#5956bd": "#7a6034",
+        "#fdf7ed": "#3a2a20",
+        "#d3bfa9": "#2a1e18",
+        "#b58057": "#d8a07a",
+        "#8a503e": "#a8704e"
+      },
+      "decals": [
+        {
+          "rows": [
+            ".k.",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kWk",
+            "kkk",
+            "kSk",
+            "kSk",
+            "kSk",
+            ".k."
+          ],
+          "legend": {
+            "k": "#222222",
+            "W": "#9a6a44",
+            "S": "#aab4bc"
+          },
+          "x": -1,
+          "y": -15,
+          "from": "bottom"
+        }
+      ]
+    },
+    "nella": {
+      "base": "elf_f",
+      "note": "Nella Yesca, viuda y cabeza de la Cuadrilla: luto negro, pelo castaño y el pañuelo rojo de la Cuadrilla",
+      "map": {
+        "#facb3e": "#6a4a30",
+        "#ee8e2e": "#4a3220",
+        "#4ba747": "#2a2428",
+        "#3d734f": "#1a161a",
+        "#da4e38": "#c02a2a",
+        "#5698cc": "#5a4a3a",
+        "#fccba3": "#e8b898"
+      },
+      "decals": [
+        {
+          "rows": [
+            "RRRR",
+            ".RR."
+          ],
+          "legend": {
+            "R": "#c02a2a"
+          },
+          "x": 4,
+          "y": -6,
+          "from": "bottom"
+        }
+      ]
+    },
+    "odda": {
+      "base": "dwarf_f",
+      "note": "Odda Hulla, enana del clan Hulla y mano derecha de Nella: trenzas cobrizas, ropa de mina y martillo",
+      "map": {
+        "#facb3e": "#c0602a",
+        "#ee8e2e": "#8a3a18",
+        "#dc4a7b": "#4a4a52",
+        "#9f294e": "#34343a",
+        "#d8a57d": "#d8a07a",
+        "#c38d70": "#b07858"
+      },
+      "decals": [
+        {
+          "rows": [
+            "kkk",
+            "kSk",
+            "kkk",
+            ".W.",
+            ".W.",
+            ".k."
+          ],
+          "legend": {
+            "k": "#222222",
+            "S": "#8a9098",
+            "W": "#9a6a44"
+          },
+          "x": 0,
+          "y": -12,
+          "from": "bottom"
+        }
+      ]
+    },
+    "lisandro": {
+      "base": "elf_m",
+      "note": "Lisandro Fuss, el prestamista elfo: pelo rubio impecable, levita verde oscuro con botones de oro y bolsa de monedas",
+      "map": {
+        "#4ba747": "#1e4a3a",
+        "#3d734f": "#143428",
+        "#314152": "#2a2a34",
+        "#5698cc": "#6ac0a0"
+      },
+      "decals": [
+        {
+          "rows": [
+            ".kk.",
+            "kYYk",
+            "kYYk",
+            ".kk."
+          ],
+          "legend": {
+            "k": "#222222",
+            "Y": "#f0c040"
+          },
+          "x": 12,
+          "y": -8,
+          "from": "bottom"
+        },
+        {
+          "rows": [
+            "Y",
+            ".",
+            "Y"
+          ],
+          "legend": {
+            "Y": "#f0c040"
+          },
+          "x": 8,
+          "y": -9,
+          "from": "bottom"
+        }
+      ]
+    },
+    "aldeano": {
+      "base": "elf_m",
+      "note": "Aldeano de Hondonegra: ropa parda remendada, pelo castaño, cara cansada",
+      "map": {
+        "#facb3e": "#5a4030",
+        "#ee8e2e": "#3e2c20",
+        "#4ba747": "#6a5a48",
+        "#3d734f": "#4a3e30",
+        "#314152": "#3a3430",
+        "#5698cc": "#4a4038",
+        "#fccba3": "#e0b090",
+        "#e2b694": "#c09070"
+      }
+    },
+    "aldeana": {
+      "base": "elf_f",
+      "note": "Aldeana de Hondonegra: pañuelo a la cabeza, vestido gris azulado gastado",
+      "map": {
+        "#facb3e": "#7a6a5a",
+        "#ee8e2e": "#5a4a3a",
+        "#4ba747": "#5a6470",
+        "#3d734f": "#3e464e",
+        "#da4e38": "#7a6a5a",
+        "#5698cc": "#4a4038",
+        "#fccba3": "#e0b090"
+      }
+    },
+    "aldeano_viejo": {
+      "base": "wizzard_m",
+      "note": "Aldeano viejo: gorro de fieltro, chaquetón pardo y barba blanca",
+      "map": {
+        "#5698cc": "#5a4a3a",
+        "#5956bd": "#3e3228",
+        "#b58057": "#d0a07a",
+        "#8a503e": "#a87050"
+      }
+    },
+    "fiel_pala": {
+      "base": "elf_m",
+      "note": "Fiel de la Santa Pala: vecino con escapulario ocre y ropa parda",
+      "map": {
+        "#facb3e": "#4a3424",
+        "#ee8e2e": "#2e2018",
+        "#4ba747": "#a8884a",
+        "#3d734f": "#7a6034",
+        "#314152": "#3a3430",
+        "#5698cc": "#4a4038",
+        "#fccba3": "#e0b090",
+        "#e2b694": "#c09070"
+      }
+    },
+    "viuda": {
+      "base": "elf_f",
+      "note": "Viuda de uno de los cuarenta: velo y luto negros",
+      "map": {
+        "#facb3e": "#1e1a1e",
+        "#ee8e2e": "#121014",
+        "#4ba747": "#2a2428",
+        "#3d734f": "#1a161a",
+        "#da4e38": "#2a2428",
+        "#5698cc": "#5a4a3a",
+        "#fccba3": "#e0b498"
+      }
+    },
+    "ivo": {
+      "base": "elf_m",
+      "note": "Ivo, el medio hermano de Garrán, entre los Callados: pálido, pelo negro, mirada vacía y el pañuelo rojo de minero que aún conserva",
+      "map": {
+        "#facb3e": "#2a2224",
+        "#ee8e2e": "#1a1416",
+        "#fccba3": "#c9c2b8",
+        "#e2b694": "#9e978e",
+        "#4ba747": "#5a5650",
+        "#3d734f": "#3e3b38",
+        "#314152": "#4a3a30",
+        "#5698cc": "#e6ecef"
+      },
+      "decals": [
+        {
+          "rows": [
+            "RRRR",
+            ".RR."
+          ],
+          "legend": {
+            "R": "#b02a2a"
+          },
+          "x": 5,
+          "y": -9,
+          "from": "bottom"
+        }
+      ]
     }
   }
 }

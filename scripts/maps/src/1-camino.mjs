@@ -49,11 +49,11 @@ export default {
     'entry-plaza': [29, 9], // back from the plaza
     dorotea: [2, 10],
     garran: [9, 12],
-    // The hungry miners (prologue tutorial; avoidable by talking). -1 speaks for them.
-    'minero_hambriento-1': [20, 9],
-    'minero_hambriento-2': [22, 10],
-    'minero_hambriento-3': [21, 4], // lookout on the outcrop (height advantage, can be pushed off)
-    'minero_hambriento-4': [27, 11],
+    // The hungry miners (prologue tutorial; avoidable by talking). Ids from cast.json.
+    minero_cabecilla: [20, 9],
+    minero_hambriento_1: [22, 10],
+    minero_hambriento_2: [21, 4], // lookout on the outcrop (height advantage, can be pushed off)
+    minero_hambriento_3: [27, 11], // the big one, by the cart and its oil
     'crate-1': [23, 11], // the overturned cart
     'crate-2': [24, 11],
     'barrel_oil-1': [25, 11],
@@ -75,7 +75,7 @@ export default {
   zones: {
     // Proposed layer (docs/ENGINE_REQUESTS_INTERESES.md, I1): entering opens the dialogue once.
     scenes: [
-      { name: 'mineros-cortan-el-paso', rect: [16, 7, 2, 5], props: { dialogue: 'TODO:mineros_hambrientos', speaker: 'minero_hambriento-1', once: true } },
+      { name: 'mineros-cortan-el-paso', rect: [16, 7, 2, 5], props: { dialogue: 'camino_mineros', speaker: 'minero_cabecilla', once: true, fight: 'minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3' } },
     ],
   },
 };

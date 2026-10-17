@@ -65,15 +65,42 @@ export function buildWorld(engine: ReturnType<typeof makeEngine>, seed: number, 
     createMonster({ id: 'bandit-1', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-1'), spriteId: 'sinpaga_cuchillero' }),
     createMonster({ id: 'bandit-2', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-2'), spriteId: 'sinpaga_enmascarado' }),
     createMonster({ id: 'thug', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug'), spriteId: 'sinpaga_bruto' }),
+    createMonster({ id: 'thug-2', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug-2'), spriteId: 'sinpaga_bruto' }),
+    createMonster({ id: 'bandit-3', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-3'), spriteId: 'sinpaga_cuchillero' }),
     createMonster({ id: 'skeleton', name: 'Minero muerto', monsterId: 'skeleton', controllerId: AI, factionId: 'sinpaga', position: at('skeleton'), spriteId: 'esqueleto_minero' }),
   ];
   const npcs: Entity[] = [
     createMonster({ id: 'viejo', name: 'Viejo minero', monsterId: 'bandit', controllerId: AI, factionId: 'neutral', position: { x: 5, y: 4 }, spriteId: 'minero_cuadrilla', extraTags: ['dialogue:viejo_minero', 'noncombatant'] }),
   ];
+  // Everyone the story's dialogues talk to (content/intereses/cast.json), so every tree can be walked here.
+  const cast = JSON.parse(readFileSync(join(CONTENT_DIR, 'cast.json'), 'utf8')) as Record<string, { name: string; monsterId: string; spriteId: string; faction: string; noncombatant?: boolean; dialogue?: string | null }>;
+  const known = new Set([...party, ...enemies, ...npcs].map((e) => e.id));
+  let slot = 0;
+  for (const [id, c] of Object.entries(cast)) {
+    if (id.startsWith('$') || known.has(id)) continue;
+    const position = { x: 1 + (slot % 6), y: 15 + Math.floor(slot / 6) };
+    slot++;
+    npcs.push(
+      createMonster({
+        id,
+        name: c.name,
+        monsterId: c.monsterId === 'companion' || c.monsterId === 'commoner' ? 'bandit' : c.monsterId,
+        controllerId: AI,
+        factionId: c.faction,
+        position,
+        spriteId: c.spriteId,
+        extraTags: [...(c.dialogue ? [`dialogue:${c.dialogue}`] : []), ...(c.noncombatant ? ['noncombatant'] : [])],
+      }),
+    );
+  }
   const usables: Entity[] = [
     createProp({ id: 'puerta-1', kind: 'door', position: { x: 9, y: 11 }, spriteId: 'none', name: 'Puerta del almacén', extraTags: ['dialogue:puerta_almacen'] }),
     createProp({ id: 'palanca-1', kind: 'lever', position: { x: 13, y: 11 }, spriteId: 'lever', extraTags: ['dialogue:palanca_almacen', 'pose:up'] }),
     createProp({ id: 'cofre-1', kind: 'chest', position: { x: 10, y: 13 }, spriteId: 'chest_trapped', extraTags: ['dialogue:cofre_prueba'] }),
+    // A generic template creature the story fights by faction (scene 1, the trial).
+    createMonster({ id: 'fanatico_pala-1', name: 'Fanático de la Pala', monsterId: 'bandit', controllerId: AI, factionId: 'fanaticos', position: { x: 12, y: 13 }, spriteId: 'fanatico_pala' }),
+    // Story interactables the dialogues change (map spawns <kind>-<x>, dialogue <kind>_<x>).
+    createProp({ id: 'chest-libro_cuentas', kind: 'chest', position: { x: 11, y: 13 }, spriteId: 'chest_trapped', extraTags: ['dialogue:chest_libro_cuentas'] }),
   ];
   const props: Entity[] = Object.entries(spawns)
     .map(([name, position]) => ({ name, position, kind: name.split('-')[0] }))

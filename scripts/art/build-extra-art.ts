@@ -263,6 +263,353 @@ function trapFrame(atlas: Image, list: Record<string, Rect>, frame: number, disa
   return img;
 }
 
+/** Tapestry with the Mazo crest (a gold mallet); the 'crossbow' variant shows the bolt tip and stock peeking out. */
+function tapestry(crossbow: boolean): Image {
+  const img = blank(T, 24);
+  rect(img, 1, 0, 14, 1, rgb('w1'));
+  rect(img, 0, 1, 16, 1, rgb('w2'));
+  rect(img, 2, 2, 12, 20, rgb('b1'));
+  rect(img, 2, 2, 1, 20, rgb('b0'));
+  rect(img, 13, 2, 1, 20, rgb('b0'));
+  for (let y = 3; y < 21; y += 2) (set(img, 3, y, rgb('f4')), set(img, 12, y, rgb('f4')));
+  ascii(img, 5, 6, ['kkkkkk', 'kYYYYk', 'kkYYkk', '..YY..', '..YY..', '..YY..', '..Yk..'], { k: 'out', Y: 'f4' });
+  for (let x = 2; x < 14; x += 2) (set(img, x, 22, rgb('b1')), set(img, x + 1, 23, rgb('b0')));
+  if (crossbow) {
+    ascii(img, 14, 14, ['k.', 'Ik', 'kk'], { k: 'out', I: 'i2' });
+    ascii(img, 12, 21, ['kOk', '.k.'], { k: 'out', O: 'w3' });
+  }
+  return img;
+}
+
+/** Gallows of the Torre del Cepo square: post, beam, brace and the noose. */
+function gallows(): Image {
+  const img = blank(T, 32);
+  rect(img, 2, 2, 3, 30, rgb('w2'));
+  rect(img, 2, 2, 1, 30, rgb('w3'));
+  rect(img, 2, 2, 13, 3, rgb('w2'));
+  rect(img, 2, 2, 13, 1, rgb('w3'));
+  for (let i = 0; i < 6; i++) set(img, 5 + i, 10 - i, rgb('w1'));
+  rect(img, 12, 5, 1, 6, rgb('d2'));
+  ascii(img, 11, 11, ['.k.', 'k.k', 'k.k', '.k.'], { k: 'd2' });
+  rect(img, 0, 30, 8, 2, rgb('s0'));
+  return img;
+}
+
+/** Camp fire: a ring of stones, logs and a 4-frame flame. */
+function campfire(frame: number): Image {
+  const img = blank(T, T);
+  ascii(img, 3, 3, FLAMES[frame]!, FLAME_LEGEND);
+  ascii(img, 4, 2, FLAMES[(frame + 2) % 4]!.slice(0, 5), FLAME_LEGEND);
+  ascii(img, 1, 10, [
+    '..kWWk.kWk....',
+    '.kWwwWkWwWk...',
+    'kSkkWWWWkkSk..',
+    'kSSkkkkkkSSk..',
+    '.kkSSkkSSkk...',
+    '...kk..kk.....',
+  ], { k: 'out', W: 'w3', w: 'w1', S: 's2' });
+  return img;
+}
+
+/** The Sinpaga oil cart: a two-wheeled cart loaded with dripping oil barrels (32x20). */
+function oilCart(): Image {
+  const img = blank(32, 20);
+  rect(img, 2, 9, 26, 5, rgb('w2'));
+  rect(img, 2, 9, 26, 1, rgb('w3'));
+  rect(img, 2, 13, 26, 1, rgb('w0'));
+  rect(img, 26, 11, 6, 1, rgb('w1'));
+  for (const x of [4, 12, 20]) {
+    rect(img, x, 1, 7, 8, rgb('paint'));
+    rect(img, x, 1, 7, 1, rgb('w4'));
+    rect(img, x, 3, 7, 1, rgb('i0'));
+    rect(img, x, 6, 7, 1, rgb('i0'));
+    set(img, x + 3, 4, rgb('warn'));
+  }
+  rect(img, 15, 9, 1, 3, rgb('oil0'));
+  for (const cx of [7, 22]) {
+    ascii(img, cx - 3, 13, ['.kkkkk.', 'kWkWkWk', 'kkWkWkk', 'kWkWkWk', '.kkkkk.'], { k: 'out', W: 'w3' });
+  }
+  return outlined(img);
+}
+
+/** The Pozo del Ahorcado: a stone well with a crossbeam, a frayed rope and no bucket (16x24). */
+function well(): Image {
+  const img = blank(T, 24);
+  rect(img, 2, 1, 2, 14, rgb('w2'));
+  rect(img, 12, 1, 2, 14, rgb('w2'));
+  rect(img, 1, 1, 14, 2, rgb('w3'));
+  rect(img, 7, 3, 1, 7, rgb('d2'));
+  set(img, 7, 10, rgb('d1'));
+  set(img, 6, 11, rgb('d1'));
+  rect(img, 1, 14, 14, 9, rgb('s1'));
+  for (let y = 14; y < 23; y += 3) {
+    rect(img, 1, y, 14, 1, rgb('out'));
+    for (let x = (y / 3) % 2 ? 1 : 4; x < 15; x += 6) rect(img, x, y, 1, 3, rgb('out'));
+  }
+  rect(img, 1, 14, 14, 2, rgb('s2'));
+  rect(img, 3, 15, 10, 1, rgb('void'));
+  return outlined(img);
+}
+
+/** Bear trap (cepo): open jaws when armed, shut and harmless when disarmed. */
+function bearTrap(armed: boolean): Image {
+  const img = blank(T, T);
+  if (armed) {
+    ascii(img, 1, 4, [
+      '.kkkkkkkkkkkk.',
+      'kIkIkIkIkIkIkk',
+      'kIIIIIIIIIIIIk',
+      'kI....kk....Ik',
+      'kI...kIIk...Ik',
+      'kI....kk....Ik',
+      'kIIIIIIIIIIIIk',
+      'kIkIkIkIkIkIkk',
+      '.kkkkkkkkkkkk.',
+    ], { k: 'out', I: 'i1' });
+  } else {
+    ascii(img, 1, 6, [
+      '.kkkkkkkkkkkk.',
+      'kIIIIIIIIIIIIk',
+      'kIkIkIkIkIkIkk',
+      'kIIIIIIIIIIIIk',
+      '.kkkkkkkkkkkk.',
+    ], { k: 'out', I: 'i0' });
+  }
+  return img;
+}
+
+/** A tripwire across the tile, between two stakes. */
+function tripwire(): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 6, ['kk', 'kW', 'kk'], { k: 'out', W: 'w3' });
+  ascii(img, 14, 6, ['kk', 'Wk', 'kk'], { k: 'out', W: 'w3' });
+  rect(img, 2, 7, 12, 1, rgb('s3'));
+  return img;
+}
+
+/** Pressure plate with dart holes (poisoned dart trap). */
+function dartPlate(): Image {
+  const img = blank(T, T);
+  ascii(img, 3, 3, ['kkkkkkkkkk', 'kSSSSSSSSk', 'kSkSSSSkSk', 'kSSSSSSSSk', 'kSSSkkSSSk', 'kSSSkkSSSk', 'kSSSSSSSSk', 'kSkSSSSkSk', 'kSSSSSSSSk', 'kkkkkkkkkk'], { k: 'out', S: 's1' });
+  set(img, 8, 8, rgb('#97da3f'));
+  return img;
+}
+
+// --- Mine and vault (scene 5 and 6) -----------------------------------------------------------
+
+/** Mine rails over the stone floor: wooden sleepers and two iron rails, horizontal or vertical. */
+function rails(vertical: boolean, seed: number): Image {
+  const r = rng(seed);
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb('s0'));
+  for (let i = 0; i < 18; i++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(r() < 0.5 ? 'ink' : 's1'));
+  for (let k = 1; k < T; k += 5) {
+    if (vertical) (rect(img, 2, k, 12, 2, rgb('w2')), rect(img, 2, k, 12, 1, rgb('w3')));
+    else (rect(img, k, 2, 2, 12, rgb('w2')), rect(img, k, 2, 1, 12, rgb('w3')));
+  }
+  for (const o of [4, 11]) {
+    if (vertical) (rect(img, o, 0, 1, T, rgb('i2')), rect(img, o + 1, 0, 1, T, rgb('i0')));
+    else (rect(img, 0, o, T, 1, rgb('i2')), rect(img, 0, o + 1, T, 1, rgb('i0')));
+  }
+  return img;
+}
+
+/** Floor of the vault: pale ancient slabs inlaid with veins of living silver. */
+function vaultFloor(seed: number): Image {
+  const r = rng(seed);
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb('#5a5866'));
+  rect(img, 0, 0, T, 1, rgb('#3a3844'));
+  rect(img, 0, 0, 1, T, rgb('#3a3844'));
+  rect(img, 1, 1, 14, 1, rgb('#6e6c7a'));
+  let x = Math.floor(r() * 12) + 2, y = 2;
+  while (y < 15) {
+    set(img, x, y, rgb('#c8d8ff'));
+    if (r() < 0.4) set(img, x + 1, y, rgb('#8aa0d8'));
+    x = Math.max(2, Math.min(13, x + Math.round(r() * 2 - 1)));
+    y++;
+  }
+  return img;
+}
+
+/** Carved vault wall: the face under the vault floor, with a band of elvish runes. */
+function vaultFace(): Image {
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb('#44424e'));
+  rect(img, 0, 0, T, 2, rgb('#6e6c7a'));
+  rect(img, 0, 2, T, 1, rgb('out'));
+  for (let x = 1; x < T; x += 3) (set(img, x, 6, rgb('#8aa0d8')), set(img, x + 1, 7, rgb('#8aa0d8')), set(img, x, 8, rgb('#8aa0d8')));
+  rect(img, 0, 12, T, 1, rgb('#2e2c36'));
+  return img;
+}
+
+/** Mine wagon (16x16), empty or loaded with ore glinting with living silver; broken: tipped over. */
+function mineWagon(load: 'empty' | 'ore' | 'broken'): Image {
+  const img = blank(T, T);
+  if (load === 'broken') {
+    ascii(img, 0, 6, [
+      '..kkkkkkkkk.....',
+      '.kIIIIIIIIIk....',
+      'kIiiiiiiiiIk....',
+      'kIiiiiiiiiIkSsS.',
+      '.kkkkkkkkkk.sSsS',
+      '..kWk..kWk......',
+      '...k....k.......',
+    ], { k: 'out', I: 'i2', i: 'i1', W: 'w3', S: 's1', s: '#c8d8ff' });
+    return img;
+  }
+  if (load === 'ore') ascii(img, 2, 2, ['..SsS.S..', '.SSsSSsS.', 'SsSSSsSSS'], { S: 's1', s: '#c8d8ff' });
+  ascii(img, 1, 5, [
+    'kkkkkkkkkkkkkk',
+    'kIIIIIIIIIIIIk',
+    'kIiikiiiikiiIk',
+    'kIiikiiiikiiIk',
+    'kIiiiiiiiiiiIk',
+    '.kIIIIIIIIIIk.',
+    '..kkkkkkkkkk..',
+    '..kWWk..kWWk..',
+    '..kWWk..kWWk..',
+    '...kk....kk...',
+  ], { k: 'out', I: 'i2', i: 'i1', W: 'w3' });
+  return img;
+}
+
+/** Powder keg: small, dark, banded, with a "PÓLVORA" skull mark; broken: split staves and black powder. */
+function powderKeg(broken: boolean): Image {
+  const img = blank(T, T);
+  if (broken) {
+    ascii(img, 1, 8, ['..k...k..k....', '.kWk.kWk.kWk..', 'kWWk.kWWk.kWk.', '.bbbbbbbbbbbb.', 'bbbbbbbbbbbbbb'], { k: 'out', W: 'w2', b: '#2a2628' });
+    return img;
+  }
+  ascii(img, 3, 3, [
+    '..kkkkkk..',
+    '.kWWWWWWk.',
+    'kIIIIIIIIk',
+    'kWWwkkwWWk',
+    'kWwkWWkwWk',
+    'kWWwkkwWWk',
+    'kWWwkwkWWk',
+    'kIIIIIIIIk',
+    'kWWWWWWWWk',
+    'kIIIIIIIIk',
+    '.kWWWWWWk.',
+    '..kkkkkk..',
+  ], { k: 'out', W: 'w1', w: 's3', I: 'i0' });
+  ascii(img, 8, 1, ['k', 'Y'], { k: 'out', Y: 'f3' });
+  return img;
+}
+
+/** Living-silver resonator: a tuning-fork pillar that hums (4 frames of glow); broken: snapped. */
+function resonator(frame: number | 'broken'): Image {
+  const img = blank(T, 24);
+  const glow = ['#8aa0d8', '#a8bcf0', '#c8d8ff', '#a8bcf0'];
+  if (frame === 'broken') {
+    ascii(img, 3, 12, [
+      '.kk..kk...',
+      'kSk.kSsk..',
+      'kSkkSk....',
+      'kSSSSk....',
+      '.kSSk.....',
+      '.kSSk.....',
+      'kkkkkk....',
+      'kAAAAk....',
+      'kkkkkkk...',
+      '.kSs.sSk..',
+    ], { k: 'out', S: '#8a90a0', s: '#c8d8ff', A: 's0' });
+    return img;
+  }
+  const g = glow[frame]!;
+  ascii(img, 3, 0, [
+    'kk......kk',
+    'kSk....kSk',
+    'kSk....kSk',
+    'kSk....kSk',
+    'kSsk..ksSk',
+    '.kSskksSk.',
+    '..kSSSSk..',
+    '...kSSk...',
+    '...kSsk...',
+    '...kSsk...',
+    '...kSsk...',
+    '...kSsk...',
+    '..kkSSkk..',
+    '.kAAAAAAk.',
+    'kAAAAAAAAk',
+    'kAaAaAaAAk',
+    'kAAAAAAAAk',
+    'kkkkkkkkkk',
+  ], { k: 'out', S: '#a8b0c0', s: g, A: 's0', a: g });
+  for (const [x, y] of [[2, 2], [13, 3], [1, 8], [14, 7]] as const) if ((frame + x) % 2 === 0) set(img, x, y, rgb(g));
+  return img;
+}
+
+/** The fuse Garrán laid: blasting charges against the rock and a coiled fuse (16x16). */
+function fuseCharges(): Image {
+  const img = blank(T, T);
+  ascii(img, 6, 1, ['kkkkkkkk', 'kRRkRRRk', 'kRRkRRRk', 'kRRkRRRk', 'kkkkkkkk', '.k.k.k..'], { k: 'out', R: 'paint1' });
+  rect(img, 7, 7, 1, 3, rgb('s3'));
+  ascii(img, 1, 9, ['...kkkkk..', '..k.....k.', '.k..kkk..k', '.k.k...k.k', '..k.kkk.k.', '...k...k..', '....kkk...'], { k: 's2' });
+  return img;
+}
+
+/** The forty's remains: bones, a miner's helmet, a broken pick and the baron's payroll sheet. */
+function remainsForty(): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 3, [
+    '....kkk.........',
+    '...kBBBk...kk...',
+    '...kBkBk..kWk...',
+    '....kBk...kWk...',
+    '..kkkkk..kWWWk..',
+    '.kBBBBBk.kWkWk..',
+    'kBkBkBkBk.kkk...',
+    '.kkkkkkk..kkkk..',
+    'kHHHk..kPPPPPk..',
+    'kHHHHk.kPpPpPk.I',
+    '.kkkk..kPPPPPkkI',
+    '.......kkkkkk.kI',
+  ], { k: 'out', B: 's3', W: 's2', H: 'w3', P: '#e8e0c8', p: '#8a7a60', I: 'i1' });
+  set(img, 10, 13, rgb('f4'));
+  return img;
+}
+
+/** Pulley and chains on the vault wall, with the ore bucket hanging from them (16x32). */
+function pulley(): Image {
+  const img = blank(T, 32);
+  ascii(img, 4, 0, ['kkkkkkkk', 'kIIIIIIk', '.kkiikk.', '..kiik..', '...kk...'], { k: 'out', I: 'i2', i: 'i1' });
+  for (let y = 5; y < 22; y++) (set(img, 6, y, rgb(y % 2 ? 'i2' : 'i0')), set(img, 9, y, rgb(y % 2 ? 'i0' : 'i2')));
+  ascii(img, 3, 22, ['kkkkkkkkkk', 'kWWWWWWWWk', 'kSsSSsSSWk', 'kWWWWWWWWk', 'kWWWWWWWWk', '.kWWWWWWk.', '..kkkkkk..'], { k: 'out', W: 'w2', S: 's1', s: '#c8d8ff' });
+  return img;
+}
+
+/** The elvish inscription carved in the vault wall (lit runes). */
+function inscription(): Image {
+  const img = blank(T, T);
+  rect(img, 1, 2, 14, 12, rgb('#44424e'));
+  rect(img, 1, 2, 14, 1, rgb('#6e6c7a'));
+  const runes = ['.k.k.kk.k.k.', 'kk.k..k.kk.k', '.k.kk.k..k.k', 'k..k.k.kk.k.', '.kk.k..k.k.k'];
+  ascii(img, 2, 5, runes.map((r) => r.replace(/k/g, 'R')), { R: '#8ab0e8' });
+  return outlined(img);
+}
+
+/** A rotten plank on a walkway (detected trap): cracked, dark and sagging. */
+function rottenPlank(): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 5, ['kkkkkkkkkkkkkkkk', 'WWwWWWWkkWWWWwWW', 'wWWWwkk..kkWWWWw', 'WWWkk......kkWWW', 'kkkkkkkkkkkkkkkk'], { k: 'out', W: 'w1', w: 'w0' });
+  return img;
+}
+
+/** Dark outline around everything opaque (props drawn without one). */
+function outlined(img: Image): Image {
+  const out = blank(img.width, img.height);
+  img.data.copy(out.data);
+  for (let y = 0; y < img.height; y++) for (let x = 0; x < img.width; x++) {
+    if (get(img, x, y)) continue;
+    if (get(img, x + 1, y) || get(img, x - 1, y) || get(img, x, y + 1) || get(img, x, y - 1)) set(out, x, y, rgb('out'));
+  }
+  return out;
+}
+
 function rim(lip: [Key, Key, Key]): Image {
   const img = blank(T, T);
   for (let x = 0; x < T; x++) {
@@ -434,6 +781,13 @@ const tiles: [string, Image][] = [
   ['door_closed_face', doorFace()],
   ['door_open_top', doorOpenTop(crop(atlas, list.floor_1!.x, list.floor_1!.y, T, T))],
   ['door_open_face', doorOpenFace()],
+  ['rails_h_1', rails(false, 1)],
+  ['rails_h_2', rails(false, 2)],
+  ['rails_v_1', rails(true, 3)],
+  ['vault_1', vaultFloor(11)],
+  ['vault_2', vaultFloor(12)],
+  ['vault_3', vaultFloor(13)],
+  ['vault_face', vaultFace()],
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps: number; loop: boolean; light?: string }> = {
@@ -448,6 +802,21 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   fx_steam: { frames: env.steam(), note: 'Vapor (agua y fuego)', anchor: 'floor', fps: 10, loop: false },
   trap_armed: { frames: [3, 3, 3, 2].map((f) => trapFrame(atlas, list, f)), note: 'Trampa visible armada (pinchos fuera)', anchor: 'floor', fps: 4, loop: true },
   trap_disarmed: { frames: [trapFrame(atlas, list, 0, true)], note: 'Trampa desarmada (pinchos retraídos, apagada)', anchor: 'floor', fps: 0, loop: false },
+  tapestry: { frames: [tapestry(false)], note: 'Tapiz con el escudo de los Mazo', anchor: 'wall', fps: 0, loop: false },
+  tapestry_crossbow: { frames: [tapestry(true)], note: 'Tapiz con una ballesta escondida detrás (asoma la punta)', anchor: 'wall', fps: 0, loop: false },
+  gallows: { frames: [gallows()], note: 'Horca de la Torre del Cepo', anchor: 'floor', fps: 0, loop: false },
+  campfire: { frames: [0, 1, 2, 3].map(campfire), note: 'Hoguera de campamento', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
+  oil_cart: { frames: [oilCart()], note: 'Carro de aceite de los Sinpaga (32x20)', anchor: 'floor', fps: 0, loop: false },
+  well: { frames: [well()], note: 'Pozo del Ahorcado', anchor: 'floor', fps: 0, loop: false },
+  trap_beartrap: { frames: [bearTrap(true)], note: 'Cepo armado', anchor: 'floor', fps: 0, loop: false },
+  trap_beartrap_disarmed: { frames: [bearTrap(false)], note: 'Cepo cerrado y desarmado', anchor: 'floor', fps: 0, loop: false },
+  trap_tripwire: { frames: [tripwire()], note: 'Cuerda trampa (detectada)', anchor: 'floor', fps: 0, loop: false },
+  trap_dart: { frames: [dartPlate()], note: 'Placa de dardo envenenado (detectada)', anchor: 'floor', fps: 0, loop: false },
+  trap_rotten_plank: { frames: [rottenPlank()], note: 'Tablón podrido de la pasarela (detectado)', anchor: 'floor', fps: 0, loop: false },
+  fuse_charges: { frames: [fuseCharges()], note: 'La mecha de Garrán: cargas contra la roca y la mecha enrollada', anchor: 'floor', fps: 0, loop: false },
+  remains_forty: { frames: [remainsForty()], note: 'Restos de los cuarenta: huesos, casco, pico roto y la nómina del barón', anchor: 'floor', fps: 0, loop: false },
+  pulley: { frames: [pulley()], note: 'Polea y cadenas con el cubo de mineral (16x32)', anchor: 'wall', fps: 0, loop: false },
+  inscription: { frames: [inscription()], note: 'Inscripción élfica tallada en la Bóveda', anchor: 'wall', fps: 0, loop: false, light: '#8ab0e8' },
 };
 /** Surface overlays (manifest 'surfaces'): drawn over the floor tile, may be translucent. */
 const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {
@@ -460,11 +829,15 @@ const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> 
   blood: { frames: env.bloodPool(), fps: 0, loop: false },
   rubble: { frames: env.rubble(), fps: 0, loop: false },
 };
-/** Objects (manifest 'sprites', kind 'frames'): idle + broken. */
-const objects: Record<string, { idle: Image; broken: Image }> = {
-  barrel: { idle: env.barrel(), broken: env.barrelBroken() },
-  barrel_oil: { idle: env.barrelOil(), broken: env.barrelOilBroken() },
-  crate: { idle: crate0x72, broken: env.crateBroken() },
+/** Objects (manifest 'sprites', kind 'frames'): animations by name (idle, broken...). */
+const objects: Record<string, Record<string, Image[]>> = {
+  barrel: { idle: [env.barrel()], broken: [env.barrelBroken()] },
+  barrel_oil: { idle: [env.barrelOil()], broken: [env.barrelOilBroken()] },
+  crate: { idle: [crate0x72], broken: [env.crateBroken()] },
+  mine_wagon: { idle: [mineWagon('empty')], broken: [mineWagon('broken')] },
+  mine_wagon_ore: { idle: [mineWagon('ore')], broken: [mineWagon('broken')] },
+  powder_keg: { idle: [powderKeg(false)], broken: [powderKeg(true)] },
+  resonator: { idle: [0, 1, 2, 3].map((f) => resonator(f)), broken: [resonator('broken')] },
 };
 
 // Sheet: one row per group of frames; each row as tall as its tallest frame.
@@ -473,7 +846,7 @@ const rows: Row[] = [
   ...tiles.map(([name, img]) => ({ name, frames: [img] })),
   ...Object.entries(props).map(([name, p]) => ({ name, frames: p.frames })),
   ...Object.entries(surfaces).map(([name, s]) => ({ name: `surface_${name}`, frames: s.frames })),
-  ...Object.entries(objects).map(([name, o]) => ({ name: `object_${name}`, frames: [o.idle, o.broken] })),
+  ...Object.entries(objects).map(([name, o]) => ({ name: `object_${name}`, frames: Object.values(o).flat() })),
 ];
 // Tiles share the first row so build-tiles can keep reading them by name.
 const tileRow = rows.splice(0, tiles.length);
@@ -516,9 +889,11 @@ manifest.props = Object.fromEntries(Object.entries(props).map(([id, p]) => [
   { url, frames: layout.get(id)!, fps: p.fps, loop: p.loop, anchor: p.anchor, ...(p.light ? { light: p.light } : {}) },
 ]));
 manifest.surfaces = Object.fromEntries(Object.entries(surfaces).map(([id, s]) => [id, { url, frames: layout.get(`surface_${id}`)!, fps: s.fps, loop: s.loop }]));
-for (const id of Object.keys(objects)) {
-  const [idle, broken] = layout.get(`object_${id}`)!;
-  manifest.sprites[id] = { kind: 'frames', url, facing: 'right', animations: { idle: [idle], broken: [broken] } };
+for (const [id, o] of Object.entries(objects)) {
+  const rects = layout.get(`object_${id}`)!;
+  let i = 0;
+  const animations = Object.fromEntries(Object.entries(o).map(([a, imgs]) => [a, imgs.map(() => rects[i++]!)]));
+  manifest.sprites[id] = { kind: 'frames', url, facing: 'right', animations };
 }
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 console.log(`${preset} extra art: ${tiles.length} tiles, ${Object.keys(props).length} props, ${Object.keys(surfaces).length} surfaces, ${Object.keys(objects).length} objects -> art-src/generated/${base}.png`);

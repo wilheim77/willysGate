@@ -203,10 +203,4 @@ describe('Ingeniero', () => {
     expect(willy.previewAction(boom.state, 'e', 'hab:red-g', {}).valid).toBe(false);
   });
 
-  it('summon abilities stay hidden until the engine can spawn entities', () => {
-    const s = game([W('e', 'ingeniero', 0, 0, 9)]);
-    const ids = willy.listActions(s, 'e').map((a) => a.id);
-    expect(ids).not.toContain('hab:construir-automata');
-    expect(ids).not.toContain('hab:despliegue-masivo');
-  });
 });

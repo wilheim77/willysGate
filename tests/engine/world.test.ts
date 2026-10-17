@@ -71,3 +71,12 @@ describe('changing maps', () => {
     expect(engine.deserialize(engine.serialize(there.state))).toEqual(there.state);
   });
 });
+
+describe('collapse (I5)', () => {
+  it('setTiles lowers the floor and whoever stood there falls', () => {
+    const s = engine.newGame({ seed: 1, map: asciiMap(['33..']), entities: [hunter('a', 0, 0)] });
+    const r = engine.applyEffects(s, [{ type: 'setTiles', tiles: [{ x: 0, y: 0 }, { x: 1, y: 0 }], height: 0 }]);
+    expect(r.state.map.tiles[0]!.height).toBe(0);
+    expect(r.events).toContainEqual({ type: 'entityFell', entityId: 'a', levels: 3 });
+  });
+});

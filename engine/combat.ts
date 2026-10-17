@@ -156,6 +156,18 @@ export function checkCombatEnd(ruleset: Ruleset, state: GameState): { state: Gam
   }
   // Nobody tracks turns any more: per-turn resources come back.
   for (const e of Object.values(next.entities)) next = applyEffects(ruleset, next, refreshTurnResources(ruleset, e)).state;
+  // Story consequences declared when the fight started (a dialogue's "if we win…").
+  const hooks = next.systems.combatHooks as unknown as { side: string; onVictory?: Effect[]; onDefeat?: Effect[] } | undefined;
+  if (hooks) {
+    const { combatHooks: _done, ...systems } = next.systems;
+    next = { ...next, systems };
+    const consequences = winner === hooks.side ? hooks.onVictory : hooks.onDefeat;
+    if (consequences?.length) {
+      const r = applyEffects(ruleset, next, consequences);
+      next = r.state;
+      events.push(...r.events);
+    }
+  }
   return { state: next, events };
 }
 
@@ -190,6 +202,16 @@ function beginTurn(ruleset: Ruleset, state: GameState, entityId: string, rng: Rn
     if (ended.events.length) return { state: ended.state, events: [...events, ...ended.events] };
     const current = next.entities[id];
     if (current && ruleset.canAct(current)) return { state: next, events };
+    // A skipped turn still passes: timed conditions (stunned, asleep) tick down, or they'd never end.
+    if (current) {
+      const ticked = decrementConditions(next, id);
+      const gone: Effect[] = ticked.entities[id]!.conditions
+        .filter((c) => c.remainingTurns !== undefined && c.remainingTurns <= 0)
+        .map((c) => ({ type: 'removeCondition', entityId: id, condition: c.id }));
+      const r = applyEffects(ruleset, ticked, gone);
+      next = r.state;
+      events.push(...r.events);
+    }
     const advanced = advanceOrder(ruleset, next, rng);
     next = advanced.state;
     events.push(...advanced.events);

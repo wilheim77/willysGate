@@ -129,6 +129,8 @@ export function createWilly(spec: WillySpec): Entity {
       `clase:${cls.id}`,
       ...traits.map((t) => `rasgo:${t}`),
       ...passives.map((p) => `rasgo:${p}`),
+      // Traits that are plain immunities.
+      ...(traits.includes('terco-como-una-mula') ? ['inmune:asustado'] : []),
       `arma:${spec.weapon ?? '1d6'}`,
       `alcance:${reach}`,
       ...(spec.extraTags ?? []),
@@ -151,6 +153,8 @@ export interface CreatureSpec {
   movimiento: number;
   alcance?: number;
   distancia?: boolean;
+  /** How hard it is to shove (DIF 8 + this). Default 5: a rat and a bear should differ. */
+  fue?: number;
   tags?: string[];
 }
 
@@ -164,7 +168,7 @@ export function createCreature(spec: CreatureSpec): Entity {
     position: spec.position,
     spriteId: spec.spriteId,
     // DEF and to-hit come straight from the data: stats are chosen so the formulas give them.
-    stats: { fue: 5, agi: 0, man: 5, agu: 5, car: 5, sue: 5, nivel: 1, armadura: spec.def - 10, ataque: spec.ataque, movimiento: spec.movimiento },
+    stats: { fue: spec.fue ?? 5, agi: 0, man: 5, agu: 5, car: 5, sue: 5, nivel: 1, armadura: spec.def - 10, ataque: spec.ataque, movimiento: spec.movimiento },
     resources: { vida: { current: spec.vida, max: spec.vida }, acciones: { current: 2, max: 2 } },
     conditions: [],
     tags: ['criatura', `arma:${spec.dano}`, `alcance:${spec.alcance ?? 1}`, ...(spec.distancia ? ['distancia'] : []), ...(spec.tags ?? [])],

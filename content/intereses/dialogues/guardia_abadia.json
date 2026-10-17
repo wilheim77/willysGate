@@ -1,0 +1,62 @@
+{
+  "$comment": "Scene 1 to 2. The guard at the abbey gate (plaza). Once the trial is over he lets the party in: audiencia_concedida and travel to the abbey (its scene zone opens the audience). The plaza exit to the abbey should require audiencia_concedida.",
+  "id": "guardia_abadia",
+  "start": "puerta",
+  "nodes": {
+    "puerta": {
+      "speaker": "guardia_abadia",
+      "text": "Alto. ¿Quién va?",
+      "choices": [
+        {
+          "text": "Casa Valcárcel. Venimos a ver al barón.",
+          "when": {
+            "notFlag": "juicio_resuelto"
+          },
+          "next": "no"
+        },
+        {
+          "text": "Casa Valcárcel. Venimos a ver al barón.",
+          "when": {
+            "flag": "juicio_resuelto"
+          },
+          "next": "si"
+        },
+        {
+          "id": "rumor",
+          "text": "¿Cómo está el barón?",
+          "once": true,
+          "next": "rumor"
+        },
+        {
+          "text": "Nadie. Ya nos íbamos."
+        }
+      ]
+    },
+    "no": {
+      "speaker": "guardia_abadia",
+      "text": "Su excelencia no recibe mientras haya ahorcamiento en la plaza. Dice que trae mala suerte asomarse. Y nosotros, por si acaso, tampoco nos asomamos.",
+      "next": "puerta"
+    },
+    "si": {
+      "speaker": "guardia_abadia",
+      "text": "Ya ha acabado el ahorcamiento. O lo que fuera. Pasen: su excelencia les recibe. Con desgana, pero les recibe.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "audiencia_concedida",
+          "value": true
+        },
+        {
+          "type": "travel",
+          "mapId": "abadia",
+          "spawn": "entry-plaza"
+        }
+      ]
+    },
+    "rumor": {
+      "speaker": "guardia_abadia",
+      "text": "Escribiendo. Siempre escribiendo. Nos lee los poemas en la cena. El sargento pidió el traslado a la frontera; dijo que allí, por lo menos, los gritos son de enemigos.",
+      "next": "puerta"
+    }
+  }
+}

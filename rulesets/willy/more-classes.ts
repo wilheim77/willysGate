@@ -11,7 +11,9 @@ import {
   invalid,
   jumpCheck,
   lastAbilityFlag,
+  pushExpectedDamage,
   targetEntity,
+  withPushBonus,
 } from './actions';
 import { hasTrait, isBoss, skillLevel } from './character';
 import { rollDice } from './dice';
@@ -19,7 +21,7 @@ import { type AttackSpec, Resolver, type WillyEvent, chanceD20, countUse, dealDa
 
 /**
  * Influencer, Bardo de verbena, Socorrista, Tasador, Mimo and Ingeniero.
- * Summons and temporary walls wait for the engine (spawnEntity, ENGINE_REQUESTS R13): marked pending.
+ * Summons and temporary walls live in summons.ts.
  */
 
 const pending = (tags: string[] = []): Handler => ({ target: { kind: 'self', range: 0 }, tags, pending: true, preview: () => invalid('Pendiente del motor.'), perform: () => {} });
@@ -97,7 +99,6 @@ Object.assign(HANDLERS, {
       if (victims.length) countUse(r, id, 'flash-del-selfie');
     },
   },
-  'hab:colaboracion': pending(['summon']),
   'hab:viral': {
     target: { kind: 'self', range: 0 },
     tags: ['buff', 'audience'],
@@ -262,7 +263,7 @@ Object.assign(HANDLERS, {
     preview: (s: GameState, a: Entity, t: ActionTarget) => {
       const target = targetEntity(s, t);
       if (!target) return invalid('¿A quién le lanzas la boya?');
-      return attackPreviewOf(s, buoySpec(a, target.id));
+      return withPushBonus(s, attackPreviewOf(s, buoySpec(a, target.id)), target.id, a.position, skillLevel(a, 'boya') >= 2 ? 3 : 2);
     },
     perform: (r: Resolver, id: string, t: ActionTarget) => {
       const me = r.entity(id);
@@ -346,7 +347,6 @@ Object.assign(HANDLERS, {
   },
 
   // ---- Mimo ----
-  'hab:pared-invisible': pending(['control']),
   'hab:cuerda-imaginaria': {
     target: { kind: 'creature', range: 6, filter: 'hostile' },
     tags: ['control', 'pull'],
@@ -354,7 +354,8 @@ Object.assign(HANDLERS, {
       const target = targetEntity(s, t);
       if (!target) return invalid('¿De quién tiras?');
       if (!withinRange(a, target, skillLevel(a, 'cuerda-imaginaria') >= 4 ? 6 : 4)) return invalid('La cuerda no llega.');
-      return { valid: true, chance: 1 };
+      const pull = Math.min(skillLevel(a, 'cuerda-imaginaria') >= 2 ? 3 : 2, gridDistance(a.position, target.position) - 1);
+      return { valid: true, chance: 1, expectedDamage: pushExpectedDamage(s, target.id, a.position, -pull) };
     },
     perform: (r: Resolver, id: string, t: ActionTarget) => {
       const me = r.entity(id);
@@ -414,10 +415,6 @@ Object.assign(HANDLERS, {
   },
 
   // ---- Ingeniero ----
-  'hab:construir-automata': pending(['summon']),
-  'hab:actualizacion-de-firmware': pending(['buff']),
-  'hab:antena-repetidora': pending(['summon']),
-  'hab:despliegue-masivo': pending(['summon']),
   'hab:arco-voltaico': {
     target: { kind: 'tile', range: 5 },
     tags: ['attack', 'area', 'lightning'],

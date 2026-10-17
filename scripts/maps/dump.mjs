@@ -70,7 +70,9 @@ export function dump(id) {
   const props = layer('spawns').filter((s) => PROP[s.name.split('-')[0]]).map((s) => s.name);
   if (props.length) legend.push(`props: ${props.join(', ')}`);
   for (const e of layer('encounters')) legend.push(`encounter ${e.name}: ${P(e.properties).participants}`);
-  for (const e of layer('scenes')) legend.push(`scene ${e.name} (${tile(e)}) ${JSON.stringify(P(e.properties))}`);
+  const KNOWN = ['ground', 'spawns', 'lights', 'surfaces', 'traps', 'exits', 'encounters'];
+  for (const l of json.layers.filter((l) => l.type === 'objectgroup' && !KNOWN.includes(l.name)))
+    for (const e of l.objects) legend.push(`${l.name} ${e.name} (${tile(e)} ${e.width / json.tilewidth}x${e.height / json.tileheight}) ${JSON.stringify(P(e.properties))}`);
   const name = P(json.properties).name;
   return [`== ${id}: ${name} (${json.width}x${json.height}, ambient ${P(json.properties).ambientLight})`, ...grid.map((r, y) => `${r.join('')}   ${heights[y]}`), ...legend].join('\n');
 }

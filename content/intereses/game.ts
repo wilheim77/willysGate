@@ -14,7 +14,17 @@ import viejoMinero from './dialogues/viejo_minero.json';
 import cofrePrueba from './dialogues/cofre_prueba.json';
 import puertaAlmacen from './dialogues/puerta_almacen.json';
 import palancaAlmacen from './dialogues/palanca_almacen.json';
-import type { DialogueTree } from '../../engine';
+import { type DialogueTree, type Engine, lightingOf } from '../../engine';
+import { STORY_DIALOGUES } from './dialogues/index';
+import { ACT_MAPS, START_MAP, buildMap, companion, useSprites } from './world';
+
+useSprites(Object.keys((art0x72 as AssetManifest).sprites));
+
+/** Every conversation: the story's plus the Phase 4 test ones. */
+const DIALOGUES: Record<string, DialogueTree> = {
+  ...Object.fromEntries([viejoMinero, cofrePrueba, puertaAlmacen, palancaAlmacen].map((d) => [d.id, d as unknown as DialogueTree])),
+  ...STORY_DIALOGUES,
+};
 
 const PLAYER = 'player:1';
 const AI = 'ai';
@@ -54,8 +64,33 @@ export const game: GameDefinition = {
       return { ...state, entities: { ...state.entities, hero: built } };
     },
   },
-  dialogues: Object.fromEntries([viejoMinero, cofrePrueba, puertaAlmacen, palancaAlmacen].map((d) => [d.id, d as unknown as DialogueTree])),
-  newGame(engine, seed) {
+  dialogues: DIALOGUES,
+  maps: Object.fromEntries(Object.keys(ACT_MAPS).map((id) => [id, () => buildMap(id, DIALOGUES)])),
+  // The act opens on the road: Dorotea talks first.
+  opening: { dialogue: 'camino_dorotea', partner: 'dorotea' },
+  newGame(engine, seed, options) {
+    if (options?.start === 'test') return testGame(engine, seed);
+    const start = options?.start && ACT_MAPS[options.start] ? options.start : START_MAP;
+    const setup = buildMap(start, DIALOGUES);
+    const at = (name: string) => setup.spawns[name] ?? setup.spawns[Object.keys(setup.spawns).find((k) => k.startsWith('entry-')) ?? ''] ?? { x: 1, y: 1 };
+    // A placeholder protagonist (character creation replaces it) and Dorotea, the bank's other employee.
+    const party: Entity[] = [
+      createCharacter({ id: 'hero', name: 'Cobrador', controllerId: PLAYER, factionId: 'party', position: at('hero'), spriteId: 'cobrador', classId: 'wizard', raceId: 'human', level: 3, abilities: { str: 8, dex: 14, con: 13, int: 15, wis: 12, cha: 10 } }),
+      companion('dorotea', 'Dorotea', at('dorotea'), PLAYER, 'party', DIALOGUES.dorotea ? ['dialogue:dorotea'] : []),
+    ];
+    let state = engine.newGame({ seed, map: setup.map, entities: [...party, ...setup.entities] });
+    state = { ...state, systems: { ...state.systems, ...(setup.systems ?? {}), spawns: setup.spawns as never } };
+    const lighting = lightingOf(state);
+    return withLighting(state, { ...lighting, lights: [...lighting.lights.filter((l) => !l.id.startsWith('surface:')), LANTERN] });
+  },
+};
+
+/** The collector carries a lantern: the only light that goes everywhere with the party. */
+const LANTERN = { id: 'lantern', attachedTo: 'hero', radius: 4, intensity: 0.85, color: '#ffcf8a', flicker: 0.08 };
+
+/** The Phase 2–4 test arena (?mapa=test): the whole party, a balanced fight, a door, a chest, a trap. */
+function testGame(engine: Engine, seed: number): GameState {
+  {
     const { map, spawns, lighting, zones } = parseTiledMap('test', testMap as TiledMapJson);
     const at = (name: string) => spawns[name] ?? { x: 1, y: 1 };
     // Test party at level 3 (character creation arrives in Phase 4). Standard array per class.
@@ -69,6 +104,8 @@ export const game: GameDefinition = {
       createMonster({ id: 'bandit-1', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-1'), spriteId: 'sinpaga_cuchillero' }),
       createMonster({ id: 'bandit-2', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-2'), spriteId: 'sinpaga_enmascarado' }),
       createMonster({ id: 'thug', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug'), spriteId: 'sinpaga_bruto' }),
+      createMonster({ id: 'thug-2', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug-2'), spriteId: 'sinpaga_bruto' }),
+      createMonster({ id: 'bandit-3', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-3'), spriteId: 'sinpaga_cuchillero' }),
       createMonster({ id: 'skeleton', name: 'Minero muerto', monsterId: 'skeleton', controllerId: AI, factionId: 'sinpaga', position: at('skeleton'), spriteId: 'esqueleto_minero' }),
     ];
     // Phase 4 test: someone to talk to on the way in.
@@ -120,13 +157,6 @@ export const game: GameDefinition = {
     // Named arrival points, so travelling back to this map knows where to put the party.
     const withSpawns = (st: GameState): GameState => ({ ...st, systems: { ...st.systems, spawns: spawns as never } });
     const state = withSpawns(withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...usables, ...props] }), painted).state, traps));
-    // The collector carries a lantern: the only light that goes everywhere with the party.
-    return withZones(
-      withLighting(state, {
-        ...lighting,
-        lights: [...lighting.lights, { id: 'lantern', attachedTo: 'hero', radius: 4, intensity: 0.85, color: '#ffcf8a', flicker: 0.08 }],
-      }),
-      zones,
-    );
-  },
-};
+    return withZones(withLighting(state, { ...lighting, lights: [...lighting.lights, LANTERN] }), zones);
+  }
+}

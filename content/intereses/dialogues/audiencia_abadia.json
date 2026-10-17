@@ -1,0 +1,539 @@
+{
+  "$comment": "Scene 2. Opened by the abbey map scene zone (speaker mazo). Options 1-8 from STORY §9; a failed Intimidation raises later DCs by 2 (abadia_desconfia). The name of Brea comes without a roll (\"¿Quién lleva su mina?\").",
+  "id": "audiencia_abadia",
+  "start": "sala",
+  "nodes": {
+    "sala": {
+      "text": "La sala capitular huele a cera barata y a hombre que no sale de casa. El barón Ulric Mazo come pasas de un plato de plata, el único que queda en la sala. Detrás de él, Hilda Cardo os mira como si os estuviera tomando medidas para el ataúd.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "audiencia_hecha",
+          "value": true
+        }
+      ],
+      "next": "m1"
+    },
+    "m1": {
+      "speaker": "mazo",
+      "text": "El banco. Esperaba a alguien más alto.",
+      "next": "d1"
+    },
+    "d1": {
+      "speaker": "dorotea",
+      "text": "La estatura del cobrador no altera el importe, excelencia. Cuatro mil coronas. Más intereses.",
+      "next": "m2"
+    },
+    "m2": {
+      "speaker": "mazo",
+      "text": "¿Y a cuánto ascienden los intereses, si no es indiscreción?",
+      "next": "d2"
+    },
+    "d2": {
+      "speaker": "dorotea",
+      "text": "A dos mil novecientas doce coronas con cuarenta. Los cuarenta céntimos se los perdono, por cortesía.",
+      "next": "m3"
+    },
+    "m3": {
+      "speaker": "mazo",
+      "text": "¿Y usted? ¿También habla con decimales, o ha venido a romperme algo?",
+      "next": [
+        {
+          "when": {
+            "inParty": "anselmo"
+          },
+          "next": "a1"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "a1": {
+      "speaker": "anselmo",
+      "text": "Si esto va a acabar en sangre, recuerdo a los presentes que la extremaunción la cobro por adelantado. Por razones evidentes.",
+      "next": "d3"
+    },
+    "d3": {
+      "speaker": "dorotea",
+      "text": "Le apunto, fray.",
+      "next": "a2"
+    },
+    "a2": {
+      "speaker": "anselmo",
+      "text": "¿Me apunta qué?",
+      "next": "d4"
+    },
+    "d4": {
+      "speaker": "dorotea",
+      "text": "Todavía no lo sé. Por eso le apunto.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "mazo",
+      "text": "¿Y bien?",
+      "choices": [
+        {
+          "id": "capataz",
+          "text": "¿Quién lleva su mina, excelencia?",
+          "once": true,
+          "next": "capataz"
+        },
+        {
+          "id": "cierre",
+          "text": "¿Por qué cerró la mina?",
+          "once": true,
+          "next": "cierre"
+        },
+        {
+          "id": "persuadir",
+          "text": "Aquí nadie tiene que romper nada. Enséñeme las cuentas y buscamos una forma de que todos durmamos esta noche.",
+          "once": true,
+          "when": {
+            "notFlag": "abadia_desconfia"
+          },
+          "check": {
+            "check": "persuasion",
+            "dc": 14,
+            "success": "cuentas",
+            "failure": "cuentas_no"
+          }
+        },
+        {
+          "id": "persuadir_dif",
+          "text": "Aquí nadie tiene que romper nada. Enséñeme las cuentas y buscamos una forma de que todos durmamos esta noche.",
+          "once": true,
+          "when": {
+            "flag": "abadia_desconfia"
+          },
+          "check": {
+            "check": "persuasion",
+            "dc": 16,
+            "success": "cuentas",
+            "failure": "cuentas_no"
+          }
+        },
+        {
+          "id": "intimidar_g",
+          "text": "Vengo a romper lo que haga falta. Usted elige si empezamos por la vajilla o por los dedos.",
+          "once": true,
+          "when": {
+            "all": [
+              {
+                "inParty": "garran"
+              },
+              {
+                "notFlag": "abadia_desconfia"
+              }
+            ]
+          },
+          "check": {
+            "check": "intimidation",
+            "dc": 12,
+            "success": "miedo",
+            "failure": "ballestas",
+            "situational": [
+              "advantage"
+            ]
+          }
+        },
+        {
+          "id": "intimidar",
+          "text": "Vengo a romper lo que haga falta. Usted elige si empezamos por la vajilla o por los dedos.",
+          "once": true,
+          "when": {
+            "all": [
+              {
+                "not": {
+                  "inParty": "garran"
+                }
+              },
+              {
+                "notFlag": "abadia_desconfia"
+              }
+            ]
+          },
+          "check": {
+            "check": "intimidation",
+            "dc": 12,
+            "success": "miedo_solo",
+            "failure": "ballestas"
+          }
+        },
+        {
+          "id": "hilda",
+          "text": "(Mirar a Hilda en vez de al barón.)",
+          "once": true,
+          "when": {
+            "notFlag": "abadia_desconfia"
+          },
+          "check": {
+            "check": "insight",
+            "dc": 13,
+            "success": "hilda_ok",
+            "failure": "hilda_mal"
+          }
+        },
+        {
+          "id": "hilda_dif",
+          "text": "(Mirar a Hilda en vez de al barón.)",
+          "once": true,
+          "when": {
+            "flag": "abadia_desconfia"
+          },
+          "check": {
+            "check": "insight",
+            "dc": 15,
+            "success": "hilda_ok",
+            "failure": "hilda_mal"
+          }
+        },
+        {
+          "id": "plato",
+          "text": "[Mago] (Ese plato tiene algo raro.)",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "wizard"
+            }
+          },
+          "check": {
+            "check": "arcana",
+            "dc": 15,
+            "success": "plato_ok",
+            "failure": "plato_mal"
+          }
+        },
+        {
+          "id": "enano",
+          "text": "[Enano] Esta abadía rezuma agua. Lo noto en la piedra. Su mina, igual.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "next": "enano"
+        },
+        {
+          "id": "elfo",
+          "text": "[Elfo] Conocí a su bisabuelo, excelencia. También debía dinero.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "next": "elfo"
+        },
+        {
+          "id": "cuarenta",
+          "text": "Cuarenta hombres bajaron a su mina, excelencia. ¿Cuántos ha visto subir?",
+          "once": true,
+          "when": {
+            "flag": "hablo_con_nella"
+          },
+          "lockedHint": "[Requiere: hablar con Nella]",
+          "next": "cuarenta"
+        },
+        {
+          "text": "Volveré cuando tenga algo mejor que ofrecer que pasas.",
+          "next": "cierre_audiencia"
+        }
+      ]
+    },
+    "capataz": {
+      "speaker": "mazo",
+      "text": "Mi capataz, Absalón Brea. Un hombre muy trabajador. Me lo recuerda a diario. Lleva la mina desde que yo llevaba pañales, y la llevaría igual si yo siguiera llevándolos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_brea",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "cierre": {
+      "speaker": "mazo",
+      "text": "Un derrumbe. El grisú, dijo Brea. Una desgracia. Escribí un poema. ¿Quieren oírlo?",
+      "choices": [
+        {
+          "id": "poema",
+          "text": "Por favor.",
+          "once": true,
+          "next": "poema"
+        },
+        {
+          "text": "No.",
+          "next": "poema_no"
+        }
+      ]
+    },
+    "poema": {
+      "speaker": "mazo",
+      "text": "«Oh, Garganta, negra y honda, / que tragaste a los cuarenta / sin dejar que nadie responda / ni rendir a nadie cuenta.»",
+      "next": "poema_2"
+    },
+    "poema_2": {
+      "speaker": "hilda",
+      "text": "Excelencia.",
+      "next": "poema_3"
+    },
+    "poema_3": {
+      "speaker": "mazo",
+      "text": "Ya lo sé, Hilda. Le falta un verso. Los mejores siempre se quedan dentro.",
+      "next": "hub"
+    },
+    "poema_no": {
+      "speaker": "mazo",
+      "text": "Nadie quiere nunca. Es el destino del poeta: escribir para la posteridad y cenar solo.",
+      "next": "hub"
+    },
+    "cuentas": {
+      "speaker": "mazo",
+      "text": "Las cuentas… Hilda, dales las cuentas. Total, ya no sirven para nada.",
+      "next": "cuentas_2"
+    },
+    "cuentas_2": {
+      "text": "Hilda deja un libro sobre la mesa sin soltarlo del todo. La mina no ha producido una onza en ocho meses, según los informes de Brea. Pero Brea sigue pidiendo pólvora, cuerda, velas y comida para doce hombres. Para una mina cerrada.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_brea_gastos",
+          "value": true
+        }
+      ],
+      "next": "cuentas_3"
+    },
+    "cuentas_3": {
+      "speaker": "dorotea",
+      "text": "Una mina cerrada que come. Le apunto, excelencia. Es la primera cosa interesante que veo en sus libros.",
+      "next": "hub"
+    },
+    "cuentas_no": {
+      "speaker": "mazo",
+      "text": "Las cuentas son privadas. Como la vergüenza. Las dos cosas las guarda Hilda.",
+      "next": "hub"
+    },
+    "miedo": {
+      "text": "Garrán se cruje los nudillos uno por uno. Tarda un buen rato. Tiene los nudillos grandes.",
+      "next": "miedo_2"
+    },
+    "miedo_solo": {
+      "text": "Dejas que el silencio haga el trabajo. Es un silencio con experiencia.",
+      "next": "miedo_2"
+    },
+    "miedo_2": {
+      "speaker": "mazo",
+      "text": "No hay dinero. No hay nada. Brea me juró que la veta estaba muerta, y yo… yo firmo lo que me ponen delante. Es mi gran talento.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_confeso_brea",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "conoce_brea",
+          "value": true
+        }
+      ],
+      "next": "miedo_3"
+    },
+    "miedo_3": {
+      "speaker": "hilda",
+      "text": "Excelencia.",
+      "next": "miedo_4"
+    },
+    "miedo_4": {
+      "speaker": "mazo",
+      "text": "Ya lo sé, Hilda. Me callo. Pero es que me lo han preguntado con muchísima convicción.",
+      "next": "hub"
+    },
+    "ballestas_g2": {
+      "speaker": "garran",
+      "text": "Cinco. La sexta está detrás del tapiz y no está cargada.",
+      "next": "ballestas_g3"
+    },
+    "ballestas_g3": {
+      "speaker": "hilda",
+      "text": "…Cinco.",
+      "next": "ballestas_g4"
+    },
+    "ballestas_g4": {
+      "speaker": "mazo",
+      "text": "¿Lo ve? Esto es lo que pasa cuando se levanta la voz. Que todos acabamos sabiendo cosas.",
+      "next": "hub"
+    },
+    "ballestas": {
+      "speaker": "hilda",
+      "text": "En esta sala hay seis ballestas, cobrador. Usted ha contado dos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "abadia_desconfia",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "ballestas_g2"
+        },
+        {
+          "next": "ballestas_2"
+        }
+      ]
+    },
+    "ballestas_2": {
+      "speaker": "mazo",
+      "text": "¿Lo ve? Esto es lo que pasa cuando se levanta la voz. Que alguien acaba contando ballestas.",
+      "next": "hub"
+    },
+    "hilda_ok": {
+      "text": "Hilda tiene la mano en la daga desde que habéis entrado. Pero no te apunta a ti. Apunta a la nuca del barón.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hilda_sopesa_traicion",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "hilda_mal": {
+      "text": "Hilda te sostiene la mirada. Pierdes tú. Sales de ese duelo con la sensación de que ella ya sabe tu talla de ataúd.",
+      "next": "hub"
+    },
+    "plato_ok": {
+      "text": "El plato zumba. No se oye: es un picor detrás de los ojos, como una canción que no recuerdas haber escuchado.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_viva",
+          "value": true
+        }
+      ],
+      "next": "plato_2"
+    },
+    "plato_2": {
+      "speaker": "mazo",
+      "text": "¿Le gusta? Me lo regaló Brea. «Por los buenos tiempos», dijo. Qué detalle, ¿verdad? Ya nadie tiene detalles.",
+      "next": "hub"
+    },
+    "plato_mal": {
+      "text": "Es un plato. Muy brillante. Te duele un poco la cabeza, pero llevas días sin dormir bien.",
+      "next": "hub"
+    },
+    "enano": {
+      "speaker": "mazo",
+      "text": "¿Agua? Brea dice que la mina está seca. Muerta, dice. Que no hay nada que sacar.",
+      "next": "enano_2"
+    },
+    "enano_2": {
+      "speaker": "hero",
+      "text": "Las minas muertas no rezuman, excelencia. Esa piedra está viva.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "enano_mina_viva",
+          "value": true
+        }
+      ],
+      "next": "enano_3"
+    },
+    "enano_3": {
+      "speaker": "hilda",
+      "text": "Interesante. Brea nunca nos ha dejado bajar a comprobarlo.",
+      "next": "hub"
+    },
+    "elfo": {
+      "speaker": "mazo",
+      "text": "¿Mi bisabuelo? ¿Y pagó?",
+      "next": "elfo_2"
+    },
+    "elfo_2": {
+      "speaker": "hero",
+      "text": "Con intereses. Tardó cuarenta años. Yo tenía tiempo.",
+      "next": "elfo_3"
+    },
+    "elfo_3": {
+      "speaker": "mazo",
+      "text": "Hilda, ¿cuántos años vive un elfo?",
+      "next": "elfo_4"
+    },
+    "elfo_4": {
+      "speaker": "hilda",
+      "text": "Más que usted, excelencia.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "elfo_conocia_bisabuelo",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "cuarenta": {
+      "text": "El barón deja una pasa a medio camino de la boca. Se le olvida, ahí, en el aire.",
+      "next": "cuarenta_2"
+    },
+    "cuarenta_2": {
+      "speaker": "mazo",
+      "text": "Ninguno. Brea me dijo… me dijo que no había nada que hacer. Que el grisú. Que si abríamos, se venía abajo el pueblo entero. Firmé la orden de sellado. Yo firmo lo que me ponen delante.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_confeso_brea",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "conoce_brea",
+          "value": true
+        }
+      ],
+      "next": "cuarenta_3"
+    },
+    "cuarenta_3": {
+      "speaker": "mazo",
+      "text": "Escribí un poema para cada uno. Bueno, para doce. Luego se me acabaron las rimas.",
+      "next": "cuarenta_4"
+    },
+    "cuarenta_4": {
+      "speaker": "anselmo",
+      "text": "Excelencia, a eso, en mi oficio, lo llamamos remordimiento. Se cura con dinero. A la Santa Madre, a plazos.",
+      "next": "hub"
+    },
+    "cierre_audiencia": {
+      "speaker": "dorotea",
+      "text": "Tres días, excelencia. Después, procedimientos.",
+      "next": "cierre_2"
+    },
+    "cierre_2": {
+      "speaker": "mazo",
+      "text": "¿Qué procedimientos?",
+      "next": "cierre_3"
+    },
+    "cierre_3": {
+      "speaker": "dorotea",
+      "text": "Los de la letra pequeña.",
+      "next": "cierre_4"
+    },
+    "cierre_4": {
+      "speaker": "mazo",
+      "text": "Hilda, ¿nosotros tenemos letra pequeña?",
+      "next": "cierre_5"
+    },
+    "cierre_5": {
+      "speaker": "hilda",
+      "text": "La tienen ellos, excelencia."
+    }
+  }
+}

@@ -1,0 +1,357 @@
+{
+  "$comment": "Every story flag the dialogues set or read. critical: the story needs it, so it must be reachable without a roll. setBy: also (or only) set by game scripts, not dialogues. readBy: read by game scripts.",
+  "viejo_hablo": {
+    "critical": false,
+    "description": "Prueba: ya le has insistido al viejo minero."
+  },
+  "viejo_pagado": {
+    "critical": false,
+    "description": "Prueba: le has dado pan al viejo minero."
+  },
+  "pista_carros": {
+    "critical": false,
+    "description": "Prueba: por la noche suben carros cargados de una mina cerrada."
+  },
+  "cofre_aguja_vista": {
+    "critical": false,
+    "description": "Prueba: has visto la aguja del cofre."
+  },
+  "cofre_abierto": {
+    "critical": false,
+    "description": "Prueba: has abierto el cofre."
+  },
+  "almacen_abierto": {
+    "critical": false,
+    "description": "Prueba: la puerta del almacén está abierta."
+  },
+  "prologo_iniciado": {
+    "critical": false,
+    "description": "Dorotea ha dado la charla del camino y los viáticos (30 coronas)."
+  },
+  "conoce_garganta": {
+    "critical": false,
+    "description": "Sabes que el préstamo era para una galería nueva que se hundió."
+  },
+  "dorotea_orden_sellada_vista": {
+    "critical": false,
+    "description": "Has visto que Dorotea guarda una página lacrada en su libro (la orden sellada).",
+    "readBy": "escena 7 (D4)"
+  },
+  "garran_busca_ivo": {
+    "critical": false,
+    "description": "Garrán te ha contado que busca a su medio hermano Ivo."
+  },
+  "garran_pagado": {
+    "critical": false,
+    "description": "Pagaste diez coronas a Garrán por adelantado.",
+    "readBy": "epílogo"
+  },
+  "garran_reclutado": {
+    "critical": false,
+    "description": "Garrán está en el grupo."
+  },
+  "garran_era_barrenero": {
+    "critical": false,
+    "description": "Garrán te ha dicho que en la mina ponía las cargas."
+  },
+  "garran_hablo_marcha": {
+    "critical": false,
+    "description": "Garrán te ha contado que se fue de Hondonegra hace ocho meses."
+  },
+  "garran_oculta_algo": {
+    "critical": false,
+    "description": "Has notado que Garrán miente sobre la noche en que se fue."
+  },
+  "conoce_mina_cerrada": {
+    "critical": false,
+    "description": "Los mineros del camino te han hablado del cierre de la mina."
+  },
+  "mineros_enfadados": {
+    "critical": false,
+    "description": "Fallaste al persuadir a los mineros: el peaje sube a 20 coronas."
+  },
+  "mineros_pagados": {
+    "critical": false,
+    "description": "Pagaste el peaje de los mineros."
+  },
+  "mineros_convencidos": {
+    "critical": false,
+    "description": "Convenciste a los mineros con la promesa de reabrir la mina."
+  },
+  "mineros_huyeron": {
+    "critical": false,
+    "description": "Asustaste a los mineros del camino."
+  },
+  "mineros_combate": {
+    "critical": false,
+    "description": "Peleaste con los mineros del camino."
+  },
+  "mineros_recuerdan_garran": {
+    "critical": false,
+    "description": "Los mineros reconocieron a Garrán: se fue la noche del derrumbe."
+  },
+  "mineros_amigos_enano": {
+    "critical": false,
+    "description": "Los mineros te tomaron por uno de los suyos (enano)."
+  },
+  "mineros_deben_al_elfo": {
+    "critical": false,
+    "description": "Prestaste 20 coronas a los mineros (elfo)."
+  },
+  "rumor_semiorco": {
+    "critical": false,
+    "description": "Los mineros llevan al pueblo el rumor del semiorco que come de todo."
+  },
+  "prologo_mineros_resuelto": {
+    "critical": true,
+    "description": "El paso del camino está libre (por las buenas o, al ganar el combate, por onVictory)."
+  },
+  "llegada_hondonegra": {
+    "critical": false,
+    "description": "El grupo ha llegado a la plaza de Hondonegra.",
+    "readBy": "scripts"
+  },
+  "plaza_presentada": {
+    "critical": false,
+    "description": "Ya se ha descrito la plaza al empezar el juicio."
+  },
+  "juicio_resuelto": {
+    "critical": true,
+    "description": "El juicio de Fray Anselmo ha terminado (hablando, pagando o a golpes). Abre la audiencia en la abadía."
+  },
+  "anselmo_reclutado": {
+    "critical": false,
+    "description": "Fray Anselmo está en el grupo."
+  },
+  "anselmo_salvado_hablando": {
+    "critical": false,
+    "description": "Salvaste a Anselmo con palabras.",
+    "readBy": "epílogo"
+  },
+  "anselmo_salvado_pagando": {
+    "critical": false,
+    "description": "Salvaste a Anselmo pagando a la Santa Pala.",
+    "readBy": "epílogo"
+  },
+  "juicio_a_golpes": {
+    "critical": false,
+    "description": "Salvaste a Anselmo peleando con los fanáticos."
+  },
+  "santa_pala_hostil": {
+    "critical": false,
+    "description": "La Santa Pala te guarda rencor (peleaste en el juicio). Se puede reparar con Cirilo."
+  },
+  "santa_pala_perdona": {
+    "critical": false,
+    "description": "Cirilo aceptó tu ofrenda tras la pelea del juicio."
+  },
+  "pagaste_por_anselmo": {
+    "critical": false,
+    "description": "Pagaste la «limosna» por Anselmo."
+  },
+  "deuda_con_dorotea": {
+    "critical": false,
+    "description": "Dorotea te adelantó 20 coronas al 12 % mensual.",
+    "readBy": "escena 7 (D4)"
+  },
+  "cirilo_ofendido": {
+    "critical": false,
+    "description": "Cirilo se ofendió en el juicio: la limosna sube a 25 coronas."
+  },
+  "cirilo_quiere_oyente": {
+    "critical": false,
+    "description": "Has notado que Cirilo solo quiere que alguien le escuche."
+  },
+  "cirilo_desconfia": {
+    "critical": false,
+    "description": "Cirilo soltó a Anselmo por tu hábito, pero no se fía."
+  },
+  "conoce_santa_pala": {
+    "critical": false,
+    "description": "Sabes qué es la Santa Pala y que considera la plata «la sangre de la tierra»."
+  },
+  "pista_canto": {
+    "critical": false,
+    "description": "Cirilo oyó un canto en la Garganta antes del derrumbe."
+  },
+  "hablo_con_nella": {
+    "critical": true,
+    "description": "Has hablado con Nella Yesca (desbloquea la opción 7 de la audiencia)."
+  },
+  "conoce_cuarenta": {
+    "critical": true,
+    "description": "Sabes lo de los cuarenta mineros sellados en la Garganta."
+  },
+  "conoce_brea": {
+    "critical": true,
+    "description": "Sabes que Absalón Brea, el capataz, bajó con los cuarenta y subió solo."
+  },
+  "conoce_cuadrilla": {
+    "critical": false,
+    "description": "Sabes qué es la Cuadrilla."
+  },
+  "nella_prepara_algo": {
+    "critical": false,
+    "description": "Has notado que Nella cuenta cabezas: prepara algo (anticipa D1)."
+  },
+  "nella_conoce_garran": {
+    "critical": false,
+    "description": "Nella reconoció a Garrán, el mejor barrenero del valle."
+  },
+  "hulla_hostiles": {
+    "critical": false,
+    "description": "Los Hulla te miran mal (elfo). Se quita convenciendo a Odda."
+  },
+  "hulla_toleran_elfo": {
+    "critical": false,
+    "description": "Odda te tolera pese a ser elfo."
+  },
+  "hulla_insultados": {
+    "critical": false,
+    "description": "Le recordaste el Pleito de las Raíces a Odda. No lo olvidará."
+  },
+  "hulla_aceptan": {
+    "critical": false,
+    "description": "Los Hulla te aceptan como uno de los suyos (enano)."
+  },
+  "odda_conoce_garran": {
+    "critical": false,
+    "description": "Odda ha visto a Garrán de vuelta."
+  },
+  "audiencia_concedida": {
+    "critical": true,
+    "description": "La guardia de la abadía os deja pasar a la audiencia (y os lleva a la abadía).",
+    "readBy": "mapa: salida de la plaza a la abadía"
+  },
+  "anselmo_hablo_habito": {
+    "critical": false,
+    "description": "Anselmo te ha contado la historia de su hábito."
+  },
+  "anselmo_habito_robado": {
+    "critical": false,
+    "description": "Has notado que el hábito de Anselmo no es suyo."
+  },
+  "pista_plata_nueva": {
+    "critical": true,
+    "description": "PISTA CLAVE: aparece plata nueva en un pueblo con la mina cerrada. Fuentes sin tirada: Cirilo, las viudas, el mostrador de Lisandro, el sermón."
+  },
+  "pista_metal_que_canta": {
+    "critical": false,
+    "description": "Los cantares élficos hablan de «el metal que canta» y de bóvedas selladas."
+  },
+  "cirilo_dice_verdad": {
+    "critical": false,
+    "description": "Cirilo está medio loco, pero lo del canto es verdad."
+  },
+  "audiencia_hecha": {
+    "critical": true,
+    "description": "Ha tenido lugar la audiencia con el barón (Dorotea le da tres días)."
+  },
+  "pista_brea_gastos": {
+    "critical": false,
+    "description": "Las cuentas del barón: Brea sigue comprando pólvora y comida para doce en una mina cerrada."
+  },
+  "baron_confeso_brea": {
+    "critical": false,
+    "description": "El barón admite que firmó lo que Brea le puso delante (veta muerta, orden de sellado)."
+  },
+  "abadia_desconfia": {
+    "critical": false,
+    "description": "La guardia de la abadía desconfía: las pruebas en la abadía tienen CD +2."
+  },
+  "hilda_sopesa_traicion": {
+    "critical": false,
+    "description": "Hilda se está pensando si su señor vale más vivo o muerto."
+  },
+  "hilda_pacto_tacito": {
+    "critical": false,
+    "description": "Hilda te ha dado a entender que hablaréis algún día."
+  },
+  "pista_plata_viva": {
+    "critical": false,
+    "description": "El plato de Brea zumba: plata viva."
+  },
+  "enano_mina_viva": {
+    "critical": false,
+    "description": "Como enano, notas que la mina está viva, no muerta como dice Brea."
+  },
+  "elfo_conocia_bisabuelo": {
+    "critical": false,
+    "description": "Conociste al bisabuelo del barón (elfo). Desbloquea una réplica de Lisandro."
+  },
+  "lisandro_aguja_vista": {
+    "critical": false,
+    "description": "Has visto la aguja envenenada del cofre de Lisandro."
+  },
+  "lisandro_sabe_robo": {
+    "critical": false,
+    "description": "Reventaste el cofre de Lisandro: él sabe que alguien ha entrado."
+  },
+  "tiene_libro_lisandro": {
+    "critical": false,
+    "description": "Tienes el libro de cuentas de Lisandro (baja la CD de mediar en D1; prueba para D4).",
+    "readBy": "escenas D1 y 7"
+  },
+  "pista_pozo": {
+    "critical": true,
+    "description": "La plata sale por el Pozo del Ahorcado. Fuentes sin tirada: las viudas, la posadera (pagando un vino) y el libro de Lisandro."
+  },
+  "pista_banco_complice": {
+    "critical": false,
+    "description": "El libro de Lisandro prueba que el banco sabe lo de la plata y planea vender la mina a «A. B.»."
+  },
+  "dorotea_duda_del_banco": {
+    "critical": false,
+    "description": "Dorotea ha visto que el banco le ocultó cosas."
+  },
+  "lisandro_desprecia_enano": {
+    "critical": false,
+    "description": "Lisandro trata con desprecio al protagonista enano.",
+    "readBy": "precios (cliente)"
+  },
+  "lisandro_hablo_negocio": {
+    "critical": false,
+    "description": "Lisandro te ha hablado de su negocio."
+  },
+  "lisandro_sospechoso": {
+    "critical": false,
+    "description": "Has notado que Lisandro espera entregas de plata desde el Pozo."
+  },
+  "pista_lisandro_sabe": {
+    "critical": false,
+    "description": "Lisandro deja caer que el valle valdrá mucho más de lo que cree el barón."
+  },
+  "lisandro_ofrece_trato": {
+    "critical": false,
+    "description": "Lisandro te invita (elfo) a verle «cuando acabe esto».",
+    "readBy": "escena 7 (D4)"
+  },
+  "lisandro_ofendido": {
+    "critical": false,
+    "description": "Amenazaste a Lisandro sin éxito: sus préstamos te salen más caros."
+  },
+  "deuda_con_lisandro": {
+    "critical": false,
+    "description": "Pediste 20 coronas prestadas a Lisandro."
+  },
+  "pista_sinpaga": {
+    "critical": false,
+    "description": "Los Sinpaga controlan el Escorial y no dejan acercarse a nadie."
+  },
+  "garran_sabe_ivo_cuarenta": {
+    "critical": false,
+    "description": "Garrán sabe ya que Ivo estaba entre los cuarenta (por Casilda)."
+  },
+  "viudas_ayudadas": {
+    "critical": false,
+    "description": "Diste 5 coronas a las viudas del Lloro."
+  },
+  "pista_callado": {
+    "critical": false,
+    "description": "La posadera vio a un hombre que no hablaba pagar con plata sin acuñar (primer Callado)."
+  },
+  "posadera_vino": {
+    "critical": false,
+    "description": "Pagaste un vino a Remedios."
+  }
+}

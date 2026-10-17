@@ -42,3 +42,22 @@ Propiedades opcionales en `encounters`: `requiresFlag` y `unlessFlag`. Ejemplos:
 ## I5. Derrumbe
 
 Capa `collapse` en la Bóveda: zonas con `height` (nueva altura) y `terrain`. Un efecto genérico `setTiles { tiles, terrain?, height?, walkable? }` (o `setTile` sobre una zona) que el guion del jefe dispare a mitad de combate (STORY §6: Brea vuela un polvorín). Quien esté encima cae (`onFall`) con la diferencia de altura.
+
+---
+
+# Peticiones del guion (rama `guion`)
+
+El guionista no toca `engine/`, `rulesets/` ni `src/`. Aquí se apunta lo que haría falta y cómo se ha resuelto mientras tanto.
+
+| # | Qué | Estado |
+|---|---|---|
+| G1 | `next` condicional en nodos sin opciones | **Hecho**. Se usa en el juicio (descripción de la plaza solo la primera vez, la réplica de Garrán) y en la audiencia (Anselmo y Garrán) |
+| G2 | `onVictory` / `onDefeat` en `startCombat` | **Hecho**. Los mineros del camino ponen `prologo_mineros_resuelto` al perder |
+| G3 | Condición `inParty` | **Hecho**. Sustituye a `garran_reclutado` en todas las réplicas de Garrán. Las marcas `*_reclutado` se quedan como historia |
+
+## Pendiente para los mapas (rama `mapas`)
+
+- Renombrar los spawns con nombre que usan los diálogos: `viuda-1` → `benita` y `viuda-2` → `casilda` (calles); `guardia_baron-1` de la plaza → `guardia_abadia`. Falta un spawn para `posadera` (Remedios, en El Pico Roto).
+- Escenas: `juicio-anselmo` ya puede apuntar a `juicio_anselmo` (incluye la llegada a la plaza), `audiencia` a `audiencia_abadia` y `sermon` a `sermon_cirilo`. El cofre de la trastienda es `chest-libro_cuentas` → `chest_libro_cuentas`.
+- La salida de la plaza a la abadía debería pedir `audiencia_concedida`. La guardia, además, hace `travel` a `abadia`/`entry-plaza`.
+- Fanáticos del juicio: el diálogo empieza el combate por facción (`fanaticos`). Las plantillas `fanatico_pala` necesitan esa facción y no llevar `noncombatant`, o no se les podrá pegar.

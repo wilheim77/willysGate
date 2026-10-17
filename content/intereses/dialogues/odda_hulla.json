@@ -1,0 +1,304 @@
+{
+  "$comment": "Scene 1. Odda Hulla (dwarf), Nella's right hand. First Hulla-vs-elf friction; dwarves are welcomed.",
+  "id": "odda_hulla",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "text": "Una enana ancha como una puerta, con las manos negras de mina hasta el codo, se apoya en un pico que no ha soltado en ocho meses.",
+      "choices": [
+        {
+          "text": "(Acercarse.)",
+          "when": {
+            "all": [
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "elf"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "dwarf"
+                  }
+                }
+              }
+            ]
+          },
+          "next": "odda_1"
+        },
+        {
+          "text": "[Elfo] (Acercarse.)",
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "next": "elfo"
+        },
+        {
+          "text": "[Enano] (Saludar como se saluda en la mina: tocando la piedra.)",
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "next": "enano"
+        },
+        {
+          "text": "Mejor no molestarla."
+        }
+      ]
+    },
+    "odda_1": {
+      "speaker": "odda",
+      "text": "Los del banco. Lo sabe el pueblo entero desde que os vieron bajar. ¿Venís a cobrar o a contar muertos? Son números distintos, aunque salgan parecidos.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "odda",
+      "text": "¿Qué?",
+      "choices": [
+        {
+          "id": "quien",
+          "text": "¿Quién eres?",
+          "once": true,
+          "next": "quien"
+        },
+        {
+          "id": "cuarenta",
+          "text": "¿Qué pasó con los cuarenta?",
+          "once": true,
+          "next": "cuarenta"
+        },
+        {
+          "id": "lisandro",
+          "text": "¿Qué opinas del prestamista, Lisandro Fuss?",
+          "once": true,
+          "next": "lisandro"
+        },
+        {
+          "text": "[Garrán] (Mirar a Garrán.)",
+          "when": {
+            "all": [
+              {
+                "inParty": "garran"
+              },
+              {
+                "notFlag": "odda_conoce_garran"
+              },
+              {
+                "rule": "race",
+                "params": {
+                  "is": "elf"
+                }
+              }
+            ]
+          },
+          "next": "garran"
+        },
+        {
+          "text": "[Garrán] (Garrán y Odda se miran.)",
+          "when": {
+            "all": [
+              {
+                "inParty": "garran"
+              },
+              {
+                "notFlag": "odda_conoce_garran"
+              },
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "elf"
+                  }
+                }
+              }
+            ]
+          },
+          "next": "garran_otro"
+        },
+        {
+          "text": "Eso es todo."
+        }
+      ]
+    },
+    "quien": {
+      "speaker": "odda",
+      "text": "Odda Hulla. Del clan Hulla, que es como decir de la mina. Hago lo que dice Nella Yesca, cuando lo que dice tiene sentido. Últimamente casi siempre.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_cuadrilla",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "cuarenta": {
+      "speaker": "odda",
+      "text": "Pregúntale a Nella. Ella cuenta mejor que yo. Yo solo sé contar hasta cuarenta, y luego vuelvo a empezar.",
+      "next": "hub"
+    },
+    "lisandro": {
+      "speaker": "odda",
+      "text": "Un orejas largas con balanza. Presta a los que tienen hambre y cobra a los que tienen menos. Le vamos a dar lo suyo, cuando toque. A él y a su banco.",
+      "next": "hub"
+    },
+    "elfo": {
+      "speaker": "odda",
+      "text": "Mira, Nella. Un elfo. ¿Viene a cobrarnos el bosque, señoría? Trescientos años de pleito, y todavía mandáis a alguien a ver si los árboles han vuelto a crecer.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hulla_hostiles",
+          "value": true
+        }
+      ],
+      "next": "elfo_hub"
+    },
+    "elfo_hub": {
+      "speaker": "odda",
+      "text": "Habla, que tenemos prisa. Llevamos esperando desde el pleito.",
+      "choices": [
+        {
+          "id": "calmar",
+          "text": "No vengo por el bosque. Vengo por el barón. Como vosotros.",
+          "once": true,
+          "check": {
+            "check": "persuasion",
+            "dc": 13,
+            "success": "calmar_ok",
+            "failure": "calmar_mal",
+            "situational": [
+              "disadvantage"
+            ]
+          }
+        },
+        {
+          "id": "pulla",
+          "text": "Ese pleito lo vais perdiendo. Por algo será.",
+          "once": true,
+          "next": "pulla"
+        },
+        {
+          "text": "[Garrán] (Mirar a Garrán.)",
+          "when": {
+            "all": [
+              {
+                "inParty": "garran"
+              },
+              {
+                "notFlag": "odda_conoce_garran"
+              }
+            ]
+          },
+          "next": "garran"
+        },
+        {
+          "text": "Seguir adelante sin contestar.",
+          "next": "callar"
+        }
+      ]
+    },
+    "calmar_ok": {
+      "speaker": "odda",
+      "text": "Por lo menos vienes por quien toca. No te confundas: no me gustas. Pero hoy me gusta menos el barón.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hulla_hostiles",
+          "value": false
+        },
+        {
+          "type": "setFlag",
+          "flag": "hulla_toleran_elfo",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "calmar_mal": {
+      "speaker": "odda",
+      "text": "Todos los elfos vienen «por otra cosa». Luego, al final, siempre era el bosque.",
+      "next": "hub"
+    },
+    "pulla": {
+      "speaker": "odda",
+      "text": "Lo vamos ganando, señoría. Lo que pasa es que las costas las pagáis con dinero y nosotros con años. Y años, de momento, tenéis más.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hulla_insultados",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "callar": {
+      "text": "Pasas de largo. A tu espalda, alguien escupe en el barro. Por el sonido, es una enana con buena puntería."
+    },
+    "garran": {
+      "speaker": "garran",
+      "text": "Os parecéis más de lo que creéis. Los dos me miráis igual.",
+      "next": "garran_2"
+    },
+    "garran_2": {
+      "speaker": "odda",
+      "text": "…Tizón. Has vuelto.",
+      "next": "garran_3"
+    },
+    "garran_3": {
+      "speaker": "garran",
+      "text": "He vuelto.",
+      "next": "garran_4"
+    },
+    "garran_4": {
+      "speaker": "odda",
+      "text": "No digo que me alegre. Digo que lo he visto.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "odda_conoce_garran",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "garran_otro": {
+      "speaker": "odda",
+      "text": "Tizón. Has vuelto. Hay quien dice que te fuiste muy deprisa aquella noche. Yo no digo nada. Yo pico.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "odda_conoce_garran",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "enano": {
+      "speaker": "odda",
+      "text": "Eso sí es un saludo. Hace ocho meses que nadie toca la piedra en este pueblo; ya no se acuerdan de que está viva.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hulla_aceptan",
+          "value": true
+        }
+      ],
+      "next": "enano_2"
+    },
+    "enano_2": {
+      "speaker": "odda",
+      "text": "Odda Hulla. Del clan Hulla. Lo que necesites en Hondonegra, pídeselo a un Hulla. Lo que necesites de un elfo, no se lo pidas a nadie.",
+      "next": "hub"
+    }
+  }
+}

@@ -1,0 +1,477 @@
+{
+  "$comment": "Prologue encounter. Entities minero_cabecilla (dialogue) and minero_hambriento_1..3, faction \"mineros\", tagged noncombatant until the fight. When the fight is won, the game must set prologo_mineros_resuelto.",
+  "id": "camino_mineros",
+  "start": "corte",
+  "nodes": {
+    "corte": {
+      "text": "Cuatro hombres cortan el camino con picos, una horca de heno y la clase de hambre que ya no pide permiso. Llevan ropa de mina. Hace mucho que no la ensucian trabajando.",
+      "next": "alto"
+    },
+    "alto": {
+      "speaker": "minero_cabecilla",
+      "text": "Alto ahí. Esto es un peaje.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "minero_cabecilla",
+      "text": "Diez coronas por cabeza. O por todas las cabezas. No somos exigentes: somos muchos y tenemos hambre.",
+      "choices": [
+        {
+          "id": "peaje",
+          "text": "¿Peaje de quién?",
+          "once": true,
+          "next": "quien"
+        },
+        {
+          "id": "mina",
+          "text": "¿Sois de Hondonegra?",
+          "once": true,
+          "next": "mina"
+        },
+        {
+          "text": "[10 coronas] Tomad. Para pan.",
+          "when": {
+            "all": [
+              {
+                "notFlag": "mineros_enfadados"
+              },
+              {
+                "item": "coronas",
+                "atLeast": 10
+              }
+            ]
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -10
+            },
+            {
+              "type": "setFlag",
+              "flag": "mineros_pagados",
+              "value": true
+            }
+          ],
+          "next": "pagado"
+        },
+        {
+          "text": "[20 coronas] Está bien. Veinte.",
+          "when": {
+            "all": [
+              {
+                "flag": "mineros_enfadados"
+              },
+              {
+                "item": "coronas",
+                "atLeast": 20
+              }
+            ]
+          },
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -20
+            },
+            {
+              "type": "setFlag",
+              "flag": "mineros_pagados",
+              "value": true
+            }
+          ],
+          "next": "pagado"
+        },
+        {
+          "id": "persuadir",
+          "text": "Vengo a cobrarle al barón. Si cobra el banco, la mina vuelve a abrir. Y vosotros con ella.",
+          "once": true,
+          "check": {
+            "check": "persuasion",
+            "dc": 12,
+            "success": "convencidos",
+            "failure": "enfadados"
+          }
+        },
+        {
+          "text": "Mirad bien. Cuatro hombres con hambre contra gente que come todos los días.",
+          "when": {
+            "not": {
+              "inParty": "garran"
+            }
+          },
+          "check": {
+            "check": "intimidation",
+            "dc": 13,
+            "success": "huyen",
+            "failure": "pelea"
+          }
+        },
+        {
+          "text": "Mirad bien a mi amigo. Mirad cuánto come.",
+          "when": {
+            "inParty": "garran"
+          },
+          "check": {
+            "check": "intimidation",
+            "dc": 13,
+            "success": "huyen",
+            "failure": "pelea",
+            "situational": [
+              "advantage"
+            ]
+          }
+        },
+        {
+          "text": "[Garrán] Dejar que hable Garrán.",
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "garran"
+        },
+        {
+          "text": "[Enano] ¿De qué galería sois? Desde aquí os huele a la Honda.",
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "next": "enano"
+        },
+        {
+          "text": "[Elfo] Os presto veinte coronas. Al cinco por ciento mensual.",
+          "when": {
+            "all": [
+              {
+                "rule": "race",
+                "params": {
+                  "is": "elf"
+                }
+              },
+              {
+                "item": "coronas",
+                "atLeast": 20
+              }
+            ]
+          },
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -20
+            },
+            {
+              "type": "setFlag",
+              "flag": "mineros_deben_al_elfo",
+              "value": true
+            }
+          ],
+          "next": "elfo"
+        },
+        {
+          "text": "[Semiorco] Yo también tengo hambre. Y soy mucho menos exigente con lo que como.",
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "half_orc"
+            }
+          },
+          "next": "semiorco"
+        },
+        {
+          "text": "Se acabó el peaje. (Atacar.)",
+          "next": "ataque"
+        },
+        {
+          "text": "Retroceder y pensarlo.",
+          "next": "retroceder"
+        }
+      ]
+    },
+    "quien": {
+      "speaker": "minero_cabecilla",
+      "text": "Del hambre. Es la única autoridad que queda en el valle. El barón no sale de la abadía y el obispo no sale de la ciudad. El hambre sale a todas partes.",
+      "next": "hub"
+    },
+    "mina": {
+      "speaker": "minero_cabecilla",
+      "text": "Éramos de la mina. Ahora somos de la cuneta. La mina cerró, el barón no paga y el pan no fía. Hacemos lo que podemos con lo que nos queda, que es un pico y mala leche.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_mina_cerrada",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "pagado": {
+      "text": "El cabecilla cuenta las monedas dos veces. Las dos veces le salen las mismas. Parece casi decepcionado de no tener que pegar a nadie.",
+      "next": "pagado_2"
+    },
+    "pagado_2": {
+      "speaker": "dorotea",
+      "text": "Le apunto.",
+      "next": "pagado_3"
+    },
+    "pagado_3": {
+      "speaker": "hero",
+      "text": "¿A ellos?",
+      "next": "pagado_4"
+    },
+    "pagado_4": {
+      "speaker": "dorotea",
+      "text": "A usted. Generosidad no presupuestada. La compasión es un gasto, no un error, pero hay que saber presupuestarla.",
+      "next": "paso"
+    },
+    "convencidos": {
+      "speaker": "minero_cabecilla",
+      "text": "El banco abriendo minas. Eso no lo había oído nunca. Será verdad, entonces: las mentiras buenas ya nos las han contado todas.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_convencidos",
+          "value": true
+        }
+      ],
+      "next": "paso"
+    },
+    "enfadados": {
+      "speaker": "minero_cabecilla",
+      "text": "Eso mismo nos dijo el último que pasó. Y el anterior. Al anterior le cobramos el doble por repetirse. A ti también.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_enfadados",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "huyen": {
+      "text": "Los mineros se miran entre sí. Uno baja el pico. Luego los demás. El hambre es valiente, pero no es tonta. Se apartan del camino sin dejar de mirarte.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_huyeron",
+          "value": true
+        }
+      ],
+      "next": "paso"
+    },
+    "pelea": {
+      "speaker": "minero_cabecilla",
+      "text": "Gente que come todos los días. Pues hoy, para variar, vais a sangrar un poco.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_combate",
+          "value": true
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_cabecilla",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_hambriento_1",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_hambriento_2",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_hambriento_3",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "startCombat",
+          "factions": [
+            "mineros"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "prologo_mineros_resuelto",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    "garran": {
+      "speaker": "minero_cabecilla",
+      "text": "¿Tizón? ¿Garrán Tizón? Te largaste la noche que se hundió la Garganta.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_recuerdan_garran",
+          "value": true
+        }
+      ],
+      "next": "garran_2"
+    },
+    "garran_2": {
+      "speaker": "garran",
+      "text": "Tenía trabajo fuera.",
+      "next": "garran_3"
+    },
+    "garran_3": {
+      "speaker": "minero_cabecilla",
+      "text": "Ya. Nosotros teníamos trabajo dentro.",
+      "next": "garran_4"
+    },
+    "garran_4": {
+      "text": "Se hace un silencio largo. De los que se llenan solos.",
+      "next": "garran_5"
+    },
+    "garran_5": {
+      "speaker": "minero_cabecilla",
+      "text": "Pasad. Por los viejos tiempos, que eran peores pero eran nuestros. Y tú, Tizón: en el pueblo hay gente que también se acuerda de aquella noche. No todos con cariño.",
+      "next": "paso"
+    },
+    "enano": {
+      "speaker": "minero_cabecilla",
+      "text": "De la Honda, sí. Y de la Garganta, los que quedan. ¿Tú de qué clan eres? Bah, da igual: con esas manos, de uno que trabaja.",
+      "next": "enano_2"
+    },
+    "enano_2": {
+      "speaker": "minero_cabecilla",
+      "text": "Pasa. Pasad todos. Y en el pueblo, busca a los Hulla. Con ellos no tendrás que pagar peaje. Con los demás, quizá.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_amigos_enano",
+          "value": true
+        }
+      ],
+      "next": "paso"
+    },
+    "elfo": {
+      "speaker": "minero_cabecilla",
+      "text": "¿Un elfo prestándonos dinero en nuestro propio camino? Es lo más élfico que he visto en mi vida.",
+      "next": "elfo_2"
+    },
+    "elfo_2": {
+      "text": "Aun así, coge las monedas. El hambre no tiene orgullo; el orgullo es para los que ya han comido.",
+      "next": "elfo_3"
+    },
+    "elfo_3": {
+      "speaker": "dorotea",
+      "text": "Al cinco por ciento mensual. Por fin alguien con criterio en este viaje.",
+      "next": "paso"
+    },
+    "semiorco": {
+      "text": "Lo dices sin sonreír. Los mineros, que han oído historias sobre los semiorcos y se las han creído todas, se apartan del camino sin darte la espalda.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_huyeron",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "rumor_semiorco",
+          "value": true
+        }
+      ],
+      "next": "semiorco_2"
+    },
+    "semiorco_2": {
+      "speaker": "dorotea",
+      "text": "Eficaz. La reputación también es un activo. Aunque la suya, en este valle, va a ir por delante de usted.",
+      "next": "paso"
+    },
+    "ataque": {
+      "text": "Los mineros aprietan los mangos. Nadie dice nada más; ya está todo dicho.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_combate",
+          "value": true
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_cabecilla",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_hambriento_1",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_hambriento_2",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_hambriento_3",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "startCombat",
+          "factions": [
+            "mineros"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "prologo_mineros_resuelto",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    "paso": {
+      "text": "El camino queda libre. Hondonegra está al fondo del valle, debajo de su escombrera, como algo que alguien ha intentado enterrar sin terminar el trabajo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "prologo_mineros_resuelto",
+          "value": true
+        },
+        {
+          "type": "setEntity",
+          "entityId": "minero_cabecilla",
+          "removeTags": [
+            "dialogue:camino_mineros"
+          ],
+          "addTags": [
+            "dialogue:camino_mineros_despues"
+          ]
+        }
+      ]
+    },
+    "retroceder": {
+      "text": "Te apartas unos pasos. Los mineros no se mueven. El hambre tiene mucha paciencia: es lo único de lo que anda sobrado."
+    }
+  }
+}
