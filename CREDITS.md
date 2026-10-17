@@ -78,7 +78,7 @@ Catálogo de fuentes candidatas y su selección en `docs/AUDIO.md`. Todos los fi
 | `ambience/mina.ogg` (recorte distinto de `music/exploration.ogg`) | intereses | Loopable Dungeon Ambience | JaggedStone | CC0 1.0 | https://opengameart.org/content/loopable-dungeon-ambience |
 | `ambience/escorial.ogg` (mezcla con `impactMining_001/003`) | intereses | Wind1; Impact Sounds (`impactMining`) | Luke.RUSTLTD; Kenney | CC0 1.0 | https://opengameart.org/content/wind1 ; https://kenney.nl/assets/impact-sounds |
 | `ambience/boveda.ogg` | intereses | Dark Ambience Loop | qubodup (Iwan Gabovitch) | **CC-BY 3.0** | https://opengameart.org/content/dark-ambience-loop |
-| `music/boveda/combat.ogg` | intereses | Hard Boss Battle 1 | MintoDog | CC0 1.0 | https://opengameart.org/content/hard-boss-battle-1 |
+| `music/boveda/combat.ogg`, `music/boss-generic.ogg` (willy, idéntico, reutilizado) | intereses, willy | Hard Boss Battle 1 | MintoDog | CC0 1.0 | https://opengameart.org/content/hard-boss-battle-1 |
 | `ambience/camerino.ogg` | willy | Ambience Pack 1 -- Sci Fi Horror (`Infestation in the Control Room`) | Joth | CC0 1.0 | https://opengameart.org/content/ambience-pack-1-sci-fi-horror |
 | `ambience/planta-1.ogg` (mezcla) | willy | Ocean Waves.wav + seagull.wav (reutilizados de `sfx/sea.ogg`/`sfx/gulls.ogg`) | Noted451; speakingmusic | CC0 1.0 | https://freesound.org/people/Noted451/sounds/531015/ ; https://freesound.org/people/speakingmusic/sounds/586831/ |
 | `sfx/crit_hit.ogg`, `sfx/downed_thud.ogg`, `sfx/death_toll.ogg` | intereses, willy | Impact Sounds (`impactPunch_heavy_001`, `impactSoft_heavy_003`, `impactBell_heavy_002`) | Kenney | CC0 1.0 | https://kenney.nl/assets/impact-sounds |
