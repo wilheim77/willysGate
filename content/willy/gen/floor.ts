@@ -57,6 +57,34 @@ export const BIOMES: Record<string, Biome> = {
   plato: plato as unknown as Biome,
 };
 
+/**
+ * What a 'b' marker becomes in each biome: something to hide behind or shove into people
+ * ('redondo' rolls when pushed). Sprites from the art preset (ninja.json → sprites).
+ */
+const BIOME_PROPS: Record<string, { sprite: string; nombre: string; tags?: string[] }[]> = {
+  castro: [{ sprite: 'barril', nombre: 'Barril', tags: ['redondo'] }],
+  hiper: [
+    { sprite: 'carrito', nombre: 'Carrito', tags: ['redondo'] },
+    { sprite: 'cesta-ofertas', nombre: 'Cesta de ofertas' },
+    { sprite: 'caja-registradora', nombre: 'Caja registradora' },
+    { sprite: 'estanteria-hiper', nombre: 'Estantería' },
+  ],
+  verbena: [
+    { sprite: 'altavoz-verbena', nombre: 'Altavoz' },
+    { sprite: 'barril', nombre: 'Barril de cerveza', tags: ['redondo'] },
+  ],
+  balneario: [
+    { sprite: 'tumbona', nombre: 'Tumbona' },
+    { sprite: 'flotador', nombre: 'Flotador', tags: ['redondo'] },
+    { sprite: 'sombrilla', nombre: 'Sombrilla' },
+  ],
+  plato: [
+    { sprite: 'camara-estudio', nombre: 'Cámara de estudio' },
+    { sprite: 'monitor-escenario', nombre: 'Monitor' },
+    { sprite: 'silla-director', nombre: 'Silla de director' },
+  ],
+};
+
 /** Marker characters: always base-height floor of the biome's '.' terrain. */
 const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X']);
 const MAX_ATTEMPTS = 20;
@@ -495,7 +523,11 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       traps.push({ id: `${prefix}-trampa-${k}`, tiles: [at], hidden: true, armed: true, params: { tipo: type, nombre: def?.nombre ?? type, detect: def?.detect ?? 12, dif: def?.dif ?? 12, dano: def?.dano ?? '1d4', ...(def?.efecto ? { efecto: def.efecto } : {}) } });
     });
     // Barrels (not all of them, every time).
-    for (const at of slots(i, 'b')) if (g.chance(0.7)) entities.push(prop(`${prefix}-barril-${entities.length}`, 'Barril', 'barril', at, ['redondo']));
+    for (const at of slots(i, 'b')) {
+      if (!g.chance(0.7)) continue;
+      const pick = g.pick(BIOME_PROPS[biome.bioma] ?? BIOME_PROPS.castro!);
+      entities.push(prop(`${prefix}-${pick.sprite}-${entities.length}`, pick.nombre, pick.sprite, at, pick.tags ?? []));
+    }
     for (const at of slots(i, 'B')) if (g.chance(0.8)) entities.push(prop(`${prefix}-gas-${entities.length}`, 'Barril de gas', 'barril-explosivo', at, ['explosivo', 'redondo']));
   });
 

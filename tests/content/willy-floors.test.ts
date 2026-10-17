@@ -62,6 +62,7 @@ describe('Willy: procedural floors', () => {
       expect(f.rooms.filter((r) => r.role === 'jefe')).toHaveLength(1);
       expect(entities.filter((e) => e.tags.includes('jefe'))).toHaveLength(1);
       expect(new Set(entities.map((e) => e.id)).size).toBe(entities.length);
+      for (const e of entities) expect((ninja.sprites as Record<string, unknown>)[e.spriteId], e.spriteId).toBeDefined();
       if (f.rival) rivals++;
     }
     // A rival room half of the time on floor 1, 80 % below.
