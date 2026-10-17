@@ -1,0 +1,185 @@
+{
+  "$comment": "Scene 3. Trapped chest in Lisandro's back room (object entity cofre_lisandro, sprite chest_trapped). Gives the ledger (key evidence for D1 mediation and D4). Smashing it needs no roll but Lisandro finds out.",
+  "id": "cofre_lisandro",
+  "start": "cofre",
+  "nodes": {
+    "cofre": {
+      "text": "Un cofre de hierro negro atornillado al suelo de la trastienda. La cerradura es élfica: bonita, antigua y más cara que todo lo que hay en la tienda.",
+      "choices": [
+        {
+          "id": "mirar",
+          "text": "Examinar la cerradura antes de tocarla.",
+          "once": true,
+          "check": {
+            "check": "investigation",
+            "dc": 13,
+            "success": "aguja",
+            "failure": "nada"
+          }
+        },
+        {
+          "text": "Forzar la cerradura.",
+          "when": {
+            "flag": "lisandro_aguja_vista"
+          },
+          "check": {
+            "check": "sleight_of_hand",
+            "dc": 15,
+            "success": "abierto",
+            "failure": "atascado"
+          }
+        },
+        {
+          "text": "Forzar la cerradura.",
+          "when": {
+            "notFlag": "lisandro_aguja_vista"
+          },
+          "check": {
+            "check": "sleight_of_hand",
+            "dc": 15,
+            "success": "abierto",
+            "failure": "pinchazo"
+          }
+        },
+        {
+          "text": "Reventar la tapa con lo que haya a mano.",
+          "next": "reventar"
+        },
+        {
+          "text": "Dejarlo."
+        }
+      ]
+    },
+    "aguja": {
+      "text": "En el ojo de la cerradura asoma una aguja fina, con la punta verdosa. Lisandro presta a todo el mundo, pero no se fía de nadie. Es lo que se llama solvencia.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "lisandro_aguja_vista",
+          "value": true
+        }
+      ],
+      "next": "cofre"
+    },
+    "nada": {
+      "text": "Una cerradura muy bonita. Demasiado bonita para tener solo una cerradura dentro, pero no ves nada más.",
+      "next": "cofre"
+    },
+    "pinchazo": {
+      "text": "Algo te muerde la yema del dedo. Un frío lento te sube por el brazo. La aguja estaba ahí, esperando a alguien con prisa.",
+      "effects": [
+        {
+          "type": "modifyResource",
+          "entityId": "hero",
+          "resource": "hp",
+          "delta": -4
+        },
+        {
+          "type": "setFlag",
+          "flag": "lisandro_aguja_vista",
+          "value": true
+        }
+      ],
+      "next": "cofre"
+    },
+    "atascado": {
+      "text": "La ganzúa gira en falso. La cerradura élfica tiene paciencia; lleva siglos esperando a alguien más hábil.",
+      "next": "cofre"
+    },
+    "reventar": {
+      "text": "La tapa cede a la cuarta patada, con un estruendo que oye media calle. La aguja de la cerradura se queda ahí, intacta, sin nadie a quien pinchar.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "lisandro_sabe_robo",
+          "value": true
+        }
+      ],
+      "next": "abierto"
+    },
+    "abierto": {
+      "text": "Dentro hay monedas, pagarés de medio valle y un libro de cuentas encuadernado en piel buena. Las últimas páginas están escritas con una letra preciosa y paciente.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "cofre_lisandro",
+          "removeTags": [
+            "dialogue:cofre_lisandro"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "libro_cuentas_lisandro",
+          "count": 1
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 25
+        },
+        {
+          "type": "setFlag",
+          "flag": "tiene_libro_lisandro",
+          "value": true
+        }
+      ],
+      "next": "leer"
+    },
+    "leer": {
+      "text": "«Recibido de A. B., por el Pozo: cuarenta libras de plata en barra, sin marca de ceca. Remitido a la Casa Valcárcel. Comisión, cuatro por ciento.» La misma anotación se repite cada semana, desde hace ocho meses.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_nueva",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pista_pozo",
+          "value": true
+        }
+      ],
+      "next": "leer_2"
+    },
+    "leer_2": {
+      "text": "En la última hoja, con el sello de la Casa: «Proceder al cobro de la deuda Mazo. Embargo preferente de la mina. Comprador previsto: A. B.»",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_banco_complice",
+          "value": true
+        }
+      ],
+      "next": "leer_3"
+    },
+    "leer_3": {
+      "speaker": "dorotea",
+      "text": "…Esto no figuraba en mi expediente.",
+      "choices": [
+        {
+          "text": "¿Usted lo sabía?",
+          "next": "dorotea_sabia"
+        },
+        {
+          "text": "Guardar el libro y salir de aquí."
+        }
+      ]
+    },
+    "dorotea_sabia": {
+      "speaker": "dorotea",
+      "text": "Yo sabía lo que figuraba en mi expediente. Esto no figuraba. Es una omisión, no un error. Las omisiones se apuntan aparte.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "dorotea_duda_del_banco",
+          "value": true
+        }
+      ]
+    }
+  }
+}

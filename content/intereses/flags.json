@@ -274,5 +274,80 @@
   "elfo_conocia_bisabuelo": {
     "critical": false,
     "description": "Conociste al bisabuelo del barón (elfo). Desbloquea una réplica de Lisandro."
+  },
+  "lisandro_aguja_vista": {
+    "critical": false,
+    "description": "Has visto la aguja envenenada del cofre de Lisandro."
+  },
+  "lisandro_sabe_robo": {
+    "critical": false,
+    "description": "Reventaste el cofre de Lisandro: él sabe que alguien ha entrado."
+  },
+  "tiene_libro_lisandro": {
+    "critical": false,
+    "description": "Tienes el libro de cuentas de Lisandro (baja la CD de mediar en D1; prueba para D4).",
+    "readBy": "escenas D1 y 7"
+  },
+  "pista_pozo": {
+    "critical": true,
+    "description": "La plata sale por el Pozo del Ahorcado. Fuentes sin tirada: las viudas, la posadera (pagando un vino) y el libro de Lisandro."
+  },
+  "pista_banco_complice": {
+    "critical": false,
+    "description": "El libro de Lisandro prueba que el banco sabe lo de la plata y planea vender la mina a «A. B.»."
+  },
+  "dorotea_duda_del_banco": {
+    "critical": false,
+    "description": "Dorotea ha visto que el banco le ocultó cosas."
+  },
+  "lisandro_desprecia_enano": {
+    "critical": false,
+    "description": "Lisandro trata con desprecio al protagonista enano.",
+    "readBy": "precios (cliente)"
+  },
+  "lisandro_hablo_negocio": {
+    "critical": false,
+    "description": "Lisandro te ha hablado de su negocio."
+  },
+  "lisandro_sospechoso": {
+    "critical": false,
+    "description": "Has notado que Lisandro espera entregas de plata desde el Pozo."
+  },
+  "pista_lisandro_sabe": {
+    "critical": false,
+    "description": "Lisandro deja caer que el valle valdrá mucho más de lo que cree el barón."
+  },
+  "lisandro_ofrece_trato": {
+    "critical": false,
+    "description": "Lisandro te invita (elfo) a verle «cuando acabe esto».",
+    "readBy": "escena 7 (D4)"
+  },
+  "lisandro_ofendido": {
+    "critical": false,
+    "description": "Amenazaste a Lisandro sin éxito: sus préstamos te salen más caros."
+  },
+  "deuda_con_lisandro": {
+    "critical": false,
+    "description": "Pediste 20 coronas prestadas a Lisandro."
+  },
+  "pista_sinpaga": {
+    "critical": false,
+    "description": "Los Sinpaga controlan el Escorial y no dejan acercarse a nadie."
+  },
+  "garran_sabe_ivo_cuarenta": {
+    "critical": false,
+    "description": "Garrán sabe ya que Ivo estaba entre los cuarenta (por Casilda)."
+  },
+  "viudas_ayudadas": {
+    "critical": false,
+    "description": "Diste 5 coronas a las viudas del Lloro."
+  },
+  "pista_callado": {
+    "critical": false,
+    "description": "La posadera vio a un hombre que no hablaba pagar con plata sin acuñar (primer Callado)."
+  },
+  "posadera_vino": {
+    "critical": false,
+    "description": "Pagaste un vino a Remedios."
   }
 }

@@ -29,6 +29,20 @@
           }
         },
         {
+          "text": "[Libro de Lisandro] Usted no sabía nada de esto, ¿verdad?",
+          "when": {
+            "all": [
+              {
+                "flag": "pista_banco_complice"
+              },
+              {
+                "notFlag": "dorotea_duda_del_banco"
+              }
+            ]
+          },
+          "next": "libro_lisandro"
+        },
+        {
           "text": "Nada. Siga apuntando."
         }
       ]
@@ -49,6 +63,18 @@
         {
           "type": "setFlag",
           "flag": "dorotea_orden_sellada_vista",
+          "value": true
+        }
+      ],
+      "next": "hola"
+    },
+    "libro_lisandro": {
+      "speaker": "dorotea",
+      "text": "Yo sabía lo que figuraba en mi expediente. Esto no figuraba. Es una omisión, no un error. Las omisiones se apuntan aparte.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "dorotea_duda_del_banco",
           "value": true
         }
       ],

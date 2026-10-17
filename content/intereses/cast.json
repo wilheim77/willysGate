@@ -149,6 +149,66 @@
     "scene": "2",
     "note": "Seneschal, behind the baron during the audience; talkable in the abbey afterwards."
   },
+  "lisandro": {
+    "name": "Lisandro Fuss",
+    "monsterId": "commoner",
+    "spriteId": "lisandro_fuss",
+    "faction": "valcarcel",
+    "noncombatant": true,
+    "essential": true,
+    "dialogue": "lisandro_fuss",
+    "scene": "3",
+    "note": "Elf pawnbroker behind his counter."
+  },
+  "cofre_lisandro": {
+    "name": "Cofre de Lisandro",
+    "prop": "chest",
+    "spriteId": "chest_trapped",
+    "dialogue": "cofre_lisandro",
+    "scene": "3",
+    "note": "Object (createProp chest) in the back room of the pawnshop. The dialogue opens it (pose:open) and drops its tag."
+  },
+  "viuda_benita": {
+    "name": "Benita",
+    "monsterId": "commoner",
+    "spriteId": "viuda",
+    "faction": "pueblo",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": "viudas_lloro",
+    "scene": "3",
+    "note": "Washing clothes at the river Lloro, next to Casilda. Tag one or both with dialogue:viudas_lloro."
+  },
+  "viuda_casilda": {
+    "name": "Casilda",
+    "monsterId": "commoner",
+    "spriteId": "viuda",
+    "faction": "pueblo",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": "viudas_lloro",
+    "scene": "3",
+    "note": "Ivo's widow (Garrán's sister-in-law)."
+  },
+  "pulpito_santa_pala": {
+    "name": "Púlpito de la Santa Pala",
+    "prop": "object",
+    "spriteId": "none",
+    "dialogue": "sermon_cirilo",
+    "scene": "3",
+    "note": "Object in the chapel next to Cirilo; interacting means listening to the sermon. A script may open sermon_cirilo instead when the party enters the chapel."
+  },
+  "posadera": {
+    "name": "Remedios",
+    "monsterId": "commoner",
+    "spriteId": "posadera",
+    "faction": "pueblo",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": "posadera_pico_roto",
+    "scene": "3",
+    "note": "Innkeeper of El Pico Roto."
+  },
   "guardia_abadia": {
     "name": "Guardia de la abadía",
     "monsterId": "guard",
