@@ -1,22 +1,24 @@
 // Builds the intro cinematic of a game: low-resolution pixel-art panels composed from
 // the packs in art-src/ plus procedural backgrounds and hand-drawn ASCII sprites.
-//   node scripts/art/build-cinematics.ts <game>
+//   node scripts/art/build-cinematics.ts <game> [intro|title]
 // Reads  content/<game>/cinematics/intro.spec.json
 // Writes content/<game>/public/assets/cinematics/<panel id>.png,
 //        content/<game>/cinematics/intro.json (panels: image, lines, durationMs, effect...)
 //        docs/art-previews/<game>-intro.png (contact sheet).
+// With `title`, reads title.spec.json (same ops) and writes each panel to
+// public/assets/title/<panel id>.png plus docs/art-previews/<game>-title.png; no player JSON.
 // Panels are drawn without colour grade: the client applies it at runtime.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
 import { type Rgb, hexToRgb, mix } from './color.ts';
-import { drawText, textWidth } from './font.ts';
+import { bigTextWidth, drawBigText, drawText, textWidth } from './font.ts';
 import { readSpriteList } from './sprite-list.ts';
 
-const [game = 'intereses'] = process.argv.slice(2);
+const [game = 'intereses', kind = 'intro'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
 const gameDir = join(root, 'content', game);
-const spec = JSON.parse(readFileSync(join(gameDir, 'cinematics', 'intro.spec.json'), 'utf8')) as Spec;
+const spec = JSON.parse(readFileSync(join(gameDir, 'cinematics', `${kind}.spec.json`), 'utf8')) as Spec;
 
 interface AsciiSprite {
   legend: Record<string, string>;
@@ -237,12 +239,28 @@ const OPS: Record<string, (img: Image, op: Op) => void> = {
     const y = op.anchor === 'bottom' ? op.y - s.height : op.y;
     blit(img, s, x, y);
   },
+  /** Text in the 3x5 font, or `font: "big"` (5x7, optionally `bold`), with optional `shadow`, 1-px `outline`
+   *  and a `highlight` colour on the top `highlightRows` rows. */
   text(img, op) {
     const scale = op.scale ?? 1;
-    const w = textWidth(op.text, scale);
+    const big = op.font === 'big';
+    const w = big ? bigTextWidth(op.text, scale, op.bold) : textWidth(op.text, scale);
     const x = op.align === 'center' ? Math.round(op.x - w / 2) : op.x;
-    if (op.shadow) drawText(img, op.text, x + scale, op.y + scale, colour(op.shadow), scale);
-    drawText(img, op.text, x, op.y, colour(op.color), scale);
+    const draw = (target: Image, dx: number, dy: number, c: string) => big
+      ? drawBigText(target, op.text, x + dx, op.y + dy, colour(c), scale, op.bold)
+      : drawText(target, op.text, x + dx, op.y + dy, colour(c), scale);
+    if (op.shadow) draw(img, op.shadowOffset ?? scale, op.shadowOffset ?? scale, op.shadow);
+    if (op.outline) for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, -1], [-1, 1], [1, 1]]) draw(img, dx!, dy!, op.outline);
+    draw(img, 0, 0, op.color);
+    if (op.highlight) {
+      const tmp = blank(img.width, img.height);
+      draw(tmp, 0, 0, op.highlight);
+      const y1 = Math.min(img.height, op.y + (op.highlightRows ?? scale * 2));
+      for (let y = Math.max(0, op.y); y < y1; y++) for (let xx = 0; xx < img.width; xx++) {
+        const i = (y * img.width + xx) * 4;
+        if (tmp.data[i + 3]) tmp.data.copy(img.data, i, i, i + 3);
+      }
+    }
   },
   rain(img, op) {
     const r = rng(op.seed ?? 1), c = colour(op.color);
@@ -362,7 +380,7 @@ function render(p: Panel): Image {
 }
 
 // --- Build -----------------------------------------------------------------------------
-const outDir = join(gameDir, 'public', 'assets', 'cinematics');
+const outDir = join(gameDir, 'public', 'assets', kind === 'intro' ? 'cinematics' : kind);
 mkdirSync(outDir, { recursive: true });
 const rendered: [Panel, Image][] = [];
 for (const p of spec.panels) {
@@ -384,7 +402,7 @@ const intro = {
     ...(p.voice ? { voice: p.voice } : {}),
   })),
 };
-writeFileSync(join(gameDir, 'cinematics', 'intro.json'), JSON.stringify(intro, null, 2) + '\n');
+if (kind === 'intro') writeFileSync(join(gameDir, 'cinematics', 'intro.json'), JSON.stringify(intro, null, 2) + '\n');
 
 // Contact sheet: 3 columns at 1x with the panel number.
 const [W, H] = spec.size;
@@ -398,6 +416,6 @@ rendered.forEach(([p, img], i) => {
 });
 const previewDir = join(root, 'docs', 'art-previews');
 if (!existsSync(previewDir)) mkdirSync(previewDir, { recursive: true });
-writePng(join(previewDir, `${game}-intro.png`), sheet);
+writePng(join(previewDir, `${game}-${kind}.png`), sheet);
 const total = spec.panels.reduce((s, p) => s + p.durationMs, 0) / 1000;
-console.log(`${game} intro: ${spec.panels.length} panels, ${total} s -> content/${game}/cinematics/intro.json`);
+console.log(kind === 'intro' ? `${game} intro: ${spec.panels.length} panels, ${total} s -> content/${game}/cinematics/intro.json` : `${game} ${kind}: ${spec.panels.length} images -> content/${game}/public/assets/${kind}/`);
