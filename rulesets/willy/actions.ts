@@ -13,12 +13,14 @@ import {
   hasLineOfSight,
   inBounds,
   isHostile,
+  simulatePush,
   surfaceAt,
   tileAt,
 } from '../../engine';
 import { classOf, damageBonus, hasTrait, isBig, isBoss, level, skillLevel } from './character';
 import { type AbilityData, CLASSES, abilityData } from './data';
 import { type Dice, averageDice, formatDice, parseDice, rollDice } from './dice';
+import { d20Check } from '../common/d20';
 import {
   type AttackSpec,
   Resolver,
@@ -104,6 +106,13 @@ const lowCeiling = (state: GameState, p: Vec2) => (tileAt(state.map, p)?.terrain
 
 // --- Generic attack and area helpers -------------------------------------------------------
 
+/** Adds what the push after a hit would do (walls, void, falls) to an attack preview, so the AI values it. */
+export function withPushBonus(state: GameState, p: ActionPreview, targetId: string, from: Vec2, distance: number): ActionPreview {
+  if (!p.valid) return p;
+  const extra = (p.chance ?? 1) * pushExpectedDamage(state, targetId, from, distance);
+  return extra > 0 ? { ...p, expectedDamage: (p.expectedDamage ?? 0) + extra } : p;
+}
+
 export function attackPreviewOf(state: GameState, spec: AttackSpec, extra: Partial<ActionPreview> = {}): ActionPreview {
   const p = attackPreview(state, spec);
   return {
@@ -122,8 +131,12 @@ export function attackPreviewOf(state: GameState, spec: AttackSpec, extra: Parti
 function explosionPreview(state: GameState, actor: Entity, centre: Vec2, radius: number, d: Dice): ActionPreview {
   const tiles = areaTiles(state, centre, radius);
   const victims = creaturesIn(state, tiles).filter(isCreature);
-  const expected = victims.filter((v) => isHostile(v, actor)).reduce((s) => s + averageDice(d), 0);
-  return { valid: true, chance: 1, expectedDamage: expected, affectedTiles: tiles, breakdown: [{ label: 'Daño en el área', value: formatDice(d) }] };
+  const foes = victims.filter((v) => isHostile(v, actor));
+  const friends = victims.filter((v) => !isHostile(v, actor));
+  const expected = Math.max(0, (foes.length - friends.length) * averageDice(d));
+  const breakdown: ActionPreview['breakdown'] = [{ label: 'Daño en el área', value: formatDice(d) }];
+  if (friends.length) breakdown.push({ label: '¡Cuidado! También alcanza a', value: friends.map((f) => (f.id === actor.id ? 'ti' : f.name)).join(', ') });
+  return { valid: true, chance: 1, expectedDamage: expected, affectedTiles: tiles, breakdown };
 }
 
 /** An explosion: damage to everyone in the area (allies too), then fire on the floor. Gas makes it worse. */
@@ -219,9 +232,51 @@ function shoveDif(target: Entity): number {
   return 8 + (target.stats.fue ?? 5) + (hasTrait(target, 'espalda-de-hierro') ? 3 : 0) + (isBig(target) ? 5 : 0);
 }
 
-function shoveBonus(actor: Entity): number {
+/** The pusher's visible modifiers: Fuerza (creatures: their strength stat), Empujar level, buffs. */
+function shoveModifiers(actor: Entity): { label: string; value: number; term?: string }[] {
   const lvl = skillLevel(actor, 'empujar');
-  return (actor.stats.fue ?? 5) + (lvl >= 4 ? 4 : lvl >= 2 ? 2 : 0) + (hasCondition(actor, 'compulsado') ? 2 : 0);
+  const mods: { label: string; value: number; term?: string }[] = [{ label: 'Fuerza', value: actor.stats.fue ?? 5 }];
+  if (lvl >= 2) mods.push({ label: 'Empujar', value: lvl >= 4 ? 4 : 2, term: 'habilidad' });
+  if (hasCondition(actor, 'compulsado')) mods.push({ label: 'Compulsado', value: 2, term: 'compulsado' });
+  if (hasCondition(actor, 'mareado')) mods.push({ label: 'Mareado', value: -2, term: 'mareado' });
+  return mods;
+}
+
+function shoveBonus(actor: Entity): number {
+  return shoveModifiers(actor).reduce((s, m) => s + m.value, 0);
+}
+
+/**
+ * Damage a push would cause (for previews and the AI): the void takes a normal enemy out, a
+ * boss loses 20 %; walls 1d6 (3.5), creatures 1d4 (2.5), falls 1d6 per level beyond the first.
+ */
+export function pushExpectedDamage(state: GameState, targetId: string, from: Vec2, distance: number): number {
+  const target = state.entities[targetId];
+  if (!target || unmovable(target)) return 0;
+  let dx = Math.sign(target.position.x - from.x);
+  let dy = Math.sign(target.position.y - from.y);
+  if (distance < 0) {
+    dx = -dx;
+    dy = -dy;
+  }
+  if (!dx && !dy) return 0;
+  const sim = simulatePush(willyRef(), state, targetId, dx, dy, Math.abs(distance));
+  const vida = target.resources.vida;
+  if (sim.intoVoid) return isBoss(target) ? Math.ceil((vida?.max ?? 0) * 0.2) : (vida?.current ?? 0);
+  let dmg = 3.5 * Math.max(0, sim.dropped - 1);
+  if (sim.collidedWith?.wall) dmg += 3.5;
+  else if (sim.collidedWith?.entityId) dmg += 2.5;
+  return dmg;
+}
+
+let rulesetRef: Ruleset | null = null;
+/** The ruleset object, for simulatePush in previews (set by index.ts). */
+export function setWillyRef(r: Ruleset): void {
+  rulesetRef = r;
+}
+function willyRef(): Ruleset {
+  if (!rulesetRef) throw new Error('willy: ruleset reference not set');
+  return rulesetRef;
 }
 
 const HANDLERS: Record<string, Handler> = {
@@ -248,13 +303,29 @@ const HANDLERS: Record<string, Handler> = {
       if (!target || target.id === a.id) return invalid('Elige a quién empujar.');
       if (unmovable(target)) return invalid('No hay quien lo mueva de ahí.');
       const chance = chanceD20(shoveBonus(a), shoveDif(target));
-      return { valid: true, chance, breakdown: [{ label: 'Fuerza', value: `+${shoveBonus(a)}` }, { label: 'DIF', value: String(shoveDif(target)), term: 'dif' }] };
+      const dist = skillLevel(a, 'empujar') >= 3 ? 2 : 1;
+      const consequence = pushExpectedDamage(s, target.id, a.position, dist);
+      return {
+        valid: true,
+        chance,
+        // Only hostiles count as a gain for the AI; shoving a friend is the player's business.
+        expectedDamage: isHostile(target, a) ? chance * consequence : 0,
+        breakdown: [
+          ...shoveModifiers(a).map((m) => ({ label: m.label, value: `${m.value >= 0 ? '+' : ''}${m.value}`, ...(m.term ? { term: m.term } : {}) })),
+          { label: 'DIF', value: String(shoveDif(target)), term: 'dif' },
+          ...(consequence > 0 ? [{ label: 'Consecuencia', value: consequence >= (target.resources.vida?.current ?? 999) ? '¡fuera de plano!' : `~${Math.round(consequence)} de daño`, term: 'empujar' }] : []),
+        ],
+      };
     },
     perform: (r, id, t) => {
       const actor = r.entity(id);
       const target = r.entity(t.entityId!);
-      const roll = rollSave(r, id, 'fue', shoveDif(target) - shoveBonus(actor) + (actor.stats.fue ?? 5));
-      if (!roll) return;
+      const roll = d20Check(r.rng, { check: 'empujar', label: 'Empujar', mode: 'normal', modifiers: shoveModifiers(actor), target: shoveDif(target), targetLabel: 'DIF' });
+      const natural = roll.dice[0]!.kept[0]!;
+      roll.success = natural === 20 || (natural !== 1 && roll.total >= shoveDif(target));
+      roll.targetTerm = 'dif';
+      r.emit({ type: 'shoveRolled', actorId: id, targetId: target.id, roll } as never);
+      if (!roll.success) return;
       const dist = skillLevel(actor, 'empujar') >= 3 ? 2 : 1;
       const res = pushEntity(r, target.id, actor.position, dist, id);
       if (res.moved > 0 || res.collided) countUse(r, id, 'empujar');
@@ -321,7 +392,7 @@ const HANDLERS: Record<string, Handler> = {
         const tile = tileAt(s.map, p);
         if (!tile?.walkable || occupiedBy(s, p, a.id)) return invalid('El camino no está despejado.');
       }
-      return attackPreviewOf(s, chargeSpec(a, target.id));
+      return withPushBonus(s, attackPreviewOf(s, chargeSpec(a, target.id)), target.id, line.at(-1) ?? a.position, skillLevel(a, 'reparto-a-domicilio') >= 3 ? 3 : 2);
     },
     perform: (r, id, t) => {
       const actor = r.entity(id);
@@ -441,7 +512,6 @@ const HANDLERS: Record<string, Handler> = {
       countUse(r, id, 'sello-oficial');
     },
   },
-  'hab:ventanilla-cerrada': { target: { kind: 'tile', range: 3 }, tags: ['control'], pending: true, preview: () => invalid('Pendiente del motor.'), perform: () => {} },
   'hab:silencio-administrativo': {
     target: { kind: 'self', range: 0 },
     tags: ['control', 'area'],
@@ -503,7 +573,7 @@ const HANDLERS: Record<string, Handler> = {
       if (!target) return invalid('¿A quién se la pasas?');
       if (gridDistance(a.position, target.position) > (skillLevel(a, 'pase-picado') >= 2 ? 6 : 5)) return invalid('Demasiado lejos.');
       if (!hasLineOfSight(s, a.position, target.position)) return invalid('No hay línea de visión (los rebotes llegarán con el motor).');
-      return attackPreviewOf(s, passSpec(a, target.id));
+      return withPushBonus(s, attackPreviewOf(s, passSpec(a, target.id)), target.id, a.position, 1);
     },
     perform: (r, id, t) => {
       const me = r.entity(id);
@@ -514,7 +584,6 @@ const HANDLERS: Record<string, Handler> = {
       }
     },
   },
-  'hab:tiempo-muerto': { target: { kind: 'tile', range: 1 }, tags: ['summon'], pending: true, preview: () => invalid('Pendiente del motor.'), perform: () => {} },
   'hab:alley-oop': {
     target: { kind: 'creature', range: 5, filter: 'hostile' },
     tags: ['attack', 'melee', 'jump', 'push'],
@@ -523,7 +592,7 @@ const HANDLERS: Record<string, Handler> = {
       if (!target) return invalid('¿Sobre quién rematas?');
       const rules = { maxLength: skillLevel(a, 'alley-oop') >= 2 ? 5 : 4, maxUp: 3, safeDown: 4 };
       if (!landingNear(s, a, target, rules)) return invalid('No hay dónde aterrizar junto al objetivo.');
-      return attackPreviewOf(s, alleySpec(a, target.id));
+      return attackPreviewOf(s, alleySpec(a, target.id, !!alleyHelper(s, a, target)));
     },
     perform: (r, id, t) => {
       const me = r.entity(id);
@@ -532,12 +601,13 @@ const HANDLERS: Record<string, Handler> = {
       const land = landingNear(r.state, me, target, rules);
       if (!land) return;
       if (land.x !== me.position.x || land.y !== me.position.y) doJump(r, id, land, rules);
-      const res = resolveAttack(r, alleySpec(r.entity(id), target.id));
+      const helper = alleyHelper(r.state, me, target);
+      const res = resolveAttack(r, alleySpec(r.entity(id), target.id, !!helper));
       if (!res.hit) return;
       if (standing(r.entity(target.id))) r.apply({ type: 'applyCondition', entityId: target.id, condition: 'tumbado', remainingTurns: 1 });
       for (const o of hostilesAround(r.state, r.entity(id), r.entity(target.id).position, 1)) if (o.id !== target.id) pushEntity(r, o.id, r.entity(target.id).position, 2, id);
       countUse(r, id, 'alley-oop');
-      r.emit({ type: 'skillUsed', entityId: id, habilidad: 'alley-oop', asistente: null } as WillyEvent);
+      r.emit({ type: 'skillUsed', entityId: id, habilidad: 'alley-oop', asistente: helper?.id ?? null } as WillyEvent);
     },
   },
   'hab:mate-del-concurso': {
@@ -644,9 +714,19 @@ function passSpec(a: Entity, targetId: string): AttackSpec {
   return { attackerId: a.id, targetId, label: 'Pase picado', melee: false, dice: dice(skillLevel(a, 'pase-picado') >= 4 ? '1d8' : '1d6'), element: 'golpe' };
 }
 
-function alleySpec(a: Entity, targetId: string): AttackSpec {
-  // Without a teammate it is an "auto-alley-oop" off the wall: half of 2d8, i.e. 1d8 (summons pending in the engine).
-  return { attackerId: a.id, targetId, label: 'Alley-oop', melee: true, dice: dice(skillLevel(a, 'alley-oop') >= 4 ? '1d10' : '1d8'), element: 'golpe', extra: [{ label: 'Remate', value: 3 }] };
+function alleySpec(a: Entity, targetId: string, assisted: boolean): AttackSpec {
+  // With a teammate throwing the ball (Chencho, a fan, an automaton...) it is the real thing: 2d8.
+  // Alone it is an "auto-alley-oop" off the wall: half, 1d8.
+  const full = skillLevel(a, 'alley-oop') >= 4 ? '2d10' : '2d8';
+  const half = skillLevel(a, 'alley-oop') >= 4 ? '1d10' : '1d8';
+  return { attackerId: a.id, targetId, label: assisted ? 'Alley-oop' : 'Auto-alley-oop', melee: true, dice: dice(assisted ? full : half), element: 'golpe', extra: [{ label: 'Remate', value: 3 }] };
+}
+
+/** An ally close enough to throw the ball: anyone on your side who is not an object. */
+function alleyHelper(state: GameState, a: Entity, target: Entity): Entity | undefined {
+  return Object.values(state.entities).find(
+    (e) => e.id !== a.id && standing(e) && isCreature(e) && !isHostile(e, a) && gridDistance(e.position, a.position) <= 5 && gridDistance(e.position, target.position) <= 6,
+  );
 }
 
 // --- Traits that react to damage ------------------------------------------------------------------
@@ -722,6 +802,19 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   if (!actor || !h) return invalid('Acción desconocida.');
   if (actionId.startsWith('hab:') && !abilityData(classOf(actor), actionId.slice(4))) return invalid('No es una habilidad de tu clase.');
   const aimed = targetEntity(state, target);
+  // The same generic checks the engine does, so previews (and the AI) never accept what `act` refuses.
+  const base = handlerTarget(h, actor, state);
+  const spec = actionId === 'basic:golpe' ? { ...base, range: reachOf(actor) } : base;
+  if (spec.kind === 'creature') {
+    if (!aimed) return invalid('Elige un objetivo.');
+    if (spec.filter === 'hostile' && !isHostile(actor, aimed)) return invalid('Tiene que ser un enemigo.');
+    if (spec.filter === 'ally' && isHostile(actor, aimed)) return invalid('Tiene que ser de los tuyos.');
+    if (gridDistance(actor.position, aimed.position) > spec.range) return invalid('Fuera de alcance.');
+  }
+  if (spec.kind === 'tile') {
+    if (!target.tile) return invalid('Elige una casilla.');
+    if (gridDistance(actor.position, target.tile) > spec.range) return invalid('Fuera de alcance.');
+  }
   if (aimed && aimed.id !== actorId && isHostile(aimed, actor) && hasCondition(aimed, 'escondido')) return invalid('No lo ves: está escondido.');
   if (aimed && aimed.id !== actorId && hasCondition(aimed, 'encajado')) return invalid('Está dentro de una caja invisible: no se le puede tocar.');
   if (hasCondition(actor, 'silenciado') && actionId.startsWith('hab:')) return invalid('Silencio administrativo: no puedes usar habilidades.');
