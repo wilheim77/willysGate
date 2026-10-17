@@ -1,0 +1,85 @@
+{
+  "$comment": "Talking to Fray Anselmo once he has joined.",
+  "id": "anselmo",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "speaker": "anselmo",
+      "text": "¿Sí, hijo? Si es confesión, la primera es gratis. La segunda va a plazos.",
+      "choices": [
+        {
+          "id": "habito",
+          "text": "¿De qué orden es ese hábito?",
+          "once": true,
+          "next": "habito"
+        },
+        {
+          "id": "poderes",
+          "text": "¿De verdad curas con eso?",
+          "once": true,
+          "next": "poderes"
+        },
+        {
+          "id": "mentira",
+          "text": "(Observarle mientras habla del hábito.)",
+          "once": true,
+          "when": {
+            "flag": "anselmo_hablo_habito"
+          },
+          "check": {
+            "check": "insight",
+            "dc": 13,
+            "success": "mentira_ok",
+            "failure": "mentira_mal"
+          }
+        },
+        {
+          "id": "quiere",
+          "text": "¿Qué buscas tú en Hondonegra?",
+          "once": true,
+          "next": "quiere"
+        },
+        {
+          "text": "Nada, fray. Siga."
+        }
+      ]
+    },
+    "habito": {
+      "speaker": "anselmo",
+      "text": "De los Hermanos de la Cuesta. Una orden muy antigua y muy discreta. Tan discreta que a veces ni sus miembros saben que lo son.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "anselmo_hablo_habito",
+          "value": true
+        }
+      ],
+      "next": "hola"
+    },
+    "poderes": {
+      "speaker": "anselmo",
+      "text": "Curo. No me preguntes cómo. Rezo, algo contesta y la herida se cierra. Lo que me quita el sueño no es que funcione. Es no saber a quién le estoy rezando. Hay dioses que cobran.",
+      "next": "hola"
+    },
+    "mentira_ok": {
+      "text": "Al hablar del hábito, Anselmo se toca el borde de la manga. Está cosido a mano, mal y hace poco: alguien acortó un hábito que no era suyo. Hay una mancha vieja que no ha salido con ningún lavado.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "anselmo_habito_robado",
+          "value": true
+        }
+      ],
+      "next": "hola"
+    },
+    "mentira_mal": {
+      "text": "Anselmo sonríe con la tranquilidad de quien ha mentido a obispos. No sacas nada en claro, salvo que tiene hambre.",
+      "next": "hola"
+    },
+    "quiere": {
+      "speaker": "anselmo",
+      "text": "Un sitio donde nadie me conozca y una despensa llena. Hondonegra cumple lo primero. Lo segundo… estamos en ello.",
+      "next": "hola"
+    }
+  }
+}

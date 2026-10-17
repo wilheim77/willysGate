@@ -51,5 +51,91 @@
     "essential": false,
     "dialogue": null,
     "scene": "P"
+  },
+  "anselmo": {
+    "name": "Fray Anselmo",
+    "monsterId": "companion",
+    "spriteId": "anselmo",
+    "faction": "neutral",
+    "noncombatant": true,
+    "essential": true,
+    "dialogue": "juicio_anselmo",
+    "scene": "1",
+    "note": "Companion, on the gallows platform of the Torre del Cepo. Create him like game.ts does (createCharacter cleric, halfling, level 3) but controllerId \"ai\", faction \"neutral\", tags noncombatant. Every outcome of the trial recruits him and switches his dialogue to \"anselmo\"."
+  },
+  "cirilo": {
+    "name": "Cirilo Hondo",
+    "monsterId": "commoner",
+    "spriteId": "cirilo_hondo",
+    "faction": "santa_pala",
+    "noncombatant": true,
+    "essential": true,
+    "dialogue": "juicio_anselmo",
+    "scene": "1, 3",
+    "note": "Chaplain of the Santa Pala. In the square for the trial (same tree as Anselmo); afterwards his dialogue becomes \"cirilo\". In scene 3 he is at the chapel of the Santa Pala."
+  },
+  "fanatico_1": {
+    "name": "Fanático de la Pala",
+    "monsterId": "bandit",
+    "spriteId": "fanatico_pala",
+    "faction": "fanaticos",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": null,
+    "scene": "1",
+    "note": "Guards the gallows. Fights only if the party cuts the rope."
+  },
+  "fanatico_2": {
+    "name": "Fanático de la Pala",
+    "monsterId": "bandit",
+    "spriteId": "fanatico_pala",
+    "faction": "fanaticos",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": null,
+    "scene": "1"
+  },
+  "fanatico_3": {
+    "name": "Fanático de la Pala",
+    "monsterId": "thug",
+    "spriteId": "fanatico_pala",
+    "faction": "fanaticos",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": null,
+    "scene": "1"
+  },
+  "nella": {
+    "name": "Nella Yesca",
+    "monsterId": "commoner",
+    "spriteId": "nella_yesca",
+    "faction": "cuadrilla",
+    "noncombatant": true,
+    "essential": true,
+    "dialogue": "nella_yesca",
+    "scene": "1",
+    "note": "Leader of the Cuadrilla, in the square. Later scenes (D1) will give her more dialogue."
+  },
+  "odda": {
+    "name": "Odda Hulla",
+    "monsterId": "thug",
+    "spriteId": "odda_hulla",
+    "faction": "cuadrilla",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": "odda_hulla",
+    "scene": "1",
+    "note": "Dwarf, Nella's right hand. Fights in D1 depending on the choice."
+  },
+  "guardia_abadia": {
+    "name": "Guardia de la abadía",
+    "monsterId": "guard",
+    "spriteId": "guardia_baron",
+    "faction": "abadia",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": "guardia_abadia",
+    "scene": "1",
+    "note": "At the abbey gate. Lets the party in once juicio_resuelto is set (audiencia_concedida)."
   }
 }
