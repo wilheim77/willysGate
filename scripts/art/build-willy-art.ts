@@ -389,6 +389,19 @@ const tiles: [string, Image][] = [
     [`baldosa_${n}`, show.answerTile(col, false)] as [string, Image], [`baldosa_${n}_luz`, show.answerTile(col, true)] as [string, Image],
   ]),
   ['trampilla_abierta', show.trapdoorOpen()], ['gradas_1', show.bleachers(91)], ['gradas_2', show.bleachers(92)],
+  // Floor 2: Hipermercado Eterno
+  ['hiper_suelo_1', show.hyperFloor(101)], ['hiper_suelo_2', show.hyperFloor(102)], ['hiper_oferta', show.saleAisle()],
+  ['estanteria_techo_1', show.shelfTop(103)], ['estanteria_techo_2', show.shelfTop(104)], ['estanteria_cara', show.shelfFace()],
+  ['cinta_1', show.conveyor(0)], ['cinta_2', show.conveyor(2)],
+  // Floor 3: La Verbena Sin Fin
+  ['verbena_suelo_1', show.fiestaSquare(111)], ['verbena_suelo_2', show.fiestaSquare(112)], ['verbena_suelo_3', show.fiestaSquare(113)],
+  ['escenario_1', show.bandStage(114)], ['escenario_2', show.bandStage(115)], ['escenario_cara', show.bandStageFace()],
+  ['tejado_banderines_1', show.buntingRoof(116)], ['tejado_banderines_2', show.buntingRoof(117)], ['fachada_encalada', show.whiteFacade()],
+  // Floor 4: Balneario Glaciar
+  ['azulejo_1', show.poolTiles(121)], ['azulejo_2', show.poolTiles(122)],
+  ['piscina_1', show.poolWater(0)], ['piscina_2', show.poolWater(3)],
+  ['hielo_1', show.icyTiles(123)], ['hielo_2', show.icyTiles(124)],
+  ['nieve_techo_1', show.snowTop(125)], ['nieve_techo_2', show.snowTop(126)], ['balneario_pared', show.spaWall()],
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; fps: number; loop: boolean; anchor: Anchor; light?: string }> = {

@@ -349,3 +349,13 @@ Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-han
 | 5 · Plató | `regidor` (cascos con micro, portapapeles), `tecnico-de-sonido` (auriculares, pértiga), `figurante` (romano de cartón), `camara-dron` (enemigo) |
 
 `mimico` sale en todas las plantas (ya estaba en P1).
+
+## P3: terrenos de las Plantas 2-4
+
+Vista previa (superficie y cara de cada terreno): [`art-previews/willy-plantas-2-4.png`](art-previews/willy-plantas-2-4.png).
+
+| Planta | Terrenos |
+|---|---|
+| 2 · Hipermercado | `hiper` (linóleo), `hiper-oferta` (flecha de oferta), `estanteria` (góndola vista desde arriba; cara: baldas con productos), `cinta` (cinta transportadora con galones; la planta 2 la usa como terreno que empuja) |
+| 3 · Verbena | `verbena` (adoquines con confeti y serpentinas), `escenario` (tarima de orquesta con bombillas; cara: faldón rojo con flecos), `muro-verbena` (tejados con banderines; cara: fachada encalada con balcón y maceta) |
+| 4 · Balneario | `azulejo` (gresite azul claro), `piscina` (agua profunda con reflejos), `hielo-balneario` (azulejo helado con grietas), `muro-balneario` (techo nevado; cara: azulejo blanco con franja azul y carámbanos) |
