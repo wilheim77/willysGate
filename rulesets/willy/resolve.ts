@@ -319,16 +319,17 @@ export function pushEntity(r: Resolver, targetId: string, from: Vec2, distance: 
   const sim = simulatePush(r.ruleset, r.state, targetId, dx, dy, steps);
   const moved = gridDistance(target.position, sim.to);
   if (moved > 0) r.apply({ type: 'push', entityId: targetId, dx, dy, distance: steps });
-  if (!sim.collidedWith) return { moved };
+  // R18: the engine now carries the shove into 'void' tiles itself (sim.intoVoid).
   const beyond = { x: sim.to.x + dx, y: sim.to.y + dy };
   const tile = tileAt(r.state.map, beyond);
-  if (sim.collidedWith.wall && tile && VOID_TERRAINS.has(tile.terrain)) {
+  if (sim.intoVoid || (sim.collidedWith?.wall && tile && VOID_TERRAINS.has(tile.terrain))) {
     r.emit({ type: 'fueraDePlano', entityId: targetId } as WillyEvent);
     const t = r.entity(targetId);
     if (isBoss(t)) dealDamage(r, targetId, Math.ceil((t.resources.vida?.max ?? 0) * 0.2), 'golpe', sourceId, 'fueraDePlano');
     else dealDamage(r, targetId, t.resources.vida?.current ?? 999, 'golpe', sourceId, 'fueraDePlano');
     return { moved, collided: 'void' };
   }
+  if (!sim.collidedWith) return { moved };
   if (sim.collidedWith.wall) {
     r.emit({ type: 'collided', entityId: targetId, with: 'muro' } as WillyEvent);
     dealDamage(r, targetId, rollDice(r.rng, { count: 1, sides: 6, bonus: 0 }), 'golpe', sourceId, 'choque');

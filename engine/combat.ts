@@ -111,6 +111,10 @@ export function applyOutcome(
         }
         const surface = surfaceAt(next, ev.to);
         if (e.type === 'entityPushed' && ruleset.onSurface && surface && next.entities[ev.entityId]) follow.push(ruleset.onSurface(next, ev.entityId, surface.type, 'enter', rng));
+        if (e.type === 'entityPushed' && ev.into === 'void' && ruleset.onVoid && next.entities[ev.entityId]) follow.push(ruleset.onVoid(next, ev.entityId, rng));
+        if (e.type === 'entityPushed' && ev.collidedWith && ruleset.onCollision && next.entities[ev.entityId]) {
+          follow.push(ruleset.onCollision(next, ev.entityId, ev.collidedWith, { dx: ev.direction?.dx ?? 0, dy: ev.direction?.dy ?? 0, remaining: ev.remaining ?? 0 }, rng));
+        }
       }
     }
     pending = [];

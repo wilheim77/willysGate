@@ -73,6 +73,11 @@ export interface EntityPushedEvent extends GameEvent {
   to: Vec2;
   /** What it hit if stopped early: a creature, a wall, or nothing. */
   collidedWith?: { entityId?: string; wall?: boolean };
+  /** Shoved over the edge into a pit or off the stage. */
+  into?: 'void';
+  direction?: { dx: number; dy: number };
+  /** Push distance left when it stopped (for chain shoves). */
+  remaining?: number;
 }
 
 /** Dropped more levels than a step allows: the ruleset decides the damage. */
@@ -211,7 +216,16 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         if (sim.to.x !== e.position.x || sim.to.y !== e.position.y || sim.collidedWith) {
           const from = { ...e.position };
           updateEntity(e.id, (x) => ({ ...x, position: { ...sim.to } }));
-          events.push({ type: 'entityPushed', entityId: e.id, from, to: { ...sim.to }, ...(sim.collidedWith ? { collidedWith: sim.collidedWith } : {}) });
+          events.push({
+            type: 'entityPushed',
+            entityId: e.id,
+            from,
+            to: { ...sim.to },
+            direction: { dx: Math.sign(effect.dx), dy: Math.sign(effect.dy) },
+            remaining: sim.remaining,
+            ...(sim.collidedWith ? { collidedWith: sim.collidedWith } : {}),
+            ...(sim.intoVoid ? { into: 'void' } : {}),
+          });
         }
         if (sim.dropped > 0) events.push({ type: 'entityFell', entityId: e.id, levels: sim.dropped });
         break;
@@ -347,7 +361,7 @@ export function simulatePush(
   dx: number,
   dy: number,
   distance: number,
-): { to: Vec2; dropped: number; collidedWith?: { entityId?: string; wall?: boolean } } {
+): { to: Vec2; dropped: number; collidedWith?: { entityId?: string; wall?: boolean }; intoVoid?: boolean; remaining: number } {
   const e = state.entities[entityId]!;
   let pos = { ...e.position };
   let dropped = 0;
@@ -355,14 +369,16 @@ export function simulatePush(
     const step = { x: pos.x + Math.sign(dx), y: pos.y + Math.sign(dy) };
     const here = tileAt(state.map, pos)!;
     const there = tileAt(state.map, step);
+    // Off a cliff into nothing (a pit, the edge of the stage): gone, the ruleset decides what that means.
+    if (inBounds(state.map, step) && there?.terrain === 'void') return { to: step, dropped, intoVoid: true, remaining: distance - i - 1 };
     if (!inBounds(state.map, step) || !there || !there.walkable || there.height - here.height > ruleset.movement.maxStep) {
-      return { to: pos, dropped, collidedWith: { wall: true } };
+      return { to: pos, dropped, collidedWith: { wall: true }, remaining: distance - i };
     }
     const blocker = Object.values(state.entities).find((o) => o.id !== e.id && o.position.x === step.x && o.position.y === step.y && (ruleset.occupiesTile ? ruleset.occupiesTile(o) : ruleset.isStanding(o)));
-    if (blocker) return { to: pos, dropped, collidedWith: { entityId: blocker.id } };
+    if (blocker) return { to: pos, dropped, collidedWith: { entityId: blocker.id }, remaining: distance - i };
     const drop = here.height - there.height;
     if (drop > ruleset.movement.maxStep) dropped += drop;
     pos = step;
   }
-  return { to: pos, dropped };
+  return { to: pos, dropped, remaining: 0 };
 }
