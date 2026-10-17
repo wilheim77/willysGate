@@ -497,3 +497,11 @@ Además, en el perfil por navegador (R6): `rivalesRecientes: string[]` (últimos
 - `Ruleset.onRoundEnd?(state, rng): ActionOutcome`: para cintas transportadoras y mareas (Plantas 1 y 2), que mueven a todo lo que tienen encima al acabar cada ronda.
 - `Ruleset.onTurnEnd?(state, entityId, rng)` y `onCombatStart?(state, rng)`: la «Siesta en la silla» de la Socorrista (si acaba el turno sin moverse) y el «Silencio absoluto» del Mimo (empieza el combate escondido). Hoy el segundo se aplica en su primer turno.
 
+
+## R21. `MapBuilder` con el estado
+
+**Qué.** `type MapBuilder = (state: GameState) => MapSetup` (o un contexto con `seed`), y que `changeMap` se lo pase.
+
+**Por qué.** Las plantas de *Willy* se generan con la semilla de la partida. Un `MapBuilder` sin argumentos no la conoce, así que hoy `content/willy/setup.ts` genera las plantas al empezar la temporada y las deja en `systems.world.stashed`. Funciona, pero obliga a generar todas las plantas por adelantado (más peso en la partida guardada) y no permite generar la Planta N+1 según lo que pasó en la N (rivales que vuelven, intento tras un derrumbe).
+
+**Mientras tanto:** se generan al empezar; el builder `planta-1` es solo un respaldo con semilla fija (para partidas antiguas).

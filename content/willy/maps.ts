@@ -29,9 +29,9 @@ function find(rows: string[], ch: string): Vec2[] {
   return out;
 }
 
-const zone = (name: string, layer: string, x: number, y: number, width: number, height: number, properties: MapZone['properties'] = {}): MapZone => ({ name, layer, x, y, width, height, properties });
+export const zone = (name: string, layer: string, x: number, y: number, width: number, height: number, properties: MapZone['properties'] = {}): MapZone => ({ name, layer, x, y, width, height, properties });
 
-function prop(id: string, name: string, spriteId: string, position: Vec2, tags: string[] = []): Entity {
+export function prop(id: string, name: string, spriteId: string, position: Vec2, tags: string[] = []): Entity {
   return {
     id,
     name,
@@ -96,7 +96,7 @@ export function camerino(): MapSetup {
   };
 }
 
-// --- Planta 1: Castro Sumergido (prueba) ---------------------------------------------------------------
+// --- Prueba del Castro Sumergido (a fixed test map; ?mapa=prueba-castro) ---------------------------------------------------------------
 
 /**
  * A hand-made test of floor 1: a flooded street, the quay above a canal you can be shoved into,
@@ -120,7 +120,7 @@ export const PLANTA1_ROWS = [
 
 export function planta1(): MapSetup {
   const rows = PLANTA1_ROWS;
-  const map = asciiMap('planta-1', rows, {
+  const map = asciiMap('prueba-castro', rows, {
     '.': T('piedra-mojada'),
     w: T('piedra-mojada'),
     E: T('piedra-mojada'),
@@ -154,4 +154,5 @@ export function planta1(): MapSetup {
   };
 }
 
-export const MAPS = { camerino, 'planta-1': planta1 };
+/** Hand-made maps. The floors themselves are generated per run (gen/floor.ts, setup.ts). */
+export const MAPS = { camerino, 'prueba-castro': planta1 };

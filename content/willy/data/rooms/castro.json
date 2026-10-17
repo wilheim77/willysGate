@@ -1,0 +1,316 @@
+{
+  "$comment": "Piezas de sala del Castro Sumergido (Planta 1) para el generador de plantas (content/willy/gen/floor.ts). Cada pieza ocupa una celda de 13×11 con su muro alrededor. Las puertas se abren en el centro de cada lado (columnas 5-7 arriba y abajo, filas 4-6 a los lados) solo si la sala vecina está conectada; un lado solo vale como puerta si las casillas de dentro son suelo a la altura base. Leyenda: # muro, . piedra mojada, w piedra mojada con agua, L lonja, S soportal (+1), q muelle (+2), V canal (vacío), e hueco de enemigo, c cofre, t trampa, b barril, B barril de gas, l farol, P llegada, J jefe, X escalera de bajada. Las salas se pueden voltear en horizontal.",
+  "version": 1,
+  "bioma": "castro",
+  "terreno": {
+    "#": {
+      "terrain": "muro-castro",
+      "height": 3,
+      "walkable": false
+    },
+    ".": {
+      "terrain": "piedra-mojada"
+    },
+    "w": {
+      "terrain": "piedra-mojada",
+      "surface": "agua"
+    },
+    "L": {
+      "terrain": "lonja"
+    },
+    "S": {
+      "terrain": "soportal",
+      "height": 1
+    },
+    "q": {
+      "terrain": "muelle",
+      "height": 2
+    },
+    "V": {
+      "terrain": "void",
+      "walkable": false
+    },
+    "puerta": {
+      "terrain": "piedra-mojada"
+    },
+    "relleno": {
+      "terrain": "muro-castro",
+      "height": 3,
+      "walkable": false
+    }
+  },
+  "salas": [
+    {
+      "id": "plaza-del-ascensor",
+      "nombre": "Plaza del ascensor",
+      "roles": [
+        "inicio"
+      ],
+      "peso": 1,
+      "filas": [
+        "#############",
+        "#...........#",
+        "#.l.......l.#",
+        "#...SSSSS...#",
+        "#...SSSSS...#",
+        "#.....P.....#",
+        "#...........#",
+        "#..w.....w..#",
+        "#..ww...ww..#",
+        "#...........#",
+        "#############"
+      ]
+    },
+    {
+      "id": "lonja-del-centollo",
+      "nombre": "Lonja del Centollo",
+      "roles": [
+        "jefe"
+      ],
+      "peso": 1,
+      "filas": [
+        "#############",
+        "#LLLLLLLLLLX#",
+        "#LL.l...l.LL#",
+        "#Lww.....wwL#",
+        "#Lww..J..wwL#",
+        "#L.........L#",
+        "#L.b.....b.L#",
+        "#L.........L#",
+        "#LL...c...LL#",
+        "#LLLLLLLLLLL#",
+        "#############"
+      ]
+    },
+    {
+      "id": "callejon-de-los-soportales",
+      "nombre": "Callejón de los soportales",
+      "roles": [
+        "combate",
+        "rival"
+      ],
+      "peso": 3,
+      "filas": [
+        "#############",
+        "#SSSS...SSSS#",
+        "#SSSS.e.SSSS#",
+        "#...........#",
+        "#.e.......e.#",
+        "#.....b.....#",
+        "#...........#",
+        "#.ww.....ww.#",
+        "#.ww..e..ww.#",
+        "#.....l.....#",
+        "#############"
+      ]
+    },
+    {
+      "id": "muelle-del-canal",
+      "nombre": "Muelle del canal",
+      "roles": [
+        "combate"
+      ],
+      "peso": 2,
+      "filas": [
+        "#############",
+        "#qqqqqqqqqqq#",
+        "#qqeqqqqqeqq#",
+        "#SSSSSSSSSSS#",
+        "#...........#",
+        "#..e.....e..#",
+        "#...........#",
+        "#VVVV...VVVV#",
+        "#VVVV...VVVV#",
+        "#.....l.....#",
+        "#############"
+      ]
+    },
+    {
+      "id": "lonja-vieja",
+      "nombre": "La lonja vieja",
+      "roles": [
+        "combate",
+        "rival"
+      ],
+      "peso": 2,
+      "filas": [
+        "#############",
+        "#...........#",
+        "#.LLL...LLL.#",
+        "#.LeL.l.LeL.#",
+        "#.LLL...LLL.#",
+        "#.....B.....#",
+        "#.LLL...LLL.#",
+        "#.LeL...LLL.#",
+        "#.LLL.c.LLL.#",
+        "#...........#",
+        "#############"
+      ]
+    },
+    {
+      "id": "bodega-inundada",
+      "nombre": "Bodega inundada",
+      "roles": [
+        "combate"
+      ],
+      "peso": 2,
+      "filas": [
+        "#############",
+        "#wwwww.wwwww#",
+        "#w.e.....e.w#",
+        "#w..b...b..w#",
+        "#.....l.....#",
+        "#....www....#",
+        "#.....e.....#",
+        "#w..b...b..w#",
+        "#w.........w#",
+        "#wwwww.wwwww#",
+        "#############"
+      ]
+    },
+    {
+      "id": "almacen-de-redes",
+      "nombre": "Almacén de redes",
+      "roles": [
+        "tesoro"
+      ],
+      "peso": 2,
+      "filas": [
+        "#############",
+        "#c.........c#",
+        "#...SSSSS...#",
+        "#...S...S...#",
+        "#.....l.....#",
+        "#...........#",
+        "#...S...S...#",
+        "#...SSSSS...#",
+        "#.b.......b.#",
+        "#...........#",
+        "#############"
+      ]
+    },
+    {
+      "id": "capilla-del-percebe",
+      "nombre": "Capilla del Percebe",
+      "roles": [
+        "tesoro",
+        "rival"
+      ],
+      "peso": 1,
+      "filas": [
+        "#############",
+        "#...........#",
+        "#....qcq....#",
+        "#....SSS....#",
+        "#...........#",
+        "#..w.....w..#",
+        "#.....l.....#",
+        "#..b.....b..#",
+        "#...........#",
+        "#.....e.....#",
+        "#############"
+      ]
+    },
+    {
+      "id": "pasaje-de-anzuelos",
+      "nombre": "Pasaje de los anzuelos",
+      "roles": [
+        "trampa"
+      ],
+      "peso": 2,
+      "filas": [
+        "#############",
+        "#...#...#...#",
+        "#.t.#.t.#.t.#",
+        "#...........#",
+        "#.t.......t.#",
+        "#...........#",
+        "#.....e.....#",
+        "#..t.....t..#",
+        "#...#...#...#",
+        "#...#.l.#...#",
+        "#############"
+      ]
+    },
+    {
+      "id": "trampillas-de-la-alcantarilla",
+      "nombre": "Las trampillas",
+      "roles": [
+        "trampa"
+      ],
+      "peso": 2,
+      "filas": [
+        "#############",
+        "#...........#",
+        "#.t.t...t.t.#",
+        "#...........#",
+        "#.b...l...b.#",
+        "#...........#",
+        "#.t.t...t.t.#",
+        "#...........#",
+        "#.....e.....#",
+        "#...........#",
+        "#############"
+      ]
+    },
+    {
+      "id": "plazuela-con-fuente",
+      "nombre": "Plazuela con fuente",
+      "roles": [
+        "vacia"
+      ],
+      "peso": 2,
+      "filas": [
+        "#############",
+        "#.....l.....#",
+        "#...........#",
+        "#....LLL....#",
+        "#...LwwwL...#",
+        "#...LwwwL...#",
+        "#...LwwwL...#",
+        "#....LLL....#",
+        "#.b.......b.#",
+        "#...........#",
+        "#############"
+      ]
+    },
+    {
+      "id": "soportal-largo",
+      "nombre": "El soportal largo",
+      "roles": [
+        "vacia",
+        "combate"
+      ],
+      "peso": 1,
+      "filas": [
+        "#############",
+        "#SSSSSSSSSSS#",
+        "#S.........S#",
+        "#S.l..e..l.S#",
+        "#...........#",
+        "#...........#",
+        "#...........#",
+        "#S.........S#",
+        "#S...e.....S#",
+        "#SSSSSSSSSSS#",
+        "#############"
+      ]
+    }
+  ],
+  "trampas": {
+    "anzuelo": {
+      "nombre": "Anzuelo",
+      "detect": 12,
+      "dif": 12,
+      "dano": "1d6",
+      "efecto": "enredado"
+    },
+    "trampilla-alcantarilla": {
+      "nombre": "Trampilla de alcantarilla",
+      "detect": 13,
+      "dif": 13,
+      "dano": "1d4",
+      "efecto": "tumbado"
+    }
+  }
+}
