@@ -57,12 +57,18 @@ describe('save/load roundtrip', () => {
       soakWithCheckpoints(engine, 'test', seed, buildTestWorld(engine, seed), [...PARTY_IDS, 'garran', 'anselmo', 'bandit-1', 'bandit-2', 'thug', 'skeleton']);
     });
 
-    it(`real act map ("escorial") survives serialize/deserialize at several checkpoints (seed ${seed})`, () => {
-      const world = buildActWorld(engine, seed, 'escorial');
-      const groups = hostileGroups(world);
-      const participants = [...PARTY_IDS, ...Object.values(groups).flat()];
-      soakWithCheckpoints(engine, 'escorial', seed, world, participants);
-    });
+    it(
+      `real act map ("escorial") survives serialize/deserialize at several checkpoints (seed ${seed})`,
+      () => {
+        // Escorial's roster has grown with the content (now several Sinpaga plus a Callado),
+        // so this fight takes meaningfully longer than the other checkpoints here.
+        const world = buildActWorld(engine, seed, 'escorial');
+        const groups = hostileGroups(world);
+        const participants = [...PARTY_IDS, ...Object.values(groups).flat()];
+        soakWithCheckpoints(engine, 'escorial', seed, world, participants);
+      },
+      15000,
+    );
   }
 
   it('save/load survives a map change (systems.world stash/restore)', () => {
