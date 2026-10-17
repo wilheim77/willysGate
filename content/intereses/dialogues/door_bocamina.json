@@ -47,6 +47,13 @@
           "type": "setFlag",
           "flag": "bocamina_abierta",
           "value": true
+        },
+        {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
         }
       ]
     },
@@ -68,6 +75,13 @@
           "type": "setFlag",
           "flag": "bocamina_abierta",
           "value": true
+        },
+        {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
         }
       ]
     },

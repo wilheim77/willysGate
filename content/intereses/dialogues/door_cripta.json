@@ -49,6 +49,13 @@
           "type": "setFlag",
           "flag": "cripta_abierta",
           "value": true
+        },
+        {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
         }
       ]
     },
