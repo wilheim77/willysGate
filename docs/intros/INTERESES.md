@@ -1,6 +1,6 @@
 # Intereses: guion del prólogo cinemático
 
-> Estado: **borrador pendiente de aprobación** (propuesta de la sesión de arte, 2026-10-17). No modifica `docs/STORY.md`, que sigue siendo la fuente de verdad: todos los datos de aquí salen de allí.
+> Estado: **aprobado por el usuario (2026-10-17)**. Es el anexo A de `docs/STORY.md`.
 >
 > Viñetas generadas: `content/intereses/public/assets/cinematics/`. Datos para el reproductor: `content/intereses/cinematics/intro.json` (se genera desde `intro.spec.json` con `npm run art`). Hoja de previsualización: [`docs/art-previews/intereses-intro.png`](../art-previews/intereses-intro.png).
 

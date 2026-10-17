@@ -4,7 +4,7 @@
 
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
 - **Fase 1, Esqueleto técnico:** **completada y aprobada** (2026-10-17). Arte: 0x72 como base y Ninja Adventure para exteriores. LPC se queda como preset alternativo.
-- **Fase 2, Combate:** **en curso** (plan aprobado el 2026-10-17). Progresión del acto: de nivel 3 a 6.
+- **Fase 2, Combate:** **completada**. Probada por el usuario en el móvil (2026-10-17). Progresión del acto: de nivel 3 a 6. Pendiente de aprobación formal y del plan de la Fase 3.
 - **Willy el mazmorrero:** un subagente trabaja en paralelo en la rama `willy` (diseño de la Fase 0, logros, cajas de botín y generación procedural). Solo toca `docs/willy/` y `content/willy/`.
 
 ## Hecho
