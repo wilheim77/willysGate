@@ -1,0 +1,130 @@
+{
+  "$comment": "0x72 sprites recoloured for Willy (ninja preset): the mimic and the loot boxes by rarity. Same pipeline as Intereses (scripts/art/build-palette-variants.ts). Build: `npm run art`.",
+  "atlas": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
+  "tileList": "0x72-dungeontileset-ii/tile_list_v1.7",
+  "facing": "right",
+  "animations": {
+    "idle": "open_anim"
+  },
+  "output": "chests.png",
+  "variants": {
+    "mimico": {
+      "base": "chest_mimic",
+      "note": "Mímico: cofre de madera con dientes y lengua; quieto parece un cofre normal",
+      "frames": {
+        "idle": [
+          "chest_mimic_open_anim_f0",
+          "chest_mimic_open_anim_f0",
+          "chest_mimic_open_anim_f0",
+          "chest_mimic_open_anim_f1"
+        ],
+        "move": [
+          "chest_mimic_open_anim_f1",
+          "chest_mimic_open_anim_f2",
+          "chest_mimic_open_anim_f1",
+          "chest_mimic_open_anim_f2"
+        ]
+      }
+    },
+    "caja-plata": {
+      "base": "chest_full",
+      "note": "Caja de plata: metálica, con remaches y un lazo azul",
+      "map": {
+        "#62232f": "#2e3a4a",
+        "#8f4029": "#46566a",
+        "#c56025": "#64788e",
+        "#facb3e": "#eef4f8",
+        "#ee8e2e": "#a8b8c8",
+        "#ffad3b": "#eef4f8"
+      },
+      "frames": {
+        "idle": [
+          "chest_full_open_anim_f0"
+        ],
+        "open": [
+          "chest_full_open_anim_f2"
+        ],
+        "opening": [
+          "chest_full_open_anim_f0",
+          "chest_full_open_anim_f1",
+          "chest_full_open_anim_f2"
+        ]
+      },
+      "decals": [
+        {
+          "rows": [
+            ".BB.",
+            ".BB.",
+            "BbbB",
+            ".BB.",
+            ".BB.",
+            ".BB.",
+            ".BB.",
+            ".BB.",
+            ".BB.",
+            ".BB."
+          ],
+          "legend": {
+            "B": "#3a7ad8",
+            "b": "#2a5aa8"
+          },
+          "x": 6,
+          "y": 3,
+          "from": "top"
+        }
+      ]
+    },
+    "caja-oro": {
+      "base": "chest_full",
+      "note": "Caja de oro: dorada y pesada, herrajes de oro viejo",
+      "map": {
+        "#62232f": "#8a5a10",
+        "#8f4029": "#c08a20",
+        "#c56025": "#f2c14e",
+        "#facb3e": "#fff4b0",
+        "#ee8e2e": "#d89a28",
+        "#ffad3b": "#fff4b0"
+      },
+      "frames": {
+        "idle": [
+          "chest_full_open_anim_f0"
+        ],
+        "open": [
+          "chest_full_open_anim_f2"
+        ],
+        "opening": [
+          "chest_full_open_anim_f0",
+          "chest_full_open_anim_f1",
+          "chest_full_open_anim_f2"
+        ]
+      }
+    },
+    "caja-legendaria": {
+      "base": "chest_full",
+      "note": "Caja legendaria: morado del plató, neón cian y gema fucsia (el render la hace flotar)",
+      "map": {
+        "#62232f": "#2a1250",
+        "#8f4029": "#46208a",
+        "#c56025": "#b45cff",
+        "#facb3e": "#7ff4ff",
+        "#ee8e2e": "#30b8e0",
+        "#ffad3b": "#c0ffff",
+        "#72d6ce": "#ff4fa0",
+        "#97da3f": "#ff4fa0"
+      },
+      "frames": {
+        "idle": [
+          "chest_full_open_anim_f0"
+        ],
+        "open": [
+          "chest_full_open_anim_f2"
+        ],
+        "opening": [
+          "chest_full_open_anim_f0",
+          "chest_full_open_anim_f1",
+          "chest_full_open_anim_f2"
+        ]
+      }
+    }
+  }
+}

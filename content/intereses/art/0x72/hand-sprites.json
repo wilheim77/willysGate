@@ -1,123 +1,632 @@
 {
-  "$comment": "Characters drawn by hand as ASCII parts and composed into frames by scripts/art/build-hand-sprites.ts (runs after the palette variants, so an id here replaces the recolour). Each frame stacks parts: [part, dx, dy]. Build with `npm run art`.",
-  "output": "hand.png",
-  "facing": "right",
-  "sprites": {
-    "garran": {
-      "note": "Garrán Tizón: semiorco grande de hombros anchos, moño, colmillos, chaleco de cuero y pico de minero en la mano de atrás",
-      "size": [16, 28],
-      "scale": 1,
-      "legend": {
-        "k": "#222222",
-        "G": "#93a46a", "g": "#76865a", "d": "#4f5a40", "w": "#fdf7ed", "e": "#1a1416", "r": "#c86040",
-        "h": "#2e2624",
-        "V": "#7a5434", "v": "#56392a", "B": "#3e2c22", "b": "#c8a868",
-        "P": "#4a3a30", "p": "#2e2420", "O": "#2c1d1b", "o": "#46302a",
-        "I": "#b8bdc3", "i": "#686a70", "W": "#9a6a44", "x": "#64402f"
-      },
-      "parts": {
-        "body": [
-          "........khk.....",
-          "kkkkkkkkkhkkk...",
-          "kIIIiikkgggggk..",
-          ".kkWkk.kggGGddk.",
-          "..kWk..kgggggek.",
-          "..kWk..kdggggGgk",
-          "..kWk..kdgggwgwk",
-          "..kWk..kddgggggk",
-          "..kWk...kddddddk",
-          "..kWk..kkdddkkk.",
-          "..kWkkVVVgggVVk.",
-          ".kgWgkVVvgggvVVk",
-          "kggWggkVVvgvVVgk",
-          "kGGWGGkVVVvVVVgk",
-          "kdgWgdkVVVVVVkgk",
-          ".kkWkkkBBbBBBkGk",
-          "..kWk.kPPPPPPkGk",
-          "..kWk.kPPPpPPkkk",
-          "..kWk.kPPPpPPk..",
-          "..kxk.kPPPpPPk.."
-        ],
-        "body_hit": [
-          "........khk.....",
-          "kkkkkkkkkhkkk...",
-          "kIIIiikkgggggk..",
-          ".kkWkk.kggGGggk.",
-          "..kWk..kgggggrk.",
-          "..kWk..kdggggGgk",
-          "..kWk..kdggkkkwk",
-          "..kWk..kddgkrkgk",
-          "..kWk...kddddddk",
-          "..kWk..kkdddkkk.",
-          "..kWkkVVVgggVVk.",
-          ".kgWgkVVvgggvVVk",
-          "kggWggkVVvgvVVgk",
-          "kGGWGGkVVVvVVVgk",
-          "kdgWgdkVVVVVVkgk",
-          ".kkWkkkBBbBBBkGk",
-          "..kWk.kPPPPPPkGk",
-          "..kWk.kPPPpPPkkk",
-          "..kWk.kPPPpPPk..",
-          "..kxk.kPPPpPPk.."
-        ],
-        "legs_stand": [
-          "..kkk.kPPPkPPPk.",
-          "......kPPpkPPpk.",
-          "......kPPpkPPpk.",
-          "......kpppkpppk.",
-          "......kOOOkOOOOk",
-          "......kOOOkOOOOk",
-          "......koookoooook",
-          "......kkkkkkkkkk"
-        ],
-        "legs_stride": [
-          "..kkk.kPPPPPPPk.",
-          ".....kPPPkkPPPk.",
-          "....kPPpk..kPPpk",
-          "....kppk...kppk.",
-          "...kOOOk...kOOOk",
-          "...kOOOk..kOOOOk",
-          "...koook..kooook",
-          "...kkkkk..kkkkkk"
-        ],
-        "legs_stride_b": [
-          "..kkk.kPPPPPPPk.",
-          ".....kPPpkkPPPk.",
-          "....kPPpk..kPPpk",
-          "....kPPk...kppk.",
-          "...kOOOk...kOOOk",
-          "...kOOOOk.kOOOk.",
-          "...koooook.kook.",
-          "...kkkkkkk.kkkk."
-        ],
-        "legs_pass": [
-          "..kkk.kPPPPPPk..",
-          "......kPPpPPpk..",
-          "......kPPpPPpk..",
-          "......kpppppk...",
-          "......kOOOOOk...",
-          "......kOOOOOOk..",
-          "......koooooook.",
-          "......kkkkkkkkk."
-        ]
-      },
-      "animations": {
-        "idle": [
-          [["legs_stand", 0, 20], ["body", 0, 0]],
-          [["legs_stand", 0, 20], ["body", 0, 0]],
-          [["legs_stand", 0, 20], ["body", 0, 1]],
-          [["legs_stand", 0, 20], ["body", 0, 1]]
-        ],
-        "move": [
-          [["legs_stride", 0, 20], ["body", 0, 0]],
-          [["legs_pass", 0, 20], ["body", 0, 1]],
-          [["legs_stride_b", 0, 20], ["body", 0, 0]],
-          [["legs_pass", 0, 20], ["body", 0, 1]]
-        ],
-        "hit": [
-          [["legs_stand", 0, 20], ["body_hit", -1, 1]]
-        ]
-      }
-    }
+ "$comment": "Characters edited by hand as ASCII frames and composed by scripts/art/build-hand-sprites.ts (runs after the palette variants, so an id here replaces the recolour). Garrán starts from 0x72's orc_warrior and the Cobrador from 0x72's doc, frame by frame, with the edits drawn in: same proportions, outline and palette as the pack. Build with `npm run art`.",
+ "output": "hand.png",
+ "facing": "right",
+ "sprites": {
+  "garran": {
+   "note": "Garrán Tizón: orco de 0x72 retocado como semiorco (moño, hombreras de cuero, pantalón pardo y pico de minero a la espalda)",
+   "size": [
+    16,
+    27
+   ],
+   "scale": 1.1,
+   "legend": {
+    "k": "#222222",
+    "G": "#3d734f",
+    "d": "#314152",
+    "b": "#8f4029",
+    "p": "#62232f",
+    "w": "#fdf7ed",
+    "P": "#483b3a",
+    "h": "#483b3a",
+    "o": "#c56025",
+    "O": "#8f4029",
+    "I": "#72d6ce",
+    "W": "#fdf7ed",
+    "v": "#62232f"
+   },
+   "parts": {
+    "idle_0": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "....kOOOOOOOOk..",
+     "....kddkkkkddk..",
+     "....kdk...kdk...",
+     "....kk....kk...."
+    ],
+    "idle_1": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWk.",
+     ".kOvkdGGGGGGGkkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "....kOOOOOOOOk..",
+     "....kddkkkkddk..",
+     "....kkk...kkk..."
+    ],
+    "idle_2": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "....kOOOOOOOOk..",
+     "....kkkkkkkkkk.."
+    ],
+    "idle_3": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "....kOOOOOOOOk..",
+     "....kddkkkkddk..",
+     "....kkk...kkk..."
+    ],
+    "move_0": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "....kOOOOOOOOk..",
+     "....kddkkkkddk..",
+     "....kdk....kkk..",
+     "....kk..........",
+     "................"
+    ],
+    "move_1": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "...kkOOOOOOOOk..",
+     "..kddddkkkkdddk.",
+     "..kdkkk...kkkkk.",
+     "..kkk...........",
+     "................",
+     "................"
+    ],
+    "move_2": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWk.",
+     ".kOvkdGGGGGGGkkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "...kkOOOOOOOOk..",
+     "...kdddkkkkddk..",
+     "...kkkk...kddk..",
+     "..........kdk...",
+     "..........kk...."
+    ],
+    "move_3": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "kkkkk...........",
+     "IWWIIk..kk......",
+     "kOOkIk.khhk.....",
+     ".kOvk...kk......",
+     ".kOvkkkkkkkkkk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGGGGGGGk..",
+     ".kOvkdGddGGGdk..",
+     ".kOvkdGkkGGGkk..",
+     ".kOvkddkkGGGkkk.",
+     ".kOvkdWddGGGdWk.",
+     ".kOvkdWWGGGGWWkk",
+     ".kOvkdGGGGGGGkbk",
+     ".kkkkvvvvvvvvkvk",
+     "...kkOOOOOOOOkk.",
+     "....kOOOOOOOOk..",
+     "....kkkkddkkkk..",
+     ".......kdk......",
+     ".......kk......."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "idle_0",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "idle_1",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "idle_2",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "idle_3",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "move_0",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "move_1",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "move_2",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "move_3",
+       0,
+       0
+      ]
+     ]
+    ],
+    "hit": [
+     [
+      [
+       "idle_0",
+       -1,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "cobrador": {
+   "note": "Cobrador: el doctor de 0x72 retocado (capucha pizarra, bufanda oscura sobre la nariz, ojos fríos, correa de latón con sello, farol)",
+   "size": [
+    16,
+    23
+   ],
+   "legend": {
+    "k": "#222222",
+    "H": "#314152",
+    "s": "#483b3a",
+    "B": "#aa8d7a",
+    "L": "#d3bfa9",
+    "e": "#111111",
+    "g": "#417089",
+    "c": "#363d4b",
+    "E": "#c8dce6",
+    "u": "#6a8aa0",
+    "f": "#3c3c48",
+    "F": "#585866",
+    "i": "#b08a48",
+    "Y": "#f0d070",
+    "y": "#ee8e2e"
+   },
+   "parts": {
+    "idle_0": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "......kkkkk.....",
+     "....kkHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHccccccsk..",
+     "..kHHkkkssskkk..",
+     ".ksHkkEEkfkEuk..",
+     ".ksHkkuukfkuk...",
+     ".ksscfccFFFck...",
+     "kYkscsffFFFfk...",
+     "kykscsssffsFk...",
+     ".kksccccsscck...",
+     "..kcciiiccssk...",
+     "..ksccccYicck...",
+     "..kcHHHHHHiik...",
+     "...kHHkkkcHHk...",
+     "...kHk...kHk....",
+     "...kk....kk....."
+    ],
+    "idle_1": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "......kkkkk.....",
+     "....kkHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHkkkkkksk..",
+     "..kHHkEEkskEuk..",
+     ".ksHkkuukfkuk...",
+     ".ksHcfccFFFck...",
+     ".ksscsffFFFfk...",
+     "kYkscsssffsFk...",
+     "kykscccccccck...",
+     ".kkccccccccck...",
+     "..ksciccssccs...",
+     "..kccciiccssk...",
+     "...kccccYicck...",
+     "...kHHHHHHiik...",
+     "...kHHkkkkHHk...",
+     "...kkk....kkk..."
+    ],
+    "idle_2": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     ".....kkkkkk.....",
+     "....kcHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHccccccsk..",
+     "..kHHkkkssskkk..",
+     ".ksHkkEEkfkEuk..",
+     "kYkHkkuukfkuk...",
+     "kykscfccFFFck...",
+     ".kkscsffFFFfk...",
+     "..kscsssffsFk...",
+     "..kcccccsscck...",
+     "..ksciiiccssk...",
+     "..kccccciYccck..",
+     "..kHHHHHHHiiik..",
+     "..kHHHkkkkHHHk.."
+    ],
+    "idle_3": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "......kkkkk.....",
+     "....kkHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHccccccsk..",
+     "..kHHkkkssskkk..",
+     ".ksHkkEEkfkEuk..",
+     ".ksHkkuukfkuk...",
+     "kYkscfccFFFck...",
+     "kykscsffFFFfk...",
+     ".kkscsssffsFk...",
+     "..ksccccsscck...",
+     "..kcciiiccssk...",
+     "..ksccccYicck...",
+     "..kcHHHHHHiik...",
+     "...kHHkkkkHHk...",
+     "...kkk....kkk..."
+    ],
+    "move_0": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "......kkkkk.....",
+     "....kkHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHccccccsk..",
+     "..kHHkkkssskkk..",
+     ".ksHkkEEkfkEuk..",
+     ".ksHkkuukfkuk...",
+     ".ksscfccFFFck...",
+     "kYkscsffFFFfk...",
+     "kykscsssffsFk...",
+     ".kksccccsscck...",
+     "..kcciiiccssk...",
+     "..ksccccYicck...",
+     "...kcHHHHHiik...",
+     "...kHHkkkkHHk...",
+     "...kHk....kkk...",
+     "...kk...........",
+     "................"
+    ],
+    "move_1": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "......kkkkk.....",
+     "....kkHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHccccccsk..",
+     "..kHHkkkssskkk..",
+     ".ksHkkEEkfkEuk..",
+     ".ksHkkuukfkuk...",
+     "kYkscfccFFFck...",
+     "kykscsffFFFfk...",
+     ".kkscsssffsFk...",
+     "..ksccccsscck...",
+     "..kcciiiccssk...",
+     "..ksccccYicck...",
+     "..kcHHHkkHiik...",
+     "..kHHkk..kHHHk..",
+     "..kkk.....kkkk..",
+     "................",
+     "................",
+     "................"
+    ],
+    "move_2": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "......kkkkk.....",
+     "....kkHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHkkkkkkkk..",
+     "..kHHkEEkskEuk..",
+     ".ksHkkuukfkuk...",
+     ".ksHcfccFFFck...",
+     ".ksscsffFFFfk...",
+     ".kkscsssffsFk...",
+     "kYkscccccccck...",
+     "kykcccccsscck...",
+     ".kksciiiccssk...",
+     "..kcccccYicck...",
+     "..kHHHHkkHiik...",
+     "..kkkkk..kHHk...",
+     ".........kHHk...",
+     "..........kHk...",
+     "...........kk..."
+    ],
+    "move_3": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "......kkkkk.....",
+     "....kkHHHHHk....",
+     "...kHHHHHHHsk...",
+     "..kHHHkkkkkksk..",
+     "..kHHkEEkskEuk..",
+     ".ksHkkuukfkuk...",
+     ".ksHcfccFFFck...",
+     "kYkscsffFFFfk...",
+     "kykscsssffsFk...",
+     ".kksccccsscck...",
+     "..kcccccccssk...",
+     "..ksciiicccck...",
+     "..kcccccYicck...",
+     "...kHHHHHHiik...",
+     "...kkcHccHkkk...",
+     ".....kHHHk......"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "idle_0",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "idle_1",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "idle_2",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "idle_3",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "move_0",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "move_1",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "move_2",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "move_3",
+       0,
+       0
+      ]
+     ]
+    ],
+    "hit": [
+     [
+      [
+       "idle_0",
+       -1,
+       1
+      ]
+     ]
+    ]
+   }
   }
+ }
 }

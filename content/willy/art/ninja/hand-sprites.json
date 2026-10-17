@@ -1,0 +1,1499 @@
+{
+ "$comment": "Willy (always human) and the Camerino NPCs, drawn by hand as ASCII parts (scripts/art/build-hand-sprites.ts). 'willy' is the template: every class variant extends it with a palette (legend) and accessory layers anchored to the body so they bob with it. Build: `npm run art`.",
+ "output": "characters.png",
+ "facing": "right",
+ "sprites": {
+  "willy": {
+   "template": true,
+   "size": [
+    16,
+    30
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#2b3a5c",
+    "c": "#3f5580",
+    "s": "#e8b088",
+    "S": "#c08a68",
+    "e": "#1e1c24",
+    "m": "#4a2e20",
+    "w": "#8a8f96",
+    "h": "#e8b088",
+    "O": "#e07a2a",
+    "o": "#b85a1e",
+    "L": "#f4ece0",
+    "l": "#3a6ab0",
+    "Q": "#e07a2a",
+    "q": "#b85a1e",
+    "R": "#e07a2a",
+    "r": "#b85a1e",
+    "b": "#3a2a20",
+    "A": "#e86a2a",
+    "a": "#b04a1e",
+    "g": "#8a8f96",
+    "W": "#f4ece0",
+    "P": "#80d8ff",
+    "Y": "#e0c060",
+    "X": "#d02020",
+    "T": "#a07040",
+    "H": "#ff8030"
+   },
+   "parts": {
+    "body": [
+     "....kkkkkkk.....",
+     "...kCCcCCCCk....",
+     "...kCCCCCCCCk...",
+     "...kkkkkkkkkkkk.",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksmmmmmsk....",
+     "...kSmsssmSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "legs_stand": [
+     "..kqqqqqqqqqk...",
+     "..kQQQQkQQQQk...",
+     "..kRRRRkRRRRk...",
+     "..krrrrkrrrrk...",
+     "..kbbbbkbbbbk...",
+     "..kbbbbkbbbbk...",
+     "..kkkkk.kkkkk..."
+    ],
+    "legs_a": [
+     "..kqqqqqqqqqk...",
+     "..kQQQQkkQQQk...",
+     ".kRRRRk..kRRRk..",
+     ".krrrk....krrrk.",
+     "kbbbbk....kbbbbk",
+     "kbbbbk....kbbbbk",
+     "kkkkk......kkkkk"
+    ],
+    "legs_b": [
+     "..kqqqqqqqqqk...",
+     "...kQQQkQQQQk...",
+     "...kRRRkRRRk....",
+     "...krrrkrrrk....",
+     "...kbbbkbbbbk...",
+     "...kbbbkbbbbk...",
+     "...kkkkkkkkkk..."
+    ],
+    "legs_c": [
+     "..kqqqqqqqqqk...",
+     "..kQQQkkQQQQk...",
+     ".kRRRk..kRRRRk..",
+     "krrrk....krrrk..",
+     "kbbbbk...kbbbbk.",
+     "kbbbbk...kbbbbk.",
+     "kkkkk.....kkkkk."
+    ],
+    "bombona_back": [
+     "..kk...",
+     ".kggk..",
+     "kAAAAk.",
+     "kAWWAk.",
+     "kAAAAk.",
+     "kaaaak.",
+     "kAAAAk.",
+     "kaaaak.",
+     ".kkkk.."
+    ],
+    "selfie_stick": [
+     "kkk",
+     "kPk",
+     "kkk",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g.",
+     ".g."
+    ],
+    "keytar": [
+     "..............kk",
+     "kkkkkkkkkkkkkkk.",
+     "kWWkWWkWWkWWWk..",
+     "kkkkkkkkkkkkkk.."
+    ],
+    "whistle": [
+     "k",
+     "g"
+    ],
+    "monocle": [
+     "YYY",
+     "Y.Y",
+     "YYY",
+     "..Y",
+     "..Y"
+    ],
+    "stripes": [
+     "kkkkkkkkk",
+     ".........",
+     "kkkkkkkkk",
+     ".........",
+     "kkkkkkkkk"
+    ],
+    "antenna": [
+     "X",
+     "k",
+     "k",
+     "k"
+    ],
+    "soldering_iron": [
+     "...k",
+     "..kg",
+     ".kgk",
+     "kHk."
+    ],
+    "tie": [
+     "kXk",
+     ".X.",
+     ".X.",
+     "XXX",
+     ".X."
+    ],
+    "stamp": [
+     ".k.",
+     "kTk",
+     "kkk",
+     "kXk"
+    ],
+    "headband": [
+     "XXXXXXXXXX"
+    ],
+    "ball": [
+     ".kkk.",
+     "kAAAk",
+     "kAkAk",
+     "kAAAk",
+     ".kkk."
+    ],
+    "legs_long_stand": [
+     "..kqqqqqqqqqk...",
+     "..kQQQQkQQQQk...",
+     "..kQQQQkQQQQk...",
+     "..kRRRRkRRRRk...",
+     "..kRRRRkRRRRk...",
+     "..krrrrkrrrrk...",
+     "..kWWWWkWWWWk...",
+     "..kbbbbkbbbbk...",
+     "..kbbbbkbbbbk...",
+     "..kkkkk.kkkkk..."
+    ],
+    "legs_long_a": [
+     "..kqqqqqqqqqk...",
+     "..kQQQQkkQQQk...",
+     "..kQQQk..kQQQk..",
+     ".kRRRk....kRRRk.",
+     ".kRRRk....kRRRk.",
+     ".krrrk....krrrk.",
+     ".kWWWk....kWWWk.",
+     "kbbbbk....kbbbbk",
+     "kbbbbk....kbbbbk",
+     "kkkkk......kkkkk"
+    ],
+    "legs_long_b": [
+     "..kqqqqqqqqqk...",
+     "...kQQQkQQQQk...",
+     "...kQQQkQQQk....",
+     "...kRRRkRRRk....",
+     "...kRRRkRRRk....",
+     "...krrrkrrrk....",
+     "...kWWWkWWWk....",
+     "...kbbbkbbbbk...",
+     "...kbbbkbbbbk...",
+     "...kkkkkkkkkk..."
+    ],
+    "legs_long_c": [
+     "..kqqqqqqqqqk...",
+     "..kQQQkkQQQQk...",
+     ".kQQQk..kQQQQk..",
+     ".kRRRk...kRRRk..",
+     "kRRRk....kRRRk..",
+     "krrrk....krrrk..",
+     "kWWWk....kWWWk..",
+     "kbbbbk...kbbbbk.",
+     "kbbbbk...kbbbbk.",
+     "kkkkk.....kkkkk."
+    ],
+    "arms2": [
+     "kSSk........kSSk",
+     "khhk........khhk",
+     ".kk..........kk."
+    ],
+    "antennae": [
+     "Y.......Y",
+     ".k.....k.",
+     ".k.....k."
+    ],
+    "mari_body": [
+     "....kkkkkkk.....",
+     "...kGGgGGGGk....",
+     "..kGgGGgGGgGk...",
+     "..kGGGGGGGGGGk..",
+     "..kGksssssskGk..",
+     "..kGsYeYsYeYk...",
+     "...ksssssssk....",
+     "...ksssMMssk....",
+     "....kSSSSSk.....",
+     "....kkSSSkk.....",
+     "..kkPPPPPPPkk...",
+     ".kPPFPPPPPFPPk..",
+     "kPPPPPPFPPPPPPk.",
+     "kPPFPPPPPPFPPPk.",
+     "kPPPPPPPPPPPPPk.",
+     "khhPPFPPPPPPhhk.",
+     ".kkPPPPPPFPPkk..",
+     "..kPPPPPPPPPk...",
+     "..kpppppppppk..."
+    ],
+    "mari_legs": [
+     "..kPPPPPPPPPk...",
+     "..kpppppppppk...",
+     "...kRRk.kRRk....",
+     "...kRRk.kRRk....",
+     "...kbbk.kbbk....",
+     "..kbbbk.kbbbk...",
+     "..kkkkk.kkkkk..."
+    ],
+    "mari_legs_b": [
+     "..kPPPPPPPPPk...",
+     "..kpppppppppk...",
+     "...kRRk..kRRk...",
+     "..kRRk...kRRk...",
+     "..kbbk....kbbk..",
+     ".kbbbk...kbbbk..",
+     ".kkkkk...kkkkk.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ]
+   }
+  },
+  "willy-butanero": {
+   "extends": "willy",
+   "note": "Butanero: mono naranja y la bombona a la espalda",
+   "under": [
+    [
+     "bombona_back",
+     -1,
+     0,
+     "body"
+    ]
+   ]
+  },
+  "willy-influencer": {
+   "extends": "willy",
+   "note": "Influencer: chaqueta brillante y palo de selfie",
+   "legend": {
+    "O": "#c03898",
+    "o": "#8a2070",
+    "L": "#fff0a0",
+    "l": "#ffffff",
+    "w": "#c03898",
+    "Q": "#3a4a7a",
+    "q": "#2a3458",
+    "R": "#3a4a7a",
+    "r": "#2a3458"
+   },
+   "over": [
+    [
+     "selfie_stick",
+     13,
+     -4,
+     "body"
+    ]
+   ]
+  },
+  "willy-bardo-de-verbena": {
+   "extends": "willy",
+   "note": "Bardo de verbena: camisa de orquesta con lentejuelas y teclado colgado",
+   "legend": {
+    "O": "#d03030",
+    "o": "#a02020",
+    "L": "#ffd040",
+    "l": "#ffd040",
+    "w": "#d03030",
+    "Q": "#2a2a30",
+    "q": "#1a1a20",
+    "R": "#2a2a30",
+    "r": "#1a1a20"
+   },
+   "over": [
+    [
+     "keytar",
+     0,
+     13,
+     "body"
+    ]
+   ]
+  },
+  "willy-socorrista": {
+   "extends": "willy",
+   "note": "Socorrista: camiseta amarilla, bañador rojo, chanclas y silbato",
+   "legend": {
+    "O": "#f0c830",
+    "o": "#c8a020",
+    "L": "#d02020",
+    "l": "#d02020",
+    "w": "#e8b088",
+    "C": "#d02020",
+    "c": "#f04040",
+    "Q": "#d02020",
+    "q": "#a01818",
+    "R": "#e8b088",
+    "r": "#c08a68",
+    "b": "#c08a68"
+   },
+   "over": [
+    [
+     "whistle",
+     8,
+     10,
+     "body"
+    ]
+   ]
+  },
+  "willy-tasador": {
+   "extends": "willy",
+   "note": "Tasador: chaleco, cadena de reloj, guantes blancos y monóculo",
+   "legend": {
+    "O": "#5a4a2a",
+    "o": "#3e3220",
+    "L": "#e0c060",
+    "l": "#e0c060",
+    "w": "#f0ece0",
+    "h": "#f8f8f8",
+    "C": "#4a3a2a",
+    "c": "#6a5a40",
+    "Q": "#5a5a60",
+    "q": "#44444a",
+    "R": "#5a5a60",
+    "r": "#44444a"
+   },
+   "over": [
+    [
+     "monocle",
+     8,
+     4,
+     "body"
+    ]
+   ]
+  },
+  "willy-mimo": {
+   "extends": "willy",
+   "note": "Mimo: cara blanca, boina negra y camiseta de rayas",
+   "legend": {
+    "s": "#f4f4f0",
+    "S": "#d0d0cc",
+    "m": "#1e1c24",
+    "O": "#f4f4f4",
+    "o": "#1e1c24",
+    "L": "#f4f4f4",
+    "l": "#f4f4f4",
+    "w": "#f4f4f4",
+    "C": "#1e1c24",
+    "c": "#3a3a40",
+    "Q": "#1e1c24",
+    "q": "#121016",
+    "R": "#1e1c24",
+    "r": "#121016"
+   },
+   "over": [
+    [
+     "stripes",
+     3,
+     12,
+     "body"
+    ]
+   ]
+  },
+  "willy-ingeniero": {
+   "extends": "willy",
+   "note": "Ingeniero de 5G: casco amarillo con antena, mono gris y soldador",
+   "legend": {
+    "C": "#f0c020",
+    "c": "#ffe060",
+    "O": "#8a8f96",
+    "o": "#5f646b",
+    "L": "#f0c020",
+    "l": "#1e1c24",
+    "w": "#6f747b",
+    "Q": "#6f747b",
+    "q": "#4f545b",
+    "R": "#6f747b",
+    "r": "#4f545b"
+   },
+   "over": [
+    [
+     "antenna",
+     8,
+     -4,
+     "body"
+    ],
+    [
+     "soldering_iron",
+     12,
+     13,
+     "body"
+    ]
+   ]
+  },
+  "willy-funcionario": {
+   "extends": "willy",
+   "note": "Funcionario: camisa azul, corbata, manguitos negros y sello",
+   "legend": {
+    "O": "#a8c0e0",
+    "o": "#8098c0",
+    "L": "#a8c0e0",
+    "l": "#a8c0e0",
+    "w": "#2a2a30",
+    "C": "#3a2a20",
+    "c": "#4a3a2a",
+    "Q": "#4a4a52",
+    "q": "#34343a",
+    "R": "#4a4a52",
+    "r": "#34343a"
+   },
+   "over": [
+    [
+     "tie",
+     6,
+     10,
+     "body"
+    ],
+    [
+     "stamp",
+     12,
+     15,
+     "body"
+    ]
+   ]
+  },
+  "willy-jugador-de-basket": {
+   "extends": "willy",
+   "note": "Jugador de basket: camiseta de tirantes del Brazomar, cinta y balón; 3 px más alto",
+   "legend": {
+    "O": "#f4f4f4",
+    "o": "#d0d0d0",
+    "L": "#2a8a3a",
+    "l": "#2a8a3a",
+    "w": "#e8b088",
+    "C": "#3a2a20",
+    "c": "#4a3a2a",
+    "Q": "#2a8a3a",
+    "q": "#1e6a2a",
+    "R": "#e8b088",
+    "r": "#c08a68",
+    "W": "#f4f4f4",
+    "b": "#f4f4f4"
+   },
+   "over": [
+    [
+     "headband",
+     3,
+     3,
+     "body"
+    ],
+    [
+     "ball",
+     -2,
+     14,
+     "body"
+    ]
+   ],
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_long_stand",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_long_stand",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_long_stand",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_long_stand",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_long_a",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_long_b",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_long_c",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_long_b",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "paco": {
+   "extends": "willy",
+   "note": "Paco, el del bar: pelo cano, camisa verde y mandil blanco",
+   "legend": {
+    "C": "#9a9aa0",
+    "c": "#b8b8be",
+    "O": "#e8e4dc",
+    "o": "#c8c4bc",
+    "L": "#e8e4dc",
+    "l": "#e8e4dc",
+    "w": "#4a6a50",
+    "m": "#7a7a80",
+    "Q": "#3a3a40",
+    "q": "#2a2a30",
+    "R": "#3a3a40",
+    "r": "#2a2a30"
+   }
+  },
+  "koldo": {
+   "extends": "willy",
+   "note": "Koldo, el de Bilbao: chubasquero amarillo y txapela",
+   "legend": {
+    "C": "#1e1c24",
+    "c": "#2e2e36",
+    "O": "#e8c840",
+    "o": "#b89a28",
+    "L": "#e8c840",
+    "l": "#b89a28",
+    "w": "#e8c840",
+    "Q": "#3a4a7a",
+    "q": "#2a3458",
+    "R": "#3a4a7a",
+    "r": "#2a3458"
+   }
+  },
+  "maripuri": {
+   "extends": "willy",
+   "note": "Maripuri, la vecina: rizos canos, gafas, bata de flores y zapatillas",
+   "legend": {
+    "G": "#c8c8d0",
+    "g": "#9a9aa4",
+    "Y": "#3a3a44",
+    "M": "#c04050",
+    "P": "#e890b0",
+    "p": "#c06888",
+    "F": "#fff4f4",
+    "R": "#e8b088",
+    "b": "#c03050"
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   }
+  },
+  "xelda": {
+   "extends": "willy",
+   "note": "Xelda, de Producción: alienígena verde azulada de cuatro brazos, antenas y chaqueta de staff",
+   "legend": {
+    "s": "#5ac8a8",
+    "S": "#3a9a84",
+    "m": "#5ac8a8",
+    "h": "#5ac8a8",
+    "e": "#101018",
+    "C": "#3a9a84",
+    "c": "#5ac8a8",
+    "O": "#6a4aa8",
+    "o": "#4a3280",
+    "L": "#ffe04f",
+    "l": "#ffe04f",
+    "w": "#5ac8a8",
+    "Y": "#ffe04f",
+    "Q": "#2a2a40",
+    "q": "#1a1a2a",
+    "R": "#2a2a40",
+    "r": "#1a1a2a"
+   },
+   "over": [
+    [
+     "antennae",
+     3,
+     -3,
+     "body"
+    ],
+    [
+     "arms2",
+     0,
+     16,
+     "body"
+    ]
+   ]
+  },
+  "gaviota-de-lonja": {
+   "note": "Gaviota de lonja: gorda, pico amarillo con la mancha roja y patas naranjas; aletea al moverse",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "W": "#f8f8f4",
+    "w": "#d0d4d8",
+    "G": "#8a929c",
+    "g": "#5a626c",
+    "Y": "#f0b030",
+    "R": "#d83020",
+    "E": "#1e1c24",
+    "O": "#e88a2a"
+   },
+   "parts": {
+    "stand": [
+     "................",
+     "................",
+     "................",
+     "........kkk.....",
+     ".......kWWWk....",
+     ".......kWEWkk...",
+     "......kWWWWYYk..",
+     "..kk..kWWWWkRk..",
+     ".kGGkkWWWWWkk...",
+     "kGGGGGWWWWWk....",
+     "kgGGGGGWWWwk....",
+     ".kggGGGGwwk.....",
+     "..kkkgggkkk.....",
+     ".....kO.kO......",
+     ".....kO.kO......",
+     "....kkk.kkk....."
+    ],
+    "flap": [
+     "................",
+     ".kk.............",
+     ".kGk......kkk...",
+     "..kGk....kWWWk..",
+     "..kGGk...kWEWkk.",
+     "...kGGk.kWWWWYYk",
+     "...kgGGkWWWWWkRk",
+     "....kgGWWWWWWkk.",
+     "....kGGGWWWWwk..",
+     ".....kgGGWWwk...",
+     "......kkkkkk....",
+     ".......kO.kO....",
+     "......kk..kk....",
+     "................",
+     "................",
+     "................"
+    ],
+    "glide": [
+     "................",
+     "................",
+     "..........kkk...",
+     ".........kWWWk..",
+     "kkk......kWEWkk.",
+     "kGGkkk..kWWWWYYk",
+     ".kgGGGkkWWWWWkRk",
+     "..kggGGGWWWWWkk.",
+     "...kkgGGGWWWwk..",
+     ".....kkgGGWwk...",
+     ".......kkkkk....",
+     ".......kO.kO....",
+     "......kk..kk....",
+     "................",
+     "................",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "stand",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "stand",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "stand",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "stand",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "flap",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "glide",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "flap",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "glide",
+       0,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "rata-portuaria": {
+   "note": "Rata portuaria: gris parda, ojos rojos, orejas, hocico y cola rosas",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#7a6a62",
+    "g": "#54463f",
+    "L": "#9a8a80",
+    "P": "#e89aa8",
+    "E": "#e83030",
+    "W": "#f4f4f0"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "..........kk....",
+     ".........kPPk...",
+     "....kkkkkkGPk...",
+     "...kLLLLLGGGkk..",
+     "..kLGGGGGGGEGkk.",
+     "..kGGGGGGGGGGGPk",
+     "kkGGGGGGGGGGGWk.",
+     "PkgGGGGGGGGGgk..",
+     ".Pkgggggggggkk..",
+     "..Pkk.kk.kk.k...",
+     "...PPkk..kk....."
+    ],
+    "b": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "..........kk....",
+     ".........kPPk...",
+     "....kkkkkkGPk...",
+     "...kLLLLLGGGkk..",
+     "..kLGGGGGGGEGkk.",
+     "..kGGGGGGGGGGGPk",
+     ".kGGGGGGGGGGGWk.",
+     "kPgGGGGGGGGGgk..",
+     "Pkkgggggggggkk..",
+     "P...kk..kk.kk...",
+     ".....kk..kk....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ]
+    ]
+   }
+  },
+  "cangrejo-con-casco": {
+   "note": "Cangrejo con casco: rojo, casco de obra amarillo y pinzas en alto; anda de lado",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "Y": "#f8c820",
+    "y": "#c89a10",
+    "R": "#e04a30",
+    "r": "#a82a20",
+    "L": "#f08060",
+    "E": "#1e1c24",
+    "W": "#f4f4f0"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "................",
+     "......kkkk......",
+     ".....kYYYYk.....",
+     "....kYYyYYYk....",
+     "..kkkkkkkkkkkk..",
+     ".kRk.kWEkWEk.kRk",
+     "kRRRkkkkkkkkkRRR",
+     "kLkRkRRRRRRkRkLk",
+     ".kkkRLLRRRRRkkk.",
+     "...kRRRRRRRRrk..",
+     "..kRrrrrrrrrrrk.",
+     "..kkrrrrrrrrrkk.",
+     ".kk.k.k..k.k.kk.",
+     "k...k.k..k.k...k",
+     "................"
+    ],
+    "b": [
+     "................",
+     "................",
+     "......kkkk......",
+     ".....kYYYYk.....",
+     "....kYYyYYYk....",
+     "..kkkkkkkkkkkk..",
+     "kRk..kWEkWEk..kR",
+     "kRRRkkkkkkkkkRRR",
+     "kLkRkRRRRRRkRkLk",
+     ".kkkRLLRRRRRkkk.",
+     "...kRRRRRRRRrk..",
+     "..kRrrrrrrrrrrk.",
+     "..kkrrrrrrrrrkk.",
+     "..kk.k.kk.k.kk..",
+     ".k...k..k..k..k.",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       -1,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       1,
+       0
+      ]
+     ]
+    ]
+   }
+  },
+  "bocarte-andante": {
+   "note": "Bocarte andante: anchoa plateada y azul con dos patitas; salen de tres en tres",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "B": "#5a86a8",
+    "b": "#3e6484",
+    "S": "#d8e4ec",
+    "s": "#b0c4d0",
+    "E": "#1e1c24",
+    "W": "#ffffff",
+    "O": "#e88a2a"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "........kkk.....",
+     ".k...kkkBBBkk...",
+     "kBk.kBBBBBBBBk..",
+     "kBBkBbBbBBBWEk..",
+     "kBBkSSSSSSSSSSk.",
+     "kBk.ksssssssskk.",
+     ".k...kkkkkkkk...",
+     "......kO..kO....",
+     ".....kk..kk.....",
+     "................"
+    ],
+    "b": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "........kkk.....",
+     ".k...kkkBBBkk...",
+     "kBk.kBBBBBBBBk..",
+     "kBBkBbBbBBBWEk..",
+     "kBBkSSSSSSSSSSk.",
+     "kBk.ksssssssskk.",
+     ".k...kkkkkkkk...",
+     ".......kO.kO....",
+     "......kk...kk...",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "caja-bronce": {
+   "note": "Caja de bronce: cartón reforzado con cinta y el logo rojo de Canal Abismo",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#c8945a",
+    "c": "#9a6a3a",
+    "T": "#e8d4a0",
+    "R": "#e0302a",
+    "S": "#3a2418"
+   },
+   "parts": {
+    "closed": [
+     "................",
+     "................",
+     "................",
+     "..kkkkkkkkkkkk..",
+     ".kCCCCCTTCCCCCk.",
+     "kCCCCCCTTCCCCCCk",
+     "kkkkkkkkkkkkkkkk",
+     "kcCCCCCTTCCCCCck",
+     "kcCCRRCTTCCCCCck",
+     "kcCRRRCTTCCCCCck",
+     "kcCCRCCTTCCCCCck",
+     "kcCCCCCTTCCCCCck",
+     "kcCCCCCTTCCCCCck",
+     "kcccccccccccccck",
+     "kkkkkkkkkkkkkkkk",
+     "................"
+    ],
+    "open": [
+     "................",
+     "kk............kk",
+     "kCk..........kCk",
+     "kCCk........kCCk",
+     ".kCCk......kCCk.",
+     "..kCCkkkkkkCCk..",
+     "kkkkSSSSSSSSkkkk",
+     "kcCkSSSSSSSSkCck",
+     "kcCCkkkkkkkkCCck",
+     "kcCRRRCCCCCCCCck",
+     "kcCCRCCCCCCCCCck",
+     "kcCCCCCCCCCCCCck",
+     "kcCCCCCCCCCCCCck",
+     "kcccccccccccccck",
+     "kkkkkkkkkkkkkkkk",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "closed",
+       0,
+       0
+      ]
+     ]
+    ],
+    "open": [
+     [
+      [
+       "open",
+       0,
+       0
+      ]
+     ]
+    ],
+    "opening": [
+     [
+      [
+       "closed",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "closed",
+       0,
+       -1
+      ]
+     ],
+     [
+      [
+       "open",
+       0,
+       0
+      ]
+     ]
+    ]
+   }
+  }
+ }
+}

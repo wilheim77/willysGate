@@ -10,7 +10,7 @@ Qué ids puede usar el contenido, de dónde sale cada pieza y qué le falta al r
 | `scripts/art/build-tiles.ts intereses 0x72` | `content/intereses/art/0x72/tiles.json` | `public/assets/0x72/tiles/terrain.png`, `terrain` del manifiesto | Ahora admite celdas `{ "atlas": "<hoja>.png", "sprite": "nombre" }` (con lista `<hoja>.txt`) y un `rim` opcional por terreno. |
 | `scripts/art/build-atlas-sprites.ts intereses 0x72` | `sprites.json` | `sprites` del manifiesto | Sin cambios: personajes 0x72 tal cual. |
 | `scripts/art/build-palette-variants.ts intereses 0x72` | `content/intereses/art/0x72/palettes.json` | `public/assets/0x72/characters.png`, `sprites` del manifiesto | Recolorea personajes 0x72: `map` (color exacto → color, o `transparent`), `adjust` (HSV por rango de tono), `prune` (borra el contorno que queda huérfano), `rules` (solo píxeles interiores o una franja de filas: así se pinta el collar de plata de Absalón). `decals` estampa detalles dibujados a mano (ASCII) en cada frame, relativos a la parte de arriba o de abajo del sprite para que sigan su balanceo; `padTop` añade filas transparentes encima para los que sobresalen (sombrero, pico). `aliases` da el mismo arte a ids antiguos. Para ver los colores de una base: `node scripts/art/build-palette-variants.ts intereses 0x72 --dump doc elf_f`. |
-| `scripts/art/build-hand-sprites.ts intereses 0x72` | `content/intereses/art/0x72/hand-sprites.json` | `public/assets/0x72/hand.png`, `sprites` del manifiesto, `docs/art-previews/0x72-hand.png` | Personajes dibujados a mano como partes ASCII (cuerpo, piernas en varias poses) que se apilan por frame con desplazamientos; sustituye al recolor del mismo id. |
+| `scripts/art/build-hand-sprites.ts intereses 0x72` | `content/intereses/art/0x72/hand-sprites.json` | `public/assets/0x72/hand.png`, `sprites` del manifiesto, `docs/art-previews/intereses-0x72-hand.png` | Personajes como partes ASCII que se apilan por frame con desplazamientos; sustituye al recolor del mismo id. En *Intereses*, Garrán y el Cobrador parten de los frames de 0x72 (`orc_warrior`, `doc`) retocados píxel a píxel, para que encajen con el pack. |
 | `scripts/art/build-portraits.ts intereses 0x72` | `content/intereses/art/0x72/portraits.json` | `public/assets/0x72/portraits.png`, `portraits` del manifiesto, `docs/art-previews/0x72-portraits.png` | Bustos de 32×32 para el HUD: la parte de arriba del primer frame de idle, a escala entera, sobre un fondo enmarcado cuyo tono distingue grupo (cálido), enemigos (sangre), no muertos (frío) y neutrales. |
 | `scripts/art/build-previews.ts intereses 0x72` | manifiesto | `docs/art-previews/0x72-{characters,terrain,props,surfaces}.png` | Hojas de revisión. |
 | `scripts/art/build-cinematics.ts <juego>` | `content/<juego>/cinematics/intro.spec.json` | `public/assets/cinematics/*.png`, `cinematics/intro.json`, `docs/art-previews/<juego>-intro.png` | Viñetas de 320×180 compuestas con operaciones (degradados con tramado, polígonos, tiles y sprites de los packs, sprites del manifiesto, sprites ASCII dibujados a mano, montañas, casas, lluvia, público, luces, viñeteado, texto pixelado). |
@@ -21,9 +21,9 @@ Todos son `kind: 'frames'`, miran a la derecha y tienen `idle` (4) y `move` (4);
 
 | Id | Base 0x72 | Tamaño | Qué es |
 |---|---|---|---|
-| `cobrador` | `doc` | 16×23 | Protagonista: cobrador encapuchado, capa gris pizarra, bufanda oscura subida hasta la nariz, correa de latón y **farol encendido** en la mano de atrás |
+| `cobrador` | `doc`, **retocado frame a frame** (`hand-sprites.json`) | 16×23, idle 4, run 4, hit 1 | Protagonista: capucha gris pizarra, bufanda oscura sobre la nariz (sin el pico), ojos claros y fríos, correa de latón con el sello del banco y **farol encendido** en la mano de atrás |
 | `dorotea` | `elf_f` | 16×28, hit | Dorotea Vane: pelo negro, lazo azul tinta, vestido granate y **su libro de cuentas** («Le apunto») |
-| `garran` | **dibujado a mano** (`hand-sprites.json`) | 16×28, idle 4, run 4, hit 1 | Garrán Tizón: semiorco grande de hombros anchos, moño, colmillos, chaleco de cuero y **pico de minero** en la mano de atrás |
+| `garran` | `orc_warrior`, **retocado frame a frame** (`hand-sprites.json`) | 16×27, `scale` 1.1, idle 4, run 4, hit 1 | Garrán Tizón: semiorco con las proporciones de 0x72, moño, hombreras de cuero, pantalón pardo y **pico de minero** a la espalda (mango y acero con los colores de las armas de 0x72) |
 | `anselmo` | `dwarf_f` | 16×28, hit | Fray Anselmo: mediano con hábito pardo de capucha, cordón claro y **crucifijo de latón** |
 | `sinpaga_cuchillero` | `elf_m` | 16×28, hit | Bandido Sinpaga, jubón rojo sucio y **cuchillo** en la mano |
 | `sinpaga_enmascarado` | `masked_orc` | 16×23 | Bandido Sinpaga con **máscara de calavera** y ropa roja de la banda |
@@ -148,3 +148,84 @@ Formato (`content/<juego>/cinematics/intro.json`, generado):
 - Efectos usados: `fade`, `pan` (`from`/`to` en píxeles de la imagen), `zoom` (`from`/`to`/`centre`), `shake` (`atMs`, `intensity`), `flicker`, `pulse` (`color`), `sink`, `fall` (`scroll`, `shake`), `spotlight`, `crumble`, `confetti`, `blink`, `drop`; partículas opcionales en `effectParams.particles` (`rain`, `steam`). Los que el reproductor no conozca se pueden ignorar sin romper nada.
 - `voice`: `narrador` por defecto; `comunicado` (Willy, viñeta 5) en tono de megafonía. Detalles de la voz sintetizada en `docs/willy/INTRO.md` (rama `willy`).
 - La corrección de color de la cámara se aplica en ejecución: las viñetas no la llevan horneada.
+
+---
+
+# *Willy el mazmorrero* (preset `ninja`)
+
+Encargo: `docs/willy/ART_BRIEF.md`. Especificación en `content/willy/art/ninja/`, salida en `content/willy/public/assets/ninja/` y manifiesto `content/willy/assets/ninja.json` (mismo esquema que *Intereses*). Paleta más saturada y luminosa; mismo tamaño de pixel que 0x72.
+
+## Willy y los PNJ del Camerino (`hand-sprites.json`)
+
+Dibujados a mano como partes ASCII: `willy` es la plantilla (gorra, bigote, cuerpo corpulento; 16×30 con hueco arriba para accesorios) y cada clase la **extiende** con su paleta y accesorios anclados al cuerpo (`extends`, `under`, `over` en `build-hand-sprites.ts`). `idle` 4 y `move` 4 frames. Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-hand.png).
+
+| Id | Aspecto |
+|---|---|
+| `willy-butanero` | Mono naranja con logo y bombona a la espalda |
+| `willy-influencer` | Chaqueta fucsia brillante, vaqueros y palo de selfie con móvil |
+| `willy-bardo-de-verbena` | Camisa roja de orquesta con lentejuelas doradas y teclado colgado |
+| `willy-socorrista` | Gorra roja, camiseta amarilla, bañador rojo, chanclas y silbato |
+| `willy-tasador` | Chaleco, cadena de reloj, guantes blancos y monóculo |
+| `willy-mimo` | Cara blanca, boina negra y camiseta de rayas |
+| `willy-ingeniero` | Casco amarillo con antena, mono gris y soldador |
+| `willy-funcionario` | Camisa azul, corbata roja, manguitos negros y sello |
+| `willy-jugador-de-basket` | Camiseta de tirantes blanca y verde, cinta roja, balón; **3 px más alto** |
+| `paco` | Pelo cano, camisa verde, mandil blanco (el mismo Paco del prólogo) |
+| `koldo` | Chubasquero amarillo y txapela |
+| `maripuri` | Rizos canos, gafas, carmín, bata de flores rosa y zapatillas |
+| `xelda` | Alienígena verde azulada con antenas, **cuatro brazos** y chaqueta morada de staff |
+
+## Enemigos de la Planta 1 (Castro Sumergido)
+
+16×16, `idle` 4 y `move` 4. Dibujados a mano (`hand-sprites.json`) salvo el mímico (cofre de 0x72 recoloreado en `palettes.json`).
+
+| Id | Aspecto |
+|---|---|
+| `gaviota-de-lonja` | Gaviota gorda, pico amarillo con la mancha roja, patas naranjas; aletea al moverse (vuela) |
+| `rata-portuaria` | Gris parda, ojos rojos; orejas, hocico y cola rosas |
+| `cangrejo-con-casco` | Cangrejo rojo con casco de obra amarillo y pinzas en alto; se mueve de lado |
+| `bocarte-andante` | Anchoa plateada y azul con dos patitas |
+| `mimico` | Cofre de 0x72 con dientes; en `idle` casi siempre cerrado (disfrazado), en `move` abre y cierra la boca |
+
+## Cajas de botín (`sprites`)
+
+16×16 con `idle` (cerrada), `open` (abierta) y `opening` (3 frames). Colores según `rarezas` de `loot-tables.json`.
+
+| Id | Aspecto |
+|---|---|
+| `caja-bronce` | Caja de cartón con cinta y el logo rojo de Canal Abismo (dibujada a mano) |
+| `caja-plata` | Cofre metálico con remaches y lazo azul (recolor de `chest_full` de 0x72 con decal) |
+| `caja-oro` | Cofre dorado con herrajes de oro viejo |
+| `caja-legendaria` | Cofre morado del plató con neón cian y gema fucsia; **el render debería hacerlo flotar** (balanceo vertical de 1-2 px) |
+
+## Terrenos de Castro Sumergido y del Camerino (`tiles.json`, dibujados por `build-willy-art.ts`)
+
+| Terreno | Superficie | Cara |
+|---|---|---|
+| `piedra-mojada` | Adoquines grises mojados con brillos (3 variantes) | Muro de muelle con línea de marea y algas |
+| `agua` | Agua por los tobillos sobre adoquines, con ondas y espuma (2) | Muro de muelle |
+| `muelle` | Losas de arenisca, una con argolla de amarre | Muro de muelle (el borde con caída) |
+| `soportal` | Baldosas de damero gastadas | Arco abierto a la sombra |
+| `lonja` | Azulejo blanco con escamas y sumidero | Fachada ocre |
+| `muro-castro` | Tejado de teja roja visto desde arriba | Fachada ocre con ventana de contraventanas verdes |
+| `moqueta` | Moqueta de terciopelo rojo con rombos dorados | Pared del plató |
+| `tarima` | Tarima de escenario con marcas de cinta | Pared del plató |
+| `muro-plato` | Techo del plató | Pared morada con tira de neón |
+
+Vista previa: [`art-previews/ninja-terrain.png`](art-previews/ninja-terrain.png).
+
+## Mobiliario del Camerino (`props`, en `assets/ninja/extra.png`)
+
+| Id | Tamaño | Notas |
+|---|---|---|
+| `espejo-bombillas` | 16×16, 2 frames (bombillas que parpadean), `wall`, luz `#fff0c0` | Espejo de camerino |
+| `mostrador-maripuri` | 32×20, `floor` | Mostrador de ultramarinos con tortilla, cubo de agua, tarro y botella |
+| `barra-paco` | 32×20, `floor` | Barra con grifos de cerveza y cafetera |
+| `mesa-xelda` | 32×22, `floor`, luz `#4fe8ff` | Mesa de producción con dos monitores (gráfica de audiencia) y portapapeles |
+| `ascensor-servicio` | 16×32, frames cerrado/abierto, `wall` | Ascensor de servicio con piloto rojo/verde |
+
+Vista previa: [`art-previews/ninja-props.png`](art-previews/ninja-props.png).
+
+## Marcos de carta por rareza (`ui` del manifiesto)
+
+`{ url, x, y, w: 24, h: 24, slice: 8 }`: marco *9-slice* (esquinas de 8 px) para `carta-bronce`, `carta-plata`, `carta-oro` y `carta-legendaria`, con los colores de `rarezas`. **Petición al render:** dibujarlos con `border-image` (CSS) o *nine-slice* escalado entero.

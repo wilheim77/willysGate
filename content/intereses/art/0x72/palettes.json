@@ -15,42 +15,6 @@
     "thug": "sinpaga_enmascarado"
   },
   "variants": {
-    "cobrador": {
-      "base": "doc",
-      "note": "Protagonista: cobrador encapuchado, capa gris pizarra, bufanda oscura subida hasta la nariz, correa de latón y farol encendido",
-      "map": {
-        "#314152": "#4c5668",
-        "#417089": "#b08a48",
-        "#483b3a": "#2e3440",
-        "#aa8d7a": "#3a3a44",
-        "#d3bfa9": "#55555f"
-      },
-      "rules": [
-        {
-          "from": "#222222",
-          "to": "#363d4b",
-          "interior": true
-        }
-      ],
-      "decals": [
-        {
-          "rows": [
-            ".k.",
-            "kYk",
-            "kyk",
-            ".k."
-          ],
-          "legend": {
-            "k": "#222222",
-            "Y": "#facb3e",
-            "y": "#ee8e2e"
-          },
-          "x": 0,
-          "y": -8,
-          "from": "bottom"
-        }
-      ]
-    },
     "dorotea": {
       "base": "elf_f",
       "note": "Dorotea Vane: contable del banco, pelo negro con lazo azul tinta, vestido granate y su libro de cuentas",
