@@ -322,6 +322,8 @@ Código en TypeScript puro que implementa la interfaz `Ruleset` del motor. Los d
 | `environment.ts` | Superficies (agua, aceite, fuego, hielo, vapor, tóxico, electrificada, canicas, red, expedientes, gas) y sus reacciones |
 | `actions.ts` | Acciones básicas (golpe, empujar, correr, hacer el ganso) y las habilidades de clase, una función por habilidad |
 | `creation.ts` | Cásting: solo clase y 3 puntos libres; `buildWilly` |
+| `progression.ts` | Experiencia, niveles y efectos de subida de nivel |
+| `more-classes.ts` | Influencer, Bardo, Socorrista, Tasador, Mimo e Ingeniero |
 | `sheet.ts` | Ficha del personaje para la interfaz |
 
 ### Estado por clase
@@ -331,13 +333,23 @@ Código en TypeScript puro que implementa la interfaz `Ruleset` del motor. Los d
 | Butanero | Hecha: Lanzar bombona (con gas), Reparto a domicilio, Fuga de gas, Cadena de reparto, Reparto urgente, Espalda de hierro, Riesgo laboral |
 | Funcionario | Hecha salvo Ventanilla cerrada (necesita entidades temporales: R13) |
 | Jugador de basket | Hecha salvo Tiempo muerto (invocación: R13). Alley-oop solo en versión «contra la pared» hasta que haya invocaciones. Pase picado sin rebote (R15) |
-| Influencer, Bardo, Socorrista, Tasador, Mimo, Ingeniero | Pendientes (siguiente hito) |
+| Influencer | Hecha salvo Colaboración (invocación del fan `fan-entusiasta`: R13). «Directo», «Unboxing», «Viral» y «Necesita likes» los aplica el sistema de audiencia del juego a partir de los estados y eventos del ruleset |
+| Bardo de verbena | Hecha (Paquito, Pasodoble, Canción del verano, ¡Otra, otra!, Orquesta completa, Repertorio corto). «Charanga» (audiencia cada 3 turnos) es del juego |
+| Socorrista | Hecha (Rescate, Silbatazo, Boya, Reanimación, Bandera roja, Como pez en el agua). «Siesta en la silla» espera un gancho de fin de turno (R20) |
+| Tasador | Hecha salvo Golpe de valor (necesita el valor de los objetos de `content/willy/data/items.json`; lo conectará el juego). Regateo, Peritaje y Subasta son del mercado y las cajas |
+| Mimo | Hecha salvo Pared invisible (barrera temporal: R13). «Silencio absoluto» se aplica en su primer turno (mejor con un gancho de inicio de combate: R20) |
+| Ingeniero | Arco voltaico y la línea 5G→10G hechas (6 niveles, contador una vez por turno en combate, efectos por nivel, 10G una vez por planta). Autómatas, antena, despliegue y firmware esperan a R13. Las zonas sin cobertura las marcará el generador de plantas |
 
-### Limitaciones mientras llegan las peticiones al motor
+### Ganchos del motor que ya usa
 
-- **Vacío:** el motor trata el vacío como un muro al empujar; el ruleset detecta que lo que hay detrás es `void`/`foso` y elimina al empujado (R18).
-- **Saltos:** se hacen con `setPosition` comprobando el salto en el ruleset (R15).
-- **Subir de nivel:** no hay efecto para cambiar atributos; la subida de nivel la hará el juego fuera de combate (R19).
-- **Invocaciones y barreras:** ocultas hasta que exista `spawnEntity` (R13).
+- **Choques (R17):** `onCollision` aplica 1d6 contra un muro, 1d4 a los dos contra una criatura y, si al empujón le quedaba recorrido, lanza a la segunda («¡Strike!»).
+- **Vacío (R18):** `onVoid` elimina a los enemigos normales («fuera de plano») y a los jefes les quita el 20 % y los devuelve a la casilla libre más cercana. Los fosos se marcan con `terrain: 'void'` en Tiled.
+- **Subir de nivel (R19):** `progression.ts` → `levelUpEffects` (nivel +1, 2 puntos de atributo, +3 de vida máxima, 25 % de vida y toda la energía) con `modifyStat`; `levelForXp` con la tabla de experiencia.
 
-Tests: `tests/rulesets/willy-core.test.ts` y `willy-classes.test.ts` (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).
+### Lo que sigue esperando al motor
+
+- **Saltos (R15):** de momento con `setPosition`, validando el salto en el ruleset.
+- **Invocaciones y barreras (R13):** ocultas hasta que exista `spawnEntity`.
+- **Fin de turno, inicio de combate, fin de ronda y vapor que tapa la vista (R20).**
+
+Tests: `tests/rulesets/willy-core.test.ts`, `willy-classes.test.ts` y `willy-classes2.test.ts` (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).

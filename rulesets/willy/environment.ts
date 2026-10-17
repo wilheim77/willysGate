@@ -56,7 +56,7 @@ export function onSurface(ruleset: Ruleset, state: GameState, id: string, surfac
   switch (surface) {
     case 'agua':
       if (hasCondition(e, 'ardiendo')) r.apply({ type: 'removeCondition', entityId: id, condition: 'ardiendo' });
-      cond('empapado', 2);
+      if (!hasTrait(e, 'pez')) cond('empapado', 2);
       break;
     case 'fuego':
       if (!hasCondition(e, 'empapado')) cond('ardiendo', 2);

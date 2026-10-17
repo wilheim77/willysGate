@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { RngCursor, SYSTEM_ISSUER, hasCondition, surfaceAt } from '../../engine';
-import { WILLY_CREATION, buildWilly, createWilly, defaultCreation, defence, skillLevel, willy } from '../../rulesets/willy';
+import { WILLY_CREATION, buildWilly, createWilly, defaultCreation, defence, levelForXp, levelUpEffects, skillLevel, willy } from '../../rulesets/willy';
 import { W, engine, game, rat, until } from './willy-helpers';
 
 
@@ -88,6 +88,14 @@ describe('Willy: environment is the strongest weapon', () => {
     const { state } = until(s, 'w', 'basic:empujar', { entityId: 'r' }, (st) => st.entities.r!.position.x === 2);
     expect(state.entities.r!.resources.vida!.current).toBeLessThan(30);
     expect(hasCondition(state.entities.r!, 'tumbado')).toBe(true);
+  });
+
+  it('«¡Strike!»: a push with distance left sends the creature it hits flying too', () => {
+    const s = game([W('w', 'butanero', 0, 0), rat('a', 2, 0, { vida: 30 }), rat('b', 3, 0, { vida: 30 })], ['........']);
+    // Reparto a domicilio pushes 2: «a» hits «b» after 0 tiles, and «b» takes the 2 left.
+    const { state, events } = until(s, 'w', 'hab:reparto-a-domicilio', { entityId: 'a' }, (st) => st.entities.b!.position.x === 5);
+    expect(events).toContainEqual(expect.objectContaining({ type: 'strike', entityId: 'a', otherId: 'b' }));
+    expect(state.entities.b!.resources.vida!.current).toBeLessThan(30);
   });
 
   it('the Funcionario cannot be moved: Plaza en propiedad', () => {
@@ -202,6 +210,18 @@ describe('Willy: rules maths (RULESET.md)', () => {
     const s = game([W('w', 'butanero', 0, 0), rat('a', 3, 0, { vida: 30 })]);
     const run = () => willy.performAction(s, 'w', 'hab:lanzar-bombona', { tile: { x: 3, y: 0 } }, new RngCursor({ a: 5, b: 6, c: 7, d: 8 }));
     expect(run()).toEqual(run());
+  });
+
+  it('level-ups: XP table, +1 level, +2 points, +3 vida, 25 % back and full energy', () => {
+    expect([0, 59, 60, 160, 4900, 99999].map(levelForXp)).toEqual([1, 1, 2, 3, 12, 12]);
+    let s = game([W('w', 'butanero', 0, 0)]);
+    s = engine.applyEffects(s, [{ type: 'modifyResource', entityId: 'w', resource: 'vida', delta: -20 }, { type: 'modifyResource', entityId: 'w', resource: 'energia', delta: -5 }]).state;
+    const up = engine.applyEffects(s, levelUpEffects(s.entities.w!, { fue: 1, agi: 1 })).state.entities.w!;
+    expect(up.stats.nivel).toBe(2);
+    expect(up.stats.fue).toBe(9);
+    expect(up.resources.vida).toEqual({ current: 4 + 3 + 7, max: 27 });
+    expect(up.resources.energia!.current).toBe(5);
+    expect(() => levelUpEffects(s.entities.w!, { fue: 3 })).toThrow();
   });
 
   it('hidden targets cannot be picked (the AI respects it)', () => {

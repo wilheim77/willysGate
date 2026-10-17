@@ -46,8 +46,9 @@ import {
  * the effects are implemented here, one handler per ability.
  */
 
-interface Handler {
-  target: ActionDef['target'];
+export interface Handler {
+  /** Fixed, or depending on the actor (the 5G line changes target with its level). */
+  target: ActionDef['target'] | ((actor: Entity, state: GameState) => ActionDef['target']);
   tags: string[];
   /** Hidden until the engine supports it (summons need spawnEntity: ENGINE_REQUESTS R13). */
   pending?: boolean;
@@ -55,10 +56,10 @@ interface Handler {
   perform(r: Resolver, actorId: string, target: ActionTarget): void;
 }
 
-const invalid = (reason: string): ActionPreview => ({ valid: false, reason });
-const dice = (text: string): Dice => parseDice(text);
+export const invalid = (reason: string): ActionPreview => ({ valid: false, reason });
+export const dice = (text: string): Dice => parseDice(text);
 
-function targetEntity(state: GameState, target: ActionTarget): Entity | undefined {
+export function targetEntity(state: GameState, target: ActionTarget): Entity | undefined {
   return target.entityId ? state.entities[target.entityId] : undefined;
 }
 
@@ -73,17 +74,17 @@ export function areaTiles(state: GameState, centre: Vec2, radius: number): Vec2[
   return tiles;
 }
 
-function creaturesIn(state: GameState, tiles: Vec2[]): Entity[] {
+export function creaturesIn(state: GameState, tiles: Vec2[]): Entity[] {
   const keys = new Set(tiles.map((t) => `${t.x},${t.y}`));
   return Object.values(state.entities).filter((e) => standing(e) && keys.has(`${e.position.x},${e.position.y}`));
 }
 
-function hostilesAround(state: GameState, actor: Entity, centre: Vec2, radius: number): Entity[] {
+export function hostilesAround(state: GameState, actor: Entity, centre: Vec2, radius: number): Entity[] {
   return Object.values(state.entities).filter((e) => standing(e) && isCreature(e) && isHostile(e, actor) && gridDistance(e.position, centre) <= radius);
 }
 
 /** Straight line (row, column or diagonal) between two tiles, excluding both ends. */
-function straightLine(a: Vec2, b: Vec2): Vec2[] | null {
+export function straightLine(a: Vec2, b: Vec2): Vec2[] | null {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
   if (dx !== 0 && dy !== 0 && Math.abs(dx) !== Math.abs(dy)) return null;
@@ -95,7 +96,7 @@ function straightLine(a: Vec2, b: Vec2): Vec2[] | null {
   return tiles;
 }
 
-function occupiedBy(state: GameState, p: Vec2, exceptId?: string): Entity | undefined {
+export function occupiedBy(state: GameState, p: Vec2, exceptId?: string): Entity | undefined {
   return Object.values(state.entities).find((e) => e.id !== exceptId && e.position.x === p.x && e.position.y === p.y && standing(e));
 }
 
@@ -103,7 +104,7 @@ const lowCeiling = (state: GameState, p: Vec2) => (tileAt(state.map, p)?.terrain
 
 // --- Generic attack and area helpers -------------------------------------------------------
 
-function attackPreviewOf(state: GameState, spec: AttackSpec, extra: Partial<ActionPreview> = {}): ActionPreview {
+export function attackPreviewOf(state: GameState, spec: AttackSpec, extra: Partial<ActionPreview> = {}): ActionPreview {
   const p = attackPreview(state, spec);
   return {
     valid: true,
@@ -140,7 +141,7 @@ function explode(r: Resolver, actorId: string, centre: Vec2, radius: number, d: 
 
 // --- Jumps (basket) ---------------------------------------------------------------------------
 
-interface JumpRules {
+export interface JumpRules {
   maxLength: number;
   maxUp: number;
   safeDown: number;
@@ -148,7 +149,7 @@ interface JumpRules {
 }
 
 /** Can `actor` jump to `to`? A straight line, over gaps but not through walls or (usually) creatures. */
-function jumpCheck(state: GameState, actor: Entity, to: Vec2, rules: JumpRules): string | null {
+export function jumpCheck(state: GameState, actor: Entity, to: Vec2, rules: JumpRules): string | null {
   if (lowCeiling(state, actor.position) || lowCeiling(state, to)) return 'Techo bajo: aquí no se puede saltar.';
   const line = straightLine(actor.position, to);
   if (!line) return 'Solo se salta en línea recta.';
@@ -177,7 +178,7 @@ function crossesGap(state: GameState, from: Vec2, to: Vec2): boolean {
   });
 }
 
-function doJump(r: Resolver, actorId: string, to: Vec2, rules: JumpRules): void {
+export function doJump(r: Resolver, actorId: string, to: Vec2, rules: JumpRules): void {
   const actor = r.entity(actorId);
   const from = { ...actor.position };
   const drop = heightOf(r.state, from) - heightOf(r.state, to);
@@ -274,6 +275,15 @@ const HANDLERS: Record<string, Handler> = {
       const me = r.entity(id);
       const near = Object.values(r.state.entities).filter((e) => standing(e) && isHostile(e, me) && gridDistance(e.position, me.position) === 1);
       r.emit({ type: 'showOff', entityId: id, adyacenteAEnemigo: near.length > 0, adyacenteAJefe: near.some(isBoss) } as WillyEvent);
+    },
+  },
+
+  'basic:liberarse': {
+    target: { kind: 'self', range: 0 },
+    tags: ['move'],
+    preview: (s, a) => (hasCondition(a, 'enredado') ? { valid: true, chance: chanceD20(a.stats.fue ?? 5, 13) } : invalid('No estás enredado.')),
+    perform: (r, id) => {
+      if (rollSave(r, id, 'fue', 13)) r.apply({ type: 'removeCondition', entityId: id, condition: 'enredado' });
     },
   },
 
@@ -664,11 +674,15 @@ const BASIC_LABELS: Record<string, { label: string; description: string }> = {
   'basic:empujar': { label: 'Empujar', description: 'Prueba de Fuerza: si sale bien, lo mueves una casilla. Contra un muro, contra otro o al vacío.' },
   'basic:correr': { label: 'Correr', description: 'Otro movimiento completo este turno.' },
   'basic:ganso': { label: 'Hacer el ganso', description: 'No sirve para nada. Al público le encanta.' },
+  'basic:liberarse': { label: 'Liberarse', description: 'Prueba de Fuerza (DIF 13) para soltarte de la red o del papeleo.' },
 };
 
 function abilityCost(state: GameState, actor: Entity, data: AbilityData): Record<string, number> {
-  const cost: Record<string, number> = { acciones: data.coste?.acciones ?? 1 };
-  let energy = data.coste?.energia ?? 0;
+  // Abilities whose cost changes per level (the 5G line) carry it in niveles[n].coste.
+  const perLevel = (data.niveles?.[String(skillLevel(actor, data.id))] as { coste?: AbilityData['coste'] } | undefined)?.coste;
+  const base = perLevel ?? data.coste;
+  const cost: Record<string, number> = { acciones: base?.acciones ?? 1 };
+  let energy = base?.energia ?? 0;
   // Funcionario: after two o'clock everything costs a bit more.
   if (classOf(actor) === 'funcionario' && afterHours(state, actor)) energy += 1;
   if (energy > 0) cost.energia = energy;
@@ -685,8 +699,10 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
   if (!e || !standing(e)) return [];
   const out: ActionDef[] = [];
   for (const [id, meta] of Object.entries(BASIC_LABELS)) {
+    if (id === 'basic:liberarse' && !hasCondition(e, 'enredado')) continue;
     const h = HANDLERS[id]!;
-    const target = id === 'basic:golpe' ? { ...h.target, range: reachOf(e) } : h.target;
+    const base = handlerTarget(h, e, state);
+    const target = id === 'basic:golpe' ? { ...base, range: reachOf(e) } : base;
     out.push({ id, label: meta.label, description: meta.description, cost: { acciones: 1 }, target, tags: h.tags });
   }
   const cls = CLASSES[classOf(e) ?? ''];
@@ -695,7 +711,7 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
     if (data.pasiva || data.nivelPersonaje > level(e)) continue;
     const h = HANDLERS[`hab:${data.id}`];
     if (!h || h.pending) continue;
-    out.push({ id: `hab:${data.id}`, label: displayName(e, data), description: data.texto, cost: abilityCost(state, e, data), target: h.target, tags: ['ability', ...h.tags] });
+    out.push({ id: `hab:${data.id}`, label: displayName(e, data), description: levelText(e, data), cost: abilityCost(state, e, data), target: handlerTarget(h, e, state), tags: ['ability', ...h.tags] });
   }
   return out;
 }
@@ -707,6 +723,7 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   if (actionId.startsWith('hab:') && !abilityData(classOf(actor), actionId.slice(4))) return invalid('No es una habilidad de tu clase.');
   const aimed = targetEntity(state, target);
   if (aimed && aimed.id !== actorId && isHostile(aimed, actor) && hasCondition(aimed, 'escondido')) return invalid('No lo ves: está escondido.');
+  if (aimed && aimed.id !== actorId && hasCondition(aimed, 'encajado')) return invalid('Está dentro de una caja invisible: no se le puede tocar.');
   if (hasCondition(actor, 'silenciado') && actionId.startsWith('hab:')) return invalid('Silencio administrativo: no puedes usar habilidades.');
   return h.preview(state, actor, target);
 }
@@ -714,7 +731,21 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
 export function performAction(ruleset: Ruleset, state: GameState, actorId: string, actionId: string, target: ActionTarget, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
   HANDLERS[actionId]?.perform(r, actorId, target);
+  // Remember the last ability used (the Bardo's «¡Otra, otra!» and «Repertorio corto»).
+  if (actionId.startsWith('hab:') && actionId !== 'hab:bis') r.apply({ type: 'setFlag', flag: lastAbilityFlag(actorId), value: `${actionId}|${JSON.stringify(target)}` });
   return r.outcome();
+}
+
+export const lastAbilityFlag = (actorId: string) => `willy:ultima:${actorId}`;
+
+export function handlerTarget(h: Handler, actor: Entity, state: GameState): ActionDef['target'] {
+  return typeof h.target === 'function' ? h.target(actor, state) : h.target;
+}
+
+/** Text for the current level of abilities with per-level texts (the 5G line). */
+function levelText(actor: Entity, data: AbilityData): string {
+  const entry = data.niveles?.[String(skillLevel(actor, data.id))] as { texto?: string } | undefined;
+  return typeof entry === 'object' && entry?.texto ? entry.texto : data.texto;
 }
 
 export { damageBonus, HANDLERS };
