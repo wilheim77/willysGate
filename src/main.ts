@@ -17,9 +17,11 @@ import { applyTheme } from './ui/theme';
 document.title = game.title;
 applyTheme(game.theme);
 
-const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {} });
-const store = new GameStore(engine, game.newGame(engine, randomSeed()));
+const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {}, maps: game.maps ?? {} });
+const startMap = new URLSearchParams(location.search).get('mapa') ?? undefined;
+const store = new GameStore(engine, game.newGame(engine, randomSeed(), startMap ? { start: startMap } : undefined));
 const hud = new Hud(store, game);
+hud.startOptions = startMap ? { start: startMap } : undefined;
 setupAudio(store, game);
 const combatHud = new CombatHud(game);
 const controller = new GameController(store, game, combatHud);

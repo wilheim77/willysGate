@@ -5,58 +5,232 @@
   "tileSize": 16,
   "terrain": {
     "stone": {
-      "top": ["floor_1", "floor_1", "floor_1", "floor_2", "floor_3", "floor_4"],
-      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "stone_face_lip" },
-      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_stone" }
+      "top": [
+        "floor_1",
+        "floor_1",
+        "floor_1",
+        "floor_2",
+        "floor_3",
+        "floor_4"
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stone_face_lip"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
     },
     "dirt": {
       "top": [
-        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [16, 15] },
-        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [17, 15] },
-        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [16, 16] },
-        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [17, 16] },
-        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [19, 15] },
-        { "atlas": "ninja-adventure/TilesetFloor.png", "cell": [15, 17] }
+        {
+          "atlas": "ninja-adventure/TilesetFloor.png",
+          "cell": [
+            16,
+            15
+          ]
+        },
+        {
+          "atlas": "ninja-adventure/TilesetFloor.png",
+          "cell": [
+            17,
+            15
+          ]
+        },
+        {
+          "atlas": "ninja-adventure/TilesetFloor.png",
+          "cell": [
+            16,
+            16
+          ]
+        },
+        {
+          "atlas": "ninja-adventure/TilesetFloor.png",
+          "cell": [
+            17,
+            16
+          ]
+        },
+        {
+          "atlas": "ninja-adventure/TilesetFloor.png",
+          "cell": [
+            19,
+            15
+          ]
+        },
+        {
+          "atlas": "ninja-adventure/TilesetFloor.png",
+          "cell": [
+            15,
+            17
+          ]
+        }
       ],
-      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "dirt_face" },
-      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_dirt" }
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "dirt_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      }
     },
     "slag": {
-      "top": ["floor_8", "floor_7", "floor_6"],
-      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "slag_face" },
-      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_stone" }
+      "top": [
+        "floor_8",
+        "floor_7",
+        "floor_6"
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "slag_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
     },
     "wall": {
       "top": [
-        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "wall_top_1" },
-        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "wall_top_2" }
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "wall_top_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "wall_top_2"
+        }
       ],
       "face": "wall_mid"
     },
     "planks": {
       "top": [
-        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_1" },
-        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_2" },
-        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_3" }
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "planks_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "planks_2"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "planks_3"
+        }
       ],
-      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_face" },
-      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_wood" }
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "planks_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_wood"
+      }
     },
     "door_closed": {
-      "top": [{ "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_closed_top" }],
-      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_closed_face" }
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "door_closed_top"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "door_closed_face"
+      }
     },
     "door_open": {
-      "top": [{ "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_open_top" }],
-      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_open_face" }
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "door_open_top"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "door_open_face"
+      }
     },
     "scaffold": {
       "top": [
-        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "scaffold_1" },
-        { "atlas": "generated/intereses-0x72-extra.png", "sprite": "scaffold_2" }
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "scaffold_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "scaffold_2"
+        }
       ],
-      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "scaffold_face" },
-      "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_wood" }
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "scaffold_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_wood"
+      }
+    },
+    "rails": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "rails_h_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "rails_h_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stone_face_lip"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
+    },
+    "rails_v": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "rails_v_1"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stone_face_lip"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
+    },
+    "vault": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "vault_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "vault_2"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "vault_3"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "vault_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
     }
   }
 }

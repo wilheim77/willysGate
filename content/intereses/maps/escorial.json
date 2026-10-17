@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 8,
- "nextobjectid": 30,
+ "nextobjectid": 32,
  "properties": [
   {
    "name": "name",
@@ -674,6 +674,52 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-escorial"
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "name": "pozo-del-ahorcado",
+     "type": "",
+     "x": 992,
+     "y": 160,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "mina"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-pozo"
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "name": "bocamina",
+     "type": "",
+     "x": 1024,
+     "y": 672,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "mina"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-bocamina"
       }
      ]
     }

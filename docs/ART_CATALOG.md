@@ -108,6 +108,17 @@ Recolores de 0x72 con detalle propio (`palettes.json`). Vista previa: [`art-prev
 
 Ya existían: `absalon` (Brea), `callado`, `callado_palido`, `minero_cuadrilla`, `guardia_baron`, `guardia_baron_sargento`, los compañeros y los Sinpaga.
 
+**Calles y Escorial** (vista previa: [`art-previews/0x72-escorial-calles.png`](art-previews/0x72-escorial-calles.png)):
+- PNJ: `fiel_pala` (vecino con escapulario ocre de la Santa Pala) y `viuda` (velo y luto negros, para las viudas de los cuarenta).
+- Props: `campfire` (hoguera de campamento, 4 frames, luz), `oil_cart` (carro de aceite de los Sinpaga con tres barriles, 32×20), `well` (el Pozo del Ahorcado, 16×24).
+- Trampas detectadas (en lugar de los pinchos genéricos): `trap_beartrap` / `trap_beartrap_disarmed` (cepo), `trap_tripwire` (cuerda) y `trap_dart` (placa de dardo envenenado).
+
+**Mina y Bóveda** (vista previa: [`art-previews/0x72-mina-boveda.png`](art-previews/0x72-mina-boveda.png)):
+- Terrenos: `rails` (vía horizontal sobre piedra: traviesas y carriles), `rails_v` (vertical) y `vault` (losas antiguas con vetas de plata viva; cara tallada con runas).
+- Objetos (`sprites`, `idle` + `broken`): `mine_wagon`, `mine_wagon_ore` (con mineral y destellos de plata), `powder_keg` (barrilete de pólvora con calavera y mecha) y `resonator` (resonador de plata viva que zumba: `idle` 4 frames con brillo; `broken` partido).
+- Props: `fuse_charges` (la mecha de Garrán: cargas contra la roca y la mecha enrollada), `remains_forty` (huesos, casco, pico roto y la nómina del barón con un destello de las treinta coronas), `pulley` (polea y cadenas con el cubo de mineral, `wall`, 16×32), `inscription` (inscripción élfica con runas encendidas, `wall`) y `trap_rotten_plank` (el tablón podrido, detectado).
+- PNJ: `ivo` (el medio hermano de Garrán entre los Callados: pálido, pelo negro, pañuelo rojo de minero).
+
 **Atrezo** (`props`): `tapestry` (tapiz con el escudo de los Mazo, `wall`, 16×24), `tapestry_crossbow` (el mismo con la punta de la ballesta asomando: la pista para la frase de Garrán) y `gallows` (horca de la Torre del Cepo, `floor`, 16×32).
 
 ## Objetos interactivos (Fase 4)
