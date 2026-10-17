@@ -13,6 +13,7 @@ import triggers from './triggers.json';
 import levelups from './levelups.json';
 import objectives from './objectives.json';
 import tutorial from './tutorial.json';
+import barks from './barks.json';
 import texts from './texts/ui.json';
 import viejoMinero from './dialogues/viejo_minero.json';
 import cofrePrueba from './dialogues/cofre_prueba.json';
@@ -82,6 +83,7 @@ export const game: GameDefinition = {
     texts: Object.fromEntries(Object.entries(levelups).filter(([k]) => /^\d+$/.test(k))) as Record<string, Record<string, string>>,
   },
   tutorial: tutorial.steps as NonNullable<GameDefinition['tutorial']>,
+  barks: Object.fromEntries(Object.entries(barks).filter(([k]) => !k.startsWith('$'))) as NonNullable<GameDefinition['barks']>,
   newGame(engine, seed, options) {
     if (options?.start === 'test') return testGame(engine, seed);
     const start = options?.start && ACT_MAPS[options.start] ? options.start : START_MAP;

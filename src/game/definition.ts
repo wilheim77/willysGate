@@ -1,6 +1,7 @@
 import type { CreationChoices, CreationSpec, DialogueTree, DialogueWhen, Entity, GameEvent, Engine, GameState, MapBuilder, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
+import type { BarksData } from '../ui/barks';
 import type { TutorialStep } from '../ui/tutorialToasts';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
@@ -84,6 +85,8 @@ export interface GameDefinition {
   opening?: { dialogue: string; partner?: string };
   /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
   tutorial?: TutorialStep[];
+  /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */
+  barks?: BarksData;
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

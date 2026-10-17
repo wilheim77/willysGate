@@ -368,6 +368,27 @@ canvas.portrait { image-rendering: pixelated; display: block; }
 @keyframes die-roll { from { transform: rotate(-200deg) scale(0.6); } to { transform: rotate(0) scale(1); } }
 @media (prefers-reduced-motion: reduce) { #dialogue .roll .die { animation: none; } }
 
+/* --- Companion barks (speech bubble, near the party column) --- */
+.bark-bubble[hidden] { display: none; }
+.bark-bubble {
+  position: fixed;
+  left: calc(6px + 52px + 8px); /* right of #party's portraits (left: 6px, width 52px) */
+  top: calc(var(--top-h) + var(--safe-top) + var(--gap));
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(260px, calc(100% - 6px - 52px - 16px));
+  background: var(--panel);
+  border: 2px solid var(--iron);
+  border-top-color: var(--iron-light);
+  border-left-color: var(--iron-light);
+  box-shadow: 3px 3px 0 var(--shadow);
+  padding: 6px 8px;
+}
+.bark-bubble canvas { flex: none; background: #0e0c0f; }
+.bark-bubble p { margin: 0; font-size: var(--fs-s); line-height: 1.25; }
+
 /* --- Tutorial toasts (dismissable card, top-centre) --- */
 .tutorial-toast[hidden] { display: none; }
 .tutorial-toast {
