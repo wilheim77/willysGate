@@ -11,6 +11,8 @@ export interface UiTexts {
     | 'newGame' | 'confirmNew' | 'height' | 'genericError',
     string
   >;
+  /** Combat HUD and map texts (miss, crit, endTurn...). */
+  combat?: Record<string, string>;
 }
 
 /** Visual identity of a game: CSS custom properties applied to the HUD, plus the UI font. */

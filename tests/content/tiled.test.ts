@@ -49,6 +49,22 @@ describe('parseTiledMap', () => {
     expect(parseTiledMap('t', json).spawns.hero).toEqual({ x: 2, y: 2 });
   });
 
+  it('reads rectangle zones from other object layers', () => {
+    const { zones } = parseTiledMap('t', {
+      width: 4,
+      height: 4,
+      tilewidth: 32,
+      tileheight: 32,
+      orientation: 'orthogonal',
+      layers: [
+        { type: 'tilelayer', name: 'ground', data: Array(16).fill(1) },
+        { type: 'objectgroup', name: 'encounters', objects: [{ name: 'ambush', x: 32, y: 64, width: 64, height: 32, properties: [{ name: 'participants', value: 'a,b' }] }] },
+      ],
+      tilesets: [tileset],
+    });
+    expect(zones).toEqual([{ name: 'ambush', layer: 'encounters', x: 1, y: 2, width: 2, height: 1, properties: { participants: 'a,b' } }]);
+  });
+
   it('ignores Tiled flip flags in gids', () => {
     const json: TiledMapJson = {
       width: 1,
