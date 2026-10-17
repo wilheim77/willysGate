@@ -190,6 +190,16 @@ function beginTurn(ruleset: Ruleset, state: GameState, entityId: string, rng: Rn
     if (ended.events.length) return { state: ended.state, events: [...events, ...ended.events] };
     const current = next.entities[id];
     if (current && ruleset.canAct(current)) return { state: next, events };
+    // A skipped turn still passes: timed conditions (stunned, asleep) tick down, or they'd never end.
+    if (current) {
+      const ticked = decrementConditions(next, id);
+      const gone: Effect[] = ticked.entities[id]!.conditions
+        .filter((c) => c.remainingTurns !== undefined && c.remainingTurns <= 0)
+        .map((c) => ({ type: 'removeCondition', entityId: id, condition: c.id }));
+      const r = applyEffects(ruleset, ticked, gone);
+      next = r.state;
+      events.push(...r.events);
+    }
     const advanced = advanceOrder(ruleset, next, rng);
     next = advanced.state;
     events.push(...advanced.events);

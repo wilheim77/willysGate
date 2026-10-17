@@ -10,7 +10,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 6,
- "nextobjectid": 71,
+ "nextobjectid": 77,
  "properties": [
   {
    "name": "name",
@@ -528,54 +528,6 @@
      "visible": true
     },
     {
-     "id": 5,
-     "name": "bandit-1",
-     "type": "",
-     "point": true,
-     "x": 496,
-     "y": 272,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true
-    },
-    {
-     "id": 6,
-     "name": "bandit-2",
-     "type": "",
-     "point": true,
-     "x": 560,
-     "y": 240,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true
-    },
-    {
-     "id": 7,
-     "name": "thug",
-     "type": "",
-     "point": true,
-     "x": 528,
-     "y": 336,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true
-    },
-    {
-     "id": 8,
-     "name": "skeleton",
-     "type": "",
-     "point": true,
-     "x": 624,
-     "y": 304,
-     "width": 0,
-     "height": 0,
-     "rotation": 0,
-     "visible": true
-    },
-    {
      "id": 60,
      "name": "barrel_oil-1",
      "type": "",
@@ -620,6 +572,78 @@
      "y": 336,
      "width": 0,
      "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 71,
+     "name": "thug",
+     "type": "",
+     "x": 496.0,
+     "y": 272.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 72,
+     "name": "thug-2",
+     "type": "",
+     "x": 560.0,
+     "y": 304.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 73,
+     "name": "bandit-1",
+     "type": "",
+     "x": 528.0,
+     "y": 368.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 74,
+     "name": "bandit-2",
+     "type": "",
+     "x": 464.0,
+     "y": 304.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 75,
+     "name": "bandit-3",
+     "type": "",
+     "x": 560.0,
+     "y": 336.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 76,
+     "name": "skeleton",
+     "type": "",
+     "x": 496.0,
+     "y": 368.0,
+     "width": 0,
+     "height": 0,
+     "point": true,
      "rotation": 0,
      "visible": true
     }
@@ -831,7 +855,7 @@
       {
        "name": "participants",
        "type": "string",
-       "value": "bandit-1,bandit-2,thug,skeleton"
+       "value": "bandit-1,bandit-2,bandit-3,thug,thug-2,skeleton"
       }
      ]
     }
