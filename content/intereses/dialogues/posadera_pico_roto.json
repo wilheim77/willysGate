@@ -26,7 +26,6 @@
               }
             ]
           },
-          "lockedHint": "[Faltan coronas]",
           "effects": [
             {
               "type": "giveItem",

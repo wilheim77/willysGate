@@ -408,7 +408,7 @@
       "next": "hub"
     },
     "hilda_mal": {
-      "text": "Hilda te sostiene la mirada. Pierdes tú. Sales de ese duelo con la sensación de que ella ya sabe tu talla de ataúd.",
+      "text": "Hilda te sostiene la mirada. Pierdes tú, y ella no se molesta en disimular que lo ha notado.",
       "next": "hub"
     },
     "plato_ok": {
@@ -504,11 +504,6 @@
     "cuarenta_3": {
       "speaker": "mazo",
       "text": "Escribí un poema para cada uno. Bueno, para doce. Luego se me acabaron las rimas.",
-      "next": "cuarenta_4"
-    },
-    "cuarenta_4": {
-      "speaker": "anselmo",
-      "text": "Excelencia, a eso, en mi oficio, lo llamamos remordimiento. Se cura con dinero. A la Santa Madre, a plazos.",
       "next": "hub"
     },
     "cierre_audiencia": {

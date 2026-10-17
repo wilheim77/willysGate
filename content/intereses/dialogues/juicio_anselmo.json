@@ -1,14 +1,34 @@
 {
   "$comment": "Scene 1. Opened by the map scene zone (speaker cirilo); the first time it also describes the square. Tag both cirilo and anselmo with dialogue:juicio_anselmo. Fanatics fanatico_pala-1..3 (faction \"fanaticos\") are noncombatant until the fight. Every resolution recruits Anselmo and sets juicio_resuelto.",
   "id": "juicio_anselmo",
-  "start": "escena",
+  "start": "silencio",
   "nodes": {
+    "silencio": {
+      "speaker": "cirilo",
+      "text": "¡Silencio! La tierra está juzgando.",
+      "next": [
+        {
+          "when": {
+            "notFlag": "juicio_visto"
+          },
+          "next": "escena"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
     "escena": {
       "text": "Hondonegra huele a ceniza mojada y a río enfermo. En medio de la plaza se levanta la Torre del Cepo, y en su plataforma un mediano con hábito de fraile tiene la soga al cuello y la boca en marcha. Delante, un capellán flaco con una pala al hombro lee los cargos de un papel que se sabe de memoria. Tres hombres con palas afiladas vigilan que nadie se aburra.",
       "effects": [
         {
           "type": "setFlag",
           "flag": "llegada_hondonegra",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "juicio_visto",
           "value": true
         }
       ],
@@ -174,7 +194,6 @@
               }
             ]
           },
-          "lockedHint": "[Faltan coronas]",
           "effects": [
             {
               "type": "giveItem",
@@ -203,7 +222,6 @@
               }
             ]
           },
-          "lockedHint": "[Faltan coronas]",
           "effects": [
             {
               "type": "giveItem",
@@ -222,30 +240,37 @@
         {
           "text": "Dorotea, ¿el banco podría adelantarme algo?",
           "when": {
-            "any": [
+            "all": [
               {
-                "all": [
-                  {
-                    "notFlag": "cirilo_ofendido"
-                  },
-                  {
-                    "not": {
-                      "item": "coronas",
-                      "atLeast": 15
-                    }
-                  }
-                ]
+                "notFlag": "deuda_con_dorotea"
               },
               {
-                "all": [
+                "any": [
                   {
-                    "flag": "cirilo_ofendido"
+                    "all": [
+                      {
+                        "notFlag": "cirilo_ofendido"
+                      },
+                      {
+                        "not": {
+                          "item": "coronas",
+                          "atLeast": 15
+                        }
+                      }
+                    ]
                   },
                   {
-                    "not": {
-                      "item": "coronas",
-                      "atLeast": 25
-                    }
+                    "all": [
+                      {
+                        "flag": "cirilo_ofendido"
+                      },
+                      {
+                        "not": {
+                          "item": "coronas",
+                          "atLeast": 25
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -422,13 +447,13 @@
     },
     "adelanto": {
       "speaker": "dorotea",
-      "text": "La Casa le adelanta veinte coronas. Al doce por ciento. Mensual. Se lo descuento de la comisión, si llega a haberla.",
+      "text": "La Casa le adelanta veinticinco coronas. Una sola vez. Al doce por ciento, mensual. Se lo descuento de la comisión, si llega a haberla.",
       "effects": [
         {
           "type": "giveItem",
           "owner": "party",
           "item": "coronas",
-          "count": 20
+          "count": 25
         },
         {
           "type": "setFlag",
@@ -622,7 +647,24 @@
     },
     "irse": {
       "speaker": "anselmo",
-      "text": "¡No, no, no! ¡Hermanos! ¡Volved! El capellán todavía tiene que leer los cargos de la cuaresma; tenéis tiempo, pero no tanto."
+      "text": "¡No, no, no! ¡Hermanos! ¡Volved! El capellán todavía tiene que leer los cargos de la cuaresma; tenéis tiempo, pero no tanto.",
+      "next": "irse_2"
+    },
+    "irse_2": {
+      "speaker": "cirilo",
+      "text": "Los forasteros se van. La tierra toma nota. Cuando vuelvan, el perdón costará más.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cirilo_ofendido",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "juicio_aplazado",
+          "value": true
+        }
+      ]
     }
   }
 }

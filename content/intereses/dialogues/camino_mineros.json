@@ -1,15 +1,37 @@
 {
   "$comment": "Prologue encounter. Entities minero_cabecilla (dialogue) and minero_hambriento_1..3, faction \"mineros\", tagged noncombatant until the fight. When the fight is won, the game must set prologo_mineros_resuelto.",
   "id": "camino_mineros",
-  "start": "corte",
+  "start": "alto",
   "nodes": {
     "corte": {
       "text": "Cuatro hombres cortan el camino con picos, una horca de heno y la clase de hambre que ya no pide permiso. Llevan ropa de mina. Hace mucho que no la ensucian trabajando.",
-      "next": "alto"
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "mineros_vistos",
+          "value": true
+        }
+      ],
+      "next": "peaje"
     },
     "alto": {
       "speaker": "minero_cabecilla",
-      "text": "Alto ahí. Esto es un peaje.",
+      "text": "Alto ahí.",
+      "next": [
+        {
+          "when": {
+            "notFlag": "mineros_vistos"
+          },
+          "next": "corte"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "peaje": {
+      "speaker": "minero_cabecilla",
+      "text": "Esto es un peaje.",
       "next": "hub"
     },
     "hub": {
@@ -41,7 +63,6 @@
               }
             ]
           },
-          "lockedHint": "[Faltan coronas]",
           "effects": [
             {
               "type": "giveItem",
@@ -195,7 +216,7 @@
     },
     "quien": {
       "speaker": "minero_cabecilla",
-      "text": "Del hambre. Es la única autoridad que queda en el valle. El barón no sale de la abadía y el obispo no sale de la ciudad. El hambre sale a todas partes.",
+      "text": "Del hambre. El barón no sale de la abadía y el obispo no sale de la ciudad. El hambre sí sale.",
       "next": "hub"
     },
     "mina": {
