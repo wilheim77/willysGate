@@ -246,4 +246,16 @@ describe('traps under 5e', () => {
     const after = engine.applyEffects(s, hit.effects).state;
     expect(after.entities.e!.resources.hp!.current).toBeLessThan(elf.resources.hp!.current);
   });
+
+  it('long spells survive walking around out of combat; one-turn snares wear off', () => {
+    const s0 = engine.newGame({ seed: 1, map: asciiMap(['......']), entities: [pc('m', 'wizard', 3, 0, 0)] });
+    const s1 = engine.applyEffects(s0, [
+      { type: 'applyCondition', entityId: 'm', condition: 'mage_armor', remainingTurns: 600 },
+      { type: 'applyCondition', entityId: 'm', condition: 'restrained', remainingTurns: 1 },
+    ]).state;
+    const r = engine.apply(s1, { type: 'move', issuer: 'player:1', entityId: 'm', to: { x: 3, y: 0 } } as BaseCommand);
+    if (!r.ok) throw new Error(r.error.code);
+    expect(hasCondition(r.state.entities.m!, 'mage_armor')).toBe(true);
+    expect(hasCondition(r.state.entities.m!, 'restrained')).toBe(false);
+  });
 });

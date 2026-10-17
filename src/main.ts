@@ -55,7 +55,7 @@ controller.onTrapReached = (trap, candidates) => {
   const disarm = trap.disarm;
   dialogue.ask(
     t.trapQuestion ?? 'Una trampa. ¿Quién intenta desactivarla?',
-    candidates.map((id) => {
+    candidates.filter((id) => !trap.triedBy?.includes(id)).map((id) => {
       const odds = ruleset.describeCheck?.(store.state, { actorId: id, check: disarm.check, target: disarm.dc });
       const name = store.state.entities[id]!.name;
       return {

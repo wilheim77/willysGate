@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type BaseCommand, type GameState, type Ruleset, type Trap, createEngine, trapsOf, withTraps } from '../../engine';
+import { type BaseCommand, type GameState, type Ruleset, type Trap, RngCursor, applyOutcome, createEngine, trapsOf, withTraps } from '../../engine';
 import { toyRuleset } from '../fixtures/toyRuleset';
 import { asciiMap, makeEntity } from '../fixtures/helpers';
 
@@ -61,5 +61,24 @@ describe('traps', () => {
     expect(good.ok && good.events[0]!.type).toBe('trapDisarmed');
     const bad = disarm(near(-20));
     expect(bad.ok && bad.events.map((e) => e.type)).toEqual(['trapDisarmFailed', 'trapTriggered', 'resourceChanged']);
+  });
+
+  it('review 3: one disarm attempt each, enemies do not reveal traps, a shove onto a trap sets it off', () => {
+    const near = (will: number) => {
+      const s = world(will, trap({ hidden: false }));
+      return { ...s, entities: { ...s.entities, hero: { ...s.entities.hero!, position: { x: 2, y: 0 } } } };
+    };
+    const tryIt = (s: GameState) => engine.apply(s, { type: 'disarmTrap', issuer: 'player:1', entityId: 'hero', trapId: 'pit' } as BaseCommand);
+    const once = tryIt(near(1)); // fails, but not by 5
+    expect(once.ok && once.events[0]!.type).toBe('trapDisarmFailed');
+    expect(once.ok && tryIt(once.state).ok).toBe(false);
+    // An enemy walking by with sharp eyes keeps the secret.
+    const s = world(0);
+    const foe = { ...s, entities: { ...s.entities, hero: { ...s.entities.hero!, controllerId: 'ai', stats: { will: 9, stride: 9 } } } };
+    const walked = engine.apply(foe, { type: 'move', issuer: 'ai', entityId: 'hero', to: { x: 2, y: 0 } } as BaseCommand);
+    expect(walked.ok && trapsOf(walked.state)[0]!.hidden).toBe(true);
+    // Pushed onto it.
+    const pushed = applyOutcome(rules, world(0), { effects: [{ type: 'push', entityId: 'hero', dx: 1, dy: 0, distance: 3 }], events: [] }, new RngCursor(world(0).rng));
+    expect(pushed.events.some((e) => e.type === 'trapTriggered')).toBe(true);
   });
 });

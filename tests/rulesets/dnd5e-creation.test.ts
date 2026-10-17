@@ -26,4 +26,10 @@ describe('5e character creation (point buy)', () => {
     expect(elf.stats.dex).toBe(17);
     expect(points.bonuses!({ race: 'elf' })).toEqual({ dex: 2, int: 1 });
   });
+
+  it('normalises the ability keys (missing ones at 8, extra ones dropped)', () => {
+    const hero = buildProtagonist({ name: 'x', race: 'human', class: 'fighter', abilities: { str: 15, dex: 14, con: 14, int: 8, wis: 10, multiattack: 5 } }, base);
+    expect(hero.stats.cha).toBe(9);
+    expect(hero.stats.multiattack).toBeUndefined();
+  });
 });

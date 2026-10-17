@@ -19,6 +19,8 @@ export interface Trap {
   params: Record<string, JsonValue>;
   /** How to disarm it: a check through the ruleset. Failing by `triggerOnFailBy` or more sets it off. */
   disarm?: { check: string; dc: number; triggerOnFailBy?: number };
+  /** Who already tried and failed to disarm it: one attempt each. */
+  triedBy?: string[];
 }
 
 /** Walking within this many tiles of a hidden trap gives a chance to notice it. */
@@ -77,6 +79,8 @@ export function trapsAfterStep(state: GameState, entityId: string, rng: RngCurso
     return { state: next, events, stop: true };
   }
 
+  // Only the player's people notice traps for the player (an enemy spotting one tells us nothing).
+  if (!mover.controllerId.startsWith('player')) return { state: next, events, stop: false };
   let spotted = false;
   for (const t of trapsOf(next)) {
     if (!t.hidden || !t.armed || distanceToTrap(t, mover.position) > NOTICE_RANGE) continue;
@@ -103,6 +107,7 @@ export const disarmTrap: CommandHandler<DisarmTrapCommand> = (state, cmd, { rule
   const trap = trapsOf(state).find((t) => t.id === cmd.trapId);
   if (!trap || trap.hidden || !trap.armed || !trap.disarm) return fail('invalid_target', 'No trap to disarm there');
   if (distanceToTrap(trap, actor.entity.position) > DISARM_RANGE) return fail('out_of_range', 'Too far from the trap');
+  if (trap.triedBy?.includes(cmd.entityId)) return fail('cannot_act', `${cmd.entityId} already failed with this trap`);
 
   const rng = new RngCursor(state.rng);
   const result = ruleset.resolveCheck(state, { actorId: cmd.entityId, check: trap.disarm.check, target: trap.disarm.dc }, rng);
@@ -111,7 +116,7 @@ export const disarmTrap: CommandHandler<DisarmTrapCommand> = (state, cmd, { rule
     return { ok: true, state: { ...next, rng: rng.state }, events: [{ type: 'trapDisarmed', trapId: trap.id, entityId: cmd.entityId, result } as TrapEvent] };
   }
   const events: GameEvent[] = [{ type: 'trapDisarmFailed', trapId: trap.id, entityId: cmd.entityId, result } as TrapEvent];
-  let next = state;
+  let next = updateTrap(state, trap.id, { triedBy: [...(trap.triedBy ?? []), cmd.entityId] });
   const by = trap.disarm.triggerOnFailBy;
   if (by !== undefined && result.total <= trap.disarm.dc - by) {
     next = updateTrap(next, trap.id, { armed: false });

@@ -83,9 +83,11 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     if (!ruleset.canAct(entity)) return fail('cannot_act', `${entity.id} cannot act`);
   }
 
-  // Out of combat, time passes between moves: short-lived conditions (a snare, a slip) wear off.
-  if (!fighting && entity.conditions.some((c) => c.remainingTurns !== undefined)) {
-    const expired = entity.conditions.filter((c) => c.remainingTurns !== undefined).map((c) => ({ type: 'removeCondition' as const, entityId: entity.id, condition: c.id }));
+  // Out of combat, time passes between moves: conditions about to run out (a snare, a slip)
+  // wear off. Long ones (an hour of Mage Armor) are left to rests and the ruleset.
+  const ending = (c: { remainingTurns?: number }) => c.remainingTurns !== undefined && c.remainingTurns <= 1;
+  if (!fighting && entity.conditions.some(ending)) {
+    const expired = entity.conditions.filter(ending).map((c) => ({ type: 'removeCondition' as const, entityId: entity.id, condition: c.id }));
     const cleared = applyEffects(ruleset, state, expired);
     const r = move(cleared.state, cmd, { ruleset });
     return r.ok ? { ...r, events: [...cleared.events, ...r.events] } : r;
@@ -151,10 +153,6 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
       next = trapped.state;
       events.push(...trapped.events);
     }
-    if (trapped.stop) {
-      prev = next.entities[entity.id]?.position ?? step;
-      break;
-    }
     const surface = surfaceAt(next, step);
     if (surface && ruleset.onSurface) {
       events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
@@ -171,6 +169,10 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
         prev = after?.position ?? step;
         break;
       }
+    }
+    if (trapped.stop) {
+      prev = next.entities[entity.id]?.position ?? step;
+      break;
     }
   }
   if (segment.length) events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);

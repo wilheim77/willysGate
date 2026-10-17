@@ -8,6 +8,7 @@ import {
 } from './command-types';
 import { type Effect, type EffectEvent, type EntityFellEvent, type EntityPushedEvent, applyEffects } from './effects';
 import { ageSurfaces, surfaceAt } from './surfaces';
+import { trapsOf, withTraps } from './traps';
 import { type Vec2, gridDistance } from './grid';
 import { RngCursor } from './rng';
 import { type ActionOutcome, type ActionTarget, type Ruleset, targetIds } from './ruleset';
@@ -99,10 +100,17 @@ export function applyOutcome(
         const ev = e as EntityFellEvent;
         follow.push(ruleset.onFall(next, ev.entityId, ev.levels, rng));
       }
-      if (e.type === 'entityPushed' && ruleset.onSurface) {
+      if (e.type === 'entityPushed' || e.type === 'entityTeleported') {
         const ev = e as EntityPushedEvent;
+        // Shoved or blinked onto an armed trap: it goes off.
+        const trap = trapsOf(next).find((t) => t.armed && t.tiles.some((p) => p.x === ev.to.x && p.y === ev.to.y));
+        if (trap && next.entities[ev.entityId]) {
+          next = withTraps(next, trapsOf(next).map((t) => (t.id === trap.id ? { ...t, armed: false, hidden: false } : t)));
+          events.push({ type: 'trapTriggered', trapId: trap.id, entityId: ev.entityId } as GameEvent);
+          if (ruleset.triggerTrap) follow.push(ruleset.triggerTrap(next, ev.entityId, trap, rng));
+        }
         const surface = surfaceAt(next, ev.to);
-        if (surface && next.entities[ev.entityId]) follow.push(ruleset.onSurface(next, ev.entityId, surface.type, 'enter', rng));
+        if (e.type === 'entityPushed' && ruleset.onSurface && surface && next.entities[ev.entityId]) follow.push(ruleset.onSurface(next, ev.entityId, surface.type, 'enter', rng));
       }
     }
     pending = [];

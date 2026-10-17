@@ -327,6 +327,8 @@ export interface EndDialogueCommand extends BaseCommand {
 export const endDialogue: CommandHandler<EndDialogueCommand> = (state, cmd) => {
   const d = dialogueOf(state);
   if (!d) return fail('cannot_act', 'No conversation in progress');
-  if (cmd.issuer !== SYSTEM_ISSUER && state.entities[d.actorId]?.controllerId !== cmd.issuer) return fail('not_your_entity', 'Not your conversation');
+  // If the speaker no longer exists (an old save), anyone may close it rather than stay stuck.
+  const speaker = state.entities[d.actorId];
+  if (cmd.issuer !== SYSTEM_ISSUER && speaker && speaker.controllerId !== cmd.issuer) return fail('not_your_entity', 'Not your conversation');
   return { ok: true, state: withDialogue(state, null), events: [{ type: 'dialogueEnded', treeId: d.treeId } as DialogueEvent] };
 };
