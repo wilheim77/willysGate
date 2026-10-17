@@ -287,7 +287,7 @@ Datos: `classes.json` → `ingeniero` → habilidad `red-g` (`subidaPorUso`, `no
 - **Salto** (acción `jump`, nueva en el motor: `ENGINE_REQUESTS.md` → R15): mueve en línea recta hasta N casillas **ignorando lo que hay en medio** (huecos, fosos, vacío y, con Maestría, enemigos) y subiendo hasta `maxUp` niveles, por encima del `maxStep` normal. La casilla de llegada debe ser transitable y libre.
 - **Bajar saltando** no hace daño hasta `safeDown` niveles (3 con Gran salto); más allá, daño de caída normal por los niveles que sobren.
 - **Mate:** solo tras saltar este turno o desde más alto que el objetivo. +3 a acertar además del bono de altura (+2 por nivel, máx. +4); deja Tumbado y, desde arriba, empuja 1 hacia abajo (puede provocar caída).
-- **Pase picado:** el balón viaja en línea y puede **rebotar** en muros (1 rebote, 2 a nivel 3). Tras rebotar ignora la cobertura. Necesita trazado con rebote (R15).
+- **Pase picado:** el balón viaja en línea y puede **rebotar** en muros (1 rebote, 2 a nivel 3). Tras rebotar ignora la cobertura y empuja desde el punto del rebote. Si hay línea de visión va directo; si no, prueba las 8 direcciones con `traceProjectile` (R15) y elige el rebote más corto que llegue.
 - **Alley-oop:** necesita un aliado que asista (Chencho, el base, invocado con Tiempo muerto; o cualquier invocación aliada). Sin aliado, contra un muro a mitad de daño.
 - **Techo bajo:** propiedad de sala o casilla en Tiled (`ceiling: low`). Ahí no se puede saltar ni hacer Mate; intentarlo dispara el rasgo `techo-bajo`.
 - **Cosas redondas:** las entidades y objetos con la etiqueta `redondo` (bombonas, barriles, balones, cabezudos, patitos, el Centollo…).
@@ -361,10 +361,11 @@ Las 9 clases están completas, con invocaciones y barreras (`summons.ts`, sobre 
 
 - **Invocaciones y barreras (R13):** `spawnEntity`/`despawnEntity`.
 - **Fin de turno e inicio de combate (R20):** «Siesta en la silla» (Socorrista) y «Silencio absoluto» (Mimo).
+- **Saltos y rebotes (R15):** Gran salto, Alley-oop, Mate del concurso y Escalera imaginaria usan `jumpTargets` y el efecto `jump` (la caída de más pasa por `onFall`); el ruleset añade el techo bajo, el estado «salto» y el evento `saltoCompleto` (con `cruzaVacio`, para logros y Narrador). Pase picado rebota con `traceProjectile`.
+- **Trampas:** `noticeTrap` (8 + SUE contra la detección de la trampa, sin dado) y `triggerTrap` (salvación de AGI contra su DIF: si la pasas, mitad de daño y sin efecto; si no, daño entero y enredado 2 turnos o tumbado).
 
 ### Lo que sigue esperando al motor
 
-- **Saltos y rebotes (R15):** de momento el salto es un `setPosition` validado en el ruleset y el Pase picado no rebota.
 - **Fin de ronda (R20):** cintas transportadoras y mareas.
 
 Tests: `tests/rulesets/willy-core.test.ts`, `willy-classes.test.ts`, `willy-classes2.test.ts`, `willy-summons.test.ts` y `willy-review.test.ts` (este recorre todas las habilidades de todas las clases en los niveles 1, 3, 6 y 9) (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).
