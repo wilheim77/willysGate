@@ -48,3 +48,7 @@ Cuando el usuario apruebe W0 y la sesión principal cierre la Fase 2 del motor:
 
 - Los datos JSON se validaron con un script de comprobación cruzada (ids de objetos en tablas, clases, patrocinadores y logros; rarezas; pistas de ocultos; ids de frases únicos). Al crear `rulesets/willy/`, convertirlo en test de contenido (`tests/content/willy-data.test.ts`) junto con el test de variables del Narrador.
 - Todo lo de *Willy* respeta las fronteras: solo `docs/willy/` y `content/willy/` (salvo `cinematics/` y `public/assets/cinematics/`, que son de la sesión de arte).
+
+## Decisiones del usuario (2026-10-17)
+
+- **No se compra arte** (ni LimeZu ni ningún otro). El Hipermercado, El Plató y cualquier otro escenario se harán con packs gratuitos (Ninja Adventure, 0x72, Kenney…) y con arte creado por el agente de arte.

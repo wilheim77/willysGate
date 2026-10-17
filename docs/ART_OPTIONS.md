@@ -13,6 +13,10 @@ Opciones de assets para *Intereses* y los dos juegos siguientes (*Willy el mazmo
 | Modern Interiors / Modern Exteriors (LimeZu) | De pago | Licencia del autor: uso comercial permitido con condiciones; revisar antes de comprar | Edición permitida, no redistribuir los originales | 16×16 (y 32 y 48) | Escenarios modernos enormes | *Willy* |
 | Hell – 16x16 Top-Down (Raguzar) | ~7-9 $ | Licencia del autor; la página dice que es editable | Edición permitida | 16×16 | Muy oscuro: personajes con attack y death en 4 direcciones, luces y niebla. **El autor declara que el arte está asistido por IA.** | Vampiros. Posible complemento oscuro de *Intereses*. |
 
+## Política de compras (2026-10-17)
+
+**No se compra ningún pack.** Todo sale de packs gratuitos (CC0, CC-BY, CC-BY-SA o licencias libres equivalentes). Lo que falte o no encaje lo crea el agente de arte con los pipelines del repo (recoloreado, composición y dibujo por script). Los packs de pago de la tabla quedan solo como referencia.
+
 ## Prueba comparativa (2026-10-17)
 
 En el mismo mapa (`content/intereses/maps/test.json`), con oscuridad, antorchas y la linterna del protagonista:
