@@ -27,8 +27,11 @@ export interface DialogueNode {
   /** Applied when the conversation reaches this node. */
   effects?: DialogueEffect[];
   choices?: DialogueChoice[];
-  /** With no choices: continue here (a "Continuar" button), or end when omitted. */
-  next?: string;
+  /**
+   * With no choices: continue here (a "Continuar" button), or end when omitted. A list picks
+   * the first entry whose `when` holds (the last one without `when` is the fallback).
+   */
+  next?: string | { when?: DialogueWhen; next?: string }[];
 }
 
 export interface DialogueChoice {
@@ -55,12 +58,14 @@ export type DialogueWhen =
   | { rule: string; actor?: string; params?: Record<string, JsonValue> }
   | { all: DialogueWhen[] }
   | { any: DialogueWhen[] }
-  | { not: DialogueWhen };
+  | { not: DialogueWhen }
+  /** The entity is in the speaker's party (same controller). */
+  | { inParty: string };
 
 export type DialogueEffect =
   | Effect
-  /** Start a fight with everyone of these factions on the map. */
-  | { type: 'startCombat'; factions: string[] }
+  /** Start a fight with everyone of these factions on the map; optional consequences by outcome. */
+  | { type: 'startCombat'; factions: string[]; onVictory?: Effect[]; onDefeat?: Effect[] }
   /** The party leaves for another map (a cart ride, a cave-in, "follow me"). */
   | { type: 'travel'; mapId: string; spawn: string };
 
@@ -139,6 +144,11 @@ export function evaluateCondition(ruleset: Ruleset, state: GameState, actorId: s
   if ('all' in c) return c.all.every((x) => evaluateCondition(ruleset, state, actorId, x));
   if ('any' in c) return c.any.some((x) => evaluateCondition(ruleset, state, actorId, x));
   if ('not' in c) return !evaluateCondition(ruleset, state, actorId, c.not);
+  if ('inParty' in c) {
+    const who = state.entities[c.inParty];
+    const me = state.entities[actorId];
+    return !!who && !!me && who.controllerId === me.controllerId && ruleset.isStanding(who);
+  }
   if ('notFlag' in c) return !state.flags[c.notFlag];
   if ('flag' in c) return c.is === undefined ? !!state.flags[c.flag] : state.flags[c.flag] === c.is;
   if ('item' in c) return itemCount(state, c.owner ?? 'party', c.item) >= (c.atLeast ?? 1);
@@ -146,6 +156,19 @@ export function evaluateCondition(ruleset: Ruleset, state: GameState, actorId: s
   if (!rule) throw new Error(`Unknown dialogue condition "${c.rule}"`);
   const who = c.actor ?? actorId;
   return !!state.entities[who] && rule(state, who, c.params ?? {});
+}
+
+/** Where a choiceless node continues: a fixed id, or the first branch whose condition holds. */
+export function resolveNext(ruleset: Ruleset, state: GameState, actorId: string, next: DialogueNode['next']): string | undefined {
+  if (next === undefined || typeof next === 'string') return next;
+  return next.find((b) => !b.when || evaluateCondition(ruleset, state, actorId, b.when))?.next;
+}
+
+/** Every node id a `next` may lead to (for validation). */
+export function nextTargets(next: DialogueNode['next']): string[] {
+  if (next === undefined) return [];
+  if (typeof next === 'string') return [next];
+  return next.flatMap((b) => (b.next ? [b.next] : []));
 }
 
 /** A choice as the UI shows it. */
@@ -236,6 +259,10 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
     const r = startCombat({ ...next, rng: rng.state }, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants } as StartCombatCommand, { ruleset });
     if (!r.ok) return r;
     next = r.state;
+    const hooks = e as { onVictory?: Effect[]; onDefeat?: Effect[] };
+    if (leaderSide && (hooks.onVictory || hooks.onDefeat)) {
+      next = { ...next, systems: { ...next.systems, combatHooks: { side: leaderSide, ...(hooks.onVictory ? { onVictory: hooks.onVictory } : {}), ...(hooks.onDefeat ? { onDefeat: hooks.onDefeat } : {}) } as unknown as JsonValue } };
+    }
     rng.state = next.rng;
     events.push(...r.events);
   }
@@ -283,7 +310,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
     // A node without choices just continues.
     if (!node.choices || node.choices.length === 0) {
       if (cmd.index !== 0) return fail('invalid_target', 'Only "continue" here');
-      const r = enterNode(ruleset, content, state, d, node.next, events, rng);
+      const r = enterNode(ruleset, content, state, d, resolveNext(ruleset, state, d.actorId, node.next), events, rng);
       return r.ok ? { ...r, state: { ...r.state, rng: rng.state } } : r;
     }
 

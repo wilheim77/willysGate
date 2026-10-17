@@ -156,6 +156,18 @@ export function checkCombatEnd(ruleset: Ruleset, state: GameState): { state: Gam
   }
   // Nobody tracks turns any more: per-turn resources come back.
   for (const e of Object.values(next.entities)) next = applyEffects(ruleset, next, refreshTurnResources(ruleset, e)).state;
+  // Story consequences declared when the fight started (a dialogue's "if we win…").
+  const hooks = next.systems.combatHooks as unknown as { side: string; onVictory?: Effect[]; onDefeat?: Effect[] } | undefined;
+  if (hooks) {
+    const { combatHooks: _done, ...systems } = next.systems;
+    next = { ...next, systems };
+    const consequences = winner === hooks.side ? hooks.onVictory : hooks.onDefeat;
+    if (consequences?.length) {
+      const r = applyEffects(ruleset, next, consequences);
+      next = r.state;
+      events.push(...r.events);
+    }
+  }
   return { state: next, events };
 }
 
