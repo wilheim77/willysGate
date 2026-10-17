@@ -305,3 +305,17 @@ Vista previa: [`art-previews/willy-plato.png`](art-previews/willy-plato.png).
 | `gradas` | terreno | Gradas vistas desde arriba con el público (no transitables) |
 
 Los focos, su cono, la parrilla de focos y las cámaras-dron ya estaban en P2.
+
+## P3: jefes y enemigos de todas las plantas (`hand-sprites.json`)
+
+Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-hand.png). Los humanoides extienden la plantilla de Willy (sin parecerse a él: otra paleta y otros accesorios). Los jefes grandes se dibujan pequeños y llevan `scale` 2 en el manifiesto.
+
+| Planta | Ids |
+|---|---|
+| 1 | `jefe-centollo` (centollo enorme con corona, 24×18, `scale` 2) |
+| 2 · Hipermercado | `maniqui` (sin cara, conjunto de temporada), `carrito-poseido` (ojos verdes furiosos), `reponedor-zombi` (piel verdosa, chaleco del híper, caja al hombro), `etiqueta-de-oferta` (etiqueta voladora con «%»), `jefe-encargada` (Doña Rebeca: permanente caoba, gafas, chaleco rojo y pistola de etiquetas) |
+| 3 · Verbena | `cabezudo` (cabezón de cartón piedra con vejiga), `musico-de-charanga` (camisa blanca, pañuelo rojo, trompeta), `vaquilla` (becerra negra con manchas), `feriante` (tirantes, gorra, petardo), `jefe-giganton` (gigante de fiestas con corona y faldón, 20×32, `scale` 2) |
+| 4 · Balneario | `patito-gigante` (`scale` 1.5), `yeti-de-sauna` (peludo, colorado, toalla, sudor), `medusa-de-piscina` (rosa translúcida), `monitor-de-aquagym` (polo turquesa, churro de piscina), `jefe-socorrista` (criatura abisal con camiseta de socorrista sentada en su silla, tentáculos, 20×24, `scale` 2) |
+| 5 · Plató | `regidor` (cascos con micro, portapapeles), `tecnico-de-sonido` (auriculares, pértiga), `figurante` (romano de cartón), `camara-dron` (enemigo) |
+
+`mimico` sale en todas las plantas (ya estaba en P1).

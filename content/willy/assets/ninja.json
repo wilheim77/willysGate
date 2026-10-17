@@ -3387,6 +3387,1070 @@
           }
         ]
       }
+    },
+    "jefe-centollo": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 588,
+            "w": 24,
+            "h": 18
+          },
+          {
+            "x": 24,
+            "y": 588,
+            "w": 24,
+            "h": 18
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 588,
+            "w": 24,
+            "h": 18
+          },
+          {
+            "x": 72,
+            "y": 588,
+            "w": 24,
+            "h": 18
+          },
+          {
+            "x": 96,
+            "y": 588,
+            "w": 24,
+            "h": 18
+          },
+          {
+            "x": 120,
+            "y": 588,
+            "w": 24,
+            "h": 18
+          }
+        ]
+      },
+      "scale": 2
+    },
+    "maniqui": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 606,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "carrito-poseido": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 636,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 16,
+            "y": 636,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 636,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 48,
+            "y": 636,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 64,
+            "y": 636,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 80,
+            "y": 636,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "reponedor-zombi": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 652,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "etiqueta-de-oferta": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 682,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 16,
+            "y": 682,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 682,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 48,
+            "y": 682,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 64,
+            "y": 682,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 80,
+            "y": 682,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "jefe-encargada": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 698,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "cabezudo": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 728,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 728,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 728,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 728,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 728,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 728,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "musico-de-charanga": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 754,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "vaquilla": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 784,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 16,
+            "y": 784,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 784,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 48,
+            "y": 784,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 64,
+            "y": 784,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 80,
+            "y": 784,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "feriante": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 800,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "jefe-giganton": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 830,
+            "w": 20,
+            "h": 32
+          },
+          {
+            "x": 20,
+            "y": 830,
+            "w": 20,
+            "h": 32
+          }
+        ],
+        "move": [
+          {
+            "x": 40,
+            "y": 830,
+            "w": 20,
+            "h": 32
+          },
+          {
+            "x": 60,
+            "y": 830,
+            "w": 20,
+            "h": 32
+          },
+          {
+            "x": 80,
+            "y": 830,
+            "w": 20,
+            "h": 32
+          },
+          {
+            "x": 100,
+            "y": 830,
+            "w": 20,
+            "h": 32
+          }
+        ]
+      },
+      "scale": 2
+    },
+    "patito-gigante": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 862,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 16,
+            "y": 862,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 862,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 48,
+            "y": 862,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 64,
+            "y": 862,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 80,
+            "y": 862,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      },
+      "scale": 1.5
+    },
+    "yeti-de-sauna": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 878,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "medusa-de-piscina": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 908,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 16,
+            "y": 908,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 908,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 48,
+            "y": 908,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 64,
+            "y": 908,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 80,
+            "y": 908,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "monitor-de-aquagym": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 924,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "jefe-socorrista": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 954,
+            "w": 20,
+            "h": 24
+          },
+          {
+            "x": 20,
+            "y": 954,
+            "w": 20,
+            "h": 24
+          }
+        ],
+        "move": [
+          {
+            "x": 40,
+            "y": 954,
+            "w": 20,
+            "h": 24
+          },
+          {
+            "x": 60,
+            "y": 954,
+            "w": 20,
+            "h": 24
+          },
+          {
+            "x": 80,
+            "y": 954,
+            "w": 20,
+            "h": 24
+          },
+          {
+            "x": 100,
+            "y": 954,
+            "w": 20,
+            "h": 24
+          }
+        ]
+      },
+      "scale": 2
+    },
+    "regidor": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 978,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "tecnico-de-sonido": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 1008,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "figurante": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 1038,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "camara-dron": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1068,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 16,
+            "y": 1068,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 1068,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 48,
+            "y": 1068,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 64,
+            "y": 1068,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 80,
+            "y": 1068,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
     }
   },
   "props": {
@@ -4801,6 +5865,146 @@
       "url": "assets/ninja/portraits.png",
       "x": 0,
       "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-centollo": {
+      "url": "assets/ninja/portraits.png",
+      "x": 32,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "maniqui": {
+      "url": "assets/ninja/portraits.png",
+      "x": 64,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "carrito-poseido": {
+      "url": "assets/ninja/portraits.png",
+      "x": 96,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "reponedor-zombi": {
+      "url": "assets/ninja/portraits.png",
+      "x": 128,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "etiqueta-de-oferta": {
+      "url": "assets/ninja/portraits.png",
+      "x": 160,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-encargada": {
+      "url": "assets/ninja/portraits.png",
+      "x": 192,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "cabezudo": {
+      "url": "assets/ninja/portraits.png",
+      "x": 224,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "musico-de-charanga": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "vaquilla": {
+      "url": "assets/ninja/portraits.png",
+      "x": 32,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "feriante": {
+      "url": "assets/ninja/portraits.png",
+      "x": 64,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-giganton": {
+      "url": "assets/ninja/portraits.png",
+      "x": 96,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "patito-gigante": {
+      "url": "assets/ninja/portraits.png",
+      "x": 128,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "yeti-de-sauna": {
+      "url": "assets/ninja/portraits.png",
+      "x": 160,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "medusa-de-piscina": {
+      "url": "assets/ninja/portraits.png",
+      "x": 192,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "monitor-de-aquagym": {
+      "url": "assets/ninja/portraits.png",
+      "x": 224,
+      "y": 160,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-socorrista": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 192,
+      "w": 32,
+      "h": 32
+    },
+    "regidor": {
+      "url": "assets/ninja/portraits.png",
+      "x": 32,
+      "y": 192,
+      "w": 32,
+      "h": 32
+    },
+    "tecnico-de-sonido": {
+      "url": "assets/ninja/portraits.png",
+      "x": 64,
+      "y": 192,
+      "w": 32,
+      "h": 32
+    },
+    "figurante": {
+      "url": "assets/ninja/portraits.png",
+      "x": 96,
+      "y": 192,
+      "w": 32,
+      "h": 32
+    },
+    "camara-dron": {
+      "url": "assets/ninja/portraits.png",
+      "x": 128,
+      "y": 192,
       "w": 32,
       "h": 32
     },
