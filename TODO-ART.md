@@ -17,7 +17,6 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | *Willy*: resto del encargo P1 | willy | **P1 hecho**: Willy en 9 clases, PNJ del Camerino, enemigos de la Planta 1, cajas de botín, terrenos de Castro Sumergido y del Camerino, mobiliario y marcos de carta | Revisión con mapas reales; que el render dibuje props grandes, `ui` 9-slice y la caja legendaria flotando |
 | *Willy*: P3 | willy | **P2 hecho**: invocaciones, utilería, superficies, efectos, retratos de patrocinadores e iconos | Hecho: rivales modulares, el Presentador y su plató, jefes y enemigos de todas las plantas. Falta: terrenos de las Plantas 2-4 (hipermercado, verbena, balneario); variante m/f de los rivales si se pide |
 | Tileset lógico de Tiled | intereses | `content/intereses/maps/terrain-logic.png` | Solo lo usa el editor. Se queda así. |
-| Atrezo de la mina | intereses | — | Vagonetas, raíles, resonadores de plata viva y lo que pidan los mapas de la mina y la bóveda (rama `mapas`) |
 
 ## Hecho
 
@@ -37,3 +36,4 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Objetos interactivos (Fase 4) | intereses | `chest`, `chest_trapped`, `lever`, terrenos `door_closed`/`door_open`, props `trap_armed`/`trap_disarmed` |
 | PNJ de Hondonegra | intereses | `mazo`, `hilda`, `cirilo`, `fanatico_pala`, `nella`, `odda`, `lisandro`, aldeanos; atrezo `tapestry`, `tapestry_crossbow`, `gallows` |
 | Calles y Escorial | intereses | `fiel_pala`, `viuda`; `campfire`, `oil_cart`, `well`; trampas `trap_beartrap`, `trap_tripwire`, `trap_dart` |
+| Mina y Bóveda | intereses | Terrenos `rails`, `rails_v`, `vault`; `mine_wagon`, `mine_wagon_ore`, `powder_keg`, `resonator`; `fuse_charges`, `remains_forty`, `pulley`, `inscription`, `trap_rotten_plank`; `ivo` |
