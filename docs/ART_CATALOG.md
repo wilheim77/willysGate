@@ -91,6 +91,23 @@ Añadidos en la Fase 3:
 | `fx_explosion` | 7 frames de **32×32**, 14 fps, `anchor: centre`, `light: #ffb060` | Destello, bola de fuego, anillo de humo con brasas y humo que se disipa |
 | `fx_steam` | 5, 10 fps | Vapor cuando el agua toca el fuego |
 
+## Terrenos de exterior (el camino, Hondonegra y el Escorial)
+
+Dibujados por `build-extra-art.ts` en una paleta seca, fría y apagada (la noche y el cielo cubierto los pone el filtro de cámara y la luz ambiente del mapa). Las caras de roca y tierra son los acantilados de Ninja Adventure (CC0) recoloreados. Antes y después, con los mapas reales: [`art-previews/0x72-camino-antes-despues.png`](art-previews/0x72-camino-antes-despues.png) y [`art-previews/0x72-plaza-antes-despues.png`](art-previews/0x72-plaza-antes-despues.png).
+
+| Terreno | Superficie | Cara |
+|---|---|---|
+| `road`, `road_v` | Camino de tierra apisonada con rodadas (horizontal / vertical) y piedras sueltas | Talud de tierra |
+| `scrub` | Hierba seca y matojos sobre tierra (4 variantes, poco contraste) | Talud de tierra |
+| `mud` | Cuneta y barro con agua estancada | Talud de tierra |
+| `rock` | Afloramiento de roca gris parda con grietas y liquen | Roca fracturada (para alturas) |
+| `cobble` | Adoquín gastado de la plaza, con barro en las juntas | Mampostería |
+| `house` / `house_plain` | Tejado de pizarra con musgo, visto desde arriba | Entramado de madera y revoque, con ventana / con riostra (alternar para que no se repita) |
+| `stone_wall` | Remate de muro | Mampostería de piedra (muros del pueblo y de la abadía por fuera) |
+| `fence` | Valla de madera vista desde arriba sobre matojos | Tablones grises |
+| `river`, `riverbank` | El Lloro: agua gris de los relaves / orilla de barro con el agua lamiendo el borde norte | Talud de tierra |
+| `slag_heap` | Escoria granulada con brasas y destellos de plata | Escoria gris oscura |
+
 ## PNJ de Hondonegra y atrezo del pueblo (para `mapas` y `guion`)
 
 Recolores de 0x72 con detalle propio (`palettes.json`). Vista previa: [`art-previews/0x72-npcs-hondonegra.png`](art-previews/0x72-npcs-hondonegra.png).

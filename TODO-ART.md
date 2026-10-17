@@ -6,7 +6,7 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 
 | Pendiente | Juego | Situación actual | Qué hace falta |
 |---|---|---|---|
-| Exteriores del pueblo (Hondonegra, el Escorial) | intereses | **Elegido Ninja Adventure (CC0).** Ya se usa para la tierra; las caras de acantilado ahora son recolores. | Elegir casas, vallas, árboles muertos y escombreras del pack (`TilesetHouse`, `TilesetVillageAbandoned`, `TilesetNature`) cuando se monten los mapas del acto (Fase 5) |
+| Exteriores: atrezo | intereses | Terrenos de exterior hechos (`road`, `scrub`, `mud`, `rock`, `cobble`, `house`, `stone_wall`, `fence`, `river`, `slag_heap`) | Árboles muertos, carros, pozos y puertas de casa como props si los mapas los piden; bordes de transición entre terrenos (autotile) si hacen falta |
 | Llamas de antorcha en el juego | intereses | **Arte hecho** (`torch_wall`, `brazier`); el render aún usa la llama por código de `src/fx/LightingLayer.ts` | Petición al render n.º 1 en `docs/ART_CATALOG.md` |
 | Reborde de plataformas | intereses | Horneado en las caras (`*_face` con reborde) y `rim_*` sueltos | Petición al render n.º 4 para dibujarlo una sola vez |
 | Sangre, chispas y polvo como sprites | intereses | **Arte hecho** (`blood_1..3`, `fx_hit_spark`, `fx_dust`); `juice.ts` usa cuadrados por código | Peticiones al render n.º 2 y 3 |
