@@ -21,12 +21,12 @@ import { Resolver, dealDamage, destructionHooks, rollSave, standing } from './re
  */
 
 export const SURFACES: Record<string, SurfaceDef> = {
-  oil: { label: 'Aceite', color: '#2a2418' },
-  grease: { label: 'Grasa', color: '#6b5a3a' },
-  fire: { label: 'Fuego', durationRounds: 3, light: { radius: 3, intensity: 0.9, color: '#ff8a30' }, color: '#d2501e' },
+  oil: { label: 'Aceite', hazard: 0.5, color: '#2a2418' },
+  grease: { label: 'Grasa', hazard: 1, color: '#6b5a3a' },
+  fire: { label: 'Fuego', hazard: 4, durationRounds: 3, light: { radius: 3, intensity: 0.9, color: '#ff8a30' }, color: '#d2501e' },
   water: { label: 'Agua', color: '#2c4a5e' },
-  ice: { label: 'Hielo', color: '#9fc8d8' },
-  electrified: { label: 'Agua electrificada', durationRounds: 2, expiresInto: 'water', light: { radius: 2, intensity: 0.5, color: '#9fd8ff' }, color: '#5ab0e0' },
+  ice: { label: 'Hielo', hazard: 1, color: '#9fc8d8' },
+  electrified: { label: 'Agua electrificada', hazard: 4, durationRounds: 2, expiresInto: 'water', light: { radius: 2, intensity: 0.5, color: '#9fd8ff' }, color: '#5ab0e0' },
   blood: { label: 'Sangre', color: '#5a0f0a' },
   rubble: { label: 'Escombros', extraMoveCost: 1, color: '#5a5048' },
 };

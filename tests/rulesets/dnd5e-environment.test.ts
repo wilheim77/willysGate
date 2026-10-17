@@ -104,3 +104,21 @@ describe('objects, cover and line of sight', () => {
     expect(cmd.target?.entityId).not.toBe('barrel');
   });
 });
+
+describe('environment-aware previews and AI', () => {
+  it('the shove preview says the target will fall off the ledge', () => {
+    const s = fight([pc('garran', 'fighter', 3, 0, 0), monster('b', 'bandit', 1, 0)], ['33...'], 'garran');
+    const p = dnd5e.previewAction(s, 'garran', 'basic:shove', { entityId: 'b' });
+    expect(p.breakdown?.some((l) => l.term === 'fall' && l.label.includes('3 niveles'))).toBe(true);
+    expect(p.affectedTiles).toEqual([{ x: 2, y: 0 }]);
+  });
+
+  it('the AI does not end its move standing in fire if it can avoid it', () => {
+    let s = fight([monster('b', 'bandit', 0, 1), pc('garran', 'fighter', 3, 3, 1)], ['.....', '.....', '.....'], 'b');
+    // Every tile next to Garrán except one is on fire.
+    const burning = [{ x: 2, y: 0 }, { x: 2, y: 1 }, { x: 3, y: 0 }, { x: 4, y: 0 }, { x: 4, y: 1 }, { x: 4, y: 2 }, { x: 3, y: 2 }];
+    s = engine.applyEffects(s, [{ type: 'spawnSurface', tiles: burning, surface: 'fire' }]).state;
+    const cmd = nextAiCommand(dnd5e, s, 'b') as BaseCommand & { to?: { x: number; y: number } };
+    if (cmd.type === 'move') expect(cmd.to).toEqual({ x: 2, y: 2 });
+  });
+});

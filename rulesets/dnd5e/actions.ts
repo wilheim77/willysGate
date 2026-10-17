@@ -12,6 +12,8 @@ import {
   hasCondition,
   hasLineOfSight,
   OBJECT_TAG,
+  simulatePush,
+  surfaceAt,
   hasTag,
   isHostile,
   stat,
@@ -20,6 +22,8 @@ import {
 import { ABILITY_LABELS, type Ability } from './abilities';
 import { castingAbility, hasFeature, mod, profBonus, tagValues } from './character';
 import { SKILLS } from './abilities';
+import { SURFACES } from './environment';
+import { dnd5eRef } from './ref';
 import { SPELLS, type SpellData, WEAPONS } from './data';
 import { type DiceExpr, averageOf, parseDice, rollDice, sum } from './dice';
 import {
@@ -377,6 +381,7 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
           { label: `CD ${dc} (${ABILITY_LABELS[spell.save.ability]})`, term: 'dc' },
           { label: 'Probabilidad de que falle la salvación', value: pct(chance), term: 'saving_throw' },
           ...(spell.area ? [{ label: `Afecta a ${victims.length} criatura(s)` }] : []),
+          ...(spell.push ? victims.filter((v) => isHostile(e, v)).flatMap((v) => describePush(state, v, e.position, spell.push!).lines.map((l) => ({ ...l, label: `${v.name}: ${l.label}` }))) : []),
         ],
       };
     }
@@ -393,7 +398,8 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
     if (id === 'shove') {
       if (!targetEntity || !standing(targetEntity)) return { valid: false, reason: 'No hay a quién empujar.' };
       const p = shoveChance(e, targetEntity);
-      return { valid: true, chance: p, breakdown: [{ label: 'Atletismo enfrentado', value: pct(p), term: 'contest' }] };
+      const push = describePush(state, targetEntity, e.position, 1);
+      return { valid: true, chance: p, breakdown: [{ label: 'Atletismo enfrentado', value: pct(p), term: 'contest' }, ...push.lines], affectedTiles: [push.to] };
     }
     if (id === 'stabilize') {
       if (!targetEntity || !hasCondition(targetEntity, 'downed') || hasCondition(targetEntity, 'stable')) return { valid: false, reason: 'Solo sirve con un aliado caído que se desangra.' };
@@ -408,6 +414,17 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
     return { valid: true, chance: 1 };
   }
   return { valid: false, reason: 'Acción desconocida.' };
+}
+
+/** Prediction of a push away from `from`: where it lands and whether it falls (for previews). */
+function describePush(state: GameState, target: Entity, from: Vec2, distance: number): { to: Vec2; lines: NonNullable<ActionPreview['breakdown']> } {
+  const sim = simulatePush(dnd5eRef(), state, target.id, Math.sign(target.position.x - from.x), Math.sign(target.position.y - from.y), distance);
+  const lines: NonNullable<ActionPreview['breakdown']> = [];
+  if (sim.dropped > 1) lines.push({ label: `Cae ${sim.dropped} niveles`, value: `~${((sim.dropped - 1) * 3.5).toFixed(1).replace('.', ',')} de daño y derribado`, term: 'fall' });
+  else if (sim.collidedWith) lines.push({ label: 'Choca contra algo', value: sim.to.x === target.position.x && sim.to.y === target.position.y ? 'no se mueve' : '' });
+  const surface = surfaceAt(state, sim.to);
+  if (surface) lines.push({ label: 'Acaba sobre', value: SURFACES[surface.type]?.label ?? surface.type, term: 'surface' });
+  return { to: sim.to, lines };
 }
 
 /** The defender resists a shove with Athletics or Acrobatics, whichever is better. */

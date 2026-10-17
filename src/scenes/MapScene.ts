@@ -266,7 +266,7 @@ export class MapScene extends Phaser.Scene {
     this.propSprites = [];
     for (const light of lightingOf(state).lights) {
       const propId = light.prop ?? torchProp;
-      if (light.attachedTo || !light.position || !propId || !props[propId]) continue;
+      if (light.attachedTo || light.id.startsWith('surface:') || !light.position || !propId || !props[propId]) continue;
       const c = this.grid.tileCentre(light.position.x, light.position.y, tileAt(map, light.position)?.height ?? 0);
       const yOffset = props[propId]!.anchor === 'wall' ? -T * 0.6 : 0;
       const sprite = this.add.sprite(c.x, c.y + yOffset, imageKey(props[propId]!.url)).setDepth(this.grid.depth(light.position.y, 9, 6));

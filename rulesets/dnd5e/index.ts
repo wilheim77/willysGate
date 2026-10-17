@@ -19,6 +19,7 @@ import {
 } from '../../engine';
 import { listActions, performAction, previewAction } from './actions';
 import { SURFACES, SURFACE_REACTIONS, onFall, onSurface } from './environment';
+import { setDnd5eRef } from './ref';
 import { profBonus } from './character';
 import { SPELLS } from './data';
 import { parseDice, rollDice, sum } from './dice';
@@ -272,6 +273,7 @@ export const dnd5e: Ruleset = {
   onSurface: (state, id, surface, trigger, rng) => onSurface(dnd5e, state, id, surface, trigger, rng),
   onFall: (state, id, levels, rng) => onFall(dnd5e, state, id, levels, rng),
 };
+setDnd5eRef(dnd5e);
 
 export interface CreatureSpec {
   id: string;

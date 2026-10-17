@@ -274,6 +274,37 @@ Son sistemas reutilizables por los tres juegos, con la configuración en `conten
   - **panel de vista previa** con probabilidad, daño esperado y desglose con «?» que explica cada término en lenguaje llano. Hay que confirmar antes de actuar;
   - registro de tiradas.
 
+## Entorno táctico (Fase 3)
+
+**Motor (genérico):**
+- **Línea de visión** (`engine/los.ts`): líneas de Bresenham sobre la cuadrícula. El terreno bloquea si es un muro a la altura de la vista o si sube 2 o más niveles por encima de los dos extremos. Las entidades con la etiqueta `obstacle` (cajas, barriles) obstruyen, pero no tapan la vista. Los muros también tapan la luz.
+- **Empujar:** el efecto `push` y la función `simulatePush` (que usan también las vistas previas). Se para en muros, criaturas, el borde del mapa y desniveles que no se pueden subir. Emite `entityPushed` y `entityFell`.
+- **Superficies** (`engine/surfaces.ts`): una capa por casilla en `state.systems.surfaces`.
+  - Los tipos (`SurfaceDef`: duración, sobrecoste de movimiento, luz, peligro para la IA, en qué se convierte al caducar) y la tabla de reacciones a elementos los define el ruleset.
+  - Efectos: `spawnSurface`, `applyElement` y `clearSurface`.
+  - Envejecen cada ronda. Las que arden dan luz.
+- **Consecuencias encadenadas:** tras cada acción, movimiento o empujón, el motor llama a `onFall` y a `onSurface` (al entrar y al empezar el turno), lo que permite cadenas como «empujado, cae y aterriza en el fuego».
+- **Objetos** (`object` + `obstacle`): se pueden atacar, dan cobertura y nunca tienen turno. La IA no los elige como objetivo.
+- **IA:** evita terminar en superficies peligrosas (`hazard`) y cuenta su coste de movimiento.
+
+**Reglas 5e** (`rulesets/dnd5e/environment.ts` y `cover.ts`):
+- **Superficies:** aceite, grasa, fuego (3 rondas, quema 1d6), agua, hielo, agua electrificada (1d6 y sin reacciones; vuelve a ser agua), sangre y escombros (terreno difícil).
+- **Reacciones:** el fuego prende el aceite y la grasa, derrite el hielo y evapora el agua. El frío congela el agua. El rayo electrifica el agua.
+- **Caídas:** 1d6 por cada nivel por encima del primero, y quien cae queda derribado.
+- **Cobertura:** solo dan cobertura los objetos, no las criaturas. Con uno, +2 a la CA; con dos, +5. Sin línea de visión no se puede disparar ni lanzar conjuros a distancia.
+- **Elementos de los conjuros:** el fuego prende la casilla del objetivo o el área.
+- **Nuevos conjuros:** Onda atronadora (empuja 2 casillas) y Grasa (crea la superficie).
+- **Acción Empujar:** Atletismo enfrentado contra Atletismo o Acrobacias, o contra CD 10 si es un objeto.
+- **Barriles de aceite:** explotan al romperse (3d6 de fuego alrededor, salvación de DES para la mitad) y dejan aceite en llamas.
+- **Vistas previas:** muestran la cobertura, a quién empuja y si caerá (con el daño esperado) o acabará sobre una superficie.
+
+**Cliente:**
+- Superficies animadas del pack (o manchas de color si falta el arte).
+- Barriles y cajas, con su versión rota al destruirlos.
+- Animaciones de empujón, caída, resbalón, explosión y vapor.
+- Nombre de la superficie al pasar el ratón por la casilla.
+- Tocar el sprite de una criatura la selecciona aunque sobresalga hacia otra casilla.
+
 ## Mapas (Tiled)
 
 - **Formato:** mapa **ortogonal** con los tilesets incrustados.
@@ -282,7 +313,8 @@ Son sistemas reutilizables por los tres juegos, con la configuración en `conten
 - **Capa de objetos `spawns`:** puntos con nombre.
 - **Capa de objetos `lights`:** puntos con `radius`, `intensity`, `color` y `flicker`.
 - **Propiedad del mapa `ambientLight`:** valor entre 0 y 1.
-- **Capas de objetos rectangulares** (por ejemplo `encounters`): zonas con propiedades, guardadas en `state.systems.zones`.
+- **Capas de objetos rectangulares** (por ejemplo `encounters`): zonas con propiedades, guardadas en `state.systems.zones`. La capa `surfaces` (propiedad `surface`) pinta las superficies iniciales.
+- **Objetos del escenario:** puntos de `spawns` llamados `barrel_oil-N`, `barrel-N` o `crate-N`.
 - **Pendiente:** capas de superficies, interactuables y ambiente (niebla, ceniza…).
 
 ## Decisiones tomadas

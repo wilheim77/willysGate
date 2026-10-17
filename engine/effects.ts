@@ -157,32 +157,13 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
       case 'push': {
         const e = next.entities[effect.entityId];
         if (!e) throw new Error(`Effect targets unknown entity "${effect.entityId}"`);
-        const from = { ...e.position };
-        let pos = from;
-        let collidedWith: EntityPushedEvent['collidedWith'];
-        let dropped = 0;
-        for (let i = 0; i < effect.distance; i++) {
-          const step = { x: pos.x + Math.sign(effect.dx), y: pos.y + Math.sign(effect.dy) };
-          const here = tileAt(next.map, pos)!;
-          const there = tileAt(next.map, step);
-          if (!inBounds(next.map, step) || !there || !there.walkable || there.height - here.height > ruleset.movement.maxStep) {
-            collidedWith = { wall: true };
-            break;
-          }
-          const blocker = Object.values(next.entities).find((o) => o.id !== e.id && o.position.x === step.x && o.position.y === step.y && ruleset.isStanding(o));
-          if (blocker) {
-            collidedWith = { entityId: blocker.id };
-            break;
-          }
-          const drop = here.height - there.height;
-          if (drop > ruleset.movement.maxStep) dropped += drop;
-          pos = step;
+        const sim = simulatePush(ruleset, next, e.id, effect.dx, effect.dy, effect.distance);
+        if (sim.to.x !== e.position.x || sim.to.y !== e.position.y || sim.collidedWith) {
+          const from = { ...e.position };
+          updateEntity(e.id, (x) => ({ ...x, position: { ...sim.to } }));
+          events.push({ type: 'entityPushed', entityId: e.id, from, to: { ...sim.to }, ...(sim.collidedWith ? { collidedWith: sim.collidedWith } : {}) });
         }
-        if (pos.x !== from.x || pos.y !== from.y || collidedWith) {
-          updateEntity(e.id, (x) => ({ ...x, position: { ...pos } }));
-          events.push({ type: 'entityPushed', entityId: e.id, from, to: { ...pos }, ...(collidedWith ? { collidedWith } : {}) });
-        }
-        if (dropped > 0) events.push({ type: 'entityFell', entityId: e.id, levels: dropped });
+        if (sim.dropped > 0) events.push({ type: 'entityFell', entityId: e.id, levels: sim.dropped });
         break;
       }
       case 'spawnSurface': {
@@ -239,4 +220,36 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
     }
   }
   return { state: next, events };
+}
+
+/**
+ * Where a push would leave a creature, without changing anything: used by the push
+ * effect and by previews ("it will fall 2 levels"). Stops at walls, creatures, the map
+ * edge and ledges too high to be pushed up; counts levels dropped beyond a normal step.
+ */
+export function simulatePush(
+  ruleset: Ruleset,
+  state: GameState,
+  entityId: string,
+  dx: number,
+  dy: number,
+  distance: number,
+): { to: Vec2; dropped: number; collidedWith?: { entityId?: string; wall?: boolean } } {
+  const e = state.entities[entityId]!;
+  let pos = { ...e.position };
+  let dropped = 0;
+  for (let i = 0; i < distance; i++) {
+    const step = { x: pos.x + Math.sign(dx), y: pos.y + Math.sign(dy) };
+    const here = tileAt(state.map, pos)!;
+    const there = tileAt(state.map, step);
+    if (!inBounds(state.map, step) || !there || !there.walkable || there.height - here.height > ruleset.movement.maxStep) {
+      return { to: pos, dropped, collidedWith: { wall: true } };
+    }
+    const blocker = Object.values(state.entities).find((o) => o.id !== e.id && o.position.x === step.x && o.position.y === step.y && ruleset.isStanding(o));
+    if (blocker) return { to: pos, dropped, collidedWith: { entityId: blocker.id } };
+    const drop = here.height - there.height;
+    if (drop > ruleset.movement.maxStep) dropped += drop;
+    pos = step;
+  }
+  return { to: pos, dropped };
 }

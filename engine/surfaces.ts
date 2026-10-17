@@ -20,6 +20,8 @@ export interface SurfaceDef {
   color?: string;
   /** What it turns into when its duration runs out (electrified water → water). */
   expiresInto?: string;
+  /** How bad it is to stand in, roughly in health points: the AI avoids ending moves on it. */
+  hazard?: number;
 }
 
 /** `surface` is the existing surface ('' for a bare tile); `result` null removes it. */

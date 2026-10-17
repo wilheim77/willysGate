@@ -1,7 +1,8 @@
 import { type ActCommand, type EndTurnCommand, isHostile } from './combat';
-import { type BaseCommand, type MoveCommand, blockedTiles } from './commands';
+import { type BaseCommand, type MoveCommand, blockedTiles, surfaceCost } from './commands';
 import { type Vec2, gridDistance, posKey, samePos } from './grid';
 import { findPath, reachableTiles } from './pathfinding';
+import { surfaceAt } from './surfaces';
 import type { ActionDef, ActionTarget, Ruleset } from './ruleset';
 import { type Entity, type GameState, OBJECT_TAG } from './state';
 
@@ -22,11 +23,13 @@ export interface AiProfile {
   focusWounded: number;
   /** Penalty per tile walked (lazy enemies stay put). */
   walking: number;
+  /** Penalty per point of surface hazard at the tile the AI would end on. */
+  hazard: number;
   /** Resource that represents health; defaults to the ruleset's resource with role 'health'. */
   healthResource?: string;
 }
 
-export const DEFAULT_AI: AiProfile = { damage: 1, healing: 1.2, kill: 6, focusWounded: 3, walking: 0.15 };
+export const DEFAULT_AI: AiProfile = { damage: 1, healing: 1.2, kill: 6, focusWounded: 3, walking: 0.15, hazard: 1.5 };
 
 export function healthResourceOf(ruleset: Ruleset): string | undefined {
   return Object.entries(ruleset.resources).find(([, r]) => r.role === 'health')?.[0];
@@ -48,7 +51,7 @@ export function nextAiCommand(ruleset: Ruleset, state: GameState, actorId: strin
 
   const blocked = blockedTiles(ruleset, state, actorId);
   const movementLeft = Math.max(0, ruleset.movementBudget(actor, state) - state.turn.movementUsed);
-  const reachable = [...reachableTiles(state.map, actor.position, movementLeft, { blocked, rules: ruleset.movement }).values()];
+  const reachable = [...reachableTiles(state.map, actor.position, movementLeft, { blocked, rules: ruleset.movement, extraCost: surfaceCost(ruleset, state) }).values()];
 
   const best = bestCandidate(ruleset, state, actor, reachable, { ...profile, healthResource: profile.healthResource ?? healthResourceOf(ruleset) });
   if (best && best.score > 0) {
@@ -91,7 +94,7 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
         const ref: ActionTarget = action.target.kind === 'tile' ? { tile: { ...target.position } } : { entityId: target.id };
         const preview = ruleset.previewAction(hypothetical, actor.id, action.id, ref);
         if (!preview.valid) continue;
-        const score = scorePreview(preview, actor, target, profile) - spot.cost * profile.walking;
+        const score = scorePreview(preview, actor, target, profile) - spot.cost * profile.walking - hazardAt(ruleset, state, spot.pos) * profile.hazard;
         if (!best || score > best.score) best = { position: spot.pos, pathCost: spot.cost, action, target: ref, score };
       }
     }
@@ -127,11 +130,17 @@ function approachNearestEnemy(ruleset: Ruleset, state: GameState, actor: Entity,
     for (const enemy of enemies) {
       // Distance along walkable paths, so it doesn't get stuck against walls.
       const path = findPath(state.map, r.pos, enemy.position, { blocked: new Set([...blocked].filter((k) => k !== posKey(enemy.position))), rules: ruleset.movement });
-      const d = path ? path.cost : gridDistance(r.pos, enemy.position) + 100;
+      const d = (path ? path.cost : gridDistance(r.pos, enemy.position) + 100) + hazardAt(ruleset, state, r.pos) * 3;
       if (!best || d < best.d || (d === best.d && r.cost < (reachable.find((x) => samePos(x.pos, best!.pos))?.cost ?? 0))) best = { pos: r.pos, d };
     }
   }
   return best?.pos ?? null;
+}
+
+/** How dangerous it is to stand on a tile, from its surface's data. */
+function hazardAt(ruleset: Ruleset, state: GameState, p: Vec2): number {
+  const s = surfaceAt(state, p);
+  return s ? (ruleset.surfaces?.[s.type]?.hazard ?? 0) : 0;
 }
 
 function matchesFilter(actor: Entity, target: Entity, filter: ActionDef['target']['filter']): boolean {

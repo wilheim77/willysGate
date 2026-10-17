@@ -4,7 +4,8 @@
 
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
 - **Fase 1, Esqueleto técnico:** **completada y aprobada** (2026-10-17). Arte: 0x72 como base y Ninja Adventure para exteriores. LPC se queda como preset alternativo.
-- **Fase 2, Combate:** **completada**. Probada por el usuario en el móvil (2026-10-17). Progresión del acto: de nivel 3 a 6. Pendiente de aprobación formal y del plan de la Fase 3.
+- **Fase 2, Combate:** **completada** y probada por el usuario en el móvil (2026-10-17). Progresión del acto: de nivel 3 a 6.
+- **Fase 3, Entorno táctico:** **implementada**, pendiente de que el usuario la pruebe.
 - **Willy el mazmorrero:** un subagente trabaja en paralelo en la rama `willy` (diseño de la Fase 0, logros, cajas de botín y generación procedural). Solo toca `docs/willy/` y `content/willy/`.
 
 ## Hecho
@@ -53,6 +54,15 @@
 - [x] Integrada la rama `willy` (Fase W0 de *Willy el mazmorrero*: diseño, ruleset, narrador, logros, botín, procedural y peticiones al motor). Pendiente de aprobación del usuario: ver `docs/willy/PROGRESS.md`.
 - [ ] Probar el combate completo en el móvil y ajustar el HUD.
 - [ ] Equilibrar el encuentro de prueba y pulir (los compañeros a veces no siguen al líder en desniveles).
+
+### Fase 3
+- [x] Motor: línea de visión (también para la luz), empujones con caídas, superficies como datos, consecuencias encadenadas, objetos y una IA que evita el peligro.
+- [x] 5e: superficies y reacciones, caídas, cobertura, elementos de los conjuros, Onda atronadora, Grasa, Empujar y barriles explosivos.
+- [x] Arte (agente de arte): superficies animadas, barriles, cajas rotas, explosión y vapor.
+- [x] Mapa de prueba con meseta alta, aceite, agua, escombros, cajas y barriles.
+- [x] Corregido: tocar el sprite de un enemigo lo selecciona (antes podía caer en la casilla de arriba).
+- [x] Tests: 189.
+- [ ] Prueba del usuario en el móvil.
 
 ## Planificado para más adelante
 

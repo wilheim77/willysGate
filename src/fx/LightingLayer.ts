@@ -68,7 +68,7 @@ export class LightingLayer {
       this.glows.set(light.id, glow);
 
       // Fixed lights are torches/braziers: show the flame itself.
-      if (!light.attachedTo && this.drawFlames) {
+      if (!light.attachedTo && this.drawFlames && !light.id.startsWith('surface:')) {
         const flame = this.flames.get(light.id) ?? this.scene.add.image(0, 0, FLAME_TEXTURE).setBlendMode(Phaser.BlendModes.ADD);
         flame.setPosition(p.x, p.y - this.tile * 0.3).setScale(0.9 + 0.25 * (wobble - 1) * 4).setTint(color).setDepth(this.darkness.depth + 2);
         this.flames.set(light.id, flame);
