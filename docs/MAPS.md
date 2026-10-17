@@ -179,10 +179,10 @@ M minero_cuadrilla-2 (19,19)
 N minero_cuadrilla-3 (14,20)
 O hulla-1 (10,20)
 P hulla-2 (17,20)
-Q odda (13,20)
+Q odda_noche (13,20)
 props: tapestry_crossbow-1, tapestry-1, door-cripta, barrel_oil-1, barrel_oil-2, crate-1, crate-2, barrel-1, crate-3, crate-4
 encounter d1-asalto: guardia_baron-1,guardia_baron-2,guardia_baron-3,guardia_baron-4,guardia_baron_sargento-1,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
-encounter d1-defensa: odda,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
+encounter d1-defensa: odda_noche,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
 scenes d1-abadia-final (7,1 16x7) {"dialogue":"d1_abadia_final","speaker":"mazo","once":true,"requiresFlag":"d1_abadia"}
 scenes audiencia (12,4 4x3) {"dialogue":"audiencia_abadia","speaker":"mazo","once":true}
 ```
@@ -388,7 +388,6 @@ F callado-10 (22,6)
 G callado-11 (10,18)
 I callado_palido-3 (19,12)
 props: resonator-1, resonator-2, resonator-3, resonator-4, powder_keg-1, powder_keg-2, powder_keg-3, lever-polea, pulley-1, inscription-1
-encounter brea: absalon,ivo,callado-9,callado-10,callado-11,callado_palido-3
 scenes brea-habla (3,10 4x5) {"dialogue":"boveda_brea","speaker":"absalon","once":true}
 collapse derrumbe (13,9 5x6) {"height":0,"terrain":"vault","trigger":"brea_vuela_polvorin"}
 collapse derrumbe-borde (18,9 1x6) {"height":1,"terrain":"vault","trigger":"brea_vuela_polvorin"}

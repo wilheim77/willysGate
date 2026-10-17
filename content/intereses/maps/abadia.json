@@ -851,7 +851,7 @@
       {
        "name": "requiresFlag",
        "type": "string",
-       "value": "llave_cripta"
+       "value": "cripta_abierta"
       }
      ]
     }

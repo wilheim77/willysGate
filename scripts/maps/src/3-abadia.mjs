@@ -96,8 +96,8 @@ export default {
   ],
   exits: [
     { name: 'a-plaza', rect: [11, 21, 6, 1], to: 'plaza', spawn: 'entry-abadia' },
-    // The crypt stairs down to the mine: the baron's key (D1, defend). I2: requiresFlag.
-    { name: 'escalera-cripta', rect: [26, 1, 1, 1], to: 'mina', spawn: 'entry-cripta', props: { requiresFlag: 'llave_cripta' } },
+    // The crypt stairs down to the mine: open once door_cripta has been opened (cripta_abierta).
+    { name: 'escalera-cripta', rect: [26, 1, 1, 1], to: 'mina', spawn: 'entry-cripta', props: { requiresFlag: 'cripta_abierta' } },
   ],
   encounters: [
     {
