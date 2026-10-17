@@ -837,6 +837,7 @@ export function handlerTarget(h: Handler, actor: Entity, state: GameState): Acti
 
 /** Text for the current level of abilities with per-level texts (the 5G line). */
 function levelText(actor: Entity, data: AbilityData): string {
+  if (data.textoSinEstrenar && !actor.tags.includes(`estrenado:${data.id}`) && (actor.resources[`uso:${data.id}`]?.current ?? 0) === 0) return data.textoSinEstrenar;
   const entry = data.niveles?.[String(skillLevel(actor, data.id))] as { texto?: string } | undefined;
   return typeof entry === 'object' && entry?.texto ? entry.texto : data.texto;
 }

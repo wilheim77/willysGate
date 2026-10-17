@@ -16,6 +16,8 @@ export interface AbilityData {
   /** Own use thresholds (the 5G line has 6 levels). */
   subidaPorUso?: { umbrales: number[] };
   nombresPorNivel?: Record<string, string>;
+  /** Shown until the first use (the 5G pretends to be useful until you try it). */
+  textoSinEstrenar?: string;
 }
 
 export interface ClassData {

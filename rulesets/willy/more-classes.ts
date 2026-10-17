@@ -442,7 +442,9 @@ Object.assign(HANDLERS, {
       const lvl = skillLevel(a, 'red-g');
       if (lvl === 2 && !targetEntity(s, t)) return invalid('¿A quién se le cuelga el vídeo?');
       if (lvl === 6 && s.flags[tenGFlag(a.id, s.map.id)]) return invalid('La señal absoluta solo una vez por planta.');
-      return { valid: true, ...(lvl === 1 ? { breakdown: [{ label: '5G', value: 'no hace nada' }] } : {}) };
+      // Before the first try it looks like a weapon; afterwards everyone knows.
+      const tried = a.tags.includes(G_TRIED) || (a.resources['uso:red-g']?.current ?? 0) > 0;
+      return { valid: true, ...(lvl === 1 ? { breakdown: [{ label: '5G', value: tried ? 'no hace nada' : 'rayo de 5G' }] } : {}) };
     },
     perform: (r: Resolver, id: string, t: ActionTarget) => performG(r, id, t),
   },
@@ -458,6 +460,8 @@ function buoySpec(a: Entity, targetId: string): AttackSpec {
 }
 
 const reviveFlag = (id: string, mapId: string) => `willy:reanimacion:${id}:${mapId}`;
+/** Tag on an engineer who has pressed the 5G button at least once. */
+export const G_TRIED = 'estrenado:red-g';
 const tenGFlag = (id: string, mapId: string) => `willy:10g:${id}:${mapId}`;
 const gTurnFlag = (id: string) => `willy:g-turno:${id}`;
 
@@ -472,7 +476,9 @@ function arcLength(a: Entity): number {
 function performG(r: Resolver, id: string, t: ActionTarget): void {
   const me = r.entity(id);
   const lvl = skillLevel(me, 'red-g');
-  const firstEver = (me.resources['uso:red-g']?.current ?? 0) === 0;
+  // "Estrenado" is remembered on the engineer, so the joke plays once even if the use doesn't count.
+  const firstEver = !me.tags.includes(G_TRIED) && (me.resources['uso:red-g']?.current ?? 0) === 0;
+  if (firstEver) r.apply({ type: 'setEntity', entityId: id, addTags: [G_TRIED] });
   r.emit({ type: 'skillUsed', entityId: id, habilidad: 'red-g', nivel: lvl, primeraVez: firstEver } as WillyEvent);
   switch (lvl) {
     case 2:

@@ -32,7 +32,9 @@ export function describeEntity(state: GameState, id: string, labels: { condition
         const next = SKILL_THRESHOLDS[lvl];
         const progress = next !== undefined ? ` · ${abilityUses(e, h.id)}/${next} usos` : ' · maestría';
         const byLevel = (h as { nombresPorNivel?: Record<string, string> }).nombresPorNivel?.[String(lvl)];
-        return { label: `${byLevel ?? h.nombre} (nv. ${lvl})`, text: `${h.texto}${h.pasiva ? '' : progress}` };
+        const unused = (h as { textoSinEstrenar?: string }).textoSinEstrenar;
+        const text = unused && !e.tags.includes(`estrenado:${h.id}`) && abilityUses(e, h.id) === 0 ? unused : h.texto;
+        return { label: `${byLevel ?? h.nombre} (nv. ${lvl})`, text: `${text}${h.pasiva ? '' : progress}` };
       }),
     });
     sections.push({
