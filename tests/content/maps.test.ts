@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { type GridMap, type MapZone, type ParsedMap, type TiledMapJson, type Vec2, inBounds, inZone, parseTiledMap, posKey, reachableTiles, tileAt } from '../../engine';
 import { DAMAGE_LABELS, SKILLS, SURFACES, dnd5e } from '../../rulesets/dnd5e';
+import art from '../../content/intereses/assets/0x72.json';
 
 /**
  * Every Intereses map: spawns on walkable ground and reachable from the entry, objects in
@@ -21,7 +22,8 @@ const maps: Record<string, ParsedMap> = Object.fromEntries(
 );
 
 const RULES = dnd5e.movement;
-const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', 'resonador'];
+// Scenery and art props (content/intereses/world.ts); all but levers and doors are assumed to block.
+const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', 'resonador', 'oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow'];
 const PROPS = [...OBSTACLE_PROPS, 'lever', 'door'];
 const kindOf = (name: string): string => name.split('-')[0]!;
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -119,6 +121,16 @@ describe('Intereses maps', () => {
           expect(back.has(posKey(origin(parsed))), `stuck in ${z.name} at ${p.x},${p.y}`).toBe(true);
         }
         expect(after.size).toBeGreaterThan(0);
+      });
+
+      it('uses art that exists (trap markers, light props, art-prop spawns)', () => {
+        const props = art.props as Record<string, unknown>;
+        for (const t of parsed.zones.filter((z) => z.layer === 'traps')) if (t.properties.marker) expect(props[String(t.properties.marker)], `${t.name}.marker`).toBeDefined();
+        for (const l of parsed.lighting.lights) if (l.prop) expect(props[l.prop], `light ${l.id}.prop`).toBeDefined();
+        for (const name of Object.keys(parsed.spawns)) {
+          const kind = kindOf(name);
+          if (OBSTACLE_PROPS.includes(kind) && !['barrel_oil', 'barrel', 'crate', 'chest', 'resonador'].includes(kind)) expect(props[kind], name).toBeDefined();
+        }
       });
 
       it('paints only known surfaces', () => {

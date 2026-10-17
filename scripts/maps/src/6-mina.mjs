@@ -84,13 +84,13 @@ export default {
       // A rotten plank on the east walkway.
       name: 'tablon-podrido',
       rect: [29, 10, 1, 1],
-      props: { detect: 14, save: 'dex', dc: 12, damage: '2d6', type: 'bludgeoning', condition: 'prone', disarmCheck: 'athletics', disarmDc: 12 },
+      props: { marker: 'trap_tripwire', detect: 14, save: 'dex', dc: 12, damage: '2d6', type: 'bludgeoning', condition: 'prone', disarmCheck: 'athletics', disarmDc: 12 },
     },
     {
       // Brea's tripwire in the crypt tunnel: brings the roof down.
       name: 'cable-derrumbe',
       rect: [9, 26, 1, 2],
-      props: { detect: 13, save: 'dex', dc: 13, damage: '2d8', type: 'bludgeoning', half: true, surface: 'rubble', disarmCheck: 'sleight_of_hand', disarmDc: 13 },
+      props: { marker: 'trap_tripwire', detect: 13, save: 'dex', dc: 13, damage: '2d8', type: 'bludgeoning', half: true, surface: 'rubble', disarmCheck: 'sleight_of_hand', disarmDc: 13 },
     },
   ],
   encounters: [

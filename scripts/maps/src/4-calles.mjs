@@ -72,7 +72,7 @@ export default {
       // A poisoned dart in the back room's floor, between the partition door and the chest.
       name: 'dardo-trastienda',
       rect: [10, 19, 1, 1],
-      props: { detect: 14, save: 'con', dc: 13, damage: '2d4', type: 'poison', condition: 'poisoned', turns: 3, disarmCheck: 'sleight_of_hand', disarmDc: 13 },
+      props: { marker: 'trap_dart', detect: 14, save: 'con', dc: 13, damage: '2d4', type: 'poison', condition: 'poisoned', turns: 3, disarmCheck: 'sleight_of_hand', disarmDc: 13 },
     },
   ],
   exits: [

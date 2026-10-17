@@ -1,12 +1,12 @@
 // Scene 1: the plaza of Hondonegra. The Torre del Cepo with its gallows platform (Anselmo's
-// trial, Cirilo and his fanatics), the Cuadrilla by the Pico Roto, the baron's guards at the
-// foot of the road up to the abbey. Exits: west (the road), north (abbey), east (streets),
+// trial, Cirilo and his fanatics), the Cuadrilla by the Pico Roto, the abbey guard at the
+// foot of the road up to the abbey (opens after the trial: audiencia_concedida). Exits: west (the road), north (abbey), east (streets),
 // south (the Escorial track).
 import { Canvas } from '../paint.mjs';
 
 const L = {
   '#': ['#', 3],
-  '.': ['.', 0],
+  '.': [',', 0], // «la plaza es de barro pisado»
   '-': ['.', 1],
   ':': ['.', 2],
   3: ['.', 3],
@@ -44,6 +44,7 @@ const ROWS = [
 ];
 
 const c = new Canvas(30, 22).stamp(0, 0, ROWS.map((r) => r.padEnd(30, '#')), L);
+c.rect(17, 12, 2, 2, ',', 0); // around the well (a prop)
 
 export default {
   id: 'plaza',
@@ -58,21 +59,23 @@ export default {
     // The trial (scene 1).
     anselmo: [10, 6],
     cirilo: [12, 7],
-    'fanatico_pala-1': [8, 9],
-    'fanatico_pala-2': [13, 9],
-    'fanatico_pala-3': [6, 8],
+    fanatico_1: [8, 9],
+    fanatico_2: [13, 9],
+    fanatico_3: [6, 8],
+    'gallows-1': [9, 6],
     // The Cuadrilla, by the inn.
     nella: [23, 12],
     odda: [24, 13],
     'minero_cuadrilla-1': [22, 14],
-    // The abbey's guards at the foot of the road.
-    'guardia_baron-1': [21, 5],
-    'guardia_baron-2': [25, 5],
+    // The abbey's guards at the foot of the road (guardia_abadia lets the party up).
+    guardia_abadia: [23, 4],
+    'guardia_baron-1': [25, 5],
     // Scenery: market stalls on the terrace, lamp oil by the gallows, the well's bucket barrel.
     'crate-1': [2, 10],
     'crate-2': [3, 10],
     'barrel-1': [2, 11],
     'barrel_oil-1': [15, 8],
+    'well-1': [17, 12],
     'barrel-2': [19, 13],
     'crate-3': [20, 16],
   },
@@ -84,17 +87,18 @@ export default {
   ],
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
   exits: [
-    { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza' },
+    { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_concedida' } },
     { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza' },
     { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza' },
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],
   zones: {
     scenes: [
+      { name: 'llegada', rect: [0, 13, 4, 5], props: { dialogue: 'plaza_llegada', once: true } },
       {
         name: 'juicio-anselmo',
         rect: [5, 8, 11, 4],
-        props: { dialogue: 'TODO:juicio_anselmo', speaker: 'cirilo', once: true, fight: 'fanatico_pala-1,fanatico_pala-2,fanatico_pala-3,cirilo' },
+        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, requiresFlag: 'llegada_hondonegra', fight: 'fanatico_1,fanatico_2,fanatico_3,cirilo' },
       },
     ],
   },

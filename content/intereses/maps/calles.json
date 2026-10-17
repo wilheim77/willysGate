@@ -618,6 +618,11 @@
      "visible": true,
      "properties": [
       {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_dart"
+      },
+      {
        "name": "detect",
        "type": "int",
        "value": 14

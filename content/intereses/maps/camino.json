@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 19,
+ "nextobjectid": 20,
  "properties": [
   {
    "name": "name",
@@ -22,6 +22,11 @@
    "name": "ambientLight",
    "type": "float",
    "value": 0.6
+  },
+  {
+   "name": "start",
+   "type": "bool",
+   "value": true
   }
  ],
  "layers": [
@@ -209,6 +214,18 @@
      "height": 0,
      "rotation": 0,
      "visible": true
+    },
+    {
+     "id": 13,
+     "name": "campfire-1",
+     "type": "",
+     "point": true,
+     "x": 816,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
     }
    ]
   },
@@ -223,7 +240,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 13,
+     "id": 14,
      "name": "hoguera-mineros",
      "type": "",
      "point": true,
@@ -253,11 +270,6 @@
        "name": "flicker",
        "type": "float",
        "value": 0.18
-      },
-      {
-       "name": "prop",
-       "type": "string",
-       "value": "brazier"
       }
      ]
     }
@@ -285,7 +297,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 14,
+     "id": 15,
      "name": "charco-camino",
      "type": "",
      "x": 448,
@@ -303,7 +315,7 @@
      ]
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "aceite-carro",
      "type": "",
      "x": 800,
@@ -333,7 +345,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 16,
+     "id": 17,
      "name": "cepo-furtivo",
      "type": "",
      "x": 480,
@@ -343,6 +355,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_beartrap"
+      },
       {
        "name": "detect",
        "type": "int",
@@ -398,7 +415,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 17,
+     "id": 18,
      "name": "a-hondonegra",
      "type": "",
      "x": 992,
@@ -433,7 +450,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 18,
+     "id": 19,
      "name": "mineros-cortan-el-paso",
      "type": "",
      "x": 512,

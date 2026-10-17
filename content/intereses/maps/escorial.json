@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 8,
- "nextobjectid": 32,
+ "nextobjectid": 33,
  "properties": [
   {
    "name": "name",
@@ -232,7 +232,7 @@
     },
     {
      "id": 14,
-     "name": "crate-1",
+     "name": "oil_cart-1",
      "type": "",
      "point": true,
      "x": 400,
@@ -268,6 +268,18 @@
     },
     {
      "id": 17,
+     "name": "campfire-1",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 18,
      "name": "door-bocamina",
      "type": "",
      "point": true,
@@ -291,7 +303,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 18,
+     "id": 19,
      "name": "hoguera-sinpaga",
      "type": "",
      "point": true,
@@ -321,16 +333,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.2
-      },
-      {
-       "name": "prop",
-       "type": "string",
-       "value": "brazier"
       }
      ]
     },
     {
-     "id": 19,
+     "id": 20,
      "name": "farol-pozo",
      "type": "",
      "point": true,
@@ -369,7 +376,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "antorcha-bocamina",
      "type": "",
      "point": true,
@@ -420,7 +427,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 21,
+     "id": 22,
      "name": "sinpaga",
      "type": "",
      "x": 256,
@@ -450,7 +457,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 22,
+     "id": 23,
      "name": "aceite-carro",
      "type": "",
      "x": 384,
@@ -468,7 +475,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 24,
      "name": "balsa-escoria",
      "type": "",
      "x": 128,
@@ -486,7 +493,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 25,
      "name": "escombros-ladera-a",
      "type": "",
      "x": 288,
@@ -504,7 +511,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 26,
      "name": "escombros-ladera-b",
      "type": "",
      "x": 928,
@@ -534,7 +541,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 26,
+     "id": 27,
      "name": "cuerda-aceite",
      "type": "",
      "x": 224,
@@ -544,6 +551,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_tripwire"
+      },
       {
        "name": "detect",
        "type": "int",
@@ -567,7 +579,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 28,
      "name": "cepo-sinpaga",
      "type": "",
      "x": 704,
@@ -577,6 +589,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_beartrap"
+      },
       {
        "name": "detect",
        "type": "int",
@@ -632,7 +649,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 29,
      "name": "a-plaza",
      "type": "",
      "x": 96,
@@ -655,7 +672,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 30,
      "name": "a-calles",
      "type": "",
      "x": 0,
@@ -678,7 +695,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 31,
      "name": "pozo-del-ahorcado",
      "type": "",
      "x": 992,
@@ -701,7 +718,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 32,
      "name": "bocamina",
      "type": "",
      "x": 1024,

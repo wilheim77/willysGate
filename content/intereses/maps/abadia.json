@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 29,
+ "nextobjectid": 30,
  "properties": [
   {
    "name": "name",
@@ -156,7 +156,7 @@
     },
     {
      "id": 8,
-     "name": "guardia_baron_sargento",
+     "name": "guardia_baron_sargento-1",
      "type": "",
      "point": true,
      "x": 496,
@@ -168,7 +168,7 @@
     },
     {
      "id": 9,
-     "name": "todo-ballesta_tapiz",
+     "name": "tapestry_crossbow-1",
      "type": "",
      "point": true,
      "x": 720,
@@ -180,6 +180,18 @@
     },
     {
      "id": 10,
+     "name": "tapestry-1",
+     "type": "",
+     "point": true,
+     "x": 272,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 11,
      "name": "door-cripta",
      "type": "",
      "point": true,
@@ -191,7 +203,7 @@
      "visible": true
     },
     {
-     "id": 11,
+     "id": 12,
      "name": "entry-cripta",
      "type": "",
      "point": true,
@@ -203,7 +215,7 @@
      "visible": true
     },
     {
-     "id": 12,
+     "id": 13,
      "name": "barrel_oil-1",
      "type": "",
      "point": true,
@@ -215,7 +227,7 @@
      "visible": true
     },
     {
-     "id": 13,
+     "id": 14,
      "name": "barrel_oil-2",
      "type": "",
      "point": true,
@@ -227,7 +239,7 @@
      "visible": true
     },
     {
-     "id": 14,
+     "id": 15,
      "name": "crate-1",
      "type": "",
      "point": true,
@@ -239,7 +251,7 @@
      "visible": true
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "crate-2",
      "type": "",
      "point": true,
@@ -251,7 +263,7 @@
      "visible": true
     },
     {
-     "id": 16,
+     "id": 17,
      "name": "barrel-1",
      "type": "",
      "point": true,
@@ -263,7 +275,7 @@
      "visible": true
     },
     {
-     "id": 17,
+     "id": 18,
      "name": "crate-3",
      "type": "",
      "point": true,
@@ -275,7 +287,7 @@
      "visible": true
     },
     {
-     "id": 18,
+     "id": 19,
      "name": "crate-4",
      "type": "",
      "point": true,
@@ -299,7 +311,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 19,
+     "id": 20,
      "name": "brasero-sala-1",
      "type": "",
      "point": true,
@@ -338,7 +350,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "brasero-sala-2",
      "type": "",
      "point": true,
@@ -377,7 +389,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 22,
      "name": "antorcha-claustro-1",
      "type": "",
      "point": true,
@@ -416,7 +428,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 23,
      "name": "antorcha-claustro-2",
      "type": "",
      "point": true,
@@ -455,7 +467,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 24,
      "name": "antorcha-puerta-1",
      "type": "",
      "point": true,
@@ -494,7 +506,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 25,
      "name": "antorcha-puerta-2",
      "type": "",
      "point": true,
@@ -533,7 +545,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 26,
      "name": "vela-cripta",
      "type": "",
      "point": true,
@@ -612,7 +624,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 26,
+     "id": 27,
      "name": "a-plaza",
      "type": "",
      "x": 352,
@@ -635,7 +647,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 28,
      "name": "escalera-cripta",
      "type": "",
      "x": 832,
@@ -675,7 +687,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 29,
      "name": "audiencia",
      "type": "",
      "x": 384,
@@ -688,7 +700,7 @@
       {
        "name": "dialogue",
        "type": "string",
-       "value": "TODO:audiencia_abadia"
+       "value": "audiencia_abadia"
       },
       {
        "name": "speaker",

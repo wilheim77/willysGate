@@ -717,6 +717,11 @@
      "visible": true,
      "properties": [
       {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_tripwire"
+      },
+      {
        "name": "detect",
        "type": "int",
        "value": 14
@@ -769,6 +774,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_tripwire"
+      },
       {
        "name": "detect",
        "type": "int",

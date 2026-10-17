@@ -52,13 +52,14 @@ export default {
     // The oil cart on the ledge, and scenery.
     'barrel_oil-1': [13, 8],
     'barrel_oil-2': [14, 8],
-    'crate-1': [12, 8],
+    'oil_cart-1': [12, 8],
     'crate-3': [21, 17],
     'barrel-1': [9, 21],
+    'campfire-1': [14, 21],
     'door-bocamina': [32, 18],
   },
   lights: [
-    { name: 'hoguera-sinpaga', at: [14, 21], radius: 5, color: '#ff9a4a', flicker: 0.2, prop: 'brazier' },
+    { name: 'hoguera-sinpaga', at: [14, 21], radius: 5, color: '#ff9a4a', flicker: 0.2 },
     { name: 'farol-pozo', at: [30, 6], radius: 3.5, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
     { name: 'antorcha-bocamina', at: [31, 17], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
   ],
@@ -74,12 +75,12 @@ export default {
       // A tripwire across the west track: it tips a hidden jar and pours oil on the track.
       name: 'cuerda-aceite',
       rect: [7, 11, 1, 3],
-      props: { detect: 13, surface: 'oil', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
+      props: { marker: 'trap_tripwire', detect: 13, surface: 'oil', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
     },
     {
       name: 'cepo-sinpaga',
       rect: [22, 13, 1, 1],
-      props: { detect: 12, save: 'dex', dc: 13, damage: '2d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
+      props: { marker: 'trap_beartrap', detect: 12, save: 'dex', dc: 13, damage: '2d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
     },
   ],
   encounters: [

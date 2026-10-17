@@ -1,14 +1,17 @@
 # Peticiones de los mapas de *Intereses* a la sesión principal
 
-> Las escribe el agente de mapas (rama `mapas`). Los mapas ya llevan los datos; falta que el motor, el cliente o `content/intereses/game.ts` los lean. Ver [`MAPS.md`](MAPS.md) para las convenciones.
+> Las escribe el agente de mapas (rama `mapas`). Convenciones en [`MAPS.md`](MAPS.md).
 
-| # | Qué | Capa | Bloquea |
+| # | Qué | Capa | Estado |
 |---|---|---|---|
-| I1 | Capa `scenes`: zonas que abren un diálogo al entrar el líder | cliente (como `encounters`) | prólogo, juicio, emboscadas habladas |
-| I2 | Capa `exits` + R10 `changeMap` | motor + cliente | pasar de un mapa a otro |
-| I3 | `game.ts`: cargar todos los mapas y crear entidades por nombre de spawn | contenido | todo |
-| I4 | Encuentros condicionados por marcas (`requiresFlag`, `unlessFlag`) | cliente | rutas de D1, emboscada de la Galería Sellada |
-| I5 | Derrumbe por zona (`collapse`) | motor (efecto) + guion | la Bóveda (polvorín de Brea) |
+| I1 | Capa `scenes`: zonas que abren un diálogo al entrar el líder | cliente | **hecho** (sesión principal) |
+| I2 | Capa `exits` + R10 `changeMap` | motor + cliente | **hecho** |
+| I3 | Entidades a partir de los nombres de spawn | contenido (`world.ts`) | **hecho** |
+| I4 | Encuentros y escenas condicionados por marcas (`requiresFlag`, `unlessFlag`) | cliente | **hecho** |
+| I5 | Derrumbe por zona (`collapse`) | motor (`setTiles`) + guion | efecto hecho; falta el guion del jefe que lo dispare |
+| I6 | Resonadores de plata viva: un tipo de prop destructible | ruleset/contenido | pendiente |
+| I7 | Polea de la Bóveda (`lever-polea`): soltar la cuba sobre la zanja | guion | pendiente |
+| I8 | Marcas que aún faltan en `flags.json` | guion | pendiente |
 
 ## I1. Capa `scenes`
 
@@ -27,11 +30,11 @@ Zonas con `to` (id de mapa) y `spawn` (nombre de un spawn `entry-*` del mapa de 
 ## I3. Entidades desde los spawns
 
 Convención de nombres (ver `MAPS.md`):
-- `hero`, `dorotea`, `garran`, `anselmo`: el grupo (solo en el mapa de inicio; en los demás el grupo llega por `entry-*`). `anselmo` en la plaza es el reo, todavía no del grupo.
-- `<id del reparto>`: un PNJ con nombre (`nella`, `odda`, `cirilo`, `mazo`, `hilda`, `lisandro`, `absalon`, `ivo`...). Cuando exista `content/intereses/cast.json` (rama `guion`), los nombres coinciden con sus ids.
-- `<plantilla>-<n>`: criaturas genéricas (`minero_hambriento-1`, `fanatico_pala-2`, `guardia_baron-1`, `sinpaga-3`, `callado-4`...). Hace falta una tabla plantilla → `monsterId`, `spriteId`, facción y nombre.
-- `barrel_oil-n`, `barrel-n`, `crate-n`: ya funcionan.
-- `chest-<id>`, `lever-<id>`, `door-<id>`: interactuables (`createProp` con `dialogue:<id>`). Un `door-*` va sobre una casilla `door_closed`; el test la cuenta como transitable porque se puede abrir.
+- `hero`, `dorotea`, `garran`: el grupo, solo en el mapa inicial (`camino`, con la propiedad `start`). En los demás mapas el grupo llega por `entry-*`.
+- **Id de `cast.json`:** un PNJ con nombre (`garran`, `minero_cabecilla`, `anselmo`, `cirilo`, `fanatico_1`, `nella`, `odda`, `mazo`, `hilda`, `guardia_abadia`...). Faltan en el reparto, y los mapas ya los usan: `lisandro`, `absalon` e `ivo`.
+- **`<plantilla>-<n>`:** criaturas genéricas de `templates.json`. Los mapas usan `minero_cuadrilla`, `guardia_baron`, `guardia_baron_sargento`, `fiel_pala`, `viuda`, `sinpaga_enmascarado`, `sinpaga_cuchillero`, `sinpaga_bruto`, `callado` y `callado_palido`.
+- **Props:** `barrel_oil`, `barrel`, `crate`, `oil_cart`, `well`, `campfire`, `gallows`, `tapestry`, `tapestry_crossbow` y `resonador` (I6).
+- **`chest-<x>`, `lever-<x>`, `door-<x>`:** interactuables con el diálogo `<kind>_<x>`. Hoy: `chest_libro_cuentas`, `door_trastienda`, `door_patio_lisandro`, `door_cripta`, `door_bocamina` y `lever_polea`. Un `door-*` va sobre una casilla `door_closed`; el test la cuenta como transitable porque se puede abrir.
 - `todo-<algo>`: marcador de algo que falta definir; no crea nada.
 - `entry-<origen>`: llegada desde otro mapa.
 
@@ -42,6 +45,23 @@ Propiedades opcionales en `encounters`: `requiresFlag` y `unlessFlag`. Ejemplos:
 ## I5. Derrumbe
 
 Capa `collapse` en la Bóveda: zonas con `height` (nueva altura) y `terrain`. Un efecto genérico `setTiles { tiles, terrain?, height?, walkable? }` (o `setTile` sobre una zona) que el guion del jefe dispare a mitad de combate (STORY §6: Brea vuela un polvorín). Quien esté encima cae (`onFall`) con la diferencia de altura.
+
+## I6. Resonadores
+
+`resonador-1..4` en la Bóveda. Son objetos destructibles (como un barril, con más puntos de golpe). Mientras quede alguno en pie, al empezar cada ronda los que lo oyen hacen una salvación de Sabiduría; quien falla queda *embelesado* y pierde la reacción (STORY §6). La regla va en el ruleset; el arte, en TODO-ART.
+
+## I7. Polea
+
+`lever-polea` en el balcón de Brea: al usarla, la cuba de mineral cae en la zanja (h1) que hay bajo el balcón (daño en un área de 3×1, escombros). Es un diálogo de objeto con `applyElement`/`spawnSurface`; es trabajo del guion.
+
+## I8. Marcas pendientes
+
+Los mapas usan marcas que todavía no están en `flags.json`, escritas como `TODO:<nombre propuesto>`:
+- `TODO:llave_cripta` (salida de la cripta de la abadía a la mina; D1, defender);
+- `TODO:d2_resuelta` (emboscada de la Galería Sellada);
+- `TODO:brea_vuela_polvorin` (disparo del derrumbe).
+
+Diálogos aún sin escribir: `TODO:sermon_cirilo`, `TODO:galeria_sellada` y `TODO:boveda_brea`.
 
 ---
 
