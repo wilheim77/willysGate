@@ -1,7 +1,11 @@
 import { type Entity, type GridMap, type JsonValue, type MapSetup, type MapZone, type Tile, type Trap, type Vec2, OBSTACLE_TAG } from '../../../engine';
 import { createCreature } from '../../../rulesets/willy';
 import floorsData from '../data/floors.json';
+import balneario from '../data/rooms/balneario.json';
 import castro from '../data/rooms/castro.json';
+import hiper from '../data/rooms/hiper.json';
+import plato from '../data/rooms/plato.json';
+import verbena from '../data/rooms/verbena.json';
 import { prop, zone } from '../maps';
 import { Gen } from './random';
 import { RIVAL_RULES, type RivalRecord, generateRival, legendaryEntity, legendaryFor, rivalEntity, rivalKeys } from './rivals';
@@ -45,7 +49,41 @@ interface Biome {
   trampas: Record<string, { nombre: string; detect: number; dif: number; dano: string; efecto?: string }>;
 }
 
-export const BIOMES: Record<string, Biome> = { castro: castro as Biome };
+export const BIOMES: Record<string, Biome> = {
+  castro: castro as Biome,
+  hiper: hiper as unknown as Biome,
+  verbena: verbena as unknown as Biome,
+  balneario: balneario as unknown as Biome,
+  plato: plato as unknown as Biome,
+};
+
+/**
+ * What a 'b' marker becomes in each biome: something to hide behind or shove into people
+ * ('redondo' rolls when pushed). Sprites from the art preset (ninja.json → sprites).
+ */
+const BIOME_PROPS: Record<string, { sprite: string; nombre: string; tags?: string[] }[]> = {
+  castro: [{ sprite: 'barril', nombre: 'Barril', tags: ['redondo'] }],
+  hiper: [
+    { sprite: 'carrito', nombre: 'Carrito', tags: ['redondo'] },
+    { sprite: 'cesta-ofertas', nombre: 'Cesta de ofertas' },
+    { sprite: 'caja-registradora', nombre: 'Caja registradora' },
+    { sprite: 'estanteria-hiper', nombre: 'Estantería' },
+  ],
+  verbena: [
+    { sprite: 'altavoz-verbena', nombre: 'Altavoz' },
+    { sprite: 'barril', nombre: 'Barril de cerveza', tags: ['redondo'] },
+  ],
+  balneario: [
+    { sprite: 'tumbona', nombre: 'Tumbona' },
+    { sprite: 'flotador', nombre: 'Flotador', tags: ['redondo'] },
+    { sprite: 'sombrilla', nombre: 'Sombrilla' },
+  ],
+  plato: [
+    { sprite: 'camara-estudio', nombre: 'Cámara de estudio' },
+    { sprite: 'monitor-escenario', nombre: 'Monitor' },
+    { sprite: 'silla-director', nombre: 'Silla de director' },
+  ],
+};
 
 /** Marker characters: always base-height floor of the biome's '.' terrain. */
 const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X']);
@@ -212,6 +250,39 @@ function assignRoles(g: Gen, spec: FloorSpec, nodes: Node[], rivalRoom: boolean)
   return roles;
 }
 
+/**
+ * Base height of each room: the start at 0, then outwards along the links, each room within
+ * maxSaltoEntreSalas of the one it is reached from (the doors are one step). A loop link
+ * between two rooms that ended up too far apart is closed.
+ */
+function baseHeights(g: Gen, spec: FloorSpec, nodes: Node[]): number[] {
+  const { min, max, maxSaltoEntreSalas: jump } = spec.generacion.alturaBase;
+  const index = new Map(nodes.map((n, i) => [key(n.cell), i]));
+  const heights: (number | undefined)[] = nodes.map(() => undefined);
+  const start = nodes.findIndex((n) => n.critical && n.pathIndex === 0);
+  heights[start] = 0;
+  const queue = [start];
+  while (queue.length) {
+    const i = queue.shift()!;
+    for (const s of nodes[i]!.links) {
+      const j = index.get(key(neighbour(nodes[i]!.cell, s)))!;
+      if (heights[j] !== undefined) continue;
+      heights[j] = Math.max(min, Math.min(max, heights[i]! + g.int(-jump, jump)));
+      queue.push(j);
+    }
+  }
+  for (const [i, n] of nodes.entries()) {
+    for (const s of [...n.links]) {
+      const j = index.get(key(neighbour(n.cell, s)))!;
+      if (Math.abs(heights[i]! - heights[j]!) > jump) {
+        n.links.delete(s);
+        nodes[j]!.links.delete(OPPOSITE[s]);
+      }
+    }
+  }
+  return heights.map((h) => h ?? 0);
+}
+
 /** The sides of a chunk usable as doors: the 3 tiles inside the socket are base-height floor. */
 export function usableSides(biome: Biome, rows: string[]): Side[] {
   const h = rows.length;
@@ -259,6 +330,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
   const earlier = options.rivals ?? [];
   const rivalRoom = earlier.every((r) => !r.plantas.includes(n)) && g.chance(RIVAL_RULES.roomChance(n));
   const roles = assignRoles(g, spec, nodes, rivalRoom);
+  const heights = baseHeights(g, spec, nodes);
 
   const cw = spec.generacion.celda.ancho;
   const ch = spec.generacion.celda.alto;
@@ -275,7 +347,6 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
   const rooms: RoomInfo[] = [];
   const markers: { ch: string; at: Vec2; room: number }[] = [];
   const surfaces: Record<string, { type: string }> = {};
-  const { min: hMin, max: hMax } = spec.generacion.alturaBase;
 
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]!;
@@ -283,7 +354,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
     const picked = pickChunk(g, biome, n, role, [...node.links], usedIds);
     if (!picked) return `no ${role} chunk with doors ${[...node.links].join('')}`;
     usedIds.add(picked.chunk.id);
-    const base = role === 'inicio' ? 0 : g.int(hMin, hMax);
+    const base = heights[i]!;
     const rows = picked.flipped ? flipRows(picked.chunk.filas) : picked.chunk.filas;
     if (rows.length !== ch || rows[0]!.length !== cw) return `chunk ${picked.chunk.id} is not ${cw}x${ch}`;
     const ox = (node.cell.x - minX) * cw;
@@ -330,7 +401,8 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
     if (ids.length) zones.push(roomZone(i, `sala-${i}`, 'encounters', { participants: ids.join(',') }));
   });
   const stairs = populated.stairs;
-  zones.push(zone('escalera', 'exits', stairs.x, stairs.y, 1, 1, { to: 'camerino', spawn: 'llegada' }));
+  // Down the stairs: the Camerino between this floor and the next (maps.ts).
+  zones.push(zone('escalera', 'exits', stairs.x, stairs.y, 1, 1, { to: `camerino-${n}`, spawn: 'llegada' }));
 
   for (const t of populated.traps) for (const p of t.tiles) delete surfaces[key(p)];
   return {
@@ -451,13 +523,20 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       traps.push({ id: `${prefix}-trampa-${k}`, tiles: [at], hidden: true, armed: true, params: { tipo: type, nombre: def?.nombre ?? type, detect: def?.detect ?? 12, dif: def?.dif ?? 12, dano: def?.dano ?? '1d4', ...(def?.efecto ? { efecto: def.efecto } : {}) } });
     });
     // Barrels (not all of them, every time).
-    for (const at of slots(i, 'b')) if (g.chance(0.7)) entities.push(prop(`${prefix}-barril-${entities.length}`, 'Barril', 'barril', at, ['redondo']));
+    for (const at of slots(i, 'b')) {
+      if (!g.chance(0.7)) continue;
+      const pick = g.pick(BIOME_PROPS[biome.bioma] ?? BIOME_PROPS.castro!);
+      entities.push(prop(`${prefix}-${pick.sprite}-${entities.length}`, pick.nombre, pick.sprite, at, pick.tags ?? []));
+    }
     for (const at of slots(i, 'B')) if (g.chance(0.8)) entities.push(prop(`${prefix}-gas-${entities.length}`, 'Barril de gas', 'barril-explosivo', at, ['explosivo', 'redondo']));
   });
 
-  // Recompensa mínima: at least two chests. Spare barrel spots become chests if needed.
+  // Recompensa mínima: at least two chests. Unused chest, barrel or enemy spots become chests if needed.
   if (chests.length < 2) {
-    const spare = markers.filter((m) => (m.ch === 'b' || m.ch === 'c') && rooms[m.room]!.role !== 'inicio' && !entities.some((e) => key(e.position) === key(m.at)));
+    const order = ['c', 'b', 'e'];
+    const spare = markers
+      .filter((m) => order.includes(m.ch) && rooms[m.room]!.role !== 'inicio' && !entities.some((e) => key(e.position) === key(m.at)))
+      .sort((a, b) => order.indexOf(a.ch) - order.indexOf(b.ch));
     for (const m of spare.slice(0, 2 - chests.length)) {
       entities.push(chest(`p${n}-s${m.room}-cofre-extra-${chests.length}`, m.at, 'caja-bronce', n));
       chests.push({ at: m.at, critical: rooms[m.room]!.critical });

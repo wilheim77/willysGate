@@ -11,19 +11,19 @@ import { MAPS } from './maps';
  * The floors are generated from the run's seed when the season starts and kept in the world's
  * stash (systems.world.stashed), so the service lift finds them and a save keeps them byte for
  * byte, even if the generator changes later. MapBuilder takes no arguments, so it can't know
- * the run's seed: the builder for 'planta-1' below is only a fallback (ENGINE_REQUESTS R21).
+ * the run's seed: the 'planta-N' builders below are only a fallback (ENGINE_REQUESTS R21).
  */
 
 export const PLAYER = 'player:1';
 export const FACTION = 'concursantes';
 
-/** The floors generated so far (planta-1 for now; 2-5 when their room chunks exist). */
-export const GENERATED_FLOORS = [1];
+/** The floors of a season, all generated when it starts (see R21). */
+export const GENERATED_FLOORS = [1, 2, 3, 4, 5];
 
 /** Map builders for the engine's travel command (EngineContent.maps). */
 export const maps: Record<string, MapBuilder> = {
   ...MAPS,
-  'planta-1': () => generateFloor(0, 1).setup,
+  ...Object.fromEntries(GENERATED_FLOORS.map((n) => [`planta-${n}`, () => generateFloor(0, n).setup])),
 };
 
 function startOn(setup: MapSetup, base: GameState, stashed: Record<string, JsonValue>): GameState {
