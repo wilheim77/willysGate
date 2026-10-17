@@ -37,6 +37,25 @@ interface Variant {
   prune?: string;
   /** Targeted replacements applied after map/prune (e.g. only inner pixels, or a band of rows). */
   rules?: Rule[];
+  /** Hand-drawn details stamped on every frame (a tool, a hat...), following the sprite's bob. */
+  decals?: Decal[];
+  /** Transparent rows added above every frame, for decals that stick out (a hat...). */
+  padTop?: number;
+  scale?: number;
+}
+
+interface Decal {
+  /** ASCII pixels; '.' or ' ' leaves the sprite as is. */
+  rows: string[];
+  /** Character -> "#rrggbb". */
+  legend: Record<string, string>;
+  /** Column of the decal's left edge in the frame. */
+  x: number;
+  /** Row offset from the top (or bottom) of the frame's opaque area. */
+  y: number;
+  from?: 'top' | 'bottom';
+  /** Draw only over transparent pixels (behind the body). */
+  behind?: boolean;
 }
 
 interface Rule {
@@ -105,6 +124,35 @@ function inHue(h: number, [from, to]: [number, number]): boolean {
 }
 
 const TRANSPARENT = 'transparent';
+
+/** Stamps decals relative to the frame's opaque area, so they bob with the sprite. */
+function stamp(img: Image, decals: Decal[]): Image {
+  if (decals.length === 0) return img;
+  const opaqueRow = (y: number) => {
+    for (let x = 0; x < img.width; x++) if (img.data[(y * img.width + x) * 4 + 3]) return true;
+    return false;
+  };
+  let top = 0, bottom = img.height - 1;
+  while (top < img.height - 1 && !opaqueRow(top)) top++;
+  while (bottom > 0 && !opaqueRow(bottom)) bottom--;
+  const out = blank(img.width, img.height);
+  img.data.copy(out.data);
+  for (const d of decals) {
+    const y0 = (d.from === 'bottom' ? bottom : top) + d.y;
+    d.rows.forEach((row, dy) => [...row].forEach((ch, dx) => {
+      if (ch === '.' || ch === ' ') return;
+      const c = d.legend[ch];
+      if (!c) throw new Error(`decal: no colour for "${ch}"`);
+      const x = d.x + dx, y = y0 + dy;
+      if (x < 0 || y < 0 || x >= out.width || y >= out.height) return;
+      const i = (y * out.width + x) * 4;
+      if (d.behind && img.data[i + 3]) return;
+      [out.data[i], out.data[i + 1], out.data[i + 2]] = hexToRgb(c);
+      out.data[i + 3] = 255;
+    }));
+  }
+  return out;
+}
 
 function recolour(img: Image, v: Variant): Image {
   const map = new Map(Object.entries(v.map ?? {}).map(([k, val]) => [k.toLowerCase(), val === TRANSPARENT ? null : hexToRgb(val)]));
@@ -182,7 +230,7 @@ function recolour(img: Image, v: Variant): Image {
 // Layout: one row per variant, frames left to right in animation order.
 const rows = Object.entries(spec.variants).map(([id, v]) => ({ id, v, anims: framesOf(v.base) }));
 const width = Math.max(...rows.map((r) => Object.values(r.anims).flat().reduce((w, f) => w + f.w, 0)));
-const height = rows.reduce((h, r) => h + Math.max(...Object.values(r.anims).flat().map((f) => f.h)), 0);
+const height = rows.reduce((h, r) => h + (r.v.padTop ?? 0) + Math.max(...Object.values(r.anims).flat().map((f) => f.h)), 0);
 const sheet = blank(width, height);
 const manifestPath = join(gameDir, 'assets', `${preset}.json`);
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
@@ -194,17 +242,20 @@ for (const { id, v, anims } of rows) {
   const animations: Record<string, Rect[]> = {};
   for (const [anim, rects] of Object.entries(anims)) {
     animations[anim] = rects.map((r) => {
-      blit(sheet, recolour(crop(atlas, r.x, r.y, r.w, r.h), v), x, y);
-      const placed = { x, y, w: r.w, h: r.h };
+      const pad = v.padTop ?? 0;
+      const frame = blank(r.w, r.h + pad);
+      blit(frame, recolour(crop(atlas, r.x, r.y, r.w, r.h), v), 0, pad);
+      blit(sheet, stamp(frame, v.decals ?? []), x, y);
+      const placed = { x, y, w: r.w, h: r.h + pad };
       x += r.w;
       return placed;
     });
   }
   // Optional per-variant display scale (e.g. a half-orc a bit bigger than humans).
-  const scale = (v as { scale?: number }).scale;
+  const scale = v.scale;
   manifest.sprites[id] = { kind: 'frames', url, facing: spec.facing, animations, ...(scale ? { scale } : {}) };
   console.log(`${id} (${v.base}): ${Object.entries(animations).map(([a, f]) => `${a}(${f.length})`).join(', ')}`);
-  y += Math.max(...Object.values(anims).flat().map((f) => f.h));
+  y += (v.padTop ?? 0) + Math.max(...Object.values(anims).flat().map((f) => f.h));
 }
 
 for (const [alias, target] of Object.entries(spec.aliases ?? {})) {

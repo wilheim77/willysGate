@@ -17,59 +17,138 @@
   "variants": {
     "cobrador": {
       "base": "doc",
-      "note": "Protagonista: cobrador de deudas encapuchado, capa parda y máscara de cuero",
+      "note": "Protagonista: cobrador encapuchado, capa gris pizarra, correa de latón, máscara de cuero y farol encendido",
       "map": {
-        "#314152": "#4e4038",
-        "#417089": "#8a6a3e",
-        "#483b3a": "#3a302a",
-        "#aa8d7a": "#6e5442",
-        "#d3bfa9": "#97785c"
+        "#314152": "#4c5668",
+        "#417089": "#b08a48",
+        "#483b3a": "#2e3440",
+        "#aa8d7a": "#7a5e48",
+        "#d3bfa9": "#a8896a"
       },
       "rules": [
         {
           "from": "#222222",
-          "to": "#2e2622",
+          "to": "#363d4b",
           "interior": true
+        }
+      ],
+      "decals": [
+        {
+          "rows": [
+            ".k.",
+            "kYk",
+            "kyk",
+            ".k."
+          ],
+          "legend": {
+            "k": "#222222",
+            "Y": "#facb3e",
+            "y": "#ee8e2e"
+          },
+          "x": 0,
+          "y": -8,
+          "from": "bottom"
         }
       ]
     },
     "dorotea": {
       "base": "elf_f",
-      "note": "Dorotea Vane: contable del banco, pelo negro recogido, vestido granate oscuro",
+      "note": "Dorotea Vane: contable del banco, pelo negro con lazo azul tinta, vestido granate y su libro de cuentas",
       "map": {
-        "#facb3e": "#3a2a2a",
-        "#ee8e2e": "#241a1c",
-        "#da4e38": "#3c4a5c",
-        "#4ba747": "#5c2834",
-        "#3d734f": "#3a1a24",
+        "#facb3e": "#2e2224",
+        "#ee8e2e": "#1e1618",
+        "#da4e38": "#4a6080",
+        "#4ba747": "#7e3446",
+        "#3d734f": "#4e2030",
         "#5698cc": "#6d7c86",
-        "#fccba3": "#e3c0a4"
-      }
+        "#fccba3": "#e8c8ac"
+      },
+      "decals": [
+        {
+          "rows": [
+            "kkkk",
+            "kssk",
+            "kSsk",
+            "kkkk"
+          ],
+          "legend": {
+            "k": "#222222",
+            "s": "#e6d6ae",
+            "S": "#a8936e"
+          },
+          "x": 11,
+          "y": -9,
+          "from": "bottom"
+        }
+      ]
     },
     "garran": {
       "base": "orc_warrior",
-      "note": "Garrán Tizón: semiorco, antiguo minero; piel gris oliva, cinturón de cuero",
+      "note": "Garrán Tizón: semiorco grande, piel verde oliva, colmillos, cinturón de cuero y pico de minero a la espalda",
       "map": {
-        "#3d734f": "#6a7656",
-        "#314152": "#434a3a",
-        "#8f4029": "#6b4a30",
-        "#62232f": "#3e2c22"
+        "#3d734f": "#76865a",
+        "#314152": "#4a553e",
+        "#8f4029": "#7a5434",
+        "#62232f": "#3e3028"
       },
-      "scale": 1.15
+      "scale": 1.15,
+      "decals": [
+        {
+          "rows": [
+            ".kkkkkk.",
+            "kIIIIiik",
+            "kkkwkkkk",
+            "..kwk...",
+            "..kwk...",
+            "..kwk...",
+            "..kwk...",
+            "..kwk...",
+            "..kwk...",
+            "..kkk..."
+          ],
+          "legend": {
+            "k": "#222222",
+            "I": "#a8adb3",
+            "i": "#55565c",
+            "w": "#8e6040"
+          },
+          "x": -1,
+          "y": -4,
+          "from": "top",
+          "behind": true
+        }
+      ],
+      "padTop": 4
     },
     "anselmo": {
       "base": "dwarf_f",
-      "note": "Fray Anselmo: mediano con hábito pardo de capucha y cordón (falso fraile)",
+      "note": "Fray Anselmo: mediano con hábito pardo de capucha, cordón claro y crucifijo de latón",
       "map": {
-        "#facb3e": "#6e5238",
-        "#ee8e2e": "#4f3a28",
-        "#dc4a7b": "#c2a878",
-        "#9f294e": "#8a7450"
-      }
+        "#facb3e": "#80603e",
+        "#ee8e2e": "#56402a",
+        "#dc4a7b": "#d6c08e",
+        "#9f294e": "#a08a5c"
+      },
+      "decals": [
+        {
+          "rows": [
+            ".w.",
+            "www",
+            ".w.",
+            ".w."
+          ],
+          "legend": {
+            "w": "#e0c060"
+          },
+          "x": 8,
+          "y": -6,
+          "from": "bottom"
+        }
+      ]
     },
     "sinpaga_cuchillero": {
       "base": "elf_m",
-      "note": "Bandido Sinpaga: pelo castaño, jubón rojo sucio",
+      "note": "Bandido Sinpaga: pelo castaño, jubón rojo sucio y cuchillo en mano",
       "map": {
         "#facb3e": "#5a3f2e",
         "#ee8e2e": "#3d2b20",
@@ -79,28 +158,46 @@
         "#5698cc": "#3a3030",
         "#fccba3": "#d4a483",
         "#e2b694": "#b0866a"
-      }
+      },
+      "decals": [
+        {
+          "rows": [
+            "..k",
+            ".kI",
+            "kIk",
+            "wk."
+          ],
+          "legend": {
+            "k": "#222222",
+            "I": "#c9d1d6",
+            "w": "#6b4a30"
+          },
+          "x": 12,
+          "y": -9,
+          "from": "bottom"
+        }
+      ]
     },
     "sinpaga_enmascarado": {
       "base": "masked_orc",
-      "note": "Bandido Sinpaga con máscara de calavera, capucha parda y ropa verde oliva",
+      "note": "Bandido Sinpaga con máscara de calavera, capucha parda y ropa roja de la banda",
       "map": {
-        "#3d734f": "#4f4030",
-        "#314152": "#342b22",
-        "#8f4029": "#5c5b3a",
-        "#62232f": "#3a3826",
+        "#3d734f": "#5e4c38",
+        "#314152": "#3e3226",
+        "#8f4029": "#8a3a2a",
+        "#62232f": "#5a2820",
         "#fdf7ed": "#d6cdb6",
         "#d3bfa9": "#9a8f78"
       }
     },
     "sinpaga_bruto": {
       "base": "ogre",
-      "note": "Bruto Sinpaga: hombretón con zamarra de cuero (grande, 32x36)",
+      "note": "Bruto Sinpaga (el Matón): hombretón con zamarra roja de la banda (32x36)",
       "map": {
         "#3d734f": "#9c7458",
         "#314152": "#5e4436",
-        "#8f4029": "#4d4236",
-        "#62232f": "#2e2924",
+        "#8f4029": "#6e3428",
+        "#62232f": "#3e2220",
         "#fdf7ed": "#e8e0d0"
       }
     },
@@ -188,11 +285,32 @@
     },
     "esqueleto_minero": {
       "base": "skelet",
-      "note": "Esqueleto de la mina: hueso amarillento y tiznado",
+      "note": "Esqueleto de la mina: hueso amarillento con sombrero de minero y vela encendida",
       "map": {
         "#fdf7ed": "#c8bc9c",
         "#d3bfa9": "#857a62"
-      }
+      },
+      "decals": [
+        {
+          "rows": [
+            ".....kyk....",
+            ".....kwk....",
+            "..kkkkkkkk..",
+            ".kHHHHHHHHk.",
+            "kkkkkkkkkkkk"
+          ],
+          "legend": {
+            "k": "#222222",
+            "y": "#facb3e",
+            "w": "#d3bfa9",
+            "H": "#7d5536"
+          },
+          "x": 2,
+          "y": -4,
+          "from": "top"
+        }
+      ],
+      "padTop": 5
     },
     "ahogado": {
       "base": "ice_zombie",

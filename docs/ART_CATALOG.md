@@ -9,7 +9,8 @@ Qué ids puede usar el contenido, de dónde sale cada pieza y qué le falta al r
 | `scripts/art/build-extra-art.ts intereses 0x72` | (código) | `art-src/generated/intereses-0x72-extra.png` + `.txt`, `public/assets/0x72/extra.png`, `props`, `surfaces` y los sprites `barrel`, `barrel_oil`, `crate` del manifiesto | Dibuja píxel a píxel, con la paleta de 0x72 (`pixel.ts`) y RNG con semilla: tablones, andamios, remate de muro, caras con reborde, rebordes sueltos, antorcha, brasero, FX, y (en `environment-art.ts`) superficies, barriles, explosión y vapor. Recolorea por luminancia las caras de acantilado de Ninja Adventure. |
 | `scripts/art/build-tiles.ts intereses 0x72` | `content/intereses/art/0x72/tiles.json` | `public/assets/0x72/tiles/terrain.png`, `terrain` del manifiesto | Ahora admite celdas `{ "atlas": "<hoja>.png", "sprite": "nombre" }` (con lista `<hoja>.txt`) y un `rim` opcional por terreno. |
 | `scripts/art/build-atlas-sprites.ts intereses 0x72` | `sprites.json` | `sprites` del manifiesto | Sin cambios: personajes 0x72 tal cual. |
-| `scripts/art/build-palette-variants.ts intereses 0x72` | `content/intereses/art/0x72/palettes.json` | `public/assets/0x72/characters.png`, `sprites` del manifiesto | Recolorea personajes 0x72: `map` (color exacto → color, o `transparent`), `adjust` (HSV por rango de tono), `prune` (borra el contorno que queda huérfano), `rules` (solo píxeles interiores o una franja de filas: así se pinta el collar de plata de Absalón). `aliases` da el mismo arte a ids antiguos. Para ver los colores de una base: `node scripts/art/build-palette-variants.ts intereses 0x72 --dump doc elf_f`. |
+| `scripts/art/build-palette-variants.ts intereses 0x72` | `content/intereses/art/0x72/palettes.json` | `public/assets/0x72/characters.png`, `sprites` del manifiesto | Recolorea personajes 0x72: `map` (color exacto → color, o `transparent`), `adjust` (HSV por rango de tono), `prune` (borra el contorno que queda huérfano), `rules` (solo píxeles interiores o una franja de filas: así se pinta el collar de plata de Absalón). `decals` estampa detalles dibujados a mano (ASCII) en cada frame, relativos a la parte de arriba o de abajo del sprite para que sigan su balanceo; `padTop` añade filas transparentes encima para los que sobresalen (sombrero, pico). `aliases` da el mismo arte a ids antiguos. Para ver los colores de una base: `node scripts/art/build-palette-variants.ts intereses 0x72 --dump doc elf_f`. |
+| `scripts/art/build-portraits.ts intereses 0x72` | `content/intereses/art/0x72/portraits.json` | `public/assets/0x72/portraits.png`, `portraits` del manifiesto, `docs/art-previews/0x72-portraits.png` | Bustos de 32×32 para el HUD: la parte de arriba del primer frame de idle, a escala entera, sobre un fondo enmarcado cuyo tono distingue grupo (cálido), enemigos (sangre), no muertos (frío) y neutrales. |
 | `scripts/art/build-previews.ts intereses 0x72` | manifiesto | `docs/art-previews/0x72-{characters,terrain,props,surfaces}.png` | Hojas de revisión. |
 | `scripts/art/build-cinematics.ts <juego>` | `content/<juego>/cinematics/intro.spec.json` | `public/assets/cinematics/*.png`, `cinematics/intro.json`, `docs/art-previews/<juego>-intro.png` | Viñetas de 320×180 compuestas con operaciones (degradados con tramado, polígonos, tiles y sprites de los packs, sprites del manifiesto, sprites ASCII dibujados a mano, montañas, casas, lluvia, público, luces, viñeteado, texto pixelado). |
 
@@ -19,20 +20,20 @@ Todos son `kind: 'frames'`, miran a la derecha y tienen `idle` (4) y `move` (4);
 
 | Id | Base 0x72 | Tamaño | Qué es |
 |---|---|---|---|
-| `cobrador` | `doc` | 16×23 | Protagonista: cobrador encapuchado, capa parda, correa de latón y máscara de cuero |
-| `dorotea` | `elf_f` | 16×28, hit | Dorotea Vane: pelo negro, vestido granate oscuro, lazo azul tinta |
-| `garran` | `orc_warrior` | 16×23 | Garrán Tizón: semiorco, piel gris oliva, cinturón de cuero |
-| `anselmo` | `dwarf_f` | 16×28, hit | Fray Anselmo: mediano con hábito pardo de capucha y cordón |
-| `sinpaga_cuchillero` | `elf_m` | 16×28, hit | Bandido Sinpaga, jubón rojo sucio |
-| `sinpaga_enmascarado` | `masked_orc` | 16×23 | Bandido Sinpaga con máscara de calavera |
-| `sinpaga_bruto` | `ogre` | 32×36 | Bruto Sinpaga (élite grande) |
+| `cobrador` | `doc` | 16×23 | Protagonista: cobrador encapuchado, capa gris pizarra, correa de latón, máscara de cuero y **farol encendido** en la mano de atrás |
+| `dorotea` | `elf_f` | 16×28, hit | Dorotea Vane: pelo negro, lazo azul tinta, vestido granate y **su libro de cuentas** («Le apunto») |
+| `garran` | `orc_warrior` | 16×27, `scale` 1.15 | Garrán Tizón: semiorco, piel verde oliva, colmillos y **pico de minero** a la espalda |
+| `anselmo` | `dwarf_f` | 16×28, hit | Fray Anselmo: mediano con hábito pardo de capucha, cordón claro y **crucifijo de latón** |
+| `sinpaga_cuchillero` | `elf_m` | 16×28, hit | Bandido Sinpaga, jubón rojo sucio y **cuchillo** en la mano |
+| `sinpaga_enmascarado` | `masked_orc` | 16×23 | Bandido Sinpaga con **máscara de calavera** y ropa roja de la banda |
+| `sinpaga_bruto` | `ogre` | 32×36 | Bruto Sinpaga, el Matón (élite grande), zamarra roja de la banda |
 | `guardia_baron` | `knight_m` | 16×28, hit | Guardia del barón Mazo: acero mate, penacho granate |
 | `guardia_baron_sargento` | `knight_f` | 16×28, hit | Sargento de la guardia: acero ennegrecido |
 | `minero_cuadrilla` | `dwarf_m` | 16×28, hit | Minero enano de la Cuadrilla (clan Hulla) |
 | `callado` | `dwarf_m` | 16×28, hit | Callado: piel cenicienta, barba plateada |
 | `callado_palido` | `elf_m` | 16×28, hit | Callado joven: pálido, ojos sin color, harapos |
 | `absalon` | `big_zombie` | 32×36 | Absalón Brea (jefe): calvo, curtido, collar de plata |
-| `esqueleto_minero` | `skelet` | 16×16 | Esqueleto de la mina, hueso amarillento |
+| `esqueleto_minero` | `skelet` | 16×21 | Esqueleto de la mina, hueso amarillento, **sombrero de minero con vela** |
 | `ahogado` | `ice_zombie` | 16×16 | Ahogado de las galerías inundadas |
 
 **Ids provisionales del encuentro de prueba** (no se han borrado):
@@ -46,6 +47,12 @@ Todos son `kind: 'frames'`, miran a la derecha y tienen `idle` (4) y `move` (4);
 | `orc` | `orc_warrior` original | `sinpaga_enmascarado` o retirar |
 | `skeleton` | `skelet` original | `esqueleto_minero` |
 | `wizard` | `wizzard_m` original | Se queda (no hay mago en la historia aprobada) |
+
+**Lectura a primera vista:** cada miembro del grupo tiene un color y un detalle propio (pizarra y farol; verde oliva y pico; granate y libro; pardo y crucifijo). Los Sinpaga comparten el rojo sucio de la banda. Comparativa en [`art-previews/0x72-party-before-after.png`](art-previews/0x72-party-before-after.png).
+
+## Retratos (`portraits` del manifiesto)
+
+`{ [spriteId]: { url, x, y, w, h } }`, celdas de 32×32 en `assets/0x72/portraits.png`. Hay retrato para todos los personajes (también los alias e ids provisionales); no para `barrel`, `barrel_oil` ni `crate`. Vista previa: [`art-previews/0x72-portraits.png`](art-previews/0x72-portraits.png). El HUD debería escalarlos con vecino más cercano (`image-rendering: pixelated`) a 2× o 3×.
 
 ## Terrenos
 
