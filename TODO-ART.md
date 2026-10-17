@@ -33,3 +33,4 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Garrán y el Cobrador al estilo de 0x72 | intereses | `orc_warrior` y `doc` retocados frame a frame: moño, hombreras y pico; capucha, bufanda, ojos fríos, sello y farol |
 | Retratos del grupo a 48×48 | intereses | Cobrador, Garrán, Dorotea y Anselmo pintados con cara propia (`portrait-painter.ts`) |
 | Pulido del HUD | intereses | Barra superior en una fila, fichas de iniciativa con retrato, barra de acciones en dos filas, botones de 44 px, paneles de hierro biselado |
+| Objetos interactivos (Fase 4) | intereses | `chest`, `chest_trapped`, `lever`, terrenos `door_closed`/`door_open`, props `trap_armed`/`trap_disarmed` |

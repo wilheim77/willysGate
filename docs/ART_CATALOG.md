@@ -91,6 +91,20 @@ Añadidos en la Fase 3:
 | `fx_explosion` | 7 frames de **32×32**, 14 fps, `anchor: centre`, `light: #ffb060` | Destello, bola de fuego, anillo de humo con brasas y humo que se disipa |
 | `fx_steam` | 5, 10 fps | Vapor cuando el agua toca el fuego |
 
+## Objetos interactivos (Fase 4)
+
+Vista previa: [`art-previews/0x72-interactables.png`](art-previews/0x72-interactables.png).
+
+| Id | Dónde | Frames |
+|---|---|---|
+| `chest` | `sprites` (cofre de 0x72) | `idle` (cerrado), `opening` (3), `open` (con botín), `empty` (abierto y vacío) |
+| `chest_trapped` | `sprites` | Igual que `chest`; **solo cerrado** lleva la pista: una aguja verdosa en la cerradura, un hilo tenso al pie y una mancha oscura en el lateral |
+| `lever` | `sprites` (palanca de 0x72) | `up`, `down`, `pull` (arriba → abajo); `idle` = arriba |
+| `door_closed` | `terrain` (para `setTile`) | Superficie: dintel de madera entre sillares; cara: puerta de tablones con flejes y aldaba en marco de piedra |
+| `door_open` | `terrain` | Superficie: suelo con umbral y la hoja abierta contra la jamba; cara: hueco oscuro enmarcado |
+| `trap_armed` | `props` (`floor`, 4 fps) | Pinchos de 0x72 fuera, con destello; sustituye al marco rojo por código |
+| `trap_disarmed` | `props` (`floor`) | Pinchos retraídos y apagados |
+
 ## Superficies (`surfaces` del manifiesto, en `assets/0x72/extra.png`)
 
 Capa de 16×16 que se dibuja **encima del suelo** del tile (y debajo de entidades y objetos). Tienen píxeles semitransparentes y un borde irregular de 0 a 2 px, para que varios tiles seguidos se lean como una mancha continua. Forma: `{ url, frames: Rect[], fps, loop }` (como `props`, sin `anchor`). `fps: 0` significa estática.

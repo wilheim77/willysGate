@@ -246,6 +246,109 @@
         "#417089": "#46534a",
         "#fdf7ed": "#cfd6c4"
       }
+    },
+    "chest": {
+      "base": "chest_full",
+      "note": "Cofre de 0x72: cerrado (idle), abriéndose, abierto con botín y vacío",
+      "frames": {
+        "idle": [
+          "chest_full_open_anim_f0"
+        ],
+        "opening": [
+          "chest_full_open_anim_f0",
+          "chest_full_open_anim_f1",
+          "chest_full_open_anim_f2"
+        ],
+        "open": [
+          "chest_full_open_anim_f2"
+        ],
+        "empty": [
+          "chest_empty_open_anim_f2"
+        ]
+      }
+    },
+    "chest_trapped": {
+      "base": "chest_full",
+      "note": "Cofre con trampa: igual que el cofre, con una aguja verdosa en la cerradura y un hilo tenso al pie (solo cerrado)",
+      "frames": {
+        "idle": [
+          "chest_full_open_anim_f0"
+        ],
+        "opening": [
+          "chest_full_open_anim_f0",
+          "chest_full_open_anim_f1",
+          "chest_full_open_anim_f2"
+        ],
+        "open": [
+          "chest_full_open_anim_f2"
+        ],
+        "empty": [
+          "chest_empty_open_anim_f2"
+        ]
+      },
+      "decals": [
+        {
+          "rows": [
+            "g"
+          ],
+          "legend": {
+            "g": "#97da3f"
+          },
+          "x": 8,
+          "y": 8,
+          "from": "top",
+          "anims": [
+            "idle"
+          ]
+        },
+        {
+          "rows": [
+            "wwwww"
+          ],
+          "legend": {
+            "w": "#d3dce4"
+          },
+          "x": 2,
+          "y": 0,
+          "from": "bottom",
+          "anims": [
+            "idle"
+          ]
+        },
+        {
+          "rows": [
+            "k"
+          ],
+          "legend": {
+            "k": "#62232f"
+          },
+          "x": 13,
+          "y": -6,
+          "from": "bottom",
+          "anims": [
+            "idle"
+          ]
+        }
+      ]
+    },
+    "lever": {
+      "base": "lever",
+      "note": "Palanca de 0x72: arriba (lever_left) y abajo (lever_right)",
+      "frames": {
+        "idle": [
+          "lever_left"
+        ],
+        "up": [
+          "lever_left"
+        ],
+        "down": [
+          "lever_right"
+        ],
+        "pull": [
+          "lever_left",
+          "lever_right"
+        ]
+      }
     }
   }
 }
