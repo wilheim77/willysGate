@@ -225,6 +225,7 @@ export class MapScene extends Phaser.Scene {
       }
       const frame = art.frames[variantHash(pos.x, pos.y) % art.frames.length]!;
       this.worldObjects.push(this.add.image(c.x, c.y, key, frame).setDepth(depth + 1));
+      this.drawFringes(map, pos, tile, c, depth);
 
       // Readability of elevation: dark rims where the ground drops, soft shadows where it rises.
       const g = this.add.graphics().setDepth(depth + 2);
@@ -617,6 +618,39 @@ export class MapScene extends Phaser.Scene {
         repeat: art.loop ? -1 : 0,
       });
     }
+  }
+
+  /**
+   * Soft edges between terrains (scrub spilling onto the road): a higher-priority neighbour
+   * at the same height draws its fringe over this tile, from its own tileset. No blending
+   * across height changes (faces and rims handle those).
+   */
+  private drawFringes(map: GameState['map'], pos: Vec2, tile: Tile, c: { x: number; y: number }, depth: number): void {
+    const terrain = this.manifest.terrain;
+    const mine = terrain[tile.terrain]?.blend?.priority ?? -Infinity;
+    const at = (dx: number, dy: number) => tileAt(map, { x: pos.x + dx, y: pos.y + dy });
+    const fringes: { priority: number; tileset: string; frame: number }[] = [];
+    const consider = (dir: 'n' | 'e' | 's' | 'w' | 'ne' | 'nw' | 'se' | 'sw', dx: number, dy: number) => {
+      const other = at(dx, dy);
+      if (!other || other.terrain === tile.terrain || other.height !== tile.height) return;
+      const art = terrain[other.terrain];
+      const blend = art?.blend;
+      if (!blend || blend.priority <= mine) return;
+      // Corners only where neither side already shows that terrain's edge.
+      if (dir.length === 2 && (at(dx, 0)?.terrain === other.terrain || at(0, dy)?.terrain === other.terrain)) return;
+      const frame = blend.edges[dir];
+      if (frame !== undefined) fringes.push({ priority: blend.priority, tileset: art.tileset, frame });
+    };
+    consider('n', 0, -1);
+    consider('e', 1, 0);
+    consider('s', 0, 1);
+    consider('w', -1, 0);
+    consider('ne', 1, -1);
+    consider('nw', -1, -1);
+    consider('se', 1, 1);
+    consider('sw', -1, 1);
+    fringes.sort((a, b) => a.priority - b.priority);
+    fringes.forEach((f, i) => this.worldObjects.push(this.add.image(c.x, c.y, tilesetKey(f.tileset), f.frame).setDepth(depth + 1.1 + i * 0.01)));
   }
 
   /**
