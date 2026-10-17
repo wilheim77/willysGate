@@ -48,7 +48,7 @@ const D1_ROUTES: Record<string, number> = { nada: 5, mediar: 4, unirse: 2, defen
 // stall - 600 AI commands without the turn order completing even round 1. Reported
 // separately (see the task report); kept here as a known failure, not silently skipped,
 // so it flips green the moment that's fixed.
-const KNOWN_COMBAT_STALL = new Set(['unirse', 'defender']);
+const KNOWN_COMBAT_STALL = new Set<string>([]);
 
 const MAP_ORDER = ['camino', 'plaza', 'abadia', 'calles', 'escorial', 'mina', 'boveda'];
 

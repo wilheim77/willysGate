@@ -16,6 +16,7 @@ import {
   type GameState,
   type MapZone,
   type StartDialogueCommand,
+  isHostile,
 } from '../../engine';
 import { dnd5e, levelUpCharacter } from '../../rulesets/dnd5e';
 import levelupsJson from '../../content/intereses/levelups.json';
@@ -109,7 +110,7 @@ function checkEncounters(engine: Engine, state: GameState, ctx: DriverCtx): Game
     const foes = String(zone.properties.participants ?? '')
       .split(',')
       .map((s) => s.trim())
-      .filter((id) => state.entities[id] && dnd5e.isStanding(state.entities[id]!));
+      .filter((id) => state.entities[id] && dnd5e.isStanding(state.entities[id]!) && isHostile(leader, state.entities[id]!));
     if (foes.length === 0) continue;
     const party = Object.values(state.entities)
       .filter((e) => e.factionId === leader.factionId && dnd5e.isStanding(e))

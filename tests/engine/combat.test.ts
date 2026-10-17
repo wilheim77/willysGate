@@ -201,3 +201,13 @@ describe('skipped turns still pass (review 4)', () => {
     expect(s.entities.z!.conditions.some((c) => c.id === 'staked')).toBe(false);
   });
 });
+
+describe('turn order integrity', () => {
+  it('a fighter listed twice takes one turn (allies are both party and encounter participants)', () => {
+    const e = createEngine(toyRuleset, 'test');
+    const pool = (n: number) => ({ current: n, max: n });
+    const s = e.newGame({ seed: 1, map: asciiMap(['....']), entities: [makeEntity({ id: 'a', resources: { blood: pool(5) } }), makeEntity({ id: 'z', factionId: 'night', controllerId: 'ai', position: { x: 3, y: 0 }, resources: { blood: pool(5) } })] });
+    const r = e.apply(s, { type: 'startCombat', issuer: 'system', participants: ['a', 'z', 'a'] } as never);
+    expect(r.ok && r.state.turn.order.length).toBe(2);
+  });
+});

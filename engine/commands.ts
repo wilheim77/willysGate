@@ -85,7 +85,8 @@ export function haltsHere(ruleset: Ruleset, state: GameState, p: Vec2, from?: Ve
       if (!props.dialogue) continue;
       return true;
     }
-    const foes = String(props.participants ?? '').split(',').map((x) => state.entities[x.trim()]).filter((e) => e && ruleset.isStanding(e));
+    const party = Object.values(state.entities).find((e) => e.controllerId.startsWith('player'));
+    const foes = String(props.participants ?? '').split(',').map((x) => state.entities[x.trim()]).filter((e) => e && ruleset.isStanding(e) && (!party || isHostile(party, e)));
     if (foes.length) return true;
   }
   return false;

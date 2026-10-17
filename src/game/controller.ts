@@ -18,6 +18,7 @@ import {
   entityAt,
   gridDistance,
   inZone,
+  isHostile,
   nextAiCommand,
   posKey,
   reachableTiles,
@@ -435,7 +436,8 @@ export class GameController {
       const foes = String(zone.properties.participants ?? '')
         .split(',')
         .map((s) => s.trim())
-        .filter((id) => this.state.entities[id] && ruleset.isStanding(this.state.entities[id]!));
+        // Only those still standing and still against us (allies are listed too).
+        .filter((id) => this.state.entities[id] && ruleset.isStanding(this.state.entities[id]!) && isHostile(leader, this.state.entities[id]!));
       if (foes.length === 0) continue;
       const party = Object.values(this.state.entities)
         .filter((e) => e.factionId === leader.factionId && ruleset.isStanding(e))
