@@ -54,8 +54,7 @@
     "name": "Fanático de la Santa Pala",
     "monsterId": "bandit",
     "spriteId": "fanatico_pala",
-    "faction": "fanaticos",
-    "noncombatant": true
+    "faction": "fanaticos"
   },
   "fiel_pala": {
     "name": "Fiel de la Santa Pala",
