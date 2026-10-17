@@ -29,7 +29,7 @@ const scene = new MapScene(
   {
     controlledEntityId: () => controller.controlledId(),
     onTileHovered: (tile) => hud.showTile(tile),
-    onTileSelected: (tile) => controller.onTileSelected(tile),
+    onTileSelected: (tile, entityId) => controller.onTileSelected(tile, entityId),
     onIdle: () => controller.onIdle(),
   },
   {

@@ -24,8 +24,12 @@ import type { GameStore } from '../game/store';
 import { GridProjection } from '../projection';
 
 export interface MapSceneHooks {
-  /** The player tapped/clicked a tile. */
-  onTileSelected(tile: Vec2): void;
+  /**
+   * The player tapped/clicked a tile. `entityId` is the creature whose sprite was under the
+   * pointer, if any: sprites stick out above their tile, so tapping a body or head would
+   * otherwise land on the tile above.
+   */
+  onTileSelected(tile: Vec2, entityId?: string): void;
   /** Pointer is over a tile (or nothing). */
   onTileHovered(tile: Vec2 | null): void;
   controlledEntityId(): string;
@@ -951,13 +955,30 @@ export class MapScene extends Phaser.Scene {
       this.dragStart = null;
       this.dragging = false;
       if (!isTap || this.busy) return;
-      const tile = this.pickTile(p.worldX, p.worldY);
-      if (tile) this.hooks.onTileSelected(tile);
+      const entityId = this.pickEntity(p.worldX, p.worldY);
+      const tile = entityId ? this.store.state.entities[entityId]!.position : this.pickTile(p.worldX, p.worldY);
+      if (tile) this.hooks.onTileSelected(tile, entityId ?? undefined);
     });
 
     this.input.on('wheel', (_p: Phaser.Input.Pointer, _over: unknown, _dx: number, dy: number) => {
       cam.setZoom(Phaser.Math.Clamp(cam.zoom * (dy > 0 ? 0.9 : 1.1), MIN_TILE_PX / this.grid.tile, MAX_TILE_PX / this.grid.tile));
     });
+  }
+
+  /** Front-most living creature or object whose sprite (opaque box) is under the point. */
+  private pickEntity(wx: number, wy: number): string | null {
+    const state = this.store.state;
+    let best: { id: string; depth: number } | null = null;
+    for (const [id, sprite] of this.sprites) {
+      const e = state.entities[id];
+      if (!e || !sprite.visible || hasCondition(e, 'dead')) continue;
+      // Shrink the frame box a little: transparent margins shouldn't steal taps.
+      const b = sprite.getBounds();
+      Phaser.Geom.Rectangle.Inflate(b, -b.width * 0.15, -b.height * 0.1);
+      if (!b.contains(wx, wy)) continue;
+      if (!best || sprite.depth > best.depth) best = { id, depth: sprite.depth };
+    }
+    return best?.id ?? null;
   }
 
   /** Front-most tile (top surface or cliff face) under the world point. */

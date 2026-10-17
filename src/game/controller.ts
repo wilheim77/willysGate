@@ -29,6 +29,8 @@ const AI_STEP_MS = 380;
  */
 export class GameController {
   private selected: ActionDef | null = null;
+  /** Creature whose sprite the last tap hit (more reliable than the tile under the finger). */
+  private tappedEntity: string | undefined;
   /** Creatures picked so far for multi-target actions (Bless, Magic Missile...). */
   private picks: string[] = [];
   private aiTimer: ReturnType<typeof setTimeout> | null = null;
@@ -71,8 +73,9 @@ export class GameController {
 
   // --- Input --------------------------------------------------------------------
 
-  onTileSelected(tile: Vec2): void {
+  onTileSelected(tile: Vec2, entityId?: string): void {
     if (this.scene.busy) return;
+    this.tappedEntity = entityId;
     const { turn } = this.state;
     if (turn.mode !== 'combat') {
       this.dispatchMove(this.game.leaderId, tile);
@@ -84,7 +87,7 @@ export class GameController {
       this.aim(active!, this.selected, tile);
       return;
     }
-    const occupant = entityAt(this.state, tile);
+    const occupant = this.occupantOf(tile);
     if (occupant && occupant.id !== active) {
       this.hud.showEntity(occupant, this.state);
       return;
@@ -117,8 +120,17 @@ export class GameController {
     this.report(this.store.dispatch({ type: 'endTurn', issuer: this.game.playerId, entityId: active } as never));
   }
 
+  /** The creature the player meant: the sprite they hit, else whoever stands on the tile. */
+  private occupantOf(tile: Vec2) {
+    const tapped = this.tappedEntity ? this.state.entities[this.tappedEntity] : undefined;
+    if (tapped) return tapped;
+    // Corpses and debris can share a tile with the living: prefer whoever still stands.
+    const here = Object.values(this.state.entities).filter((e) => e.position.x === tile.x && e.position.y === tile.y);
+    return here.find((e) => this.store.engine.ruleset.isStanding(e)) ?? here[0];
+  }
+
   private aim(actorId: string, action: ActionDef, tile: Vec2): void {
-    const occupant = entityAt(this.state, tile);
+    const occupant = this.occupantOf(tile);
     const max = action.target.maxTargets ?? 1;
     if (action.target.kind === 'creature' && max > 1) {
       this.pick(actorId, action, occupant?.id);
