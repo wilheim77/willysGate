@@ -46,6 +46,11 @@ export type Effect =
   | { type: 'spawnEntity'; entity: Entity; ownerId?: string; rounds?: number }
   /** Take something out of play (a summon ending, a barrier dropping). Gone, not dead. */
   | { type: 'despawnEntity'; entityId: string }
+  /**
+   * A jump to `to` (validate with jumpTargets first). Dropping more than `safeDown` levels
+   * counts as a fall of the extra levels; landing on traps and surfaces works as for pushes.
+   */
+  | { type: 'jump'; entityId: string; to: Vec2; safeDown?: number }
   /** Raise or lower a stat (levelling up, a curse): stats are the ruleset's numbers. */
   | { type: 'modifyStat'; entityId: string; stat: string; delta: number }
   | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
@@ -360,6 +365,19 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         tiles[index] = changed;
         next = { ...next, map: { ...next.map, tiles } };
         events.push({ type: 'tileChanged', position: { x, y }, tile: changed });
+        break;
+      }
+      case 'jump': {
+        const e = next.entities[effect.entityId];
+        if (!e) throw new Error(`Effect targets unknown entity "${effect.entityId}"`);
+        const from = { ...e.position };
+        const drop = (tileAt(next.map, from)?.height ?? 0) - (tileAt(next.map, effect.to)?.height ?? 0);
+        updateEntity(e.id, (x) => ({ ...x, position: { ...effect.to } }));
+        // Reported like a teleport, so traps and the renderer treat the landing the same way.
+        events.push({ type: 'entityTeleported', entityId: e.id, from, to: { ...effect.to } });
+        events.push({ type: 'jumped', entityId: e.id, from, to: { ...effect.to } } as never);
+        const extra = drop - (effect.safeDown ?? ruleset.movement.maxStep);
+        if (extra > 0) events.push({ type: 'entityFell', entityId: e.id, levels: extra + 1 });
         break;
       }
       case 'spawnEntity': {

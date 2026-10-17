@@ -638,7 +638,10 @@ export class MapScene extends Phaser.Scene {
    */
   private drawFringes(map: GameState['map'], pos: Vec2, tile: Tile, c: { x: number; y: number }, depth: number): void {
     const terrain = this.manifest.terrain;
-    const mine = terrain[tile.terrain]?.blend?.priority ?? -Infinity;
+    // Only terrains that take part in blending receive fringes (no scrub creeping onto dungeon stone).
+    const own = terrain[tile.terrain]?.blend;
+    if (!own) return;
+    const mine = own.priority;
     const at = (dx: number, dy: number) => tileAt(map, { x: pos.x + dx, y: pos.y + dy });
     const fringes: { priority: number; tileset: string; frame: number }[] = [];
     const consider = (dir: 'n' | 'e' | 's' | 'w' | 'ne' | 'nw' | 'se' | 'sw', dx: number, dy: number) => {

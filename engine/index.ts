@@ -15,6 +15,7 @@ export * from './dialogue';
 export * from './creation';
 export * from './traps';
 export * from './world';
+export * from './jump';
 export * from './checks';
 export * from './save';
 export * from './tiled';
