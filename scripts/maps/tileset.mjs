@@ -24,6 +24,12 @@ export const LOGIC_TILES = [
   { terrain: 'scaffold', height: 3 },
   { terrain: 'door_closed', height: 3, walkable: false },
   { terrain: 'door_open', height: 0 },
+  { terrain: 'rails', height: 0 },
+  { terrain: 'rails_v', height: 0 },
+  { terrain: 'vault', height: 0 },
+  { terrain: 'vault', height: 1 },
+  { terrain: 'vault', height: 2 },
+  { terrain: 'vault', height: 3 },
 ];
 
 /** Tiled tile id for a terrain at a height (walls and closed doors ignore the height). */

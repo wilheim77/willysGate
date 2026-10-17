@@ -18,11 +18,14 @@ const BASE_RGB = {
   scaffold: [110, 84, 52],
   door_closed: [70, 40, 30],
   door_open: [40, 30, 26],
+  rails: [70, 62, 56],
+  rails_v: [70, 62, 56],
+  vault: [60, 66, 80],
 };
 const TILES = LOGIC_TILES.map((t) => {
   const lift = t.walkable === false ? 0 : t.height * 15;
   const name = t.terrain === 'planks' && t.height === 1 ? 'planks' : `${t.terrain} h${t.height}`;
-  return { name, level: t.walkable === false ? 0 : t.height, planks: t.terrain === 'planks' || t.terrain === 'scaffold', rgb: BASE_RGB[t.terrain].map((c) => c + lift) };
+  return { name, level: t.walkable === false ? 0 : t.height, planks: ['planks', 'scaffold', 'rails', 'rails_v'].includes(t.terrain), rgb: BASE_RGB[t.terrain].map((c) => c + lift) };
 });
 
 const width = TW * TILES.length;

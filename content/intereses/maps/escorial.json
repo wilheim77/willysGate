@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 8,
- "nextobjectid": 33,
+ "nextobjectid": 34,
  "properties": [
   {
    "name": "name",
@@ -289,6 +289,18 @@
      "height": 0,
      "rotation": 0,
      "visible": true
+    },
+    {
+     "id": 19,
+     "name": "well-1",
+     "type": "",
+     "point": true,
+     "x": 1008,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
     }
    ]
   },
@@ -303,7 +315,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 19,
+     "id": 20,
      "name": "hoguera-sinpaga",
      "type": "",
      "point": true,
@@ -337,7 +349,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "farol-pozo",
      "type": "",
      "point": true,
@@ -376,7 +388,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 22,
      "name": "antorcha-bocamina",
      "type": "",
      "point": true,
@@ -427,7 +439,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 22,
+     "id": 23,
      "name": "sinpaga",
      "type": "",
      "x": 256,
@@ -457,7 +469,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 23,
+     "id": 24,
      "name": "aceite-carro",
      "type": "",
      "x": 384,
@@ -475,7 +487,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 25,
      "name": "balsa-escoria",
      "type": "",
      "x": 128,
@@ -493,7 +505,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 26,
      "name": "escombros-ladera-a",
      "type": "",
      "x": 288,
@@ -511,7 +523,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 27,
      "name": "escombros-ladera-b",
      "type": "",
      "x": 928,
@@ -541,7 +553,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 28,
      "name": "cuerda-aceite",
      "type": "",
      "x": 224,
@@ -579,7 +591,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 29,
      "name": "cepo-sinpaga",
      "type": "",
      "x": 704,
@@ -649,7 +661,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 29,
+     "id": 30,
      "name": "a-plaza",
      "type": "",
      "x": 96,
@@ -672,7 +684,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 31,
      "name": "a-calles",
      "type": "",
      "x": 0,
@@ -695,11 +707,11 @@
      ]
     },
     {
-     "id": 31,
+     "id": 32,
      "name": "pozo-del-ahorcado",
      "type": "",
      "x": 992,
-     "y": 160,
+     "y": 192,
      "width": 32,
      "height": 32,
      "rotation": 0,
@@ -718,7 +730,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 33,
      "name": "bocamina",
      "type": "",
      "x": 1024,
@@ -749,10 +761,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 22,
-   "columns": 22,
+   "tilecount": 28,
+   "columns": 28,
    "image": "terrain-logic.png",
-   "imagewidth": 704,
+   "imagewidth": 896,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1094,6 +1106,96 @@
        "name": "height",
        "type": "int",
        "value": 0
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
       }
      ]
     }

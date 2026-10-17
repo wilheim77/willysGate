@@ -33,7 +33,7 @@ Convención de nombres (ver `MAPS.md`):
 - `hero`, `dorotea`, `garran`: el grupo, solo en el mapa inicial (`camino`, con la propiedad `start`). En los demás mapas el grupo llega por `entry-*`.
 - **Id de `cast.json`:** un PNJ con nombre (`garran`, `minero_cabecilla`, `anselmo`, `cirilo`, `fanatico_1`, `nella`, `odda`, `mazo`, `hilda`, `guardia_abadia`...). Faltan en el reparto, y los mapas ya los usan: `lisandro`, `absalon` e `ivo`.
 - **`<plantilla>-<n>`:** criaturas genéricas de `templates.json`. Los mapas usan `minero_cuadrilla`, `guardia_baron`, `guardia_baron_sargento`, `fiel_pala`, `viuda`, `sinpaga_enmascarado`, `sinpaga_cuchillero`, `sinpaga_bruto`, `callado` y `callado_palido`.
-- **Props:** `barrel_oil`, `barrel`, `crate`, `oil_cart`, `well`, `campfire`, `gallows`, `tapestry`, `tapestry_crossbow` y `resonador` (I6).
+- **Props:** `barrel_oil`, `barrel`, `crate`, `oil_cart`, `well`, `campfire`, `gallows`, `tapestry`, `tapestry_crossbow`, `mine_wagon`, `mine_wagon_ore`, `powder_keg` (debería explotar como `barrel_oil`), `resonator` (I6), `fuse_charges`, `remains_forty`, `pulley` e `inscription`. El test los trata todos como obstáculos, salvo las palancas y las puertas.
 - **`chest-<x>`, `lever-<x>`, `door-<x>`:** interactuables con el diálogo `<kind>_<x>`. Hoy: `chest_libro_cuentas`, `door_trastienda`, `door_patio_lisandro`, `door_cripta`, `door_bocamina` y `lever_polea`. Un `door-*` va sobre una casilla `door_closed`; el test la cuenta como transitable porque se puede abrir.
 - `todo-<algo>`: marcador de algo que falta definir; no crea nada.
 - `entry-<origen>`: llegada desde otro mapa.
@@ -48,7 +48,7 @@ Capa `collapse` en la Bóveda: zonas con `height` (nueva altura) y `terrain`. Un
 
 ## I6. Resonadores
 
-`resonador-1..4` en la Bóveda. Son objetos destructibles (como un barril, con más puntos de golpe). Mientras quede alguno en pie, al empezar cada ronda los que lo oyen hacen una salvación de Sabiduría; quien falla queda *embelesado* y pierde la reacción (STORY §6). La regla va en el ruleset; el arte, en TODO-ART.
+`resonator-1..4` en la Bóveda (el arte ya existe). Son objetos destructibles (como un barril, con más puntos de golpe). Mientras quede alguno en pie, al empezar cada ronda los que lo oyen hacen una salvación de Sabiduría; quien falla queda *embelesado* y pierde la reacción (STORY §6). La regla va en el ruleset.
 
 ## I7. Polea
 
@@ -59,7 +59,7 @@ Capa `collapse` en la Bóveda: zonas con `height` (nueva altura) y `terrain`. Un
 Los mapas usan marcas que todavía no están en `flags.json`, escritas como `TODO:<nombre propuesto>`:
 - `TODO:llave_cripta` (salida de la cripta de la abadía a la mina; D1, defender);
 - `TODO:d2_resuelta` (emboscada de la Galería Sellada);
-- `TODO:brea_vuela_polvorin` (disparo del derrumbe).
+- `TODO:brea_vuela_polvorin` (disparo del derrumbe; los barriles `powder_keg-1..3` del polvorín).
 
 Diálogos aún sin escribir: `TODO:sermon_cirilo`, `TODO:galeria_sellada` y `TODO:boveda_brea`.
 

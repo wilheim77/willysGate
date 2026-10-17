@@ -23,7 +23,8 @@ const maps: Record<string, ParsedMap> = Object.fromEntries(
 
 const RULES = dnd5e.movement;
 // Scenery and art props (content/intereses/world.ts); all but levers and doors are assumed to block.
-const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', 'resonador', 'oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow'];
+const ART_PROPS = ['oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow', 'mine_wagon', 'mine_wagon_ore', 'powder_keg', 'resonator', 'fuse_charges', 'remains_forty', 'pulley', 'inscription'];
+const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', ...ART_PROPS];
 const PROPS = [...OBSTACLE_PROPS, 'lever', 'door'];
 const kindOf = (name: string): string => name.split('-')[0]!;
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -124,12 +125,13 @@ describe('Intereses maps', () => {
       });
 
       it('uses art that exists (trap markers, light props, art-prop spawns)', () => {
-        const props = art.props as Record<string, unknown>;
+        const props = { ...art.props, ...art.sprites } as Record<string, unknown>;
         for (const t of parsed.zones.filter((z) => z.layer === 'traps')) if (t.properties.marker) expect(props[String(t.properties.marker)], `${t.name}.marker`).toBeDefined();
-        for (const l of parsed.lighting.lights) if (l.prop) expect(props[l.prop], `light ${l.id}.prop`).toBeDefined();
+        for (const l of parsed.lighting.lights) if (l.prop) expect(art.props[l.prop as keyof typeof art.props], `light ${l.id}.prop`).toBeDefined();
+        for (const t of new Set(map.tiles.map((t) => t.terrain))) if (t !== 'void') expect(art.terrain[t as keyof typeof art.terrain], `terrain ${t}`).toBeDefined();
         for (const name of Object.keys(parsed.spawns)) {
           const kind = kindOf(name);
-          if (OBSTACLE_PROPS.includes(kind) && !['barrel_oil', 'barrel', 'crate', 'chest', 'resonador'].includes(kind)) expect(props[kind], name).toBeDefined();
+          if (ART_PROPS.includes(kind)) expect(props[kind], name).toBeDefined();
         }
       });
 

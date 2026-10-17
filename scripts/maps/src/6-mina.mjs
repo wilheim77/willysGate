@@ -8,15 +8,15 @@ import { Canvas } from '../paint.mjs';
 
 const c = new Canvas(40, 30, '#', 3);
 // Main adit with its rails (west).
-c.rect(0, 13, 15, 3, '.', 0).rect(0, 14, 15, 1, '=', 0);
+c.rect(0, 13, 15, 3, '.', 0).rect(0, 14, 15, 1, '-', 0);
 // The great working.
 c.rect(14, 5, 17, 17, '.', 0);
-c.rect(14, 14, 17, 1, '=', 0); // rails
+c.rect(14, 14, 17, 1, '-', 0); // rails
 c.rect(16, 5, 13, 2, '.', 2); // north ledge (h2): drops 2 onto the floor
 c.put(15, 6, 'H', 1).put(15, 5, '#'); // west stairs down from the ledge
 c.rect(29, 5, 1, 3, 'H', 2).put(30, 5, '#').put(30, 6, '#'); // the ledge joins the east walkway
 c.rect(29, 8, 2, 11, 'H', 2); // east walkway (h2)...
-c.rect(29, 13, 2, 3, '=', 0); // ...broken where the rails run under it to the breach
+c.rect(29, 13, 2, 3, '.', 0).rect(29, 14, 2, 1, '-', 0); // ...broken where the rails run under it to the breach
 c.put(29, 19, 'H', 1); // its stairs
 c.put(30, 19, '#');
 c.put(16, 12, 'H', 1).put(16, 11, 'H', 2).rect(16, 10, 3, 1, 'H', 3); // west tower: steps up to h3
@@ -26,7 +26,7 @@ c.rect(20, 1, 3, 4, '.', 3).put(21, 0, '.', 3);
 // The Galería Sellada, through the breach (rubble), with ambush alcoves north and south.
 c.rect(31, 13, 1, 3, '.', 0);
 c.rect(32, 10, 7, 9, '.', 0);
-c.rect(31, 14, 5, 1, '=', 0);
+c.rect(31, 14, 5, 1, '-', 0);
 c.rect(33, 8, 2, 2, '.', 0).rect(36, 19, 2, 2, '.', 0);
 c.rect(39, 13, 1, 3, '.', 0); // the way down to the Bóveda
 // The crypt tunnel from the abbey (south-west), winding up into the working.
@@ -56,13 +56,13 @@ export default {
     'callado-7': [33, 8],
     'callado-8': [37, 20],
     'callado_palido-2': [38, 11],
-    'todo-mecha': [35, 12], // the fuse Garrán laid (D2)
-    'todo-restos_cuarenta': [34, 16], // the forty; the baron's payroll with the thirty crowns
+    'fuse_charges-1': [35, 11], // the fuse and charges Garrán laid (D2)
+    'remains_forty-1': [34, 16], // the forty; the baron's payroll with the thirty crowns
     // Wagons on the rails, lamp oil by the walkway.
-    'crate-1': [8, 14],
-    'crate-2': [19, 14],
-    'barrel_oil-1': [23, 14],
-    'crate-3': [26, 14],
+    'mine_wagon-1': [8, 14],
+    'mine_wagon_ore-1': [19, 14],
+    'barrel_oil-1': [23, 13],
+    'mine_wagon-2': [26, 14],
     'barrel_oil-2': [28, 20],
     'barrel-1': [33, 14],
   },
@@ -84,7 +84,7 @@ export default {
       // A rotten plank on the east walkway.
       name: 'tablon-podrido',
       rect: [29, 10, 1, 1],
-      props: { marker: 'trap_tripwire', detect: 14, save: 'dex', dc: 12, damage: '2d6', type: 'bludgeoning', condition: 'prone', disarmCheck: 'athletics', disarmDc: 12 },
+      props: { marker: 'trap_rotten_plank', detect: 14, save: 'dex', dc: 12, damage: '2d6', type: 'bludgeoning', condition: 'prone', disarmCheck: 'athletics', disarmDc: 12 },
     },
     {
       // Brea's tripwire in the crypt tunnel: brings the roof down.
