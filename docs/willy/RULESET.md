@@ -2,7 +2,7 @@
 
 > Estado: **propuesta pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
 > Razas (6) y clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `content/willy/data/races.json` y `classes.json`. Objetos en `items.json`.
-> Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden las clases Ingeniero (con la habilidad secreta 5G→10G), Funcionario y Jugador de basket, y los modos de eliminación.
+> Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden las clases Ingeniero (con la habilidad 5G→10G), Funcionario y Jugador de basket, y los modos de eliminación.
 
 ## Objetivos
 
@@ -227,13 +227,15 @@ Cada habilidad activa (y algunas pasivas) tiene **nivel de habilidad 1-5**, inde
 | Socorrista | +2 AGU, +1 AGI | Arrastrar, agua, curar | Se duerme si no se mueve |
 | Tasador de antigüedades | +2 MAÑ, +1 SUE, +1 CAR, −1 FUE | Críticos, botín, mercado | Romper decorado le da pena |
 | Mimo táctico | +2 AGI, +1 MAÑ, −1 CAR | Paredes, atraer, encerrar | Solo gestos en los diálogos |
-| **Ingeniero** | +3 MAÑ, +1 AGU, −1 CAR | **Invocador**: autómatas, antena-torreta, arco voltaico y la habilidad secreta G | **Cobertura irregular**: salas sin cobertura donde la G cuesta más y sube más despacio; Mamá Clementina desconfía de él |
+| **Ingeniero** | +3 MAÑ, +1 AGU, −1 CAR | **Invocador**: autómatas, antena-torreta, arco voltaico y la habilidad G (5G→10G) | **Cobertura irregular**: salas sin cobertura donde la G cuesta más y sube más despacio; Mamá Clementina desconfía de él |
 | **Funcionario** | +2 MAÑ, +1 AGU, +1 CAR, −1 AGI | **Control**: aturdir con papeleo, superficie de expedientes, barreras, inamovible | **Horario de atención al público**: desde la 5.ª ronda todo le cuesta más y no hay pausa del café |
 | **Jugador de basket** | +2 AGI, +1 FUE, −1 MAÑ | **Movilidad vertical**: saltos, mates desde arriba, balón que rebota, alley-oop | **Cosas redondas y techos bajos**: tira a canasta a lo redondo sin querer; no salta en salas de techo bajo |
 
-### Ingeniero: la habilidad secreta «G»
+### Ingeniero: la habilidad «G» (5G → 10G)
 
-- En la ficha aparece como **«??? (sin estrenar)»**, sin descripción ni coste, hasta que se usa por primera vez. Entonces se revela como **5G** y el Narrador suelta su línea (banco `redG`, línea `g5-01`).
+- **Visible desde el principio** como «5G», con su texto («No hace nada»): el nombre está ahí para tentar al jugador.
+- **Primer uso:** no pasa nada y el Narrador suelta su chiste, solo esa vez: «¡Ya sabíamos que el 5G no servía para nada! A lo mejor si lo subes a 6G…» (banco `redG`, línea `g5-01`).
+- **Usos siguientes a 5G:** nada, en silencio. Como mucho, muy de vez en cuando, una frase de tres palabras que no se repite en la partida (banco `redG5Repetido`).
 - A nivel 5G **no hace nada** (1 acción, 0 energía). Es intencionado.
 - **Sube con el uso**, con umbrales propios y **6 niveles** (excepción a la regla general de 5): cuenta cada uso en combate, como mucho uno por turno, **aunque no haga nada**. En salas sin cobertura cuenta medio uso.
 
@@ -248,7 +250,7 @@ Cada habilidad activa (y algunas pasivas) tiene **nivel de habilidad 1-5**, inde
 
 Con un uso por turno, 6G llega en el primer combate largo, 8G hacia la Planta 2 y 10G hacia la Planta 4 si se usa a menudo. Hay un logro por nivel (de «¿Y esto qué hace?» a «Cobertura total: 10G»).
 
-Datos: `classes.json` → `ingeniero` → habilidad `red-g` (`secreta`, `subidaPorUso`, `nombresPorNivel`, `niveles`). La interfaz necesita poder mostrar una habilidad oculta y cambiar su nombre por nivel: es del cliente, con los datos del contenido.
+Datos: `classes.json` → `ingeniero` → habilidad `red-g` (`subidaPorUso`, `nombresPorNivel`, `niveles`, `primerUso`). La interfaz muestra el nombre del nivel actual (5G, 6G…), leído de los datos.
 
 ### Ingeniero: reglas de las invocaciones
 
