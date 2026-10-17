@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
 import { type Rgb, hexToRgb, mix } from './color.ts';
 import { drawText } from './font.ts';
+import { type Shape, paintBust } from './portrait-painter.ts';
 
 interface PortraitSpec {
   size: number;
@@ -21,6 +22,8 @@ interface PortraitSpec {
   skip: string[];
   /** Per-sprite overrides: backdrop tone, integer scale, extra rows of headroom, horizontal nudge. */
   sprites: Record<string, { tone?: string; scale?: number; headroom?: number; dx?: number; label?: string }>;
+  /** Hand-designed busts that replace the generated ones (bigger, with real faces). */
+  hand?: { size: number; busts: Record<string, { tone: string; shapes: Shape[]; also?: string[] }> };
 }
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
@@ -64,7 +67,7 @@ function scaleUp(img: Image, k: number): Image {
 
 const BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
 
-function backdrop(tone: [string, string]): Image {
+function backdrop(tone: [string, string], S = spec.size): Image {
   const img = blank(S, S);
   const dark = hexToRgb(tone[0]), light = hexToRgb(tone[1]);
   for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
@@ -77,7 +80,7 @@ function backdrop(tone: [string, string]): Image {
   return img;
 }
 
-function frame(img: Image): void {
+function frame(img: Image, S = img.width): void {
   const out = hexToRgb('#111111'), hi = hexToRgb('#8a8088'), lo = hexToRgb('#3a3438');
   for (let i = 0; i < S; i++) {
     put(img, i, 0, out); put(img, i, S - 1, out); put(img, 0, i, out); put(img, S - 1, i, out);
@@ -135,12 +138,38 @@ cells.forEach((c, i) => blit(sheet, c, (i % cols) * S, Math.floor(i / cols) * S)
 const outDir = join(gameDir, 'public', 'assets', preset);
 mkdirSync(outDir, { recursive: true });
 writePng(join(outDir, 'portraits.png'), sheet);
+// Hand-painted busts: their own sheet, same entry shape.
+const hand = spec.hand;
+const handIds: string[] = [];
+if (hand) {
+  const H = hand.size;
+  const busts = Object.entries(hand.busts);
+  const handSheet = blank(busts.length * H, H);
+  const handUrl = `assets/${preset}/portraits-hand.png`;
+  busts.forEach(([id, b], i) => {
+    const cell = backdrop(spec.tones[b.tone]!, H);
+    blit(cell, paintBust(b.shapes, H), 0, 0);
+    frame(cell);
+    blit(handSheet, cell, i * H, 0);
+    for (const target of [id, ...(b.also ?? [])]) entries[target] = { url: handUrl, x: i * H, y: 0, w: H, h: H };
+    handIds.push(id);
+  });
+  writePng(join(gameDir, 'public', 'assets', preset, 'portraits-hand.png'), handSheet);
+  const big = blank(busts.length * (H * 3 + 12) + 12, H * 3 + 30);
+  for (let i = 0; i < big.data.length; i += 4) [big.data[i], big.data[i + 1], big.data[i + 2], big.data[i + 3]] = [20, 18, 22, 255];
+  busts.forEach(([id], i) => {
+    blit(big, scaleUp(crop(handSheet, i * H, 0, H, H), 3), 12 + i * (H * 3 + 12), 8);
+    drawText(big, id, 12 + i * (H * 3 + 12), H * 3 + 14, [200, 196, 186], 2);
+  });
+  writePng(join(root, 'docs', 'art-previews', `${preset}-portraits-hand.png`), big);
+}
 manifest.portraits = entries;
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 
 // Preview: every portrait at 3x with its id.
 const firstId = new Map<number, string>();
 for (const [id, e] of Object.entries(entries)) {
+  if (e.url !== url) continue;
   const i = (e.y / S) * cols + e.x / S;
   if (!firstId.has(i) || spec.sprites[id]) firstId.set(i, id);
 }
@@ -156,4 +185,4 @@ named.forEach(([id, e], i) => {
 const previewDir = join(root, 'docs', 'art-previews');
 mkdirSync(previewDir, { recursive: true });
 writePng(join(previewDir, `${preset}-portraits.png`), preview);
-console.log(`${preset} portraits: ${cells.length} busts for ${Object.keys(entries).length} sprite ids -> ${url}`);
+console.log(`${preset} portraits: ${cells.length} busts, ${handIds.length} hand-painted (${handIds.join(', ')}), for ${Object.keys(entries).length} sprite ids`);

@@ -1,0 +1,123 @@
+{
+  "$comment": "Characters drawn by hand as ASCII parts and composed into frames by scripts/art/build-hand-sprites.ts (runs after the palette variants, so an id here replaces the recolour). Each frame stacks parts: [part, dx, dy]. Build with `npm run art`.",
+  "output": "hand.png",
+  "facing": "right",
+  "sprites": {
+    "garran": {
+      "note": "Garrán Tizón: semiorco grande de hombros anchos, moño, colmillos, chaleco de cuero y pico de minero en la mano de atrás",
+      "size": [16, 28],
+      "scale": 1,
+      "legend": {
+        "k": "#222222",
+        "G": "#93a46a", "g": "#76865a", "d": "#4f5a40", "w": "#fdf7ed", "e": "#1a1416", "r": "#c86040",
+        "h": "#2e2624",
+        "V": "#7a5434", "v": "#56392a", "B": "#3e2c22", "b": "#c8a868",
+        "P": "#4a3a30", "p": "#2e2420", "O": "#2c1d1b", "o": "#46302a",
+        "I": "#b8bdc3", "i": "#686a70", "W": "#9a6a44", "x": "#64402f"
+      },
+      "parts": {
+        "body": [
+          "........khk.....",
+          "kkkkkkkkkhkkk...",
+          "kIIIiikkgggggk..",
+          ".kkWkk.kggGGddk.",
+          "..kWk..kgggggek.",
+          "..kWk..kdggggGgk",
+          "..kWk..kdgggwgwk",
+          "..kWk..kddgggggk",
+          "..kWk...kddddddk",
+          "..kWk..kkdddkkk.",
+          "..kWkkVVVgggVVk.",
+          ".kgWgkVVvgggvVVk",
+          "kggWggkVVvgvVVgk",
+          "kGGWGGkVVVvVVVgk",
+          "kdgWgdkVVVVVVkgk",
+          ".kkWkkkBBbBBBkGk",
+          "..kWk.kPPPPPPkGk",
+          "..kWk.kPPPpPPkkk",
+          "..kWk.kPPPpPPk..",
+          "..kxk.kPPPpPPk.."
+        ],
+        "body_hit": [
+          "........khk.....",
+          "kkkkkkkkkhkkk...",
+          "kIIIiikkgggggk..",
+          ".kkWkk.kggGGggk.",
+          "..kWk..kgggggrk.",
+          "..kWk..kdggggGgk",
+          "..kWk..kdggkkkwk",
+          "..kWk..kddgkrkgk",
+          "..kWk...kddddddk",
+          "..kWk..kkdddkkk.",
+          "..kWkkVVVgggVVk.",
+          ".kgWgkVVvgggvVVk",
+          "kggWggkVVvgvVVgk",
+          "kGGWGGkVVVvVVVgk",
+          "kdgWgdkVVVVVVkgk",
+          ".kkWkkkBBbBBBkGk",
+          "..kWk.kPPPPPPkGk",
+          "..kWk.kPPPpPPkkk",
+          "..kWk.kPPPpPPk..",
+          "..kxk.kPPPpPPk.."
+        ],
+        "legs_stand": [
+          "..kkk.kPPPkPPPk.",
+          "......kPPpkPPpk.",
+          "......kPPpkPPpk.",
+          "......kpppkpppk.",
+          "......kOOOkOOOOk",
+          "......kOOOkOOOOk",
+          "......koookoooook",
+          "......kkkkkkkkkk"
+        ],
+        "legs_stride": [
+          "..kkk.kPPPPPPPk.",
+          ".....kPPPkkPPPk.",
+          "....kPPpk..kPPpk",
+          "....kppk...kppk.",
+          "...kOOOk...kOOOk",
+          "...kOOOk..kOOOOk",
+          "...koook..kooook",
+          "...kkkkk..kkkkkk"
+        ],
+        "legs_stride_b": [
+          "..kkk.kPPPPPPPk.",
+          ".....kPPpkkPPPk.",
+          "....kPPpk..kPPpk",
+          "....kPPk...kppk.",
+          "...kOOOk...kOOOk",
+          "...kOOOOk.kOOOk.",
+          "...koooook.kook.",
+          "...kkkkkkk.kkkk."
+        ],
+        "legs_pass": [
+          "..kkk.kPPPPPPk..",
+          "......kPPpPPpk..",
+          "......kPPpPPpk..",
+          "......kpppppk...",
+          "......kOOOOOk...",
+          "......kOOOOOOk..",
+          "......koooooook.",
+          "......kkkkkkkkk."
+        ]
+      },
+      "animations": {
+        "idle": [
+          [["legs_stand", 0, 20], ["body", 0, 0]],
+          [["legs_stand", 0, 20], ["body", 0, 0]],
+          [["legs_stand", 0, 20], ["body", 0, 1]],
+          [["legs_stand", 0, 20], ["body", 0, 1]]
+        ],
+        "move": [
+          [["legs_stride", 0, 20], ["body", 0, 0]],
+          [["legs_pass", 0, 20], ["body", 0, 1]],
+          [["legs_stride_b", 0, 20], ["body", 0, 0]],
+          [["legs_pass", 0, 20], ["body", 0, 1]]
+        ],
+        "hit": [
+          [["legs_stand", 0, 20], ["body_hit", -1, 1]]
+        ]
+      }
+    }
+  }
+}
