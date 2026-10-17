@@ -60,7 +60,9 @@ W0 **aprobada** con estos cambios, ya aplicados en los documentos y los datos:
 | 14 | Willy siempre humano | El personaje del jugador es **siempre humano** (castreño): ya no se elige raza en el cásting, solo clase. Los rasgos castreños pasan a ser fijos (`willy.json`). Las otras 5 razas pasan a ser **mazmorreros rivales** (PNJ): Vanesa la Gaviota, Don Ceferino, Gorka de Compras, Mari Luz y Asterio, con sus rasgos de raza, plantas, frases y tres desenlaces (derrotar, pactar, dejar ir) | `willy.json`, `rivals.json` (sustituyen a `races.json`), banco `rivalAparece`, líneas del cásting por clase, logro «Cásting completo» (6 clases), 3 logros nuevos, glosario, tutorial, `STORY.md`, `RULESET.md`, `DESIGN.md` |
 | 15 | Arte | El encargo de arte de *Willy* se envía directamente a la sesión de arte | `ART_BRIEF.md` |
 
-**Cifras tras los cambios:** Willy humano, 9 clases (57 habilidades), 5 rivales, 93 objetos, 131 logros (24 ocultos), 387 frases del Narrador en 62 bancos.
+| 16 | Rivales procedurales | Los mazmorreros rivales se **generan** por partida a partir de la semilla (raza × nombre × apodo × pueblo × oficio × personalidad × manía × aspecto × kit × comportamiento × frases por plantilla × gancho), sin repetirse en la partida ni con los últimos 40 del navegador. Los 5 de antes pasan a ser **legendarios** raros (6 %). Vuelven con memoria del desenlace; los tramposos pueden traicionar. Arte modular: cuerpo por raza + paleta + accesorios | `rival-generator.json`, `rivals.json` (legendarios), banco `rivalAparece`, 4 logros nuevos, glosario, `STORY.md`, `RULESET.md`, `DESIGN.md` §17, R16, `ART_BRIEF.md` |
+
+**Cifras tras los cambios:** Willy humano, 9 clases (57 habilidades), rivales procedurales (12 millones de identidades) + 5 legendarios, 93 objetos, 135 logros (26 ocultos), 405 frases del Narrador en 62 bancos.
 
 ## Pendiente
 

@@ -22,6 +22,7 @@
 | R13 | Efectos adicionales, macros de ruleset e **invocaciones** (`spawnEntity` con dueño, controlador, duración e IA) | `engine/effects.ts` + IA | W2-W4 | Todos (refuerzos de jefes, invocaciones de clérigo en *Intereses*) |
 | R14 | Capa `markers` en el cargador de Tiled | `engine/tiled.ts` | W3 | *Intereses* (interactuables) |
 | R15 | **Salto** (mover ignorando `maxStep` y huecos dentro de un presupuesto) y **trazado con rebote** | `engine/pathfinding.ts` + `engine/los.ts` | W2 | Pícaros y monjes de *Intereses*, saltos de vampiros |
+| R16 | **Generador por tablas y plantillas** (PNJ, nombres, frases) con unicidad | `engine/procgen/tables.ts` | W4 | Bandidos y aldeanos de *Intereses*, cazadores de vampiros |
 
 Ninguna mete reglas de *Willy* ni de d20 en `engine/`.
 
@@ -254,7 +255,7 @@ interface Profile {
   counters: Record<string, number>;        // 'siempre' scope
   unlocks: string[];                       // item ids
   cosmetics: string[];
-  stats: Record<string, JsonValue>;        // classes played, rivals met, glossary read, intro views...
+  stats: Record<string, JsonValue>;        // classes played, rivals met, rivalesRecientes, glossary read, intro views...
   prefs: { tips: boolean; reducedMotion: boolean; voice: boolean; textSpeed: number };
 }
 // Clave: `${gameId}:profile`. Escritura tras cada logro y al acabar cada combate.
@@ -438,3 +439,30 @@ export function traceProjectile(state: GameState, from: Vec2, toward: Vec2, opts
 - Lo usa también la habilidad del Ingeniero «Arco voltaico» a nivel 3 (rebote en un autómata).
 - **Tests:** rebote simple en muro vertical y horizontal, esquina, límite de rebotes, alcance total con rebotes, impacto con la primera entidad.
 
+## R16. Generador por tablas y plantillas
+
+**Qué.** Un módulo puro para componer entidades o textos a partir de **tablas ponderadas** y **plantillas con fragmentos**, con reglas de **unicidad** y semilla derivada.
+
+**Por qué.** Los mazmorreros rivales de *Willy* se generan por partida (nombre, apodo, oficio, personalidad, manía, aspecto, kit, comportamiento, frases) y no pueden repetirse (`DESIGN.md` §17). Lo mismo sirve para bandidos con nombre en *Intereses* o cazadores en el juego de vampiros.
+
+**Capa.** `engine/procgen/tables.ts` (sin DOM, sin `Math.random`). Las plantillas de texto reutilizan el motor del Narrador (R5) para variables y concordancia de género.
+
+```ts
+export interface Table<T = JsonValue> { entries: Array<{ value: T; weight?: number; tags?: string[] }> }
+export interface GenSpec {
+  /** Field order matters: later fields may depend on earlier ones (e.g. apodo uses lugar). */
+  fields: Array<{ id: string; from: string /* table id */ | { template: string; tables: Record<string, string> }; dependsOn?: string[] }>;
+  /** Combinations that must not repeat, e.g. [['nombre','apellido'], ['apodo'], ['raza','kit','comportamiento']]. */
+  unique: string[][];
+  maxRerolls: number;          // per conflicting field
+}
+export interface GenContext { used: Set<string>; exclude?: Set<string> /* e.g. profile's recent rivals */ }
+
+export function generate(spec: GenSpec, tables: Record<string, Table>, seed: number, ctx: GenContext): Record<string, JsonValue>;
+// Deterministic: same seed + same ctx → same result. Rerolls use deriveSeed(seed, 'reroll', fieldId, n).
+// Returns the generated record plus the uniqueness keys it consumed, so the caller can store them in state.
+```
+
+Además, en el perfil por navegador (R6): `rivalesRecientes: string[]` (últimos 40 nombre+apellido) y `legendarioAnterior?: string`, para no repetir entre partidas seguidas. El juego los copia al `GameState` al empezar la partida.
+
+**Tests:** reproducibilidad, unicidad con conflictos forzados, exclusión entre partidas, pesos respetados en 10 000 tiradas, dependencia entre campos.

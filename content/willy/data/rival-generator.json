@@ -1,0 +1,1115 @@
+{
+  "$comment": "Generador de mazmorreros rivales. Borrador; algoritmo en docs/willy/DESIGN.md → «Mazmorreros rivales procedurales». Todo el azar sale de deriveSeed(semillaPartida, 'rival', planta, ranura) (ENGINE_REQUESTS R12 y R16); nunca Math.random. Los textos usan las variables {rival}, {rivalNombre}, {rivalApodo}, {rivalLugar}, {rivalOficio}, {rivalMania}, {rivalRaza} y el género del rival para los filtros :el/:un/:o.",
+  "version": 1,
+  "reglas": {
+    "probabilidadSalaRival": {
+      "1": 0.5,
+      "2": 0.8,
+      "3": 0.8,
+      "4": 0.8,
+      "5": 0.8
+    },
+    "maxSalasPorPlanta": 1,
+    "probabilidadLegendario": 0.06,
+    "probabilidadVuelta": 0.4,
+    "vuelta": "Si hay un rival de una planta anterior al que se pactó o se dejó ir, con probabilidadVuelta la sala rival de esta planta es para él (con memoria del desenlace) en vez de uno nuevo. Los derrotados no vuelven: están eliminados del concurso.",
+    "unicidadEnPartida": [
+      "nombre+apellido",
+      "apodo",
+      "raza+kit+comportamiento",
+      "mania",
+      "gancho"
+    ],
+    "unicidadEntrePartidas": "No se repite ningún nombre+apellido de los últimos 40 rivales vistos en este navegador (perfil → rivalesRecientes, copiado al GameState al empezar la partida para que la generación sea reproducible). Los legendarios no se repiten en dos partidas seguidas.",
+    "reintentos": "Si una combinación choca con las reglas de unicidad, se vuelve a tirar solo el campo que choca, con deriveSeed(..., 'reintento', n), hasta 30 veces.",
+    "escalado": "vida = vidaBase × (1 + 0,35 × (planta − 1)); ataque y DEF + ⌊(planta − 1) ÷ 2⌋; daño: el dado del kit sube un escalón cada dos plantas (1d6 → 1d8 → 1d10).",
+    "genero": "Cada rival tira género (m/f). Oficio, apodo, personalidad y frases usan la forma de su género (nombreF/cortoF, adjetivos f, {o} → o/a)."
+  },
+  "razas": [
+    {
+      "id": "semigaviota",
+      "nombre": "Semigaviota",
+      "descripcion": "Alas cortas, pico largo y una relación complicada con las patatas fritas ajenas.",
+      "rasgos": [
+        {
+          "id": "planeo",
+          "nombre": "Planeo",
+          "texto": "Nunca recibes daño por caída y puedes saltar a cualquier altura inferior.",
+          "mecanica": {
+            "danoCaida": 0,
+            "bajadaLibre": true
+          }
+        },
+        {
+          "id": "pico-largo",
+          "nombre": "Pico largo",
+          "texto": "Al golpear cuerpo a cuerpo, 15 % de robar fichas o un consumible al objetivo.",
+          "mecanica": {
+            "al": "golpear",
+            "probabilidad": 0.15,
+            "robar": [
+              "fichas",
+              "consumible"
+            ]
+          }
+        },
+        {
+          "id": "eso-brilla",
+          "nombre": "¡Eso brilla!",
+          "texto": "Si empiezas el turno junto a fichas u objetos en el suelo, 25 % de gastar 1 acción en cogerlos, quieras o no.",
+          "mecanica": {
+            "al": "inicioTurno",
+            "si": "objetoAdyacente",
+            "probabilidad": 0.25,
+            "acciones": -1,
+            "efecto": "recogerObjeto"
+          },
+          "desventaja": true
+        }
+      ],
+      "atributos": {
+        "agi": 7,
+        "sue": 6,
+        "fue": 4,
+        "car": 4
+      },
+      "cuerpoBase": "rival-cuerpo-semigaviota",
+      "paletas": [
+        "gaviota-patiamarilla",
+        "gaviota-reidora",
+        "gaviota-sombria",
+        "gaviota-de-puerto-sucia",
+        "gaviota-albina"
+      ],
+      "peso": 1
+    },
+    {
+      "id": "gnomo-de-jardin",
+      "nombre": "Gnomo de jardín",
+      "descripcion": "Lleva décadas mirando un estanque de plástico. Ha visto cosas. Ninguna interesante.",
+      "rasgos": [
+        {
+          "id": "ceramica-esmaltada",
+          "nombre": "Cerámica esmaltada",
+          "texto": "Recibes 1 de daño menos de cada golpe (mínimo 1).",
+          "mecanica": {
+            "reduccionDano": {
+              "elemento": "golpe",
+              "cantidad": 1
+            }
+          }
+        },
+        {
+          "id": "pose-de-estatua",
+          "nombre": "Pose de estatua",
+          "texto": "Si acabas el turno sin moverte ni actuar, quedas Escondido.",
+          "mecanica": {
+            "al": "finTurnoQuieto",
+            "aplicar": "escondido"
+          }
+        },
+        {
+          "id": "clonc",
+          "nombre": "¡Clonc!",
+          "texto": "Las caídas y los choques contra muros te hacen el doble de daño. Y tienes 1 de movimiento menos.",
+          "mecanica": {
+            "multiplicador": {
+              "caida": 2,
+              "choque": 2
+            },
+            "movimiento": -1
+          },
+          "desventaja": true
+        }
+      ],
+      "atributos": {
+        "agu": 8,
+        "man": 6,
+        "agi": 4
+      },
+      "cuerpoBase": "rival-cuerpo-gnomo-de-jardin",
+      "paletas": [
+        "gorro-rojo-clasico",
+        "gorro-azul-desvaido",
+        "pintura-descascarillada",
+        "musgo",
+        "dorado-de-chalé"
+      ],
+      "peso": 1
+    },
+    {
+      "id": "orco-de-oficina",
+      "nombre": "Orco de oficina",
+      "descripcion": "Músculo de sobra y una agresividad que ha aprendido a canalizar en correos con copia oculta.",
+      "rasgos": [
+        {
+          "id": "corpulento",
+          "nombre": "Corpulento",
+          "texto": "+5 de vida máxima y tus empujones mueven 1 casilla más.",
+          "mecanica": {
+            "vidaMax": 5,
+            "empujeExtra": 1
+          }
+        },
+        {
+          "id": "agresividad-pasiva",
+          "nombre": "Agresividad pasiva",
+          "texto": "Tu primer ataque de cada combate tiene +3 a acertar y al daño.",
+          "mecanica": {
+            "al": "primerAtaqueCombate",
+            "acertar": 3,
+            "dano": 3
+          }
+        },
+        {
+          "id": "burocracia",
+          "nombre": "Burocracia",
+          "texto": "Cada vez que subes de nivel tienes que rellenar un formulario: el reloj de la planta pierde 30 segundos.",
+          "mecanica": {
+            "al": "subirNivel",
+            "relojSegundos": -30
+          },
+          "desventaja": true
+        }
+      ],
+      "atributos": {
+        "fue": 8,
+        "agu": 6,
+        "man": 4
+      },
+      "cuerpoBase": "rival-cuerpo-orco-de-oficina",
+      "paletas": [
+        "verde-oliva",
+        "verde-fluor",
+        "gris-ojeras",
+        "moreno-de-terraza",
+        "verde-pálido-de-fluorescente"
+      ],
+      "peso": 1
+    },
+    {
+      "id": "fantasma-en-practicas",
+      "nombre": "Fantasma en prácticas",
+      "descripcion": "Translúcido, un poco frío y todavía aprendiendo a atravesar paredes. De momento solo atraviesa gente.",
+      "rasgos": [
+        {
+          "id": "incorporeo",
+          "nombre": "Incorpóreo",
+          "texto": "Puedes atravesar casillas ocupadas por cualquier criatura. Inmune a Envenenado y Tumbado.",
+          "mecanica": {
+            "atravesarEntidades": true,
+            "inmune": [
+              "envenenado",
+              "tumbado"
+            ]
+          }
+        },
+        {
+          "id": "susto",
+          "nombre": "¡Bu!",
+          "texto": "Una vez por combate, gratis: un enemigo adyacente queda Asustado 2 turnos.",
+          "mecanica": {
+            "habilidadGratis": "bu",
+            "unaVezPor": "combate"
+          }
+        },
+        {
+          "id": "se-le-transparenta",
+          "nombre": "Se le transparenta todo",
+          "texto": "La comida te cura la mitad: se te cae por dentro y se ve.",
+          "mecanica": {
+            "curacionComida": 0.5
+          },
+          "desventaja": true
+        }
+      ],
+      "atributos": {
+        "man": 7,
+        "agi": 6,
+        "agu": 3,
+        "car": 6
+      },
+      "cuerpoBase": "rival-cuerpo-fantasma-en-practicas",
+      "paletas": [
+        "sabana-blanca",
+        "azul-niebla",
+        "verde-ectoplasma",
+        "lila-cursi",
+        "gris-polvo"
+      ],
+      "peso": 1
+    },
+    {
+      "id": "minotauro-vegano",
+      "nombre": "Minotauro vegano",
+      "descripcion": "Dejó el laberinto por una cuestión de principios. Los principios siguen ahí; el laberinto lo lleva por dentro.",
+      "rasgos": [
+        {
+          "id": "embestida",
+          "nombre": "Embestida",
+          "texto": "Si te mueves 3 casillas o más en línea recta y atacas, el golpe empuja 2 casillas.",
+          "mecanica": {
+            "si": "movimientoRecto>=3",
+            "empujeAlGolpear": 2
+          }
+        },
+        {
+          "id": "laberinto-interior",
+          "nombre": "Laberinto interior",
+          "texto": "Siempre sabes dónde está la salida de la planta.",
+          "mecanica": {
+            "al": "inicioPlanta",
+            "revelar": "salida"
+          }
+        },
+        {
+          "id": "principios",
+          "nombre": "Principios",
+          "texto": "No puedes comer nada con carne o pescado. Y si ves algo rojo a 3 casillas o menos, tu siguiente ataque tiene que ser contra eso.",
+          "mecanica": {
+            "prohibido": {
+              "etiqueta": "carne"
+            },
+            "provocacion": {
+              "etiqueta": "rojo",
+              "radio": 3
+            }
+          },
+          "desventaja": true
+        }
+      ],
+      "atributos": {
+        "fue": 7,
+        "agu": 6,
+        "car": 4
+      },
+      "cuerpoBase": "rival-cuerpo-minotauro-vegano",
+      "paletas": [
+        "negro-zaino",
+        "castaño",
+        "berrendo",
+        "cárdeno",
+        "jabonero"
+      ],
+      "peso": 1
+    }
+  ],
+  "nombres": {
+    "m": [
+      "Paco",
+      "Txema",
+      "Rufino",
+      "Anselmo",
+      "Benito",
+      "Iñaki",
+      "Jacinto",
+      "Lolo",
+      "Manolo",
+      "Nicanor",
+      "Pancho",
+      "Remigio",
+      "Sito",
+      "Tasio",
+      "Ubaldo",
+      "Vicente",
+      "Agapito",
+      "Baldomero",
+      "Cosme",
+      "Desiderio",
+      "Eusebio",
+      "Fermín",
+      "Gumersindo",
+      "Higinio",
+      "Isidro",
+      "Jenaro",
+      "Leandro",
+      "Marcelino",
+      "Norberto",
+      "Onésimo",
+      "Pelayo",
+      "Quino",
+      "Roque",
+      "Saturnino",
+      "Teodoro",
+      "Valeriano",
+      "Xabi",
+      "Jonathan",
+      "Kevin",
+      "Brayan"
+    ],
+    "f": [
+      "Paqui",
+      "Amparo",
+      "Begoña",
+      "Charo",
+      "Dolores",
+      "Eulalia",
+      "Felisa",
+      "Gertrudis",
+      "Herminia",
+      "Inma",
+      "Jacinta",
+      "Loli",
+      "Maite",
+      "Nieves",
+      "Olvido",
+      "Petra",
+      "Remedios",
+      "Sagrario",
+      "Tere",
+      "Visitación",
+      "Ainhoa",
+      "Covadonga",
+      "Encarna",
+      "Fuencisla",
+      "Genoveva",
+      "Itziar",
+      "Leocadia",
+      "Milagros",
+      "Nekane",
+      "Purificación",
+      "Rosi",
+      "Socorro",
+      "Trini",
+      "Vanessa",
+      "Yolanda",
+      "Zuriñe",
+      "Jessica",
+      "Tamara",
+      "Estefanía",
+      "Sheila"
+    ]
+  },
+  "apellidos": [
+    "Gutiérrez",
+    "Lastra",
+    "Cobo",
+    "Ruiz de la Peña",
+    "Saiz",
+    "Revuelta",
+    "Fernández de Arriba",
+    "Iturbe",
+    "Maza",
+    "Pellón",
+    "Quintana",
+    "Setién",
+    "Trueba",
+    "Uriarte",
+    "Velarde",
+    "Bustamante",
+    "Calderón",
+    "Díez",
+    "Echevarría",
+    "Fuentecilla",
+    "Garmendia",
+    "Hoz",
+    "Incera",
+    "Lavín",
+    "Merino",
+    "Noriega",
+    "Ortiz de Zárate",
+    "Pomar",
+    "Rasines",
+    "Sobremazas",
+    "Toca",
+    "Udías",
+    "Villegas",
+    "Zubieta",
+    "Arenal",
+    "Bárcena",
+    "Cuesta",
+    "Escalante",
+    "Gómez de la Torre",
+    "Mier"
+  ],
+  "apodos": {
+    "plantillas": [
+      "{art} {adj}",
+      "{art} de {lugar}",
+      "{art} {oficioCorto}",
+      "{art} que {verbo}",
+      "{art} {adj} de {lugar}"
+    ],
+    "articulo": {
+      "m": "el",
+      "f": "la"
+    },
+    "adjetivos": {
+      "m": [
+        "Breve",
+        "Sudoroso",
+        "Infalible",
+        "Despistado",
+        "Puntual",
+        "Rencoroso",
+        "Tranquilo",
+        "Elegante",
+        "Pegajoso",
+        "Ruidoso",
+        "Magnífico",
+        "Pocho",
+        "Sincero",
+        "Raudo",
+        "Templado",
+        "Formal",
+        "Majo",
+        "Bravo",
+        "Tieso",
+        "Fino"
+      ],
+      "f": [
+        "Breve",
+        "Sudorosa",
+        "Infalible",
+        "Despistada",
+        "Puntual",
+        "Rencorosa",
+        "Tranquila",
+        "Elegante",
+        "Pegajosa",
+        "Ruidosa",
+        "Magnífica",
+        "Pocha",
+        "Sincera",
+        "Rauda",
+        "Templada",
+        "Formal",
+        "Maja",
+        "Brava",
+        "Tiesa",
+        "Fina"
+      ]
+    },
+    "verbos": [
+      "no se cansa",
+      "siempre vuelve",
+      "lo sabe todo",
+      "no paga rondas",
+      "pide hoja de reclamaciones",
+      "llega tarde",
+      "nunca pierde",
+      "casi gana",
+      "lo grita todo",
+      "se lo toma todo a mal",
+      "duerme de pie",
+      "saluda a cámara"
+    ]
+  },
+  "lugares": [
+    "Laredo",
+    "Santoña",
+    "Noja",
+    "Colindres",
+    "Ampuero",
+    "Liendo",
+    "Guriezo",
+    "Islares",
+    "Sámano",
+    "Ramales",
+    "Reinosa",
+    "Potes",
+    "Comillas",
+    "Suances",
+    "Torrelavega",
+    "Sopuerta",
+    "Muskiz",
+    "Barakaldo",
+    "Portugalete",
+    "Getxo",
+    "Medina de Pomar",
+    "Espinosa de los Monteros",
+    "Villacarriedo",
+    "Selaya",
+    "Arredondo",
+    "Soba",
+    "Valdecilla",
+    "Somo",
+    "Pedreña",
+    "Mioño"
+  ],
+  "oficios": [
+    {
+      "id": "taxista",
+      "nombre": "taxista",
+      "corto": "Taxista",
+      "nombreF": "taxista",
+      "cortoF": "Taxista"
+    },
+    {
+      "id": "peluquero",
+      "nombre": "peluquero de barrio",
+      "corto": "Peluquero",
+      "nombreF": "peluquera de barrio",
+      "cortoF": "Peluquera"
+    },
+    {
+      "id": "pescadero",
+      "nombre": "pescadero",
+      "corto": "Pescadero",
+      "nombreF": "pescadera",
+      "cortoF": "Pescadera"
+    },
+    {
+      "id": "monitor-zumba",
+      "nombre": "monitor de zumba",
+      "corto": "Monitor",
+      "nombreF": "monitora de zumba",
+      "cortoF": "Monitora"
+    },
+    {
+      "id": "tasador-seguros",
+      "nombre": "perito de seguros",
+      "corto": "Perito",
+      "nombreF": "perita de seguros",
+      "cortoF": "Perita"
+    },
+    {
+      "id": "conductor-autobus",
+      "nombre": "conductor del autobús de línea",
+      "corto": "Conductor",
+      "nombreF": "conductora del autobús de línea",
+      "cortoF": "Conductora"
+    },
+    {
+      "id": "repartidor",
+      "nombre": "repartidor de paquetes",
+      "corto": "Repartidor",
+      "nombreF": "repartidora de paquetes",
+      "cortoF": "Repartidora"
+    },
+    {
+      "id": "dj",
+      "nombre": "DJ de bodas",
+      "corto": "DJ",
+      "nombreF": "DJ de bodas",
+      "cortoF": "DJ"
+    },
+    {
+      "id": "socorrista-piscina",
+      "nombre": "socorrista de piscina municipal",
+      "corto": "Socorrista",
+      "nombreF": "socorrista de piscina municipal",
+      "cortoF": "Socorrista"
+    },
+    {
+      "id": "quiosquero",
+      "nombre": "quiosquero",
+      "corto": "Quiosquero",
+      "nombreF": "quiosquera",
+      "cortoF": "Quiosquera"
+    },
+    {
+      "id": "camarero",
+      "nombre": "camarero de chiringuito",
+      "corto": "Camarero",
+      "nombreF": "camarera de chiringuito",
+      "cortoF": "Camarera"
+    },
+    {
+      "id": "agente-inmobiliario",
+      "nombre": "agente inmobiliario",
+      "corto": "Inmobiliario",
+      "nombreF": "agente inmobiliaria",
+      "cortoF": "Inmobiliaria"
+    },
+    {
+      "id": "influencer-local",
+      "nombre": "influencer de su pueblo",
+      "corto": "Influencer",
+      "nombreF": "influencer de su pueblo",
+      "cortoF": "Influencer"
+    },
+    {
+      "id": "afinador",
+      "nombre": "afinador de pianos",
+      "corto": "Afinador",
+      "nombreF": "afinadora de pianos",
+      "cortoF": "Afinadora"
+    },
+    {
+      "id": "tanatopractor",
+      "nombre": "maquillador de figuras de cera",
+      "corto": "Maquillador",
+      "nombreF": "maquilladora de figuras de cera",
+      "cortoF": "Maquilladora"
+    },
+    {
+      "id": "guia-turistico",
+      "nombre": "guía turístico",
+      "corto": "Guía",
+      "nombreF": "guía turística",
+      "cortoF": "Guía"
+    },
+    {
+      "id": "electricista",
+      "nombre": "electricista",
+      "corto": "Electricista",
+      "nombreF": "electricista",
+      "cortoF": "Electricista"
+    },
+    {
+      "id": "jardinero",
+      "nombre": "jardinero municipal",
+      "corto": "Jardinero",
+      "nombreF": "jardinera municipal",
+      "cortoF": "Jardinera"
+    },
+    {
+      "id": "aparcacoches",
+      "nombre": "aparcacoches",
+      "corto": "Aparcacoches",
+      "nombreF": "aparcacoches",
+      "cortoF": "Aparcacoches"
+    },
+    {
+      "id": "opositor",
+      "nombre": "opositor eterno",
+      "corto": "Opositor",
+      "nombreF": "opositora eterna",
+      "cortoF": "Opositora"
+    },
+    {
+      "id": "domador",
+      "nombre": "domador de pulgas jubilado",
+      "corto": "Domador",
+      "nombreF": "domadora de pulgas jubilada",
+      "cortoF": "Domadora"
+    },
+    {
+      "id": "pastelero",
+      "nombre": "pastelero",
+      "corto": "Pastelero",
+      "nombreF": "pastelera",
+      "cortoF": "Pastelera"
+    },
+    {
+      "id": "relojero",
+      "nombre": "relojero",
+      "corto": "Relojero",
+      "nombreF": "relojera",
+      "cortoF": "Relojera"
+    },
+    {
+      "id": "pintor",
+      "nombre": "pintor de brocha gorda",
+      "corto": "Pintor",
+      "nombreF": "pintora de brocha gorda",
+      "cortoF": "Pintora"
+    },
+    {
+      "id": "vendedor-enciclopedias",
+      "nombre": "vendedor de enciclopedias",
+      "corto": "Vendedor",
+      "nombreF": "vendedora de enciclopedias",
+      "cortoF": "Vendedora"
+    }
+  ],
+  "personalidades": [
+    {
+      "id": "optimista",
+      "nombre": "optimista",
+      "coletillas": [
+        "¡Qué buen día para pelear!",
+        "Seguro que sale bien.",
+        "¡Venga, que esto lo sacamos!"
+      ],
+      "nombreF": "optimista"
+    },
+    {
+      "id": "rencoroso",
+      "nombre": "rencoroso",
+      "coletillas": [
+        "Me acuerdo de todo.",
+        "Esto lo apunto.",
+        "No se me olvida, que conste."
+      ],
+      "nombreF": "rencorosa"
+    },
+    {
+      "id": "pedante",
+      "nombre": "pedante",
+      "coletillas": [
+        "Técnicamente, tengo razón.",
+        "Como dijo Aristóteles, o alguien así.",
+        "Se dice «mazmorrero», no «mazmorrista»."
+      ],
+      "nombreF": "pedante"
+    },
+    {
+      "id": "zalamero",
+      "nombre": "zalamero",
+      "coletillas": [
+        "Qué bien te queda ese mono, de verdad.",
+        "Eres mi concursante favorito, no se lo digas a nadie.",
+        "Con ese bigote, cualquiera."
+      ],
+      "nombreF": "zalamera"
+    },
+    {
+      "id": "melancolico",
+      "nombre": "melancólico",
+      "coletillas": [
+        "Antes esto era todo campo.",
+        "Ya nada es como antes del apocalipsis.",
+        "Qué tiempos aquellos, el martes pasado."
+      ],
+      "nombreF": "melancólica"
+    },
+    {
+      "id": "chulo",
+      "nombre": "chulo",
+      "coletillas": [
+        "Tú no sabes con quién estás hablando.",
+        "Mírame bien, que no lo vas a ver dos veces.",
+        "Esto lo hago con una mano. La otra la tengo ocupada."
+      ],
+      "nombreF": "chula"
+    },
+    {
+      "id": "nervioso",
+      "nombre": "nervioso",
+      "coletillas": [
+        "¿Eso ha sido un ruido? ¿Has oído un ruido?",
+        "Perdona, es que estoy un poco nervioso.",
+        "No me mires así, que me pongo peor."
+      ],
+      "nombreF": "nerviosa"
+    },
+    {
+      "id": "mistico",
+      "nombre": "místico",
+      "coletillas": [
+        "Los astros ya me lo habían dicho.",
+        "Tu aura es naranja. Como tu mono.",
+        "Esto estaba escrito."
+      ],
+      "nombreF": "mística"
+    },
+    {
+      "id": "empresarial",
+      "nombre": "empresarial",
+      "coletillas": [
+        "Hablemos de sinergias.",
+        "Esto es una oportunidad de negocio.",
+        "Te paso mi tarjeta."
+      ],
+      "nombreF": "empresarial"
+    },
+    {
+      "id": "abuelil",
+      "nombre": "abuelil",
+      "coletillas": [
+        "Abrígate, que aquí abajo hay corriente.",
+        "¿Has comido? Tienes cara de no haber comido.",
+        "En mis tiempos las mazmorras tenían barandilla."
+      ],
+      "nombreF": "abuelil"
+    },
+    {
+      "id": "dramatico",
+      "nombre": "dramático",
+      "coletillas": [
+        "¡Este es el momento más importante de mi vida!",
+        "Que conste en acta mi sufrimiento.",
+        "¡Nadie me comprende! ¡Nadie!"
+      ],
+      "nombreF": "dramática"
+    },
+    {
+      "id": "pasota",
+      "nombre": "pasota",
+      "coletillas": [
+        "Bueno, lo que sea.",
+        "Yo he venido por el catering.",
+        "Me da igual ganar. Bueno, un poco no."
+      ],
+      "nombreF": "pasota"
+    }
+  ],
+  "manias": [
+    "colecciona tapas de yogur",
+    "habla de sí mism{o} en tercera persona",
+    "no pisa las juntas de las baldosas",
+    "lleva siempre un paraguas, cerrado",
+    "cuenta los escalones en voz alta",
+    "saluda a todas las cámaras por su nombre",
+    "tararea el anuncio de los Hermanos Pérez",
+    "pide factura de todo",
+    "duerme con un ojo abierto y el otro también",
+    "lleva fotos de su perro en la cartera; no tiene perro",
+    "compara todo con Bilbao",
+    "se peina antes de cada combate",
+    "lleva un termo de caldo a todas partes",
+    "no soporta que le llamen «concursante»",
+    "firma autógrafos sin que se los pidan",
+    "corrige la ortografía de los carteles",
+    "cree que el presentador es su tío",
+    "regatea hasta con los monstruos",
+    "se presenta dos veces por si acaso",
+    "huele las cosas antes de pegarlas",
+    "lleva la cuenta de sus derrotas en una libreta",
+    "silba cuando miente",
+    "trae su propio cojín",
+    "no se fía de los mímicos ni de los cofres de verdad",
+    "dice «a ver» antes de cada frase"
+  ],
+  "aspecto": {
+    "$comment": "Capas para la sesión de arte: cuerpo base por raza + paleta + un accesorio por ranura (o ninguno). Ver docs/willy/ART_BRIEF.md.",
+    "ranuras": {
+      "cabeza": [
+        "ninguno",
+        "gorra",
+        "boina",
+        "casco-de-moto",
+        "sombrero-de-paja",
+        "pañuelo",
+        "corona-de-carton",
+        "gorro-de-lana",
+        "visera",
+        "tupé",
+        "auriculares",
+        "flor"
+      ],
+      "cara": [
+        "ninguno",
+        "gafas-de-sol",
+        "monóculo",
+        "bigote-postizo",
+        "parche",
+        "mascarilla",
+        "pintura-de-guerra",
+        "gafas-de-pasta"
+      ],
+      "mano": [
+        "ninguno",
+        "paraguas",
+        "maletín",
+        "palo-de-escoba",
+        "sartén",
+        "megáfono",
+        "raqueta",
+        "bolsa-de-pipas",
+        "cuchara-de-madera",
+        "abanico"
+      ]
+    }
+  },
+  "kits": [
+    {
+      "id": "pegon",
+      "nombre": "pegón",
+      "vidaBase": 22,
+      "def": 12,
+      "ataque": 5,
+      "dano": "1d8",
+      "movimiento": 4,
+      "acciones": [
+        "golpe",
+        "empujar"
+      ],
+      "ia": "agresivo"
+    },
+    {
+      "id": "tirador",
+      "nombre": "tirador",
+      "vidaBase": 16,
+      "def": 13,
+      "ataque": 5,
+      "dano": "1d6",
+      "movimiento": 4,
+      "alcance": 5,
+      "acciones": [
+        "disparo",
+        "retirarse"
+      ],
+      "ia": "a-distancia"
+    },
+    {
+      "id": "trampero",
+      "nombre": "trampero",
+      "vidaBase": 18,
+      "def": 12,
+      "ataque": 4,
+      "dano": "1d6",
+      "movimiento": 5,
+      "acciones": [
+        "lanzar-aceite",
+        "lanzar-canicas",
+        "golpe"
+      ],
+      "ia": "controlador"
+    },
+    {
+      "id": "tanque",
+      "nombre": "tanque",
+      "vidaBase": 32,
+      "def": 14,
+      "ataque": 4,
+      "dano": "1d6",
+      "movimiento": 3,
+      "acciones": [
+        "golpe",
+        "guardia"
+      ],
+      "ia": "guardian"
+    },
+    {
+      "id": "curandero",
+      "nombre": "curandero",
+      "vidaBase": 18,
+      "def": 12,
+      "ataque": 3,
+      "dano": "1d4",
+      "movimiento": 4,
+      "acciones": [
+        "curarse",
+        "golpe"
+      ],
+      "ia": "cauto"
+    },
+    {
+      "id": "ladron",
+      "nombre": "ladrón",
+      "vidaBase": 16,
+      "def": 14,
+      "ataque": 4,
+      "dano": "1d6",
+      "movimiento": 6,
+      "acciones": [
+        "robar",
+        "huir",
+        "golpe"
+      ],
+      "ia": "codicioso"
+    }
+  ],
+  "comportamientos": [
+    {
+      "id": "agresivo",
+      "nombre": "agresivo",
+      "pactoDif": 18,
+      "texto": "Ataca en cuanto te ve.",
+      "pesos": {
+        "pelea": 8,
+        "pacto": 1,
+        "huida": 1
+      }
+    },
+    {
+      "id": "codicioso",
+      "nombre": "codicioso",
+      "pactoDif": 14,
+      "texto": "Va a por el cofre de la sala; se le puede comprar con fichas.",
+      "pactoConFichas": 20,
+      "pesos": {
+        "pelea": 3,
+        "pacto": 4,
+        "huida": 3
+      }
+    },
+    {
+      "id": "cobarde",
+      "nombre": "cobarde",
+      "pactoDif": 10,
+      "texto": "Huye al bajar a la mitad de vida.",
+      "pesos": {
+        "pelea": 2,
+        "pacto": 4,
+        "huida": 4
+      }
+    },
+    {
+      "id": "aliable",
+      "nombre": "propenso a aliarse",
+      "pactoDif": 8,
+      "texto": "Propone un pacto él mismo antes de pelear.",
+      "pesos": {
+        "pelea": 1,
+        "pacto": 8,
+        "huida": 1
+      }
+    },
+    {
+      "id": "fanfarron",
+      "nombre": "fanfarrón",
+      "pactoDif": 15,
+      "texto": "Reta a duelo delante de cámara: vencerle da el doble de audiencia.",
+      "pesos": {
+        "pelea": 7,
+        "pacto": 2,
+        "huida": 1
+      }
+    },
+    {
+      "id": "tramposo",
+      "nombre": "tramposo",
+      "pactoDif": 12,
+      "texto": "Acepta pactos con facilidad, pero hay un 30 % de que te traicione cuando vuelva.",
+      "traicion": 0.3,
+      "pesos": {
+        "pelea": 3,
+        "pacto": 5,
+        "huida": 2
+      }
+    }
+  ],
+  "ganchos": [
+    "Le debe dinero a Maripuri y lo sabe medio Camerino.",
+    "Dice que conoció al presentador de joven. Al presentador, no a sí mism{o}.",
+    "Ha venido a buscar a su suegra, que cayó en la Planta 3.",
+    "Se apuntó al concurso porque creía que era un casting de cocina.",
+    "Quiere ganar para comprarse un piso. En la Planta 2, que es la más barata.",
+    "Tiene una teoría sobre la Planta 6 y te la va a contar.",
+    "Fue {oficio} durante veinte años y está convencid{o} de que eso le prepara para esto.",
+    "Le han prometido un patrocinio de Glorp si gana. Glorp no lo sabe.",
+    "Cayó a la mazmorra mientras hacía la declaración de la renta. No la presentó.",
+    "Sostiene que ya ha ganado otra temporada en otro planeta. No hay pruebas.",
+    "Lleva una carta para Willy de su madre. No sabe cómo ha llegado a sus manos.",
+    "Quiere una foto con Gorka, el orco de Compras. Nadie sabe quién es Gorka, salvo Gorka.",
+    "Está aquí por una apuesta con su cuñado. Va perdiendo.",
+    "Ha leído el reglamento entero. Dice que hay una errata en la página 4.000.",
+    "Es fan de Willy desde el prólogo. Le da vergüenza decírselo, así que le pega."
+  ],
+  "frases": {
+    "presentacion": [
+      "Soy {rivalNombre}, {rivalApodo}. {coletilla}",
+      "{rivalNombre}, de {rivalLugar}. {rivalOficio:Mayus} de profesión. {coletilla}",
+      "A ver, que me presento: {rival}. Y {coletilla:min}",
+      "¿Tú eres el butanero? Yo soy {rivalNombre}. {coletilla}"
+    ],
+    "amenaza": [
+      "Esta sala es mía. {coletilla}",
+      "En {rivalLugar} me temían. Aquí, también. {coletilla}",
+      "No es nada personal. Bueno, un poco sí. {coletilla}"
+    ],
+    "pacto": [
+      "Vale, trato hecho. Te debo una. {coletilla}",
+      "Me caes bien. No se lo digas a nadie. {coletilla}",
+      "Pacto. Si nos volvemos a ver, voy contigo. {coletilla}"
+    ],
+    "derrota": [
+      "Me voy del concurso. Dile a {rivalLugar} que lo intenté.",
+      "Eliminad{o}. Bueno. Siempre me quedará mi trabajo de {rivalOficio}. Ah, no, que se acabó el mundo.",
+      "Has ganado tú. Esta vez. No habrá otra, pero esta vez."
+    ],
+    "huida": [
+      "¡Esto no es huir, es una retirada estratégica! {coletilla}",
+      "Me llevo esto, que está muy solo. ¡Adiós!",
+      "Nos veremos en otra planta. {coletilla}"
+    ],
+    "vueltaPacto": [
+      "¡Willy! Te dije que volvería. Vengo a ayudar. {coletilla}",
+      "Un pacto es un pacto. Aquí me tienes.",
+      "Lo prometido es deuda, y yo soy de {rivalLugar}: pago mis deudas."
+    ],
+    "vueltaHuida": [
+      "¿Te acuerdas de mí? Yo de ti sí. {coletilla}",
+      "La última vez me fui. Esta vez, te vas tú.",
+      "He vuelto, y más fuerte. He estado entrenando. Bueno, comiendo."
+    ],
+    "traicion": [
+      "Lo siento, Willy. El pacto tenía letra pequeña. {coletilla}",
+      "¡Sorpresa! Nunca te fíes de alguien de {rivalLugar}. Bueno, de mí."
+    ]
+  }
+}

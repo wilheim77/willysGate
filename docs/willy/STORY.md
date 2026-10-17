@@ -83,19 +83,21 @@ Los gustos chocan entre sí a propósito: Butanos Pérez y Glorp no pueden estar
 
 ### Mazmorreros rivales
 
-Otros concursantes de *¡Mazmorreros!* que **no son humanos**. Willy siempre es humano; estos cinco son la competencia. Datos en `content/willy/data/rivals.json` (rasgos, estadísticas, frases y plantas donde aparecen).
+Otros concursantes de *¡Mazmorreros!* que **no son humanos**: semigaviotas, gnomos de jardín, orcos de oficina, fantasmas en prácticas y minotauros veganos. Willy siempre es humano; ellos son la competencia.
 
-| Rival | Raza | Quién es | Plantas | Cómo se le trata |
-|---|---|---|---|---|
-| **Vanesa la Gaviota** | Semigaviota | De Laredo. Simpática, descarada y cleptómana: te saluda mientras te quita el bocadillo | 1, 3 | Compite por los cofres; en combate prefiere robar a pelear |
-| **Don Ceferino** | Gnomo de jardín | Gnomo jubilado de un chalé de Santoña. Lento, gruñón y digno; cree que la mazmorra es su jardín | 2, 4 | Bloquea un pasillo: rodearlo, convencerlo o tumbarlo |
-| **Gorka, de Compras** | Orco de oficina | De un parque empresarial de Bilbao. Competitivo, habla de «sinergias». Rival declarado de Willy, buen tipo en el fondo | 2, 3, 5 | Duelo delante de cámara; se para a rellenar formularios al subir de nivel |
-| **Mari Luz** | Fantasma en prácticas | Recién contratada, amabilísima, se disculpa cada vez que asusta. Quiere contrato fijo de aparición | 3, 4 | Si la ayudas, se une como aliada en un combate; si no, te asusta en el peor momento |
-| **Asterio** | Minotauro vegano | Enorme, tranquilo y filosófico. Sabe dónde está la salida y no soporta el rojo | 4, 5 | Te enseña la salida a cambio de comida sin carne; embiste si ve rojo o fuego |
-
-- Cada rival conserva **los rasgos que tenía como raza** (Planeo, Pose de estatua, Burocracia, Incorpóreo, Embestida…), ahora como rasgos de PNJ.
-- Aparecen en una sala de rol `rival` (como mucho una por planta) o en escenas fijas. Tres desenlaces: **derrotarlo** (caja de plata), **pactar** (no ataca y la próxima vez llega como aliado temporal controlado por la IA) o **dejarle ir** (se lleva el botín de la sala y vuelve más fuerte).
+- **Cada partida trae rivales nuevos.** Se generan a partir de la semilla de la partida combinando raza, nombre y apellido, apodo, pueblo de origen, oficio de antes del apocalipsis, personalidad, una manía, un aspecto, un estilo de combate, un comportamiento y un gancho de historia. Hablan con frases montadas a partir de plantillas y coletillas de su personalidad. Nunca se repiten en una misma partida, ni con los últimos 40 vistos en el navegador.
+- **Cada raza conserva sus rasgos:** Planeo y Pico largo (semigaviota), Cerámica esmaltada y Pose de estatua (gnomo), Corpulento y Burocracia (orco), Incorpóreo y ¡Bu! (fantasma), Embestida y Principios (minotauro).
+- **Legendarios:** muy de vez en cuando (6 % de las salas de rival) aparece uno de los cinco escritos a mano: **Vanesa la Gaviota** (de Laredo, cleptómana encantadora), **Don Ceferino** (gnomo jubilado de Santoña que cree que la mazmorra es su jardín), **Gorka, de Compras** (orco de oficina de Bilbao, de las sinergias), **Mari Luz** (fantasma en prácticas que pide perdón al asustar) y **Asterio** (minotauro vegano que sabe dónde está la salida). Cada uno sale como mucho una vez por partida y nunca en dos partidas seguidas.
+- **Encuentros:** como mucho una sala de rival por planta. Tres desenlaces: **derrotarlo** (caja de plata; queda eliminado del concurso), **pactar** (no ataca y puede volver como aliado) o **dejarle ir** (se lleva el botín y puede volver más fuerte). Los rivales que vuelven **recuerdan** lo que pasó; los tramposos pueden traicionar el pacto.
 - Koldo, el de Bilbao, es el rival **humano** y amistoso del Camerino; no combate.
+
+Ejemplos generados con la semilla «CASTRO»:
+
+| Rival | Quién es | Estilo |
+|---|---|---|
+| **Loli Díez, «la que pide hoja de reclamaciones»** | Fantasma en prácticas de Mioño, pintora de brocha gorda, dramática. Tararea el anuncio de los Hermanos Pérez. Ha leído el reglamento entero y dice que hay una errata en la página 4.000. | Ladrona, cobarde. «Soy Loli, la que pide hoja de reclamaciones. ¡Nadie me comprende! ¡Nadie!» |
+| **Higinio Zubieta, «el que no se cansa»** | Gnomo de jardín de Liendo, jardinero municipal, empresarial. Lleva la cuenta de sus derrotas en una libreta. Ha venido a buscar a su suegra, que cayó en la Planta 3. | Tanque, propenso a aliarse. «¿Tú eres el butanero? Yo soy Higinio. Te paso mi tarjeta.» |
+| **Tere Cobo, «la Pescadera»** | Gnomo de jardín de Barakaldo, pescadera, rencorosa. Silba cuando miente. Le han prometido un patrocinio de Glorp si gana; Glorp no lo sabe. | Pegona, tramposa. «¿Tú eres el butanero? Yo soy Tere. Me acuerdo de todo.» |
 
 ## 3. Las cinco plantas
 

@@ -81,7 +81,7 @@ No hay elección de raza: el personaje del jugador siempre es Willy, humano.
 | Hijo del Cantábrico | Ventaja | El agua no le frena; Empapado no le hace daño doble de rayo |
 | Hablar del tiempo | Desventaja cómica | En el primer combate de cada planta pierde 1 acción comentando lo raro que está el tiempo aquí abajo |
 
-Las otras cinco razas (semigaviota, gnomo de jardín, orco de oficina, fantasma en prácticas y minotauro vegano) son ahora **mazmorreros rivales**: PNJ que usan las mismas reglas que cualquier entidad, con sus rasgos de raza (`rivals.json`; ver `STORY.md` → «Mazmorreros rivales»).
+Las otras cinco razas (semigaviota, gnomo de jardín, orco de oficina, fantasma en prácticas y minotauro vegano) son ahora la base de los **mazmorreros rivales**: PNJ generados por partida (`rival-generator.json`) o legendarios escritos a mano (`rivals.json`). Usan las mismas reglas que cualquier entidad, con los rasgos de su raza, un kit de combate (pegón, tirador, trampero, tanque, curandero, ladrón) escalado por planta y un comportamiento que fija la DIF para pactar (8-18). Ver `DESIGN.md` → «Mazmorreros rivales procedurales».
 
 ### Valores derivados
 

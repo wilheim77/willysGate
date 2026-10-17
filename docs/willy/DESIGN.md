@@ -21,6 +21,7 @@
 14. Arte y sonido
 15. `GameDefinition` prevista
 16. Plan por fases
+17. Mazmorreros rivales procedurales
 
 ---
 
@@ -161,7 +162,7 @@ Reglas completas en `RULESET.md`. Lo que importa para el diseño:
 - **Invocaciones (Ingeniero, Jugador de basket, Influencer):** el Autómata repetidor, la Antena repetidora, Chencho el base y los fans son entidades normales creadas con `spawnEntity` (R13). Tienen dueño (`ownerId` = Willy), la facción de Willy y duración (fin del combate o N turnos). El autómata lo **controla el jugador** y actúa justo después de Willy; la antena es una torreta con IA aliada. Lo que eliminan da experiencia y audiencia a Willy, y cuentan para sus logros. Fuera de combate se pliegan. Si Willy cae, desaparecen.
 - **Movilidad vertical (Jugador de basket):** saltos que cruzan huecos y suben varios niveles, mates desde arriba y balón con rebote. Es la clase que más exprime la altura y los fosos. Necesita la acción genérica de salto y el trazado con rebote del motor (R15). Las plantillas marcan las salas de **techo bajo** (bodegas, alcantarillas, saunas) con `ceiling: low`.
 - **Control (Funcionario):** aturdir a distancia, la superficie **expedientes** (enreda y arde) y barreras temporales. Su pasiva lo hace inmune a todo movimiento forzado, que en este juego es muy fuerte: a cambio, su horario de ventanilla le encarece todo a partir de la quinta ronda.
-- **Mazmorreros rivales:** cinco PNJ no humanos (`rivals.json`) con IA propia (facción `rivales`), que pueden convertirse en aliados temporales tras un pacto. Usan las invocaciones de R13 cuando llegan como aliados.
+- **Mazmorreros rivales:** PNJ no humanos generados por partida (ver §17) con IA propia (facción `rivales`), que pueden convertirse en aliados temporales tras un pacto.
 - **IA (Fase 2 del motor):** cada enemigo tiene un perfil simple en datos (`agresivo`, `a distancia`, `cobarde`, `guardián`) y **evita** casillas peligrosas para sí mismo, salvo los Bailando y los empujados. Que la IA no se suicide sola es importante: las muertes por entorno tienen que ser mérito del jugador.
 
 ## 6. Audiencia
@@ -490,3 +491,39 @@ Cada fase termina con la aprobación del usuario. **Dep.** indica lo que necesit
 | **W8. Pulido** | Balance, sonido, partículas, accesibilidad, revisión como jugador nuevo | Fase 6 del motor (FX) |
 
 La primera versión que se puede enseñar a amigos llega al cerrar **W6** (Planta 1 completa con tutorial y el primer Camerino).
+
+## 17. Mazmorreros rivales procedurales
+
+Decisión del usuario: los rivales no son fijos ni se repiten. Datos: `content/willy/data/rival-generator.json` (tablas) y `rivals.json` (5 legendarios escritos a mano).
+
+### Cuándo aparece uno
+
+- Al generar cada planta, con probabilidad `probabilidadSalaRival` (Planta 1: 50 %, después del tutorial; resto: 80 %) una sala procedural recibe el rol `rival`. Como mucho una por planta.
+- Si hay un rival anterior de esta partida al que se pactó o se dejó ir, con un 40 % la sala es para él (**vuelve**, con memoria del desenlace). Los derrotados no vuelven.
+- Si no, con un 6 % es un **legendario** que no haya salido en esta partida ni en la anterior; si no, uno **generado**.
+
+### Cómo se genera
+
+Todo con `deriveSeed(semillaPartida, 'rival', planta, ranura)` (R12), nunca `Math.random`: la misma semilla da los mismos rivales. Pasos:
+
+1. **Raza** (5) y **género** (m/f).
+2. **Identidad:** nombre (40 por género) + apellido (40), pueblo de origen (30), oficio de antes (25, con forma masculina y femenina).
+3. **Apodo** por plantilla («{art} {adj}», «{art} de {lugar}», «{art} {oficio}», «{art} que {verbo}», «{art} {adj} de {lugar}»).
+4. **Personalidad** (12, cada una con 3 coletillas), **manía** (25) y **gancho de historia** (15).
+5. **Aspecto:** paleta de su raza (5 por raza) + accesorio de cabeza (12), cara (8) y mano (10). Lo usa el arte modular.
+6. **Kit** (6) con estadísticas escaladas por planta, más los rasgos de la raza.
+7. **Comportamiento** (6): agresivo, codicioso, cobarde, propenso a aliarse, fanfarrón o tramposo. Fija la IA, la DIF del pacto y la probabilidad de traición.
+8. **Frases:** plantillas por momento (presentación, amenaza, pacto, derrota, huida, vuelta tras pacto, vuelta tras huida, traición) con variables del rival y coletillas de su personalidad, con el motor de plantillas del Narrador (R5).
+
+**Unicidad:** dentro de la partida no se repiten nombre+apellido, apodo, la terna raza+kit+comportamiento, la manía ni el gancho. Entre partidas, se excluyen los nombre+apellido de los últimos 40 rivales del perfil del navegador (`rivalesRecientes`, R6), que se copian al `GameState` al empezar para que la generación siga siendo reproducible. Si algo choca, se vuelve a tirar solo ese campo (hasta 30 veces).
+
+**Tamaño:** 12 millones de identidades (raza × nombre × apellido × pueblo × oficio); con personalidad, manía, kit y comportamiento, unos 130 000 millones de combinaciones; 4 800 aspectos distintos.
+
+### Estado
+
+`state.systems.rivals`: lista de los rivales de la partida (semilla de cada uno, no el texto: se regenera igual), con `desenlace` (`derrotado` | `pacto` | `huida`), plantas en que ha salido y si ha traicionado. El texto y las estadísticas se derivan de la semilla y la planta.
+
+### Logros y Narrador
+
+- Banco `rivalAparece` (plantas.json): presentaciones de los 5 legendarios y 9 plantillas para generados (por comportamiento), más vueltas, alianza y traición.
+- Logros: «Competencia directa», «Alianza estratégica», «Fauna local» (un rival de cada raza), «Agenda de contactos» (50 rivales distintos), «Viejos conocidos» (vuelve como aliado), «La letra pequeña del pacto» (traición, oculto) y «Edición limitada» (legendario, oculto).
