@@ -62,6 +62,8 @@ export interface TurnState {
   initiative: Record<string, number>;
   /** Movement cost already spent by the active entity this turn. */
   movementUsed: number;
+  /** Position of the active entity in `order` (kept in case it leaves play mid-turn). */
+  activeIndex?: number;
 }
 
 /** Per-game options that rules may read (difficulty...). Serializable, saved with the game. */

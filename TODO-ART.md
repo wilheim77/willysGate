@@ -6,7 +6,7 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 
 | Pendiente | Juego | Situación actual | Qué hace falta |
 |---|---|---|---|
-| Exteriores: atrezo | intereses | Terrenos de exterior hechos (`road`, `scrub`, `mud`, `rock`, `cobble`, `house`, `stone_wall`, `fence`, `river`, `slag_heap`) | Árboles muertos, carros, pozos y puertas de casa como props si los mapas los piden; bordes de transición entre terrenos (autotile) si hacen falta |
+| Exteriores: atrezo | intereses | Terrenos de exterior hechos (`road`, `scrub`, `mud`, `rock`, `cobble`, `house`, `stone_wall`, `fence`, `river`, `slag_heap`) | Árboles muertos, carros, pozos y puertas de casa como props si los mapas los piden; transiciones hechas (`blend`); añadir más parejas si hace falta |
 | Llamas de antorcha en el juego | intereses | **Arte hecho** (`torch_wall`, `brazier`); el render aún usa la llama por código de `src/fx/LightingLayer.ts` | Petición al render n.º 1 en `docs/ART_CATALOG.md` |
 | Reborde de plataformas | intereses | Horneado en las caras (`*_face` con reborde) y `rim_*` sueltos | Petición al render n.º 4 para dibujarlo una sola vez |
 | Sangre, chispas y polvo como sprites | intereses | **Arte hecho** (`blood_1..3`, `fx_hit_spark`, `fx_dust`); `juice.ts` usa cuadrados por código | Peticiones al render n.º 2 y 3 |
@@ -15,7 +15,7 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Reproductor de cinemáticas | intereses, willy | **Viñetas y `intro.json` hechos** (guion de *Intereses* aprobado) | Fase 6: reproductor (ver `docs/ART_CATALOG.md`); aprobar `docs/willy/INTRO.md` |
 | Superficies, barriles y explosión en el juego | intereses | **Arte hecho** (`surfaces`, `barrel`, `barrel_oil`, `crate`, `fx_explosion`, `fx_steam`) | Peticiones al render n.º 8 a 10 en `docs/ART_CATALOG.md`; bordes por vecinos (n.º 11) solo si hacen falta |
 | *Willy*: resto del encargo P1 | willy | **P1 hecho**: Willy en 9 clases, PNJ del Camerino, enemigos de la Planta 1, cajas de botín, terrenos de Castro Sumergido y del Camerino, mobiliario y marcos de carta | Revisión con mapas reales; que el render dibuje props grandes, `ui` 9-slice y la caja legendaria flotando |
-| *Willy*: P3 | willy | **P2 hecho**: invocaciones, utilería, superficies, efectos, retratos de patrocinadores e iconos | Hecho: rivales modulares, el Presentador y su plató, jefes y enemigos de todas las plantas. y terrenos de las Plantas 2-5. Falta: atrezo propio de cada bioma si los mapas lo piden; variante m/f de los rivales si se pide |
+| *Willy*: P3 | willy | **P2 hecho**: invocaciones, utilería, superficies, efectos, retratos de patrocinadores e iconos | Hecho: rivales modulares, el Presentador y su plató, jefes y enemigos de todas las plantas. y terrenos de las Plantas 2-5. Atrezo de bioma de las Plantas 2-5 hecho. Falta: variante m/f de los rivales si se pide |
 | Tileset lógico de Tiled | intereses | `content/intereses/maps/terrain-logic.png` | Solo lo usa el editor. Se queda así. |
 
 ## Hecho

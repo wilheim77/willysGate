@@ -1,6 +1,6 @@
 // A tiny canvas to paint map sources with rectangles instead of hand-aligned ASCII.
 // Terrain chars as in build.mjs: '.' stone ',' dirt ';' slag '=' planks 'H' scaffold
-// '#' wall '+' closed door '/' open door ' ' void.
+// '#' wall '+' closed door '/' open door '-' rails '|' rails_v 'v' vault ' ' void.
 export class Canvas {
   constructor(width, height, terrain = ',', h = 0) {
     this.width = width;
@@ -51,6 +51,12 @@ export class Canvas {
   /** A digit grid stamped as heights only. */
   heights(x, y, rows) {
     rows.forEach((row, dy) => [...row].forEach((c, dx) => /[0-9]/.test(c) && this.put(x + dx, y + dy, undefined, Number(c))));
+    return this;
+  }
+
+  /** Re-terrain every cell: fn(terrainChar, height, x, y) returns a new char (or the same). */
+  retile(fn) {
+    for (let y = 0; y < this.height; y++) for (let x = 0; x < this.width; x++) this.t[y][x] = fn(this.t[y][x], this.h[y][x], x, y);
     return this;
   }
 

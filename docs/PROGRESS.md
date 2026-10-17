@@ -101,12 +101,17 @@
 - [ ] `flags.json` con marcas críticas + tests (marca crítica alcanzable sin tiradas, marcas leídas y nunca escritas, PNJ esenciales).
 - [x] El acto carga sus mapas reales (`content/intereses/world.ts`): camino, plaza, abadía, calles, Escorial, mina y Bóveda; reparto (`cast.json`), plantillas (`templates.json`), objetos, puertas/cofres/palancas con su diálogo, trampas, superficies y luces. La partida empieza en «El camino» con la conversación de Dorotea; `?mapa=<id>` empieza en otro mapa y `?mapa=test` abre la arena de pruebas.
 - [x] Guion (agente guionista): prólogo, escena 1 (llegada y juicio de Anselmo), escena 2 (audiencia) y escena 3 (hilos sueltos), con `flags.json` y pistas críticas con varias fuentes sin tirada.
+- [x] **Guion** (rama `guion`): el acto entero escrito como datos en `content/intereses/dialogues/` (unos 30 árboles), con `flags.json` (marcas críticas alcanzables sin tirada), `cast.json` y objetos nuevos.
+  - Escenas: prólogo, 1 (llegada y juicio), 2 (audiencia), 3 (hilos sueltos), 4 (Escorial y Pozo), D1 (noche de las antorchas, con sus dos desenlaces y las puertas de la bocamina y la cripta), 5 (Galería Sellada y D2), 6 (Brea, la losa y D3), 7 (el cobro, D4) y el epílogo en viñetas.
+  - Revisión 5 (A) aplicada.
+  - Pendiente: los ganchos de escena y la mecánica que lista `docs/ENGINE_REQUESTS_INTERESES.md` (sección «Pendiente para los mapas y los guiones de escena»).
 - [x] Peticiones del guion: `next` condicional (G1), consecuencias al ganar o perder un combate abierto desde un diálogo (G2), condición `inParty` (G3). Escenas que abren diálogo al entrar (I1), zonas condicionadas por marcas (I4), derrumbes con `setTiles` (I5).
 - [x] Motor: invocaciones y barreras (R13), `onTurnEnd`/`onCombatStart`, vapor que tapa la vista y `onRoundEnd` (R20), vacío y choques (R17, R18), cambio de mapa (R10), `deriveSeed` (R12), marcadores (R14), `modifyStat` (R19).
 - [x] Arreglos de la revisión 4: los turnos saltados también cuentan para los estados (aturdido, paralizado); la IA cura a sus caídos; empujar y Onda atronadora valoran caídas y superficies; combate de prueba reequilibrado (V10).
 - [x] *Willy el mazmorrero* jugable por primera vez: reglas completas de las 9 clases, casting, Camerino y un piso 1 de prueba (`/willysGate/willy/`).
 - [ ] Terreno exterior para el acto (encargado al artista).
 - [x] R10 cambio de mapa (`engine/world.ts`): varios mapas en una partida; el que se deja queda guardado tal cual (cadáveres, puertas abiertas), el nuevo se construye la primera vez con `EngineContent.maps`. Comando `travel` desde zonas `exits` (propiedades `to`, `spawn`) y efecto de diálogo `travel`. El grupo viaja junto y se lleva la linterna.
+- [x] Mapas del acto (agente de mapas, rama `mapas`): `camino`, `plaza`, `abadia`, `calles`, `escorial`, `mina` y `boveda`, generados desde `scripts/maps/src/`, con un test de validación (`tests/content/maps.test.ts`) y su documentación en [`MAPS.md`](MAPS.md). Las peticiones pendientes (resonadores, polea, marcas que faltan) están en `ENGINE_REQUESTS_INTERESES.md`.
 - [x] R12 `deriveSeed`, R14 capa `markers` (y puntos de Tiled como zonas 1×1, propiedades del mapa), R19 efecto `modifyStat`.
 - [ ] Peticiones de Willy al motor: causa en eventos (R11), invocaciones (R13), salto (R15), generador (R16), choques (R17), vacío (R18), `modifyStat` (R19), `blocksSight`/`onRoundEnd` (R20).
 

@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { type GridMap, type MapZone, type ParsedMap, type TiledMapJson, type Vec2, inBounds, inZone, parseTiledMap, posKey, reachableTiles, tileAt } from '../../engine';
 import { DAMAGE_LABELS, SKILLS, SURFACES, dnd5e } from '../../rulesets/dnd5e';
+import art from '../../content/intereses/assets/0x72.json';
 
 /**
  * Every Intereses map: spawns on walkable ground and reachable from the entry, objects in
@@ -20,8 +21,37 @@ const maps: Record<string, ParsedMap> = Object.fromEntries(
     }),
 );
 
+const content = join(import.meta.dirname, '..', '..', 'content', 'intereses');
+const FLAGS = JSON.parse(readFileSync(join(content, 'flags.json'), 'utf8')) as Record<string, unknown>;
+const CAST = JSON.parse(readFileSync(join(content, 'cast.json'), 'utf8')) as Record<string, { essential?: boolean }>;
+const DIALOGUES = new Set(
+  readdirSync(join(content, 'dialogues'))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => (JSON.parse(readFileSync(join(content, 'dialogues', f), 'utf8')) as { id: string }).id),
+);
+/** The party travels with the leader, so it can speak on any map. */
+const PARTY = ['hero', 'dorotea', 'garran', 'anselmo'];
+/** `TODO:<name>` marks a dialogue or flag the writer has not defined yet (docs/ENGINE_REQUESTS_INTERESES.md, I8). */
+const pending = (v: unknown): boolean => String(v).startsWith('TODO:');
+/** Flags the writer has named but not pushed to flags.json yet. Drop each once it lands. */
+const ANNOUNCED_FLAGS = new Set(['d1_resuelto']);
+
+/**
+ * Story order (STORY §7): forward exits that must stay shut until the scene before them is
+ * resolved. The crypt and the mine wait for flags the writer has not named yet.
+ */
+const STORY_GATES: Record<string, Record<string, string>> = {
+  camino: { 'a-hondonegra': 'prologo_mineros_resuelto' },
+  plaza: { 'a-abadia': 'audiencia_concedida', 'a-calles': 'juicio_resuelto', 'a-escorial': 'audiencia_hecha' },
+  calles: { 'a-escorial': 'audiencia_hecha' },
+  escorial: { 'pozo-del-ahorcado': 'd1_resuelto', bocamina: 'd1_resuelto' },
+  abadia: { 'escalera-cripta': 'TODO:llave_cripta' },
+};
+
 const RULES = dnd5e.movement;
-const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', 'resonador'];
+// Scenery and art props (content/intereses/world.ts); all but levers and doors are assumed to block.
+const ART_PROPS = ['oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow', 'mine_wagon', 'mine_wagon_ore', 'powder_keg', 'resonator', 'fuse_charges', 'remains_forty', 'pulley', 'inscription'];
+const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', ...ART_PROPS];
 const PROPS = [...OBSTACLE_PROPS, 'lever', 'door'];
 const kindOf = (name: string): string => name.split('-')[0]!;
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -119,6 +149,61 @@ describe('Intereses maps', () => {
           expect(back.has(posKey(origin(parsed))), `stuck in ${z.name} at ${p.x},${p.y}`).toBe(true);
         }
         expect(after.size).toBeGreaterThan(0);
+      });
+
+      it('uses art that exists (trap markers, light props, art-prop spawns)', () => {
+        const props = { ...art.props, ...art.sprites } as Record<string, unknown>;
+        for (const t of parsed.zones.filter((z) => z.layer === 'traps')) if (t.properties.marker) expect(props[String(t.properties.marker)], `${t.name}.marker`).toBeDefined();
+        for (const l of parsed.lighting.lights) if (l.prop) expect(art.props[l.prop as keyof typeof art.props], `light ${l.id}.prop`).toBeDefined();
+        for (const t of new Set(map.tiles.map((t) => t.terrain))) if (t !== 'void') expect(art.terrain[t as keyof typeof art.terrain], `terrain ${t}`).toBeDefined();
+        for (const name of Object.keys(parsed.spawns)) {
+          const kind = kindOf(name);
+          if (ART_PROPS.includes(kind)) expect(props[kind], name).toBeDefined();
+        }
+      });
+
+      it('wires scenes to real dialogues and speakers, and never fights an essential character', () => {
+        for (const z of parsed.zones.filter((z) => z.layer === 'scenes')) {
+          const p = z.properties;
+          expect(pending(p.dialogue) || DIALOGUES.has(String(p.dialogue)), `${z.name}: no dialogue "${String(p.dialogue)}"`).toBe(true);
+          if (p.speaker) expect(parsed.spawns[String(p.speaker)] ?? PARTY.includes(String(p.speaker)), `${z.name}: speaker ${String(p.speaker)}`).toBeTruthy();
+          for (const id of String(p.fight ?? '').split(',').filter(Boolean)) {
+            expect(parsed.spawns[id], `${z.name}: fighter ${id} not on the map`).toBeDefined();
+            expect(CAST[id]?.essential, `${z.name}: ${id} is essential`).not.toBe(true);
+          }
+        }
+      });
+
+      it('gates only on flags that exist', () => {
+        for (const z of parsed.zones)
+          for (const key of ['requiresFlag', 'unlessFlag']) {
+            const flag = z.properties[key];
+            if (flag !== undefined) expect(pending(flag) || ANNOUNCED_FLAGS.has(String(flag)) || String(flag) in FLAGS, `${z.layer}/${z.name}.${key} = ${String(flag)}`).toBe(true);
+          }
+      });
+
+      it('keeps story exits shut until their scene is resolved', () => {
+        const exits = parsed.zones.filter((z) => z.layer === 'exits');
+        for (const [name, flag] of Object.entries(STORY_GATES[id] ?? {})) {
+          const exit = exits.find((e) => e.name === name);
+          expect(exit, `${id}: no exit ${name}`).toBeDefined();
+          expect(exit?.properties.requiresFlag, `${id}/${name}`).toBe(flag);
+        }
+      });
+
+      it('cannot walk around a gate scene (probe: block the zone, its exits fall out of reach)', () => {
+        const start = origin(parsed);
+        for (const z of parsed.zones.filter((z) => z.layer === 'scenes' && z.properties.gate)) {
+          // Arriving inside the zone triggers it at once.
+          if (inZone(z, start)) continue;
+          const walled = new Set([...blocked, ...zoneTiles(z).map(posKey)]);
+          const around = reachableTiles(map, start, Infinity, { rules: RULES, blocked: walled });
+          for (const name of String(z.properties.protects ?? '').split(',').filter(Boolean)) {
+            const exit = parsed.zones.find((e) => e.layer === 'exits' && e.name === name);
+            expect(exit, `${z.name} protects unknown exit ${name}`).toBeDefined();
+            expect(zoneTiles(exit!).some((t) => around.has(posKey(t))), `${name} reachable around ${z.name}`).toBe(false);
+          }
+        }
       });
 
       it('paints only known surfaces', () => {

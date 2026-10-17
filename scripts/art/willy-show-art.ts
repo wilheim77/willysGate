@@ -663,3 +663,196 @@ export function spaWall(): Image {
   for (let x = 1; x < T; x += 3) (px(img, x, 0, '#c8f0ff'), px(img, x, 1, '#c8f0ff'), px(img, x, 2, '#a8d8f0'));
   return img;
 }
+
+// --- Biome props (object sprites, standing on a tile) ---------------------------------------------
+
+const PRODUCTS = ['#e0302a', '#3a8fd9', '#40c060', '#ffe04f', '#ff7a1a', '#b45cff', '#f4f4f0'];
+
+/** Free-standing supermarket shelf (16x24): three stocked shelves; broken: tipped with stock spilled. */
+export function shelfUnit(broken: boolean): Image {
+  const img = blank(T, 24);
+  const r = rng(broken ? 601 : 600);
+  if (broken) {
+    fill(img, 1, 16, 14, 6, '#8a9098');
+    for (let i = 0; i < 9; i++) fill(img, Math.floor(r() * 14), 12 + Math.floor(r() * 10), 2, 2, PRODUCTS[i % PRODUCTS.length]!);
+    return outline(img);
+  }
+  fill(img, 1, 1, 14, 22, '#8a9098');
+  fill(img, 2, 2, 12, 20, '#5a5e66');
+  for (let s = 0; s < 3; s++) {
+    const y = 2 + s * 7;
+    let x = 2;
+    while (x < 14) {
+      const w = 1 + Math.floor(r() * 2);
+      fill(img, x, y + 1, Math.min(w, 14 - x), 5, PRODUCTS[Math.floor(r() * PRODUCTS.length)]!);
+      px(img, x, y + 1, '#ffffff');
+      x += w + 1;
+    }
+    fill(img, 2, y + 6, 12, 1, '#c0c6ce');
+    px(img, 4 + s * 3, y + 6, '#ffe04f');
+  }
+  return outline(img);
+}
+
+/** Checkout till (16x20): counter, register with its little screen and a receipt. */
+export function checkout(): Image {
+  const img = blank(T, 20);
+  fill(img, 0, 10, 16, 10, '#c0c6ce');
+  fill(img, 0, 10, 16, 2, '#e8ecf0');
+  fill(img, 0, 13, 16, 1, '#e0302a');
+  art(img, 6, 1, ['kkkkkkkk', 'kSSSSSSk', 'kSGGGGSk', 'kkkkkkkk', '.kMMMMk.', 'kMWMWMMk', 'kMMMMMMk', 'kkkkkkkk'], { k: OUT, S: '#5a5e66', G: '#40e060', M: '#8a9098', W: '#f4f4f0' });
+  art(img, 2, 6, ['kWk', 'kWk', 'kWk'], { k: OUT, W: '#f4f4f0' });
+  return outline(img);
+}
+
+/** Bargain bin full of jumbled sale goods with a red sign. */
+export function bargainBin(): Image {
+  const img = blank(T, T);
+  const r = rng(610);
+  fill(img, 1, 7, 14, 8, '#3a8fd9');
+  fill(img, 1, 7, 14, 1, '#7ab8f0');
+  for (let i = 0; i < 10; i++) fill(img, 2 + Math.floor(r() * 11), 4 + Math.floor(r() * 4), 2, 2, PRODUCTS[i % PRODUCTS.length]!);
+  art(img, 9, 0, ['kkkkkk', 'kRRRRk', 'kRWWRk', 'kkkkkk', '..k...'], { k: OUT, R: '#e0302a', W: '#ffffff' });
+  return outline(img);
+}
+
+/** Fiesta loudspeaker on a pole (16x24). */
+export function speaker(): Image {
+  const img = blank(T, 24);
+  fill(img, 7, 8, 2, 16, '#5a5e66');
+  art(img, 2, 0, ['kkkkkkkkkkkk', 'kGGGGGGGGGGk', 'kGkkkkkkkkGk', 'kGkWWWWWWkGk', 'kGkWkkkkWkGk', 'kGkWWWWWWkGk', 'kGkkkkkkkkGk', 'kGGGGGGGGGGk', 'kkkkkkkkkkkk'], { k: OUT, G: '#8a9098', W: '#c0c6ce' });
+  return outline(img);
+}
+
+/** Fair stall (32x24): striped awning, counter with prizes. */
+export function fairStall(): Image {
+  const img = blank(32, 24);
+  for (let x = 0; x < 32; x++) fill(img, x, 0, 1, 6, Math.floor(x / 4) % 2 ? '#f4f4f0' : '#e0302a');
+  for (let x = 0; x < 32; x += 4) (px(img, x + 1, 6, '#e0302a'), px(img, x + 2, 6, '#e0302a'));
+  fill(img, 1, 6, 1, 18, '#8e5e34');
+  fill(img, 30, 6, 1, 18, '#8e5e34');
+  fill(img, 2, 7, 28, 9, '#2a2040');
+  const r = rng(620);
+  for (let i = 0; i < 8; i++) art(img, 3 + i * 3, 9 + (i % 2) * 2, ['.c.', 'ccc'], { c: PRODUCTS[Math.floor(r() * PRODUCTS.length)]! });
+  fill(img, 0, 16, 32, 8, '#a8743e');
+  fill(img, 0, 16, 32, 1, '#d09a5a');
+  drawText(img, 'TOMBOLA', 16 - Math.floor(textWidth('TOMBOLA') / 2), 18, hexToRgb('#ffe04f'));
+  return outline(img);
+}
+
+/** Paper lantern on a string (prop: hangs, glows). */
+export function paperLantern(frame: number): Image {
+  const img = blank(T, T);
+  px(img, 8, 0, OUT);
+  px(img, 8, 1, OUT);
+  art(img, 5, 2, ['.kkkkk.', 'kRRRRRk', 'kRYYYRk', 'kRYWYRk', 'kRYYYRk', 'kRRRRRk', '.kkkkk.', '...k...'], { k: OUT, R: frame ? '#e0302a' : '#c02020', Y: '#ffb040', W: frame ? '#fff4c0' : '#ffe04f' });
+  return img;
+}
+
+/** Bunting: a string of triangular flags (prop, 32x8). */
+export function bunting(): Image {
+  const img = blank(32, 8);
+  const cols = ['#e0302a', '#ffe04f', '#3a8fd9', '#40c060', '#ffffff'];
+  for (let x = 0; x < 32; x++) px(img, x, 1 + Math.round(Math.sin(x / 5) * 1), '#2a2420');
+  for (let i = 0; i < 8; i++) {
+    const x = i * 4, y = 2 + Math.round(Math.sin(x / 5) * 1);
+    art(img, x, y, ['ccc', '.c.'], { c: cols[i % cols.length]! });
+  }
+  return img;
+}
+
+/** Pool lounger (16x16), striped cushion. */
+export function lounger(): Image {
+  const img = blank(T, T);
+  art(img, 0, 5, ['...........kkkk.', '..........kWBWk.', 'kkkkkkkkkkWBWBk.', 'kWBWBWBWBWBWBWk.', 'kkkkkkkkkkkkkkk.', '.kk.........kk..', '.kk.........kk..'], { k: '#5a5e66', W: '#f4f4f0', B: '#3a8fd9' });
+  return outline(img);
+}
+
+/** Pool ladder (prop on the pool edge): two chrome rails and steps going down. */
+export function poolLadder(): Image {
+  const img = blank(T, T);
+  art(img, 3, 0, ['kk......kk', 'kCk....kCk', '.kCk..kCk.', '.kCCCCCCk.', '..kC..Ck..', '..kCCCCk..', '..kC..Ck..', '..kCCCCk..', '..kC..Ck..'], { k: '#5a5e66', C: '#e0e8f0' });
+  return img;
+}
+
+/** Sauna door (wall prop, 16x24): pine boards, a steamed porthole and a thermometer. */
+export function saunaDoor(frame: number): Image {
+  const img = blank(T, 24);
+  fill(img, 1, 1, 14, 23, '#c89a5a');
+  for (let x = 1; x < 15; x += 3) fill(img, x, 1, 1, 23, '#a07040');
+  art(img, 4, 4, ['.kkkkk.', 'kSSSSSk', 'kSWSSSk', 'kSSSSWk', 'kSSSSSk', '.kkkkk.'], { k: OUT, S: '#e8eef2', W: '#ffffff' });
+  fill(img, 11, 12, 2, 2, '#e8b830');
+  art(img, 2, 12, ['k', 'R', 'R', 'R', 'k'], { k: OUT, R: '#e0302a' });
+  for (let i = 0; i < 3; i++) px(img, 5 + i * 2, 2 - ((frame + i) % 2), '#f4f4f0');
+  return outline(img);
+}
+
+/** Inflatable swim ring (16x16). */
+export function swimRing(): Image {
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const d = Math.hypot(x - 7.5, (y - 9) * 1.4);
+    if (d < 7 && d > 3) px(img, x, y, Math.floor(Math.atan2(y - 9, x - 7.5) / (Math.PI / 4)) % 2 ? '#e0302a' : '#f4f4f0');
+  }
+  return outline(img);
+}
+
+/** Parasol (16x28): pole and a striped canopy. */
+export function parasol(): Image {
+  const img = blank(T, 28);
+  fill(img, 7, 6, 2, 22, '#c0c6ce');
+  for (let y = 0; y < 7; y++) {
+    const half = 2 + y;
+    for (let x = 8 - half; x < 8 + half; x++) px(img, x, y, Math.floor((x + 16) / 3) % 2 ? '#ffe04f' : '#3a8fd9');
+  }
+  return outline(img);
+}
+
+/** Studio camera on a pedestal (16x24) with its tally light. */
+export function studioCamera(on: boolean): Image {
+  const img = blank(T, 24);
+  art(img, 1, 2, ['kkkkkkkkkk....', 'kMMMMMMMMkkkk.', 'kMSSSMMMMkLLk.', 'kMSSSMMMMkLLk.', 'kMMMMMMMMkkkk.', 'kkkkkkkkkk....', '....kk........'], { k: OUT, M: '#3a3e46', S: '#5a6a8a', L: '#4fe8ff' });
+  px(img, 3, 1, on ? '#ff3030' : '#5a1818');
+  fill(img, 5, 9, 2, 10, '#5a5e66');
+  art(img, 0, 18, ['..kkkkkkkk..', '.kMMMMMMMMk.', 'kMk......kMk', 'kk........kk'], { k: OUT, M: '#5a5e66' });
+  return outline(img);
+}
+
+/** Floor monitor (stage wedge speaker). */
+export function floorMonitor(): Image {
+  const img = blank(T, T);
+  art(img, 1, 6, ['....kkkkkkkk..', '..kkGGGGGGGGk.', 'kkGGWWWWWWGGk.', 'kGGWkkkkkkWGk.', 'kGGWWWWWWWWGk.', 'kkkkkkkkkkkkk.'], { k: OUT, G: '#2a2a30', W: '#5a5e66' });
+  return img;
+}
+
+/** Cable run on the studio floor (prop decal): taped bundle with a connector. */
+export function cables(): Image {
+  const img = blank(T, T);
+  for (let x = 0; x < T; x++) {
+    px(img, x, 7 + Math.round(Math.sin(x / 2.5)), '#1e1c24');
+    px(img, x, 9 + Math.round(Math.cos(x / 3)), '#e0302a');
+    px(img, x, 8, '#3a3e46');
+  }
+  fill(img, 6, 6, 3, 5, '#ffe04f');
+  art(img, 12, 7, ['kk', 'kM', 'kk'], { k: OUT, M: '#c0c6ce' });
+  return img;
+}
+
+/** Clapperboard. */
+export function clapperboard(): Image {
+  const img = blank(T, T);
+  art(img, 2, 3, ['kkkkkkkkkkk.', 'kWkWkWkWkWk.', 'kkkkkkkkkkk.', 'kSSSSSSSSSk.', 'kSWWWSSWWSk.', 'kSSSSSSSSSk.', 'kSWWSWWWSSk.', 'kSSSSSSSSSk.', 'kkkkkkkkkkk.'], { k: OUT, W: '#f4f4f0', S: '#2a2a30' });
+  return img;
+}
+
+/** Director's chair with «PRODUCCIÓN» on the back. */
+export function directorChair(): Image {
+  const img = blank(T, 20);
+  fill(img, 2, 2, 12, 5, '#1e1c24');
+  drawText(img, 'PROD', 3, 3, hexToRgb('#ffe04f'));
+  fill(img, 2, 10, 12, 2, '#1e1c24');
+  for (const x of [2, 13]) (fill(img, x, 2, 1, 18, '#a8743e'));
+  line(img, 3, 12, 12, 19, '#a8743e');
+  line(img, 12, 12, 3, 19, '#a8743e');
+  return outline(img);
+}

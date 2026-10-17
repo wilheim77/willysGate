@@ -258,6 +258,43 @@
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 4,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "scrub_blend_sw"
+          }
+        }
       }
     },
     "road": {
@@ -278,6 +315,10 @@
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 1,
+        "edges": {}
       }
     },
     "road_v": {
@@ -298,6 +339,10 @@
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 1,
+        "edges": {}
       }
     },
     "mud": {
@@ -318,6 +363,43 @@
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 3,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_sw"
+          }
+        }
       }
     },
     "rock": {
@@ -362,6 +444,43 @@
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_stone"
+      },
+      "blend": {
+        "priority": 2,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "cobble_blend_sw"
+          }
+        }
       }
     },
     "house": {
@@ -458,6 +577,43 @@
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 3,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_sw"
+          }
+        }
       }
     },
     "slag_heap": {
@@ -482,6 +638,210 @@
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_stone"
+      },
+      "blend": {
+        "priority": 3,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "slag_heap_blend_sw"
+          }
+        }
+      }
+    },
+    "riverbank_w": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "riverbank_w_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "riverbank_w_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 3,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_sw"
+          }
+        }
+      }
+    },
+    "riverbank_e": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "riverbank_e_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "riverbank_e_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 3,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_sw"
+          }
+        }
+      }
+    },
+    "riverbank_s": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "riverbank_s_1"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      },
+      "blend": {
+        "priority": 3,
+        "edges": {
+          "n": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_n"
+          },
+          "e": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_e"
+          },
+          "s": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_s"
+          },
+          "w": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_w"
+          },
+          "ne": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_ne"
+          },
+          "nw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_nw"
+          },
+          "se": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_se"
+          },
+          "sw": {
+            "atlas": "generated/intereses-0x72-extra.png",
+            "sprite": "mud_blend_sw"
+          }
+        }
       }
     }
   }

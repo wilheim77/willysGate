@@ -18,7 +18,9 @@ useSprites(Object.keys(sprites));
  * Spawns whose cast entry or art is still being written by the content agents (scene 3+).
  * Remove names from here as they land; the test then holds them to the full standard.
  */
-const PENDING = new Set(['lisandro', 'absalon', 'ivo', 'resonador-1', 'resonador-2', 'resonador-3', 'resonador-4']);
+const PENDING = new Set(['absalon', 'ivo']);
+// Art props the map agent already places (assets/0x72.json) and world.ts does not build yet. Drop once it does.
+const PENDING_KINDS = /^$/;
 
 describe('Intereses act maps load into the game', () => {
   for (const id of Object.keys(ACT_MAPS)) {
@@ -26,7 +28,7 @@ describe('Intereses act maps load into the game', () => {
       const setup = buildMap(id, dialogues);
       const { spawns } = parseTiledMap(id, ACT_MAPS[id]!);
       const known = new Set(setup.entities.map((e) => e.id));
-      const unknown = Object.keys(spawns).filter((n) => !known.has(n) && !PENDING.has(n) && !/^(entry-|todo-)/.test(n) && !['hero', 'dorotea'].includes(n));
+      const unknown = Object.keys(spawns).filter((n) => !known.has(n) && !PENDING.has(n) && !PENDING_KINDS.test(n) && !/^(entry-|todo-)/.test(n) && !['hero', 'dorotea'].includes(n));
       expect(unknown, `spawns nobody understands on ${id}`).toEqual([]);
       for (const e of setup.entities) {
         if (e.spriteId === 'none' || e.tags.includes('object')) continue;

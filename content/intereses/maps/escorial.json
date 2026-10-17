@@ -10,8 +10,8 @@
  "tilewidth": 32,
  "tileheight": 32,
  "infinite": false,
- "nextlayerid": 8,
- "nextobjectid": 32,
+ "nextlayerid": 9,
+ "nextobjectid": 34,
  "properties": [
   {
    "name": "name",
@@ -36,32 +36,32 @@
    "opacity": 1,
    "visible": true,
    "data": [
-13,13,13,4,4,4,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,
-13,5,5,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,13,
-13,5,5,4,4,4,5,5,5,8,8,8,8,8,8,8,8,8,8,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,13,
-13,5,5,4,4,4,5,5,5,8,9,9,9,9,9,9,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,13,
-13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,6,6,6,5,5,13,
-13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,6,1,6,5,5,13,
-13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
-13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
-13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
-13,5,5,4,4,4,5,5,5,8,8,8,8,8,8,8,8,8,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
-13,5,5,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
-4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,13,
-4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,13,
-4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,13,
-13,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,13,
-13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,7,7,7,7,4,4,5,8,8,8,8,8,8,8,8,5,4,5,5,13,
-13,5,5,5,5,5,5,5,5,4,6,6,6,4,4,4,7,7,19,7,4,4,5,8,9,9,9,9,9,9,8,5,4,5,5,13,
-13,5,5,5,5,5,5,5,5,4,6,6,6,4,4,4,7,7,7,7,4,4,5,8,9,13,13,13,13,9,8,5,4,5,5,13,
-13,5,5,5,5,5,5,5,5,4,6,6,6,4,4,4,4,4,4,4,4,4,5,8,9,13,13,13,13,9,6,6,21,6,6,13,
-13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,9,13,13,13,13,9,6,6,1,6,6,13,
-13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,9,13,13,13,13,9,6,6,1,6,6,13,
-13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,9,9,9,9,9,9,6,6,1,6,6,13,
-13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,8,8,8,8,8,8,6,6,6,6,6,13,
-13,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,13,
-13,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,13,
-13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13
+42,42,42,46,46,46,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,
+42,32,32,46,46,46,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,42,
+42,32,32,46,46,46,32,32,32,36,36,36,36,36,36,36,36,36,36,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,42,
+42,32,32,46,46,46,32,32,32,36,40,40,40,40,40,40,40,40,36,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,42,
+42,32,32,46,46,46,32,32,32,36,40,40,44,44,44,44,40,40,36,32,32,32,32,32,32,32,32,32,32,32,59,59,59,32,32,42,
+42,32,32,46,46,46,32,32,32,36,40,40,44,44,44,44,40,40,36,32,32,32,32,32,32,32,32,32,32,32,59,1,59,32,32,42,
+42,32,32,46,46,46,32,32,32,36,40,40,44,44,44,44,40,40,36,32,32,32,32,32,32,32,32,32,32,32,32,46,32,32,32,42,
+42,32,32,46,46,46,32,32,32,36,40,40,44,44,44,44,40,40,36,32,32,32,32,32,32,32,32,32,32,32,32,46,32,32,32,42,
+42,32,32,46,46,46,32,32,32,36,40,40,44,44,44,44,40,40,36,32,32,32,32,32,32,32,32,32,32,32,32,46,32,32,32,42,
+42,32,32,46,46,46,32,32,32,36,36,36,36,36,36,36,36,36,36,32,32,32,32,32,32,32,32,32,32,32,32,46,32,32,32,42,
+42,32,32,46,46,46,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,46,32,32,32,42,
+45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,32,32,42,
+45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,32,32,42,
+45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,32,32,42,
+42,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,46,32,32,42,
+42,32,32,32,32,32,32,32,32,47,47,47,47,47,47,47,7,7,7,7,47,47,32,36,36,36,36,36,36,36,36,32,46,32,32,42,
+42,32,32,32,32,32,32,32,32,47,58,58,58,47,47,47,7,7,19,7,47,47,32,36,40,40,40,40,40,40,36,32,46,32,32,42,
+42,32,32,32,32,32,32,32,32,47,58,58,58,47,47,47,7,7,7,7,47,47,32,36,40,44,44,44,44,40,36,32,46,32,32,42,
+42,32,32,32,47,47,47,32,32,47,58,58,58,47,47,47,47,47,47,47,47,47,32,36,40,44,44,44,44,40,59,59,21,59,59,42,
+42,32,32,32,47,47,47,32,32,47,47,47,47,47,47,47,47,47,47,47,47,47,32,36,40,44,44,44,44,40,59,59,1,59,59,42,
+42,32,32,32,47,47,47,32,32,47,47,47,47,47,47,47,47,47,47,47,47,47,32,36,40,44,44,44,44,40,59,59,1,59,59,42,
+42,32,32,32,32,32,32,32,32,47,47,47,47,47,47,47,47,47,47,47,47,47,32,36,40,40,40,40,40,40,59,59,1,59,59,42,
+42,32,32,32,32,32,32,32,32,47,47,47,47,47,47,47,47,47,47,47,47,47,32,36,36,36,36,36,36,36,59,59,59,59,59,42,
+42,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,59,59,59,59,59,42,
+42,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,59,59,59,59,59,42,
+42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42
 ]
   },
   {
@@ -232,7 +232,7 @@
     },
     {
      "id": 14,
-     "name": "crate-1",
+     "name": "oil_cart-1",
      "type": "",
      "point": true,
      "x": 400,
@@ -268,11 +268,35 @@
     },
     {
      "id": 17,
+     "name": "campfire-1",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 18,
      "name": "door-bocamina",
      "type": "",
      "point": true,
      "x": 1040,
      "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 19,
+     "name": "well-1",
+     "type": "",
+     "point": true,
+     "x": 1008,
+     "y": 176,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -291,7 +315,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 18,
+     "id": 20,
      "name": "hoguera-sinpaga",
      "type": "",
      "point": true,
@@ -321,16 +345,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.2
-      },
-      {
-       "name": "prop",
-       "type": "string",
-       "value": "brazier"
       }
      ]
     },
     {
-     "id": 19,
+     "id": 21,
      "name": "farol-pozo",
      "type": "",
      "point": true,
@@ -369,7 +388,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 22,
      "name": "antorcha-bocamina",
      "type": "",
      "point": true,
@@ -418,26 +437,7 @@
    "visible": true,
    "x": 0,
    "y": 0,
-   "objects": [
-    {
-     "id": 21,
-     "name": "sinpaga",
-     "type": "",
-     "x": 256,
-     "y": 288,
-     "width": 672,
-     "height": 480,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "participants",
-       "type": "string",
-       "value": "sinpaga_enmascarado-1,sinpaga_enmascarado-2,sinpaga_cuchillero-1,sinpaga_cuchillero-2,sinpaga_cuchillero-3,sinpaga_bruto-1"
-      }
-     ]
-    }
-   ]
+   "objects": []
   },
   {
    "id": 5,
@@ -450,7 +450,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 22,
+     "id": 23,
      "name": "aceite-carro",
      "type": "",
      "x": 384,
@@ -468,7 +468,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 24,
      "name": "balsa-escoria",
      "type": "",
      "x": 128,
@@ -486,7 +486,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 25,
      "name": "escombros-ladera-a",
      "type": "",
      "x": 288,
@@ -504,7 +504,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 26,
      "name": "escombros-ladera-b",
      "type": "",
      "x": 928,
@@ -534,7 +534,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 26,
+     "id": 27,
      "name": "cuerda-aceite",
      "type": "",
      "x": 224,
@@ -544,6 +544,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_tripwire"
+      },
       {
        "name": "detect",
        "type": "int",
@@ -567,7 +572,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 28,
      "name": "cepo-sinpaga",
      "type": "",
      "x": 704,
@@ -577,6 +582,11 @@
      "rotation": 0,
      "visible": true,
      "properties": [
+      {
+       "name": "marker",
+       "type": "string",
+       "value": "trap_beartrap"
+      },
       {
        "name": "detect",
        "type": "int",
@@ -632,7 +642,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 29,
      "name": "a-plaza",
      "type": "",
      "x": 96,
@@ -655,7 +665,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 30,
      "name": "a-calles",
      "type": "",
      "x": 0,
@@ -678,11 +688,11 @@
      ]
     },
     {
-     "id": 30,
+     "id": 31,
      "name": "pozo-del-ahorcado",
      "type": "",
      "x": 992,
-     "y": 160,
+     "y": 192,
      "width": 32,
      "height": 32,
      "rotation": 0,
@@ -697,11 +707,16 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-pozo"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_resuelto"
       }
      ]
     },
     {
-     "id": 31,
+     "id": 32,
      "name": "bocamina",
      "type": "",
      "x": 1024,
@@ -720,6 +735,61 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-bocamina"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_resuelto"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "scenes",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 33,
+     "name": "sinpaga-jefe",
+     "type": "",
+     "x": 32,
+     "y": 32,
+     "width": 224,
+     "height": 768,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "sinpaga_jefe"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "sinpaga_enmascarado-1"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "gate",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "protects",
+       "type": "string",
+       "value": "pozo-del-ahorcado,bocamina"
       }
      ]
     }
@@ -732,10 +802,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 22,
-   "columns": 22,
+   "tilecount": 59,
+   "columns": 59,
    "image": "terrain-logic.png",
-   "imagewidth": 704,
+   "imagewidth": 1888,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1077,6 +1147,576 @@
        "name": "height",
        "type": "int",
        "value": 0
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 32,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 33,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 37,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 40,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 41,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 42,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 44,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 46,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "mud"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 48,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "mud"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 50,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "river"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_s"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_e"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_w"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "fence"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 56,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "house"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "house_plain"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 58,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone_wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
       }
      ]
     }

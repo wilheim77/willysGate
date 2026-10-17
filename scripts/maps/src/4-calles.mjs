@@ -26,7 +26,21 @@ c.put(5, 21, '+');
 // A storehouse across the lane (solid), and the Lloro running south from a culvert.
 c.rect(16, 14, 11, 6, '#');
 c.rect(16, 13, 11, 1, '=', 1); // the storehouse's loading dock (h1): a little height over the street
-c.rect(29, 13, 2, 11, ',', 0);
+c.rect(29, 13, 2, 11, '~', 0); // the Lloro
+c.rect(28, 13, 1, 11, 'Y', 0).rect(31, 13, 1, 11, 'Z', 0); // its banks (water to the east / west)
+// Exterior art: cobbles on the street, scrub in the yards, timber houses, stone for the chapel
+// rock face and the pawnshop.
+c.retile((t, h, x, y) => {
+  if (t === '#') {
+    if (y <= 8 && x >= 9 && x <= 20) return 'W'; // the chapel's rock
+    if (y >= 14 && x >= 3 && x <= 13) return 'W'; // Lisandro's
+    if (y >= 14) return 'g';
+    return (x + y) % 2 ? 'h' : 'g';
+  }
+  if (t === '.' && y >= 9 && y <= 12) return 'c';
+  if (t === ',') return 's';
+  return t;
+});
 
 export default {
   id: 'calles',
@@ -40,9 +54,9 @@ export default {
     cirilo: [14, 2],
     'fiel_pala-1': [12, 3],
     'fiel_pala-2': [17, 3],
-    // The widows (names pending in cast.json).
-    'viuda-1': [23, 3],
-    'viuda-2': [27, 4],
+    // Benita and Casilda wash clothes in the Lloro; one more widow at home.
+    benita: [28, 16],
+    casilda: [31, 18],
     'viuda-3': [24, 6],
     // The pawnshop.
     lisandro: [7, 16],
@@ -72,14 +86,14 @@ export default {
       // A poisoned dart in the back room's floor, between the partition door and the chest.
       name: 'dardo-trastienda',
       rect: [10, 19, 1, 1],
-      props: { detect: 14, save: 'con', dc: 13, damage: '2d4', type: 'poison', condition: 'poisoned', turns: 3, disarmCheck: 'sleight_of_hand', disarmDc: 13 },
+      props: { marker: 'trap_dart', detect: 14, save: 'con', dc: 13, damage: '2d4', type: 'poison', condition: 'poisoned', turns: 3, disarmCheck: 'sleight_of_hand', disarmDc: 13 },
     },
   ],
   exits: [
     { name: 'a-plaza', rect: [0, 9, 1, 4], to: 'plaza', spawn: 'entry-calles' },
-    { name: 'a-escorial', rect: [33, 9, 1, 4], to: 'escorial', spawn: 'entry-calles' },
+    { name: 'a-escorial', rect: [33, 9, 1, 4], to: 'escorial', spawn: 'entry-calles', props: { requiresFlag: 'audiencia_hecha' } },
   ],
   zones: {
-    scenes: [{ name: 'sermon', rect: [13, 5, 4, 3], props: { dialogue: 'TODO:sermon_cirilo', speaker: 'cirilo', once: true } }],
+    scenes: [{ name: 'sermon', rect: [13, 5, 4, 3], props: { dialogue: 'sermon_cirilo', speaker: 'cirilo', once: true } }],
   },
 };

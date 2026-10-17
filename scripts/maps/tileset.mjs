@@ -24,6 +24,24 @@ export const LOGIC_TILES = [
   { terrain: 'scaffold', height: 3 },
   { terrain: 'door_closed', height: 3, walkable: false },
   { terrain: 'door_open', height: 0 },
+  { terrain: 'rails', height: 0 },
+  { terrain: 'rails_v', height: 0 },
+  { terrain: 'vault', height: 0 },
+  { terrain: 'vault', height: 1 },
+  { terrain: 'vault', height: 2 },
+  { terrain: 'vault', height: 3 },
+  // Exteriors (2026-10-17).
+  ...[0, 1, 2, 3].flatMap((height) => ['scrub', 'rock', 'cobble', 'slag_heap'].map((terrain) => ({ terrain, height }))),
+  ...[0, 1].flatMap((height) => ['road', 'road_v', 'mud'].map((terrain) => ({ terrain, height }))),
+  { terrain: 'river', height: 0 },
+  { terrain: 'riverbank', height: 0 },
+  { terrain: 'riverbank_s', height: 0 },
+  { terrain: 'riverbank_e', height: 0 },
+  { terrain: 'riverbank_w', height: 0 },
+  { terrain: 'fence', height: 1 },
+  { terrain: 'house', height: 3, walkable: false },
+  { terrain: 'house_plain', height: 3, walkable: false },
+  { terrain: 'stone_wall', height: 3, walkable: false },
 ];
 
 /** Tiled tile id for a terrain at a height (walls and closed doors ignore the height). */

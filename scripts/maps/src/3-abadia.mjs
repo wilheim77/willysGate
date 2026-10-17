@@ -44,6 +44,8 @@ const ROWS = [
 ];
 
 const c = new Canvas(28, 22).stamp(0, 0, ROWS, L);
+// Exterior art: the cloister garden, the outer walls and gate in rough stone, the road outside.
+c.retile((t, h, x, y) => (t === '#' && (y >= 15 || x === 0 || x === 27) ? 'W' : t === ',' ? (y >= 17 ? 'R' : 's') : t));
 
 export default {
   id: 'abadia',
@@ -59,8 +61,9 @@ export default {
     'guardia_baron-2': [21, 4],
     'guardia_baron-3': [5, 15], // wall-walk
     'guardia_baron-4': [22, 15],
-    guardia_baron_sargento: [15, 18],
-    'todo-ballesta_tapiz': [22, 1], // the sixth crossbow behind the tapestry (scene 2, Garrán's line)
+    'guardia_baron_sargento-1': [15, 18],
+    'tapestry_crossbow-1': [22, 1], // the sixth crossbow behind the tapestry (scene 2, Garrán's line)
+    'tapestry-1': [8, 1],
     // Crypt (D1, defend: the baron's key).
     'door-cripta': [25, 8],
     'entry-cripta': [25, 3],
@@ -88,6 +91,6 @@ export default {
     { name: 'escalera-cripta', rect: [26, 1, 1, 1], to: 'mina', spawn: 'entry-cripta', props: { requiresFlag: 'TODO:llave_cripta' } },
   ],
   zones: {
-    scenes: [{ name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'TODO:audiencia_abadia', speaker: 'mazo', once: true } }],
+    scenes: [{ name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'audiencia_abadia', speaker: 'mazo', once: true } }],
   },
 };

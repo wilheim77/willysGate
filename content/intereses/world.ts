@@ -22,6 +22,7 @@ import boveda from './maps/boveda.json';
 import plaza from './maps/plaza.json';
 import castJson from './cast.json';
 import templatesJson from './templates.json';
+import spawnDialoguesJson from './spawn-dialogues.json';
 
 /**
  * The act's places, built from their Tiled maps (DOM-free, so tests can use it too).
@@ -54,6 +55,8 @@ interface CastEntry {
   noncombatant?: boolean;
   essential?: boolean;
   dialogue?: string | null;
+  /** A different conversation on a given map (Cirilo at the trial vs. in his chapel). */
+  dialogueByMap?: Record<string, string>;
 }
 interface Template {
   name: string;
@@ -66,6 +69,7 @@ interface Template {
 const strip = <T>(o: Record<string, unknown>) => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith('$'))) as Record<string, T>;
 export const CAST = strip<CastEntry>(castJson);
 export const TEMPLATES = strip<Template>(templatesJson);
+const SPAWN_DIALOGUES = strip<string>(spawnDialoguesJson);
 
 /** Companions met on the road: proper 5e characters, not monsters. Level 3, as the act starts. */
 const COMPANIONS: Record<string, { classId: string; raceId: string; abilities: Record<'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha', number> }> = {
@@ -79,8 +83,9 @@ export function companion(id: string, name: string, position: Vec2, controllerId
   return createCharacter({ id, name, controllerId, factionId, position, spriteId: id, classId: c.classId, raceId: c.raceId, level: 3, abilities: { ...c.abilities }, extraTags });
 }
 
-function castEntity(id: string, c: CastEntry, position: Vec2, dialogues: Record<string, DialogueTree>): Entity {
-  const tags = [...(c.dialogue && dialogues[c.dialogue] ? [`dialogue:${c.dialogue}`] : []), ...(c.noncombatant ? ['noncombatant'] : []), ...(c.essential ? ['essential'] : [])];
+function castEntity(id: string, c: CastEntry, position: Vec2, dialogues: Record<string, DialogueTree>, mapId: string): Entity {
+  const script = c.dialogueByMap?.[mapId] ?? c.dialogue;
+  const tags = [...(script && dialogues[script] ? [`dialogue:${script}`] : []), ...(c.noncombatant ? ['noncombatant'] : []), ...(c.essential ? ['essential'] : [])];
   if (COMPANIONS[id]) return companion(id, c.name, position, AI, c.faction, tags);
   return createMonster({ id, name: c.name, monsterId: c.monsterId === 'companion' ? 'commoner' : c.monsterId, controllerId: AI, factionId: c.faction, position, spriteId: knownSprites.has(c.spriteId) || !knownSprites.has(id) ? c.spriteId : id, extraTags: tags });
 }
@@ -92,6 +97,23 @@ export function useSprites(ids: Iterable<string>): void {
 }
 
 const PROP_KINDS = new Set(['barrel_oil', 'barrel', 'crate']);
+/** Art props placed as spawns: which object rules they follow, and whether they block the way. */
+const ART_PROPS: Record<string, { kind: 'powder_keg' | 'wagon' | 'resonator' | 'decor'; name: string; obstacle: boolean }> = {
+  powder_keg: { kind: 'powder_keg', name: 'Barril de pólvora', obstacle: true },
+  mine_wagon: { kind: 'wagon', name: 'Vagoneta', obstacle: true },
+  mine_wagon_ore: { kind: 'wagon', name: 'Vagoneta cargada', obstacle: true },
+  resonator: { kind: 'resonator', name: 'Resonador', obstacle: true },
+  oil_cart: { kind: 'decor', name: 'Carro de aceite', obstacle: true },
+  well: { kind: 'decor', name: 'Pozo', obstacle: true },
+  gallows: { kind: 'decor', name: 'Horca', obstacle: true },
+  campfire: { kind: 'decor', name: 'Hoguera', obstacle: true },
+  tapestry: { kind: 'decor', name: 'Tapiz', obstacle: false },
+  tapestry_crossbow: { kind: 'decor', name: 'Tapiz', obstacle: false },
+  fuse_charges: { kind: 'decor', name: 'Cargas y mecha', obstacle: false },
+  remains_forty: { kind: 'decor', name: 'Restos', obstacle: false },
+  pulley: { kind: 'decor', name: 'Polea', obstacle: false },
+  inscription: { kind: 'decor', name: 'Inscripción', obstacle: false },
+};
 const USABLE_KINDS = new Set(['chest', 'door', 'lever']);
 
 /** One map, as it is the first time anyone arrives. */
@@ -104,7 +126,7 @@ export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>)
     if (name.startsWith('entry-') || name.startsWith('todo-') || PARTY_SPAWNS.has(name)) continue;
     const cast = CAST[name];
     if (cast) {
-      entities.push(castEntity(name, cast, position, dialogues));
+      entities.push(castEntity(name, cast, position, dialogues, mapId));
       continue;
     }
     const dash = name.lastIndexOf('-');
@@ -114,10 +136,21 @@ export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>)
       entities.push(createProp({ id: name, kind: kind as 'barrel_oil' | 'barrel' | 'crate', position }));
       continue;
     }
+    const artProp = ART_PROPS[kind];
+    if (artProp && rest) {
+      // A usable art prop (the pulley) gets its script like levers do: <kind>_<n>.
+      const script = `${kind}_${rest}`;
+      const tags = [...(dialogues[script] ? [`dialogue:${script}`] : [])];
+      const prop = createProp({ id: name, kind: artProp.kind, position, spriteId: kind, name: artProp.name, extraTags: tags });
+      entities.push(artProp.obstacle ? prop : { ...prop, tags: prop.tags.filter((t) => t !== 'obstacle') });
+      continue;
+    }
     const usable = name.split('-')[0]!;
     if (USABLE_KINDS.has(usable)) {
       const script = `${usable}_${name.slice(usable.length + 1).replace(/-/g, '_')}`;
-      const tags = dialogues[script] ? [`dialogue:${script}`] : [];
+      // Doors nobody wrote a script for still open (door_default).
+      const tree = dialogues[script] ? script : usable === 'door' && dialogues.door_default ? 'door_default' : null;
+      const tags = tree ? [`dialogue:${tree}`] : [];
       const sprite = usable === 'door' ? 'none' : usable === 'lever' ? 'lever' : 'chest';
       entities.push(createProp({ id: name, kind: usable as 'chest' | 'door' | 'lever', position, spriteId: sprite, extraTags: usable === 'lever' ? [...tags, 'pose:up'] : tags }));
       continue;
@@ -131,6 +164,12 @@ export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>)
     // Unknown spawn names are content bugs; the map test reports them, the game skips them.
   }
 
+  // Spawn-specific scripts (a Callado who talks, a well you can lower yourself into).
+  for (let i = 0; i < entities.length; i++) {
+    const e = entities[i]!;
+    const script = SPAWN_DIALOGUES[`${mapId}:${e.id}`];
+    if (script && dialogues[script]) entities[i] = { ...e, tags: [...e.tags.filter((t) => !t.startsWith('dialogue:')), `dialogue:${script}`] };
+  }
   const surfaces: Record<string, SurfaceInstance> = {};
   const traps: Trap[] = [];
   for (const z of zones) {

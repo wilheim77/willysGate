@@ -1,0 +1,79 @@
+{
+  "$comment": "Spawn door-bocamina in the Escorial. Opens without a roll after D1 if the Cuadrilla guides the party (ruta_bocamina); Athletics otherwise. The Pozo is always the fallback.",
+  "id": "door_bocamina",
+  "start": "puerta",
+  "nodes": {
+    "puerta": {
+      "text": "La bocamina principal está tapiada con tablones gruesos y una cadena con el sello del barón. Detrás, alguien ha colgado un cartel: «Peligro. Grisú». Debajo, otra mano ha escrito: «Mentira».",
+      "choices": [
+        {
+          "text": "[La Cuadrilla os guía] Dejar que los mineros quiten los tablones.",
+          "when": {
+            "flag": "ruta_bocamina"
+          },
+          "next": "abierta"
+        },
+        {
+          "id": "forzar",
+          "text": "Arrancar los tablones a pulso.",
+          "once": true,
+          "check": {
+            "check": "athletics",
+            "dc": 16,
+            "success": "abierta_fuerza",
+            "failure": "no_cede"
+          }
+        },
+        {
+          "text": "Dejarlo. Por el Pozo también se baja."
+        }
+      ]
+    },
+    "abierta": {
+      "text": "Una docena de picos que saben dónde golpear. Los tablones caen en el orden correcto; la cadena del sello, la última. Detrás hay oscuridad y un aire que lleva ocho meses sin moverse.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "door-bocamina",
+          "removeTags": [
+            "dialogue:door_bocamina",
+            "obstacle"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "bocamina_abierta",
+          "value": true
+        }
+      ]
+    },
+    "abierta_fuerza": {
+      "text": "Los tablones ceden con un crujido largo. Te sangran las manos y te sobra el aliento para pensar que, si esto era tan fácil, alguien prefería que nadie lo intentara.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "door-bocamina",
+          "removeTags": [
+            "dialogue:door_bocamina",
+            "obstacle"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "bocamina_abierta",
+          "value": true
+        }
+      ]
+    },
+    "no_cede": {
+      "text": "Los tablones no ceden. Quien tapió esto sabía de minas. Necesitarías más manos, o volver por el Pozo.",
+      "next": "puerta"
+    }
+  }
+}

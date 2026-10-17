@@ -1,0 +1,130 @@
+{
+  "$comment": "D1 aftermath if the party joined the Cuadrilla (d1_cuadrilla). Plaza scene zone with requiresFlag d1_cuadrilla, after the abbey fight (speaker nella).",
+  "id": "d1_horca",
+  "start": "torre",
+  "nodes": {
+    "torre": {
+      "text": "Amanece sobre la Torre del Cepo. El barón Ulric Mazo está en la plataforma, en camisón, con la soga al cuello y un pie descalzo. Abajo, la Cuadrilla entera. Hilda Cardo no aparece por ninguna parte, y el sello del barón tampoco.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_prisionero",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "hilda_huyo_sello",
+          "value": true
+        }
+      ],
+      "next": "mazo"
+    },
+    "mazo": {
+      "speaker": "mazo",
+      "text": "Si alguien quiere un último poema, lo tengo preparado. Es corto. Por razones evidentes.",
+      "next": "nella"
+    },
+    "nella": {
+      "speaker": "nella",
+      "text": "Ahí lo tienes, cobrador. Tu deudor. Si quieres cobrarle, date prisa.",
+      "choices": [
+        {
+          "id": "libro",
+          "text": "[Libro de Lisandro] Colgadle y Brea se queda con la mina. Está aquí escrito: el banco se la vende a él.",
+          "once": true,
+          "when": {
+            "item": "libro_cuentas_lisandro",
+            "atLeast": 1
+          },
+          "next": "libro"
+        },
+        {
+          "id": "persuadir",
+          "text": "Un barón colgado no os devuelve a nadie. Un barón vivo puede firmar que la mina es vuestra.",
+          "once": true,
+          "check": {
+            "check": "persuasion",
+            "dc": 14,
+            "success": "salvado",
+            "failure": "ahorcado_tras_intentar"
+          }
+        },
+        {
+          "text": "Ponerse delante de la soga.",
+          "next": "delante"
+        },
+        {
+          "text": "Es vuestro. Haced lo que tengáis que hacer.",
+          "next": "ahorcado"
+        }
+      ]
+    },
+    "libro": {
+      "speaker": "nella",
+      "text": "¿Que se la vende a Brea? … Bajad al barón. Vivo vale más. Por una vez en su vida, que valga algo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_vivo_d1",
+          "value": true
+        }
+      ],
+      "next": "salvado"
+    },
+    "salvado": {
+      "speaker": "mazo",
+      "text": "Gracias. Creo. Escribiré algo sobre esto. No, no me lo agradezcan: es lo mínimo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_vivo_d1",
+          "value": true
+        }
+      ],
+      "next": "guia"
+    },
+    "delante": {
+      "text": "Te pones delante del barón, de cara a treinta antorchas apagadas y treinta hombres que no han dormido. Nadie te toca. Pero cuando bajas de la plataforma, nadie te mira tampoco.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_vivo_d1",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "cuadrilla_resentida",
+          "value": true
+        }
+      ],
+      "next": "guia"
+    },
+    "ahorcado_tras_intentar": {
+      "speaker": "nella",
+      "text": "Bonitas palabras. El barón también las tenía.",
+      "next": "ahorcado"
+    },
+    "ahorcado": {
+      "text": "La trampilla se abre con un golpe seco. El barón Ulric Mazo deja de deber dinero a nadie. El papel del poema se le cae del bolsillo y se lo lleva el viento hacia el Lloro.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_muerto",
+          "value": true
+        }
+      ],
+      "next": "guia"
+    },
+    "guia": {
+      "speaker": "nella",
+      "text": "Ahora Brea. Los míos os bajan por la bocamina principal. Las cargas de la entrada las quitaremos nosotros. Lo de dentro, ya no lo sabe nadie.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "ruta_bocamina",
+          "value": true
+        }
+      ]
+    }
+  }
+}

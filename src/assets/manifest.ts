@@ -6,6 +6,11 @@ export interface TerrainArt {
   face: number;
   /** Optional lip drawn once at the south edge of raised tiles (only its top rows are opaque). */
   rim?: number;
+  /**
+   * Soft edges onto lower-priority neighbours at the same height: overlay frames (mostly
+   * transparent) for the side of the neighbour that touches this terrain.
+   */
+  blend?: { priority: number; edges: Partial<Record<'n' | 'e' | 's' | 'w' | 'ne' | 'nw' | 'se' | 'sw', number>> };
 }
 
 /** Animated decoration or effect (torches, blood decals, hit sparks), drawn by the client. */

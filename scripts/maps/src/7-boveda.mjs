@@ -7,14 +7,14 @@
 import { Canvas } from '../paint.mjs';
 
 const c = new Canvas(32, 24, '#', 3);
-c.rect(0, 11, 6, 3, '.', 2); // tunnel and landing from the mine
-c.rect(6, 4, 20, 16, '.', 2); // the vault floor
-c.rect(11, 1, 12, 3, '.', 3); // Brea's balcony
-c.rect(11, 4, 12, 1, '.', 1); // the trench below it (h3 over h1: pushed off, you fall)
-c.rect(10, 1, 1, 3, '.', 2).rect(23, 1, 1, 3, '.', 2); // stairs up at both ends
-c.rect(22, 15, 4, 4, '.', 3); // the powder store's platform
-c.rect(8, 20, 14, 2, '.', 0); // the chasm
-c.put(22, 20, '.', 1); // its only way out
+c.rect(0, 11, 6, 3, 'v', 2); // tunnel and landing from the mine
+c.rect(6, 4, 20, 16, 'v', 2); // the vault floor
+c.rect(11, 1, 12, 3, 'v', 3); // Brea's balcony
+c.rect(11, 4, 12, 1, 'v', 1); // the trench below it (h3 over h1: pushed off, you fall)
+c.rect(10, 1, 1, 3, 'v', 2).rect(23, 1, 1, 3, 'v', 2); // stairs up at both ends
+c.rect(22, 15, 4, 4, 'v', 3); // the powder store's platform
+c.rect(8, 20, 14, 2, 'v', 0); // the chasm
+c.put(22, 20, 'v', 1); // its only way out
 c.put(8, 10, '#').put(8, 14, '#').put(23, 10, '#').put(23, 14, '#'); // pillars
 
 export default {
@@ -30,17 +30,18 @@ export default {
     'callado-10': [22, 6],
     'callado-11': [10, 18],
     'callado_palido-3': [19, 12],
-    // Silver resonators (I6: a destructible prop kind; WIS save each round while one stands).
-    'resonador-1': [11, 8],
-    'resonador-2': [20, 8],
-    'resonador-3': [11, 16],
-    'resonador-4': [20, 16],
-    // The powder store (Brea blows it mid-fight; oil barrels stand in for powder kegs for now).
-    'barrel_oil-1': [23, 16],
-    'barrel_oil-2': [24, 17],
-    'barrel_oil-3': [24, 15],
+    // Silver resonators (I6: destructible objects; WIS save each round while one stands).
+    'resonator-1': [11, 8],
+    'resonator-2': [20, 8],
+    'resonator-3': [11, 16],
+    'resonator-4': [20, 16],
+    // The powder store (Brea blows it mid-fight).
+    'powder_keg-1': [23, 16],
+    'powder_keg-2': [24, 17],
+    'powder_keg-3': [24, 15],
     'lever-polea': [21, 1], // pulley and chains: drops the ore bucket on the trench (TODO script)
-    'todo-inscripcion': [7, 5], // the elvish carving: [Historia] CD 13 for an elf or dwarf
+    'pulley-1': [20, 1],
+    'inscription-1': [7, 5], // the elvish carving: [Historia] CD 13 for an elf or dwarf
   },
   lights: [
     { name: 'brillo-resonador-1', at: [11, 7], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
@@ -63,8 +64,8 @@ export default {
     scenes: [{ name: 'brea-habla', rect: [3, 10, 4, 5], props: { dialogue: 'TODO:boveda_brea', speaker: 'absalon', once: true } }],
     // Proposed layer (I5): Brea's blast sinks the centre. Pit at h0, a shallow edge at h1.
     collapse: [
-      { name: 'derrumbe', rect: [13, 9, 5, 6], props: { height: 0, terrain: 'stone', trigger: 'TODO:brea_vuela_polvorin' } },
-      { name: 'derrumbe-borde', rect: [18, 9, 1, 6], props: { height: 1, terrain: 'stone', trigger: 'TODO:brea_vuela_polvorin' } },
+      { name: 'derrumbe', rect: [13, 9, 5, 6], props: { height: 0, terrain: 'vault', trigger: 'TODO:brea_vuela_polvorin' } },
+      { name: 'derrumbe-borde', rect: [18, 9, 1, 6], props: { height: 1, terrain: 'vault', trigger: 'TODO:brea_vuela_polvorin' } },
     ],
   },
 };

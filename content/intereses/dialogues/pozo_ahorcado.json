@@ -1,0 +1,88 @@
+{
+  "$comment": "Scene 4. Object/prop pozo (the well) in the Escorial, near entry-pozo. Finding the open well needs no roll (acceso_contrabando).",
+  "id": "pozo_ahorcado",
+  "start": "pozo",
+  "nodes": {
+    "pozo": {
+      "text": "El Pozo del Ahorcado es un brocal de piedra con una viga encima, de la que alguien colgó a alguien hace tanto tiempo que ya nadie se acuerda de quién era el culpable. Todo el pueblo dice que está cegado.",
+      "choices": [
+        {
+          "text": "Mirar dentro.",
+          "next": "dentro"
+        },
+        {
+          "id": "rastro",
+          "text": "(Buscar rastros alrededor.)",
+          "once": true,
+          "check": {
+            "check": "survival",
+            "dc": 12,
+            "success": "rastro_ok",
+            "failure": "rastro_mal"
+          }
+        },
+        {
+          "text": "Dejarlo."
+        }
+      ]
+    },
+    "dentro": {
+      "text": "No está cegado. Tiene una polea nueva, engrasada, y una cuerda gruesa que baja a la oscuridad. En el brocal, la piedra está pulida por el roce de algo pesado que sube y baja. Muchas veces.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "acceso_contrabando",
+          "value": true
+        }
+      ],
+      "next": "dentro_2"
+    },
+    "dentro_2": {
+      "speaker": "dorotea",
+      "text": "Una mina cerrada con un pozo abierto. Le apunto, cobrador. Esto ya no es una deuda: es un negocio.",
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "dentro_g"
+        },
+        {
+          "next": "pozo"
+        }
+      ]
+    },
+    "dentro_g": {
+      "speaker": "garran",
+      "text": "Este pozo da a las galerías viejas. Por ahí se llega a la Garganta sin pasar por la bocamina. Lo sabíamos cuatro. Dos están muertos. Uno era yo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_conoce_pozo",
+          "value": true
+        }
+      ],
+      "next": "pozo"
+    },
+    "rastro_ok": {
+      "text": "Huellas de botas, muchas, todas iguales: los que suben y bajan caminan al mismo paso, como si alguien llevara la cuenta. Y unas rodadas de carro que van hacia el pueblo. Hacia la casa del prestamista.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_pozo",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pista_callados_marchan",
+          "value": true
+        }
+      ],
+      "next": "pozo"
+    },
+    "rastro_mal": {
+      "text": "Barro, piedras y el viento de la escombrera, que lo borra todo. Sea lo que sea, aquí pasa algo; lo que no sabes es qué.",
+      "next": "pozo"
+    }
+  }
+}

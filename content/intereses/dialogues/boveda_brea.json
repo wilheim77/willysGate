@@ -1,0 +1,258 @@
+{
+  "$comment": "Scene 6. Boveda scene zone «brea-habla» (speaker absalon). With the smuggling proof, Deception DC 18 makes the Callados lose a turn. If D2 was covered up, Ivo recognises Garrán and he loses a turn. The fight is by faction (callados; Brea and Ivo must be in it). The polvorín collapse is the map script's (brea_vuela_polvorin). Victory sets brea_derrotado, and the game then opens boveda_collera (D3).",
+  "id": "boveda_brea",
+  "start": "canto",
+  "nodes": {
+    "canto": {
+      "text": "La Bóveda no la cavó nadie de este valle. Es una sala redonda, de piedra lisa como hueso, más vieja que cualquier reino. En las paredes, venas de plata viva laten despacio. Y la plata canta: un picor detrás de los ojos que se parece mucho a tener ganas de obedecer.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "boveda_vista",
+          "value": true
+        }
+      ],
+      "next": "brea_1"
+    },
+    "brea_1": {
+      "speaker": "absalon",
+      "text": "El cobrador del banco. Has tardado. Yo en tu lugar habría venido por el Pozo el primer día; es lo que habría hecho cualquiera que trabaje.",
+      "next": "brea_2"
+    },
+    "brea_2": {
+      "text": "Absalón Brea es un hombre de cincuenta años con las manos de un hombre de setenta. Lleva al cuello una collera de plata viva que zumba al compás de las paredes. Detrás de él, quietos como herramientas colgadas, los Callados. Uno de ellos es más joven que los demás y tiene la cara de Garrán, pero más fina.",
+      "next": [
+        {
+          "when": {
+            "all": [
+              {
+                "inParty": "garran"
+              },
+              {
+                "flag": "d2_encubierto"
+              }
+            ]
+          },
+          "next": "ivo_ve"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "ivo_ve": {
+      "text": "El Callado joven gira la cabeza. Mira a Garrán. Algo se mueve detrás de sus ojos, muy al fondo, como un pez en agua turbia.",
+      "next": "ivo_ve_2"
+    },
+    "ivo_ve_2": {
+      "speaker": "ivo",
+      "text": "…Garrán. Tú pusiste las cargas.",
+      "next": "ivo_ve_3"
+    },
+    "ivo_ve_3": {
+      "text": "Garrán se queda quieto. No es el miedo: es otra cosa, que pesa más.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_bloqueado",
+          "value": true
+        },
+        {
+          "type": "applyCondition",
+          "entityId": "garran",
+          "condition": "incapacitated",
+          "remainingTurns": 1
+        }
+      ],
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "absalon",
+      "text": "Habla, si quieres. Aquí abajo el tiempo no cuenta. Lo cuento yo.",
+      "choices": [
+        {
+          "id": "por_que",
+          "text": "¿Por qué, Brea? Cuarenta hombres.",
+          "once": true,
+          "next": "por_que"
+        },
+        {
+          "id": "callados",
+          "text": "¿Qué les has hecho?",
+          "once": true,
+          "next": "callados"
+        },
+        {
+          "id": "banco",
+          "text": "El banco te va a vender la mina. ¿Sabes a qué precio?",
+          "once": true,
+          "next": "banco"
+        },
+        {
+          "id": "engano",
+          "text": "[Pruebas del contrabando] El banco ya te ha vendido, Brea. Lisandro firmó tu nombre en la última hoja: «comprador previsto». Cuando embarguen, sobrarás tú.",
+          "once": true,
+          "when": {
+            "any": [
+              {
+                "flag": "pista_banco_complice"
+              },
+              {
+                "item": "libro_cuentas_lisandro",
+                "atLeast": 1
+              }
+            ]
+          },
+          "check": {
+            "check": "deception",
+            "dc": 18,
+            "success": "duda",
+            "failure": "no_duda"
+          }
+        },
+        {
+          "id": "mirar",
+          "text": "(Mirar la collera: ¿cómo los domina?)",
+          "once": true,
+          "check": {
+            "check": "arcana",
+            "dc": 14,
+            "success": "collera_ok",
+            "failure": "collera_mal"
+          }
+        },
+        {
+          "id": "ivo",
+          "text": "[Garrán] Ivo está ahí, Garrán.",
+          "once": true,
+          "when": {
+            "all": [
+              {
+                "inParty": "garran"
+              },
+              {
+                "not": {
+                  "flag": "d2_encubierto"
+                }
+              }
+            ]
+          },
+          "next": "ivo"
+        },
+        {
+          "text": "Basta de cuentas. (Atacar.)",
+          "next": "pelea"
+        }
+      ]
+    },
+    "por_que": {
+      "speaker": "absalon",
+      "text": "Iban a matarse entre ellos. El canto los tenía. Yo solo cerré la puerta. Y luego bajé, solo, porque alguien tenía que bajar. Siempre hay alguien que tiene que bajar, y nunca es el barón.",
+      "next": "por_que_2"
+    },
+    "por_que_2": {
+      "speaker": "absalon",
+      "text": "La plata viva es el futuro de Hondonegra. Si el futuro necesita esclavos, el pasado también los necesitó. Pregunta a cualquier minero por su abuelo.",
+      "next": "hub"
+    },
+    "callados": {
+      "speaker": "absalon",
+      "text": "Les he dado trabajo. No hablan, no cobran, no se quejan. Son los mejores mineros que ha tenido este valle. El barón nunca los trató tan bien: a mí me hacen caso.",
+      "next": "hub"
+    },
+    "banco": {
+      "speaker": "absalon",
+      "text": "A buen precio. El banco y yo nos entendemos: los dos sabemos lo que vale el trabajo de otros.",
+      "next": "hub"
+    },
+    "duda": {
+      "text": "Brea no dice nada. La collera zumba más fuerte, desafinada, y los Callados vacilan, como herramientas que alguien ha soltado un momento.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "brea_duda",
+          "value": true
+        },
+        {
+          "type": "applyCondition",
+          "entityId": "callado-9",
+          "condition": "incapacitated",
+          "remainingTurns": 1
+        },
+        {
+          "type": "applyCondition",
+          "entityId": "callado-10",
+          "condition": "incapacitated",
+          "remainingTurns": 1
+        },
+        {
+          "type": "applyCondition",
+          "entityId": "callado-11",
+          "condition": "incapacitated",
+          "remainingTurns": 1
+        },
+        {
+          "type": "applyCondition",
+          "entityId": "callado_palido-3",
+          "condition": "incapacitated",
+          "remainingTurns": 1
+        },
+        {
+          "type": "applyCondition",
+          "entityId": "ivo",
+          "condition": "incapacitated",
+          "remainingTurns": 1
+        }
+      ],
+      "next": "duda_2"
+    },
+    "duda_2": {
+      "speaker": "absalon",
+      "text": "…Lisandro. Elfo de mierda. Seis siglos y no ha aprendido a no firmar las cosas.",
+      "next": "pelea"
+    },
+    "no_duda": {
+      "speaker": "absalon",
+      "text": "Claro que me ha vendido. Me vendió el primer día. Yo también a él. Así es el negocio, cobrador. Tú eres el último en enterarte, como siempre los que cobran a comisión.",
+      "next": "hub"
+    },
+    "collera_ok": {
+      "text": "Los Callados no miran a Brea: miran la collera. Cada vez que la plata de su cuello zumba, ellos se mueven. Romper los resonadores de las paredes, o arrancarle la collera, cortaría la cuerda.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_resonadores",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "collera_mal": {
+      "text": "La collera te devuelve la mirada. Es una forma de hablar. O no.",
+      "next": "hub"
+    },
+    "ivo": {
+      "speaker": "garran",
+      "text": "Lo veo. Ivo. Soy yo. Voy a sacarte de ahí. Y después me pegas tú, que te toca.",
+      "next": "hub"
+    },
+    "pelea": {
+      "text": "Brea toca la collera con dos dedos, como quien afina un instrumento. Los Callados levantan las herramientas a la vez. La Bóveda canta más alto.",
+      "effects": [
+        {
+          "type": "startCombat",
+          "factions": [
+            "callados"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "brea_derrotado",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

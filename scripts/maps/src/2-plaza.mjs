@@ -1,12 +1,12 @@
 // Scene 1: the plaza of Hondonegra. The Torre del Cepo with its gallows platform (Anselmo's
-// trial, Cirilo and his fanatics), the Cuadrilla by the Pico Roto, the baron's guards at the
-// foot of the road up to the abbey. Exits: west (the road), north (abbey), east (streets),
+// trial, Cirilo and his fanatics), the Cuadrilla by the Pico Roto, the abbey guard at the
+// foot of the road up to the abbey (opens after the trial: audiencia_concedida). Exits: west (the road), north (abbey), east (streets),
 // south (the Escorial track).
 import { Canvas } from '../paint.mjs';
 
 const L = {
   '#': ['#', 3],
-  '.': ['.', 0],
+  '.': [',', 0], // «la plaza es de barro pisado»
   '-': ['.', 1],
   ':': ['.', 2],
   3: ['.', 3],
@@ -44,6 +44,16 @@ const ROWS = [
 ];
 
 const c = new Canvas(30, 22).stamp(0, 0, ROWS.map((r) => r.padEnd(30, '#')), L);
+c.rect(17, 12, 2, 2, ',', 0); // around the well (a prop)
+c.put(25, 15, '/', 0); // the door of El Pico Roto
+// Exterior art: packed earth for the square, cobbles up the abbey road and on the terrace,
+// timber houses alternating, the Torre del Cepo in stone.
+c.retile((t, h, x, y) => {
+  if (t === '#') return x >= 8 && x <= 11 && y >= 3 && y <= 5 ? 'W' : (x + y) % 2 ? 'h' : 'g';
+  if (t === '.') return 'c';
+  if (t === ',') return y >= 19 ? 'I' : 'R';
+  return t;
+});
 
 export default {
   id: 'plaza',
@@ -57,22 +67,25 @@ export default {
     'entry-escorial': [13, 19],
     // The trial (scene 1).
     anselmo: [10, 6],
-    cirilo: [12, 7],
+    cirilo: [13, 6], // on the platform, away from the fanatics below
     'fanatico_pala-1': [8, 9],
     'fanatico_pala-2': [13, 9],
     'fanatico_pala-3': [6, 8],
+    'gallows-1': [9, 6],
     // The Cuadrilla, by the inn.
     nella: [23, 12],
     odda: [24, 13],
     'minero_cuadrilla-1': [22, 14],
-    // The abbey's guards at the foot of the road.
-    'guardia_baron-1': [21, 5],
-    'guardia_baron-2': [25, 5],
+    posadera: [24, 16], // at the door of El Pico Roto
+    // The abbey's guards at the foot of the road (guardia_abadia lets the party up).
+    guardia_abadia: [23, 4],
+    'guardia_baron-1': [25, 5],
     // Scenery: market stalls on the terrace, lamp oil by the gallows, the well's bucket barrel.
     'crate-1': [2, 10],
     'crate-2': [3, 10],
     'barrel-1': [2, 11],
     'barrel_oil-1': [15, 8],
+    'well-1': [17, 12],
     'barrel-2': [19, 13],
     'crate-3': [20, 16],
   },
@@ -84,17 +97,18 @@ export default {
   ],
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
   exits: [
-    { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza' },
-    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza' },
-    { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza' },
+    { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_concedida' } },
+    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto' } },
+    { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_hecha' } },
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],
   zones: {
     scenes: [
       {
         name: 'juicio-anselmo',
-        rect: [5, 8, 11, 4],
-        props: { dialogue: 'TODO:juicio_anselmo', speaker: 'cirilo', once: true, fight: 'fanatico_pala-1,fanatico_pala-2,fanatico_pala-3,cirilo' },
+        // Opens as soon as the party walks into the square from the road (west half).
+        rect: [0, 8, 16, 11],
+        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, gate: true, protects: 'a-calles,a-escorial,a-abadia', fight: 'fanatico_pala-1,fanatico_pala-2,fanatico_pala-3' },
       },
     ],
   },

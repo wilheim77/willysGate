@@ -108,6 +108,8 @@ Dibujados por `build-extra-art.ts` en una paleta seca, fría y apagada (la noche
 | `river`, `riverbank` | El Lloro: agua gris de los relaves / orilla de barro con el agua lamiendo el borde norte | Talud de tierra |
 | `slag_heap` | Escoria granulada con brasas y destellos de plata | Escoria gris oscura |
 
+**Transiciones (`terrain.<id>.blend`)**: `{ priority, edges: { n, e, s, w, ne, nw, se, sw } }`, frames del mismo tileset. Cada frame es un flequillo irregular de la textura del terreno con un borde algo más oscuro; el render lo dibuja sobre la cara superior del vecino de menor prioridad (misma altura), en orden de prioridad; las esquinas solo cuando ninguno de los dos vecinos ortogonales es ese terreno. Prioridades: `scrub` 4; `mud`, `riverbank*`, `slag_heap` 3; `cobble` 2; `road`, `road_v` 1. La orilla tiene variantes por lado del agua: `riverbank` (agua al norte), `riverbank_s`, `riverbank_w` y `riverbank_e`.
+
 ## PNJ de Hondonegra y atrezo del pueblo (para `mapas` y `guion`)
 
 Recolores de 0x72 con detalle propio (`palettes.json`). Vista previa: [`art-previews/0x72-npcs-hondonegra.png`](art-previews/0x72-npcs-hondonegra.png).
@@ -376,3 +378,16 @@ Vista previa (superficie y cara de cada terreno): [`art-previews/willy-plantas-2
 | 2 · Hipermercado | `hiper` (linóleo), `hiper-oferta` (flecha de oferta), `estanteria` (góndola vista desde arriba; cara: baldas con productos), `cinta` (cinta transportadora con galones; la planta 2 la usa como terreno que empuja) |
 | 3 · Verbena | `verbena` (adoquines con confeti y serpentinas), `escenario` (tarima de orquesta con bombillas; cara: faldón rojo con flecos), `muro-verbena` (tejados con banderines; cara: fachada encalada con balcón y maceta) |
 | 4 · Balneario | `azulejo` (gresite azul claro), `piscina` (agua profunda con reflejos), `hielo-balneario` (azulejo helado con grietas), `muro-balneario` (techo nevado; cara: azulejo blanco con franja azul y carámbanos) |
+
+## Atrezo de bioma de las Plantas 2-5
+
+Vista previa: [`art-previews/willy-biome-props.png`](art-previews/willy-biome-props.png). Los que son entidades (`sprites`, con `spriteId` en `prop(...)` de `maps.ts`) ocupan casilla; los `props` del manifiesto son decoración que dibuja el cliente.
+
+| Planta | `sprites` (entidades) | `props` (decoración) |
+|---|---|---|
+| 2 · Hipermercado | `estanteria-hiper` (16×24; `broken`: volcada con género por el suelo), `caja-registradora` (16×20), `cesta-ofertas`, `carrito` (ya existía) | La cinta es el terreno `cinta` |
+| 3 · Verbena | `altavoz-verbena` (16×24, bocina en poste), `caseta-feria` (32×24, «TOMBOLA» con toldo) | `farolillo` (pared, 2 frames, luz `#ffb040`), `banderines` (pared, 32×8) |
+| 4 · Balneario | `tumbona`, `flotador`, `sombrilla` (16×28) | `escalera-piscina` (suelo, borde de la piscina), `puerta-sauna` (pared, 16×24, vapor animado) |
+| 5 · Plató | `camara-estudio` (16×24, piloto rojo parpadeando en `idle`), `monitor-escenario`, `silla-director` (16×20) | `cables` (suelo), `claqueta` (suelo) |
+
+Las luces del plató ya existían en P2: `foco-movil`, `cono-de-luz` y `parrilla-de-focos`.

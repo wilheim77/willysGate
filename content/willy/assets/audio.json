@@ -45,19 +45,16 @@
   },
   "events": {
     "combatStarted": { "sfx": "tvJingle", "music": "combat" },
-    "combatEnded": { "field": "winner", "map": { "party": "victory" }, "fallback": "defeat", "music": "exploration" },
+    "combatEnded": { "field": "winner", "map": { "concursantes": "victory" }, "fallback": "defeat", "music": "exploration" },
     "attackRolled": { "field": "hit", "map": { "false": "miss" } },
     "damageDealt": {
-      "field": "damageType",
+      "field": "element",
       "map": {
-        "slashing": "hitSlash",
-        "piercing": "hitPierce",
-        "bludgeoning": "hitBlunt",
-        "fire": "spellFire",
-        "cold": "spellCold",
-        "lightning": "spellLightning",
-        "thunder": "spellThunder",
-        "radiant": "spellRadiant"
+        "golpe": "hitBlunt",
+        "fuego": "spellFire",
+        "frio": "spellCold",
+        "rayo": "spellLightning",
+        "agua": "surfaceSteam"
       },
       "fallback": "hitBlunt"
     },
@@ -67,5 +64,5 @@
     "trapDisarmFailed": { "sfx": "trapSpring" },
     "dialogueCheck": { "sfx": "diceRoll" }
   },
-  "_note": "Placeholder: the `willy` ruleset (docs/willy/RULESET.md) isn't implemented yet, so no game.ts wires this in. Event names/fields here mirror dnd5e's engine events as a starting point; revisit once the ruleset lands (crit -> crowdApplause, pifia/fumble -> crowdBoo, floor clear -> gameshowDing, game over -> gameshowBuzzer, coastal floors -> gulls/sea ambience are still unassigned)."
+  "_note": "The `willy` ruleset emits damage with an `element` field in Spanish (golpe/fuego/frio/rayo/agua), not `damageType` like dnd5e, and its player faction is `concursantes` (see content/willy/setup.ts) — mapped above accordingly. Still unassigned: crit -> crowdApplause, pifia/fumble -> crowdBoo, floor clear -> gameshowDing, game over -> gameshowBuzzer, and gulls/sea for coastal floors (no matching engine event yet; wire client-side per map if needed)."
 }
