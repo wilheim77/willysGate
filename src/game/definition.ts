@@ -1,6 +1,7 @@
 import type { CreationChoices, CreationSpec, DialogueTree, DialogueWhen, Engine, GameState, MapBuilder, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
+import type { TutorialStep } from '../ui/tutorialToasts';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
 export interface UiTexts {
@@ -75,6 +76,8 @@ export interface GameDefinition {
   triggers?: { id: string; when: DialogueWhen; dialogue: string; partner?: string; map?: string }[];
   /** A conversation that opens as soon as the protagonist is created. */
   opening?: { dialogue: string; partner?: string };
+  /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
+  tutorial?: TutorialStep[];
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

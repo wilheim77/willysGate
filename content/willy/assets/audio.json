@@ -5,7 +5,9 @@
     "combat": { "src": "assets/audio/music/combat.ogg" },
     "tension": { "src": "assets/audio/music/tension.ogg", "volume": 0.8 },
     "victory": { "src": "assets/audio/music/victory.ogg", "loop": false },
-    "defeat": { "src": "assets/audio/music/defeat.ogg", "loop": false }
+    "defeat": { "src": "assets/audio/music/defeat.ogg", "loop": false },
+    "bossGeneric": { "src": "assets/audio/music/boss-generic.ogg" },
+    "bossPresentador": { "src": "assets/audio/music/planta-5/combat.ogg" }
   },
   "sfx": {
     "footstepStone": { "src": ["assets/audio/sfx/footstep_stone_1.ogg", "assets/audio/sfx/footstep_stone_2.ogg"], "volume": 0.5 },
@@ -81,6 +83,16 @@
     "dialogueChoice": { "sfx": "uiClick" }
   },
   "outcomeMusic": { "field": "winner", "map": { "concursantes": "victory" }, "fallback": "defeat" },
+  "combatMusicByEntity": {
+    "arrayField": "order",
+    "map": {
+      "jefe-centollo": "bossGeneric",
+      "jefe-encargada": "bossGeneric",
+      "jefe-giganton": "bossGeneric",
+      "jefe-socorrista": "bossGeneric",
+      "jefe-presentador": "bossPresentador"
+    }
+  },
   "maps": {
     "camerino": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
     "camerino-1": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
@@ -93,10 +105,7 @@
     "planta-2": { "ambience": { "src": "assets/audio/ambience/planta-2.ogg", "volume": 0.6 } },
     "planta-3": { "ambience": { "src": "assets/audio/ambience/planta-3.ogg", "volume": 0.6 } },
     "planta-4": { "ambience": { "src": "assets/audio/ambience/planta-4.ogg", "volume": 0.6 } },
-    "planta-5": {
-      "ambience": { "src": "assets/audio/ambience/planta-5.ogg", "volume": 0.7 },
-      "music": { "combat": { "src": "assets/audio/music/planta-5/combat.ogg" } }
-    }
+    "planta-5": { "ambience": { "src": "assets/audio/ambience/planta-5.ogg", "volume": 0.7 } }
   },
-  "_note": "Map ids per a8057565f4a8e7219 (Willy agent): camerino is the start, camerino-1..5 are the post-floor Camerino (same ambience). planta-1 Castro Sumergido .. planta-5 Plató, plus the hand-made test map prueba-castro (given planta-1's ambience). planta-5's combat override is the only boss theme wired — the generated floors' boss room is a sub-area (systems.planta.salas[i].role==='jefe') with no engine event exposing which room a fight started in, so jefe-centollo/-encargada/-giganton/-socorrista/-presentador don't get individual stingers yet; this plays the floor's own combat track for any fight there. `conditionApplied`/condition `eliminado` is willy's one-hit elimination (no downed/bleed-out state like dnd5e); `natural` on attackRolled is the raw d20 (1 = pifia/fumble)."
+  "_note": "Map ids per a8057565f4a8e7219 (Willy agent): camerino is the start, camerino-1..5 are the post-floor Camerino (same ambience). planta-1 Castro Sumergido .. planta-5 Plató, plus the hand-made test map prueba-castro (given planta-1's ambience). Boss fights (jefe-* in combatStarted.order, per the same agent) get their own theme via `combatMusicByEntity` rather than a per-map override, since the boss room is a sub-area with no roomId event — this works because the boss's entity id itself is in the fight's roster. jefe-centollo/-encargada/-giganton/-socorrista share a generic boss track; jefe-presentador (the finale) gets its own. Rival fights (rival-pN-M, rival-vanesa...) don't get a sting yet. `conditionApplied`/condition `eliminado` is willy's one-hit elimination (no downed/bleed-out state like dnd5e); `natural` on attackRolled is the raw d20 (1 = pifia/fumble)."
 }

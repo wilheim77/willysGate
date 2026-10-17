@@ -37,7 +37,16 @@ export function setupAudio(store: GameStore, game: GameDefinition): AudioManager
       // ambience bed and re-resolves the current music state's per-map override.
       if (event.type === 'mapChanged') manager.setMap((event as unknown as { to: string }).to);
     }
-    if (change.events.some((e) => e.type === 'combatStarted')) syncMusicToTurnMode();
+    const started = change.events.find((e) => e.type === 'combatStarted') as unknown as Record<string, unknown> | undefined;
+    if (started) {
+      syncMusicToTurnMode();
+      // A boss (or other special) entity in the fight overrides the plain combat track —
+      // checked by entity id, so no room/zone concept is needed in the engine.
+      const rule = manifest.combatMusicByEntity;
+      const ids = rule && (started[rule.arrayField] as unknown[] | undefined);
+      const bossKey = rule && Array.isArray(ids) ? Object.keys(rule.map).find((id) => ids.includes(id)) : undefined;
+      if (bossKey) manager.setMusic(rule!.map[bossKey]!);
+    }
     // combatEnded: play the victory/defeat stinger (manifest.outcomeMusic), then let it
     // fall back to the exploration/combat sync itself once the stinger finishes —
     // calling syncMusicToTurnMode() right away (as for combatStarted) would cut it off.
