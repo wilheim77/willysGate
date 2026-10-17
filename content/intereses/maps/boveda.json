@@ -494,6 +494,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.15
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
       }
      ]
     }

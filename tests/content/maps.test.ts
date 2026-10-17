@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { type GridMap, type MapZone, type ParsedMap, type TiledMapJson, type Vec2, inBounds, inZone, parseTiledMap, posKey, reachableTiles, tileAt } from '../../engine';
@@ -278,6 +278,20 @@ describe('Intereses maps', () => {
       });
     });
   }
+
+  it('opens every door for real: each door-* script makes its tile walkable', () => {
+    const dialoguesDir = join(content, 'dialogues');
+    for (const [mapId, parsed] of Object.entries(maps)) {
+      if (mapId === 'test') continue;
+      for (const name of Object.keys(parsed.spawns).filter((n) => kindOf(n) === 'door')) {
+        const script = `door_${name.slice(5).replace(/-/g, '_')}`;
+        const file = join(dialoguesDir, `${script}.json`);
+        const text = readFileSync(existsSync(file) ? file : join(dialoguesDir, 'door_default.json'), 'utf8');
+        const opens = /"type":\s*"setTile"[^}]*"walkable":\s*true/.test(text.replace(/\n/g, ' '));
+        expect(opens, `${mapId}/${name}: ${existsSync(file) ? script : 'door_default'} never makes the door tile walkable`).toBe(true);
+      }
+    }
+  });
 
   it('wires the act-critical scenes to their dialogues', () => {
     const scene = (map: string, name: string) => maps[map]?.zones.find((z) => z.layer === 'scenes' && z.name === name)?.properties;

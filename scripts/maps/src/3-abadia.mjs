@@ -106,7 +106,7 @@ export default {
     { name: 'antorcha-claustro-2', at: [20, 9], radius: 4, color: '#ffb050', flicker: 0.12, prop: 'torch_wall' },
     { name: 'antorcha-puerta-1', at: [12, 17], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
     { name: 'antorcha-puerta-2', at: [15, 17], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
-    { name: 'vela-cripta', at: [25, 4], radius: 2.5, color: '#ffd090', flicker: 0.2, intensity: 0.7 },
+    { name: 'vela-cripta', at: [25, 4], radius: 2.5, color: '#ffd090', flicker: 0.2, intensity: 0.7, prop: 'candles' },
   ],
   exits: [
     { name: 'a-plaza', rect: [11, 21, 6, 1], to: 'plaza', spawn: 'entry-abadia' },
