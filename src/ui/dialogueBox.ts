@@ -79,6 +79,8 @@ export class DialogueBox {
     const node = tree && tree.nodes[d.nodeId];
     if (!d || !tree || !node) {
       this.root.hidden = true;
+      // A saved conversation this version doesn't have: close it rather than freeze the party.
+      if (d) queueMicrotask(() => this.store.dispatch({ type: 'endDialogue', issuer: this.game.playerId } as never));
       return;
     }
     const ruleset = this.store.engine.ruleset;

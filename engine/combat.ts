@@ -60,7 +60,11 @@ export interface ActionPerformedEvent extends GameEvent {
 // --- Helpers ------------------------------------------------------------------
 
 /** Different factions fight each other. Finer relations (neutral, allied factions) can come later. */
+/** Bystanders (an old miner on the road): nobody's enemy until something changes that. */
+export const NONCOMBATANT_TAG = 'noncombatant';
+
 export function isHostile(a: Entity, b: Entity): boolean {
+  if (a.tags.includes(NONCOMBATANT_TAG) || b.tags.includes(NONCOMBATANT_TAG)) return false;
   return a.factionId !== b.factionId;
 }
 
@@ -233,8 +237,12 @@ export const startCombat: CommandHandler<StartCombatCommand> = (state, cmd, { ru
   for (const id of participants) initiative[id] = ruleset.rollInitiative(state, id, rng);
   const order = [...participants].sort((a, b) => initiative[b]! - initiative[a]! || a.localeCompare(b));
 
+  // A fight cuts any conversation short.
+  const talking = state.systems.dialogue as { treeId?: string } | undefined;
+  const { dialogue: _dropped, ...systems } = state.systems;
   const started: GameState = {
     ...state,
+    systems,
     rng: rng.state,
     turn: { mode: 'combat', round: 1, activeEntityId: null, order, initiative, movementUsed: 0 },
   };
@@ -242,7 +250,11 @@ export const startCombat: CommandHandler<StartCombatCommand> = (state, cmd, { ru
   return {
     ok: true,
     state: { ...first.state, rng: rng.state },
-    events: [{ type: 'combatStarted', order, initiative } as CombatStartedEvent, ...first.events],
+    events: [
+      ...(talking ? [{ type: 'dialogueEnded', treeId: talking.treeId ?? '' } as GameEvent] : []),
+      { type: 'combatStarted', order, initiative } as CombatStartedEvent,
+      ...first.events,
+    ],
   };
 };
 

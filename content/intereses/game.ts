@@ -65,7 +65,7 @@ export const game: GameDefinition = {
     ];
     // Phase 4 test: someone to talk to on the way in.
     const npcs: Entity[] = [
-      createMonster({ id: 'viejo', name: 'Viejo minero', monsterId: 'bandit', controllerId: AI, factionId: 'neutral', position: { x: 5, y: 4 }, spriteId: 'minero_cuadrilla', extraTags: ['dialogue:viejo_minero'] }),
+      createMonster({ id: 'viejo', name: 'Viejo minero', monsterId: 'bandit', controllerId: AI, factionId: 'neutral', position: { x: 5, y: 4 }, spriteId: 'minero_cuadrilla', extraTags: ['dialogue:viejo_minero', 'noncombatant'] }),
     ];
     // Scenery from spawn names: "barrel_oil-1", "crate-2"...
     const props: Entity[] = Object.entries(spawns)

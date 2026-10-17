@@ -28,7 +28,7 @@ describe('dialogue content', () => {
           for (const l of links) expect(tree.nodes[l], `${id} -> ${l}`).toBeDefined();
           // No softlocks: a node with choices always offers one with no condition and no roll.
           if (node.choices?.length) {
-            expect(node.choices.some((c) => !c.when && !c.check), `${id}: needs an always-available choice without a check`).toBe(true);
+            expect(node.choices.some((c) => !c.when && !c.check && !c.once), `${id}: needs an always-available, repeatable choice without a check`).toBe(true);
           }
           for (const c of node.choices ?? []) {
             for (const r of c.when ? rules(c.when) : []) expect(dnd5e.dialogueConditions[r], `${id}: rule ${r}`).toBeDefined();
@@ -36,13 +36,14 @@ describe('dialogue content', () => {
           }
         }
         // Every node can reach the end of the conversation.
-        const ends = new Set(Object.entries(tree.nodes).filter(([, n]) => (!n.choices?.length && !n.next) || n.choices?.some((c) => !c.next && !c.check)).map(([k]) => k));
+        // Only through choices that are always offered (no `when`), so a closed door can't hide the exit.
+        const ends = new Set(Object.entries(tree.nodes).filter(([, n]) => (!n.choices?.length && !n.next) || n.choices?.some((c) => !c.next && !c.check && !c.when)).map(([k]) => k));
         let grew = true;
         while (grew) {
           grew = false;
           for (const [k, n] of Object.entries(tree.nodes)) {
             if (ends.has(k)) continue;
-            const outs = [n.next, ...(n.choices ?? []).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
+            const outs = [n.next, ...(n.choices ?? []).filter((c) => !c.when).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
             if (outs.some((o) => ends.has(o))) {
               ends.add(k);
               grew = true;

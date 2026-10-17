@@ -5,7 +5,7 @@ import { type PathResult, findPath } from './pathfinding';
 import { surfaceAt } from './surfaces';
 import { applyEffects } from './effects';
 import { disarmTrap, trapsAfterStep, trapsOf } from './traps';
-import { type EngineContent, chooseOption, dialogueOf, interact, startDialogue } from './dialogue';
+import { type EngineContent, chooseOption, dialogueOf, endDialogue, interact, startDialogue } from './dialogue';
 import { RngCursor } from './rng';
 import type { Ruleset } from './ruleset';
 import type { Entity, GameState } from './state';
@@ -179,7 +179,7 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
   return { ok: true, state: ended.state, events: [...events, ...ended.events] };
 };
 
-export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act, startDialogue, chooseOption, interact, disarmTrap };
+export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act, startDialogue, chooseOption, interact, endDialogue, disarmTrap };
 
 /** Validates a command against the state and returns the new state plus events. Pure: never mutates `state`. */
 export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCommand, content?: EngineContent): ReturnType<CommandHandler> {

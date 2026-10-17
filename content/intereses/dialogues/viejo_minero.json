@@ -7,12 +7,68 @@
       "speaker": "viejo",
       "text": "¿Del banco? Se os huele desde la cuneta. A tinta y a cuerda.",
       "choices": [
-        { "text": "¿Qué pasó en la mina?", "once": true, "next": "mina" },
-        { "text": "Busco al barón Mazo.", "once": true, "next": "baron" },
-        { "text": "Seguro que sabes algo más. Habla.", "when": { "notFlag": "viejo_hablo" }, "check": { "check": "persuasion", "dc": 13, "success": "secreto", "failure": "cerrado" } },
-        { "text": "Mi gente no olvida las minas, viejo. Ni a los que se quedan dentro.", "when": { "rule": "race", "params": { "is": "elf" } }, "lockedHint": "[Elfo]", "next": "elfo" },
-        { "text": "Toma, para pan.", "when": { "all": [{ "notFlag": "viejo_pagado" }] }, "effects": [{ "type": "setFlag", "flag": "viejo_pagado", "value": true }], "next": "pan" },
-        { "text": "Apártate.", "next": "adios" }
+        {
+          "text": "¿Qué pasó en la mina?",
+          "once": true,
+          "next": "mina",
+          "id": "mina"
+        },
+        {
+          "text": "Busco al barón Mazo.",
+          "once": true,
+          "next": "baron",
+          "id": "baron"
+        },
+        {
+          "text": "Seguro que sabes algo más. Habla.",
+          "when": {
+            "notFlag": "viejo_hablo"
+          },
+          "check": {
+            "check": "persuasion",
+            "dc": 13,
+            "success": "secreto",
+            "failure": "cerrado"
+          }
+        },
+        {
+          "text": "Mi gente no olvida las minas, viejo. Ni a los que se quedan dentro.",
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "lockedHint": "[Elfo]",
+          "next": "elfo"
+        },
+        {
+          "text": "Toma, para pan.",
+          "when": {
+            "all": [
+              {
+                "notFlag": "viejo_pagado"
+              }
+            ]
+          },
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "viejo_pagado",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "flag": "pista_carros",
+              "value": true
+            }
+          ],
+          "next": "pan"
+        },
+        {
+          "text": "Apártate.",
+          "next": "adios"
+        }
       ]
     },
     "mina": {
@@ -28,13 +84,30 @@
     "secreto": {
       "speaker": "viejo",
       "text": "Por las noches suben carros por el camino viejo. Cargados. De una mina cerrada. Haced las cuentas, que para eso os pagan.",
-      "effects": [{ "type": "setFlag", "flag": "viejo_hablo", "value": true }, { "type": "setFlag", "flag": "pista_carros", "value": true }],
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "viejo_hablo",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pista_carros",
+          "value": true
+        }
+      ],
       "next": "saludo"
     },
     "cerrado": {
       "speaker": "viejo",
       "text": "Sé que tengo hambre y que tú no eres pan. Hala.",
-      "effects": [{ "type": "setFlag", "flag": "viejo_hablo", "value": true }],
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "viejo_hablo",
+          "value": true
+        }
+      ],
       "next": "saludo"
     },
     "elfo": {
@@ -44,8 +117,15 @@
     },
     "pan": {
       "speaker": "viejo",
-      "text": "Una moneda del banco. Qué ironía más cara. Toma esto a cambio, a mí ya no me abre nada.",
-      "effects": [{ "type": "giveItem", "owner": "party", "item": "llave_herrumbrosa", "count": 1 }],
+      "text": "Una moneda del banco. Qué ironía más cara. Te la pago con lo único que tengo: por las noches suben carros por el camino viejo, cargados, de una mina cerrada. Y toma esto, a mí ya no me abre nada.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "llave_herrumbrosa",
+          "count": 1
+        }
+      ],
       "next": "saludo"
     },
     "adios": {

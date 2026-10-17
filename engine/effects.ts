@@ -262,7 +262,7 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
       }
       case 'setController': {
         const e = next.entities[effect.entityId];
-        if (!e) break;
+        if (!e) throw new Error(`Effect targets unknown entity "${effect.entityId}"`);
         const updated = { ...e, controllerId: effect.controllerId, factionId: effect.factionId ?? e.factionId };
         next = { ...next, entities: { ...next.entities, [e.id]: updated } };
         events.push({ type: 'controllerChanged', entityId: e.id, controllerId: updated.controllerId, factionId: updated.factionId } as ControllerChangedEvent);
@@ -270,6 +270,7 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
       }
       case 'setTile': {
         const { x, y } = effect.position;
+        if (!inBounds(next.map, effect.position)) throw new Error(`setTile out of the map at ${x},${y}`);
         const index = y * next.map.width + x;
         const tile = next.map.tiles[index];
         if (!tile) break;
