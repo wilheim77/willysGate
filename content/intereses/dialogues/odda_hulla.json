@@ -78,7 +78,7 @@
         },
         {
           "id": "lisandro",
-          "text": "¿Qué opinas del prestamista, Lisandro Fuss?",
+          "text": "¿Quién presta dinero en este pueblo?",
           "once": true,
           "next": "lisandro"
         },
@@ -148,7 +148,7 @@
     },
     "lisandro": {
       "speaker": "odda",
-      "text": "Un orejas largas con balanza. Presta a los que tienen hambre y cobra a los que tienen menos. Le vamos a dar lo suyo, cuando toque. A él y a su banco.",
+      "text": "Lisandro Fuss. Un orejas largas con balanza. Presta a los que tienen hambre y cobra a los que tienen menos. Le vamos a dar lo suyo, cuando toque. A él y a su banco.",
       "next": "hub"
     },
     "elfo": {
