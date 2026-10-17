@@ -5,6 +5,7 @@ import { gridDistance } from './grid';
 import { itemCount } from './inventory';
 import { RngCursor } from './rng';
 import type { CheckResult, Ruleset } from './ruleset';
+import { type MapBuilder, changeMap } from './world';
 import { type FlagValue, type GameState, type JsonValue, OBJECT_TAG } from './state';
 
 /**
@@ -59,7 +60,9 @@ export type DialogueWhen =
 export type DialogueEffect =
   | Effect
   /** Start a fight with everyone of these factions on the map. */
-  | { type: 'startCombat'; factions: string[] };
+  | { type: 'startCombat'; factions: string[] }
+  /** The party leaves for another map (a cart ride, a cave-in, "follow me"). */
+  | { type: 'travel'; mapId: string; spawn: string };
 
 export interface DialogueEvent extends GameEvent {
   type: 'dialogueStarted' | 'dialogueNode' | 'dialogueChoice' | 'dialogueEnded';
@@ -80,6 +83,8 @@ export interface DialogueCheckEvent extends GameEvent {
 /** Content the engine looks up by id while running commands. */
 export interface EngineContent {
   dialogues: Record<string, DialogueTree>;
+  /** Builders for the game's maps, by id, used the first time the party travels there. */
+  maps?: Record<string, MapBuilder>;
 }
 
 export const EMPTY_CONTENT: EngineContent = { dialogues: {} };
@@ -191,7 +196,7 @@ function enterNode(
   if (!node) return fail('invalid_target', `Dialogue ${d.treeId} has no node "${nodeId}"`);
   let next = withDialogue(state, { ...d, nodeId });
   events.push({ type: 'dialogueNode', treeId: d.treeId, nodeId } as DialogueEvent);
-  const applied = applyDialogueEffects(ruleset, next, node.effects ?? [], rng);
+  const applied = applyDialogueEffects(ruleset, next, node.effects ?? [], rng, content);
   if (!applied.ok) return applied;
   next = applied.state;
   events.push(...applied.events);
@@ -203,12 +208,23 @@ function enterNode(
   return { ok: true, state: next, events };
 }
 
-function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor): CommandResult {
-  const plain = effects.filter((e): e is Effect => e.type !== 'startCombat');
+function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor, content: EngineContent): CommandResult {
+  const plain = effects.filter((e): e is Effect => e.type !== 'startCombat' && e.type !== 'travel');
   const applied = applyEffects(ruleset, state, plain);
   let next = applied.state;
   const events: GameEvent[] = [...applied.events];
   for (const e of effects) {
+    if (e.type === 'travel') {
+      const t = e as { mapId: string; spawn: string };
+      const d = dialogueOf(next);
+      const issuer = d ? next.entities[d.actorId]?.controllerId : undefined;
+      const party = Object.values(next.entities).filter((x) => issuer && x.controllerId === issuer).map((x) => x.id);
+      const r = changeMap(next, content.maps ?? {}, t.mapId, t.spawn, party);
+      if (!r.ok) return r;
+      next = r.state;
+      events.push(...r.events);
+      continue;
+    }
     if (e.type !== 'startCombat') continue;
     const factions = (e as { factions: string[] }).factions;
     const leaderSide = Object.values(next.entities).find((x) => x.controllerId.startsWith('player'))?.factionId;
@@ -289,7 +305,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
       events.push({ type: 'dialogueCheck', actorId, result: lastCheck } as DialogueCheckEvent);
       target = lastCheck.success ? choice.check.success : choice.check.failure;
     }
-    const applied = applyDialogueEffects(ruleset, { ...next, rng: rng.state }, choice.effects ?? [], rng);
+    const applied = applyDialogueEffects(ruleset, { ...next, rng: rng.state }, choice.effects ?? [], rng, content);
     if (!applied.ok) return applied;
     next = applied.state;
     events.push(...applied.events);
