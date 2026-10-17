@@ -3,14 +3,15 @@
 // Writes content/<game>/public/assets/<preset>/tiles/terrain.png and updates the
 // 'tilesets.terrain' and 'terrain' entries of content/<game>/assets/<preset>.json.
 //
-// Cells are either [col, row] in a grid of tileSize, or sprite names looked up in a
-// "name x y w h" list (e.g. 0x72's tile_list), given as "tileList" in the spec.
+// Cells are [col, row] in a grid of tileSize, sprite names looked up in a
+// "name x y w h" list (e.g. 0x72's tile_list, given as "tileList"), or
+// { "atlas": "<other sheet>", "cell": [col, row] } to mix packs in one preset.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, isOpaque, readPng, writePng } from './png.ts';
 import { readSpriteList } from './sprite-list.ts';
 
-type Cell = [number, number] | string;
+type Cell = [number, number] | string | { atlas: string; cell: [number, number] };
 
 const [game = 'intereses', preset = 'lpc'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -23,12 +24,19 @@ const spec = JSON.parse(readFileSync(join(gameDir, 'art', preset, 'tiles.json'),
 };
 const T = spec.tileSize;
 const atlas = readPng(join(root, 'art-src', spec.atlas));
+const extraAtlases = new Map<string, Image>();
+const loadAtlas = (path: string): Image => {
+  if (!extraAtlases.has(path)) extraAtlases.set(path, readPng(join(root, 'art-src', path)));
+  return extraAtlases.get(path)!;
+};
 const named = spec.tileList ? readSpriteList(join(root, 'art-src', spec.tileList)) : {};
 
 const frames: Image[] = [];
 const cell = (c: Cell, what: string) => {
   let img: Image;
-  if (typeof c === 'string') {
+  if (!Array.isArray(c) && typeof c === 'object') {
+    img = crop(loadAtlas(c.atlas), c.cell[0] * T, c.cell[1] * T, T, T);
+  } else if (typeof c === 'string') {
     const r = named[c];
     if (!r) throw new Error(`${what}: unknown sprite "${c}"`);
     img = crop(atlas, r.x, r.y, T, T);

@@ -37,7 +37,7 @@ En el mismo mapa (`content/intereses/maps/test.json`), con oscuridad, antorchas 
   - Los tiles LPC son brillantes y genéricos: incluso con el filtro, quedan más «aventura» que grimdark.
   - Mezclar personajes LPC con tiles 0x72 no funciona por escala.
 
-**Recomendación:** 0x72 como base de *Intereses*, con animaciones por código e iluminación como principal fuente de ambiente. Queda pendiente elegir el pack de exteriores a 16 px para el pueblo. LPC se queda en el pipeline como opción para la creación de personaje o para otro juego.
+**Decisión (2026-10-17):** 0x72 como base de *Intereses* y **Ninja Adventure (CC0) para exteriores**, con el mismo filtro de color. Recomendación original: 0x72 como base de *Intereses*, con animaciones por código e iluminación como principal fuente de ambiente. Queda pendiente elegir el pack de exteriores a 16 px para el pueblo. LPC se queda en el pipeline como opción para la creación de personaje o para otro juego.
 
 ## Cómo entra un pack en el proyecto
 

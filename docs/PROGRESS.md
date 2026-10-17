@@ -3,7 +3,8 @@
 ## Estado actual
 
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
-- **Fase 1, Esqueleto técnico:** completada y desplegada en **vista cenital 3/4**, con dos presets de arte para comparar. **Pendiente de aprobación** y de la elección de arte definitiva.
+- **Fase 1, Esqueleto técnico:** **completada y aprobada** (2026-10-17). Arte: 0x72 como base y Ninja Adventure para exteriores. LPC se queda como preset alternativo.
+- **Fase 2, Combate:** plan propuesto y pendiente del visto bueno.
 
 ## Hecho
 
@@ -37,11 +38,8 @@
 - [x] Licencias: código MIT (`LICENSE`); arte derivado de LPC, CC-BY-SA 3.0 (`CREDITS.md`).
 - [x] Tests: 107.
 
-## Pendiente de la Fase 1
-
-- [ ] El usuario elige el arte definitivo. La recomendación es 0x72 como base.
-- [ ] El usuario decide el pack de exteriores a 16 px para el pueblo: Ninja Adventure (CC0) o Raguzar.
-- [ ] Confirmar en un móvil real que pellizcar no mueve al personaje.
+- [x] Arte elegido: 0x72 (base) y Ninja Adventure (exteriores, ya integrado en tierra y acantilados).
+- [x] Confirmado en un móvil real que pellizcar no mueve al personaje.
 
 ## Planificado para más adelante
 
@@ -57,4 +55,4 @@
 
 ## Siguiente paso
 
-Esperar la aprobación de la Fase 1 y la elección de arte. Después, presentar el plan de la Fase 2 (combate), que incluye juice, animaciones por código, recoloreado de enemigos y las piezas genéricas para el onboarding.
+Aprobar el plan de la Fase 2 (combate) y empezar a implementarlo.

@@ -34,31 +34,35 @@
       "frames": [
         7,
         8,
-        9
-      ],
-      "face": 10
-    },
-    "slag": {
-      "tileset": "terrain",
-      "frames": [
+        9,
+        10,
         11,
         12
       ],
       "face": 13
     },
+    "slag": {
+      "tileset": "terrain",
+      "frames": [
+        14,
+        15,
+        16
+      ],
+      "face": 17
+    },
     "wall": {
       "tileset": "terrain",
       "frames": [
-        14
+        18
       ],
-      "face": 15
+      "face": 19
     },
     "planks": {
       "tileset": "terrain",
       "frames": [
-        16
+        20
       ],
-      "face": 17
+      "face": 21
     }
   },
   "sprites": {
