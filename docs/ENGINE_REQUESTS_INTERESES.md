@@ -55,9 +55,52 @@ El guionista no toca `engine/`, `rulesets/` ni `src/`. Aquí se apunta lo que ha
 | G2 | `onVictory` / `onDefeat` en `startCombat` | **Hecho**. Los mineros del camino ponen `prologo_mineros_resuelto` al perder |
 | G3 | Condición `inParty` | **Hecho**. Sustituye a `garran_reclutado` en todas las réplicas de Garrán. Las marcas `*_reclutado` se quedan como historia |
 
-## Pendiente para los mapas (rama `mapas`)
+## Pendiente para los mapas y los guiones de escena
 
-- Renombrar los spawns con nombre que usan los diálogos: `viuda-1` → `benita` y `viuda-2` → `casilda` (calles); `guardia_baron-1` de la plaza → `guardia_abadia`. Falta un spawn para `posadera` (Remedios, en El Pico Roto).
-- Escenas: `juicio-anselmo` ya puede apuntar a `juicio_anselmo` (incluye la llegada a la plaza), `audiencia` a `audiencia_abadia` y `sermon` a `sermon_cirilo`. El cofre de la trastienda es `chest-libro_cuentas` → `chest_libro_cuentas`.
-- La salida de la plaza a la abadía debería pedir `audiencia_concedida`. La guardia, además, hace `travel` a `abadia`/`entry-plaza`.
-- Fanáticos del juicio: el diálogo empieza el combate por facción (`fanaticos`). Las plantillas `fanatico_pala` necesitan esa facción y no llevar `noncombatant`, o no se les podrá pegar.
+**Spawns con nombre.** Calles: `viuda-1` → `benita` y `viuda-2` → `casilda`. Plaza: `guardia_baron-1` → `guardia_abadia`. Falta `posadera` (Remedios) en El Pico Roto.
+
+**Interactuables:**
+- `pozo_ahorcado` es un objeto en el Escorial, junto a `entry-pozo`. No es cofre, puerta ni palanca, así que necesita un spawn propio.
+- `inscripcion_boveda` va en el spawn `todo-inscripcion` de la Bóveda.
+- `door_bocamina` y `door_cripta` ya siguen la convención.
+
+**Escenas** (zona → diálogo, hablante):
+
+| Mapa | Zona | Diálogo | Hablante | Condición |
+|---|---|---|---|---|
+| camino | `garran-en-la-cuneta` | `camino_garran` | `garran` | — |
+| escorial | `sinpaga-jefe` | `sinpaga_jefe` | `sinpaga_enmascarado-1` | — |
+| escorial | junto a `callado-1` | `callado_pozo` | `callado-1` | — |
+| plaza | noche de las antorchas | `noche_antorchas` | `nella` | `acceso_contrabando` y no `d1_resuelto` |
+| plaza | tras el asalto | `d1_horca` | `nella` | `d1_cuadrilla` (después del combate de la abadía) |
+| abadia | tras la defensa | `d1_abadia_final` | `mazo` | `d1_abadia` (después del combate) |
+| mina | `galeria-sellada` | `galeria_sellada` | `garran` | — |
+| boveda | `brea-habla` | `boveda_brea` | `absalon` | — |
+
+**Los abre el juego** (no hay zona):
+- `boveda_collera` cuando se pone `brea_derrotado` (lo pone el `onVictory` de la Bóveda).
+- `el_cobro` al llegar a la plaza con `d3_resuelta`. D3 acaba con `travel` a `plaza`/`entry-escorial`.
+- `epilogo` cuando se pone `d4_resuelta` y no hay combate.
+
+**Marcas que piden los mapas:**
+
+| Marca provisional | Marca real |
+|---|---|
+| `TODO:noche_antorchas_resuelta` | `d1_resuelto` |
+| `TODO:llave_cripta` | `llave_cripta` (también está el objeto del mismo nombre) |
+| `TODO:d2_resuelta` | `d2_resuelta` |
+
+**Encuentros de D1:**
+- Guardia de la abadía si `d1_cuadrilla`.
+- Cuadrilla, con Odda, si `d1_abadia`.
+- Los Hulla no pelean si `hulla_no_luchan`.
+
+**Mecánica que queda al juego o al ruleset:**
+- `brea_vuela_polvorin`: el derrumbe a mitad del combate del jefe.
+- `garran_sin_nada_que_perder`: ventaja de Garrán en la Bóveda.
+- `d3_puesta`: desventaja en Sabiduría y curas de Anselmo a la mitad. La collera da una orden por combate.
+- `pueblo_hostil`: precios de la posada y la Santa Pala no cura.
+- `d2_expulsado`: Garrán aparece herido y neutral en la Bóveda.
+- Subidas de nivel. A 4 con `pista_plata_nueva` + `pista_pozo`, a 5 con `d1_resuelto` y a 6 con `d2_resuelta`.
+
+**Fanáticos del juicio:** el combate se empieza por facción (`fanaticos`).
