@@ -54,15 +54,32 @@ export function surfaceCost(ruleset: Ruleset, state: GameState): (p: Vec2) => nu
  * A story zone that wants the party to stop here: a scene not yet played (flag
  * "scene:<name>"), or an encounter whose fighters are still standing, when its flags allow.
  */
-export function haltsHere(ruleset: Ruleset, state: GameState, p: Vec2): boolean {
-  const zones = (state.systems.zones as unknown as { name: string; layer: string; x: number; y: number; width: number; height: number; properties: Record<string, unknown> }[] | undefined) ?? [];
+type StoryZone = { name: string; layer: string; x: number; y: number; width: number; height: number; properties: Record<string, unknown> };
+
+/**
+ * A gate scene (the miners blocking the road) is settled once every exit it protects is open;
+ * until then it plays again each time the party walks back in.
+ */
+export function gateSettled(state: GameState, z: StoryZone): boolean {
+  // Someone who has joined the party (Garrán in the ditch) no longer blocks anything.
+  const speaker = z.properties.speaker ? state.entities[String(z.properties.speaker)] : undefined;
+  if (speaker?.controllerId.startsWith('player')) return true;
+  const zones = (state.systems.zones as unknown as StoryZone[] | undefined) ?? [];
+  const names = String(z.properties.protects ?? '').split(',').map((n) => n.trim()).filter(Boolean);
+  const exits = zones.filter((e) => e.layer === 'exits' && names.includes(e.name));
+  return exits.length > 0 && exits.every((e) => !e.properties.requiresFlag || !!state.flags[String(e.properties.requiresFlag)]);
+}
+
+export function haltsHere(ruleset: Ruleset, state: GameState, p: Vec2, from?: Vec2): boolean {
+  const zones = (state.systems.zones as unknown as StoryZone[] | undefined) ?? [];
+  const inside = (z: StoryZone, q: Vec2) => q.x >= z.x && q.y >= z.y && q.x < z.x + z.width && q.y < z.y + z.height;
   for (const z of zones) {
     if (z.layer !== 'scenes' && z.layer !== 'encounters') continue;
-    if (p.x < z.x || p.y < z.y || p.x >= z.x + z.width || p.y >= z.y + z.height) continue;
+    if (!inside(z, p) || (from && inside(z, from))) continue;
     const props = z.properties;
     if ((props.requiresFlag && !state.flags[String(props.requiresFlag)]) || (props.unlessFlag && state.flags[String(props.unlessFlag)])) continue;
     if (z.layer === 'scenes') {
-      if (props.once !== false && state.flags[`scene:${z.name}`]) continue;
+      if (props.gate ? gateSettled(state, z) : props.once !== false && state.flags[`scene:${z.name}`]) continue;
       const speaker = props.speaker ? state.entities[String(props.speaker)] : undefined;
       if (props.speaker && (!speaker || !ruleset.isStanding(speaker))) continue;
       if (!props.dialogue) continue;
@@ -166,11 +183,12 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     const tileTo = next.map.tiles[step.y * next.map.width + step.x]!;
     spent += 1 + Math.max(0, tileTo.height - tileFrom.height) * ruleset.movement.climbCost + surfaceCost(ruleset, next)(step);
     segment.push(step);
+    const tileFromPos = prev;
     prev = step;
     next = placeAt(next, step);
     // A scene or a fight waiting on this tile stops the walk here (otherwise a long tap walks
     // straight past the miners blocking the road and the story never starts).
-    if (entity.controllerId.startsWith('player') && haltsHere(ruleset, next, step)) {
+    if (entity.controllerId.startsWith('player') && haltsHere(ruleset, next, step, tileFromPos)) {
       events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
       from = step;
       segment = [];
