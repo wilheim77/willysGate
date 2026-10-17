@@ -1,0 +1,55 @@
+{
+  "$comment": "Entities the dialogues talk to or change, for the map designer. Ids are fixed: dialogues reference them (setEntity/setController/startCombat). 'dialogue' is the tree to tag on the entity (dialogue:<id>); null when a script opens it or it only appears as a speaker. noncombatant: tag it until a dialogue starts a fight. essential: the story needs it alive. 'commoner' means a plain non-fighter. spriteId is a suggestion; ids not yet in assets/0x72.json need art (TODO-ART). Party members hero and dorotea are created by game.ts.",
+  "garran": {
+    "name": "Garrán",
+    "monsterId": "companion",
+    "spriteId": "garran",
+    "faction": "neutral",
+    "noncombatant": true,
+    "essential": true,
+    "dialogue": "camino_garran",
+    "scene": "P",
+    "note": "Companion. Create him like game.ts does (createCharacter fighter, half_orc, level 3) but controllerId \"ai\", faction \"neutral\", tags noncombatant. Recruiting switches him to player:1/party and his dialogue to \"garran\"."
+  },
+  "minero_cabecilla": {
+    "name": "Cabecilla de los mineros",
+    "monsterId": "bandit",
+    "spriteId": "minero_cuadrilla",
+    "faction": "mineros",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": "camino_mineros",
+    "scene": "P",
+    "note": "Blocks the road with the other three. Tutorial fight if talks fail."
+  },
+  "minero_hambriento_1": {
+    "name": "Minero hambriento",
+    "monsterId": "bandit",
+    "spriteId": "minero_cuadrilla",
+    "faction": "mineros",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": null,
+    "scene": "P"
+  },
+  "minero_hambriento_2": {
+    "name": "Minero hambriento",
+    "monsterId": "bandit",
+    "spriteId": "minero_cuadrilla",
+    "faction": "mineros",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": null,
+    "scene": "P"
+  },
+  "minero_hambriento_3": {
+    "name": "Minero hambriento",
+    "monsterId": "thug",
+    "spriteId": "minero_cuadrilla",
+    "faction": "mineros",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": null,
+    "scene": "P"
+  }
+}
