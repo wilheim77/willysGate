@@ -35,7 +35,7 @@ Pantalla de inicio → Prólogo (saltable) → Planta 1 (tutorial + cásting)
 - **Una partida = una temporada**: 5 plantas y un final. Duración objetivo: **3-4 horas** la primera vez (35-50 min por planta).
 - Cada planta: llegar a la **escalera de bajada** antes de que el **reloj** llegue a cero, ganando audiencia por el camino y derrotando al jefe que guarda la escalera.
 - **Modo de eliminación, elegido al empezar** (ver §12): **Con repetición** (normal: si Willy cae, vuelve al último Camerino y la planta se regenera) o **Sin repetición** (hardcore: muerte permanente, la temporada termina).
-- La rejugabilidad viene de la generación procedural, las 6 razas × 9 clases, los logros por navegador, la dificultad Prime time y el modo Sin repetición.
+- La rejugabilidad viene de la generación procedural, las 9 clases (Willy siempre es humano), los 5 mazmorreros rivales, los logros por navegador, la dificultad Prime time y el modo Sin repetición.
 
 ## 2. Qué reutiliza del motor y qué cambia
 
@@ -150,7 +150,7 @@ El reloj **no es tiempo real**. Cada acción descuenta segundos de un contador d
 - **Derrumbe gradual:** a cero, las salas caen de una en una, de la más lejana a la salida a la más cercana, 10 s de reloj por sala, con un aviso de 1 ronda antes de cada una. Las salas derrumbadas se ven en el mapa.
 - **El derrumbe nunca elimina.** Si pilla a Willy, cae a la planta siguiente: pierde el 30 % de su vida máxima (nunca baja de 1), se salta el Camerino y llega Tumbado. Es un castigo claro, pero la partida sigue (y hay un logro).
 - **Dificultad Turista:** reloj ×1,5. **Prime time:** ×0,8.
-- **El orco** paga 30 s por subir de nivel (su desventaja).
+- **El Funcionario** paga 1 s más por interacción (su horario de ventanilla).
 
 ## 5. Combate y entorno
 
@@ -161,6 +161,7 @@ Reglas completas en `RULESET.md`. Lo que importa para el diseño:
 - **Invocaciones (Ingeniero, Jugador de basket, Influencer):** el Autómata repetidor, la Antena repetidora, Chencho el base y los fans son entidades normales creadas con `spawnEntity` (R13). Tienen dueño (`ownerId` = Willy), la facción de Willy y duración (fin del combate o N turnos). El autómata lo **controla el jugador** y actúa justo después de Willy; la antena es una torreta con IA aliada. Lo que eliminan da experiencia y audiencia a Willy, y cuentan para sus logros. Fuera de combate se pliegan. Si Willy cae, desaparecen.
 - **Movilidad vertical (Jugador de basket):** saltos que cruzan huecos y suben varios niveles, mates desde arriba y balón con rebote. Es la clase que más exprime la altura y los fosos. Necesita la acción genérica de salto y el trazado con rebote del motor (R15). Las plantillas marcan las salas de **techo bajo** (bodegas, alcantarillas, saunas) con `ceiling: low`.
 - **Control (Funcionario):** aturdir a distancia, la superficie **expedientes** (enreda y arde) y barreras temporales. Su pasiva lo hace inmune a todo movimiento forzado, que en este juego es muy fuerte: a cambio, su horario de ventanilla le encarece todo a partir de la quinta ronda.
+- **Mazmorreros rivales:** cinco PNJ no humanos (`rivals.json`) con IA propia (facción `rivales`), que pueden convertirse en aliados temporales tras un pacto. Usan las invocaciones de R13 cuando llegan como aliados.
 - **IA (Fase 2 del motor):** cada enemigo tiene un perfil simple en datos (`agresivo`, `a distancia`, `cobarde`, `guardián`) y **evita** casillas peligrosas para sí mismo, salvo los Bailando y los empujados. Que la IA no se suicide sola es importante: las muertes por entorno tienen que ser mérito del jugador.
 
 ## 6. Audiencia
@@ -370,7 +371,7 @@ En `localStorage`, separado de las partidas (ver R6):
 - logros desbloqueados y contadores de ámbito `siempre`;
 - **objetos desbloqueados** para las tablas de botín (vía logros);
 - **cosméticos** (gorros y aspectos para Willy, se eligen en el cásting);
-- estadísticas (razas y clases jugadas y ganadas, glosario leído, prólogo visto);
+- estadísticas (clases jugadas y ganadas, rivales conocidos, glosario leído, prólogo visto);
 - preferencias (consejos, animaciones reducidas, voz, velocidad de texto).
 
 **Decisión del usuario: solo variedad entre partidas, nunca poder permanente.** Los desbloqueos amplían las tablas de botín y el armario de cosméticos; no hay mejoras de atributos, vida ni reloj que se arrastren. Así una partida nueva es justa y el juego sigue siendo de habilidad.
@@ -402,7 +403,7 @@ Regla: **ningún sistema aparece sin haberse explicado antes**. Lo no explicado 
 |---|---|---|---|
 | 1-2 | Calle de Willy (fija) | Moverse y la cámara | Entrar en la planta |
 | 3 | Plaza | **Audiencia** (aparece el contador) | Llegar a la plaza |
-| 4-5 | Plaza | **Cásting** (raza y clase) y **atributos** / % de acierto | Tras la audiencia |
+| 4-5 | Plaza | **Cásting** (clase; Willy siempre es humano) y **atributos** / % de acierto | Tras la audiencia |
 | 6-9 | Sala de tutorial (fija): 2 ratas, un muelle | **Turnos**, **atacar**, **empujar**, **altura y caídas** | Primer combate, rata al borde del muelle |
 | 10 | — | **Primer logro** («Por favor, circule» o «Primer figurante», garantizado aquí) | Primer logro |
 | 11-12 | — | **Primera caja** (guionizada: mechero + tirita) y **mochila** | Recompensa del logro |
@@ -425,7 +426,9 @@ Todos los textos van con la voz del Narrador: sarcástico, breve, nunca un manua
 - **Sprites:** 2 direcciones con volteo como mínimo; Ninja Adventure trae 4, que se usarán.
 - **Falta (anotar en `TODO-ART.md` cuando se integre):**
   - Willy con mono naranja y bombona: recolor de un personaje de Ninja Adventure (pipeline de paletas, Fase 2 del motor) y la bombona como sprite propio.
-  - Las 6 razas como variantes visibles de Willy (gaviota, gnomo, orco, fantasma, minotauro): recolores y piezas superpuestas.
+  - Willy humano con una variante visible por clase (9).
+  - Los 5 mazmorreros rivales (gaviota, gnomo, orco, fantasma, minotauro) como PNJ.
+  - El encargo concreto a la sesión de arte está en `ART_BRIEF.md`.
   - Jefes grandes (Centollo, Gigantón, Socorrista): no existen a 16 px; escalar monstruos ×2 con retoque o dibujarlos.
   - Biomas modernos (hipermercado, verbena, balneario, plató): tiles propios de la sesión de arte, partiendo de Ninja Adventure (interiores) y Kenney.
   - Ingeniero: Autómata repetidor (2 direcciones, idle y golpe) y Antena repetidora, propios; arco voltaico y las ondas de la habilidad G (más vistosas por nivel, de un pitido triste en 5G a un estallido de pantalla en 10G) como partículas.
@@ -476,7 +479,7 @@ Cada fase termina con la aprobación del usuario. **Dep.** indica lo que necesit
 
 | Fase | Contenido | Dep. |
 |---|---|---|
-| **W0. Diseño** (hecha) | Historia, prólogo, reglas, datos (6 razas, 9 clases, 93 objetos, tablas, 124 logros, patrocinadores, audiencia, plantas, tutorial, glosario, 376 frases del Narrador), peticiones al motor | — |
+| **W0. Diseño** (hecha) | Historia, prólogo, reglas, datos (Willy humano, 9 clases, 5 rivales, 93 objetos, tablas, 131 logros, patrocinadores, audiencia, plantas, tutorial, glosario, 376 frases del Narrador), peticiones al motor | — |
 | **W1. Esqueleto** | `rulesets/willy` (atributos, d20, recursos, condiciones, tests); `game.ts`; preset de arte `ninja`; la calle fija de la Planta 1 jugable con movimiento | Fase 2 del motor (ganchos de turno, `preview`) |
 | **W2. Combate y entorno** | Ataque, empujar, caídas, superficies, 4 enemigos de la Planta 1, IA, sala de tutorial, invocaciones (Ingeniero, Basket), salto y rebote del balón | Fases 2 y 3 del motor (combate, superficies, empujar, caídas); R13 (`spawnEntity`); R15 (salto y rebote) |
 | **W3. Procedural** | Generador (R1) + 12 plantillas de Castro + validación con 500 semillas; reloj (R2) y derrumbe | R1, R2, R3 |

@@ -100,6 +100,69 @@
         { "id": "ds-02", "texto": "Paco te pone un pincho sin que se lo pidas. Paco sabe. Paco siempre sabe." },
         { "id": "ds-03", "texto": "Descansando. Paco te cuenta que la cafetera ha sobrevivido al apocalipsis. Habla de ella con más cariño que de su mujer." }
       ]
+    },
+    {
+      "id": "rivalAparece",
+      "evento": "rivalEncountered",
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 0,
+      "lineas": [
+        {
+          "id": "rv-01",
+          "texto": "¡Competencia! Vanesa la Gaviota, de Laredo. Mitad persona, mitad gaviota, toda mano larga. Vigila la mochila.",
+          "si": {
+            "rival": "rival-vanesa",
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rv-02",
+          "texto": "Don Ceferino, gnomo de jardín jubilado. Lleva cuarenta años sin moverse y no piensa empezar por ti.",
+          "si": {
+            "rival": "rival-ceferino",
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rv-03",
+          "texto": "Gorka, de Compras. Orco de oficina, rival declarado y fan de las sinergias. Te va a retar. Delante de cámara. Con copia a todos.",
+          "si": {
+            "rival": "rival-gorka",
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rv-04",
+          "texto": "Mari Luz, fantasma en prácticas. Muy maja. Se disculpa cada vez que asusta a alguien. Asusta mucho.",
+          "si": {
+            "rival": "rival-mariluz",
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rv-05",
+          "texto": "Asterio, minotauro vegano. Sabe dónde está la salida. Odia el rojo. Mira tu mono. Ahora mira el mono otra vez. Es naranja. Respira.",
+          "si": {
+            "rival": "rival-asterio",
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rv-06",
+          "texto": "Otra vez {rival}. En este programa la competencia nunca se jubila. Como el presentador.",
+          "si": {
+            "primeraVez": false
+          }
+        },
+        {
+          "id": "rv-07",
+          "texto": "{rival} viene como aliado. Lo que une el share, que no lo separe el guion.",
+          "si": {
+            "comoAliado": true
+          }
+        }
+      ]
     }
   ]
 }

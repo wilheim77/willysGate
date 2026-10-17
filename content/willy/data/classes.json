@@ -1753,7 +1753,7 @@
     }
   ],
   "ventajas": {
-    "$comment": "Mazo de ventajas (perks) de niveles pares. Se ofrecen 3: una de la clase, una de la raza (rasgos mejorados) y una general.",
+    "$comment": "Mazo de ventajas (perks) de niveles pares. Se ofrecen 3: una de la clase, una de los rasgos de Willy (willy.json → ventajasDeOrigen; rasgos mejorados) y una general.",
     "generales": [
       {
         "id": "piel-curtida",

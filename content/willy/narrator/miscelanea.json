@@ -412,13 +412,6 @@
           "texto": "Nivel {nivel}. Si tu madre te viera... bueno, te está viendo. Está muy orgullosa. Y preocupada."
         },
         {
-          "id": "sn-04",
-          "texto": "Nivel {nivel}. El orco tiene que rellenar el formulario. Treinta segundos de reloj. Burocracia galáctica.",
-          "si": {
-            "raza": "orco-de-oficina"
-          }
-        },
-        {
           "id": "sn-05",
           "texto": "Nivel {nivel}. Ya eres más fuerte que el presentador de la Temporada 9. Que era una seta, pero cuenta.",
           "si": {
@@ -511,68 +504,54 @@
       "lineas": [
         {
           "id": "cs-01",
-          "texto": "Ya está. Willy es oficialmente {raza:un} {clase}. Su madre lo va a flipar."
+          "texto": "Ya está. Willy es oficialmente {clase:un}. Su madre lo va a flipar."
         },
         {
           "id": "cs-02",
-          "texto": "{raza:Mayus} y {clase}. Lo que es Willy de verdad. Original. Sin aditivos. Como el bonito del norte.",
+          "texto": "Butanero. Lo que es Willy de verdad. Original. Sin aditivos. Como el bonito del norte.",
           "si": {
-            "raza": "castreno",
             "clase": "butanero"
           }
         },
         {
           "id": "cs-03",
-          "texto": "Un minotauro vegano influencer. Producción acaba de cancelar las vacaciones de todo el equipo de marketing.",
+          "texto": "Influencer de mazmorra. Producción acaba de cancelar las vacaciones de todo el equipo de marketing.",
           "si": {
-            "raza": "minotauro-vegano",
             "clase": "influencer"
           }
         },
         {
           "id": "cs-04",
-          "texto": "Un fantasma socorrista. Rescata a la gente del agua y luego les da un susto de muerte. Perfecto.",
+          "texto": "Socorrista. Su trabajo es sacar a la gente del agua. Aquí abajo hará justo lo contrario.",
           "si": {
-            "raza": "fantasma-en-practicas",
             "clase": "socorrista"
           }
         },
         {
           "id": "cs-05",
-          "texto": "Un gnomo de jardín mimo. Silencioso, quieto e inquietante. Ya era así antes, pero ahora cobra.",
+          "texto": "Mimo táctico. Silencioso, inquietante y con guantes blancos. Willy nunca había estado tan callado.",
           "si": {
-            "raza": "gnomo-de-jardin",
             "clase": "mimo"
           }
         },
         {
           "id": "cs-06",
-          "texto": "Una semigaviota tasadora. Roba cosas y luego te dice cuánto valen. Es el sueño de cualquier gaviota.",
+          "texto": "Tasador de antigüedades. Ya ha tasado el decorado. Dice que es de cartón piedra. Ha acertado.",
           "si": {
-            "raza": "semigaviota",
             "clase": "tasador"
           }
         },
         {
           "id": "cs-07",
-          "texto": "Un orco de oficina bardo de verbena. Pasodobles y hojas de cálculo. Que Dios nos pille confesados.",
+          "texto": "Bardo de verbena. Que alguien esconda el teclado antes de que empiece con los pasodobles.",
           "si": {
-            "raza": "orco-de-oficina",
             "clase": "bardo-de-verbena"
           }
         },
         {
           "id": "cs-08",
-          "texto": "{raza:Mayus} e ingeniero. Tiene una habilidad que se llama 5G y que, según su propia ficha, no hace nada. Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.",
+          "texto": "Ingeniero. Tiene una habilidad que se llama 5G y que, según su propia ficha, no hace nada. Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.",
           "si": {
-            "clase": "ingeniero"
-          }
-        },
-        {
-          "id": "cs-09",
-          "texto": "Un fantasma ingeniero. Invisible e inalámbrico. Los foros conspiranoicos van a arder. Él solo quería arreglar el router.",
-          "si": {
-            "raza": "fantasma-en-practicas",
             "clase": "ingeniero"
           }
         },
@@ -584,14 +563,6 @@
           }
         },
         {
-          "id": "cs-11",
-          "texto": "Un gnomo de jardín funcionario. Inmóvil, imperturbable y con plaza. Nadie lo va a mover de ahí. Nadie.",
-          "si": {
-            "raza": "gnomo-de-jardin",
-            "clase": "funcionario"
-          }
-        },
-        {
           "id": "cs-12",
           "texto": "Jugador de basket. Dos metros cuatro. La mazmorra tiene techos de dos metros. Ya me estoy riendo y aún no ha pasado nada.",
           "si": {
@@ -599,12 +570,8 @@
           }
         },
         {
-          "id": "cs-13",
-          "texto": "Un gnomo de jardín jugador de basket. Cuarenta centímetros de altura y un mate en el corazón. Producción ha pedido una escalera.",
-          "si": {
-            "raza": "gnomo-de-jardin",
-            "clase": "jugador-de-basket"
-          }
+          "id": "cs-14",
+          "texto": "Willy sigue siendo Willy: humano, de Castro y con bigote. Lo único que ha cambiado es el oficio. Y la ropa. Y las ganas de vivir."
         }
       ]
     },

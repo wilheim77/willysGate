@@ -1,7 +1,7 @@
 # Ruleset `willy`: el Reglamento del Concurso
 
 > Estado: **propuesta pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
-> Razas (6) y clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `content/willy/data/races.json` y `classes.json`. Objetos en `items.json`.
+> Willy es **siempre humano** (rasgos fijos en `content/willy/data/willy.json`). Clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `classes.json`. Las razas no humanas son ahora mazmorreros rivales (PNJ) en `rivals.json`. Objetos en `items.json`.
 > Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden las clases Ingeniero (con la habilidad 5G→10G), Funcionario y Jugador de basket, y los modos de eliminación.
 
 ## Objetivos
@@ -68,7 +68,20 @@ Seis, con valores visibles que empiezan entre 3 y 9 y llegan a 15-20 al final de
 | `car` | **Carisma** | Audiencia ganada, afinidad con los patrocinadores, precios, diálogos |
 | `sue` | **Suerte** | Pruebas de suerte (tómbola), probabilidad de pifia enemiga, botín de enemigos |
 
-**Valores de partida:** 5 en todo, más los de la raza y la clase, más **3 puntos libres** al crear el personaje (o «Que elija el Narrador», que reparte por ti).
+**Valores de partida:** 5 en todo, +1 en todo por ser castreño, más los de la clase, más **3 puntos libres** al crear el personaje (o «Que elija el Narrador», que reparte por ti).
+
+### Willy, humano de Castro
+
+No hay elección de raza: el personaje del jugador siempre es Willy, humano.
+
+| Rasgo | Tipo | Efecto |
+|---|---|---|
+| Castreño de pura cepa | Atributos | +1 a los seis atributos |
+| Terco como una mula | Ventaja | Inmune a Asustado |
+| Hijo del Cantábrico | Ventaja | El agua no le frena; Empapado no le hace daño doble de rayo |
+| Hablar del tiempo | Desventaja cómica | En el primer combate de cada planta pierde 1 acción comentando lo raro que está el tiempo aquí abajo |
+
+Las otras cinco razas (semigaviota, gnomo de jardín, orco de oficina, fantasma en prácticas y minotauro vegano) son ahora **mazmorreros rivales**: PNJ que usan las mismas reglas que cualquier entidad, con sus rasgos de raza (`rivals.json`; ver `STORY.md` → «Mazmorreros rivales»).
 
 ### Valores derivados
 
@@ -197,9 +210,8 @@ El público premia matar con el entorno, así que estas reglas son generosas y c
 ### Qué da cada nivel
 
 - **Siempre:** +3 de vida máxima, **+2 puntos de atributo** (o «Que elija el Narrador»), recuperas el 25 % de la vida y toda la energía. Pantalla «¡SUBES DE NIVEL!» con números grandes, sonido y frase del Narrador.
-- **Niveles pares:** eliges **1 de 3 ventajas** (perks) sacadas del mazo de tu raza, tu clase y uno general, con el RNG de la partida.
+- **Niveles pares:** eliges **1 de 3 ventajas** (perks) sacadas del mazo de tu clase, de los rasgos de Willy (`willy.json` → `ventajasDeOrigen`) y uno general, con el RNG de la partida.
 - **Niveles 3, 6 y 9:** nueva habilidad de clase.
-- La **burocracia del orco** le cuesta 30 segundos de reloj por nivel (ver razas).
 
 ### Habilidades que suben con el uso
 
@@ -343,4 +355,4 @@ export const willy: Ruleset = {
 };
 ```
 
-Tests previstos: tabla de %, críticos y pifias, empujones contra muro/criatura/vacío, caídas por niveles, subida de nivel de habilidad exactamente en el uso 4/12/25/45, «uso sin efecto» que no cuenta, burocracia del orco descontando reloj.
+Tests previstos: tabla de %, críticos y pifias, empujones contra muro/criatura/vacío, caídas por niveles, subida de nivel de habilidad exactamente en el uso 4/12/25/45, «uso sin efecto» que no cuenta, rasgos de los rivales (Burocracia de Gorka descontando su turno).

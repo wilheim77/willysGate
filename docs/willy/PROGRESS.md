@@ -17,10 +17,11 @@
 | Reglamento d20 propio (atributos visibles, niveles frecuentes, habilidades que suben con el uso) | [`RULESET.md`](RULESET.md) |
 | Diseño completo: procedural, reloj, audiencia, patrocinadores, cajas, logros, Narrador, Camerino, onboarding, arte, fases | [`DESIGN.md`](DESIGN.md) |
 | Peticiones al motor y al cliente (R1-R15) | [`ENGINE_REQUESTS.md`](ENGINE_REQUESTS.md) |
-| 6 razas y 9 clases, incluidas las especiales Ingeniero, Funcionario y Jugador de basket (57 habilidades y mazo de ventajas) | `content/willy/data/races.json`, `classes.json` |
+| Willy siempre humano (rasgos fijos) y 9 clases, incluidas las especiales Ingeniero, Funcionario y Jugador de basket (57 habilidades y mazo de ventajas) | `content/willy/data/willy.json`, `classes.json` |
+| 5 mazmorreros rivales no humanos (antes razas jugables) | `content/willy/data/rivals.json` |
 | 93 objetos (27 iniciales de clase, 66 de botín, avisos y cosméticos) | `content/willy/data/items.json` |
 | Cajas, tablas de botín, piedad, cofres, botín de enemigos y mercado | `content/willy/data/loot-tables.json` |
-| 128 logros (23 ocultos) con frase del Narrador y recompensa | `content/willy/data/achievements.json` |
+| 131 logros (24 ocultos) con frase del Narrador y recompensa | `content/willy/data/achievements.json` |
 | 6 patrocinadores con gustos, regalos y mensajes | `content/willy/data/sponsors.json` |
 | Reglas de audiencia | `content/willy/data/audience.json` |
 | 5 plantas (bioma, mecánica, reloj, generación, enemigos, jefe) y el Camerino | `content/willy/data/floors.json` |
@@ -56,7 +57,10 @@ W0 **aprobada** con estos cambios, ya aplicados en los documentos y los datos:
 
 | 13 | Jefe final | El Presentador pasa a ser **«Jordi Hurtado, el Inmortal»**: vampiro alienígena que se alimenta de audiencia y por eso no envejece (homenaje cariñoso y absurdo al meme; nada sobre la persona real). Combate en 3 fases (Ronda de preguntas con trampillas, Pausa publicitaria a oscuras vulnerable solo a focos, Gran final con votación), medidor **Share** que lo hace inmortal mientras tenga audiencia, 8 preguntas en datos, 11 frases propias, finales y gancho de Temporada 2 reescritos. **El nombre está en un único campo:** `content/willy/data/cast.json`; todos los textos usan `{presentador}` | `cast.json`, `floors.json` (jefe), banco `presentador` y líneas `je-5a/5b`, `jd-5`, `ws-05`, 4 logros nuevos (uno oculto) y 3 frases de logros, `STORY.md`, `DESIGN.md`, R5 (variables globales) |
 
-**Cifras tras los cambios:** 6 razas, 9 clases (57 habilidades), 93 objetos, 128 logros (23 ocultos), 383 frases del Narrador en 61 bancos.
+| 14 | Willy siempre humano | El personaje del jugador es **siempre humano** (castreño): ya no se elige raza en el cásting, solo clase. Los rasgos castreños pasan a ser fijos (`willy.json`). Las otras 5 razas pasan a ser **mazmorreros rivales** (PNJ): Vanesa la Gaviota, Don Ceferino, Gorka de Compras, Mari Luz y Asterio, con sus rasgos de raza, plantas, frases y tres desenlaces (derrotar, pactar, dejar ir) | `willy.json`, `rivals.json` (sustituyen a `races.json`), banco `rivalAparece`, líneas del cásting por clase, logro «Cásting completo» (6 clases), 3 logros nuevos, glosario, tutorial, `STORY.md`, `RULESET.md`, `DESIGN.md` |
+| 15 | Arte | El encargo de arte de *Willy* se envía directamente a la sesión de arte | `ART_BRIEF.md` |
+
+**Cifras tras los cambios:** Willy humano, 9 clases (57 habilidades), 5 rivales, 93 objetos, 131 logros (24 ocultos), 387 frases del Narrador en 62 bancos.
 
 ## Pendiente
 

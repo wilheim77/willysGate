@@ -1,0 +1,400 @@
+{
+  "$comment": "Mazmorreros rivales: otros concursantes de ¡Mazmorreros! que no son humanos. Antes eran razas jugables; desde la decisión del usuario (Willy es siempre humano) son PNJ con sus rasgos de raza. Aparecen en salas de rol 'rival' de las plantas indicadas (una por planta como mucho) y en escenas fijas. Se pueden derrotar, pactar con ellos o dejarles marchar. Ver docs/willy/STORY.md → «Mazmorreros rivales» y DESIGN.md → «Mazmorreros rivales».",
+  "version": 1,
+  "reglas": {
+    "salasPorPlanta": 1,
+    "rolSala": "rival",
+    "conocerlos": "La primera vez que aparecen, el Narrador los presenta (banco narrator/plantas.json → rivalAparece).",
+    "controlador": "ai",
+    "faccion": "rivales",
+    "aliadoTemporal": {
+      "duracion": "combate",
+      "controlador": "ia-aliada"
+    }
+  },
+  "rivales": [
+    {
+      "id": "rival-vanesa",
+      "nombre": "Vanesa la Gaviota",
+      "genero": "f",
+      "raza": {
+        "id": "semigaviota",
+        "nombre": "Semigaviota",
+        "resumen": "Mitad persona, mitad gaviota de puerto. Toda descaro.",
+        "descripcion": "Alas cortas, pico largo y una relación complicada con las patatas fritas ajenas."
+      },
+      "clase": "ladrona de botín",
+      "personalidad": "Semigaviota de Laredo. Simpática, descarada y cleptómana. Te saluda, te pregunta qué tal y, mientras, te quita un bocadillo. No es mala: es gaviota.",
+      "spriteId": "rival-vanesa",
+      "plantas": [
+        1,
+        3
+      ],
+      "comportamiento": "Aparece en una sala con cofre y compite por él: si llega antes, se lo lleva. En combate prefiere robar a pelear.",
+      "stats": {
+        "vida": 18,
+        "def": 14,
+        "ataque": 4,
+        "dano": "1d6",
+        "movimiento": 6
+      },
+      "atributos": {
+        "agi": 7,
+        "sue": 6,
+        "fue": 4,
+        "car": 4
+      },
+      "rasgos": [
+        {
+          "id": "planeo",
+          "nombre": "Planeo",
+          "texto": "Nunca recibes daño por caída y puedes saltar a cualquier altura inferior.",
+          "mecanica": {
+            "danoCaida": 0,
+            "bajadaLibre": true
+          }
+        },
+        {
+          "id": "pico-largo",
+          "nombre": "Pico largo",
+          "texto": "Al golpear cuerpo a cuerpo, 15 % de robar fichas o un consumible al objetivo.",
+          "mecanica": {
+            "al": "golpear",
+            "probabilidad": 0.15,
+            "robar": [
+              "fichas",
+              "consumible"
+            ]
+          }
+        },
+        {
+          "id": "eso-brilla",
+          "nombre": "¡Eso brilla!",
+          "texto": "Si empiezas el turno junto a fichas u objetos en el suelo, 25 % de gastar 1 acción en cogerlos, quieras o no.",
+          "mecanica": {
+            "al": "inicioTurno",
+            "si": "objetoAdyacente",
+            "probabilidad": 0.25,
+            "acciones": -1,
+            "efecto": "recogerObjeto"
+          },
+          "desventaja": true
+        }
+      ],
+      "frases": [
+        "¡Hola, guapo! ¿Eso que llevas es chorizo? No, por nada.",
+        "Lo brillante es mío. Lo dice la ley de la gaviota.",
+        "Me voy volando. Literalmente. Adiós."
+      ],
+      "fraseNarrador": "Semigaviota. La audiencia de catorce galaxias acaba de aprender lo que es una gaviota y ya la odia.",
+      "desenlaces": {
+        "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
+        "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
+        "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
+      }
+    },
+    {
+      "id": "rival-ceferino",
+      "nombre": "Don Ceferino",
+      "genero": "m",
+      "raza": {
+        "id": "gnomo-de-jardin",
+        "nombre": "Gnomo de jardín",
+        "resumen": "Cerámica pintada a mano, gorro rojo y una paciencia mineral.",
+        "descripcion": "Lleva décadas mirando un estanque de plástico. Ha visto cosas. Ninguna interesante."
+      },
+      "clase": "guardián de jardín",
+      "personalidad": "Gnomo de cerámica jubilado de un chalé de Santoña. Lento, gruñón y muy digno. Cree que la mazmorra entera es su jardín y que los demás la están pisando.",
+      "spriteId": "rival-ceferino",
+      "plantas": [
+        2,
+        4
+      ],
+      "comportamiento": "Bloquea un pasillo y no se mueve. Se le rodea, se le convence (prueba de Carisma) o se le tumba (su caída le hace el doble).",
+      "stats": {
+        "vida": 30,
+        "def": 15,
+        "ataque": 4,
+        "dano": "1d8",
+        "movimiento": 3
+      },
+      "atributos": {
+        "agu": 8,
+        "man": 6,
+        "agi": 4
+      },
+      "rasgos": [
+        {
+          "id": "ceramica-esmaltada",
+          "nombre": "Cerámica esmaltada",
+          "texto": "Recibes 1 de daño menos de cada golpe (mínimo 1).",
+          "mecanica": {
+            "reduccionDano": {
+              "elemento": "golpe",
+              "cantidad": 1
+            }
+          }
+        },
+        {
+          "id": "pose-de-estatua",
+          "nombre": "Pose de estatua",
+          "texto": "Si acabas el turno sin moverte ni actuar, quedas Escondido.",
+          "mecanica": {
+            "al": "finTurnoQuieto",
+            "aplicar": "escondido"
+          }
+        },
+        {
+          "id": "clonc",
+          "nombre": "¡Clonc!",
+          "texto": "Las caídas y los choques contra muros te hacen el doble de daño. Y tienes 1 de movimiento menos.",
+          "mecanica": {
+            "multiplicador": {
+              "caida": 2,
+              "choque": 2
+            },
+            "movimiento": -1
+          },
+          "desventaja": true
+        }
+      ],
+      "frases": [
+        "Esto es propiedad privada. Lo pone en el cartel. El cartel soy yo.",
+        "No me muevo. Llevo cuarenta años sin moverme y no voy a empezar ahora.",
+        "¡Clonc! … No ha pasado nada. Sigue andando."
+      ],
+      "fraseNarrador": "Un gnomo de jardín. Duro, inmóvil y decorativo. Como el jurado de la temporada pasada.",
+      "desenlaces": {
+        "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
+        "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
+        "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
+      }
+    },
+    {
+      "id": "rival-gorka",
+      "nombre": "Gorka, de Compras",
+      "genero": "m",
+      "raza": {
+        "id": "orco-de-oficina",
+        "nombre": "Orco de oficina",
+        "resumen": "Colmillos, corbata y quince años en el departamento de Compras.",
+        "descripcion": "Músculo de sobra y una agresividad que ha aprendido a canalizar en correos con copia oculta."
+      },
+      "clase": "jefe de proyecto",
+      "personalidad": "Orco de oficina de un parque empresarial de Bilbao. Competitivo, de los que dicen «sinergias» en serio. Rival declarado de Willy desde el cásting; en el fondo, buen tipo.",
+      "spriteId": "rival-gorka",
+      "plantas": [
+        2,
+        3,
+        5
+      ],
+      "comportamiento": "Duelo directo: te reta delante de cámara. Su primer golpe es brutal. Cada vez que sube de nivel se para a rellenar un formulario (un turno sin actuar).",
+      "stats": {
+        "vida": 40,
+        "def": 13,
+        "ataque": 6,
+        "dano": "1d10+2",
+        "movimiento": 4
+      },
+      "atributos": {
+        "fue": 8,
+        "agu": 6,
+        "man": 4
+      },
+      "rasgos": [
+        {
+          "id": "corpulento",
+          "nombre": "Corpulento",
+          "texto": "+5 de vida máxima y tus empujones mueven 1 casilla más.",
+          "mecanica": {
+            "vidaMax": 5,
+            "empujeExtra": 1
+          }
+        },
+        {
+          "id": "agresividad-pasiva",
+          "nombre": "Agresividad pasiva",
+          "texto": "Tu primer ataque de cada combate tiene +3 a acertar y al daño.",
+          "mecanica": {
+            "al": "primerAtaqueCombate",
+            "acertar": 3,
+            "dano": 3
+          }
+        },
+        {
+          "id": "burocracia",
+          "nombre": "Burocracia",
+          "texto": "Cada vez que subes de nivel tienes que rellenar un formulario: el reloj de la planta pierde 30 segundos.",
+          "mecanica": {
+            "al": "subirNivel",
+            "relojSegundos": -30
+          },
+          "desventaja": true
+        }
+      ],
+      "frases": [
+        "Te lo digo desde el respeto: te voy a reventar. Con copia a todos.",
+        "Tengo una reunión en dos rondas. Seamos eficientes.",
+        "Un momento, que tengo que rellenar el formulario de subida de nivel. No te muevas."
+      ],
+      "fraseNarrador": "Orco de oficina. Fuerza bruta con firma digital. Por favor, no responda a todos.",
+      "desenlaces": {
+        "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
+        "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
+        "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
+      }
+    },
+    {
+      "id": "rival-mariluz",
+      "nombre": "Mari Luz, fantasma en prácticas",
+      "genero": "f",
+      "raza": {
+        "id": "fantasma-en-practicas",
+        "nombre": "Fantasma en prácticas",
+        "resumen": "Muerto hace poco, contratado como aparición a media jornada.",
+        "descripcion": "Translúcido, un poco frío y todavía aprendiendo a atravesar paredes. De momento solo atraviesa gente."
+      },
+      "clase": "aparición a media jornada",
+      "personalidad": "Fantasma recién contratada, muy amable, que se disculpa cada vez que asusta a alguien. Quiere que le hagan un contrato fijo de aparición.",
+      "spriteId": "rival-mariluz",
+      "plantas": [
+        3,
+        4
+      ],
+      "comportamiento": "Atraviesa paredes y enemigos. Si la ayudas (una pequeña misión en la planta), se une como aliada en el siguiente combate; si no, te asusta en el peor momento.",
+      "stats": {
+        "vida": 16,
+        "def": 16,
+        "ataque": 5,
+        "dano": "1d6",
+        "movimiento": 5
+      },
+      "atributos": {
+        "man": 7,
+        "agi": 6,
+        "agu": 3,
+        "car": 6
+      },
+      "rasgos": [
+        {
+          "id": "incorporeo",
+          "nombre": "Incorpóreo",
+          "texto": "Puedes atravesar casillas ocupadas por cualquier criatura. Inmune a Envenenado y Tumbado.",
+          "mecanica": {
+            "atravesarEntidades": true,
+            "inmune": [
+              "envenenado",
+              "tumbado"
+            ]
+          }
+        },
+        {
+          "id": "susto",
+          "nombre": "¡Bu!",
+          "texto": "Una vez por combate, gratis: un enemigo adyacente queda Asustado 2 turnos.",
+          "mecanica": {
+            "habilidadGratis": "bu",
+            "unaVezPor": "combate"
+          }
+        },
+        {
+          "id": "se-le-transparenta",
+          "nombre": "Se le transparenta todo",
+          "texto": "La comida te cura la mitad: se te cae por dentro y se ve.",
+          "mecanica": {
+            "curacionComida": 0.5
+          },
+          "desventaja": true
+        }
+      ],
+      "frases": [
+        "¡Bu! … Uy, perdona, ¿te he asustado? Es que me evalúan por sustos.",
+        "Atravieso paredes, pero no me sé el camino. ¿Me acompañas?",
+        "Me da cosa decirlo, pero estás un poco transparente. Ah, no, que soy yo."
+      ],
+      "fraseNarrador": "Un fantasma. Técnicamente ya estaba eliminado antes de empezar. Producción dice que cuenta igual.",
+      "desenlaces": {
+        "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
+        "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
+        "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
+      }
+    },
+    {
+      "id": "rival-asterio",
+      "nombre": "Asterio, minotauro vegano",
+      "genero": "m",
+      "raza": {
+        "id": "minotauro-vegano",
+        "nombre": "Minotauro vegano",
+        "resumen": "Cabeza de toro, cuerpo de culturista y una dieta muy estricta.",
+        "descripcion": "Dejó el laberinto por una cuestión de principios. Los principios siguen ahí; el laberinto lo lleva por dentro."
+      },
+      "clase": "guía de laberintos",
+      "personalidad": "Minotauro enorme, tranquilo y filosófico. Dejó su laberinto por principios. Sabe siempre dónde está la salida y no soporta el color rojo.",
+      "spriteId": "rival-asterio",
+      "plantas": [
+        4,
+        5
+      ],
+      "comportamiento": "Ofrece un trato: te enseña la salida a cambio de comida sin carne. Si llevas algo rojo equipado o lanzas fuego cerca, embiste.",
+      "stats": {
+        "vida": 50,
+        "def": 14,
+        "ataque": 6,
+        "dano": "2d6",
+        "movimiento": 5
+      },
+      "atributos": {
+        "fue": 7,
+        "agu": 6,
+        "car": 4
+      },
+      "rasgos": [
+        {
+          "id": "embestida",
+          "nombre": "Embestida",
+          "texto": "Si te mueves 3 casillas o más en línea recta y atacas, el golpe empuja 2 casillas.",
+          "mecanica": {
+            "si": "movimientoRecto>=3",
+            "empujeAlGolpear": 2
+          }
+        },
+        {
+          "id": "laberinto-interior",
+          "nombre": "Laberinto interior",
+          "texto": "Siempre sabes dónde está la salida de la planta.",
+          "mecanica": {
+            "al": "inicioPlanta",
+            "revelar": "salida"
+          }
+        },
+        {
+          "id": "principios",
+          "nombre": "Principios",
+          "texto": "No puedes comer nada con carne o pescado. Y si ves algo rojo a 3 casillas o menos, tu siguiente ataque tiene que ser contra eso.",
+          "mecanica": {
+            "prohibido": {
+              "etiqueta": "carne"
+            },
+            "provocacion": {
+              "etiqueta": "rojo",
+              "radio": 3
+            }
+          },
+          "desventaja": true
+        }
+      ],
+      "frases": [
+        "La salida está por allí. Siempre está por allí. Es lo bueno de haber nacido en un laberinto.",
+        "¿Eso es jamón? Aléjalo. Aléjalo despacio.",
+        "Rojo. ¿Por qué tenía que ser rojo?"
+      ],
+      "fraseNarrador": "Minotauro vegano. Mil kilos de músculo alimentados a base de garbanzos. Que nadie le ofrezca jamón.",
+      "desenlaces": {
+        "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
+        "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
+        "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
+      }
+    }
+  ]
+}

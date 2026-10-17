@@ -254,7 +254,7 @@ interface Profile {
   counters: Record<string, number>;        // 'siempre' scope
   unlocks: string[];                       // item ids
   cosmetics: string[];
-  stats: Record<string, JsonValue>;        // races played, glossary read, intro views...
+  stats: Record<string, JsonValue>;        // classes played, rivals met, glossary read, intro views...
   prefs: { tips: boolean; reducedMotion: boolean; voice: boolean; textSpeed: number };
 }
 // Clave: `${gameId}:profile`. Escritura tras cada logro y al acabar cada combate.
