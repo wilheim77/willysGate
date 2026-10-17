@@ -111,14 +111,24 @@ Definida en `engine/ruleset.ts`:
 
 `extendRuleset(base, ext)` crea un ruleset derivado sin copiarlo entero. Un juego puede añadir sus propias condiciones (como «embelesado» en *Intereses*) o un ruleset de vampiros puede partir de `dnd5e` y añadir Sed y Fe.
 
+**Combate (Fase 2, hecho).** La interfaz incluye:
+- `rollInitiative`, `canAct`, `isStanding`, `onTurnStart` y `onCombatEnd`;
+- `listActions`, `previewAction` (sin tirar dados: probabilidad, daño o curación esperados, desglose con `term` y `affectedTiles`) y `performAction`;
+- `onLeaveReach` (interrupción para el ataque de oportunidad);
+- `glossary`, y el rol `health` en los recursos.
+
+El motor gestiona:
+- los comandos `startCombat` (solo `system`), `endTurn` y `act`;
+- el orden de iniciativa, la recarga de recursos `turn` y la duración de las condiciones;
+- el movimiento por turno, con interrupciones;
+- el fin de combate;
+- una **IA genérica** (`engine/ai.ts`) que puntúa la vista previa del ruleset desde cada casilla alcanzable, con pesos configurables (`AiProfile`).
+
 **Ganchos previstos**, que se añadirán a la interfaz en las fases correspondientes:
 
 | Gancho | Fase |
 |---|---|
-| `rollInitiative` y `onTurnStart` / `onTurnEnd` (recarga de los recursos `turn`, duración de las condiciones) | 2 |
-| `onFall` (daño por caída) | 2-3 |
-| Reacciones a interrupciones del motor (ataque de oportunidad al salir de una casilla adyacente) | 2 |
-| `listActions` y puntuación para la IA | 2 |
+| `onFall` (daño por caída) | 3 |
 | Modificadores por luz u oscuridad | Cuando exista el sistema de iluminación |
 
 Si alguno de estos ganchos obligara a meter lógica de 5e en `engine/`, se avisará antes de implementarlo.
@@ -233,6 +243,37 @@ Son sistemas reutilizables por los tres juegos, con la configuración en `conten
 | Corrección de color por escena (desaturado y frío), viñeta, CRT o scanlines desactivable | `src/fx/post.ts` (pipeline de postprocesado) | Por mapa y en opciones | 6 (hoy hay un filtro por preset) |
 | Ajuste de calidad bajo, medio o alto (partículas, luces, postprocesado) | `src/fx/quality.ts` | Opciones del jugador (`localStorage`) | 6 |
 
+## Reglas 5e (`rulesets/dnd5e`)
+
+- **Datos SRD 5.1** en `rulesets/dnd5e/data/*.json`:
+  - armas, armaduras, monstruos (bandido, matón, capitán, guardia, esqueleto, zombi, orco) y razas (humano, elfo, enano, mediano, semiorco);
+  - las 4 clases con su subclase del SRD (Campeón, Ladrón, Evocación, Vida) y rasgos y recursos **del nivel 1 al 6**;
+  - conjuros de nivel 0 a 3, definidos como datos (ataque, salvación, daño, curación, área, condición, concentración). Los casos especiales se marcan con `special`.
+- **Convenciones de la entidad:**
+  - stats: características, `level`, `speed`, `ac` y `prof`/`multiattack` en monstruos;
+  - tags: `class:`, `subclass:`, `race:`, `feature:`, `weapon:`, `spell:`, `prof:`, `expert:`, `resist:`, `immune:`, `vuln:`, `type:` y `pc`.
+- **Reglas implementadas:**
+  - Ataque con probabilidad exacta, críticos (19-20 para el Campeón) y ventaja desde arriba, contra indefensos o con tácticas de manada. Desventaja con un enemigo pegado al disparar.
+  - Bendición, Ataque furtivo, Ataque extra y Ataques salvajes.
+  - Resistencias, salvaciones, concentración y fortaleza de no muerto.
+  - Caer y desangrarse (3 turnos), estabilizar, muerte, curación y Aguante incansable.
+  - Reacciones automáticas: Escudo y Esquiva asombrosa.
+  - Áreas (esfera, cono y línea) con Esculpir conjuros, Espíritus guardianes, Expulsar muertos vivientes y Preservar la vida.
+- **Ajustes conscientes:** los conjuros multiobjetivo eligen automáticamente a los aliados más heridos. Las reacciones se usan solas cuando convienen (en el futuro, con una opción para preguntar). Las subidas de nivel interactivas (mejora de característica y elección de conjuros) llegan en la Fase 5.
+
+## Cliente de combate
+
+- **`GameController`** (`src/game/controller.ts`):
+  - convierte el input en comandos;
+  - hace que los compañeros sigan al líder en exploración;
+  - lanza encuentros desde zonas de Tiled (capa `encounters`, propiedad `participants`);
+  - ejecuta los turnos de la IA cuando la escena termina de animar.
+- **`MapScene`:** reproduce los eventos en cola con juice (`src/fx/juice.ts`): estocada, destello, retroceso, números flotantes, temblor y pausa breve en los críticos, partículas de sangre, anillos de conjuro, caída y muerte, y paneo al personaje activo. Marca el personaje activo, el alcance de movimiento, los objetivos y el área.
+- **`CombatHud`:**
+  - barra de iniciativa, ficha del personaje activo, acciones y «Terminar turno»;
+  - **panel de vista previa** con probabilidad, daño esperado y desglose con «?» que explica cada término en lenguaje llano. Hay que confirmar antes de actuar;
+  - registro de tiradas.
+
 ## Mapas (Tiled)
 
 - **Formato:** mapa **ortogonal** con los tilesets incrustados.
@@ -241,6 +282,7 @@ Son sistemas reutilizables por los tres juegos, con la configuración en `conten
 - **Capa de objetos `spawns`:** puntos con nombre.
 - **Capa de objetos `lights`:** puntos con `radius`, `intensity`, `color` y `flicker`.
 - **Propiedad del mapa `ambientLight`:** valor entre 0 y 1.
+- **Capas de objetos rectangulares** (por ejemplo `encounters`): zonas con propiedades, guardadas en `state.systems.zones`.
 - **Pendiente:** capas de superficies, interactuables y ambiente (niebla, ceniza…).
 
 ## Decisiones tomadas
