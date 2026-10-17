@@ -99,7 +99,7 @@ export function onFall(ruleset: Ruleset, state: GameState, id: string, levels: n
 
 export interface PropSpec {
   id: string;
-  kind: 'barrel_oil' | 'barrel' | 'crate' | 'chest' | 'door' | 'lever';
+  kind: 'barrel_oil' | 'barrel' | 'crate' | 'chest' | 'door' | 'lever' | 'powder_keg' | 'wagon' | 'resonator' | 'decor';
   position: Vec2;
   spriteId?: string;
   name?: string;
@@ -114,6 +114,12 @@ const PROP_STATS: Record<PropSpec['kind'], { name: string; hp: number; ac: numbe
   chest: { name: 'Cofre', hp: 15, ac: 12, tags: [] },
   door: { name: 'Puerta', hp: 18, ac: 15, tags: [] },
   lever: { name: 'Palanca', hp: 10, ac: 14, tags: [] },
+  // Powder burns like oil, only worse: same explosion.
+  powder_keg: { name: 'Barril de pólvora', hp: 1, ac: 10, tags: ['explosive_oil'] },
+  wagon: { name: 'Vagoneta', hp: 20, ac: 14, tags: [] },
+  resonator: { name: 'Resonador de plata viva', hp: 12, ac: 13, tags: ['resonator'] },
+  // Scenery that only looks the part: a well, a gallows, a campfire, a tapestry.
+  decor: { name: 'Decorado', hp: 30, ac: 15, tags: ['decor'] },
 };
 
 /** Inanimate scenery: attackable, gives cover, never takes turns. */

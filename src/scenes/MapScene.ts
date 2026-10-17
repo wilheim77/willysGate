@@ -255,6 +255,17 @@ export class MapScene extends Phaser.Scene {
       // Invisible interactables (a door is drawn by its tile; the entity only holds the script).
       if (entity.spriteId === 'none') continue;
       const art = this.manifest.sprites[entity.spriteId];
+      // Scenery drawn from the pack's props (a well, a gallows, a tapestry on the wall).
+      const propArt = !art ? this.manifest.props?.[entity.spriteId] : undefined;
+      if (propArt) {
+        const tile = tileAt(map, entity.position)!;
+        const c = this.grid.tileCentre(entity.position.x, entity.position.y, tile.height);
+        const y = propArt.anchor === 'wall' ? c.y - T * 0.6 : propArt.anchor === 'floor' ? c.y + T / 2 : c.y;
+        const sprite = this.add.sprite(c.x, y, imageKey(propArt.url)).setOrigin(0.5, propArt.anchor === 'floor' ? 1 : 0.5).setDepth(this.grid.depth(entity.position.y, tile.height, 5));
+        sprite.play(`prop:${entity.spriteId}`);
+        this.sprites.set(entity.id, sprite);
+        continue;
+      }
       if (!art) {
         this.addPlaceholderEntity(entity.id, entity.spriteId, entity.position, map);
         continue;

@@ -20,7 +20,7 @@ useSprites(Object.keys(sprites));
  */
 const PENDING = new Set(['absalon', 'ivo']);
 // Art props the map agent already places (assets/0x72.json) and world.ts does not build yet. Drop once it does.
-const PENDING_KINDS = /^(campfire|well|gallows|tapestry|tapestry_crossbow|oil_cart|mine_wagon|mine_wagon_ore|powder_keg|resonator|fuse_charges|remains_forty|pulley|inscription)-\d+$/;
+const PENDING_KINDS = /^$/;
 
 describe('Intereses act maps load into the game', () => {
   for (const id of Object.keys(ACT_MAPS)) {
