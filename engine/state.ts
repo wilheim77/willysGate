@@ -14,6 +14,9 @@ export type ControllerId = string;
 
 export type FlagValue = boolean | number | string;
 
+/** Tag for inanimate entities (barrels, crates): attackable, but not combatants. AI ignores them as targets. */
+export const OBJECT_TAG = 'object';
+
 /** A depletable pool: hit points, spell slots, actions per turn, Thirst, Faith... Defined by the ruleset. */
 export interface Resource {
   current: number;

@@ -243,7 +243,7 @@ export const endTurn: CommandHandler<EndTurnCommand> = (state, cmd, { ruleset })
   const surfaceEvents: GameEvent[] = [];
   if (advanced.state.turn.round > expired.state.turn.round) {
     // A new round: timed surfaces (fire) burn down.
-    const aged = ageSurfaces(advanced.state);
+    const aged = ageSurfaces(advanced.state, ruleset.surfaces);
     advanced = { ...advanced, state: aged.state };
     if (aged.changed.length) surfaceEvents.push({ type: 'surfaceChanged', changes: aged.changed } as GameEvent);
   }

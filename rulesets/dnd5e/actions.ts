@@ -10,6 +10,8 @@ import {
   type Vec2,
   gridDistance,
   hasCondition,
+  hasLineOfSight,
+  OBJECT_TAG,
   hasTag,
   isHostile,
   stat,
@@ -17,6 +19,7 @@ import {
 } from '../../engine';
 import { ABILITY_LABELS, type Ability } from './abilities';
 import { castingAbility, hasFeature, mod, profBonus, tagValues } from './character';
+import { SKILLS } from './abilities';
 import { SPELLS, type SpellData, WEAPONS } from './data';
 import { type DiceExpr, averageOf, parseDice, rollDice, sum } from './dice';
 import {
@@ -122,6 +125,7 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
   actions.push(
     { id: 'basic:dodge', label: 'Esquivar', description: 'Hasta tu siguiente turno, los ataques contra ti tienen desventaja.', cost: main, target: { kind: 'self', range: 0 }, tags: ['defense'] },
     { id: 'basic:dash', label: 'Correr', description: 'Duplicas tu movimiento este turno.', cost: main, target: { kind: 'self', range: 0 }, tags: ['move'] },
+    { id: 'basic:shove', label: 'Empujar', description: 'Atletismo enfrentado: si ganas, apartas al objetivo una casilla. Un barranco detrás hace el resto.', cost: main, target: { kind: 'creature', range: 1, filter: 'hostile' }, tags: ['control', 'push'] },
     { id: 'basic:stabilize', label: 'Estabilizar', description: 'Prueba de Medicina (CD 10) para que un aliado caído deje de desangrarse.', cost: main, target: { kind: 'creature', range: 1, filter: 'ally' }, tags: ['support'] },
   );
   return actions;
@@ -298,6 +302,7 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
 
   if (kind === 'attack') {
     if (!targetEntity || !standing(targetEntity)) return { valid: false, reason: 'No hay a quién atacar ahí.' };
+    if (!hasLineOfSight(state, e.position, targetEntity.position)) return { valid: false, reason: 'No lo ves: hay algo en medio.' };
     const sneak = sneakApplies(state, e, id, targetEntity);
     const p = attackPreview(state, weaponAttackSpec(state, e, id, targetEntity.id, sneak));
     const n = attacksPerAction(e);
@@ -324,6 +329,8 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
       return free ? { valid: true, chance: 1 } : { valid: false, reason: 'Necesitas una casilla libre.' };
     }
     if (spell.target === 'creature' && (!targetEntity || (!standing(targetEntity) && !spell.heal))) return { valid: false, reason: 'Objetivo no válido.' };
+    const aimAt = target.tile ?? targetEntity?.position;
+    if (aimAt && spell.range > 1 && !hasLineOfSight(state, e.position, aimAt)) return { valid: false, reason: 'No lo ves: hay algo en medio.' };
 
     const victims = spellTargets(state, e, spell, target);
     const shots = dartTargets(spell, target);
@@ -383,6 +390,11 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
 
   if (kind === 'feature' || kind === 'basic') {
     if (id === 'second_wind') return { valid: true, chance: 1, expectedHealing: 5.5 + stat(e, 'level', 1) };
+    if (id === 'shove') {
+      if (!targetEntity || !standing(targetEntity)) return { valid: false, reason: 'No hay a quién empujar.' };
+      const p = shoveChance(e, targetEntity);
+      return { valid: true, chance: p, breakdown: [{ label: 'Atletismo enfrentado', value: pct(p), term: 'contest' }] };
+    }
     if (id === 'stabilize') {
       if (!targetEntity || !hasCondition(targetEntity, 'downed') || hasCondition(targetEntity, 'stable')) return { valid: false, reason: 'Solo sirve con un aliado caído que se desangra.' };
       const p = chanceToSucceed(mod(e, 'wis') + (hasTag(e, 'prof:medicine') ? profBonus(e) : 0), 10);
@@ -398,6 +410,25 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   return { valid: false, reason: 'Acción desconocida.' };
 }
 
+/** The defender resists a shove with Athletics or Acrobatics, whichever is better. */
+function bestEscape(t: Entity): string {
+  return skillBonus(t, 'acrobatics') > skillBonus(t, 'athletics') ? 'acrobatics' : 'athletics';
+}
+
+function skillBonus(e: Entity, skill: string): number {
+  return mod(e, SKILLS[skill]!.ability) + (hasTag(e, `prof:${skill}`) ? profBonus(e) : 0);
+}
+
+/** Exact chance that d20 + a ≥ d20 + b (ties go to the attacker), or vs a flat 10 for objects. */
+function shoveChance(attacker: Entity, target: Entity): number {
+  const a = skillBonus(attacker, 'athletics');
+  if (target.tags.includes(OBJECT_TAG)) return Math.min(1, Math.max(0, (21 - (10 - a)) / 20));
+  const b = skillBonus(target, bestEscape(target));
+  let wins = 0;
+  for (let x = 1; x <= 20; x++) for (let y = 1; y <= 20; y++) if (x + a >= y + b) wins++;
+  return wins / 400;
+}
+
 function pct(p: number): string {
   return `${Math.round(p * 100)} %`;
 }
@@ -408,6 +439,7 @@ function attackBreakdown(p: ReturnType<typeof attackPreview>, attacks: number, s
     { label: 'Bonificador de ataque', value: `${p.bonus >= 0 ? '+' : ''}${p.bonus}`, term: 'attack_bonus' },
     { label: 'CA del objetivo', value: String(p.ac), term: 'ac' },
     ...(p.mode !== 'normal' ? [{ label: p.mode === 'advantage' ? 'Ventaja' : 'Desventaja', value: p.reasons.join(', '), term: p.mode }] : []),
+    ...(p.cover.bonus ? [{ label: 'Cobertura', value: `+${p.cover.bonus} CA (${p.cover.label})`, term: 'cover' }] : []),
     ...(attacks > 1 ? [{ label: 'Ataques', value: String(attacks) }] : []),
     ...(sneak ? [{ label: 'Ataque furtivo', term: 'sneak_attack' }] : []),
   ];
@@ -468,6 +500,15 @@ export function performAction(ruleset: Ruleset, state: GameState, actorId: strin
     case 'dodge':
       r.apply({ type: 'applyCondition', entityId: actorId, condition: 'dodging', remainingTurns: 1 });
       break;
+    case 'shove': {
+      const t = r.entity(targetId!);
+      const attack = ruleset.resolveCheck(r.state, { actorId, check: 'athletics', target: 0 }, rng);
+      const defence = t.tags.includes(OBJECT_TAG) ? 10 : ruleset.resolveCheck(r.state, { actorId: t.id, check: bestEscape(t), target: 0 }, rng).total;
+      const won = attack.total >= defence;
+      r.emit({ type: 'saveRolled', entityId: actorId, roll: { ...attack, target: defence, targetLabel: 'oposición', success: won } } as never);
+      if (won) r.apply({ type: 'push', entityId: t.id, dx: Math.sign(t.position.x - e.position.x), dy: Math.sign(t.position.y - e.position.y), distance: 1 });
+      break;
+    }
     case 'stabilize': {
       const check = ruleset.resolveCheck(r.state, { actorId, check: 'medicine', target: 10 }, rng);
       r.emit({ type: 'saveRolled', entityId: actorId, roll: check } as never);
@@ -543,6 +584,31 @@ function castSpell(r: Resolver, casterId: string, spell: SpellData, spellId: str
       return;
   }
 
+  // The ground first: Grease lays its surface before anyone rolls to keep their feet.
+  const touched = touchedTiles(r.state, caster, spell, target);
+  if (spell.surface) r.apply({ type: 'spawnSurface', tiles: touched, surface: spell.surface });
+  try {
+    resolveSpellOnCreatures(r, casterId, spell, target, slot);
+  } finally {
+    if (spell.element && touched.length) r.apply({ type: 'applyElement', tiles: touched, element: spell.element });
+  }
+}
+
+/** Tiles a spell touches for surface purposes: its area, or the target's tile. */
+function touchedTiles(state: GameState, caster: Entity, spell: SpellData, target: ActionTarget): Vec2[] {
+  if (spell.area) return areaTiles(state, caster, spell, target.tile ?? (target.entityId ? state.entities[target.entityId]?.position : undefined) ?? caster.position);
+  const ids = target.entityIds ?? (target.entityId ? [target.entityId] : []);
+  const tiles = ids.map((id) => state.entities[id]?.position).filter((p): p is Vec2 => !!p);
+  return tiles.length ? tiles : target.tile ? [target.tile] : [];
+}
+
+function resolveSpellOnCreatures(r: Resolver, casterId: string, spell: SpellData, target: ActionTarget, slot: number): void {
+  const caster = r.entity(casterId);
+  const ability = castingAbility(caster) ?? 'int';
+  const conditionFor = (id: string) =>
+    spell.condition
+      ? [{ type: 'applyCondition' as const, entityId: id, condition: spell.condition.id, remainingTurns: spell.condition.turns, ...(spell.concentration ? { sourceId: concentrationSource(casterId) } : {}) }]
+      : [];
   const victims = spellTargets(r.state, caster, spell, target);
   if (spell.attack) {
     for (const id of dartTargets(spell, target)) {
@@ -570,6 +636,11 @@ function castSpell(r: Resolver, casterId: string, spell: SpellData, spellId: str
         if (amount > 0) dealDamage(r, v.id, amount, spell.damage!.type);
       }
       if (!saved) r.apply(...conditionFor(v.id));
+      // Thunderwave: those who fail are thrown back, away from the caster.
+      if (!saved && spell.push && standing(r.entity(v.id))) {
+        const p = r.entity(v.id).position;
+        r.apply({ type: 'push', entityId: v.id, dx: Math.sign(p.x - caster.position.x), dy: Math.sign(p.y - caster.position.y), distance: spell.push });
+      }
     }
     return;
   }

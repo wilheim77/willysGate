@@ -19,6 +19,7 @@ import { type RollMode, d20Check, resolveRollMode } from '../common/d20';
 import { ABILITY_LABELS, type Ability } from './abilities';
 import { armorClass, hasFeature, mod, profBonus } from './character';
 import { type DiceExpr, averageOf, rollDice, sum } from './dice';
+import { coverBetween } from './cover';
 
 /**
  * Working copy used while resolving one action: reads see the effects already
@@ -258,6 +259,9 @@ function dropToZero(r: Resolver, id: string, type: string, crit: boolean, amount
   }
 }
 
+/** Things that happen when something is destroyed (an oil barrel explodes). Registered by environment.ts. */
+export const destructionHooks: ((r: Resolver, id: string) => void)[] = [];
+
 export function die(r: Resolver, id: string): void {
   endConcentration(r, id);
   r.apply(
@@ -266,6 +270,7 @@ export function die(r: Resolver, id: string): void {
     { type: 'applyCondition', entityId: id, condition: 'dead' },
   );
   r.emit({ type: 'died', entityId: id } as FateEvent);
+  for (const hook of destructionHooks) hook(r, id);
 }
 
 export function heal(r: Resolver, targetId: string, amount: number): void {
@@ -324,7 +329,8 @@ export function attackPreview(state: GameState, spec: AttackSpec) {
   const { mode, reasons } = attackMode(state, attacker, target, spec.melee);
   const bless = hasCondition(attacker, 'blessed') ? 2.5 : 0;
   const bonus = spec.modifiers.reduce((s, m) => s + m.value, 0);
-  const ac = armorClass(target);
+  const cover = coverBetween(state, attacker.position, target.position);
+  const ac = armorClass(target) + cover.bonus;
   const autoCrit = spec.melee && (hasCondition(target, 'paralyzed') || hasCondition(target, 'downed'));
   const chance = chanceToHit(bonus + bless, ac, mode, spec.critOn);
   const crit = autoCrit ? chance.hit : chance.crit;
@@ -332,7 +338,7 @@ export function attackPreview(state: GameState, spec: AttackSpec) {
   const base = averageOf(spec.damage) + (spec.extra ?? []).reduce((s, x) => s + averageOf(x.dice), 0);
   const critExtra = diceAvg(spec.damage) + (spec.extra ?? []).reduce((s, x) => s + diceAvg(x.dice), 0);
   const expected = adjustForType(target, chance.hit * base + crit * critExtra, spec.damageType);
-  return { chance: chance.hit, crit, expected, mode, reasons, bonus, ac };
+  return { chance: chance.hit, crit, expected, mode, reasons, bonus, ac, cover };
 }
 
 export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; crit: boolean } {
@@ -342,7 +348,7 @@ export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; cr
   const { mode } = attackMode(r.state, attacker, target, spec.melee);
   const modifiers = [...spec.modifiers];
   if (hasCondition(attacker, 'blessed')) modifiers.push({ label: 'Bendición', value: r.rng.die(4), term: 'bless' });
-  let ac = armorClass(target);
+  let ac = armorClass(target) + coverBetween(r.state, attacker.position, target.position).bonus;
   const roll = d20Check(r.rng, { check: 'attack', label: spec.label, mode, modifiers, target: ac, targetLabel: 'CA' });
   roll.targetTerm = 'ac';
   const natural = roll.dice[0]!.kept[0]!;

@@ -1,30 +1,465 @@
 {
-  "$comment": "SRD 5.1 spells (levels 0-3) used by the game, as data. Range and area in tiles. cast: action | bonus_action | reaction. target: creature | self | tile. attack: ranged | melee spell attack. save: {ability, half}. damage.scale: cantrip dice grow at character levels 5 and 11. heal.addMod adds the casting modifier. area: sphere (radius around the target tile, or around the caster if range 0), cone (length from the caster), line (length from the caster). 'special' marks spells with bespoke logic.",
-  "fire_bolt": { "label": "Descarga de fuego", "level": 0, "cast": "action", "range": 12, "target": "creature", "filter": "hostile", "attack": "ranged", "damage": { "dice": "1d10", "type": "fire", "scale": true }, "text": "Un dardo de fuego. Simple, barato y siempre disponible." },
-  "ray_of_frost": { "label": "Rayo de escarcha", "level": 0, "cast": "action", "range": 12, "target": "creature", "filter": "hostile", "attack": "ranged", "damage": { "dice": "1d8", "type": "cold", "scale": true }, "condition": { "id": "slowed", "turns": 1 }, "text": "Daño de frío y el objetivo pierde 2 casillas de movimiento en su siguiente turno." },
-  "shocking_grasp": { "label": "Agarre electrizante", "level": 0, "cast": "action", "range": 1, "target": "creature", "filter": "hostile", "attack": "melee", "damage": { "dice": "1d8", "type": "lightning", "scale": true }, "condition": { "id": "no_reactions", "turns": 1 }, "text": "Un calambre que además impide reaccionar: útil para escapar sin ataques de oportunidad." },
-  "sacred_flame": { "label": "Llama sagrada", "level": 0, "cast": "action", "range": 12, "target": "creature", "filter": "hostile", "save": { "ability": "dex", "half": false }, "damage": { "dice": "1d8", "type": "radiant", "scale": true }, "text": "Fuego divino. No sirve esconderse detrás de nada." },
-  "spare_the_dying": { "label": "Piedad con los moribundos", "level": 0, "cast": "action", "range": 1, "target": "creature", "filter": "ally", "special": "stabilize", "text": "Detiene la hemorragia de un aliado caído. No lo levanta, pero deja de morirse." },
-  "guidance": { "label": "Orientación divina", "level": 0, "cast": "action", "range": 1, "target": "creature", "filter": "ally", "condition": { "id": "guided_check", "turns": 10 }, "concentration": true, "text": "+1d4 a la siguiente prueba de característica." },
-  "magic_missile": { "label": "Proyectil mágico", "level": 1, "cast": "action", "range": 12, "target": "creature", "filter": "hostile", "autoHit": true, "multi": 3, "damage": { "dice": "1d4+1", "type": "force" }, "text": "Tres dardos que nunca fallan." },
-  "shield": { "label": "Escudo", "level": 1, "cast": "reaction", "range": 0, "target": "self", "special": "shield", "text": "Reacción al ser alcanzado: +5 a la CA hasta tu siguiente turno. Se lanza solo si convierte el impacto en fallo." },
-  "burning_hands": { "label": "Manos ardientes", "level": 1, "cast": "action", "range": 3, "target": "tile", "area": { "shape": "cone", "size": 3 }, "save": { "ability": "dex", "half": true }, "damage": { "dice": "3d6", "type": "fire" }, "text": "Un abanico de llamas delante de ti." },
-  "mage_armor": { "label": "Armadura de mago", "level": 1, "cast": "action", "range": 1, "target": "creature", "filter": "ally", "condition": { "id": "mage_armor", "turns": 600 }, "text": "CA 13 + Destreza mientras no lleves armadura." },
-  "cure_wounds": { "label": "Curar heridas", "level": 1, "cast": "action", "range": 1, "target": "creature", "filter": "ally", "heal": { "dice": "1d8", "addMod": true }, "text": "Cura a un aliado al que puedas tocar." },
-  "healing_word": { "label": "Palabra de curación", "level": 1, "cast": "bonus_action", "range": 12, "target": "creature", "filter": "ally", "heal": { "dice": "1d4", "addMod": true }, "text": "Cura poco, pero a distancia y como acción adicional." },
-  "bless": { "label": "Bendecir", "level": 1, "cast": "action", "range": 6, "target": "creature", "filter": "ally", "maxTargets": 3, "condition": { "id": "blessed", "turns": 10 }, "concentration": true, "text": "Hasta tres aliados suman 1d4 a sus ataques y tiradas de salvación." },
-  "guiding_bolt": { "label": "Saeta guía", "level": 1, "cast": "action", "range": 24, "target": "creature", "filter": "hostile", "attack": "ranged", "damage": { "dice": "4d6", "type": "radiant" }, "condition": { "id": "guided", "turns": 1 }, "text": "Mucho daño radiante, y el siguiente ataque contra el objetivo tiene ventaja." },
-  "inflict_wounds": { "label": "Infligir heridas", "level": 1, "cast": "action", "range": 1, "target": "creature", "filter": "hostile", "attack": "melee", "damage": { "dice": "3d10", "type": "necrotic" }, "text": "Un toque que pudre la carne." },
-  "shield_of_faith": { "label": "Escudo de fe", "level": 1, "cast": "bonus_action", "range": 12, "target": "creature", "filter": "ally", "condition": { "id": "shield_of_faith", "turns": 100 }, "concentration": true, "text": "+2 a la CA de un aliado." },
-  "scorching_ray": { "label": "Rayo abrasador", "level": 2, "cast": "action", "range": 24, "target": "creature", "filter": "hostile", "attack": "ranged", "multi": 3, "damage": { "dice": "2d6", "type": "fire" }, "text": "Tres rayos de fuego, cada uno con su propia tirada de ataque." },
-  "misty_step": { "label": "Paso brumoso", "level": 2, "cast": "bonus_action", "range": 6, "target": "tile", "special": "teleport", "text": "Te teletransportas a una casilla libre que veas." },
-  "hold_person": { "label": "Inmovilizar persona", "level": 2, "cast": "action", "range": 12, "target": "creature", "filter": "hostile", "save": { "ability": "wis", "half": false }, "condition": { "id": "paralyzed", "turns": 2 }, "concentration": true, "requiresTag": "type:humanoid", "text": "Un humanoide queda paralizado. Los ataques cuerpo a cuerpo contra él son críticos." },
-  "shatter": { "label": "Quebrar", "level": 2, "cast": "action", "range": 12, "target": "tile", "area": { "shape": "sphere", "size": 2 }, "save": { "ability": "con", "half": true }, "damage": { "dice": "3d8", "type": "thunder" }, "text": "Un estallido de sonido que revienta lo que pilla." },
-  "aid": { "label": "Ayuda", "level": 2, "cast": "action", "range": 6, "target": "creature", "filter": "ally", "maxTargets": 3, "special": "aid", "text": "Hasta tres aliados ganan 5 puntos de golpe máximos y actuales." },
-  "lesser_restoration": { "label": "Restablecimiento menor", "level": 2, "cast": "action", "range": 1, "target": "creature", "filter": "ally", "special": "cleanse", "text": "Elimina una condición: envenenado, cegado, paralizado o ensordecido." },
-  "fireball": { "label": "Bola de fuego", "level": 3, "cast": "action", "range": 24, "target": "tile", "area": { "shape": "sphere", "size": 4 }, "save": { "ability": "dex", "half": true }, "damage": { "dice": "8d6", "type": "fire" }, "text": "La respuesta a casi todo. Cuidado con tus amigos." },
-  "lightning_bolt": { "label": "Relámpago", "level": 3, "cast": "action", "range": 20, "target": "tile", "area": { "shape": "line", "size": 20 }, "save": { "ability": "dex", "half": true }, "damage": { "dice": "8d6", "type": "lightning" }, "text": "Una línea de rayos desde tus manos." },
-  "spirit_guardians": { "label": "Espíritus guardianes", "level": 3, "cast": "action", "range": 0, "target": "self", "special": "spirit_guardians", "concentration": true, "condition": { "id": "spirit_guardians", "turns": 100 }, "damage": { "dice": "3d8", "type": "radiant" }, "save": { "ability": "wis", "half": true }, "area": { "shape": "sphere", "size": 3 }, "text": "Espíritus que dañan a los enemigos que empiezan su turno cerca de ti." },
-  "revivify": { "label": "Revivir", "level": 3, "cast": "action", "range": 1, "target": "creature", "filter": "ally", "special": "revivify", "text": "Devuelve a la vida a un aliado muerto hace poco, con 1 punto de golpe." },
-  "mass_healing_word": { "label": "Palabra de curación en masa", "level": 3, "cast": "bonus_action", "range": 12, "target": "creature", "filter": "ally", "maxTargets": 6, "heal": { "dice": "1d4", "addMod": true }, "text": "Cura un poco a hasta seis aliados." }
+  "$comment": "SRD 5.1 spells (levels 0-3) used by the game, as data. Range and area in tiles. cast: action | bonus_action | reaction. target: creature | self | tile. attack: ranged | melee spell attack. save: {ability, half}. damage.scale: cantrip dice grow at character levels 5 and 11. heal.addMod adds the casting modifier. area: sphere (radius around the target tile, or around the caster if range 0), cone (length from the caster), line (length from the caster). 'special' marks spells with bespoke logic. element: what the spell does to surfaces it touches (fire, cold, lightning). surface: lays a surface over the area. push: tiles a failed save shoves creatures away from the caster.",
+  "fire_bolt": {
+    "label": "Descarga de fuego",
+    "level": 0,
+    "cast": "action",
+    "range": 12,
+    "target": "creature",
+    "filter": "hostile",
+    "attack": "ranged",
+    "damage": {
+      "dice": "1d10",
+      "type": "fire",
+      "scale": true
+    },
+    "text": "Un dardo de fuego. Simple, barato y siempre disponible.",
+    "element": "fire"
+  },
+  "ray_of_frost": {
+    "label": "Rayo de escarcha",
+    "level": 0,
+    "cast": "action",
+    "range": 12,
+    "target": "creature",
+    "filter": "hostile",
+    "attack": "ranged",
+    "damage": {
+      "dice": "1d8",
+      "type": "cold",
+      "scale": true
+    },
+    "condition": {
+      "id": "slowed",
+      "turns": 1
+    },
+    "text": "Daño de frío y el objetivo pierde 2 casillas de movimiento en su siguiente turno.",
+    "element": "cold"
+  },
+  "shocking_grasp": {
+    "label": "Agarre electrizante",
+    "level": 0,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "hostile",
+    "attack": "melee",
+    "damage": {
+      "dice": "1d8",
+      "type": "lightning",
+      "scale": true
+    },
+    "condition": {
+      "id": "no_reactions",
+      "turns": 1
+    },
+    "text": "Un calambre que además impide reaccionar: útil para escapar sin ataques de oportunidad.",
+    "element": "lightning"
+  },
+  "sacred_flame": {
+    "label": "Llama sagrada",
+    "level": 0,
+    "cast": "action",
+    "range": 12,
+    "target": "creature",
+    "filter": "hostile",
+    "save": {
+      "ability": "dex",
+      "half": false
+    },
+    "damage": {
+      "dice": "1d8",
+      "type": "radiant",
+      "scale": true
+    },
+    "text": "Fuego divino. No sirve esconderse detrás de nada."
+  },
+  "spare_the_dying": {
+    "label": "Piedad con los moribundos",
+    "level": 0,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "ally",
+    "special": "stabilize",
+    "text": "Detiene la hemorragia de un aliado caído. No lo levanta, pero deja de morirse."
+  },
+  "guidance": {
+    "label": "Orientación divina",
+    "level": 0,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "ally",
+    "condition": {
+      "id": "guided_check",
+      "turns": 10
+    },
+    "concentration": true,
+    "text": "+1d4 a la siguiente prueba de característica."
+  },
+  "magic_missile": {
+    "label": "Proyectil mágico",
+    "level": 1,
+    "cast": "action",
+    "range": 12,
+    "target": "creature",
+    "filter": "hostile",
+    "autoHit": true,
+    "multi": 3,
+    "damage": {
+      "dice": "1d4+1",
+      "type": "force"
+    },
+    "text": "Tres dardos que nunca fallan."
+  },
+  "shield": {
+    "label": "Escudo",
+    "level": 1,
+    "cast": "reaction",
+    "range": 0,
+    "target": "self",
+    "special": "shield",
+    "text": "Reacción al ser alcanzado: +5 a la CA hasta tu siguiente turno. Se lanza solo si convierte el impacto en fallo."
+  },
+  "burning_hands": {
+    "label": "Manos ardientes",
+    "level": 1,
+    "cast": "action",
+    "range": 3,
+    "target": "tile",
+    "area": {
+      "shape": "cone",
+      "size": 3
+    },
+    "save": {
+      "ability": "dex",
+      "half": true
+    },
+    "damage": {
+      "dice": "3d6",
+      "type": "fire"
+    },
+    "text": "Un abanico de llamas delante de ti.",
+    "element": "fire"
+  },
+  "mage_armor": {
+    "label": "Armadura de mago",
+    "level": 1,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "ally",
+    "condition": {
+      "id": "mage_armor",
+      "turns": 600
+    },
+    "text": "CA 13 + Destreza mientras no lleves armadura."
+  },
+  "cure_wounds": {
+    "label": "Curar heridas",
+    "level": 1,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "ally",
+    "heal": {
+      "dice": "1d8",
+      "addMod": true
+    },
+    "text": "Cura a un aliado al que puedas tocar."
+  },
+  "healing_word": {
+    "label": "Palabra de curación",
+    "level": 1,
+    "cast": "bonus_action",
+    "range": 12,
+    "target": "creature",
+    "filter": "ally",
+    "heal": {
+      "dice": "1d4",
+      "addMod": true
+    },
+    "text": "Cura poco, pero a distancia y como acción adicional."
+  },
+  "bless": {
+    "label": "Bendecir",
+    "level": 1,
+    "cast": "action",
+    "range": 6,
+    "target": "creature",
+    "filter": "ally",
+    "maxTargets": 3,
+    "condition": {
+      "id": "blessed",
+      "turns": 10
+    },
+    "concentration": true,
+    "text": "Hasta tres aliados suman 1d4 a sus ataques y tiradas de salvación."
+  },
+  "guiding_bolt": {
+    "label": "Saeta guía",
+    "level": 1,
+    "cast": "action",
+    "range": 24,
+    "target": "creature",
+    "filter": "hostile",
+    "attack": "ranged",
+    "damage": {
+      "dice": "4d6",
+      "type": "radiant"
+    },
+    "condition": {
+      "id": "guided",
+      "turns": 1
+    },
+    "text": "Mucho daño radiante, y el siguiente ataque contra el objetivo tiene ventaja."
+  },
+  "inflict_wounds": {
+    "label": "Infligir heridas",
+    "level": 1,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "hostile",
+    "attack": "melee",
+    "damage": {
+      "dice": "3d10",
+      "type": "necrotic"
+    },
+    "text": "Un toque que pudre la carne."
+  },
+  "shield_of_faith": {
+    "label": "Escudo de fe",
+    "level": 1,
+    "cast": "bonus_action",
+    "range": 12,
+    "target": "creature",
+    "filter": "ally",
+    "condition": {
+      "id": "shield_of_faith",
+      "turns": 100
+    },
+    "concentration": true,
+    "text": "+2 a la CA de un aliado."
+  },
+  "scorching_ray": {
+    "label": "Rayo abrasador",
+    "level": 2,
+    "cast": "action",
+    "range": 24,
+    "target": "creature",
+    "filter": "hostile",
+    "attack": "ranged",
+    "multi": 3,
+    "damage": {
+      "dice": "2d6",
+      "type": "fire"
+    },
+    "text": "Tres rayos de fuego, cada uno con su propia tirada de ataque.",
+    "element": "fire"
+  },
+  "misty_step": {
+    "label": "Paso brumoso",
+    "level": 2,
+    "cast": "bonus_action",
+    "range": 6,
+    "target": "tile",
+    "special": "teleport",
+    "text": "Te teletransportas a una casilla libre que veas."
+  },
+  "hold_person": {
+    "label": "Inmovilizar persona",
+    "level": 2,
+    "cast": "action",
+    "range": 12,
+    "target": "creature",
+    "filter": "hostile",
+    "save": {
+      "ability": "wis",
+      "half": false
+    },
+    "condition": {
+      "id": "paralyzed",
+      "turns": 2
+    },
+    "concentration": true,
+    "requiresTag": "type:humanoid",
+    "text": "Un humanoide queda paralizado. Los ataques cuerpo a cuerpo contra él son críticos."
+  },
+  "shatter": {
+    "label": "Quebrar",
+    "level": 2,
+    "cast": "action",
+    "range": 12,
+    "target": "tile",
+    "area": {
+      "shape": "sphere",
+      "size": 2
+    },
+    "save": {
+      "ability": "con",
+      "half": true
+    },
+    "damage": {
+      "dice": "3d8",
+      "type": "thunder"
+    },
+    "text": "Un estallido de sonido que revienta lo que pilla."
+  },
+  "aid": {
+    "label": "Ayuda",
+    "level": 2,
+    "cast": "action",
+    "range": 6,
+    "target": "creature",
+    "filter": "ally",
+    "maxTargets": 3,
+    "special": "aid",
+    "text": "Hasta tres aliados ganan 5 puntos de golpe máximos y actuales."
+  },
+  "lesser_restoration": {
+    "label": "Restablecimiento menor",
+    "level": 2,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "ally",
+    "special": "cleanse",
+    "text": "Elimina una condición: envenenado, cegado, paralizado o ensordecido."
+  },
+  "fireball": {
+    "label": "Bola de fuego",
+    "level": 3,
+    "cast": "action",
+    "range": 24,
+    "target": "tile",
+    "area": {
+      "shape": "sphere",
+      "size": 4
+    },
+    "save": {
+      "ability": "dex",
+      "half": true
+    },
+    "damage": {
+      "dice": "8d6",
+      "type": "fire"
+    },
+    "text": "La respuesta a casi todo. Cuidado con tus amigos.",
+    "element": "fire"
+  },
+  "lightning_bolt": {
+    "label": "Relámpago",
+    "level": 3,
+    "cast": "action",
+    "range": 20,
+    "target": "tile",
+    "area": {
+      "shape": "line",
+      "size": 20
+    },
+    "save": {
+      "ability": "dex",
+      "half": true
+    },
+    "damage": {
+      "dice": "8d6",
+      "type": "lightning"
+    },
+    "text": "Una línea de rayos desde tus manos.",
+    "element": "lightning"
+  },
+  "spirit_guardians": {
+    "label": "Espíritus guardianes",
+    "level": 3,
+    "cast": "action",
+    "range": 0,
+    "target": "self",
+    "special": "spirit_guardians",
+    "concentration": true,
+    "condition": {
+      "id": "spirit_guardians",
+      "turns": 100
+    },
+    "damage": {
+      "dice": "3d8",
+      "type": "radiant"
+    },
+    "save": {
+      "ability": "wis",
+      "half": true
+    },
+    "area": {
+      "shape": "sphere",
+      "size": 3
+    },
+    "text": "Espíritus que dañan a los enemigos que empiezan su turno cerca de ti."
+  },
+  "revivify": {
+    "label": "Revivir",
+    "level": 3,
+    "cast": "action",
+    "range": 1,
+    "target": "creature",
+    "filter": "ally",
+    "special": "revivify",
+    "text": "Devuelve a la vida a un aliado muerto hace poco, con 1 punto de golpe."
+  },
+  "mass_healing_word": {
+    "label": "Palabra de curación en masa",
+    "level": 3,
+    "cast": "bonus_action",
+    "range": 12,
+    "target": "creature",
+    "filter": "ally",
+    "maxTargets": 6,
+    "heal": {
+      "dice": "1d4",
+      "addMod": true
+    },
+    "text": "Cura un poco a hasta seis aliados."
+  },
+  "thunderwave": {
+    "label": "Onda atronadora",
+    "level": 1,
+    "cast": "action",
+    "range": 0,
+    "target": "self",
+    "area": {
+      "shape": "sphere",
+      "size": 1
+    },
+    "save": {
+      "ability": "con",
+      "half": true
+    },
+    "damage": {
+      "dice": "2d8",
+      "type": "thunder"
+    },
+    "push": 2,
+    "text": "Una onda de trueno a tu alrededor: daña y aparta 2 casillas a quien no la resista. Ideal para tirar enemigos por un barranco."
+  },
+  "grease": {
+    "label": "Grasa",
+    "level": 1,
+    "cast": "action",
+    "range": 12,
+    "target": "tile",
+    "area": {
+      "shape": "sphere",
+      "size": 1
+    },
+    "save": {
+      "ability": "dex",
+      "half": false
+    },
+    "condition": {
+      "id": "prone",
+      "turns": 1
+    },
+    "surface": "grease",
+    "text": "Cubre el suelo de grasa resbaladiza (y muy inflamable). Quien esté encima puede caer derribado."
+  }
 }

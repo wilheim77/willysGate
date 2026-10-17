@@ -3,7 +3,7 @@ import { type BaseCommand, type MoveCommand, blockedTiles } from './commands';
 import { type Vec2, gridDistance, posKey, samePos } from './grid';
 import { findPath, reachableTiles } from './pathfinding';
 import type { ActionDef, ActionTarget, Ruleset } from './ruleset';
-import type { Entity, GameState } from './state';
+import { type Entity, type GameState, OBJECT_TAG } from './state';
 
 /**
  * Generic tactical AI. It knows nothing about any rule system: it enumerates the
@@ -68,7 +68,7 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
   const affordable = ruleset
     .listActions(state, actor.id)
     .filter((a) => Object.entries(a.cost).every(([r, n]) => (actor.resources[r]?.current ?? 0) >= n));
-  const others = Object.values(state.entities).filter((e) => e.id !== actor.id && ruleset.isStanding(e));
+  const others = Object.values(state.entities).filter((e) => e.id !== actor.id && ruleset.isStanding(e) && !e.tags.includes(OBJECT_TAG));
   let best: Candidate | null = null;
 
   for (const action of affordable) {
@@ -120,7 +120,7 @@ function scorePreview(
 }
 
 function approachNearestEnemy(ruleset: Ruleset, state: GameState, actor: Entity, reachable: { pos: Vec2; cost: number }[], blocked: Set<string>): Vec2 | null {
-  const enemies = Object.values(state.entities).filter((e) => isHostile(actor, e) && ruleset.isStanding(e));
+  const enemies = Object.values(state.entities).filter((e) => isHostile(actor, e) && ruleset.isStanding(e) && !e.tags.includes(OBJECT_TAG));
   if (enemies.length === 0 || reachable.length === 0) return null;
   let best: { pos: Vec2; d: number } | null = null;
   for (const r of reachable) {

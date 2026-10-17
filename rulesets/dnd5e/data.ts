@@ -78,6 +78,12 @@ export interface SpellData {
   concentration?: boolean;
   requiresTag?: string;
   special?: string;
+  /** Element applied to the tiles it touches (surface reactions). */
+  element?: string;
+  /** Surface laid over the area. */
+  surface?: string;
+  /** Tiles a failed save shoves creatures away from the caster. */
+  push?: number;
   text: string;
 }
 

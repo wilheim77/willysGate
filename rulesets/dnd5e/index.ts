@@ -18,6 +18,7 @@ import {
   tagValue,
 } from '../../engine';
 import { listActions, performAction, previewAction } from './actions';
+import { SURFACES, SURFACE_REACTIONS, onFall, onSurface } from './environment';
 import { profBonus } from './character';
 import { SPELLS } from './data';
 import { parseDice, rollDice, sum } from './dice';
@@ -111,6 +112,10 @@ const glossary: Record<string, GlossaryEntry> = {
   sneak_attack: { label: 'Ataque furtivo', text: 'El pícaro hace daño extra una vez por turno si tiene ventaja o un aliado junto al objetivo.' },
   bless: { label: 'Bendición', text: 'Suma 1d4 a ataques y salvaciones mientras dure.' },
   resistance: { label: 'Resistencia', text: 'Recibe la mitad de daño de ese tipo. Vulnerable: el doble. Inmune: nada.' },
+  cover: { label: 'Cobertura', text: 'Si hay cajas, barriles o columnas entre tú y el objetivo, es más difícil acertarle: +2 a su CA con un obstáculo, +5 con dos.' },
+  contest: { label: 'Tirada enfrentada', text: 'Los dos tiráis un dado de 20 y sumáis vuestra habilidad; gana el más alto (los empates, quien empuja).' },
+  surface: { label: 'Superficie', text: 'Lo que cubre el suelo. El aceite y la grasa arden, el agua conduce el rayo y se congela, el hielo y la sangre hacen resbalar, el fuego quema.' },
+  fall: { label: 'Caída', text: 'Bajar un nivel andando no hace daño. Si te empujan desde más alto, recibes 1d6 por cada nivel de más y caes derribado.' },
 };
 
 /** Spellcasting ability by class. */
@@ -262,6 +267,10 @@ export const dnd5e: Ruleset = {
   performAction: (state, actorId, actionId, target, rng) => performAction(dnd5e, state, actorId, actionId, target, rng),
   onLeaveReach: (state, reactorId, moverId, rng) => onLeaveReach(dnd5e, state, reactorId, moverId, rng),
   onCombatEnd: (state, winner) => onCombatEnd(dnd5e, state, winner),
+  surfaces: SURFACES,
+  surfaceReactions: SURFACE_REACTIONS,
+  onSurface: (state, id, surface, trigger, rng) => onSurface(dnd5e, state, id, surface, trigger, rng),
+  onFall: (state, id, levels, rng) => onFall(dnd5e, state, id, levels, rng),
 };
 
 export interface CreatureSpec {
@@ -305,5 +314,7 @@ export { ABILITIES, ABILITY_LABELS, SKILLS, abilityModifier, proficiencyBonus } 
 export { createCharacter, createMonster, armorClass, type CharacterSpec, type MonsterSpec } from './character';
 export { CLASSES, MONSTERS, RACES, SPELLS, WEAPONS } from './data';
 export { areaTiles, DAMAGE_LABELS } from './actions';
+export { createProp, SURFACES, type PropSpec } from './environment';
+export { coverBetween } from './cover';
 export type { AttackRolledEvent, DamageDealtEvent, FateEvent, HealedEvent, SaveRolledEvent } from './resolve';
 export type { Ability } from './abilities';

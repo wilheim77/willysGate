@@ -18,6 +18,8 @@ export interface SurfaceDef {
   light?: { radius: number; intensity: number; color?: string };
   /** Visual hint for renderers without art for it. */
   color?: string;
+  /** What it turns into when its duration runs out (electrified water → water). */
+  expiresInto?: string;
 }
 
 /** `surface` is the existing surface ('' for a bare tile); `result` null removes it. */
@@ -64,7 +66,7 @@ export function surfaceable(state: GameState, p: Vec2): boolean {
 }
 
 /** Ages every timed surface by one round; returns the new layer and what changed. */
-export function ageSurfaces(state: GameState): { state: GameState; changed: { tile: Vec2; from: string; to: string | null }[] } {
+export function ageSurfaces(state: GameState, defs: Record<string, SurfaceDef> = {}): { state: GameState; changed: { tile: Vec2; from: string; to: string | null }[] } {
   const next: Record<string, SurfaceInstance> = {};
   const changed: { tile: Vec2; from: string; to: string | null }[] = [];
   for (const [key, s] of Object.entries(surfacesOf(state))) {
@@ -72,7 +74,9 @@ export function ageSurfaces(state: GameState): { state: GameState; changed: { ti
     else if (s.turnsLeft > 1) next[key] = { ...s, turnsLeft: s.turnsLeft - 1 };
     else {
       const [x, y] = key.split(',').map(Number) as [number, number];
-      changed.push({ tile: { x, y }, from: s.type, to: null });
+      const into = defs[s.type]?.expiresInto;
+      if (into && defs[into]) next[key] = makeSurface(defs, into);
+      changed.push({ tile: { x, y }, from: s.type, to: into ?? null });
     }
   }
   return { state: withSurfaces(state, next), changed };
