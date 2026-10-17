@@ -1,0 +1,1082 @@
+{
+ "$comment": "Title screen key art of Willy el mazmorrero (320x180; keep the logo and Willy inside the centre 180 px so a portrait cover-crop still works). Built by `node scripts/art/build-cinematics.ts willy title` into public/assets/title/. Same ops and palette as intro.spec.json.",
+ "size": [
+  320,
+  180
+ ],
+ "palette": {
+  "k": "#1c1a22",
+  "black": "#0a090c",
+  "white": "#f4ece0",
+  "cap0": "#2b3a5c",
+  "cap1": "#3f5580",
+  "skin0": "#e8b088",
+  "skin1": "#c08a68",
+  "must": "#4a2e20",
+  "ov0": "#e07a2a",
+  "ov1": "#b85a1e",
+  "logo": "#3a6ab0",
+  "shirt": "#8a8f96",
+  "boot": "#3a2a20",
+  "butane0": "#e86a2a",
+  "butane1": "#b04a1e",
+  "sky0": "#5e6a80",
+  "sky1": "#8a90a0",
+  "sky2": "#c0a8a8",
+  "sky3": "#e0bca0",
+  "sea0": "#2a3e52",
+  "sea1": "#3a5468",
+  "sea2": "#567082",
+  "foam": "#c8d4d8",
+  "rock0": "#3a3a40",
+  "rock1": "#56565c",
+  "moss0": "#3e5a3a",
+  "moss1": "#5a7a48",
+  "ochre0": "#8a6a48",
+  "ochre1": "#b08c5e",
+  "ochre2": "#d0b080",
+  "stone0": "#6a6460",
+  "stone1": "#8e8680",
+  "stone2": "#b0a89e",
+  "wood0": "#4a2e22",
+  "wood1": "#6e4630",
+  "wood2": "#8e6040",
+  "tile0": "#a85a3a",
+  "tile1": "#c8784a",
+  "rain": "#b8c4d0",
+  "gull": "#e8e8e8",
+  "gull1": "#a8acb0",
+  "beak": "#f0b030",
+  "red0": "#5a0e14",
+  "red1": "#a01a22",
+  "red2": "#e0302a",
+  "red3": "#ff6a50",
+  "neon0": "#ff4fa0",
+  "neon1": "#4fe8ff",
+  "neon2": "#ffe04f",
+  "studio0": "#120c1e",
+  "studio1": "#22183a",
+  "studio2": "#3a2a5c",
+  "screen0": "#1a1a2a",
+  "tv0": "#3a3430",
+  "tv1": "#5a524a",
+  "bar0": "#3e2a20",
+  "bar1": "#7a5236",
+  "glass": "#a8d0d8",
+  "coffee": "#4a2a18",
+  "steam": "#d8d8d8",
+  "gold0": "#a8781e",
+  "gold1": "#e8b830",
+  "gold2": "#fff0a0",
+  "chute0": "#d8d0c0",
+  "chute1": "#e04a4a"
+ },
+ "atlases": {
+  "x72": {
+   "png": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
+   "list": "0x72-dungeontileset-ii/tile_list_v1.7"
+  },
+  "na_floor": {
+   "png": "ninja-adventure/TilesetFloor.png",
+   "grid": 16
+  }
+ },
+ "ascii": {
+  "willy": {
+   "legend": {
+    "k": "k",
+    "C": "cap0",
+    "c": "cap1",
+    "s": "skin0",
+    "S": "skin1",
+    "e": "k",
+    "m": "must",
+    "O": "ov0",
+    "o": "ov1",
+    "L": "white",
+    "l": "logo",
+    "w": "shirt",
+    "b": "boot"
+   },
+   "rows": [
+    "....kkkkkkk.....",
+    "...kCCcCCCCk....",
+    "...kCCCCCCCCk...",
+    "..kkkkkkkkkkkk..",
+    "...ksssssssk....",
+    "...ksesssesk....",
+    "...kSsssssSk....",
+    "...ksmmmmmsk....",
+    "...kSmsssmSk....",
+    "....kSSSSSk.....",
+    "..kkwwwwwwwkk...",
+    ".kwOOwwwwwOOwk..",
+    "kwwOOOOOOOOOwwk.",
+    "kwwOOOLLlOOOwwk.",
+    "kwwOOOLlLOOOwwk.",
+    "kwwOOOOOOOOOwwk.",
+    "kssOOOOOOOOOssk.",
+    ".kkOOOOOOOOOkk..",
+    "..kOOOOOOOOOk...",
+    "..koooooooook...",
+    "..kOOOOkOOOOk...",
+    "..kOOOOkOOOOk...",
+    "..kooookooook...",
+    "..kbbbbkbbbbk...",
+    "..kbbbbkbbbbk...",
+    "..kkkkk.kkkkk..."
+   ]
+  },
+  "bombona": {
+   "legend": {
+    "k": "k",
+    "O": "butane0",
+    "o": "butane1",
+    "L": "white",
+    "g": "shirt"
+   },
+   "rows": [
+    "..kkkk..",
+    ".kg..gk.",
+    ".kkggkk.",
+    "kOOOOOOk",
+    "kOLLLLOk",
+    "kOOOOOOk",
+    "kOOOOOOk",
+    "kooooook",
+    "kOOOOOOk",
+    "kooooook",
+    ".kkkkkk."
+   ]
+  },
+  "gull": {
+   "legend": {
+    "k": "k",
+    "w": "gull",
+    "g": "gull1",
+    "y": "beak"
+   },
+   "rows": [
+    "...kk....",
+    "..kwwk...",
+    "kkwwwwkyy",
+    ".kgwwwk..",
+    "..kkkk...",
+    "...y.y..."
+   ]
+  },
+  "gull_fly": {
+   "legend": {
+    "k": "k",
+    "w": "gull",
+    "g": "gull1",
+    "y": "beak"
+   },
+   "rows": [
+    "kk.......kk",
+    ".kgk...kgk.",
+    "..kwwwwwkyy",
+    "...kkgkk..."
+   ]
+  },
+  "drone": {
+   "legend": {
+    "k": "k",
+    "G": "shirt",
+    "g": "tv1",
+    "L": "neon1",
+    "R": "red2"
+   },
+   "rows": [
+    "kkkk....kkkk",
+    "..kkkkkkkk..",
+    "...kGGGGk...",
+    "..kGgggggk..",
+    "..kgLLgRgk..",
+    "..kgLLgggk..",
+    "...kkkkkk..."
+   ]
+  },
+  "skull": {
+   "legend": {
+    "k": "k",
+    "w": "white"
+   },
+   "rows": [
+    "..kkkkk..",
+    ".kwwwwwk.",
+    "kwwwwwwwk",
+    "kwkkwwwwk",
+    "kwkkwkkkk",
+    "kwwwkwwwk",
+    ".kwwwwwk.",
+    ".kwkwkwk.",
+    "..kkkkk.."
+   ]
+  },
+  "star": {
+   "legend": {
+    "y": "neon2",
+    "w": "white"
+   },
+   "rows": [
+    "..y..",
+    ".yyy.",
+    "yywyy",
+    ".yyy.",
+    "y...y"
+   ]
+  },
+  "cafetera": {
+   "legend": {
+    "k": "k",
+    "g": "stone2",
+    "G": "stone1"
+   },
+   "rows": [
+    ".kkk.",
+    "kgggk",
+    ".kGk.",
+    "kgggkk",
+    "kGGGk.",
+    "kkkkk."
+   ]
+  },
+  "cup": {
+   "legend": {
+    "k": "k",
+    "w": "white",
+    "c": "coffee"
+   },
+   "rows": [
+    "kwwwk",
+    "kwcwkk",
+    "kwwwk.",
+    ".kkk.."
+   ]
+  },
+  "gift": {
+   "legend": {
+    "k": "k",
+    "y": "gold1",
+    "Y": "gold2",
+    "o": "gold0",
+    "r": "red2"
+   },
+   "rows": [
+    "...rr.rr...",
+    "....rrr....",
+    "kkkkkrkkkkk",
+    "kyyYyryyyyk",
+    "kkkkkrkkkkk",
+    ".kyyyryyyk.",
+    ".kyYyryyyk.",
+    ".kyyyryyok.",
+    ".kooorooook",
+    ".kkkkkkkkk."
+   ]
+  },
+  "clock": {
+   "legend": {
+    "k": "k",
+    "w": "white",
+    "r": "red2"
+   },
+   "rows": [
+    ".kkk.",
+    "kwrwk",
+    "kwrrk",
+    "kwwwk",
+    ".kkk."
+   ]
+  }
+ },
+ "panels": [
+  {
+   "id": "title",
+   "lines": [],
+   "durationMs": 0,
+   "draw": [
+    {
+     "op": "gradient",
+     "colors": [
+      "studio0",
+      "studio1",
+      "studio2",
+      "studio1"
+     ],
+     "y": 0,
+     "h": 160
+    },
+    {
+     "op": "grid",
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 150,
+     "size": 8,
+     "color": "studio2",
+     "alpha": 0.5
+    },
+    {
+     "op": "glow",
+     "cx": 160,
+     "cy": 52,
+     "r": 150,
+     "ry": 70,
+     "color": "neon0",
+     "strength": 0.25
+    },
+    {
+     "op": "poly",
+     "points": [
+      [
+       20,
+       0
+      ],
+      [
+       52,
+       0
+      ],
+      [
+       186,
+       158
+      ],
+      [
+       138,
+       158
+      ]
+     ],
+     "color": "neon2",
+     "alpha": 0.1
+    },
+    {
+     "op": "poly",
+     "points": [
+      [
+       300,
+       0
+      ],
+      [
+       268,
+       0
+      ],
+      [
+       134,
+       158
+      ],
+      [
+       182,
+       158
+      ]
+     ],
+     "color": "neon1",
+     "alpha": 0.1
+    },
+    {
+     "op": "ellipse",
+     "cx": 36,
+     "cy": 0,
+     "rx": 12,
+     "ry": 5,
+     "color": "neon2"
+    },
+    {
+     "op": "ellipse",
+     "cx": 284,
+     "cy": 0,
+     "rx": 12,
+     "ry": 5,
+     "color": "neon1"
+    },
+    {
+     "op": "noise",
+     "seed": 21,
+     "color": "neon2",
+     "density": 0.004,
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 120
+    },
+    {
+     "op": "noise",
+     "seed": 22,
+     "color": "neon0",
+     "density": 0.004,
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 120
+    },
+    {
+     "op": "noise",
+     "seed": 23,
+     "color": "neon1",
+     "density": 0.004,
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 120
+    },
+    {
+     "op": "vignette",
+     "from": 0.7,
+     "alpha": 0.6
+    },
+    {
+     "op": "poly",
+     "points": [
+      [
+       247,
+       38
+      ],
+      [
+       223,
+       44
+      ],
+      [
+       239,
+       54
+      ],
+      [
+       211,
+       55
+      ],
+      [
+       214,
+       67
+      ],
+      [
+       188,
+       63
+      ],
+      [
+       179,
+       75
+      ],
+      [
+       160,
+       66
+      ],
+      [
+       141,
+       75
+      ],
+      [
+       132,
+       63
+      ],
+      [
+       106,
+       67
+      ],
+      [
+       109,
+       55
+      ],
+      [
+       81,
+       54
+      ],
+      [
+       97,
+       44
+      ],
+      [
+       73,
+       38
+      ],
+      [
+       97,
+       32
+      ],
+      [
+       81,
+       22
+      ],
+      [
+       109,
+       21
+      ],
+      [
+       106,
+       9
+      ],
+      [
+       132,
+       13
+      ],
+      [
+       141,
+       1
+      ],
+      [
+       160,
+       10
+      ],
+      [
+       179,
+       1
+      ],
+      [
+       188,
+       13
+      ],
+      [
+       214,
+       9
+      ],
+      [
+       211,
+       21
+      ],
+      [
+       239,
+       22
+      ],
+      [
+       223,
+       32
+      ]
+     ],
+     "color": "red0"
+    },
+    {
+     "op": "poly",
+     "points": [
+      [
+       238,
+       38
+      ],
+      [
+       216,
+       43
+      ],
+      [
+       230,
+       52
+      ],
+      [
+       205,
+       53
+      ],
+      [
+       208,
+       64
+      ],
+      [
+       185,
+       60
+      ],
+      [
+       177,
+       70
+      ],
+      [
+       160,
+       62
+      ],
+      [
+       143,
+       70
+      ],
+      [
+       135,
+       60
+      ],
+      [
+       112,
+       64
+      ],
+      [
+       115,
+       53
+      ],
+      [
+       90,
+       52
+      ],
+      [
+       104,
+       43
+      ],
+      [
+       82,
+       38
+      ],
+      [
+       104,
+       33
+      ],
+      [
+       90,
+       24
+      ],
+      [
+       115,
+       23
+      ],
+      [
+       112,
+       12
+      ],
+      [
+       135,
+       16
+      ],
+      [
+       143,
+       6
+      ],
+      [
+       160,
+       14
+      ],
+      [
+       177,
+       6
+      ],
+      [
+       185,
+       16
+      ],
+      [
+       208,
+       12
+      ],
+      [
+       205,
+       23
+      ],
+      [
+       230,
+       24
+      ],
+      [
+       216,
+       33
+      ]
+     ],
+     "color": "red1"
+    },
+    {
+     "op": "poly",
+     "points": [
+      [
+       224,
+       41
+      ],
+      [
+       208,
+       45
+      ],
+      [
+       215,
+       52
+      ],
+      [
+       196,
+       53
+      ],
+      [
+       195,
+       61
+      ],
+      [
+       177,
+       58
+      ],
+      [
+       167,
+       64
+      ],
+      [
+       154,
+       59
+      ],
+      [
+       139,
+       63
+      ],
+      [
+       133,
+       56
+      ],
+      [
+       114,
+       57
+      ],
+      [
+       117,
+       49
+      ],
+      [
+       99,
+       47
+      ],
+      [
+       110,
+       40
+      ],
+      [
+       96,
+       35
+      ],
+      [
+       112,
+       31
+      ],
+      [
+       105,
+       24
+      ],
+      [
+       124,
+       23
+      ],
+      [
+       125,
+       15
+      ],
+      [
+       143,
+       18
+      ],
+      [
+       153,
+       12
+      ],
+      [
+       166,
+       17
+      ],
+      [
+       181,
+       13
+      ],
+      [
+       187,
+       20
+      ],
+      [
+       206,
+       19
+      ],
+      [
+       203,
+       27
+      ],
+      [
+       221,
+       29
+      ],
+      [
+       210,
+       36
+      ]
+     ],
+     "color": "red2",
+     "dither": 0.5
+    },
+    {
+     "op": "poly",
+     "points": [
+      [
+       76,
+       54
+      ],
+      [
+       92,
+       56
+      ],
+      [
+       92,
+       72
+      ],
+      [
+       76,
+       74
+      ],
+      [
+       82,
+       64
+      ]
+     ],
+     "color": "red0"
+    },
+    {
+     "op": "poly",
+     "points": [
+      [
+       244,
+       54
+      ],
+      [
+       228,
+       56
+      ],
+      [
+       228,
+       72
+      ],
+      [
+       244,
+       74
+      ],
+      [
+       238,
+       64
+      ]
+     ],
+     "color": "red0"
+    },
+    {
+     "op": "rect",
+     "x": 88,
+     "y": 54,
+     "w": 144,
+     "h": 16,
+     "color": "red1"
+    },
+    {
+     "op": "rect",
+     "x": 88,
+     "y": 54,
+     "w": 144,
+     "h": 2,
+     "color": "red3"
+    },
+    {
+     "op": "rect",
+     "x": 88,
+     "y": 68,
+     "w": 144,
+     "h": 2,
+     "color": "red0"
+    },
+    {
+     "op": "text",
+     "font": "big",
+     "bold": true,
+     "text": "WILLY",
+     "x": 160,
+     "y": 14,
+     "scale": 5,
+     "align": "center",
+     "color": "neon2",
+     "outline": "k",
+     "shadow": "red0",
+     "shadowOffset": 3,
+     "highlight": "gold2",
+     "highlightRows": 10
+    },
+    {
+     "op": "text",
+     "font": "big",
+     "text": "EL MAZMORRERO",
+     "x": 160,
+     "y": 56,
+     "scale": 2,
+     "align": "center",
+     "color": "white",
+     "shadow": "k",
+     "shadowOffset": 1
+    },
+    {
+     "op": "text",
+     "text": "UN CONCURSO DE CANAL ABISMO",
+     "x": 160,
+     "y": 80,
+     "align": "center",
+     "color": "neon1",
+     "shadow": "k"
+    },
+    {
+     "op": "sprite",
+     "ascii": "star",
+     "x": 64,
+     "y": 14,
+     "scale": 2
+    },
+    {
+     "op": "sprite",
+     "ascii": "star",
+     "x": 246,
+     "y": 20,
+     "scale": 2
+    },
+    {
+     "op": "sprite",
+     "ascii": "star",
+     "x": 82,
+     "y": 80
+    },
+    {
+     "op": "sprite",
+     "ascii": "star",
+     "x": 234,
+     "y": 84
+    },
+    {
+     "op": "sprite",
+     "ascii": "drone",
+     "x": 30,
+     "y": 96,
+     "scale": 2
+    },
+    {
+     "op": "sprite",
+     "ascii": "drone",
+     "x": 266,
+     "y": 88,
+     "scale": 2,
+     "flip": true
+    },
+    {
+     "op": "ellipse",
+     "cx": 160,
+     "cy": 158,
+     "rx": 64,
+     "ry": 11,
+     "color": "studio2"
+    },
+    {
+     "op": "ellipse",
+     "cx": 160,
+     "cy": 156,
+     "rx": 60,
+     "ry": 9,
+     "color": "studio1"
+    },
+    {
+     "op": "ellipse",
+     "cx": 160,
+     "cy": 157,
+     "rx": 30,
+     "ry": 5,
+     "color": "neon2",
+     "alpha": 0.25
+    },
+    {
+     "op": "glow",
+     "cx": 160,
+     "cy": 150,
+     "r": 46,
+     "ry": 16,
+     "color": "neon2",
+     "strength": 0.3
+    },
+    {
+     "op": "sprite",
+     "ascii": "willy",
+     "x": 154,
+     "y": 158,
+     "scale": 2,
+     "anchor": "bottom"
+    },
+    {
+     "op": "sprite",
+     "ascii": "bombona",
+     "x": 184,
+     "y": 158,
+     "scale": 2,
+     "anchor": "bottom"
+    },
+    {
+     "op": "gradient",
+     "colors": [
+      "studio1",
+      "studio2"
+     ],
+     "y": 150,
+     "h": 30
+    },
+    {
+     "op": "glow",
+     "cx": 160,
+     "cy": 168,
+     "r": 150,
+     "ry": 20,
+     "color": "neon0",
+     "strength": 0.25
+    },
+    {
+     "op": "crowd",
+     "seed": 6,
+     "x": -4,
+     "y": 162,
+     "w": 330,
+     "rows": 2,
+     "rowGap": 10,
+     "color": "k",
+     "accent": "neon0"
+    },
+    {
+     "op": "ellipse",
+     "cx": 14,
+     "cy": 12,
+     "rx": 7,
+     "ry": 7,
+     "color": "k"
+    },
+    {
+     "op": "ellipse",
+     "cx": 14,
+     "cy": 12,
+     "rx": 5,
+     "ry": 5,
+     "color": "neon1"
+    },
+    {
+     "op": "ellipse",
+     "cx": 14,
+     "cy": 12,
+     "rx": 3,
+     "ry": 3,
+     "color": "studio0"
+    },
+    {
+     "op": "ellipse",
+     "cx": 15,
+     "cy": 13,
+     "rx": 1,
+     "ry": 1,
+     "color": "neon0"
+    },
+    {
+     "op": "text",
+     "text": "CANAL",
+     "x": 24,
+     "y": 6,
+     "color": "white",
+     "shadow": "k"
+    },
+    {
+     "op": "text",
+     "text": "ABISMO",
+     "x": 24,
+     "y": 13,
+     "color": "neon1",
+     "shadow": "k"
+    },
+    {
+     "op": "ellipse",
+     "cx": 268,
+     "cy": 10,
+     "rx": 2,
+     "ry": 2,
+     "color": "red2"
+    },
+    {
+     "op": "text",
+     "text": "EN DIRECTO",
+     "x": 274,
+     "y": 8,
+     "color": "white",
+     "shadow": "k"
+    }
+   ]
+  }
+ ]
+}

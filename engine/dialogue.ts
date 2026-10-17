@@ -18,6 +18,8 @@ export interface DialogueTree {
   id: string;
   start: string;
   nodes: Record<string, DialogueNode>;
+  /** Long runs without choices (an epilogue): the client may advance by itself. */
+  cinematic?: boolean;
 }
 
 export interface DialogueNode {
@@ -249,6 +251,8 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
       const d = dialogueOf(next);
       const issuer = d ? next.entities[d.actorId]?.controllerId : undefined;
       const party = Object.values(next.entities).filter((x) => issuer && x.controllerId === issuer).map((x) => x.id);
+      // Already there (the scene happens where you stand): nothing to do.
+      if (t.mapId === next.map.id) continue;
       const r = changeMap(next, content.maps ?? {}, t.mapId, t.spawn, party);
       if (!r.ok) return r;
       next = r.state;

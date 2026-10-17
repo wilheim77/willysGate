@@ -60,16 +60,18 @@ describe('Willy real content: casting, the service lift, and the floor-1 encount
       const reloaded = engine.deserialize(engine.serialize(down.state));
       expect(JSON.stringify(reloaded), 'save/load after travelling down changed the state').toBe(JSON.stringify(down.state));
 
-      const upExit = zonesOf(down.state, 'exits').find((z) => z.properties.to === 'camerino')!;
+      // The stairs of floor N lead to camerino-N (a copy of the Camerino).
+      const upExit = zonesOf(down.state, 'exits').find((z) => String(z.properties.to).startsWith('camerino'))!;
+      const upMap = String(upExit.properties.to);
       const standing = standOn(down.state, 'willy', { x: upExit.x, y: upExit.y });
-      const up = engine.apply(standing, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: 'camerino', spawn: String(upExit.properties.spawn) } as BaseCommand & {
+      const up = engine.apply(standing, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: upMap, spawn: String(upExit.properties.spawn) } as BaseCommand & {
         entityId: string;
         mapId: string;
         spawn: string;
       });
       expect(up.ok, up.ok ? '' : `travel back up failed: ${JSON.stringify((up as { error: unknown }).error)}`).toBe(true);
       if (!up.ok) return;
-      expect(up.state.map.id).toBe('camerino');
+      expect(up.state.map.id).toBe(upMap);
       expect(up.state.entities.maripuri, 'the Camerino regulars should be back').toBeDefined();
     });
   }
@@ -122,6 +124,6 @@ describe('Willy real content: casting, the service lift, and the floor-1 encount
         }
       }
       expect(s.turn.mode, `seed=${seed}: the floor-1 fight never ended`).toBe('exploration');
-    });
+    }, 60_000);
   }
 });

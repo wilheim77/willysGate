@@ -52,13 +52,8 @@ export default {
     { name: 'farol-polvorin', at: [25, 18], radius: 3, color: '#ffb050', flicker: 0.15 },
   ],
   surfaces: [{ name: 'escombros-sima', rect: [8, 20, 3, 2], surface: 'rubble' }],
-  encounters: [
-    {
-      name: 'brea',
-      rect: [8, 1, 18, 21],
-      participants: ['absalon', 'ivo', 'callado-9', 'callado-10', 'callado-11', 'callado_palido-3'],
-    },
-  ],
+  // No encounters zone: boveda_brea (scene brea-habla) starts the fight by faction and sets
+  // brea_derrotado on victory.
   exits: [{ name: 'a-mina', rect: [0, 11, 1, 3], to: 'mina', spawn: 'entry-boveda' }],
   zones: {
     scenes: [{ name: 'brea-habla', rect: [3, 10, 4, 5], props: { dialogue: 'boveda_brea', speaker: 'absalon', once: true } }],

@@ -165,6 +165,11 @@ export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>)
     // Unknown spawn names are content bugs; the map test reports them, the game skips them.
   }
 
+  // A spawn may change sides (allies on the night of the torches fight for the party, still AI-led).
+  for (let i = 0; i < entities.length; i++) {
+    const side = spawnProperties[entities[i]!.id]?.faction;
+    if (side) entities[i] = { ...entities[i]!, factionId: String(side), tags: entities[i]!.tags.filter((t) => t !== 'noncombatant') };
+  }
   // Story-conditional spawns (the night attackers at the abbey gate): present only when the flags say.
   for (let i = 0; i < entities.length; i++) {
     const e = entities[i]!;

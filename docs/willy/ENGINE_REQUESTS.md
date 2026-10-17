@@ -29,7 +29,7 @@
 | R18 | ✅ **Hecho y usado** (`intoVoid`, `Ruleset.onVoid`). Empujar **al vacío**: casillas `void`/foso que se pueden atravesar al ser empujado | `engine/effects.ts` (`simulatePush`) | W2 | Fosos de la mina de *Intereses* |
 | R19 | ✅ **Hecho y usado** (subida de nivel en `rulesets/willy/progression.ts`). Efecto `modifyStat` (subir atributos y nivel) | `engine/effects.ts` | W5 | Subida de nivel de *Intereses* |
 | R20 | ✅ en parte: `blocksSight`, `onTurnEnd` y `onCombatStart` hechos y usados; falta `onRoundEnd`. `SurfaceDef.blocksSight` (vapor) y gancho `onRoundEnd` (cintas transportadoras, mareas) | `engine/surfaces.ts`, `engine/los.ts`, `engine/combat.ts` | W3 | Niebla y humo en *Intereses* |
-| R21 | **`MapBuilder` con el estado** (semilla de la partida) para generar plantas al llegar | `engine/world.ts` | W3 | Mazmorras procedurales de cualquier juego |
+| R21 | ✅ **Hecho y usado** (las plantas se generan al llegar, `content/willy/setup.ts`). **`MapBuilder` con el estado** (semilla de la partida) para generar plantas al llegar | `engine/world.ts` | W3 | Mazmorras procedurales de cualquier juego |
 
 Ninguna mete reglas de *Willy* ni de d20 en `engine/`.
 
@@ -505,4 +505,4 @@ Además, en el perfil por navegador (R6): `rivalesRecientes: string[]` (últimos
 
 **Por qué.** Las plantas de *Willy* se generan con la semilla de la partida. Un `MapBuilder` sin argumentos no la conoce, así que hoy `content/willy/setup.ts` genera las plantas al empezar la temporada y las deja en `systems.world.stashed`. Funciona, pero obliga a generar todas las plantas por adelantado (más peso en la partida guardada) y no permite generar la Planta N+1 según lo que pasó en la N (rivales que vuelven, intento tras un derrumbe).
 
-**Mientras tanto:** se generan al empezar; el builder `planta-1` es solo un respaldo con semilla fija (para partidas antiguas).
+**Hecho:** `MapBuilder` recibe `{ state }`; cada planta se genera al llegar con la semilla y los rivales ya vistos.

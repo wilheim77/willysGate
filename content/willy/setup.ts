@@ -8,63 +8,63 @@ import { MAPS } from './maps';
  * The game's start and the casting, without any client imports (so tests and a future server
  * can use them). content/willy/game.ts wires these into the GameDefinition.
  *
- * The floors are generated from the run's seed when the season starts and kept in the world's
- * stash (systems.world.stashed), so the service lift finds them and a save keeps them byte for
- * byte, even if the generator changes later. MapBuilder takes no arguments, so it can't know
- * the run's seed: the builder for 'planta-1' below is only a fallback (ENGINE_REQUESTS R21).
+ * Each floor is generated when Willy first arrives (R21: the map builder sees the state), from
+ * the run's seed and what happened before: the rivals already met, and whether they were beaten,
+ * made a pact with or ran away. Once built, a floor stays in the world's stash like any map, so
+ * a save keeps it as it was even if the generator changes later.
  */
 
 export const PLAYER = 'player:1';
 export const FACTION = 'concursantes';
 
-/** The floors generated so far (planta-1 for now; 2-5 when their room chunks exist). */
-export const GENERATED_FLOORS = [1];
+/** The floors of a season. */
+export const FLOORS = [1, 2, 3, 4, 5];
+
+export function rivalsOf(state: GameState | undefined): RivalRecord[] {
+  return ((state?.systems?.rivals as unknown as RivalRecord[] | undefined) ?? []).slice();
+}
+
+/**
+ * Floor `n` for this run. Its systems carry the updated rival list (a new rival, or one coming
+ * back), which travel merges into the state when Willy arrives.
+ */
+export function buildFloor(n: number, state: GameState | undefined): MapSetup {
+  const rivals = rivalsOf(state);
+  const floor = generateFloor(state?.seed ?? 0, n, { rivals });
+  if (!floor.rival) return floor.setup;
+  const others = rivals.filter((r) => r.id !== floor.rival!.id);
+  return { ...floor.setup, systems: { ...floor.setup.systems, rivals: [...others, floor.rival] as unknown as JsonValue } };
+}
 
 /** Map builders for the engine's travel command (EngineContent.maps). */
 export const maps: Record<string, MapBuilder> = {
   ...MAPS,
-  'planta-1': () => generateFloor(0, 1).setup,
+  ...Object.fromEntries(FLOORS.map((n) => [`planta-${n}`, (ctx?: { state: GameState }) => buildFloor(n, ctx?.state)])),
 };
 
-function startOn(setup: MapSetup, base: GameState, stashed: Record<string, JsonValue>): GameState {
+function startOn(setup: MapSetup, base: GameState): GameState {
   const systems = setup.systems ?? {};
-  let state: GameState = { ...base, systems: { ...base.systems, ...systems, spawns: setup.spawns as unknown as JsonValue, world: { current: setup.map.id, stashed } as unknown as JsonValue } };
+  let state: GameState = {
+    ...base,
+    systems: { ...base.systems, rivals: [] as unknown as JsonValue, ...systems, spawns: setup.spawns as unknown as JsonValue, world: { current: setup.map.id, stashed: {} } as unknown as JsonValue },
+  };
   if (systems.lighting) state = withLighting(state, systems.lighting as never);
   if (systems.zones) state = withZones(state, systems.zones as never);
   return state;
 }
 
-function stash(setup: MapSetup): JsonValue {
-  return { map: setup.map, entities: Object.fromEntries(setup.entities.map((e) => [e.id, e])), systems: { ...(setup.systems ?? {}), spawns: setup.spawns } } as unknown as JsonValue;
-}
-
-/** Every floor of the run, generated in order (later floors know the earlier rivals). */
-export function generateRun(seed: number): { floors: Record<string, MapSetup>; rivals: RivalRecord[] } {
-  const floors: Record<string, MapSetup> = {};
-  const rivals: RivalRecord[] = [];
-  for (const n of GENERATED_FLOORS) {
-    const floor = generateFloor(seed, n, { rivals });
-    floors[`planta-${n}`] = floor.setup;
-    if (floor.rival) rivals.push(floor.rival);
-  }
-  return { floors, rivals };
-}
-
 /**
- * A new season: Willy (a Butanero until the casting) in the Camerino, with the floors already
- * generated. `start` (the client's ?mapa=) begins on another map: a floor or 'prueba-castro'.
+ * A new season: Willy (a Butanero until the casting) in the Camerino. `start` (the client's
+ * ?mapa=) begins on another map: a floor ('planta-3') or 'prueba-castro'.
  */
 export function newWillyGame(engine: Engine, seed: number, options?: { start?: string }): GameState {
-  const { floors, rivals } = generateRun(seed);
-  const builders: Record<string, () => MapSetup> = { ...MAPS, ...Object.fromEntries(Object.entries(floors).map(([id, f]) => [id, () => f])) };
-  const startId = options?.start && builders[options.start] ? options.start : 'camerino';
-  const start = builders[startId]!();
+  const startId = options?.start && maps[options.start] ? options.start : 'camerino';
+  // A floor needs the seed: build it against a bare state that carries it.
+  const start = maps[startId]!({ state: { seed: seed >>> 0, systems: {} } as unknown as GameState });
   const at: Vec2 = start.spawns.llegada ?? Object.values(start.spawns)[0] ?? { x: 1, y: 1 };
   const willyEntity: Entity = createWilly({ id: 'willy', controllerId: PLAYER, factionId: FACTION, position: at, spriteId: 'willy-butanero', classId: 'butanero' });
   const base = engine.newGame({ seed, map: start.map, entities: [willyEntity, ...start.entities] });
-  const stashed = Object.fromEntries(Object.entries(floors).filter(([id]) => id !== startId).map(([id, f]) => [id, stash(f)]));
-  const state = startOn(start, base, stashed);
-  return { ...state, systems: { ...state.systems, rivals: rivals as unknown as JsonValue } };
+  return startOn(start, base);
 }
 
 /** The casting: Willy is rebuilt in place with the chosen class (same spot, id and controller). */

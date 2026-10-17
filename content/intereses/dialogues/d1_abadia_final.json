@@ -4,7 +4,23 @@
   "start": "patio",
   "nodes": {
     "patio": {
-      "text": "Amanece en el patio de la abadía. Hay mineros muertos a los que conocías de nombre. Hilda limpia la ballesta. El barón ha salido de su sala por primera vez en meses, y lo mira todo como si fuera un poema que no se atreve a terminar.",
+      "text": "Amanece en el patio de la abadía. Hay mineros muertos a los que conocías de nombre. Odda Hulla está entre ellos, con el pico todavía en la mano: fue la última en caer y la primera en subir.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_abadia_final_visto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "odda_muerta",
+          "value": true
+        }
+      ],
+      "next": "patio_2"
+    },
+    "patio_2": {
+      "text": "Hilda limpia la ballesta. El barón ha salido de su sala por primera vez en meses, y lo mira todo como si fuera un poema que no se atreve a terminar.",
       "next": "nella"
     },
     "nella": {
