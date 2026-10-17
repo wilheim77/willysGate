@@ -14,7 +14,7 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Terreno `scaffold` en los mapas | intereses | Arte y manifiesto listos | Tile lógico en `content/intereses/maps/terrain-logic.png` (sesión principal) |
 | Reproductor de cinemáticas | intereses, willy | **Viñetas y `intro.json` hechos** (guion de *Intereses* aprobado) | Fase 6: reproductor (ver `docs/ART_CATALOG.md`); aprobar `docs/willy/INTRO.md` |
 | Superficies, barriles y explosión en el juego | intereses | **Arte hecho** (`surfaces`, `barrel`, `barrel_oil`, `crate`, `fx_explosion`, `fx_steam`) | Peticiones al render n.º 8 a 10 en `docs/ART_CATALOG.md`; bordes por vecinos (n.º 11) solo si hacen falta |
-| *Willy*: resto del encargo P1 | willy | Hecho: Willy en 9 clases y los PNJ del Camerino | Enemigos de la Planta 1, tiles de Castro Sumergido y del Camerino, cajas de botín y marcos de carta |
+| *Willy*: resto del encargo P1 | willy | Hecho: Willy en 9 clases, PNJ del Camerino, enemigos de la Planta 1 y cajas de botín | Tiles de Castro Sumergido y del Camerino, marcos de carta |
 | *Willy*: P2 y P3 | willy | — | Invocaciones, utilería del plató, superficies, efectos, HUD del concurso; rivales modulares (cuerpo por raza + paletas + accesorios), el Presentador y los biomas 2-5 |
 | Tileset lógico de Tiled | intereses | `content/intereses/maps/terrain-logic.png` | Solo lo usa el editor. Se queda así. |
 

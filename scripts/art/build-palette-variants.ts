@@ -41,6 +41,8 @@ interface Variant {
   decals?: Decal[];
   /** Transparent rows added above every frame, for decals that stick out (a hat...). */
   padTop?: number;
+  /** Explicit frames per animation (atlas sprite names) instead of the base prefix, e.g. { "idle": ["chest_full_open_anim_f0"] }. */
+  frames?: Record<string, string[]>;
   scale?: number;
 }
 
@@ -228,7 +230,15 @@ function recolour(img: Image, v: Variant): Image {
 }
 
 // Layout: one row per variant, frames left to right in animation order.
-const rows = Object.entries(spec.variants).map(([id, v]) => ({ id, v, anims: framesOf(v.base) }));
+const pick = (v: Variant): Record<string, Rect[]> => {
+  if (!v.frames) return framesOf(v.base);
+  return Object.fromEntries(Object.entries(v.frames).map(([a, names]) => [a, names.map((n) => {
+    const r = list[n];
+    if (!r) throw new Error(`unknown sprite "${n}"`);
+    return r;
+  })]));
+};
+const rows = Object.entries(spec.variants).map(([id, v]) => ({ id, v, anims: pick(v) }));
 const width = Math.max(...rows.map((r) => Object.values(r.anims).flat().reduce((w, f) => w + f.w, 0)));
 const height = rows.reduce((h, r) => h + (r.v.padTop ?? 0) + Math.max(...Object.values(r.anims).flat().map((f) => f.h)), 0);
 const sheet = blank(width, height);

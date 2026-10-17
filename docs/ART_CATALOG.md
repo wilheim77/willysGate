@@ -174,3 +174,26 @@ Dibujados a mano como partes ASCII: `willy` es la plantilla (gorra, bigote, cuer
 | `koldo` | Chubasquero amarillo y txapela |
 | `maripuri` | Rizos canos, gafas, carmín, bata de flores rosa y zapatillas |
 | `xelda` | Alienígena verde azulada con antenas, **cuatro brazos** y chaqueta morada de staff |
+
+## Enemigos de la Planta 1 (Castro Sumergido)
+
+16×16, `idle` 4 y `move` 4. Dibujados a mano (`hand-sprites.json`) salvo el mímico (cofre de 0x72 recoloreado en `palettes.json`).
+
+| Id | Aspecto |
+|---|---|
+| `gaviota-de-lonja` | Gaviota gorda, pico amarillo con la mancha roja, patas naranjas; aletea al moverse (vuela) |
+| `rata-portuaria` | Gris parda, ojos rojos; orejas, hocico y cola rosas |
+| `cangrejo-con-casco` | Cangrejo rojo con casco de obra amarillo y pinzas en alto; se mueve de lado |
+| `bocarte-andante` | Anchoa plateada y azul con dos patitas |
+| `mimico` | Cofre de 0x72 con dientes; en `idle` casi siempre cerrado (disfrazado), en `move` abre y cierra la boca |
+
+## Cajas de botín (`sprites`)
+
+16×16 con `idle` (cerrada), `open` (abierta) y `opening` (3 frames). Colores según `rarezas` de `loot-tables.json`.
+
+| Id | Aspecto |
+|---|---|
+| `caja-bronce` | Caja de cartón con cinta y el logo rojo de Canal Abismo (dibujada a mano) |
+| `caja-plata` | Cofre metálico con remaches y lazo azul (recolor de `chest_full` de 0x72 con decal) |
+| `caja-oro` | Cofre dorado con herrajes de oro viejo |
+| `caja-legendaria` | Cofre morado del plató con neón cian y gema fucsia; **el render debería hacerlo flotar** (balanceo vertical de 1-2 px) |

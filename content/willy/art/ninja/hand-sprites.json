@@ -912,6 +912,588 @@
      "body"
     ]
    ]
+  },
+  "gaviota-de-lonja": {
+   "note": "Gaviota de lonja: gorda, pico amarillo con la mancha roja y patas naranjas; aletea al moverse",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "W": "#f8f8f4",
+    "w": "#d0d4d8",
+    "G": "#8a929c",
+    "g": "#5a626c",
+    "Y": "#f0b030",
+    "R": "#d83020",
+    "E": "#1e1c24",
+    "O": "#e88a2a"
+   },
+   "parts": {
+    "stand": [
+     "................",
+     "................",
+     "................",
+     "........kkk.....",
+     ".......kWWWk....",
+     ".......kWEWkk...",
+     "......kWWWWYYk..",
+     "..kk..kWWWWkRk..",
+     ".kGGkkWWWWWkk...",
+     "kGGGGGWWWWWk....",
+     "kgGGGGGWWWwk....",
+     ".kggGGGGwwk.....",
+     "..kkkgggkkk.....",
+     ".....kO.kO......",
+     ".....kO.kO......",
+     "....kkk.kkk....."
+    ],
+    "flap": [
+     "................",
+     ".kk.............",
+     ".kGk......kkk...",
+     "..kGk....kWWWk..",
+     "..kGGk...kWEWkk.",
+     "...kGGk.kWWWWYYk",
+     "...kgGGkWWWWWkRk",
+     "....kgGWWWWWWkk.",
+     "....kGGGWWWWwk..",
+     ".....kgGGWWwk...",
+     "......kkkkkk....",
+     ".......kO.kO....",
+     "......kk..kk....",
+     "................",
+     "................",
+     "................"
+    ],
+    "glide": [
+     "................",
+     "................",
+     "..........kkk...",
+     ".........kWWWk..",
+     "kkk......kWEWkk.",
+     "kGGkkk..kWWWWYYk",
+     ".kgGGGkkWWWWWkRk",
+     "..kggGGGWWWWWkk.",
+     "...kkgGGGWWWwk..",
+     ".....kkgGGWwk...",
+     ".......kkkkk....",
+     ".......kO.kO....",
+     "......kk..kk....",
+     "................",
+     "................",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "stand",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "stand",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "stand",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "stand",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "flap",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "glide",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "flap",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "glide",
+       0,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "rata-portuaria": {
+   "note": "Rata portuaria: gris parda, ojos rojos, orejas, hocico y cola rosas",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#7a6a62",
+    "g": "#54463f",
+    "L": "#9a8a80",
+    "P": "#e89aa8",
+    "E": "#e83030",
+    "W": "#f4f4f0"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "..........kk....",
+     ".........kPPk...",
+     "....kkkkkkGPk...",
+     "...kLLLLLGGGkk..",
+     "..kLGGGGGGGEGkk.",
+     "..kGGGGGGGGGGGPk",
+     "kkGGGGGGGGGGGWk.",
+     "PkgGGGGGGGGGgk..",
+     ".Pkgggggggggkk..",
+     "..Pkk.kk.kk.k...",
+     "...PPkk..kk....."
+    ],
+    "b": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "..........kk....",
+     ".........kPPk...",
+     "....kkkkkkGPk...",
+     "...kLLLLLGGGkk..",
+     "..kLGGGGGGGEGkk.",
+     "..kGGGGGGGGGGGPk",
+     ".kGGGGGGGGGGGWk.",
+     "kPgGGGGGGGGGgk..",
+     "Pkkgggggggggkk..",
+     "P...kk..kk.kk...",
+     ".....kk..kk....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ]
+    ]
+   }
+  },
+  "cangrejo-con-casco": {
+   "note": "Cangrejo con casco: rojo, casco de obra amarillo y pinzas en alto; anda de lado",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "Y": "#f8c820",
+    "y": "#c89a10",
+    "R": "#e04a30",
+    "r": "#a82a20",
+    "L": "#f08060",
+    "E": "#1e1c24",
+    "W": "#f4f4f0"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "................",
+     "......kkkk......",
+     ".....kYYYYk.....",
+     "....kYYyYYYk....",
+     "..kkkkkkkkkkkk..",
+     ".kRk.kWEkWEk.kRk",
+     "kRRRkkkkkkkkkRRR",
+     "kLkRkRRRRRRkRkLk",
+     ".kkkRLLRRRRRkkk.",
+     "...kRRRRRRRRrk..",
+     "..kRrrrrrrrrrrk.",
+     "..kkrrrrrrrrrkk.",
+     ".kk.k.k..k.k.kk.",
+     "k...k.k..k.k...k",
+     "................"
+    ],
+    "b": [
+     "................",
+     "................",
+     "......kkkk......",
+     ".....kYYYYk.....",
+     "....kYYyYYYk....",
+     "..kkkkkkkkkkkk..",
+     "kRk..kWEkWEk..kR",
+     "kRRRkkkkkkkkkRRR",
+     "kLkRkRRRRRRkRkLk",
+     ".kkkRLLRRRRRkkk.",
+     "...kRRRRRRRRrk..",
+     "..kRrrrrrrrrrrk.",
+     "..kkrrrrrrrrrkk.",
+     "..kk.k.kk.k.kk..",
+     ".k...k..k..k..k.",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       -1,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       1,
+       0
+      ]
+     ]
+    ]
+   }
+  },
+  "bocarte-andante": {
+   "note": "Bocarte andante: anchoa plateada y azul con dos patitas; salen de tres en tres",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "B": "#5a86a8",
+    "b": "#3e6484",
+    "S": "#d8e4ec",
+    "s": "#b0c4d0",
+    "E": "#1e1c24",
+    "W": "#ffffff",
+    "O": "#e88a2a"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "........kkk.....",
+     ".k...kkkBBBkk...",
+     "kBk.kBBBBBBBBk..",
+     "kBBkBbBbBBBWEk..",
+     "kBBkSSSSSSSSSSk.",
+     "kBk.ksssssssskk.",
+     ".k...kkkkkkkk...",
+     "......kO..kO....",
+     ".....kk..kk.....",
+     "................"
+    ],
+    "b": [
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "................",
+     "........kkk.....",
+     ".k...kkkBBBkk...",
+     "kBk.kBBBBBBBBk..",
+     "kBBkBbBbBBBWEk..",
+     "kBBkSSSSSSSSSSk.",
+     "kBk.ksssssssskk.",
+     ".k...kkkkkkkk...",
+     ".......kO.kO....",
+     "......kk...kk...",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "caja-bronce": {
+   "note": "Caja de bronce: cartón reforzado con cinta y el logo rojo de Canal Abismo",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#c8945a",
+    "c": "#9a6a3a",
+    "T": "#e8d4a0",
+    "R": "#e0302a",
+    "S": "#3a2418"
+   },
+   "parts": {
+    "closed": [
+     "................",
+     "................",
+     "................",
+     "..kkkkkkkkkkkk..",
+     ".kCCCCCTTCCCCCk.",
+     "kCCCCCCTTCCCCCCk",
+     "kkkkkkkkkkkkkkkk",
+     "kcCCCCCTTCCCCCck",
+     "kcCCRRCTTCCCCCck",
+     "kcCRRRCTTCCCCCck",
+     "kcCCRCCTTCCCCCck",
+     "kcCCCCCTTCCCCCck",
+     "kcCCCCCTTCCCCCck",
+     "kcccccccccccccck",
+     "kkkkkkkkkkkkkkkk",
+     "................"
+    ],
+    "open": [
+     "................",
+     "kk............kk",
+     "kCk..........kCk",
+     "kCCk........kCCk",
+     ".kCCk......kCCk.",
+     "..kCCkkkkkkCCk..",
+     "kkkkSSSSSSSSkkkk",
+     "kcCkSSSSSSSSkCck",
+     "kcCCkkkkkkkkCCck",
+     "kcCRRRCCCCCCCCck",
+     "kcCCRCCCCCCCCCck",
+     "kcCCCCCCCCCCCCck",
+     "kcCCCCCCCCCCCCck",
+     "kcccccccccccccck",
+     "kkkkkkkkkkkkkkkk",
+     "................"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "closed",
+       0,
+       0
+      ]
+     ]
+    ],
+    "open": [
+     [
+      [
+       "open",
+       0,
+       0
+      ]
+     ]
+    ],
+    "opening": [
+     [
+      [
+       "closed",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "closed",
+       0,
+       -1
+      ]
+     ],
+     [
+      [
+       "open",
+       0,
+       0
+      ]
+     ]
+    ]
+   }
   }
  }
 }
