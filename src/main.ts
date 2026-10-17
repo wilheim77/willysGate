@@ -55,3 +55,6 @@ new Phaser.Game({
   input: { touch: { capture: true } },
   scene: [scene],
 });
+
+// Development-only handle for testing from the browser console (stripped from production builds).
+if (import.meta.env.DEV) Object.assign(window, { __game: { store, controller, engine } });
