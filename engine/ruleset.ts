@@ -29,6 +29,8 @@ export interface Ruleset {
 
   /** Resolves a skill check, saving throw, etc. Consumes dice from `rng`; must not mutate `state`. */
   resolveCheck(state: GameState, request: CheckRequest, rng: RngCursor): CheckResult;
+  /** Name and odds of a check before rolling it, for "[Persuasión] CD 14 · 65 %". No dice consumed. */
+  describeCheck?(state: GameState, request: CheckRequest): { label: string; chance: number };
   /** Difficulty an entity imposes on others, e.g. 5e spell save DC (source 'spell'). */
   difficulty(state: GameState, entityId: string, source: string): number;
 

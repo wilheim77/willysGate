@@ -7,6 +7,7 @@ import { MapScene } from './scenes/MapScene';
 import './style.css';
 import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
+import { DialogueBox } from './ui/dialogueBox';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
 
@@ -14,7 +15,7 @@ import { applyTheme } from './ui/theme';
 document.title = game.title;
 applyTheme(game.theme);
 
-const engine = createEngine(game.ruleset, game.id);
+const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {} });
 const store = new GameStore(engine, game.newGame(engine, randomSeed()));
 const hud = new Hud(store, game);
 const combatHud = new CombatHud(game);
@@ -35,6 +36,14 @@ const renderParty = () => {
 };
 store.subscribe(renderParty);
 renderParty();
+
+// Conversations (and chests, levers, doors: they are dialogues too).
+const dialogue = new DialogueBox(store, game, manifest);
+store.subscribe((change, state) => {
+  if (change.kind === 'events') dialogue.onEvents(change.events, state);
+  dialogue.render(state);
+});
+dialogue.render(store.state);
 
 const combat = game.texts.combat ?? {};
 const scene = new MapScene(

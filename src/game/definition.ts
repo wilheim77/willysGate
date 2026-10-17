@@ -1,4 +1,4 @@
-import type { Engine, GameState, Ruleset } from '../../engine';
+import type { DialogueTree, Engine, GameState, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
@@ -50,5 +50,7 @@ export interface GameDefinition {
   playerId: string;
   /** Entity the player controls at the start (party leader). */
   leaderId: string;
+  /** Conversations and interactable scripts, by id (content/<game>/dialogues/*.json). */
+  dialogues?: Record<string, DialogueTree>;
   newGame(engine: Engine, seed: number): GameState;
 }

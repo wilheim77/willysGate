@@ -6,6 +6,8 @@ import {
   type MoveCommand,
   SYSTEM_ISSUER,
   type Vec2,
+  INTERACT_RANGE,
+  dialogueOf,
   entityAt,
   gridDistance,
   inZone,
@@ -38,6 +40,8 @@ export class GameController {
   /** Recent leader positions, so companions walk in single file behind them. */
   private trail: Vec2[] = [];
   private leaderMoved = false;
+  /** Who the leader is walking up to talk to (or open, or pull). */
+  private pendingInteract: string | null = null;
   scene!: MapScene;
 
   constructor(
@@ -79,6 +83,14 @@ export class GameController {
     this.tappedEntity = entityId;
     const { turn } = this.state;
     if (turn.mode !== 'combat') {
+      if (dialogueOf(this.state)) return;
+      // Tapping someone (or something) you can talk to or use: walk up to it, then interact.
+      const target = this.occupantOf(tile);
+      if (target && target.id !== this.game.leaderId && target.tags.some((t) => t.startsWith('dialogue:'))) {
+        this.approachAndInteract(target.id);
+        return;
+      }
+      this.pendingInteract = null;
       this.dispatchMove(this.game.leaderId, tile);
       return;
     }
@@ -193,6 +205,24 @@ export class GameController {
     });
   }
 
+  /** Walks the leader next to `targetId` (if needed) and starts the interaction on arrival. */
+  private approachAndInteract(targetId: string): void {
+    const leader = this.state.entities[this.game.leaderId]!;
+    const target = this.state.entities[targetId]!;
+    if (gridDistance(leader.position, target.position) <= INTERACT_RANGE) {
+      this.pendingInteract = null;
+      this.report(this.store.dispatch({ type: 'interact', issuer: this.game.playerId, entityId: leader.id, targetId } as never));
+      return;
+    }
+    const spot = this.freeAround(target.position).find((p) => gridDistance(p, target.position) <= INTERACT_RANGE);
+    if (!spot) {
+      this.hud.say(this.game.texts.errors.no_path ?? '', true);
+      return;
+    }
+    this.pendingInteract = targetId;
+    this.dispatchMove(leader.id, spot);
+  }
+
   private dispatchMove(entityId: string, to: Vec2): void {
     const command: MoveCommand = { type: 'move', issuer: this.game.playerId, entityId, to };
     this.report(this.store.dispatch(command));
@@ -224,6 +254,15 @@ export class GameController {
     const { turn } = this.state;
     if (turn.mode !== 'combat') {
       if (this.checkEncounters()) return;
+      if (this.pendingInteract) {
+        const id = this.pendingInteract;
+        this.pendingInteract = null;
+        const leader = this.state.entities[this.game.leaderId];
+        const target = this.state.entities[id];
+        // Only once: if the walk was cut short, the player taps again.
+        if (leader && target && gridDistance(leader.position, target.position) <= INTERACT_RANGE) this.approachAndInteract(id);
+        return;
+      }
       if (this.leaderMoved) {
         this.leaderMoved = false;
         this.followLeader();
