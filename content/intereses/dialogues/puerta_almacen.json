@@ -6,18 +6,59 @@
     "puerta": {
       "text": "Una puerta de almacén, atrancada por dentro. Por la rendija huele a humedad y a dinero escondido.",
       "choices": [
-        { "id": "empujar", "text": "Echarle el hombro.", "check": { "check": "athletics", "dc": 14, "success": "rota", "failure": "aguanta" } },
-        { "id": "dejar", "text": "Buscar otra forma de entrar." }
+        {
+          "id": "empujar",
+          "text": "Echarle el hombro.",
+          "check": {
+            "check": "athletics",
+            "dc": 14,
+            "success": "rota",
+            "failure": "aguanta"
+          }
+        },
+        {
+          "id": "dejar",
+          "text": "Buscar otra forma de entrar."
+        }
       ]
     },
-    "aguanta": { "text": "La puerta aguanta. Tu hombro opina distinto.", "next": "puerta" },
+    "aguanta": {
+      "text": "La puerta aguanta. Tu hombro opina distinto.",
+      "next": "puerta"
+    },
     "rota": {
       "text": "La tranca salta con un crujido que oye medio pueblo.",
       "effects": [
-        { "type": "setTile", "position": { "x": 9, "y": 11 }, "walkable": true },
-        { "type": "setEntity", "entityId": "puerta-1", "spriteId": "door_open", "removeTags": ["dialogue:puerta_almacen", "obstacle"] },
-        { "type": "setEntity", "entityId": "palanca-1", "removeTags": ["dialogue:palanca_almacen"] },
-        { "type": "setFlag", "flag": "almacen_abierto", "value": true }
+        {
+          "type": "setTile",
+          "position": {
+            "x": 9,
+            "y": 11
+          },
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
+        },
+        {
+          "type": "setEntity",
+          "entityId": "puerta-1",
+          "removeTags": [
+            "dialogue:puerta_almacen",
+            "obstacle"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "palanca-1",
+          "removeTags": [
+            "dialogue:palanca_almacen"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "almacen_abierto",
+          "value": true
+        }
       ]
     }
   }

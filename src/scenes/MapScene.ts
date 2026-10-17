@@ -251,6 +251,8 @@ export class MapScene extends Phaser.Scene {
     }
 
     for (const entity of Object.values(state.entities)) {
+      // Invisible interactables (a door is drawn by its tile; the entity only holds the script).
+      if (entity.spriteId === 'none') continue;
       const art = this.manifest.sprites[entity.spriteId];
       if (!art) {
         this.addPlaceholderEntity(entity.id, entity.spriteId, entity.position, map);
@@ -646,6 +648,14 @@ export class MapScene extends Phaser.Scene {
       for (const t of trap.tiles) {
         const h = tileAt(state.map, t)?.height ?? 0;
         const c = this.grid.tileCentre(t.x, t.y, h);
+        const propId = trap.armed ? 'trap_armed' : 'trap_disarmed';
+        const prop = this.manifest.props?.[propId];
+        if (prop) {
+          const sprite = this.add.sprite(c.x, c.y + T / 2, imageKey(prop.url)).setOrigin(0.5, 1).setDepth(this.grid.depth(t.y, h, 1.6));
+          sprite.play(`prop:${propId}`);
+          this.surfaceObjects.push(sprite);
+          continue;
+        }
         const g = this.add.graphics().setDepth(this.grid.depth(t.y, h, 1.6));
         const color = trap.armed ? 0xd0402a : 0x6a6266;
         const s = T * 0.36;
@@ -902,7 +912,9 @@ export class MapScene extends Phaser.Scene {
     const id = this.spriteIdOf(entityId);
     const facing = this.facing.get(entityId)!;
     if (art.kind === 'frames') {
-      sprite.play(`${id}:idle`, true);
+      // Objects show their state through a "pose:<animation>" tag (pose:open, pose:down...).
+      const pose = this.store.state.entities[entityId]?.tags.find((t) => t.startsWith('pose:'))?.slice(5);
+      sprite.play(pose && art.animations[pose] ? `${id}:${pose}` : `${id}:idle`, true);
       return;
     }
     if (art.animations.idle) {

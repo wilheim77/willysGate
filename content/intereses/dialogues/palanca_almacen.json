@@ -5,17 +5,54 @@
     "palanca": {
       "text": "Una palanca oxidada junto al muro, con una cadena que se pierde hacia la puerta del almacén.",
       "choices": [
-        { "id": "tirar", "text": "Tirar de la palanca.", "next": "abierta" },
-        { "id": "dejar", "text": "Dejarla." }
+        {
+          "id": "tirar",
+          "text": "Tirar de la palanca.",
+          "next": "abierta"
+        },
+        {
+          "id": "dejar",
+          "text": "Dejarla."
+        }
       ]
     },
     "abierta": {
       "text": "La cadena chirría, la tranca se levanta al otro lado y la puerta se entreabre sola.",
       "effects": [
-        { "type": "setTile", "position": { "x": 9, "y": 11 }, "walkable": true },
-        { "type": "setEntity", "entityId": "puerta-1", "spriteId": "door_open", "removeTags": ["dialogue:puerta_almacen", "obstacle"] },
-        { "type": "setEntity", "entityId": "palanca-1", "spriteId": "lever_down", "removeTags": ["dialogue:palanca_almacen"] },
-        { "type": "setFlag", "flag": "almacen_abierto", "value": true }
+        {
+          "type": "setTile",
+          "position": {
+            "x": 9,
+            "y": 11
+          },
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
+        },
+        {
+          "type": "setEntity",
+          "entityId": "puerta-1",
+          "removeTags": [
+            "dialogue:puerta_almacen",
+            "obstacle"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "palanca-1",
+          "removeTags": [
+            "dialogue:palanca_almacen",
+            "pose:up"
+          ],
+          "addTags": [
+            "pose:down"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "almacen_abierto",
+          "value": true
+        }
       ]
     }
   }

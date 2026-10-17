@@ -74,9 +74,10 @@ export const game: GameDefinition = {
     ];
     // Phase 4 test: a storeroom behind a barred door, a lever outside, a trapped chest inside.
     const usables: Entity[] = [
-      createProp({ id: 'puerta-1', kind: 'door', position: { x: 9, y: 11 }, spriteId: 'door_closed', name: 'Puerta del almacén', extraTags: ['dialogue:puerta_almacen'] }),
-      createProp({ id: 'palanca-1', kind: 'lever', position: { x: 13, y: 11 }, spriteId: 'lever_up', extraTags: ['dialogue:palanca_almacen'] }),
-      createProp({ id: 'cofre-1', kind: 'chest', position: { x: 10, y: 13 }, spriteId: 'chest_closed', extraTags: ['dialogue:cofre_prueba'] }),
+      // The door is drawn by its tile (door_closed / door_open); the entity only holds the script.
+      createProp({ id: 'puerta-1', kind: 'door', position: { x: 9, y: 11 }, spriteId: 'none', name: 'Puerta del almacén', extraTags: ['dialogue:puerta_almacen'] }),
+      createProp({ id: 'palanca-1', kind: 'lever', position: { x: 13, y: 11 }, spriteId: 'lever', extraTags: ['dialogue:palanca_almacen', 'pose:up'] }),
+      createProp({ id: 'cofre-1', kind: 'chest', position: { x: 10, y: 13 }, spriteId: 'chest_trapped', extraTags: ['dialogue:cofre_prueba'] }),
     ];
     // Scenery from spawn names: "barrel_oil-1", "crate-2"...
     const props: Entity[] = Object.entries(spawns)
@@ -110,7 +111,7 @@ export const game: GameDefinition = {
     const wall = map.tiles[11 * map.width + 8]!;
     const closed = {
       ...map,
-      tiles: map.tiles.map((t, i) => (i === 11 * map.width + 10 ? { ...wall } : i === 11 * map.width + 9 ? { ...t, walkable: false } : t)),
+      tiles: map.tiles.map((t, i) => (i === 11 * map.width + 10 ? { ...wall } : i === 11 * map.width + 9 ? { ...wall, terrain: 'door_closed' } : t)),
     };
     map.tiles = closed.tiles;
     const state = withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...usables, ...props] }), painted).state, traps);

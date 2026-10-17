@@ -6,16 +6,66 @@
     "cofre": {
       "text": "Un cofre de roble con herrajes de hierro y una cerradura demasiado buena para lo que suele guardar la gente honrada.",
       "choices": [
-        { "id": "mirar", "text": "Examinar la cerradura antes de tocarla.", "once": true, "check": { "check": "investigation", "dc": 12, "success": "aguja", "failure": "nada" } },
-        { "id": "llave", "text": "Probar la llave herrumbrosa.", "when": { "item": "llave_herrumbrosa" }, "next": "abierto" },
-        { "id": "forzar", "text": "Forzar la cerradura.", "when": { "flag": "cofre_aguja_vista" }, "check": { "check": "sleight_of_hand", "dc": 13, "success": "abierto", "failure": "atascado" } },
-        { "id": "forzar_a_ciegas", "text": "Forzar la cerradura.", "when": { "notFlag": "cofre_aguja_vista" }, "check": { "check": "sleight_of_hand", "dc": 13, "success": "abierto", "failure": "pinchazo" } },
-        { "id": "dejar", "text": "Dejarlo." }
+        {
+          "id": "mirar",
+          "text": "Examinar la cerradura antes de tocarla.",
+          "once": true,
+          "check": {
+            "check": "investigation",
+            "dc": 12,
+            "success": "aguja",
+            "failure": "nada"
+          }
+        },
+        {
+          "id": "llave",
+          "text": "Probar la llave herrumbrosa.",
+          "when": {
+            "item": "llave_herrumbrosa"
+          },
+          "next": "abierto"
+        },
+        {
+          "id": "forzar",
+          "text": "Forzar la cerradura.",
+          "when": {
+            "flag": "cofre_aguja_vista"
+          },
+          "check": {
+            "check": "sleight_of_hand",
+            "dc": 13,
+            "success": "abierto",
+            "failure": "atascado"
+          }
+        },
+        {
+          "id": "forzar_a_ciegas",
+          "text": "Forzar la cerradura.",
+          "when": {
+            "notFlag": "cofre_aguja_vista"
+          },
+          "check": {
+            "check": "sleight_of_hand",
+            "dc": 13,
+            "success": "abierto",
+            "failure": "pinchazo"
+          }
+        },
+        {
+          "id": "dejar",
+          "text": "Dejarlo."
+        }
       ]
     },
     "aguja": {
       "text": "Dentro del ojo de la cerradura asoma una aguja con la punta ennegrecida. Alguien confía poco en sus vecinos. Con razón.",
-      "effects": [{ "type": "setFlag", "flag": "cofre_aguja_vista", "value": true }],
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cofre_aguja_vista",
+          "value": true
+        }
+      ],
       "next": "cofre"
     },
     "nada": {
@@ -24,7 +74,19 @@
     },
     "pinchazo": {
       "text": "Algo te muerde el dedo. La aguja estaba ahí desde el principio, esperando a alguien con prisa.",
-      "effects": [{ "type": "modifyResource", "entityId": "hero", "resource": "hp", "delta": -3 }, { "type": "setFlag", "flag": "cofre_aguja_vista", "value": true }],
+      "effects": [
+        {
+          "type": "modifyResource",
+          "entityId": "hero",
+          "resource": "hp",
+          "delta": -3
+        },
+        {
+          "type": "setFlag",
+          "flag": "cofre_aguja_vista",
+          "value": true
+        }
+      ],
       "next": "cofre"
     },
     "atascado": {
@@ -34,10 +96,33 @@
     "abierto": {
       "text": "El cofre cede. Dentro: un pagaré con el sello de Valcárcel y unas monedas que alguien contaba a menudo.",
       "effects": [
-        { "type": "setEntity", "entityId": "cofre-1", "spriteId": "chest_open", "removeTags": ["dialogue:cofre_prueba"] },
-        { "type": "giveItem", "owner": "party", "item": "pagare_valcarcel", "count": 1 },
-        { "type": "giveItem", "owner": "party", "item": "coronas", "count": 12 },
-        { "type": "setFlag", "flag": "cofre_abierto", "value": true }
+        {
+          "type": "setEntity",
+          "entityId": "cofre-1",
+          "removeTags": [
+            "dialogue:cofre_prueba"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "pagare_valcarcel",
+          "count": 1
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 12
+        },
+        {
+          "type": "setFlag",
+          "flag": "cofre_abierto",
+          "value": true
+        }
       ]
     }
   }
