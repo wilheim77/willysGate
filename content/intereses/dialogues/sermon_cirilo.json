@@ -1,0 +1,112 @@
+{
+  "$comment": "Scene 3. Object entity pulpito_santa_pala in the chapel (or opened by script when the party enters during the sermon). New silver and the song, without a roll.",
+  "id": "sermon_cirilo",
+  "start": "sermon",
+  "nodes": {
+    "sermon": {
+      "text": "La capilla de la Santa Pala es una bocamina con un altar al fondo. Huele a sebo y a roca húmeda. Una docena de fieles escuchan de pie, porque sentarse en la tierra sería faltarle al respeto.",
+      "next": "s1"
+    },
+    "s1": {
+      "speaker": "cirilo",
+      "text": "¡Hermanos! La tierra canta. Yo la he oído. Canta bajo vuestros pies mientras dormís, canta bajo la abadía mientras el barón escribe versos, canta bajo la casa del elfo mientras cuenta.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_canto",
+          "value": true
+        }
+      ],
+      "next": "s2"
+    },
+    "s2": {
+      "speaker": "cirilo",
+      "text": "Y ahora la sangre de la tierra corre otra vez por el valle. ¡La he visto brillar en manos de pecadores! ¡Plata nueva, de una mina muerta! ¿Quién la hiere? ¿Quién la desangra de noche?",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_nueva",
+          "value": true
+        }
+      ],
+      "next": "s3"
+    },
+    "s3": {
+      "speaker": "cirilo",
+      "text": "¡Sellad la herida, hermanos! ¡Tapad la boca de la mina antes de que la tierra se canse de cantar y empiece a gritar!",
+      "choices": [
+        {
+          "id": "religion",
+          "text": "(Reconocer de dónde saca Cirilo esas imágenes.)",
+          "once": true,
+          "check": {
+            "check": "religion",
+            "dc": 12,
+            "success": "fuentes_ok",
+            "failure": "fuentes_mal"
+          }
+        },
+        {
+          "id": "arcana",
+          "text": "[Mago] (Ese «canto» se parece a algo que leíste en la Academia.)",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "wizard"
+            }
+          },
+          "check": {
+            "check": "arcana",
+            "dc": 13,
+            "success": "arcana_ok",
+            "failure": "arcana_mal"
+          }
+        },
+        {
+          "id": "fieles",
+          "text": "(Mirar a los fieles.)",
+          "once": true,
+          "next": "fieles"
+        },
+        {
+          "text": "Salir antes de que pasen la pala de las limosnas."
+        }
+      ]
+    },
+    "fuentes_ok": {
+      "text": "No es doctrina de la Santa Pala. Son los cantares élficos de las bóvedas, mal recordados: «el metal que canta», «lo que se sella para que no despierte». Cirilo los repite como quien repite una canción que no sabe de dónde ha sacado.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_metal_que_canta",
+          "value": true
+        }
+      ],
+      "next": "s3"
+    },
+    "fuentes_mal": {
+      "text": "Te suenan a sermones de pueblo: la tierra, la sangre, la herida. Lo de siempre, con más gritos.",
+      "next": "s3"
+    },
+    "arcana_ok": {
+      "text": "Los tratados prohibidos hablan de metales resonantes: menas que vibran con la voluntad de quien las trabaja y la devuelven, multiplicada, a quien las escucha. Ninguno decía qué pasa con la gente que las escucha demasiado.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_viva",
+          "value": true
+        }
+      ],
+      "next": "s3"
+    },
+    "arcana_mal": {
+      "text": "Algo leíste, sí. En un libro que te quitaron antes de que acabaras el capítulo.",
+      "next": "s3"
+    },
+    "fieles": {
+      "text": "Viudas, viejos y algún minero joven con los ojos de quien ya no duerme. Asienten a todo. No porque le crean: porque es el único que les habla de los cuarenta sin bajar la voz.",
+      "next": "s3"
+    }
+  }
+}
