@@ -95,7 +95,7 @@ export default {
   ],
   exits: [
     { name: 'a-plaza', rect: [0, 9, 1, 4], to: 'plaza', spawn: 'entry-calles' },
-    { name: 'a-escorial', rect: [33, 9, 1, 4], to: 'escorial', spawn: 'entry-calles', props: { requiresFlag: 'audiencia_hecha' } },
+    { name: 'a-escorial', rect: [33, 9, 1, 4], to: 'escorial', spawn: 'entry-calles', props: { requiresFlag: 'audiencia_hecha', closedText: 'Primero, la audiencia con el barón.' } },
   ],
   zones: {
     scenes: [{ name: 'sermon', rect: [13, 5, 4, 3], props: { dialogue: 'sermon_cirilo', speaker: 'cirilo', once: true } }],

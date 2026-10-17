@@ -671,6 +671,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "audiencia_concedida"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "La guardia no os deja subir sin audiencia."
       }
      ]
     },
@@ -699,6 +704,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "juicio_resuelto"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "Medio pueblo se agolpa ante el cadalso. Hasta que acabe el juicio, no se pasa."
       }
      ]
     },
@@ -727,6 +737,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "audiencia_hecha"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "Primero, la audiencia con el barón."
       }
      ]
     },

@@ -797,6 +797,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "audiencia_hecha"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "Primero, la audiencia con el barón."
       }
      ]
     }

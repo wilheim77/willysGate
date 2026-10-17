@@ -712,6 +712,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "d1_resuelto"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "Los Sinpaga vigilan el pozo. No es momento."
       }
      ]
     },
@@ -740,6 +745,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "d1_resuelto"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "La bocamina está atrancada y vigilada. No es momento."
       }
      ]
     }

@@ -107,7 +107,7 @@ export default {
     { name: 'a-plaza', rect: [3, 0, 3, 1], to: 'plaza', spawn: 'entry-escorial' },
     { name: 'a-calles', rect: [0, 11, 1, 3], to: 'calles', spawn: 'entry-escorial' },
     // The mine comes after the night of the torches (D1).
-    { name: 'pozo-del-ahorcado', rect: [31, 6, 1, 1], to: 'mina', spawn: 'entry-pozo', props: { requiresFlag: 'd1_resuelto' } },
-    { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina', props: { requiresFlag: 'd1_resuelto' } },
+    { name: 'pozo-del-ahorcado', rect: [31, 6, 1, 1], to: 'mina', spawn: 'entry-pozo', props: { requiresFlag: 'd1_resuelto', closedText: 'Los Sinpaga vigilan el pozo. No es momento.' } },
+    { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina', props: { requiresFlag: 'd1_resuelto', closedText: 'La bocamina está atrancada y vigilada. No es momento.' } },
   ],
 };

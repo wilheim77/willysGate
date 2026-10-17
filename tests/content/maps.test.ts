@@ -226,6 +226,9 @@ describe('Intereses maps', () => {
           expect(exit, `${id}: no exit ${name}`).toBeDefined();
           expect(exit?.properties.requiresFlag, `${id}/${name}`).toBe(flag);
         }
+        for (const exit of exits.filter((e) => e.properties.requiresFlag || e.properties.unlessFlag)) {
+          expect(String(exit.properties.closedText ?? '').length, `${id}/${exit.name}: gated exit without closedText`).toBeGreaterThan(0);
+        }
       });
 
       it('cannot walk around a gate scene (probe: block the zone, its exits fall out of reach)', () => {

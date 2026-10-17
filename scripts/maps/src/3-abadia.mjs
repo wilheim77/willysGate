@@ -71,7 +71,9 @@ export default {
     'tapestry_crossbow-1': [22, 1], // the sixth crossbow behind the tapestry (scene 2, Garrán's line)
     'tapestry-1': [8, 1],
     // Crypt (D1, defend: the baron's key).
-    'door-cripta': [25, 8],
+    // The crypt door is only there to be opened after D1 (d1_resuelto): before, the doorway stays shut
+    // and has no script, so forcing the lock early is no shortcut into the mine.
+    'door-cripta': { at: [25, 8], requiresFlag: 'd1_resuelto' },
     'entry-cripta': [25, 3],
     // Scenery: kitchen oil, cloister cover, a barricade at the gate for the night of the torches.
     'barrel_oil-1': [1, 1],
@@ -108,8 +110,8 @@ export default {
   ],
   exits: [
     { name: 'a-plaza', rect: [11, 21, 6, 1], to: 'plaza', spawn: 'entry-abadia' },
-    // The crypt stairs down to the mine: open once door_cripta has been opened (cripta_abierta).
-    { name: 'escalera-cripta', rect: [26, 1, 1, 1], to: 'mina', spawn: 'entry-cripta', props: { requiresFlag: 'cripta_abierta' } },
+    // The crypt stairs down to the mine, behind door-cripta (cripta_abierta).
+    { name: 'escalera-cripta', rect: [26, 1, 1, 1], to: 'mina', spawn: 'entry-cripta', props: { requiresFlag: 'cripta_abierta', closedText: 'La puerta de la cripta sigue cerrada.' } },
   ],
   encounters: [
     {

@@ -99,9 +99,9 @@ export default {
   ],
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
   exits: [
-    { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_concedida' } },
-    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto' } },
-    { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_hecha' } },
+    { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_concedida', closedText: 'La guardia no os deja subir sin audiencia.' } },
+    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto', closedText: 'Medio pueblo se agolpa ante el cadalso. Hasta que acabe el juicio, no se pasa.' } },
+    { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_hecha', closedText: 'Primero, la audiencia con el barón.' } },
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],
   zones: {

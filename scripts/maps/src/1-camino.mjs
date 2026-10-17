@@ -77,7 +77,7 @@ export default {
       props: { marker: 'trap_beartrap', detect: 10, save: 'dex', dc: 11, damage: '1d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 10 },
     },
   ],
-  exits: [{ name: 'a-hondonegra', rect: [31, 8, 1, 2], to: 'plaza', spawn: 'entry-camino', props: { requiresFlag: 'prologo_mineros_resuelto' } }],
+  exits: [{ name: 'a-hondonegra', rect: [31, 8, 1, 2], to: 'plaza', spawn: 'entry-camino', props: { requiresFlag: 'prologo_mineros_resuelto', closedText: 'Los mineros siguen cortando el camino.' } }],
   zones: {
     // Proposed layer (docs/ENGINE_REQUESTS_INTERESES.md, I1): entering opens the dialogue once.
     scenes: [

@@ -331,7 +331,14 @@
      "width": 0,
      "height": 0,
      "rotation": 0,
-     "visible": true
+     "visible": true,
+     "properties": [
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_resuelto"
+      }
+     ]
     },
     {
      "id": 16,
@@ -1103,6 +1110,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "cripta_abierta"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "La puerta de la cripta sigue cerrada."
       }
      ]
     }
