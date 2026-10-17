@@ -439,7 +439,7 @@ Se derivan del frame `idle` de cada personaje con `scripts/art/build-action-anim
 | Id | Tipo | Descripción |
 |---|---|---|
 | `candles` | prop, `floor`, luz `#ffc070` | Tres velas de sebo con goterones (capilla, cripta). 3 frames. |
-| `oil_lamp` | prop, `wall`, luz `#ffb050` | Candil de barro colgado de una escarpia. 3 frames. |
+| `oil_lamp` | prop, `floor`, luz `#ffb050` | Candil de barro colgado del brazo de su propio poste de madera: vale en suelo abierto y junto a un muro. 3 frames. |
 | `lantern` | prop, `floor`, luz `#ffb050` | Farol de hierro con ventanas de cuerno. 3 frames. |
 | `lever` | sprite (`idle`, `up`, `down`, `pull`) | Palanca redibujada sobre placa de piedra, con pomo rojo grande: se lee como algo que se usa. Sustituye a la de 0x72. |
 

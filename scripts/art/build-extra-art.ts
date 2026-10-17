@@ -953,23 +953,28 @@ function candles(frame: number): Image {
   return img;
 }
 
-/** Oil lamp (candil) hanging from an iron wall bracket. */
+/** Oil lamp (candil) hanging from the arm of its own wooden post, so it stands anywhere. */
 function oilLamp(frame: number): Image {
   const img = blank(T, T);
-  ascii(img, 0, 2, [
-    '..#iiiiii#......',
-    '..#I#...#i#.....',
-    '.........#i#....',
-    '..........#i#...',
-    '.........#iI#...',
-    '..........#.....',
-    '..........#.....',
-    '........#WWW#...',
-    '.......#WggwW#..',
-    '........#WWW#...',
-    '.........###....',
-  ], { '#': 'out', i: 'i1', I: 'i2', W: 'gr1', w: 'gr3', g: 'gr2' });
-  smallFlame(img, 9, 5, frame);
+  ascii(img, 0, 0, [
+    '...##########...',
+    '..#wWWWWWWWWi#..',
+    '..#Ww#####.#i#..',
+    '..#Ww#.....#i#..',
+    '..#Ww#.........',
+    '..#Ww#....#gg#..',
+    '..#Ww#...#gGGg#.',
+    '..#Ww#....#gg#..',
+    '..#Ww#.....##...',
+    '..#Ww#..........',
+    '..#Ww#..........',
+    '..#Ww#..........',
+    '..#Ww#..........',
+    '.#wWWw#.........',
+    '#wwWWww#........',
+    '########........',
+  ], { '#': 'out', W: 'w3', w: 'w1', i: 'i1', g: 'gr1', G: 'gr3' });
+  smallFlame(img, 8, 3, frame);
   return img;
 }
 
@@ -1225,7 +1230,7 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   torch_wall: { frames: [0, 1, 2, 3].map(torch), note: 'Antorcha de pared', anchor: 'wall', fps: 8, loop: true, light: '#ffb060' },
   brazier: { frames: [0, 1, 2, 3].map(brazier), note: 'Brasero de hierro', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
   candles: { frames: [0, 1, 2].map(candles), note: 'Velas en el suelo (capilla, cripta)', anchor: 'floor', fps: 6, loop: true, light: '#ffc070' },
-  oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado de una escarpia', anchor: 'wall', fps: 6, loop: true, light: '#ffb050' },
+  oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado del brazo de su poste', anchor: 'floor', fps: 6, loop: true, light: '#ffb050' },
   marker_party: { frames: [factionRing('#e8c070', 'solid')], note: 'Aro bajo los pies: grupo', anchor: 'floor', fps: 0, loop: false },
   marker_ally: { frames: [factionRing('#6ad0a0', 'dashed')], note: 'Aro bajo los pies: aliado que lucha por el grupo (IA)', anchor: 'floor', fps: 0, loop: false },
   marker_enemy: { frames: [factionRing('#d04a3a', 'heavy')], note: 'Aro bajo los pies: enemigo', anchor: 'floor', fps: 0, loop: false },

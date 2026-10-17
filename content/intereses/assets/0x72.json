@@ -3901,7 +3901,7 @@
       ],
       "fps": 6,
       "loop": true,
-      "anchor": "wall",
+      "anchor": "floor",
       "light": "#ffb050"
     },
     "marker_party": {
