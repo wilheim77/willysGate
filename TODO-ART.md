@@ -30,6 +30,6 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Viñetas del prólogo | intereses, willy | `build-cinematics.ts`; 10 viñetas para *Intereses*, 16 para *Willy* |
 | Entorno táctico (Fase 3) | intereses | Superficies `oil`, `grease`, `fire`, `water`, `ice`, `electrified`, `blood`, `rubble`; objetos `barrel`, `barrel_oil`, `crate` con restos; `fx_explosion` y `fx_steam` (`environment-art.ts`) |
 | Lectura de personajes y retratos | intereses | Color y detalle propio por personaje (decals); retratos de 32×32 para el HUD (`build-portraits.ts`) |
-| Garrán dibujado a mano | intereses | 16×28 con idle, carrera y golpe (`hand-sprites.json`) |
+| Garrán y el Cobrador al estilo de 0x72 | intereses | `orc_warrior` y `doc` retocados frame a frame: moño, hombreras y pico; capucha, bufanda, ojos fríos, sello y farol |
 | Retratos del grupo a 48×48 | intereses | Cobrador, Garrán, Dorotea y Anselmo pintados con cara propia (`portrait-painter.ts`) |
 | Pulido del HUD | intereses | Barra superior en una fila, fichas de iniciativa con retrato, barra de acciones en dos filas, botones de 44 px, paneles de hierro biselado |
