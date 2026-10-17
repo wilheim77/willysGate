@@ -99,7 +99,9 @@
         {
           "text": "Mirad bien. Cuatro hombres con hambre contra gente que come todos los días.",
           "when": {
-            "notFlag": "garran_reclutado"
+            "not": {
+              "inParty": "garran"
+            }
           },
           "check": {
             "check": "intimidation",
@@ -111,7 +113,7 @@
         {
           "text": "Mirad bien a mi amigo. Mirad cuánto come.",
           "when": {
-            "flag": "garran_reclutado"
+            "inParty": "garran"
           },
           "check": {
             "check": "intimidation",
@@ -126,7 +128,7 @@
         {
           "text": "[Garrán] Dejar que hable Garrán.",
           "when": {
-            "flag": "garran_reclutado"
+            "inParty": "garran"
           },
           "next": "garran"
         },
@@ -303,6 +305,13 @@
           "type": "startCombat",
           "factions": [
             "mineros"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "prologo_mineros_resuelto",
+              "value": true
+            }
           ]
         }
       ]
@@ -430,6 +439,13 @@
           "type": "startCombat",
           "factions": [
             "mineros"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "prologo_mineros_resuelto",
+              "value": true
+            }
           ]
         }
       ]

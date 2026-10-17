@@ -280,6 +280,16 @@ export function defeat(r: Resolver, id: string, sourceId: string | undefined, ca
       if (v.id !== id && standing(v) && gridDistance(v.position, fallen.position) <= 1) dealDamage(r, v.id, rollDice(r.rng, { count: 1, sides: 6, bonus: 0 }), 'rayo', ownerId, 'explosion');
     }
   }
+  // Barrels of gas go off: 2d6 of fire to everything around and fire on the floor.
+  if (hasTag(fallen, 'explosivo')) {
+    r.emit({ type: 'exploded', entityId: id, at: fallen.position } as WillyEvent);
+    const around: Vec2[] = [];
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) around.push({ x: fallen.position.x + dx, y: fallen.position.y + dy });
+    for (const v of Object.values(r.state.entities)) {
+      if (v.id !== id && standing(v) && gridDistance(v.position, fallen.position) <= 1) dealDamage(r, v.id, rollDice(r.rng, { count: 2, sides: 6, bonus: 0 }), 'fuego', sourceId, 'explosion');
+    }
+    r.apply({ type: 'applyElement', tiles: around.filter((p) => tileAt(r.state.map, p)?.walkable), element: 'fuego' });
+  }
   // Summons leave when their owner falls.
   for (const e of Object.values(r.state.entities)) if (e.tags.includes(`invocado-por:${id}`)) r.apply({ type: 'despawnEntity', entityId: e.id });
   // «¡Que es de época!»: the Tasador is sad for a turn after breaking scenery.

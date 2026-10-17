@@ -1,0 +1,185 @@
+{
+  "$comment": "Scene 3. Two widows washing clothes in the river (named spawns benita and casilda, instead of viuda-1/viuda-2; tag either with dialogue:viudas_lloro). New silver and the Hanged Man's Well, both without a roll. Casilda is Ivo's widow.",
+  "id": "viudas_lloro",
+  "start": "orilla",
+  "nodes": {
+    "orilla": {
+      "text": "En la orilla del Lloro, dos mujeres de luto lavan ropa en un agua gris que la ensucia más. Lavan de todas formas. Es lo que se hace con las manos cuando no hay nada que hacer con ellas.",
+      "next": "benita"
+    },
+    "benita": {
+      "speaker": "benita",
+      "text": "¿Vienen del banco? Pues lo único que nos queda para cobrar es la colada. Sírvanse.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "casilda",
+      "text": "¿Qué queréis?",
+      "choices": [
+        {
+          "id": "maridos",
+          "text": "¿Vuestros maridos bajaron a la Garganta?",
+          "once": true,
+          "next": "maridos"
+        },
+        {
+          "id": "lisandro",
+          "text": "¿Cómo os ganáis la vida ahora?",
+          "once": true,
+          "next": "lisandro"
+        },
+        {
+          "id": "noche",
+          "text": "¿Pasa algo raro de noche en el valle?",
+          "once": true,
+          "next": "noche"
+        },
+        {
+          "id": "garran",
+          "text": "[Garrán] (Casilda se ha quedado mirando a Garrán.)",
+          "once": true,
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "garran"
+        },
+        {
+          "text": "[5 coronas] Tomad. No es caridad: es un anticipo de algo.",
+          "when": {
+            "all": [
+              {
+                "item": "coronas",
+                "atLeast": 5
+              },
+              {
+                "notFlag": "viudas_ayudadas"
+              }
+            ]
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -5
+            },
+            {
+              "type": "setFlag",
+              "flag": "viudas_ayudadas",
+              "value": true
+            }
+          ],
+          "next": "limosna"
+        },
+        {
+          "text": "Seguid con lo vuestro."
+        }
+      ]
+    },
+    "maridos": {
+      "speaker": "benita",
+      "text": "Mi Anselmo, que no se parece en nada a su fraile, y el Ivo de Casilda. Y treinta y ocho más. Brea dijo que fue el grisú. Ni los dejó subir. Una se acostumbra a no tener marido. A no tener tumba, no.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_cuarenta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "conoce_brea",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "lisandro": {
+      "speaker": "casilda",
+      "text": "Vendiendo lo que queda. Le empeñé la alianza al elfo. Me la pagó con plata. Plata nueva, que brillaba como recién nacida; ni un arañazo.",
+      "next": "lisandro_2"
+    },
+    "lisandro_2": {
+      "speaker": "benita",
+      "text": "Y dime tú de dónde sale plata nueva en un pueblo que tiene la mina cerrada desde hace ocho meses. Del cielo no. El cielo aquí no da ni lluvia limpia.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_nueva",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "noche": {
+      "speaker": "casilda",
+      "text": "Por el Pozo del Ahorcado sale luz algunas noches. Y está cegado desde que yo era niña. Mi hija dice que, si pegas la oreja a la escombrera, se oye cantar algo. Dice que son ellos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_pozo",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pista_canto",
+          "value": true
+        }
+      ],
+      "next": "noche_2"
+    },
+    "noche_2": {
+      "speaker": "benita",
+      "text": "Tu hija dice muchas cosas. Pero yo también he visto la luz. Y los Sinpaga no dejan acercarse a nadie al Escorial. Algo guardan.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_sinpaga",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "garran": {
+      "speaker": "casilda",
+      "text": "¿Garrán? ¿Garrán Tizón?",
+      "next": "garran_2"
+    },
+    "garran_2": {
+      "speaker": "garran",
+      "text": "Casilda.",
+      "next": "garran_3"
+    },
+    "garran_3": {
+      "speaker": "casilda",
+      "text": "Ivo bajó con ellos. Con los cuarenta. Tú te fuiste esa misma noche. Con prisa, dicen.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_sabe_ivo_cuarenta",
+          "value": true
+        }
+      ],
+      "next": "garran_4"
+    },
+    "garran_4": {
+      "text": "Garrán no dice nada. Se mira las botas que no son suyas como si ahí dentro estuviera la respuesta. No está.",
+      "next": "garran_5"
+    },
+    "garran_5": {
+      "speaker": "casilda",
+      "text": "Él te esperaba, ¿sabes? Decía que volverías. Que siempre volvías cuando se acababa el dinero.",
+      "next": "hub"
+    },
+    "limosna": {
+      "speaker": "dorotea",
+      "text": "La compasión es un gasto, no un error. Hay que saber presupuestarla. Le apunto, cobrador.",
+      "next": "limosna_2"
+    },
+    "limosna_2": {
+      "speaker": "benita",
+      "text": "Gracias. No te vamos a rezar, que estamos desentrenadas. Pero no lo olvidamos.",
+      "next": "hub"
+    }
+  }
+}

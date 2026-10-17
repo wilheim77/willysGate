@@ -67,30 +67,17 @@ Diálogos aún sin escribir: `TODO:sermon_cirilo`, `TODO:galeria_sellada` y `TOD
 
 # Peticiones del guion (rama `guion`)
 
-
 El guionista no toca `engine/`, `rulesets/` ni `src/`. Aquí se apunta lo que haría falta y cómo se ha resuelto mientras tanto.
 
-## G1. Saltos condicionales entre nodos
+| # | Qué | Estado |
+|---|---|---|
+| G1 | `next` condicional en nodos sin opciones | **Hecho**. Se usa en el juicio (descripción de la plaza solo la primera vez, la réplica de Garrán) y en la audiencia (Anselmo y Garrán) |
+| G2 | `onVictory` / `onDefeat` en `startCombat` | **Hecho**. Los mineros del camino ponen `prologo_mineros_resuelto` al perder |
+| G3 | Condición `inParty` | **Hecho**. Sustituye a `garran_reclutado` en todas las réplicas de Garrán. Las marcas `*_reclutado` se quedan como historia |
 
-**Qué:** que un nodo pueda continuar a un sitio distinto según una condición, sin que el jugador elija nada. Por ejemplo, `next` como lista `[{ "when": {...}, "next": "a" }, { "next": "b" }]`, o un `when` en el propio nodo para saltárselo.
+## Pendiente para los mapas (rama `mapas`)
 
-**Para qué:** hay frases que solo tienen sentido si alguien está en el grupo (Garrán en la audiencia o en el camino), o que cambian con decisiones anteriores. El epílogo, con viñetas que dependen de D1–D4, lo necesita de verdad.
-
-**Mientras tanto:**
-- Se duplican las opciones con `when` contrarios (por ejemplo, Intimidación con o sin Garrán) y cada una lleva a su propia variante del nodo.
-- Se ordenan las escenas para que la condición se cumpla siempre. La abadía solo abre tras el juicio, así que Anselmo siempre está en la audiencia.
-- En las escenas narradas, el jugador elige la variante en una opción condicionada («[Garrán] …»), y siempre queda una salida sin condición.
-
-## G2. Ganchos al terminar un combate iniciado desde un diálogo
-
-**Qué:** un `onVictory` / `onDefeat` (efectos o un diálogo) en `startCombat`.
-
-**Para qué:** al ganar contra los mineros del camino hay que poner `prologo_mineros_resuelto`. Lo mismo pasa con los fanáticos y, más adelante, con los Sinpaga y los Callados.
-
-**Mientras tanto:** las marcas que dependen del resultado llevan `setBy` en `flags.json` y las pone el script de la escena.
-
-## G3. Comprobar si una entidad está en el grupo
-
-**Qué:** una condición `{ "inParty": "garran" }` (genérica: controlador y facción del jugador).
-
-**Mientras tanto:** se usan las marcas `garran_reclutado` y `anselmo_reclutado`. Si un compañero se va (D2, D4), el diálogo que lo eche tiene que borrar su marca.
+- Renombrar los spawns con nombre que usan los diálogos: `viuda-1` → `benita` y `viuda-2` → `casilda` (calles); `guardia_baron-1` de la plaza → `guardia_abadia`. Falta un spawn para `posadera` (Remedios, en El Pico Roto).
+- Escenas: `juicio-anselmo` ya puede apuntar a `juicio_anselmo` (incluye la llegada a la plaza), `audiencia` a `audiencia_abadia` y `sermon` a `sermon_cirilo`. El cofre de la trastienda es `chest-libro_cuentas` → `chest_libro_cuentas`.
+- La salida de la plaza a la abadía debería pedir `audiencia_concedida`. La guardia, además, hace `travel` a `abadia`/`entry-plaza`.
+- Fanáticos del juicio: el diálogo empieza el combate por facción (`fanaticos`). Las plantillas `fanatico_pala` necesitan esa facción y no llevar `noncombatant`, o no se les podrá pegar.
