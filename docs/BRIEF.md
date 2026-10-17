@@ -29,7 +29,7 @@ El juego **no usa ningún LLM en tiempo de ejecución**: todas las reglas, diál
 ## Mecánicas imprescindibles
 
 1. Combate táctico por turnos en cuadrícula isométrica: iniciativa, acción, acción adicional, movimiento y reacción (ataque de oportunidad).
-2. Reglas 5e simplificadas basadas en el SRD 5.1 (CC-BY 4.0): d20, ventaja y desventaja, CA, CD, salvaciones, críticos, niveles 1 a 4.
+2. Reglas 5e simplificadas basadas en el SRD 5.1 (CC-BY 4.0): d20, ventaja y desventaja, CA, CD, salvaciones, críticos. ~~Niveles 1 a 4~~ **Niveles 3 a 6** (cambio aprobado el 2026-10-17: se empieza a nivel 3 y se termina a nivel 5-6; los datos de clase cubren del 1 al 6).
    - Clases: Guerrero, Pícaro, Mago y Clérigo, con 3-5 habilidades o conjuros por nivel.
    - Razas con rasgos sencillos (aprobadas: Humano, Elfo, Enano, Mediano y Semiorco).
 3. Entorno táctico:
@@ -85,7 +85,7 @@ Los commits son pequeños y descriptivos, y los tests del core tienen que pasar 
    - Un mapa isométrico de prueba con un personaje que se mueve por la cuadrícula con pathfinding.
 2. **Combate:**
    - Iniciativa, turnos, acciones, ataque, daño, muerte y caída.
-   - Las 4 clases a nivel 1.
+   - Las 4 clases ~~a nivel 1~~ con sus rasgos y conjuros del nivel 1 al 6 como datos; el encuentro de prueba se juega a nivel 3.
    - IA enemiga.
    - Un encuentro de prueba completo.
    - *Añadido:* juice de combate, animaciones por código (ataque, golpe, muerte, conjuro), contorno de selección y recoloreado por paleta de enemigos.
@@ -96,7 +96,7 @@ Los commits son pequeños y descriptivos, y los tests del core tienen que pasar 
    - Interactuables y trampas.
    - Creación de personaje con point buy.
    - Reclutamiento de compañeros.
-5. **Contenido del acto:** el acto completo, la subida de nivel hasta 3-4 y el balance de encuentros.
+5. **Contenido del acto:** el acto completo, la subida de nivel de 3 a 6 y el balance de encuentros.
 6. **Pulido:** menús, interfaz, sonido y música CC0, feedback de las tiradas, un tutorial mínimo, revisión de bugs y una partida completa de principio a fin.
    - **Añadido el 2026-10-17:** partículas de ambiente (niebla, polvo, ceniza, lluvia), corrección de color por escena, viñeta, CRT opcional y ajuste de calidad (bajo, medio, alto).
    - **Añadido el 2026-10-16: introducción y onboarding** para jugadores que no conocen D&D: pantalla de inicio, prólogo cinemático que se puede saltar, primer encuentro como tutorial integrado, tooltips de jerga con % de acierto, glosario, consejos desactivables, dificultad «Historia», botón de feedback y revisión final como jugador novato. Detalle en `docs/DESIGN.md` → «Introducción y onboarding».
