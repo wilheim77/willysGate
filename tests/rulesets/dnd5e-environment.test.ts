@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type BaseCommand, type Entity, type GameState, RngCursor, SYSTEM_ISSUER, createEngine, hasCondition, nextAiCommand, surfaceAt } from '../../engine';
+import { type BaseCommand, type Entity, type GameState, type Trap, RngCursor, SYSTEM_ISSUER, createEngine, hasCondition, nextAiCommand, surfaceAt, withTraps } from '../../engine';
 import { coverBetween, createCharacter, createMonster, createProp, dnd5e } from '../../rulesets/dnd5e';
 import { asciiMap } from '../fixtures/helpers';
 
@@ -233,5 +233,17 @@ describe('review fixes (Phase 3)', () => {
     const s = fight([pc('g', 'fighter', 3, 0, 0), monster('b', 'thug', 5, 0)], ['......'], 'g');
     const prone = engine.applyEffects(s, [{ type: 'applyCondition', entityId: 'g', condition: 'prone', remainingTurns: 1 }]).state;
     expect(dnd5e.movementBudget(prone.entities.g!, prone)).toBe(dnd5e.movementBudget(s.entities.g!, s) - 3);
+  });
+});
+
+describe('traps under 5e', () => {
+  it('passive Perception spots traps; a failed DEX save takes the damage', () => {
+    const elf = createCharacter({ id: 'e', name: 'e', controllerId: 'player:1', factionId: 'party', position: { x: 0, y: 0 }, spriteId: 'hero', classId: 'rogue', raceId: 'elf', level: 3, abilities: { ...ABILITIES, wis: 14 } });
+    const trap: Trap = { id: 't', tiles: [{ x: 3, y: 0 }], hidden: true, armed: true, params: { detect: 14, save: 'dex', dc: 30, damage: '2d6', type: 'piercing' } };
+    const s = withTraps(engine.newGame({ seed: 4, map: asciiMap(['......']), entities: [elf] }), [trap]);
+    expect(dnd5e.noticeTrap!(s, 'e', trap)).toBe(true); // 10 + 2 WIS + 2 proficiency (keen senses)
+    const hit = dnd5e.triggerTrap!(s, 'e', trap, new RngCursor(s.rng));
+    const after = engine.applyEffects(s, hit.effects).state;
+    expect(after.entities.e!.resources.hp!.current).toBeLessThan(elf.resources.hp!.current);
   });
 });

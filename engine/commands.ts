@@ -3,6 +3,8 @@ import { type BaseCommand, type CommandHandler, type GameEvent, fail, requireCon
 import { type Vec2, inBounds, posKey } from './grid';
 import { type PathResult, findPath } from './pathfinding';
 import { surfaceAt } from './surfaces';
+import { applyEffects } from './effects';
+import { disarmTrap, trapsAfterStep, trapsOf } from './traps';
 import { type EngineContent, chooseOption, dialogueOf, interact, startDialogue } from './dialogue';
 import { RngCursor } from './rng';
 import type { Ruleset } from './ruleset';
@@ -50,9 +52,11 @@ export function surfaceCost(ruleset: Ruleset, state: GameState): (p: Vec2) => nu
 /** How much a mover would rather not step on a tile (fire, electrified water...). */
 export function surfaceHazard(ruleset: Ruleset, state: GameState): (p: Vec2) => number {
   const defs = ruleset.surfaces ?? {};
+  // Known, armed traps are worth a long detour.
+  const traps = new Set(trapsOf(state).filter((t) => t.armed && !t.hidden).flatMap((t) => t.tiles.map(posKey)));
   return (p) => {
     const s = surfaceAt(state, p);
-    return s ? (defs[s.type]?.hazard ?? 0) : 0;
+    return (s ? (defs[s.type]?.hazard ?? 0) : 0) + (traps.has(posKey(p)) ? 20 : 0);
   };
 }
 
@@ -79,6 +83,13 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     if (!ruleset.canAct(entity)) return fail('cannot_act', `${entity.id} cannot act`);
   }
 
+  // Out of combat, time passes between moves: short-lived conditions (a snare, a slip) wear off.
+  if (!fighting && entity.conditions.some((c) => c.remainingTurns !== undefined)) {
+    const expired = entity.conditions.filter((c) => c.remainingTurns !== undefined).map((c) => ({ type: 'removeCondition' as const, entityId: entity.id, condition: c.id }));
+    const cleared = applyEffects(ruleset, state, expired);
+    const r = move(cleared.state, cmd, { ruleset });
+    return r.ok ? { ...r, events: [...cleared.events, ...r.events] } : r;
+  }
   const budget = fighting ? ruleset.movementBudget(entity, state) - state.turn.movementUsed : Infinity;
   const result = movePath(ruleset, state, entity.id, cmd.to, budget);
   if (!result) return fail('no_path', 'No path to destination');
@@ -130,6 +141,20 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     segment.push(step);
     prev = step;
     next = placeAt(next, step);
+    // Traps: stepping on an armed one sets it off; walking near a hidden one may reveal it.
+    // Either stops the walk.
+    const trapped = trapsAfterStep(next, entity.id, rng, ruleset);
+    if (trapped.events.length) {
+      events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
+      from = step;
+      segment = [];
+      next = trapped.state;
+      events.push(...trapped.events);
+    }
+    if (trapped.stop) {
+      prev = next.entities[entity.id]?.position ?? step;
+      break;
+    }
     const surface = surfaceAt(next, step);
     if (surface && ruleset.onSurface) {
       events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
@@ -154,7 +179,7 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
   return { ok: true, state: ended.state, events: [...events, ...ended.events] };
 };
 
-export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act, startDialogue, chooseOption, interact };
+export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act, startDialogue, chooseOption, interact, disarmTrap };
 
 /** Validates a command against the state and returns the new state plus events. Pure: never mutates `state`. */
 export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCommand, content?: EngineContent): ReturnType<CommandHandler> {

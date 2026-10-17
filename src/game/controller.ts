@@ -7,6 +7,11 @@ import {
   SYSTEM_ISSUER,
   type Vec2,
   INTERACT_RANGE,
+  DISARM_RANGE,
+  type Trap,
+  distanceToTrap,
+  trapAt,
+  trapsOf,
   dialogueOf,
   entityAt,
   gridDistance,
@@ -88,6 +93,12 @@ export class GameController {
       const target = this.occupantOf(tile);
       if (target && target.id !== this.game.leaderId && target.tags.some((t) => t.startsWith('dialogue:'))) {
         this.approachAndInteract(target.id);
+        return;
+      }
+      // A known, armed trap: walk up to it and offer to disarm it.
+      const trap = trapAt(this.state, tile);
+      if (trap && !trap.hidden && trap.armed && trap.disarm) {
+        this.approachTrap(trap.id);
         return;
       }
       this.pendingInteract = null;
@@ -205,6 +216,27 @@ export class GameController {
     });
   }
 
+  /** Asked when the party stands by a known trap: who tries to disarm it (or leave it). */
+  onTrapReached: (trap: Trap, candidates: string[]) => void = () => undefined;
+
+  private approachTrap(trapId: string): void {
+    const trap = trapsOf(this.state).find((t) => t.id === trapId);
+    const leader = this.state.entities[this.game.leaderId]!;
+    if (!trap) return;
+    if (distanceToTrap(trap, leader.position) <= 1) {
+      this.pendingInteract = null;
+      const candidates = Object.values(this.state.entities)
+        .filter((e) => e.controllerId === this.game.playerId && this.store.engine.ruleset.canAct(e) && distanceToTrap(trap, e.position) <= DISARM_RANGE)
+        .map((e) => e.id);
+      this.onTrapReached(trap, candidates);
+      return;
+    }
+    const spot = trap.tiles.flatMap((t) => this.freeAround(t)).find((p) => distanceToTrap(trap, p) <= 1 && !trap.tiles.some((t) => t.x === p.x && t.y === p.y));
+    if (!spot) return;
+    this.pendingInteract = `trap:${trapId}`;
+    this.dispatchMove(leader.id, spot);
+  }
+
   /** Walks the leader next to `targetId` (if needed) and starts the interaction on arrival. */
   private approachAndInteract(targetId: string): void {
     const leader = this.state.entities[this.game.leaderId]!;
@@ -257,6 +289,12 @@ export class GameController {
       if (this.pendingInteract) {
         const id = this.pendingInteract;
         this.pendingInteract = null;
+        if (id.startsWith('trap:')) {
+          const trap = trapsOf(this.state).find((t) => `trap:${t.id}` === id);
+          const lead = this.state.entities[this.game.leaderId];
+          if (trap && lead && distanceToTrap(trap, lead.position) <= 1) this.approachTrap(trap.id);
+          return;
+        }
         const leader = this.state.entities[this.game.leaderId];
         const target = this.state.entities[id];
         // Only once: if the walk was cut short, the player taps again.

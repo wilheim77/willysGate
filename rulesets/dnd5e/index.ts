@@ -19,7 +19,7 @@ import {
   tagValue,
 } from '../../engine';
 import { listActions, performAction, previewAction } from './actions';
-import { SURFACES, SURFACE_REACTIONS, onFall, onSurface } from './environment';
+import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onSurface, triggerTrap } from './environment';
 import { setDnd5eRef } from './ref';
 import { profBonus } from './character';
 import { SPELLS } from './data';
@@ -293,6 +293,8 @@ export const dnd5e: Ruleset = {
   surfaceReactions: SURFACE_REACTIONS,
   onSurface: (state, id, surface, trigger, rng) => onSurface(dnd5e, state, id, surface, trigger, rng),
   onFall: (state, id, levels, rng) => onFall(dnd5e, state, id, levels, rng),
+  noticeTrap,
+  triggerTrap: (state, id, trap, rng) => triggerTrap(dnd5e, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { resources, conditions }),
 };
 setDnd5eRef(dnd5e);
@@ -338,7 +340,7 @@ export { ABILITIES, ABILITY_LABELS, SKILLS, abilityModifier, proficiencyBonus } 
 export { createCharacter, createMonster, armorClass, type CharacterSpec, type MonsterSpec } from './character';
 export { CLASSES, MONSTERS, RACES, SPELLS, WEAPONS } from './data';
 export { areaTiles, DAMAGE_LABELS } from './actions';
-export { createProp, SURFACES, type PropSpec } from './environment';
+export { createProp, passivePerception, SURFACES, type PropSpec } from './environment';
 export { coverBetween } from './cover';
 export { FEATURES } from './sheet';
 export { DND5E_CREATION, POINT_COST, buildProtagonist, defaultCreation } from './creation';

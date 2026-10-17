@@ -1,4 +1,4 @@
-import { type Entity, type TiledMapJson, parseTiledMap, withLighting, withZones } from '../../engine';
+import { type Entity, type TiledMapJson, type Trap, parseTiledMap, withLighting, withTraps, withZones } from '../../engine';
 import { DND5E_CREATION, SURFACES, buildProtagonist, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
@@ -81,7 +81,21 @@ export const game: GameDefinition = {
         surface: String(z.properties.surface),
         tiles: Array.from({ length: z.width * z.height }, (_, i) => ({ x: z.x + (i % z.width), y: z.y + Math.floor(i / z.width) })),
       }));
-    const state = engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...props] }), painted).state;
+    // Traps from the "traps" layer: hidden until noticed; disarmed with a check.
+    const traps: Trap[] = zones
+      .filter((z) => z.layer === 'traps')
+      .map((z) => {
+        const { disarmCheck, disarmDc, ...params } = z.properties;
+        return {
+          id: z.name,
+          tiles: Array.from({ length: z.width * z.height }, (_, i) => ({ x: z.x + (i % z.width), y: z.y + Math.floor(i / z.width) })),
+          hidden: true,
+          armed: true,
+          params,
+          ...(disarmCheck ? { disarm: { check: String(disarmCheck), dc: Number(disarmDc ?? 12), triggerOnFailBy: 5 } } : {}),
+        };
+      });
+    const state = withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...props] }), painted).state, traps);
     // The collector carries a lantern: the only light that goes everywhere with the party.
     return withZones(
       withLighting(state, {

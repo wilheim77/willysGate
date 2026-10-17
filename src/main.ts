@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { createEngine } from '../engine';
+import { type CheckResult, createEngine } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -47,6 +47,30 @@ store.subscribe((change, state) => {
 dialogue.render(store.state);
 
 // A new game starts with character creation.
+// Known traps: pick who tries to disarm, see the roll.
+controller.onTrapReached = (trap, candidates) => {
+  const ruleset = store.engine.ruleset;
+  const t = game.texts.combat ?? {};
+  if (!trap.disarm) return;
+  const disarm = trap.disarm;
+  dialogue.ask(
+    t.trapQuestion ?? 'Una trampa. ¿Quién intenta desactivarla?',
+    candidates.map((id) => {
+      const odds = ruleset.describeCheck?.(store.state, { actorId: id, check: disarm.check, target: disarm.dc });
+      const name = store.state.entities[id]!.name;
+      return {
+        label: `${name} · [${odds?.label ?? disarm.check}] ${t.dcShort ?? 'CD'} ${disarm.dc}${odds ? ` · ${Math.round(odds.chance * 100)} %` : ''}`,
+        onPick: () => {
+          const r = store.dispatch({ type: 'disarmTrap', issuer: game.playerId, entityId: id, trapId: trap.id } as never);
+          if (!r.ok) return;
+          const ev = r.events.find((e) => e.type === 'trapDisarmed' || e.type === 'trapDisarmFailed') as unknown as { type: string; result: CheckResult } | undefined;
+          if (ev) dialogue.showRoll(name, ev.result, ev.type === 'trapDisarmed' ? (t.trapDisarmedText ?? 'Clic. Ya no muerde.') : r.events.some((e) => e.type === 'trapTriggered') ? (t.trapBackfired ?? 'Clic. Lo malo es que era el otro clic.') : (t.trapStillArmed ?? 'No hay manera. Sigue armada.'));
+        },
+      };
+    }),
+  );
+};
+
 const creation = new CreationScreen(store, game);
 hud.onNewGame = () => creation.open();
 creation.open();
@@ -73,6 +97,10 @@ const scene = new MapScene(
     defeat: combat.defeat ?? 'Derrota',
     fell: combat.fell ?? '¡Caída!',
     slipped: combat.slipped ?? '¡Resbala!',
+    trapSpotted: combat.trapSpotted ?? '¡Una trampa!',
+    trapTriggered: combat.trapTriggered ?? '¡Trampa!',
+    trapDisarmed: combat.trapDisarmed ?? 'Desactivada',
+    trapDisarmFailed: combat.trapDisarmFailed ?? 'No hay manera',
   },
 );
 controller.scene = scene;

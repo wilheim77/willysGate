@@ -4,6 +4,7 @@ import type { Vec2 } from './grid';
 import type { MovementRules } from './pathfinding';
 import type { RngCursor } from './rng';
 import type { SurfaceDef, SurfaceReaction } from './surfaces';
+import type { Trap } from './traps';
 import type { Entity, GameState, JsonValue } from './state';
 
 /**
@@ -80,6 +81,11 @@ export interface Ruleset {
   onSurface?(state: GameState, entityId: string, surface: string, trigger: 'enter' | 'turnStart', rng: RngCursor): ActionOutcome;
   /** A creature dropped `levels` levels in one go (pushed off a ledge). */
   onFall?(state: GameState, entityId: string, levels: number, rng: RngCursor): ActionOutcome;
+
+  /** Passive chance to spot a hidden trap nearby (no dice: e.g. 5e passive Perception). */
+  noticeTrap?(state: GameState, entityId: string, trap: Trap): boolean;
+  /** What a trap does to whoever sets it off. */
+  triggerTrap?(state: GameState, entityId: string, trap: Trap, rng: RngCursor): ActionOutcome;
 
   /** Ruleset bookkeeping when a combat ends (e.g. downed allies get back up). */
   onCombatEnd?(state: GameState, winner: string | null): ActionOutcome;
