@@ -8,6 +8,29 @@
   --accent: #a3412f;
   --error: #d0705c;
   --font: 'VT323', ui-monospace, monospace;
+
+  /* Derived look (not themed per game). */
+  --iron-dark: #2a2529;
+  --gold: #e8c070;
+  --party: #5f8a4a;
+  --foe: #a3412f;
+  --hp-foe: #8a2e22;
+  --shadow: #000;
+  --touch: 44px;
+
+  /* One type scale for the pixel font (VT323 renders crisp at multiples of ~4px). */
+  --fs-xs: 14px;
+  --fs-s: 16px;
+  --fs-m: 20px;
+  --fs-l: 24px;
+  --fs-xl: 32px;
+
+  /* Layout: heights of the fixed bars, shared so panels never overlap. */
+  --top-h: 48px;
+  --strip-h: 52px;
+  --gap: 6px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * { box-sizing: border-box; }
@@ -19,8 +42,10 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 20px;
+  font-size: var(--fs-m);
+  line-height: 1.15;
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: none;
 }
 
 #game {
@@ -29,178 +54,262 @@ html, body {
   touch-action: none;
 }
 
+/* --- Iron panels: bevelled border (light top-left, dark bottom-right) and a hard drop shadow --- */
+.hud,
+.chip,
+#party .member,
+#preview-sheet,
+#sheet .panel,
+#combat-log .toggle,
+#combat-log.open .lines {
+  border-style: solid;
+  border-color: var(--iron-light) var(--iron) var(--iron) var(--iron-light);
+}
+
+/* --- Top and bottom bars --- */
 .hud {
   position: fixed;
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 12px;
+  gap: 10px;
+  padding: 0 10px;
   background: linear-gradient(var(--panel), #161317);
+  border-width: 0;
   pointer-events: auto;
   z-index: 1;
 }
 
 .hud-top {
   top: 0;
-  padding-top: max(6px, env(safe-area-inset-top));
+  height: calc(var(--top-h) + var(--safe-top));
+  padding-top: var(--safe-top);
   border-bottom: 3px solid var(--iron);
-  box-shadow: 0 2px 0 #000;
+  box-shadow: 0 2px 0 var(--shadow);
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .hud-bottom {
   bottom: 0;
-  padding-bottom: max(6px, env(safe-area-inset-bottom));
+  min-height: calc(36px + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
   border-top: 3px solid var(--iron);
-  box-shadow: 0 -2px 0 #000;
+  box-shadow: 0 -2px 0 var(--shadow);
   justify-content: space-between;
-  min-height: 34px;
   color: var(--muted);
+  font-size: var(--fs-s);
 }
 
 .title {
-  font-size: 26px;
+  flex: none;
+  font-size: var(--fs-l);
   letter-spacing: 2px;
   color: var(--accent);
-  text-shadow: 2px 2px 0 #000;
+  text-shadow: 2px 2px 0 var(--shadow);
 }
 
-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+/* The menu stays on one row; on narrow screens it scrolls sideways instead of wrapping. */
+nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-width: 0;
+}
+nav::-webkit-scrollbar { display: none; }
+nav button { flex: none; min-height: 36px; font-size: var(--fs-s); }
 
+/* --- Buttons --- */
 button {
   font: inherit;
   color: var(--text);
-  background: #2a2529;
+  background: var(--iron-dark);
   border: 2px solid var(--iron);
   border-top-color: var(--iron-light);
   border-left-color: var(--iron-light);
   padding: 2px 10px;
   cursor: pointer;
-  min-height: 34px;
+  min-height: var(--touch);
+  min-width: var(--touch);
+  touch-action: manipulation;
 }
 
 button:hover { background: #352f34; }
-button:active { border-color: var(--iron); border-bottom-color: var(--iron-light); border-right-color: var(--iron-light); }
-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+button:active { border-color: var(--iron); border-bottom-color: var(--iron-light); border-right-color: var(--iron-light); background: #1f1b1f; }
+button:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+button:disabled { cursor: default; }
 
 #message { color: var(--text); text-align: right; }
 #message.error { color: var(--error); }
 
-/* --- Combat HUD --- */
+/* --- Combat: initiative strip --- */
 #combat[hidden] { display: none; }
 #initiative-wrap {
-  position: fixed; top: 52px; left: 8px; right: 8px; z-index: 2;
-  display: flex; gap: 8px; align-items: center; pointer-events: none;
+  position: fixed; z-index: 2;
+  top: calc(var(--top-h) + var(--safe-top) + var(--gap)); left: 6px; right: 6px; height: var(--strip-h);
+  display: flex; gap: 6px; align-items: center; pointer-events: none;
 }
-#round { color: var(--muted); white-space: nowrap; }
-#initiative { display: flex; gap: 4px; overflow-x: auto; pointer-events: auto; }
+#round {
+  flex: none; color: var(--gold); font-size: var(--fs-s); text-shadow: 1px 1px 0 var(--shadow);
+  writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 1px;
+}
+#initiative {
+  display: flex; gap: 4px; overflow-x: auto; pointer-events: auto; scrollbar-width: none;
+  padding: 2px 4px 4px 2px; min-width: 0;
+}
+#initiative::-webkit-scrollbar { display: none; }
 .chip {
-  font: inherit; color: var(--text); min-height: 0; cursor: pointer; text-align: left;
-  min-width: 74px; padding: 2px 6px; background: var(--panel); border: 2px solid var(--iron);
-  font-size: 16px; line-height: 1.1; box-shadow: 2px 2px 0 #000;
+  flex: none; position: relative;
+  display: grid; grid-template-columns: 32px auto; grid-template-rows: 1fr auto; column-gap: 5px; align-items: center;
+  min-height: var(--touch); min-width: 0; padding: 2px 6px 2px 2px;
+  font: inherit; font-size: var(--fs-s); line-height: 1; text-align: left; color: var(--text); cursor: pointer;
+  background: var(--panel); border-width: 2px; box-shadow: 2px 2px 0 var(--shadow);
 }
-.chip.active { border-color: #e8c070; }
+.chip canvas.portrait { grid-row: 1 / 3; width: 32px; height: 32px; background: #0e0c0f; }
+.chip .name { max-width: 9ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip .hp { display: block; height: 4px; background: var(--shadow); margin-top: 3px; }
+.chip .hp i { display: block; height: 100%; background: var(--party); }
+/* Faction at a glance: a coloured base under the chip. */
+.chip { border-bottom: 3px solid var(--party); }
+.chip.foe { border-bottom-color: var(--foe); }
 .chip.foe .name { color: #e0a090; }
-.chip.down { opacity: 0.45; text-decoration: line-through; }
-.chip .hp { display: block; height: 4px; background: #000; margin-top: 2px; }
-.chip .hp i { display: block; height: 100%; background: #7a2e22; }
-.chip:not(.foe) .hp i { background: #5f8a4a; }
-#combat-log {
-  position: fixed; left: 64px; top: 100px; z-index: 2; max-width: min(520px, calc(100vw - 76px));
-  display: flex; align-items: flex-start; gap: 4px;
-  font-size: 15px; color: var(--muted); text-shadow: 1px 1px 0 #000; pointer-events: none;
+.chip.foe .hp i { background: var(--hp-foe); }
+.chip.active { border-color: var(--gold); border-bottom-color: var(--gold); box-shadow: 0 0 0 1px var(--shadow), 0 0 8px rgba(232, 192, 112, 0.55); }
+.chip.down { opacity: 0.45; }
+.chip.down .name { text-decoration: line-through; }
+.chip.down canvas.portrait { filter: grayscale(1) brightness(0.6); }
+
+/* --- Party portraits (left column, under the strip when fighting) --- */
+#party {
+  position: fixed; left: 6px; z-index: 2; display: flex; flex-direction: column; gap: 4px;
+  top: calc(var(--top-h) + var(--safe-top) + var(--gap));
 }
-#combat-log .toggle { pointer-events: auto; min-height: 28px; min-width: 32px; padding: 0 6px; font-size: 15px; flex: none; }
-#combat-log .lines { overflow: hidden; }
+body:has(#combat:not([hidden])) #party { top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap)); }
+#party .member {
+  position: relative; padding: 0; width: 48px; height: 56px; min-width: 0; min-height: 0;
+  background: var(--panel); border-width: 2px; box-shadow: 2px 2px 0 var(--shadow);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+}
+#party .member canvas { background: #0e0c0f; }
+#party .member.active { border-color: var(--gold); box-shadow: 0 0 0 1px var(--shadow), 0 0 8px rgba(232, 192, 112, 0.55); }
+#party .member.down canvas { filter: grayscale(1) brightness(0.5); }
+#party .hp, #sheet .hp { display: block; width: 40px; height: 4px; background: var(--shadow); }
+#party .hp i { display: block; height: 100%; background: var(--party); }
+canvas.portrait { image-rendering: pixelated; display: block; }
+
+/* --- Combat log (right of the party column, under the strip) --- */
+#combat-log {
+  position: fixed; z-index: 2; left: 62px; right: 8px;
+  top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap));
+  display: flex; align-items: flex-start; gap: 4px;
+  font-size: var(--fs-s); color: var(--muted); text-shadow: 1px 1px 0 var(--shadow); pointer-events: none;
+}
+#combat-log .toggle {
+  pointer-events: auto; flex: none; min-height: 40px; min-width: var(--touch); padding: 0 6px; font-size: var(--fs-s);
+  background: rgba(29, 26, 30, 0.9); border-width: 2px;
+}
+#combat-log .lines { overflow: hidden; min-width: 0; max-width: 520px; padding-top: 6px; }
 #combat-log:not(.open) .lines p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #combat-log.open { flex-direction: column; }
 #combat-log.open .lines {
-  pointer-events: auto; max-height: 32vh; overflow-y: auto; background: rgba(18, 15, 19, 0.88);
-  border: 2px solid var(--iron); padding: 4px 6px;
+  pointer-events: auto; max-height: 30vh; overflow-y: auto; background: rgba(18, 15, 19, 0.92);
+  border-width: 2px; padding: 4px 8px; box-shadow: 2px 2px 0 var(--shadow); width: min(520px, 100%);
 }
-#combat-log p { margin: 0; }
+#combat-log p { margin: 0; line-height: 1.1; }
+#combat-log.open p + p { margin-top: 2px; }
 
-/* --- Party portraits and character sheet --- */
-#party {
-  position: fixed; left: 6px; top: 100px; z-index: 2; display: flex; flex-direction: column; gap: 4px;
-}
-#party .member {
-  position: relative; padding: 0; width: 48px; height: 54px; background: var(--panel);
-  border: 2px solid var(--iron); box-shadow: 2px 2px 0 #000; display: flex; flex-direction: column; align-items: center;
-}
-#party .member.active { border-color: #e8c070; }
-#party .member.down canvas { filter: grayscale(1) brightness(0.5); }
-#party .hp, #sheet .hp { display: block; width: 40px; height: 4px; background: #000; margin-top: 1px; }
-#party .hp i { display: block; height: 100%; background: #5f8a4a; }
-canvas.portrait { image-rendering: pixelated; display: block; }
+/* --- Character sheet --- */
 #sheet[hidden] { display: none; }
 #sheet {
-  position: fixed; inset: 0; z-index: 5; background: rgba(6, 5, 8, 0.7);
+  position: fixed; inset: 0; z-index: 5; background: rgba(6, 5, 8, 0.75);
   display: flex; align-items: center; justify-content: center; padding: 12px;
 }
 #sheet .panel {
   width: min(460px, 100%); max-height: calc(100% - 24px); display: flex; flex-direction: column;
-  background: var(--panel); border: 3px solid var(--iron); box-shadow: 4px 4px 0 #000;
+  background: var(--panel); border-width: 3px; box-shadow: 4px 4px 0 var(--shadow);
 }
 #sheet header { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-bottom: 2px solid var(--iron); }
-#sheet header canvas { background: #120f13; border: 2px solid var(--iron); flex: none; }
+#sheet header canvas { background: #0e0c0f; border: 2px solid var(--iron); flex: none; }
 #sheet header div { flex: 1; min-width: 0; }
-#sheet h2 { margin: 0; font-weight: normal; font-size: 28px; color: var(--accent); line-height: 1; }
-#sheet .subtitle { margin: 2px 0 0; color: var(--muted); }
-#sheet .close { flex: none; min-width: 40px; }
+#sheet h2 { margin: 0; font-weight: normal; font-size: var(--fs-xl); color: var(--accent); line-height: 1; text-shadow: 2px 2px 0 var(--shadow); }
+#sheet .subtitle { margin: 2px 0 0; color: var(--muted); font-size: var(--fs-s); }
+#sheet .close { flex: none; }
 #sheet .body { overflow-y: auto; padding: 4px 12px 10px; }
-#sheet h3 { margin: 8px 0 2px; font-weight: normal; font-size: 20px; color: #e8c070; border-bottom: 1px solid var(--iron); }
-#sheet dl { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; margin: 2px 0; }
+#sheet h3 { margin: 10px 0 2px; font-weight: normal; font-size: var(--fs-m); color: var(--gold); border-bottom: 1px solid var(--iron); }
+#sheet dl { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; margin: 2px 0; align-items: center; }
 #sheet dt { color: var(--muted); }
 #sheet dd { margin: 0; text-align: right; }
-#sheet .explain { grid-column: 1 / -1; background: #120f13; padding: 4px 6px; margin: 2px 0 4px; }
-#sheet .help { min-height: 0; padding: 0 6px; font-size: 14px; }
-#sheet .item { margin: 4px 0; }
+#sheet .explain, #preview-sheet .explain {
+  grid-column: 1 / -1; color: var(--text); background: #0e0c0f; padding: 4px 6px; margin: 2px 0 4px;
+  border-left: 2px solid var(--gold); font-size: var(--fs-s);
+}
+#sheet .help, #preview-sheet .help { min-height: 28px; min-width: 28px; padding: 0 6px; font-size: var(--fs-xs); vertical-align: middle; }
+#sheet .item { margin: 6px 0; }
 #sheet .item strong { font-weight: normal; color: var(--text); }
-#sheet .item p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.15; }
+#sheet .item p { margin: 0; color: var(--muted); font-size: var(--fs-s); line-height: 1.15; }
+
+/* --- Action bar: card + end turn on the first row, actions in two scrollable rows, hint --- */
 #action-bar {
-  position: fixed; left: 0; right: 0; bottom: calc(40px + env(safe-area-inset-bottom)); z-index: 2;
-  background: linear-gradient(transparent, rgba(10, 8, 12, 0.92) 30%);
-  padding: 18px 10px 6px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  position: fixed; left: 0; right: 0; z-index: 2;
+  bottom: calc(36px + 3px + var(--safe-bottom));
+  background: linear-gradient(transparent, rgba(10, 8, 12, 0.94) 22px);
+  padding: 22px 8px 6px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 8px; align-items: center;
 }
-#action-bar .card { width: 100%; display: flex; gap: 8px; align-items: baseline; }
-#action-bar .card strong { color: var(--text); font-size: 22px; }
-#action-bar .pip { color: #3a3438; font-size: 18px; }
-#action-bar .pip.on { color: #e8c070; }
+#action-bar .card { grid-column: 1; display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: baseline; min-width: 0; }
+#action-bar .card strong { color: var(--text); font-size: var(--fs-l); font-weight: normal; text-shadow: 2px 2px 0 var(--shadow); }
+#action-bar .hpnum { color: #9fc28a; }
+#action-bar .pip { color: #3a3438; font-size: var(--fs-m); }
+#action-bar .pip.on { color: var(--gold); text-shadow: 0 0 4px rgba(232, 192, 112, 0.6); }
 #action-bar .move { color: var(--muted); }
-#action-bar .actions { display: flex; gap: 6px; overflow-x: auto; flex: 1 1 auto; padding-bottom: 2px; }
-#action-bar .actions button { white-space: nowrap; }
-#action-bar button.bonus { border-color: #6b5a3a; }
-#action-bar button.selected { background: #5a3a22; border-color: #e8c070; }
-#action-bar button:disabled { opacity: 0.4; }
-#action-bar .end-turn { background: #3a2222; }
-#action-bar .hint { width: 100%; color: var(--muted); font-size: 16px; }
-#preview-sheet {
-  position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); bottom: calc(150px + env(safe-area-inset-bottom));
-  width: min(420px, calc(100vw - 24px)); background: var(--panel); border: 3px solid var(--iron);
-  box-shadow: 4px 4px 0 #000; padding: 10px 12px;
+#action-bar .end-turn { grid-column: 2; grid-row: 1; background: #3a2222; border-color: #7a4a3a #4a2a22 #4a2a22 #7a4a3a; }
+#action-bar .actions {
+  grid-column: 1 / -1;
+  display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, var(--touch)); grid-auto-columns: max-content;
+  gap: 4px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin;
 }
-#preview-sheet h3 { margin: 0 0 4px; color: var(--accent); font-weight: normal; font-size: 24px; }
-#preview-sheet .big { font-size: 30px; color: #e8d6b0; }
-#preview-sheet .desc { color: var(--muted); margin: 4px 0; }
+#action-bar .actions button { white-space: nowrap; font-size: var(--fs-m); }
+#action-bar button.bonus { border-color: #8a7240 #5a4a2a #5a4a2a #8a7240; }
+#action-bar button.selected { background: #5a3a22; border-color: var(--gold); }
+#action-bar button:disabled { opacity: 0.4; }
+#action-bar .hint { grid-column: 1 / -1; color: var(--muted); font-size: var(--fs-s); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+/* A few actions only: one row is enough. */
+#action-bar .actions:not(:has(> :nth-child(7))) { grid-template-rows: var(--touch); }
+
+/* --- Preview sheet (the decision point) --- */
+#preview-sheet {
+  position: fixed; z-index: 3; left: 50%; transform: translateX(-50%);
+  bottom: calc(224px + var(--safe-bottom));
+  width: min(420px, calc(100vw - 16px)); max-height: calc(100vh - 280px); overflow-y: auto;
+  background: var(--panel); border-width: 3px; box-shadow: 4px 4px 0 var(--shadow); padding: 8px 12px 10px;
+}
+#preview-sheet h3 { margin: 0 0 2px; color: var(--accent); font-weight: normal; font-size: var(--fs-l); line-height: 1; }
+#preview-sheet .big { font-size: var(--fs-xl); color: #f0dcb0; text-shadow: 2px 2px 0 var(--shadow); line-height: 1.1; }
+#preview-sheet .desc { color: var(--muted); margin: 4px 0; font-size: var(--fs-s); }
 #preview-sheet .error { color: var(--error); }
-#preview-sheet dl { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; margin: 6px 0; }
+#preview-sheet dl { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; margin: 6px 0; align-items: center; border-top: 1px solid var(--iron); padding-top: 4px; }
 #preview-sheet dt { color: var(--muted); }
 #preview-sheet dd { margin: 0; text-align: right; }
-#preview-sheet .explain { grid-column: 1 / -1; color: var(--text); background: #120f13; padding: 4px 6px; margin: 2px 0 4px; }
-#preview-sheet .help { min-height: 0; padding: 0 6px; font-size: 14px; }
-#preview-sheet .buttons { display: flex; justify-content: flex-end; gap: 8px; }
-#preview-sheet .confirm { background: #5a3a22; border-color: #e8c070; }
+#preview-sheet .buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+#preview-sheet .buttons button { flex: 1 1 0; max-width: 180px; }
+#preview-sheet .confirm { background: #5a3a22; border-color: var(--gold); color: #f0dcb0; }
 
+/* --- Phones --- */
 @media (max-width: 560px) {
-  #combat-log { top: 120px; font-size: 13px; }
-  #party { top: 150px; }
-  #initiative-wrap { top: 96px; }
+  :root { --top-h: 44px; --strip-h: 48px; }
   html, body { font-size: 18px; }
-  .title { font-size: 22px; }
+  .title { font-size: var(--fs-m); letter-spacing: 1px; }
+  nav button { padding: 2px 6px; min-height: 40px; }
   button { padding: 2px 7px; }
   #tile-info { display: none; }
+  /* Chips show only the portrait and the hit points; the name is in the sheet and the tooltip. */
+  .chip { grid-template-columns: 32px; padding: 2px; }
+  .chip .name { display: none; }
+  .chip .hp { grid-row: 2; }
+  .chip canvas.portrait { grid-row: 1; }
+  #combat-log { font-size: var(--fs-xs); }
+  #action-bar .actions button { font-size: var(--fs-s); }
 }
