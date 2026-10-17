@@ -242,6 +242,7 @@ Son sistemas reutilizables por los tres juegos, con la configuración en `conten
 | Partículas de ambiente: niebla, polvo, ceniza, lluvia | `src/fx/ambient.ts` | Propiedades del mapa en Tiled | 6 |
 | Corrección de color por escena (desaturado y frío), viñeta, CRT o scanlines desactivable | `src/fx/post.ts` (pipeline de postprocesado) | Por mapa y en opciones | 6 (hoy hay un filtro por preset) |
 | Ajuste de calidad bajo, medio o alto (partículas, luces, postprocesado) | `src/fx/quality.ts` | Opciones del jugador (`localStorage`) | 6 |
+| Audio: música por estado (exploración/combate/tensión/victoria/derrota/título) con crossfade, sfx agrupados, volumen maestro/música/sfx y mute (`localStorage`), desbloqueo en el primer gesto | `src/audio/AudioManager.ts` + `src/audio/setupAudio.ts` (un único suscriptor del `GameStore`, sin tocar `engine/` ni `rulesets/`) | `content/<juego>/assets/audio.json` (qué evento del motor dispara qué sonido o cambio de música; ver `docs/AUDIO.md` para el catálogo de fuentes) | **Hecho (módulo); ficheros de audio pendientes de aprobación** |
 
 ## Reglas 5e (`rulesets/dnd5e`)
 
