@@ -62,6 +62,8 @@
     "sure": "Sin tirada",
     "pickTargets": "Toca para elegir hasta",
     "targets": "Objetivos",
-    "done": "Listo"
+    "done": "Listo",
+    "fell": "¡Caída!",
+    "slipped": "¡Resbala!"
   }
 }

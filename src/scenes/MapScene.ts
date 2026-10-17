@@ -13,6 +13,7 @@ import {
   isEvent,
   lightPosition,
   lightingOf,
+  surfacesOf,
   tileAt,
 } from '../../engine';
 import { DEFAULT_FX, Juice, tween } from '../fx/juice';
@@ -42,6 +43,8 @@ export interface MapSceneTexts {
   combatStart: string;
   victory: string;
   defeat: string;
+  fell?: string;
+  slipped?: string;
 }
 
 const STEP_MS = 160;
@@ -95,6 +98,7 @@ export class MapScene extends Phaser.Scene {
   private pinchDistance: number | null = null;
   private grid: GridProjection;
   private propSprites: Phaser.GameObjects.Sprite[] = [];
+  private surfaceObjects: Phaser.GameObjects.GameObject[] = [];
 
   constructor(
     private store: GameStore,
@@ -111,7 +115,7 @@ export class MapScene extends Phaser.Scene {
     for (const [id, ts] of Object.entries(this.manifest.tilesets)) {
       this.load.spritesheet(tilesetKey(id), assetUrl(ts.url), { frameWidth: ts.frameWidth, frameHeight: ts.frameHeight });
     }
-    for (const art of [...Object.values(this.manifest.sprites), ...Object.values(this.manifest.props ?? {})]) {
+    for (const art of [...Object.values(this.manifest.sprites), ...Object.values(this.manifest.props ?? {}), ...Object.values(this.manifest.surfaces ?? {})]) {
       if (!this.textures.exists(imageKey(art.url))) this.load.image(imageKey(art.url), assetUrl(art.url));
     }
   }
@@ -119,6 +123,7 @@ export class MapScene extends Phaser.Scene {
   create(): void {
     this.defineCharacterFrames();
     this.defineProps();
+    this.defineSurfaceAnims();
     this.pathPreview = this.add.graphics().setDepth(1_000_000);
     this.overlay = this.add.graphics().setDepth(999_000);
     this.juice = new Juice(this, this.grid.tile, DEFAULT_FX);
@@ -235,7 +240,10 @@ export class MapScene extends Phaser.Scene {
 
     for (const entity of Object.values(state.entities)) {
       const art = this.manifest.sprites[entity.spriteId];
-      if (!art) continue;
+      if (!art) {
+        this.addPlaceholderEntity(entity.id, entity.spriteId, entity.position, map);
+        continue;
+      }
       const tile = tileAt(map, entity.position)!;
       const c = this.grid.tileCentre(entity.position.x, entity.position.y, tile.height);
       const depth = this.grid.depth(entity.position.y, tile.height, 5);
@@ -262,6 +270,7 @@ export class MapScene extends Phaser.Scene {
       this.propSprites.push(sprite);
     }
     this.lighting = new LightingLayer(this, map.width * T, map.height * T, T, LIGHTING_DEPTH, !torchProp);
+    this.drawSurfaces(state);
   }
 
   override update(time: number): void {
@@ -438,6 +447,45 @@ export class MapScene extends Phaser.Scene {
         this.applyFate(String(e.entityId), state, true);
         return;
       }
+      case 'surfaceChanged':
+        this.drawSurfaces(state);
+        return;
+      case 'entityPushed': {
+        const s = sprite(e.entityId);
+        const to = e.to as Vec2;
+        if (!s) return;
+        const c = this.grid.tileCentre(to.x, to.y, tileAt(state.map, to)?.height ?? 0);
+        await tween(this, { targets: s, x: c.x, y: c.y, duration: 220, ease: 'Cubic.easeOut' });
+        if (e.collidedWith) {
+          this.juice.shake(0.6);
+          this.playProp('fx_dust', s.x, s.y, s.depth + 1);
+        }
+        return;
+      }
+      case 'entityFell': {
+        const s = sprite(e.entityId);
+        this.juice.shake(1.2);
+        if (s) {
+          this.playProp('fx_dust', s.x, s.y, s.depth + 1);
+          await this.juice.floatText(s.x, s.y, this.texts.fell ?? '¡Caída!', '#ffb070', 0.5);
+        }
+        return;
+      }
+      case 'slipped': {
+        const s = sprite(e.entityId);
+        if (s) await this.juice.floatText(s.x, s.y, this.texts.slipped ?? '¡Resbala!', '#c8e0ff', 0.45);
+        return;
+      }
+      case 'exploded': {
+        const at = e.at as Vec2;
+        const c = this.grid.tileCentre(at.x, at.y, tileAt(state.map, at)?.height ?? 0);
+        this.juice.shake(2);
+        if (this.manifest.props?.fx_explosion) this.playProp('fx_explosion', c.x, c.y - T * 0.3, 2_000_000);
+        else await this.juice.ring(c.x, c.y, 1.6, 0xff7a2a);
+        this.juice.burst(c.x, c.y, 0xffa040, 18);
+        await this.juice.hitStop();
+        return;
+      }
       case 'combatStarted':
         await this.juice.banner(this.texts.combatStart);
         return;
@@ -466,6 +514,12 @@ export class MapScene extends Phaser.Scene {
     if (!s || !e) return;
     const dead = hasCondition(e, 'dead');
     const down = hasCondition(e, 'downed');
+    if (e.tags.includes('object')) {
+      // Scenery breaks rather than lying down.
+      s.setVisible(!dead);
+      this.shadows.get(id)?.setVisible(false);
+      return;
+    }
     const angle = dead || down ? 90 : 0;
     const alpha = dead ? 0.55 : 1;
     if (dead) s.setTint(0x6a6a6a);
@@ -494,6 +548,76 @@ export class MapScene extends Phaser.Scene {
       this.applyFate(id, state);
     }
     this.updateActiveRing();
+  }
+
+  // --- Surfaces -------------------------------------------------------------------
+
+  private defineSurfaceAnims(): void {
+    for (const [id, art] of Object.entries(this.manifest.surfaces ?? {})) {
+      const texture = this.textures.get(imageKey(art.url));
+      art.frames.forEach((r, f) => texture.add(`surface:${id}-${f}`, 0, r.x, r.y, r.w, r.h));
+      if (this.anims.exists(`surface:${id}`)) continue;
+      this.anims.create({
+        key: `surface:${id}`,
+        frames: art.frames.map((_, f) => ({ key: imageKey(art.url), frame: `surface:${id}-${f}` })),
+        frameRate: art.fps,
+        repeat: art.loop ? -1 : 0,
+      });
+    }
+  }
+
+  /**
+   * Redraws the surface layer from state: the art pack's animated tiles when it has them,
+   * otherwise translucent colour patches (the ruleset's hint colour) so nothing is invisible.
+   */
+  private drawSurfaces(state: GameState): void {
+    for (const o of this.surfaceObjects) o.destroy();
+    this.surfaceObjects = [];
+    const defs = this.store.engine.ruleset.surfaces ?? {};
+    const T = this.grid.tile;
+    for (const [key, surface] of Object.entries(surfacesOf(state))) {
+      const [x, y] = key.split(',').map(Number) as [number, number];
+      const h = tileAt(state.map, { x, y })?.height ?? 0;
+      const c = this.grid.tileCentre(x, y, h);
+      const depth = this.grid.depth(y, h, 1.5);
+      const art = this.manifest.surfaces?.[surface.type];
+      if (art) {
+        const sprite = this.add.sprite(c.x, c.y, imageKey(art.url)).setDepth(depth);
+        sprite.play({ key: `surface:${surface.type}`, startFrame: (x * 7 + y * 3) % art.frames.length });
+        this.surfaceObjects.push(sprite);
+        continue;
+      }
+      const color = Phaser.Display.Color.HexStringToColor(defs[surface.type]?.color ?? '#888888').color;
+      const patch = this.add.rectangle(c.x, c.y, T - 2, T - 2, color, surface.type === 'fire' || surface.type === 'electrified' ? 0.55 : 0.45).setDepth(depth);
+      if (surface.type === 'fire' || surface.type === 'electrified') {
+        patch.setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: patch, alpha: { from: 0.35, to: 0.75 }, duration: 160 + ((x + y) % 4) * 40, yoyo: true, repeat: -1 });
+      }
+      this.surfaceObjects.push(patch);
+    }
+  }
+
+  /** Simple code-drawn stand-ins for entities whose art isn't in the pack yet (barrels, crates). */
+  private addPlaceholderEntity(id: string, spriteId: string, position: Vec2, map: GameState['map']): void {
+    const key = `placeholder:${spriteId}`;
+    const T = this.grid.tile;
+    if (!this.textures.exists(key)) {
+      const g = this.make.graphics({}, false);
+      const w = T * 0.8;
+      if (spriteId.startsWith('barrel')) {
+        g.fillStyle(spriteId === 'barrel_oil' ? 0x3a2a1a : 0x6a4a2a).fillRoundedRect(0, 0, w, w * 1.1, 3);
+        g.fillStyle(0x2a2a2a).fillRect(0, w * 0.25, w, 2).fillRect(0, w * 0.8, w, 2);
+        if (spriteId === 'barrel_oil') g.fillStyle(0xb02a1a).fillTriangle(w / 2, w * 0.4, w * 0.3, w * 0.7, w * 0.7, w * 0.7);
+      } else {
+        g.fillStyle(0x7a5a32).fillRect(0, 0, w, w).lineStyle(1, 0x3a2a16).strokeRect(0, 0, w, w).lineBetween(0, 0, w, w).lineBetween(w, 0, 0, w);
+      }
+      g.generateTexture(key, Math.ceil(w) + 1, Math.ceil(w * 1.1) + 1);
+      g.destroy();
+    }
+    const h = tileAt(map, position)?.height ?? 0;
+    const c = this.grid.tileCentre(position.x, position.y, h);
+    const sprite = this.add.sprite(c.x, c.y + T * 0.35, key).setOrigin(0.5, 1).setDepth(this.grid.depth(position.y, h, 5));
+    this.sprites.set(id, sprite);
   }
 
   // --- Props and decals ------------------------------------------------------------

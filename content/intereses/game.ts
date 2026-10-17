@@ -1,5 +1,5 @@
-import { type Entity, type TiledMapJson, parseTiledMap, withLighting, withZones } from '../../engine';
-import { createCharacter, createMonster, dnd5e } from '../../rulesets/dnd5e';
+import { type Entity, type TiledMapJson, parseTiledMap, posKey, withLighting, withSurfaces, withZones } from '../../engine';
+import { SURFACES, createCharacter, createMonster, createProp, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import art0x72 from './assets/0x72.json';
@@ -50,7 +50,20 @@ export const game: GameDefinition = {
       createMonster({ id: 'thug', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug'), spriteId: 'sinpaga_bruto' }),
       createMonster({ id: 'skeleton', name: 'Minero muerto', monsterId: 'skeleton', controllerId: AI, factionId: 'sinpaga', position: at('skeleton'), spriteId: 'esqueleto_minero' }),
     ];
-    const state = engine.newGame({ seed, map, entities: [...party, ...enemies] });
+    // Scenery from spawn names: "barrel_oil-1", "crate-2"...
+    const props: Entity[] = Object.entries(spawns)
+      .map(([name, position]) => ({ name, position, kind: name.split('-')[0] }))
+      .filter((p): p is { name: string; position: { x: number; y: number }; kind: 'barrel_oil' | 'barrel' | 'crate' } => ['barrel_oil', 'barrel', 'crate'].includes(p.kind!))
+      .map((p) => createProp({ id: p.name, kind: p.kind, position: p.position }));
+    // Surfaces painted as rectangles in the map's "surfaces" layer.
+    const surfaces = Object.fromEntries(
+      zones
+        .filter((z) => z.layer === 'surfaces' && SURFACES[String(z.properties.surface)])
+        .flatMap((z) =>
+          Array.from({ length: z.width * z.height }, (_, i) => [posKey({ x: z.x + (i % z.width), y: z.y + Math.floor(i / z.width) }), { type: String(z.properties.surface) }]),
+        ),
+    );
+    const state = withSurfaces(engine.newGame({ seed, map, entities: [...party, ...enemies, ...props] }), surfaces);
     // The collector carries a lantern: the only light that goes everywhere with the party.
     return withZones(
       withLighting(state, {

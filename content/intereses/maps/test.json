@@ -9,8 +9,8 @@
  "tilewidth": 32,
  "tileheight": 32,
  "infinite": false,
- "nextlayerid": 5,
- "nextobjectid": 40,
+ "nextlayerid": 6,
+ "nextobjectid": 70,
  "properties": [
   {
    "name": "name",
@@ -245,9 +245,9 @@
     1,
     7,
     10,
-    10,
-    10,
-    10,
+    11,
+    11,
+    11,
     4,
     1,
     6,
@@ -269,9 +269,9 @@
     1,
     1,
     10,
-    10,
-    10,
-    10,
+    11,
+    11,
+    11,
     4,
     1,
     6,
@@ -574,6 +574,54 @@
      "height": 0,
      "rotation": 0,
      "visible": true
+    },
+    {
+     "id": 60,
+     "name": "barrel_oil-1",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 61,
+     "name": "crate-1",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 62,
+     "name": "crate-2",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 63,
+     "name": "barrel-1",
+     "type": "",
+     "point": true,
+     "x": 656,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
     }
    ]
   },
@@ -788,6 +836,72 @@
      ]
     }
    ]
+  },
+  {
+   "id": 5,
+   "name": "surfaces",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "objects": [
+    {
+     "id": 50,
+     "name": "aceite",
+     "type": "",
+     "x": 480,
+     "y": 288,
+     "width": 64,
+     "height": 64,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "oil"
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "name": "charco",
+     "type": "",
+     "x": 288,
+     "y": 384,
+     "width": 64,
+     "height": 64,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "water"
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "name": "escombros",
+     "type": "",
+     "x": 352,
+     "y": 288,
+     "width": 64,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "rubble"
+      }
+     ]
+    }
+   ]
   }
  ],
  "tilesets": [
@@ -796,10 +910,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 10,
-   "columns": 10,
+   "tilecount": 11,
+   "columns": 11,
    "image": "terrain-logic.png",
-   "imagewidth": 320,
+   "imagewidth": 352,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -956,6 +1070,21 @@
        "name": "height",
        "type": "int",
        "value": 1
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
       }
      ]
     }

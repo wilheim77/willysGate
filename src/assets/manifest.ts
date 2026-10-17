@@ -54,6 +54,8 @@ export interface AssetManifest {
   terrain: Record<string, TerrainArt>;
   sprites: Record<string, SpriteArt>;
   props?: Record<string, PropArt>;
+  /** Animated overlays for surfaces (oil, fire, ice...), drawn over the floor. */
+  surfaces?: Record<string, { url: string; frames: Rect[]; fps: number; loop: boolean }>;
 }
 
 export const tilesetKey = (id: string): string => `tileset:${id}`;

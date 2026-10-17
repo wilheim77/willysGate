@@ -41,6 +41,8 @@ const scene = new MapScene(
     combatStart: combat.combatStart ?? 'Combate',
     victory: combat.victory ?? 'Victoria',
     defeat: combat.defeat ?? 'Derrota',
+    fell: combat.fell ?? '¡Caída!',
+    slipped: combat.slipped ?? '¡Resbala!',
   },
 );
 controller.scene = scene;

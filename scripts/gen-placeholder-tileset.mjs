@@ -18,6 +18,7 @@ const TILES = [
   { name: 'slag h1', rgb: [58, 56, 60] },
   { name: 'slag h2', rgb: [72, 70, 74] },
   { name: 'dirt h1', rgb: [95, 78, 60] },
+  { name: 'dirt h2', rgb: [112, 92, 70] },
 ];
 
 const width = TW * TILES.length;

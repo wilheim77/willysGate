@@ -1,4 +1,4 @@
-import { SaveError, type Vec2, tileAt } from '../../engine';
+import { SaveError, type Vec2, surfaceAt, tileAt } from '../../engine';
 import type { GameDefinition } from '../game/definition';
 import { SaveSlots } from '../game/saves';
 import type { GameStore } from '../game/store';
@@ -48,7 +48,9 @@ export class Hud {
   showTile(pos: Vec2 | null): void {
     const tile = pos && tileAt(this.store.state.map, pos);
     const { terrain, ui } = this.game.texts;
-    this.tileInfo.textContent = pos && tile ? `(${pos.x}, ${pos.y}) · ${terrain[tile.terrain] ?? tile.terrain} · ${ui.height} ${tile.height}` : '';
+    const surface = pos ? surfaceAt(this.store.state, pos) : undefined;
+    const surfaceLabel = surface ? ` · ${this.store.engine.ruleset.surfaces?.[surface.type]?.label ?? surface.type}` : '';
+    this.tileInfo.textContent = pos && tile ? `(${pos.x}, ${pos.y}) · ${terrain[tile.terrain] ?? tile.terrain} · ${ui.height} ${tile.height}${surfaceLabel}` : '';
   }
 
   private async run(action: string): Promise<void> {
