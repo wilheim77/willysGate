@@ -49,5 +49,7 @@ export const game: GameDefinition = {
     defaults: defaultCreation,
     apply: (_engine, state, choices) => applyCasting(state, choices),
   },
+  // The service lift needs the engine to know the floors (travel builds them on arrival).
+  maps,
   newGame: newWillyGame,
 };

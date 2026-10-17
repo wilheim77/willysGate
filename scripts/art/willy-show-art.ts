@@ -457,3 +457,209 @@ export function studioFloor(seed: number): Image {
   if (r() < 0.5) (fill(img, 3, 6, 5, 1, '#ffe04f'), fill(img, 3, 6, 1, 4, '#ffe04f'));
   return img;
 }
+
+// --- Floor 2: Hipermercado Eterno ---------------------------------------------------------------
+
+/** Supermarket linoleum: big pale tiles with speckles and a scuff. */
+export function hyperFloor(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  fill(img, 0, 0, T, T, '#e4e6e8');
+  for (let i = 0; i < 14; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), r() < 0.5 ? '#c8ccd0' : '#a8b0b8');
+  fill(img, 0, 0, T, 1, '#c0c4c8');
+  fill(img, 0, 0, 1, T, '#c0c4c8');
+  fill(img, 8, 0, 1, T, '#d0d4d8');
+  fill(img, 0, 8, T, 1, '#d0d4d8');
+  if (r() < 0.4) line(img, 3, 11, 7, 12, '#9aa0a8');
+  return img;
+}
+
+/** Aisle floor with a yellow «OFERTA» arrow sticker. */
+export function saleAisle(): Image {
+  const img = hyperFloor(77);
+  art(img, 3, 3, ['...k......', '...kk.....', 'kkkkYk....', 'kYYYYYk...', 'kYYYYYYk..', 'kYYYYYk...', 'kkkkYk....', '...kk.....', '...k......'], { k: '#c08a10', Y: '#ffe04f' });
+  return img;
+}
+
+/** A gondola shelf seen from above: metal top with rows of product boxes. */
+export function shelfTop(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  fill(img, 0, 0, T, T, '#8a9098');
+  for (let row = 0; row < 3; row++) {
+    let x = 1;
+    while (x < 15) {
+      const w = 2 + Math.floor(r() * 3);
+      const c = ['#e0302a', '#3a8fd9', '#40c060', '#ffe04f', '#ff7a1a', '#f4f4f0'][Math.floor(r() * 6)]!;
+      fill(img, x, 1 + row * 5, Math.min(w, 15 - x), 4, c);
+      fill(img, x, 1 + row * 5, Math.min(w, 15 - x), 1, '#ffffff');
+      x += w + 1;
+    }
+  }
+  fill(img, 0, T - 2, T, 2, '#5a5e66');
+  return img;
+}
+
+/** Front of a shelf: three shelves of boxes, bottles and price strips. */
+export function shelfFace(): Image {
+  const img = blank(T, T);
+  const r = rng(88);
+  fill(img, 0, 0, T, T, '#5a5e66');
+  for (let s = 0; s < 3; s++) {
+    const y = s * 5 + 1;
+    let x = 1;
+    while (x < 15) {
+      const bottle = r() < 0.4;
+      const c = ['#e0302a', '#3a8fd9', '#40c060', '#ffe04f', '#ff7a1a', '#b45cff'][Math.floor(r() * 6)]!;
+      if (bottle) (fill(img, x, y + 1, 1, 3, c), px(img, x, y, '#f4f4f0'), (x += 2));
+      else (fill(img, x, y, 2, 4, c), px(img, x, y, '#ffffff'), (x += 3));
+    }
+    fill(img, 0, y + 4, T, 1, '#c0c6ce');
+    px(img, 3 + s * 4, y + 4, '#ffe04f');
+  }
+  return img;
+}
+
+/** Checkout conveyor belt: black rubber with chevrons running east. */
+export function conveyor(frame: number): Image {
+  const img = blank(T, T);
+  fill(img, 0, 0, T, T, '#8a9098');
+  fill(img, 0, 2, T, 12, '#26262c');
+  for (let x = -4; x < T; x += 5) {
+    const o = x + frame;
+    for (let i = 0; i < 4; i++) (px(img, o + i, 4 + i, '#4a4a54'), px(img, o + i, 11 - i, '#4a4a54'));
+  }
+  fill(img, 0, 2, T, 1, '#c0c6ce');
+  fill(img, 0, 13, T, 1, '#5a5e66');
+  return img;
+}
+
+// --- Floor 3: La Verbena Sin Fin ----------------------------------------------------------------
+
+/** Village square cobbles with confetti and streamers from the fiesta. */
+export function fiestaSquare(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  fill(img, 0, 0, T, T, '#7a6650');
+  for (let row = 0; row < 4; row++) {
+    let x = row % 2 ? -2 : 0;
+    while (x < T) {
+      const w = 3 + Math.floor(r() * 2);
+      fill(img, (x + T) % T, row * 4, Math.min(w, T - ((x + T) % T)), 3, r() < 0.5 ? '#b89a78' : '#a88a68');
+      px(img, (x + T) % T, row * 4, '#d0b490');
+      x += w + 1;
+    }
+  }
+  const cols = ['#ff4fa0', '#4fe8ff', '#ffe04f', '#40c060', '#e0302a'];
+  for (let i = 0; i < 7; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), cols[i % cols.length]!);
+  if (r() < 0.5) line(img, 2, 12, 9, 10, '#ff4fa0');
+  return img;
+}
+
+/** Orchestra stage boards with a row of bulbs along the front edge. */
+export function bandStage(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) px(img, x, y, y % 4 === 3 ? '#4a2c1c' : r() < 0.1 ? '#8e5e34' : '#a8743e');
+  fill(img, 0, T - 2, T, 2, '#e0302a');
+  for (let x = 1; x < T; x += 3) px(img, x, T - 2, '#fff4c0');
+  return img;
+}
+
+/** Stage front: red skirt with gold fringe and bulbs. */
+export function bandStageFace(): Image {
+  const img = blank(T, T);
+  fill(img, 0, 0, T, T, '#a01e1e');
+  for (let x = 0; x < T; x += 4) fill(img, x, 0, 1, T, '#7a1414');
+  fill(img, 0, 0, T, 2, '#e8b830');
+  for (let x = 1; x < T; x += 3) px(img, x, 1, '#fff4c0');
+  for (let x = 0; x < T; x += 2) px(img, x, T - 1, '#e8b830');
+  return img;
+}
+
+/** Village rooftops seen from above with a string of fiesta bunting across them. */
+export function buntingRoof(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) px(img, x, y, y % 4 === 3 ? '#8a3020' : (x + Math.floor(y / 4) * 2) % 4 === 0 ? '#8a3020' : '#c05a34');
+  const cols = ['#e0302a', '#ffe04f', '#3a8fd9', '#40c060', '#ffffff'];
+  for (let x = 0; x < T; x++) {
+    const y = 5 + Math.round(Math.sin(x / 3) * 1.5);
+    px(img, x, y, '#2a2420');
+    if (x % 3 === 0) art(img, x, y + 1, ['cc', 'c.'], { c: cols[(x / 3 + Math.floor(r() * 2)) % cols.length]! });
+  }
+  return img;
+}
+
+/** Whitewashed facade with a small iron balcony and a flowerpot. */
+export function whiteFacade(): Image {
+  const img = blank(T, T);
+  fill(img, 0, 0, T, T, '#f0ece0');
+  fill(img, 0, 0, T, 1, '#ffffff');
+  fill(img, 4, 2, 8, 9, '#3a5a8a');
+  fill(img, 4, 2, 8, 1, '#2a4068');
+  fill(img, 3, 10, 10, 1, OUT);
+  for (let x = 3; x < 13; x += 2) fill(img, x, 11, 1, 3, OUT);
+  fill(img, 3, 13, 10, 1, OUT);
+  art(img, 10, 8, ['.R.', 'RGR', 'kkk'], { R: '#e0302a', G: '#40a060', k: '#a8603a' });
+  return img;
+}
+
+// --- Floor 4: Balneario Glaciar -----------------------------------------------------------------
+
+/** Small light-blue pool tiles with white grout. */
+export function poolTiles(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const grout = x % 4 === 0 || y % 4 === 0;
+    px(img, x, y, grout ? '#e8f4f8' : r() < 0.1 ? '#8ac8e0' : '#a8d8ec');
+  }
+  return img;
+}
+
+/** Deep pool water: blue with drifting caustic light. */
+export function poolWater(frame: number): Image {
+  const img = blank(T, T);
+  const n = valueNoise(500, 16, 4);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const v = n(x + frame, y + frame);
+    px(img, x, y, v > 0.62 ? '#8ae0f0' : v > 0.45 ? '#3aa8d0' : '#2a7ab8');
+  }
+  return img;
+}
+
+/** Frozen spa floor: pale icy tiles with frost and cracks. */
+export function icyTiles(seed: number): Image {
+  const img = poolTiles(seed);
+  const r = rng(seed + 1);
+  for (let i = 0; i < img.data.length; i += 4) {
+    img.data[i] = Math.round(img.data[i]! * 0.6 + 255 * 0.4);
+    img.data[i + 1] = Math.round(img.data[i + 1]! * 0.6 + 255 * 0.4);
+    img.data[i + 2] = Math.round(img.data[i + 2]! * 0.7 + 255 * 0.3);
+  }
+  let x = Math.floor(r() * 10) + 3, y = 0;
+  while (y < T) (px(img, x, y, '#7ab0c8'), (x += Math.round(r() * 2 - 1)), y++);
+  for (let i = 0; i < 6; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), '#ffffff');
+  return img;
+}
+
+/** Snowy roof seen from above (spa wall top). */
+export function snowTop(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  fill(img, 0, 0, T, T, '#f4f8fc');
+  for (let i = 0; i < 10; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), '#d0e0ec');
+  fill(img, 0, T - 2, T, 2, '#a8c8dc');
+  for (let x = 1; x < T; x += 4) (px(img, x, T - 1, '#e8f4f8'), px(img, x, T, '#e8f4f8'));
+  return img;
+}
+
+/** Spa wall: white tiles with a blue band and icicles on top. */
+export function spaWall(): Image {
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) px(img, x, y, x % 4 === 0 || y % 4 === 0 ? '#d0dce4' : '#f4f8fa');
+  fill(img, 0, 8, T, 3, '#3a8fd9');
+  for (let x = 1; x < T; x += 3) (px(img, x, 0, '#c8f0ff'), px(img, x, 1, '#c8f0ff'), px(img, x, 2, '#a8d8f0'));
+  return img;
+}

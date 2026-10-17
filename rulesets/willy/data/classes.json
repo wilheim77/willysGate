@@ -872,7 +872,7 @@
     {
       "id": "ingeniero",
       "nombre": "Ingeniero",
-      "resumen": "Construye autómatas, suelda lo que haga falta y tiene una habilidad, «5G», que de momento no hace absolutamente nada.",
+      "resumen": "Construye autómatas, suelda lo que haga falta y lanza rayos de 5G. Tecnología punta.",
       "descripcion": "Estaba montando una antena en el tejado de la lonja cuando se acabó el mundo. Media comarca le echó la culpa «por lo de las ondas». Él no discute: construye. Es el más competente de la mazmorra y el más cansado de dar explicaciones.",
       "atributos": {
         "man": 3,
@@ -1179,7 +1179,8 @@
           "primerUso": {
             "narrador": "redG/g5-01",
             "comentario": "Visible desde el principio como «5G», con su texto («No hace nada») para tentar al jugador. Solo el primer uso tiene comentario del Narrador; los siguientes usos a nivel 5G no hacen nada y en silencio, salvo como mucho una frase corta de un pequeño banco sin repetición."
-          }
+          },
+          "textoSinEstrenar": "Lanza un rayo de 5G. Tecnología punta, cobertura total."
         },
         {
           "id": "cobertura-total",

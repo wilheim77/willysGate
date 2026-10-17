@@ -43,6 +43,15 @@
           }
         },
         {
+          "id": "ivo_cuarenta",
+          "text": "[Ivo estaba entre los cuarenta] Lo siento, Garrán.",
+          "once": true,
+          "when": {
+            "flag": "garran_sabe_ivo_cuarenta"
+          },
+          "next": "ivo_cuarenta"
+        },
+        {
           "text": "Nada. Sigue andando."
         }
       ]

@@ -231,6 +231,258 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_stone"
       }
+    },
+    "scrub": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "scrub_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "scrub_2"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "scrub_3"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "scrub_4"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      }
+    },
+    "road": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "road_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "road_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      }
+    },
+    "road_v": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "road_v_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "road_v_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      }
+    },
+    "mud": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "mud_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "mud_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      }
+    },
+    "rock": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "rock_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "rock_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rock_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
+    },
+    "cobble": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "cobble_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "cobble_2"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "cobble_3"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "masonry_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
+    },
+    "house": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "roof_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "roof_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "timber_face_window"
+      }
+    },
+    "house_plain": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "roof_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "roof_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "timber_face"
+      }
+    },
+    "stone_wall": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "wall_top_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "wall_top_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "masonry_face"
+      }
+    },
+    "fence": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "fence_top"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "fence_face"
+      }
+    },
+    "river": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "river_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "river_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      }
+    },
+    "riverbank": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "riverbank_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "riverbank_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "earth_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_dirt"
+      }
+    },
+    "slag_heap": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "slag_heap_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "slag_heap_2"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "slag_heap_3"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "slag_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_stone"
+      }
     }
   }
 }
