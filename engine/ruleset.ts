@@ -79,6 +79,8 @@ export interface Ruleset {
   surfaceReactions?: SurfaceReaction[];
   /** A creature entered a surface tile, or starts its turn on one. */
   onSurface?(state: GameState, entityId: string, surface: string, trigger: 'enter' | 'turnStart', rng: RngCursor): ActionOutcome;
+  /** End of a full round in combat (conveyor belts move, tides rise). Runs before surfaces age. */
+  onRoundEnd?(state: GameState, round: number, rng: RngCursor): ActionOutcome;
   /** Shoved into something: a wall, or another creature (who may be shoved on: «¡Strike!»). */
   onCollision?(state: GameState, entityId: string, hit: { entityId?: string; wall?: boolean }, push: { dx: number; dy: number; remaining: number }, rng: RngCursor): ActionOutcome;
   /** Shoved off the map into a pit or the void. Without this hook it just stands there. */

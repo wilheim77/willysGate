@@ -1,3 +1,4 @@
+import { surfaceAt } from './surfaces';
 import { type Vec2, samePos, tileAt } from './grid';
 import type { GameState } from './state';
 
@@ -54,7 +55,7 @@ export function obstructionsBetween(state: GameState, a: Vec2, b: Vec2, options:
   for (const p of lineBetween(a, b)) {
     const t = tileAt(state.map, p);
     if (!t || t.terrain === 'void') continue;
-    if (!t.walkable && t.height >= eye || t.height - eye >= BLOCKING_RISE) out.push({ tile: p, kind: 'terrain' });
+    if (!t.walkable && t.height >= eye || t.height - eye >= BLOCKING_RISE || surfaceAt(state, p)?.blocksSight) out.push({ tile: p, kind: 'terrain' });
     for (const blocker of obstacles) {
       if (samePos(blocker.position, p) && !samePos(blocker.position, a) && !samePos(blocker.position, b)) out.push({ tile: p, kind: 'entity', entityId: blocker.id });
     }

@@ -210,7 +210,12 @@ function advanceOrder(ruleset: Ruleset, state: GameState, rng: RngCursor): { sta
   let next: GameState = state;
   const events: GameEvent[] = [];
   if (nextIndex === 0) {
-    next = { ...state, turn: { ...state.turn, round: round + 1 } };
+    if (ruleset.onRoundEnd) {
+      const r = applyOutcome(ruleset, next, ruleset.onRoundEnd(next, round, rng), rng);
+      next = r.state;
+      events.push(...r.events);
+    }
+    next = { ...next, turn: { ...next.turn, round: round + 1 } };
     const aged = ageSurfaces(next, ruleset.surfaces);
     next = aged.state;
     if (aged.changed.length) events.push({ type: 'surfaceChanged', changes: aged.changed } as GameEvent);
