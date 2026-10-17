@@ -94,6 +94,18 @@ describe('objects, cover and line of sight', () => {
     expect(after.entities.b!.resources.hp!.current).toBeLessThan(after.entities.b!.resources.hp!.max);
   });
 
+  it('attacks against objects never miss', () => {
+    const crate = createProp({ id: 'crate', kind: 'crate', position: { x: 3, y: 0 } });
+    const s = fight([pc('mage', 'wizard', 5, 0, 0), monster('b', 'thug', 5, 1), crate], ['......', '......'], 'mage');
+    expect(engine.ruleset.previewAction(s, 'mage', 'spell:fire_bolt', { entityId: 'crate' }).chance).toBe(1);
+    for (let i = 0; i < 20; i++) {
+      const seeded = { ...s, rng: { ...s.rng, a: (s.rng.a + i * 7919) >>> 0 } };
+      const r = engine.apply(seeded, { type: 'act', issuer: 'player:1', entityId: 'mage', actionId: 'spell:fire_bolt', target: { entityId: 'crate' } } as BaseCommand);
+      if (!r.ok) throw new Error(r.error.code);
+      expect(r.state.entities.crate!.resources.hp!.current).toBeLessThan(12);
+    }
+  });
+
   it('crates and barrels give cover; walls block sight', () => {
     const crate = createProp({ id: 'crate', kind: 'crate', position: { x: 2, y: 0 } });
     const s = engine.newGame({ seed: 1, map: asciiMap(['.....', '..#..']), entities: [crate] });

@@ -215,7 +215,11 @@ export class CombatHud {
       const e = ev as GameEvent & Record<string, unknown>;
       switch (ev.type) {
         case 'attackRolled':
-          this.push(`${name(e.attackerId)} → ${name(e.targetId)}: ${formatRoll(e.roll as CheckResult)} ${e.crit ? '¡CRÍTICO!' : e.hit ? 'acierta' : 'falla'}`);
+          this.push(
+            e.roll
+              ? `${name(e.attackerId)} → ${name(e.targetId)}: ${formatRoll(e.roll as CheckResult)} ${e.crit ? '¡CRÍTICO!' : e.hit ? 'acierta' : 'falla'}`
+              : `${name(e.attackerId)} → ${name(e.targetId)}: [${String(e.label)}] impacto seguro`,
+          );
           break;
         case 'saveRolled':
           this.push(`${name(e.entityId)}: ${formatRoll(e.roll as CheckResult)} ${(e.roll as CheckResult).success ? 'supera' : 'falla'}`);

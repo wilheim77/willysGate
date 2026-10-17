@@ -8,6 +8,7 @@ import {
   type RngCursor,
   type Ruleset,
   type Vec2,
+  OBJECT_TAG,
   applyEffects,
   gridDistance,
   hasCondition,
@@ -62,7 +63,8 @@ export interface AttackRolledEvent extends GameEvent {
   attackerId: string;
   targetId: string;
   label: string;
-  roll: CheckResult;
+  /** Absent when the attack cannot miss (objects stand still and are hit automatically). */
+  roll?: CheckResult;
   hit: boolean;
   crit: boolean;
 }
@@ -332,19 +334,26 @@ export function attackPreview(state: GameState, spec: AttackSpec) {
   const cover = coverBetween(state, attacker.position, target.position);
   const ac = armorClass(target) + cover.bonus;
   const autoCrit = spec.melee && (hasCondition(target, 'paralyzed') || hasCondition(target, 'downed'));
-  const chance = chanceToHit(bonus + bless, ac, mode, spec.critOn);
+  const object = target.tags.includes(OBJECT_TAG);
+  const chance = object ? { hit: 1, crit: 0 } : chanceToHit(bonus + bless, ac, mode, spec.critOn);
   const crit = autoCrit ? chance.hit : chance.crit;
   const diceAvg = (d: DiceExpr) => averageOf({ ...d, bonus: 0 });
   const base = averageOf(spec.damage) + (spec.extra ?? []).reduce((s, x) => s + averageOf(x.dice), 0);
   const critExtra = diceAvg(spec.damage) + (spec.extra ?? []).reduce((s, x) => s + diceAvg(x.dice), 0);
-  const expected = adjustForType(target, chance.hit * base + crit * critExtra, spec.damageType);
-  return { chance: chance.hit, crit, expected, mode, reasons, bonus, ac, cover };
+  const expected = adjustForType(target, object ? averageOf(spec.damage) : chance.hit * base + crit * critExtra, spec.damageType);
+  return { chance: chance.hit, crit: object ? 0 : crit, expected, mode, reasons, bonus, ac, cover, object };
 }
 
 export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; crit: boolean } {
   const attacker = r.entity(spec.attackerId);
   const target = r.entity(spec.targetId);
   if (!standing(target) && !hasCondition(target, 'downed')) return { hit: false, crit: false };
+  if (target.tags.includes(OBJECT_TAG)) {
+    // Barrels and crates don't dodge: the attack always lands, never as a critical.
+    r.emit({ type: 'attackRolled', attackerId: attacker.id, targetId: target.id, label: spec.label, hit: true, crit: false } as AttackRolledEvent);
+    dealDamage(r, target.id, Math.max(1, sum(rollDice(r.rng, spec.damage.count, spec.damage.sides)) + spec.damage.bonus), spec.damageType);
+    return { hit: true, crit: false };
+  }
   const { mode } = attackMode(r.state, attacker, target, spec.melee);
   const modifiers = [...spec.modifiers];
   if (hasCondition(attacker, 'blessed')) modifiers.push({ label: 'Bendición', value: r.rng.die(4), term: 'bless' });

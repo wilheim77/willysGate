@@ -451,6 +451,7 @@ function pct(p: number): string {
 }
 
 function attackBreakdown(p: ReturnType<typeof attackPreview>, attacks: number, sneak: boolean): ActionPreview['breakdown'] {
+  if (p.object) return [{ label: 'Impacta siempre (objeto)', value: '100 %', term: 'hit_chance' }, ...(attacks > 1 ? [{ label: 'Ataques', value: String(attacks) }] : [])];
   return [
     { label: 'Probabilidad de acierto', value: pct(p.chance), term: 'hit_chance' },
     { label: 'Bonificador de ataque', value: `${p.bonus >= 0 ? '+' : ''}${p.bonus}`, term: 'attack_bonus' },
