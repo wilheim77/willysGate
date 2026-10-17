@@ -13,6 +13,8 @@ import {
   surfaceCost,
   surfaceHazard,
   hasCondition,
+  isHostile,
+  type Entity,
   isEvent,
   lightPosition,
   lightingOf,
@@ -93,7 +95,7 @@ export class MapScene extends Phaser.Scene {
   private tiles: DrawnTile[] = [];
   private worldObjects: Phaser.GameObjects.GameObject[] = [];
   private sprites = new Map<string, Phaser.GameObjects.Sprite>();
-  private shadows = new Map<string, Phaser.GameObjects.Ellipse>();
+  private shadows = new Map<string, Phaser.GameObjects.Ellipse | Phaser.GameObjects.Sprite>();
   private lighting: LightingLayer | null = null;
   private facing = new Map<string, Dir>();
   private breathing = new Map<string, Phaser.Tweens.Tween>();
@@ -273,8 +275,13 @@ export class MapScene extends Phaser.Scene {
       const tile = tileAt(map, entity.position)!;
       const c = this.grid.tileCentre(entity.position.x, entity.position.y, tile.height);
       const depth = this.grid.depth(entity.position.y, tile.height, 5);
-      // Soft contact shadow, drawn by code so any art pack gets one.
-      const shadow = this.add.ellipse(c.x, c.y, T * 0.7, T * 0.28, 0x000000, 0.35).setDepth(depth - 1);
+      // Under the feet: a ring by side (yours, allies, enemies, bystanders) when the art has one,
+      // otherwise a soft contact shadow drawn by code so any art pack gets one.
+      const ring = this.factionRing(entity, state);
+      const ringArt = ring ? this.manifest.props?.[ring] : undefined;
+      const shadow = ringArt
+        ? this.add.sprite(c.x, c.y, imageKey(ringArt.url)).setDepth(depth - 1).play(`prop:${ring}`)
+        : this.add.ellipse(c.x, c.y, T * 0.7, T * 0.28, 0x000000, 0.35).setDepth(depth - 1);
       const sprite = this.add.sprite(c.x, c.y, imageKey(art.url)).setDepth(depth).setScale(this.baseScale(entity.spriteId));
       this.sprites.set(entity.id, sprite);
       this.shadows.set(entity.id, shadow);
@@ -479,6 +486,7 @@ export class MapScene extends Phaser.Scene {
         this.focusOn(this.hooks.controlledEntityId());
         return;
       }
+      case 'controllerChanged':
       case 'entitySpawned':
       case 'entityDespawned':
       case 'entityChanged':
@@ -546,6 +554,8 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       case 'combatStarted':
+        // Bystanders pulled into the fight change rings.
+        this.refreshRings(state);
         await this.juice.banner(this.texts.combatStart);
         return;
       case 'combatEnded': {
@@ -721,6 +731,26 @@ export class MapScene extends Phaser.Scene {
         this.surfaceObjects.push(g);
       }
     }
+  }
+
+  /** Re-dress the foot rings after sides change (no full rebuild). */
+  private refreshRings(state: GameState): void {
+    for (const [id, old] of this.shadows) {
+      const e = state.entities[id];
+      const ring = e ? this.factionRing(e, state) : null;
+      const art = ring ? this.manifest.props?.[ring] : undefined;
+      if (!art || !(old instanceof Phaser.GameObjects.Sprite)) continue;
+      old.play(`prop:${ring}`);
+    }
+  }
+
+  /** Which foot ring an entity wears, seen from the side of the character the player controls. */
+  private factionRing(entity: Entity, state: GameState): string | null {
+    const me = state.entities[this.hooks.controlledEntityId()];
+    if (!me || entity.tags.includes('object')) return null;
+    if (entity.controllerId === me.controllerId) return 'marker_party';
+    if (entity.tags.includes('noncombatant')) return 'marker_neutral';
+    return isHostile(me, entity) ? 'marker_enemy' : 'marker_ally';
   }
 
   /** Simple code-drawn stand-ins for entities whose art isn't in the pack yet (barrels, crates). */
