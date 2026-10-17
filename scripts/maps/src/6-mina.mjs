@@ -68,13 +68,13 @@ export default {
   },
   lights: [
     { name: 'candil-bocamina', at: [4, 13], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
-    { name: 'candil-torre', at: [17, 12], radius: 3.5, color: '#ffb050', flicker: 0.15 },
+    { name: 'candil-torre', at: [17, 12], radius: 3.5, color: '#ffb050', flicker: 0.15, prop: 'oil_lamp' },
     { name: 'candil-repisa', at: [22, 5], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
-    { name: 'candil-pasarela', at: [29, 15], radius: 3.5, color: '#ffb050', flicker: 0.15 },
+    { name: 'candil-pasarela', at: [29, 15], radius: 3.5, color: '#ffb050', flicker: 0.15, prop: 'oil_lamp' },
     { name: 'brillo-plata', at: [35, 14], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.6 },
-    { name: 'candil-tunel-cripta', at: [15, 25], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7 },
-    { name: 'candil-brecha', at: [30, 15], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7 },
-    { name: 'vela-cripta', at: [3, 26], radius: 2.5, color: '#ffd090', flicker: 0.2, intensity: 0.7 },
+    { name: 'candil-tunel-cripta', at: [15, 25], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7, prop: 'oil_lamp' },
+    { name: 'candil-brecha', at: [30, 15], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7, prop: 'oil_lamp' },
+    { name: 'vela-cripta', at: [3, 26], radius: 2.5, color: '#ffd090', flicker: 0.2, intensity: 0.7, prop: 'candles' },
   ],
   surfaces: [
     { name: 'filtracion', rect: [20, 18, 4, 3], surface: 'water' },
