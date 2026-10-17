@@ -1,0 +1,275 @@
+{
+  "$comment": "D3. Opened by the game after the Vault fight (brea_derrotado), on the Vault map (speaker: none). Every choice sets d3_resuelta and travels back up to the plaza, where the game opens el_cobro.",
+  "id": "boveda_collera",
+  "start": "suelo",
+  "nodes": {
+    "suelo": {
+      "text": "Brea está en el suelo y ya no cuenta nada. La collera ha rodado hasta tus pies. Zumba bajito, como un perro que todavía no sabe que su amo ha muerto y ya está buscando otro.",
+      "next": "callados"
+    },
+    "callados": {
+      "text": "Los Callados que quedan en pie esperan. No miran a Brea. Miran la collera. Te miran a ti.",
+      "choices": [
+        {
+          "text": "Destruirla.",
+          "next": "destruir"
+        },
+        {
+          "text": "Ponérmela.",
+          "next": "poner"
+        },
+        {
+          "text": "Sellar la mina con la pólvora que queda. Con todo dentro.",
+          "next": "sellar"
+        },
+        {
+          "text": "(Escuchar el canto un momento.)",
+          "next": "escuchar"
+        }
+      ]
+    },
+    "escuchar": {
+      "text": "Es bonito. Eso es lo peor: es bonito. Promete que todo el mundo hará lo que tú digas, y que te lo agradecerá.",
+      "next": "callados"
+    },
+    "destruir": {
+      "text": "La collera se resiste al primer golpe y al segundo. Al tercero se parte con un sonido muy pequeño, como un niño que deja de llorar. En las paredes, las venas de plata se apagan una a una. La mina acaba de perder casi todo su valor.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d3_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d3_destruida",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "callados_libres",
+          "value": true
+        }
+      ],
+      "next": "destruir_2"
+    },
+    "destruir_2": {
+      "text": "Los Callados se sientan en el suelo, despacio, como hombres que vuelven de un turno muy largo. Algunos lloran. Otros no tienen ya con qué.",
+      "next": [
+        {
+          "when": {
+            "any": [
+              {
+                "inParty": "garran"
+              },
+              {
+                "flag": "d2_expulsado"
+              }
+            ]
+          },
+          "next": "ivo_1"
+        },
+        {
+          "next": "destruir_fin"
+        }
+      ]
+    },
+    "ivo_1": {
+      "speaker": "ivo",
+      "text": "Garrán. Hermano. Has tardado.",
+      "next": "ivo_2"
+    },
+    "ivo_2": {
+      "speaker": "garran",
+      "text": "Tenía trabajo fuera.",
+      "next": "ivo_3"
+    },
+    "ivo_3": {
+      "speaker": "ivo",
+      "text": "Ya. Siempre. Contamos los días, ¿sabes? Yo llevaba la cuenta. Llegué a treinta y uno. Luego vino él y ya no hacía falta contar.",
+      "next": "ivo_4"
+    },
+    "ivo_4": {
+      "text": "Ivo cierra los ojos. No los vuelve a abrir. El metal se lo llevó hace meses; sólo le ha devuelto lo justo para despedirse.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "ivo_muerto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "ivo_se_despidio",
+          "value": true
+        }
+      ],
+      "next": "destruir_fin"
+    },
+    "destruir_fin": {
+      "speaker": "dorotea",
+      "text": "La mina valía cien veces la deuda. Ahora vale la deuda, con suerte. Le apunto, cobrador. No sé si como pérdida.",
+      "effects": [
+        {
+          "type": "travel",
+          "mapId": "plaza",
+          "spawn": "entry-escorial"
+        }
+      ]
+    },
+    "poner": {
+      "text": "La collera está fría y luego no. Se cierra sola. El canto entra por la nuca y se instala detrás de los ojos como un inquilino que ya ha pagado el año.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d3_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d3_puesta",
+          "value": true
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "collera",
+          "count": 1
+        },
+        {
+          "type": "setFlag",
+          "flag": "oye_el_canto",
+          "value": true
+        }
+      ],
+      "next": "poner_2"
+    },
+    "poner_2": {
+      "text": "Los Callados se vuelven hacia ti. Todos a la vez. Esperan órdenes. Uno de ellos tiene la cara de Garrán, pero más fina.",
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "poner_garran"
+        },
+        {
+          "next": "poner_fin"
+        }
+      ]
+    },
+    "poner_garran": {
+      "speaker": "garran",
+      "text": "Quítatela.",
+      "next": "poner_garran_2"
+    },
+    "poner_garran_2": {
+      "speaker": "hero",
+      "text": "Ahora mismo, Ivo me obedece. Ivo está vivo porque me obedece.",
+      "next": "poner_garran_3"
+    },
+    "poner_garran_3": {
+      "speaker": "garran",
+      "text": "Ya. Por eso. No sé si darte las gracias o romperte el cuello. Las dos cosas me salen igual de mal.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_odia_collera",
+          "value": true
+        }
+      ],
+      "next": "poner_fin"
+    },
+    "poner_fin": {
+      "text": "Subís a la superficie con una docena de mineros que no hablan detrás de ti. El canto te acompaña todo el camino. Es muy buena compañía. Ese es el problema.",
+      "effects": [
+        {
+          "type": "travel",
+          "mapId": "plaza",
+          "spawn": "entry-escorial"
+        }
+      ]
+    },
+    "sellar": {
+      "text": "Quedan seis barriles de pólvora y una mecha buena. Alguien que sepa de cargas lo haría en una hora.",
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "sellar_garran"
+        },
+        {
+          "next": "sellar_solo"
+        }
+      ]
+    },
+    "sellar_solo": {
+      "text": "Lo haces tú, despacio y mal, y aun así funciona. La explosión llega a la superficie como un trueno de dentro. La Bóveda, los Callados y la plata viva se quedan donde estaban hace mil años: debajo de todo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d3_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d3_sellada",
+          "value": true
+        }
+      ],
+      "next": "sellar_fin"
+    },
+    "sellar_garran": {
+      "speaker": "garran",
+      "text": "Yo pongo las cargas. Es lo que sé hacer. Pero esta vez me quedo del lado de dentro.",
+      "next": "sellar_garran_2"
+    },
+    "sellar_garran_2": {
+      "speaker": "garran",
+      "text": "Ivo contó treinta y un días solo. No va a contar más. Subid. Contad hasta cien antes de mirar atrás. No miréis atrás.",
+      "next": "sellar_garran_3"
+    },
+    "sellar_garran_3": {
+      "text": "Contáis hasta cien. Nadie llega. La explosión llega a la superficie como un trueno de dentro. Garrán Tizón puso sus últimas cargas como las primeras: bien.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d3_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d3_sellada",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "garran_se_queda_abajo",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "garran_reclutado",
+          "value": false
+        },
+        {
+          "type": "setController",
+          "entityId": "garran",
+          "controllerId": "ai",
+          "factionId": "neutral"
+        }
+      ],
+      "next": "sellar_fin"
+    },
+    "sellar_fin": {
+      "text": "La Santa Pala lo celebrará con campanas. El pueblo, en cuanto haga cuentas, se quedará sin futuro. Las dos cosas a la vez, como pasa siempre en Hondonegra.",
+      "effects": [
+        {
+          "type": "travel",
+          "mapId": "plaza",
+          "spawn": "entry-escorial"
+        }
+      ]
+    }
+  }
+}

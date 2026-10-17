@@ -1,0 +1,223 @@
+{
+  "$comment": "Scene 5. Mina scene zone «galeria-sellada» (speaker garran). D2: cover up, make him confess, or send him away. Every route sets d2_resuelta (the ambush that follows requires it). Sending him away hands Garrán back to the AI; the Vault should then spawn him wounded and on nobody's side.",
+  "id": "galeria_sellada",
+  "start": "muro",
+  "nodes": {
+    "muro": {
+      "text": "La Galería Sellada termina en un muro de escombro que no cayó solo: tiene la forma limpia de una voladura bien hecha. Alguien lo ha abierto desde este lado, hace poco, lo justo para que pase un hombre con un saco.",
+      "next": "dentro"
+    },
+    "dentro": {
+      "text": "Detrás están los cuarenta. Lo que queda. Huesos con ropa de mina, sentados contra las paredes en filas, como en misa. En la roca, a la altura de una mano, hay rayas: cientos, en grupos de cinco. Contaban los días.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "restos_cuarenta",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "inParty": "anselmo"
+          },
+          "next": "rayas"
+        },
+        {
+          "next": "mecha"
+        }
+      ]
+    },
+    "rayas": {
+      "speaker": "anselmo",
+      "text": "Siguieron vivos. Ahí dentro. Un mes, por lo menos. Que algún dios, el que sea, se apiade. Y si es de los que cobran, que me cobre a mí.",
+      "next": "mecha"
+    },
+    "mecha": {
+      "text": "Junto al muro hay un rollo de mecha de barrenero, del bueno, cortado a medida. Y clavada en una astilla, una hoja de nómina del barón, húmeda pero legible: «Tizón, G. Cargas, Garganta. Treinta coronas. Pagado.»",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "nomina_tizon",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "garran_1"
+        },
+        {
+          "next": "sin_garran"
+        }
+      ]
+    },
+    "sin_garran": {
+      "text": "Treinta coronas. Garrán Tizón cerró la Garganta. Lo que hicieran con eso los que quedaron dentro ya no se puede preguntar a nadie.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d2_resuelta",
+          "value": true
+        }
+      ]
+    },
+    "garran_1": {
+      "speaker": "garran",
+      "text": "…",
+      "next": "garran_2"
+    },
+    "garran_2": {
+      "speaker": "garran",
+      "text": "Brea me dijo que estaban muertos. Que el grisú los había matado a todos y que había que cerrar antes de que el gas llegara al pueblo. Me dio treinta coronas. Puse las cargas. Me fui esa noche.",
+      "next": "garran_3"
+    },
+    "garran_3": {
+      "speaker": "garran",
+      "text": "No miré. No quise mirar. Ivo estaba aquí. Ivo contó los días.",
+      "next": "dorotea_1"
+    },
+    "dorotea_1": {
+      "speaker": "dorotea",
+      "text": "Figura en la nómina desde hace ocho meses. Yo la tengo copiada. Lo sabía desde el primer día, cobrador. Es mi trabajo saber quién cobró qué.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "dorotea_sabia_garran",
+          "value": true
+        }
+      ],
+      "next": "decision"
+    },
+    "decision": {
+      "speaker": "garran",
+      "text": "Decide tú. Yo ya decidí una vez y mira.",
+      "choices": [
+        {
+          "text": "Aquí no ha pasado nada. Nadie más tiene que saberlo.",
+          "next": "encubrir"
+        },
+        {
+          "text": "Cuando salgamos, se lo contarás a Nella. A todos.",
+          "next": "confesar"
+        },
+        {
+          "text": "Fuera. No quiero a mi lado al que cerró esta puerta.",
+          "next": "echar"
+        },
+        {
+          "text": "(Callar un momento más.)",
+          "next": "silencio"
+        }
+      ]
+    },
+    "silencio": {
+      "text": "El silencio de la galería es de los que ya han oído de todo. Garrán espera. Los cuarenta, también; tienen más práctica.",
+      "next": "decision"
+    },
+    "encubrir": {
+      "speaker": "garran",
+      "text": "Nada. Bien. Nada.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d2_encubierto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "dorotea_palanca_garran",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d2_resuelta",
+          "value": true
+        }
+      ],
+      "next": "encubrir_2"
+    },
+    "encubrir_2": {
+      "speaker": "dorotea",
+      "text": "Le apunto.",
+      "next": "encubrir_3"
+    },
+    "encubrir_3": {
+      "speaker": "hero",
+      "text": "¿El qué?",
+      "next": "encubrir_4"
+    },
+    "encubrir_4": {
+      "speaker": "dorotea",
+      "text": "Que hoy no ha pasado nada. Las cosas que no pasan son las que más caro se cobran, cobrador. Lo verá."
+    },
+    "confesar": {
+      "speaker": "garran",
+      "text": "Se lo contaré. Y después que hagan lo que quieran. Pero primero bajo a por Ivo. Si está vivo, que me mire a la cara antes que nadie.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d2_confesara",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "garran_sin_nada_que_perder",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d2_resuelta",
+          "value": true
+        }
+      ],
+      "next": "confesar_2"
+    },
+    "confesar_2": {
+      "text": "Garrán se aprieta las botas que no son suyas. Ya no parece que le aprieten."
+    },
+    "echar": {
+      "speaker": "garran",
+      "text": "Me parece justo. Yo tampoco me querría.",
+      "next": "echar_2"
+    },
+    "echar_2": {
+      "text": "Garrán coge la mecha, la mira, la tira. Luego echa a andar galería abajo, hacia la oscuridad, solo. No se vuelve. Los que ponen cargas nunca se vuelven: saben lo que viene detrás.",
+      "effects": [
+        {
+          "type": "setController",
+          "entityId": "garran",
+          "controllerId": "ai",
+          "factionId": "neutral"
+        },
+        {
+          "type": "setEntity",
+          "entityId": "garran",
+          "removeTags": [
+            "dialogue:garran"
+          ],
+          "addTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "garran_reclutado",
+          "value": false
+        },
+        {
+          "type": "setFlag",
+          "flag": "d2_expulsado",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d2_resuelta",
+          "value": true
+        }
+      ]
+    }
+  }
+}

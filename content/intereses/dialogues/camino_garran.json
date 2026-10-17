@@ -1,15 +1,37 @@
 {
-  "$comment": "Prologue. Garrán sits in the ditch (entity garran, noncombatant, controller ai). Recruiting needs no roll.",
+  "$comment": "Prologue. Garrán sits in the ditch (entity garran, noncombatant, controller ai); a road scene zone opens this tree so the meeting is unavoidable. Every ending recruits him, without a roll.",
   "id": "camino_garran",
-  "start": "cuneta",
+  "start": "mira",
   "nodes": {
+    "mira": {
+      "speaker": "garran",
+      "text": "¿Qué miras?",
+      "next": [
+        {
+          "when": {
+            "notFlag": "garran_visto"
+          },
+          "next": "cuneta"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
     "cuneta": {
       "text": "En la cuneta hay un semiorco sentado sobre una piedra. Es grande, de los que se ven antes de verse. Va descalzo y tiene una bota en cada mano. Ninguna de las dos parece suya. Tampoco parecen ser de la misma persona.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_visto",
+          "value": true
+        }
+      ],
       "next": "hub"
     },
     "hub": {
       "speaker": "garran",
-      "text": "¿Qué?",
+      "text": "Habla. O no hables. La piedra es cómoda.",
       "choices": [
         {
           "id": "botas",
@@ -229,7 +251,17 @@
     },
     "recluta": {
       "text": "Garrán se pone las botas. La izquierda le aprieta. No dice nada: es de los que no dicen nada cuando algo aprieta.",
+      "next": "recluta_2"
+    },
+    "recluta_2": {
+      "speaker": "garran",
+      "text": "Voy a buscar a mi hermano. Ivo. Si en el camino hay que pegar a alguien, pego. Si hay que cobrar, cobráis vosotros.",
       "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_busca_ivo",
+          "value": true
+        },
         {
           "type": "setController",
           "entityId": "garran",
@@ -255,7 +287,13 @@
       ]
     },
     "adios": {
-      "text": "Garrán se encoge de hombros. Sigue mirando las botas, como si fueran a decirle algo que todavía no está preparado para oír."
+      "text": "Garrán se encoge de hombros, se pone las botas y echa a andar detrás de vosotros. Nadie le ha invitado. No parece que eso le haya detenido nunca.",
+      "next": "adios_2"
+    },
+    "adios_2": {
+      "speaker": "garran",
+      "text": "El camino es de todos. Y voy al mismo sitio. Me llamo Garrán, por si luego hay que gritarlo.",
+      "next": "recluta_2"
     }
   }
 }

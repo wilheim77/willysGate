@@ -14,6 +14,7 @@ import {
 } from '../../engine';
 import { createCharacter, createMonster, createProp, dnd5e, SURFACES } from '../../rulesets/dnd5e';
 import testMap from '../../content/intereses/maps/test.json';
+import { ACT_MAPS, buildMap } from '../../content/intereses/world';
 
 /**
  * Rebuilds the Intereses world purely from content JSON + the engine/ruleset, without
@@ -45,7 +46,10 @@ export function loadItems(): Record<string, unknown> {
 export const MAPS: Record<string, TiledMapJson> = { test: testMap as TiledMapJson };
 
 export function makeEngine() {
-  return createEngine(dnd5e, 'qa', { dialogues: loadDialogues() });
+  const dialogues = loadDialogues();
+  // The act's maps, so dialogues that `travel` can be walked to the end.
+  const maps = Object.fromEntries(Object.keys(ACT_MAPS).map((id) => [id, () => buildMap(id, dialogues)]));
+  return createEngine(dnd5e, 'qa', { dialogues, maps });
 }
 
 /** Builds the same world content/intereses/game.ts does for `mapId`, for a given seed. */

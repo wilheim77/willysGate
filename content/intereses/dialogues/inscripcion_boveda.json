@@ -1,0 +1,110 @@
+{
+  "$comment": "Scene 6. Object for the todo-inscripcion spawn in the Vault. An elf or dwarf protagonist can learn the origin of the feud with History DC 13 (optional lore, not critical).",
+  "id": "inscripcion_boveda",
+  "start": "piedra",
+  "nodes": {
+    "piedra": {
+      "text": "En el centro de la Bóveda hay una losa con dos escrituras talladas una encima de otra. La de abajo es élfica, antiquísima. La de arriba, enana, y está tallada encima de la otra a golpe de cincel, como quien tapa una firma.",
+      "choices": [
+        {
+          "id": "elfo",
+          "text": "[Elfo] (Leer la escritura de abajo.)",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "check": {
+            "check": "history",
+            "dc": 13,
+            "success": "historia",
+            "failure": "historia_mal"
+          }
+        },
+        {
+          "id": "enano",
+          "text": "[Enano] (Leer la escritura de arriba.)",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "check": {
+            "check": "history",
+            "dc": 13,
+            "success": "historia",
+            "failure": "historia_mal"
+          }
+        },
+        {
+          "id": "otro",
+          "text": "(Intentar leer algo.)",
+          "once": true,
+          "when": {
+            "all": [
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "elf"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "rule": "race",
+                  "params": {
+                    "is": "dwarf"
+                  }
+                }
+              }
+            ]
+          },
+          "next": "otro"
+        },
+        {
+          "text": "Dejarla."
+        }
+      ]
+    },
+    "historia": {
+      "text": "Abajo, en élfico: «Aquí duerme el metal que canta. Lo sellamos para que no despierte a quien lo trabaje.» Arriba, en enano: «Abierta por el clan de la Honda. Lo que se encuentra bajo tierra es de quien lo cava.»",
+      "next": "historia_2"
+    },
+    "historia_2": {
+      "text": "No fue el bosque. Nunca fue el bosque. Los enanos abrieron una bóveda que los elfos habían sellado, oyeron el canto y se mataron entre ellos, y los elfos cobraron la culpa durante tres siglos con intereses. El Pleito de las Raíces es la factura de esto, emitida con otro concepto.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "origen_enemistad",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "garran"
+        },
+        {}
+      ]
+    },
+    "garran": {
+      "speaker": "garran",
+      "text": "Trescientos años peleando por unos árboles para no hablar de esto. Os parecéis más de lo que creéis."
+    },
+    "historia_mal": {
+      "text": "Reconoces algunas palabras: «sellado», «metal», «clan». Las demás llevan demasiado tiempo calladas para ti.",
+      "next": "piedra"
+    },
+    "otro": {
+      "text": "Dos escrituras, una tapando a la otra. No hace falta saber leerlas para entender que alguien quiso tener la última palabra.",
+      "next": "piedra"
+    }
+  }
+}

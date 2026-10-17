@@ -242,7 +242,12 @@
       "next": "repaso"
     },
     "marcha": {
-      "text": "Dorotea cierra el libro con un golpe seco, el único ruido que hace en todo el día. El camino sigue bajando. Hondonegra, como todas las deudas, está más lejos de lo que parecía."
+      "text": "Dorotea cierra el libro con un golpe seco, el único ruido que hace en todo el día. El camino sigue bajando. Hondonegra, como todas las deudas, está más lejos de lo que parecía.",
+      "next": "cuneta"
+    },
+    "cuneta": {
+      "speaker": "dorotea",
+      "text": "Una cosa más. Más adelante, en la cuneta, hay un semiorco sentado con dos botas en la mano. Lleva ahí desde que se ve el camino. O es un problema o es una oportunidad. Usted dirá cuál; yo apunto las dos."
     }
   }
 }
