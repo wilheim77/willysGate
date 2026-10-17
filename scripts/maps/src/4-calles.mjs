@@ -27,7 +27,7 @@ c.put(5, 21, '+');
 c.rect(16, 14, 11, 6, '#');
 c.rect(16, 13, 11, 1, '=', 1); // the storehouse's loading dock (h1): a little height over the street
 c.rect(29, 13, 2, 11, '~', 0); // the Lloro
-c.rect(28, 13, 1, 11, 'b', 0).rect(31, 13, 1, 11, 'b', 0); // its banks
+c.rect(28, 13, 1, 11, 'Y', 0).rect(31, 13, 1, 11, 'Z', 0); // its banks (water to the east / west)
 // Exterior art: cobbles on the street, scrub in the yards, timber houses, stone for the chapel
 // rock face and the pawnshop.
 c.retile((t, h, x, y) => {

@@ -34,7 +34,10 @@ export const TERRAIN_CHARS = {
   I: 'road_v',
   m: 'mud',
   '~': 'river',
-  b: 'riverbank',
+  b: 'riverbank', // water to the north
+  X: 'riverbank_s',
+  Y: 'riverbank_e',
+  Z: 'riverbank_w',
   f: 'fence',
   h: 'house',
   g: 'house_plain',
