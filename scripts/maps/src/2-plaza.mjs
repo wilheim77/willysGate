@@ -60,9 +60,9 @@ export default {
     // The trial (scene 1).
     anselmo: [10, 6],
     cirilo: [12, 7],
-    fanatico_1: [8, 9],
-    fanatico_2: [13, 9],
-    fanatico_3: [6, 8],
+    'fanatico_pala-1': [8, 9],
+    'fanatico_pala-2': [13, 9],
+    'fanatico_pala-3': [6, 8],
     'gallows-1': [9, 6],
     // The Cuadrilla, by the inn.
     nella: [23, 12],
@@ -100,7 +100,7 @@ export default {
         name: 'juicio-anselmo',
         // Opens as soon as the party walks into the square from the road (west half).
         rect: [0, 8, 16, 11],
-        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, fight: 'fanatico_1,fanatico_2,fanatico_3,cirilo' },
+        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, fight: 'fanatico_pala-1,fanatico_pala-2,fanatico_pala-3,cirilo' },
       },
     ],
   },

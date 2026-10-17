@@ -87,8 +87,8 @@ scenes mineros-cortan-el-paso (16,7 2x5) {"dialogue":"camino_mineros","speaker":
 ######################....####   ######################2222####
 ######################.B..####   ######################2222####
 ######################.*..####   ######################1111####
-#,,,,,,,####,,,,,,,,,,.O..####   #0000000####00000000001111####
-#,,,,,,,####,,,,,,,,,,,,,P####   #0000000####00000000000000####
+#,,,,,,,####,,,,,,,,,,.P..####   #0000000####00000000001111####
+#,,,,,,,####,,,,,,,,,,,,,Q####   #0000000####00000000000000####
 #,,,,,,==TF====,,,,,,,,,,,####   #0000001222222100000000000####
 #,,,,,,=====G==,,,,,,,,,,,####   #0000001222222100000000000####
 #,,,,,K*,,,,,,,o,,,,,,,,,,,,,E   #00000000000000000000000000000
@@ -98,8 +98,8 @@ scenes mineros-cortan-el-paso (16,7 2x5) {"dialogue":"camino_mineros","speaker":
 #.....,,,,,,,,,,,O,,,,,L,*####   #111110000000000000000000#####
 #,,,,,,,,,,,,,,,,,,u,,,,M#####   #000000000000000000000000#####
 E,,,,,,,,,,,,,,,www,,,N,,#####   0000000000000000000000000#####
-E,A,,,,,,,,,,,,,,,,,,,,,,#####   0000000000000000000000000#####
-E,,,,,,,,,,,,,,,,,,,x,,,,#####   0000000000000000000000000#####
+E,A,,,,,,,,,,,,,,,,,,,,,,/####   00000000000000000000000000####
+E,,,,,,,,,,,,,,,,,,,x,,,O#####   0000000000000000000000000#####
 #,,,,,,,,,,,,,,,,,,,,,,,,#####   #000000000000000000000000#####
 #,,,,,,,,,,,,,,,,,,,,,,,,#####   #000000000000000000000000#####
 ############,D,###############   ############000###############
@@ -115,17 +115,17 @@ C entry-calles (27,9)
 D entry-escorial (13,19)
 F anselmo (10,6)
 G cirilo (12,7)
-I fanatico_1 (8,9)
-J fanatico_2 (13,9)
-K fanatico_3 (6,8)
+I fanatico_pala-1 (8,9)
+J fanatico_pala-2 (13,9)
+K fanatico_pala-3 (6,8)
 L nella (23,12)
 M odda (24,13)
 N minero_cuadrilla-1 (22,14)
-O guardia_abadia (23,4)
-P guardia_baron-1 (25,5)
+O posadera (24,16)
+P guardia_abadia (23,4)
+Q guardia_baron-1 (25,5)
 props: gallows-1, crate-1, crate-2, barrel-1, barrel_oil-1, well-1, barrel-2, crate-3
-scenes llegada (0,13 4x5) {"dialogue":"plaza_llegada","once":true}
-scenes juicio-anselmo (5,8 11x4) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"requiresFlag":"llegada_hondonegra","fight":"fanatico_1,fanatico_2,fanatico_3,cirilo"}
+scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"fight":"fanatico_pala-1,fanatico_pala-2,fanatico_pala-3,cirilo"}
 ```
 
 ### `abadia`
@@ -209,8 +209,8 @@ B entry-escorial (31,11)
 C cirilo (14,2)
 D fiel_pala-1 (12,3)
 F fiel_pala-2 (17,3)
-G viuda-1 (23,3)
-I viuda-2 (27,4)
+G benita (23,3)
+I casilda (27,4)
 J viuda-3 (24,6)
 K lisandro (7,16)
 props: door-trastienda, door-patio_lisandro, chest-libro_cuentas, crate-1, crate-2, barrel-1, barrel_oil-1, crate-3, crate-4
