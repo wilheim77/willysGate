@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { type GridMap, type Tile, type Vec2, posKey, reachableTiles } from '../../engine';
 import { SURFACES } from '../../rulesets/willy/environment';
+import { willy } from '../../rulesets/willy';
 import ninja from '../../content/willy/assets/ninja.json';
 import floors from '../../content/willy/data/floors.json';
 
@@ -30,7 +31,7 @@ interface Biome {
   bioma?: string;
   celda?: { ancho: number; alto: number };
   terreno: Record<string, LegendEntry>;
-  trampas?: Record<string, { nombre: string; detect: number; dif: number; dano?: string }>;
+  trampas?: Record<string, { nombre: string; detect: number; dif: number; dano?: string; efecto?: string }>;
   salas: Room[];
 }
 
@@ -79,6 +80,8 @@ describe('Willy room chunks', () => {
           const trap = biome.trampas?.[t];
           expect(trap, `${id}: trap ${t}`).toBeDefined();
           if (trap) expect(typeof trap.detect === 'number' && typeof trap.dif === 'number' && !!trap.nombre, `${id}: trap ${t} params`).toBe(true);
+          // efecto is a condition the trap applies (rulesets/willy/environment.ts).
+          if (trap?.efecto) expect(willy.conditions[trap.efecto], `${id}: trap ${t} efecto ${trap.efecto}`).toBeDefined();
         }
       });
 

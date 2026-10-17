@@ -1,10 +1,7 @@
 {
   "$comment": "Room chunks for «El Plató» (15x13 cells, generator: content/willy/gen/floor.ts). Written by the map agent. Marker chars: e enemy, c chest, t trap, b barrel, B gas barrel, l light, P arrival, J boss, X stairs down.",
   "bioma": "plato",
-  "celda": {
-    "ancho": 15,
-    "alto": 13
-  },
+  "version": 1,
   "terreno": {
     ".": {
       "terrain": "plato"
@@ -61,14 +58,14 @@
       "detect": 13,
       "dif": 13,
       "dano": "1d6",
-      "efecto": "caida"
+      "efecto": "tumbado"
     },
     "cable-pelado": {
       "nombre": "Cable pelado",
       "detect": 12,
       "dif": 13,
       "dano": "2d6",
-      "efecto": "electrificada"
+      "efecto": "electrocutado"
     }
   },
   "salas": [
@@ -119,6 +116,52 @@
       ]
     },
     {
+      "id": "plato-recepcion",
+      "nombre": "Recepción de público",
+      "roles": [
+        "inicio"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.ggg.....ggg.#",
+        "#.............#",
+        "#..mmmmmmmmm..#",
+        "#..mmmmmmmmm..#",
+        "#..mmmmPmmmm..#",
+        "#..mmmmmmmmm..#",
+        "#.............#",
+        "#.b....l....b.#",
+        "#.............#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-control",
+      "nombre": "Sala de control",
+      "roles": [
+        "jefe"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.rrrrr.rrrrr.#",
+        "#.rRRRr.rRRRr.#",
+        "#.rrrrr.rrrrr.#",
+        "#..e.......e..#",
+        "#......J......#",
+        "#......l......#",
+        "#.............#",
+        "#.c....c....c.#",
+        "#.X...........#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
       "id": "plato-concursos",
       "nombre": "Plató de concursos",
       "roles": [
@@ -137,7 +180,7 @@
         "#...##...##...#",
         "#.............#",
         "#..vv..e..yy..#",
-        "#..vv.....yy..#",
+        "#..vv..c..yy..#",
         "#.............#",
         "###############"
       ]
@@ -184,7 +227,7 @@
         "#.#..#...#..#.#",
         "#.#..#...#..#.#",
         "#......e......#",
-        "#.b.........B.#",
+        "#.b....c....B.#",
         "#.............#",
         "###############"
       ]
@@ -207,7 +250,7 @@
         "#...rrrrrrr...#",
         "#...rRRRRRr...#",
         "#...rrrrrrr...#",
-        "#....e...e....#",
+        "#..c.e...e.c..#",
         "#.............#",
         "###############"
       ]
@@ -322,7 +365,7 @@
         "#.mmmmmmmmmmm.#",
         "#.m#m#m#m#m#m.#",
         "#.mmmmmmmmmmm.#",
-        "#.............#",
+        "#......c......#",
         "#.............#",
         "###############"
       ]

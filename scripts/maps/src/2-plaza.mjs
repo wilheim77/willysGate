@@ -106,9 +106,8 @@ export default {
   ],
   zones: {
     scenes: [
-      // D1: back in the square once the smuggling access is found; then, after storming the abbey, the gallows.
+      // D1: back in the square once the smuggling access is found (d1_horca and d1_abadia_final open from triggers.json).
       { name: 'noche-antorchas', rect: [1, 4, 25, 15], props: { dialogue: 'noche_antorchas', speaker: 'nella', once: true, requiresFlag: 'acceso_contrabando', unlessFlag: 'd1_resuelto' } },
-      { name: 'd1-horca', rect: [1, 4, 25, 15], props: { dialogue: 'd1_horca', speaker: 'nella', once: true, requiresFlag: 'd1_cuadrilla' } },
       {
         name: 'juicio-anselmo',
         // Opens as soon as the party walks into the square from the road (west half).

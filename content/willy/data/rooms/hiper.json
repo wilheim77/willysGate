@@ -1,10 +1,7 @@
 {
   "$comment": "Room chunks for floor 2, «Hipermercado Eterno» (15x11 cells, generator: content/willy/gen/floor.ts). Written by the map agent. Format: docs/willy/DESIGN.md §3 and the castro.json sample. Marker chars: e enemy, c chest, t trap, b barrel, B gas barrel, l light, P arrival, J boss, X stairs down.",
   "bioma": "hiper",
-  "celda": {
-    "ancho": 15,
-    "alto": 11
-  },
+  "version": 1,
   "terreno": {
     ".": {
       "terrain": "hiper"
@@ -95,6 +92,48 @@
         "#......l......#",
         "#...uuu.uuu...#",
         "#.X.uuu.uuu.c.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-parking",
+      "nombre": "Parking subterráneo",
+      "roles": [
+        "inicio"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.............#",
+        "#..#..#.#..#..#",
+        "#.............#",
+        "#......P......#",
+        "#.............#",
+        "#..#..#.#..#..#",
+        "#.b.........b.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-oficina-central",
+      "nombre": "Oficina central",
+      "roles": [
+        "jefe"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.uuuuu.uuuuu.#",
+        "#.u...u.u...u.#",
+        "#.............#",
+        "#..e...J...e..#",
+        "#......l......#",
+        "#.##.......##.#",
+        "#.Xc.......c..#",
         "#......o......#",
         "###############"
       ]
