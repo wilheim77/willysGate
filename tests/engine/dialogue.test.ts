@@ -143,4 +143,36 @@ describe('dialogue', () => {
     const picked = engine.apply(lost, { type: 'chooseOption', issuer: 'player:1', index: 0 } as BaseCommand);
     expect(picked.ok && dialogueOf(picked.state)).toBeNull();
   });
+
+  it('G1-G3: conditional next, inParty, and consequences when the fight ends', () => {
+    const tree: DialogueTree = {
+      id: 'g',
+      start: 'a',
+      nodes: {
+        a: { text: '…', next: [{ when: { inParty: 'guard' }, next: 'withGuard' }, { next: 'alone' }] },
+        withGuard: { text: 'Con el guardia.' },
+        alone: { text: 'Solo.', choices: [{ text: 'Pelear', effects: [{ type: 'startCombat', factions: ['watch'], onVictory: [{ type: 'setFlag', flag: 'won', value: true }] }] }, { text: 'Irse' }] },
+      },
+    };
+    const e = createEngine(toyRuleset, 'test', { dialogues: { g: tree } });
+    const start = (s: GameState) => {
+      const r = e.apply(s, { type: 'startDialogue', issuer: 'system', treeId: 'g', actorId: 'hero' } as BaseCommand);
+      if (!r.ok) throw new Error(r.error.message);
+      return r.state;
+    };
+    const cont = (s: GameState, index = 0) => {
+      const r = e.apply(s, { type: 'chooseOption', issuer: 'player:1', index } as BaseCommand);
+      if (!r.ok) throw new Error(r.error.message);
+      return r.state;
+    };
+    expect(dialogueOf(cont(start(world())))?.nodeId).toBe('alone');
+    const friendly = { ...world(), entities: { ...world().entities, guard: { ...world().entities.guard!, controllerId: 'player:1' } } };
+    expect(dialogueOf(cont(start(friendly)))?.nodeId).toBe('withGuard');
+    // Win the fight: the hook sets the flag.
+    let s = cont(cont(start(world())), 0);
+    expect(s.turn.mode).toBe('combat');
+    s = e.applyEffects(s, [{ type: 'modifyResource', entityId: 'guard', resource: 'blood', delta: -10 }]).state;
+    const r = e.apply(s, { type: 'endTurn', issuer: 'system', entityId: s.turn.activeEntityId! } as BaseCommand);
+    expect(r.ok && r.state.flags.won).toBe(true);
+  });
 });

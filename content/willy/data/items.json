@@ -164,6 +164,30 @@
       ] },
       "etiquetas": ["comida", "curacion"], "valor": 4 },
 
+    { "id": "cana-de-pescar", "nombre": "Caña de pescar del abuelo", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "Ha pescado lubinas, chipirones y, una vez, la dentadura de un concejal. La devolvió. Casi.",
+      "regla": "Alcance 3. Enganchas a un enemigo: 1d3 y lo atraes 1 casilla hacia ti.",
+      "usar": { "objetivo": "enemigo", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d3", "element": "golpe" },
+        { "type": "push", "entityId": "$target", "from": "$self", "distance": -1 }
+      ] }, "valor": 5 },
+    { "id": "rodillo-de-cocina", "nombre": "Rodillo de cocina", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "De madera de haya, con cuarenta años de masa de empanada encima. Las abuelas del norte saben por qué no es solo para cocinar.",
+      "regla": "Golpe de 1d6. +2 al daño contra enemigos Tumbados.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe", "bonusSi": { "condicion": "tumbado", "bonus": 2 } }
+      ] }, "valor": 5 },
+    { "id": "share-embotellado", "nombre": "Share embotellado", "rareza": "legendaria", "tipo": "consumible", "unico": true,
+      "descripcion": "Un frasquito sacado del camerino del presentador. Huele a laca y a once mil años de prime time. Dicen que un sorbo te quita una década. Willy no tiene una década que quitarse, pero oye.",
+      "regla": "Una vez: recuperas toda la vida y la energía, ganas un 25 % de audiencia y quedas Animado 3 turnos.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "heal", "entityId": "$self", "amount": "100%vidaMax" },
+        { "type": "modifyResource", "entityId": "$self", "resource": "energia", "delta": 99 },
+        { "type": "modifyMeter", "meter": "audiencia", "pct": 25, "cause": "share-embotellado" },
+        { "type": "applyCondition", "entityId": "$self", "condition": "animado", "remainingTurns": 3 }
+      ] },
+      "desbloqueo": "logro:apagon-de-audiencia", "valor": 60 },
+
     { "id": "tirita-de-dibujos", "nombre": "Tirita de dibujos", "rareza": "bronce", "tipo": "consumible",
       "descripcion": "Con un dragoncito sonriente. Cura poco, pero anima mucho.",
       "regla": "Recuperas 3 de vida y se quita Envenenado.",
@@ -191,7 +215,7 @@
         { "type": "spawnSurface", "at": "$tile", "surface": "fuego", "radius": 0 }
       ] }, "valor": 4 },
     { "id": "cubo-de-agua", "nombre": "Cubo de agua", "rareza": "bronce", "tipo": "consumible",
-      "descripcion": "Agua del Cantábrico, con su sal y sus cosas flotando.",
+      "descripcion": "Agua del Cantábrico, con su sal, su yodo y sus cosas flotando que es mejor no mirar.",
       "regla": "Lanza (alcance 3): charco de agua de radio 1. Apaga el fuego.",
       "usar": { "objetivo": "casilla", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
         { "type": "spawnSurface", "at": "$tile", "surface": "agua", "radius": 1 }
@@ -319,7 +343,7 @@
         { "type": "spawnSurface", "at": "$tile", "surface": "toxico", "radius": 1 }
       ] }, "valor": 11 },
     { "id": "extintor", "nombre": "Extintor de nieve carbónica", "rareza": "plata", "tipo": "consumible",
-      "descripcion": "Escupe una niebla helada que apaga incendios y, de paso, congela al que está detrás.",
+      "descripcion": "Revisado por última vez en 2009. Aun así funciona mejor que el de tu comunidad de vecinos, que nunca ha funcionado.",
       "regla": "Radio 2 a tu alrededor: apaga el fuego, el agua se hiela y los enemigos Empapados quedan Congelados 1 turno.",
       "usar": { "objetivo": "area", "radio": 2, "centro": "$self", "filtro": "enemigos", "coste": { "acciones": 1 }, "efectos": [
         { "type": "spawnSurface", "at": "$self", "surface": "frio", "radius": 2 },
@@ -391,7 +415,7 @@
       "inmunidades": [{ "efecto": "push" }],
       "desbloqueo": "logro:esto-no-es-un-atajo", "valor": 28 },
     { "id": "mochila-sin-fondo", "nombre": "Mochila sin fondo", "rareza": "oro", "tipo": "equipo", "ranura": "amuleto",
-      "descripcion": "Dentro cabe todo. Lo difícil es encontrar algo. Dicen que hay un concursante de la Temporada 4 aún buscando las llaves.",
+      "descripcion": "Dentro cabe todo. Lo difícil es encontrar algo, como en el bolso de tu madre. Dicen que hay un concursante de la Temporada 4 aún buscando las llaves.",
       "regla": "+3 huecos de mochila.",
       "pasivo": [{ "stat": "huecos", "delta": 3 }], "valor": 24 },
     { "id": "rayo-embotellado", "nombre": "Rayo embotellado", "rareza": "oro", "tipo": "consumible",
@@ -403,7 +427,7 @@
       ] },
       "desbloqueo": "logro:cortocircuito", "valor": 22 },
     { "id": "trompeta-de-charanga", "nombre": "Trompeta de charanga", "rareza": "oro", "tipo": "consumible", "usos": 2,
-      "descripcion": "Suena como una alarma de incendios afinada por un tuba. Nadie se queda a escuchar la segunda nota.",
+      "descripcion": "Suena como una alarma de incendios afinada por una tuba. Nadie se queda a escuchar la segunda nota.",
       "regla": "Los enemigos en radio 3 son empujados 1 casilla y quedan Asustados 2 turnos.",
       "usar": { "objetivo": "area", "radio": 3, "centro": "$self", "filtro": "enemigos", "coste": { "acciones": 1 }, "efectos": [
         { "type": "push", "entityId": "$each", "from": "$self", "distance": 1 },

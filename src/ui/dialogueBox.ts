@@ -1,4 +1,4 @@
-import { type CheckResult, type DialogueCheckEvent, type GameEvent, type GameState, dialogueChoices, dialogueOf, isEvent } from '../../engine';
+import { type CheckResult, type DialogueCheckEvent, type GameEvent, type GameState, dialogueChoices, dialogueOf, isEvent, resolveNext } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { GameDefinition } from '../game/definition';
 import type { GameStore } from '../game/store';
@@ -107,7 +107,8 @@ export class DialogueBox {
     list.className = 'choices';
     const choices = dialogueChoices(ruleset, state, tree);
     if (!node.choices || node.choices.length === 0) {
-      list.append(this.button(node.next ? this.t('continue', 'Continuar') : this.t('endDialogue', 'Terminar'), true, () => this.choose(0)));
+      const goesOn = resolveNext(ruleset, state, d.actorId, node.next) !== undefined;
+      list.append(this.button(goesOn ? this.t('continue', 'Continuar') : this.t('endDialogue', 'Terminar'), true, () => this.choose(0)));
     }
     choices.forEach((c, i) => {
       let label = `${i + 1}. ${c.text}`;

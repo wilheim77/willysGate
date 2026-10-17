@@ -1983,6 +1983,1675 @@
      ]
     ]
    }
+  },
+  "jefe-presentador": {
+   "note": "El Presentador (jefe final): pelo engominado con sienes canas, piel algo pálida, sonrisa con colmillos discretos, un brillo rojo en los ojos, traje impecable con corbata granate y micrófono",
+   "size": [
+    16,
+    30
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "H": "#2a2228",
+    "G": "#c8c8d0",
+    "s": "#ecdcd8",
+    "S": "#c8b4b4",
+    "e": "#1e1c24",
+    "R": "#ff3040",
+    "W": "#ffffff",
+    "J": "#34344a",
+    "j": "#222234",
+    "X": "#8e1f3a",
+    "Y": "#e0c060",
+    "h": "#ecdcd8",
+    "K": "#141018",
+    "M": "#c0c6ce"
+   },
+   "parts": {
+    "body": [
+     "....kkkkkk......",
+     "...kHHHHHHk.....",
+     "..kHHHHHHHGk....",
+     "..kHssssssGk....",
+     "..kHseesseRk....",
+     "...kssssSssk....",
+     "...ksWkkkWsk....",
+     "...kSssssssk....",
+     "....kSSSSSk.....",
+     "..kkkJWWWJkkk...",
+     ".kJJJJWXWJJJJk..",
+     "kJJjJJWXWJJjJJk.",
+     "kJjJJJWXWJJJjJk.",
+     "kJjJJJJXJJJJjJk.",
+     "khJJJJJJJJJJJhk.",
+     ".kkJJJJYJJJJkk..",
+     "..kJJJJJJJJJk...",
+     "..kjjjjjjjjjk..."
+    ],
+    "mic": [
+     "kk",
+     "kM",
+     ".k",
+     ".k"
+    ],
+    "legs_stand": [
+     "..kJJJJkJJJJk...",
+     "..kJJJJkJJJJk...",
+     "..kjJJJkjJJJk...",
+     "..kjjjjkjjjjk...",
+     "..kKKKKkKKKKk...",
+     "..kkkkkkkkkkkk.."
+    ],
+    "legs_a": [
+     "..kJJJJkkJJJk...",
+     ".kJJJJk..kJJJk..",
+     ".kjJJk....kjJJk.",
+     ".kjjjk....kjjjk.",
+     "kKKKKk....kKKKKk",
+     "kkkkkk....kkkkkk"
+    ],
+    "legs_b": [
+     "...kJJJkJJJJk...",
+     "...kJJJkJJJk....",
+     "...kjJJkjJJk....",
+     "...kjjjkjjjk....",
+     "...kKKKkKKKKk...",
+     "...kkkkkkkkkkk.."
+    ],
+    "legs_c": [
+     "..kJJJkkJJJJk...",
+     ".kJJJk..kJJJJk..",
+     "kjJJk....kjJJk..",
+     "kjjjk....kjjjk..",
+     "kKKKKk...kKKKKk.",
+     "kkkkkk...kkkkkk."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ]
+    ]
+   }
+  },
+  "jefe-centollo": {
+   "note": "Su Majestad el Centollo (jefe de la Planta 1): centollo enorme con corona de oro y pinzas en alto (24x16 a escala 2)",
+   "size": [
+    24,
+    18
+   ],
+   "scale": 2,
+   "legend": {
+    "k": "#1e1c24",
+    "R": "#d04a28",
+    "r": "#9a2a18",
+    "L": "#f08a60",
+    "W": "#ffffff",
+    "E": "#1e1c24",
+    "Y": "#ffd040"
+   },
+   "parts": {
+    "a": [
+     "...........kk...........",
+     "..kk......kYYk......kk..",
+     ".kRRk....kYYYYk....kRRk.",
+     "kRRRRk...kkkkkk...kRRRRk",
+     "kRLRRk..kRRRRRRk..kRRLRk",
+     ".kRRRkkkRRWERWERkkRRRk..",
+     "..kkRRRRRRRRRRRRRRRRkk..",
+     "....kRRRLRRRRRRLRRRk....",
+     "...kRRRRRRRRRRRRRRRRk...",
+     "..kRRRrRRRRRRRRRRrRRRk..",
+     "..kRrRRRRRRRRRRRRRRrRk..",
+     "...kRRRrrrrrrrrrrRRRk...",
+     "..k.kkrrrrrrrrrrrrkk.k..",
+     ".k.k..kkkkkkkkkkkk..k.k.",
+     "k.k..k.k..k..k.k..k..k.k",
+     "k...k..k..k..k.k...k...k"
+    ],
+    "b": [
+     "...........kk...........",
+     "..........kYYk..........",
+     "..kk.....kYYYYk.....kk..",
+     ".kRRk....kkkkkk....kRRk.",
+     "kRRRRk..kRRRRRRk..kRRRRk",
+     ".kRRRkkkRRWERWERkkRRRk..",
+     "..kkRRRRRRRRRRRRRRRRkk..",
+     "....kRRRLRRRRRRLRRRk....",
+     "...kRRRRRRRRRRRRRRRRk...",
+     "..kRRRrRRRRRRRRRRrRRRk..",
+     "..kRrRRRRRRRRRRRRRRrRk..",
+     "...kRRRrrrrrrrrrrRRRk...",
+     "..k.kkrrrrrrrrrrrrkk.k..",
+     ".k.k..kkkkkkkkkkkk..k.k.",
+     ".k.k.k.k..k..k..k.k.k.k.",
+     ".k...k..k.k..k.k..k...k."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       -1,
+       2
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       1,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "maniqui": {
+   "extends": "willy",
+   "note": "Maniquí: muñeco de escaparate sin cara, con conjunto de temporada; no se mueve si le miras",
+   "legend": {
+    "C": "#e8d8c0",
+    "c": "#f4e8d4",
+    "s": "#e8d8c0",
+    "S": "#c8b8a0",
+    "e": "#c8b8a0",
+    "m": "#e8d8c0",
+    "h": "#e8d8c0",
+    "O": "#3aa8a0",
+    "o": "#2a7a74",
+    "L": "#ffe04f",
+    "l": "#ffe04f",
+    "w": "#e8d8c0",
+    "Q": "#f4f4f0",
+    "q": "#c8c8c0",
+    "R": "#f4f4f0",
+    "r": "#c8c8c0",
+    "b": "#c8b8a0"
+   }
+  },
+  "carrito-poseido": {
+   "note": "Carrito poseído: carro de la compra con ojos furiosos y halo verde; embiste en línea",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#3a3e46",
+    "M": "#c0c6ce",
+    "W": "#ffffff",
+    "E": "#40e060",
+    "R": "#e0302a",
+    "G": "#40e060"
+   },
+   "parts": {
+    "a": [
+     "kk..............",
+     ".k..............",
+     ".kkkkkkkkkkkkkk.",
+     ".kMkMkMkMkMkMMk.",
+     ".kMWWMkMkMWWMMk.",
+     ".kMWEMkMkMWEMk..",
+     "..kMkMkMkMkMMk..",
+     "...kMkMkMkMMk...",
+     "...kkkkkkkkkk...",
+     "...k........k...",
+     "..kRk......kRk..",
+     "...k........k..."
+    ],
+    "b": [
+     "kk..............",
+     ".k..............",
+     ".kkkkkkkkkkkkkk.",
+     ".kMkMkMkMkMkMMk.",
+     ".kMWWMkMkMWWMMk.",
+     ".kMWEMkMkMWEMk..",
+     "..kMkMkMkMkMMk..",
+     "...kMkMkMkMMk...",
+     "...kkkkkkkkkk...",
+     "...k........k...",
+     "..kRk......kRk..",
+     "...k........k..."
+    ],
+    "glow": [
+     "G..............G"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       3
+      ],
+      [
+       "glow",
+       0,
+       15
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "a",
+       1,
+       2
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "a",
+       -1,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "reponedor-zombi": {
+   "extends": "willy",
+   "note": "Reponedor zombi: piel verdosa, chaleco del híper con chapa, ojeras y una caja al hombro",
+   "legend": {
+    "C": "#e0302a",
+    "c": "#f04a40",
+    "s": "#a8c090",
+    "S": "#7a9a68",
+    "e": "#e0f040",
+    "m": "#5a6a48",
+    "h": "#a8c090",
+    "O": "#e0302a",
+    "o": "#a01e1e",
+    "L": "#ffffff",
+    "l": "#ffe04f",
+    "w": "#8a9a7a",
+    "Q": "#3a3e52",
+    "q": "#2a2e3e",
+    "R": "#3a3e52",
+    "r": "#2a2e3e",
+    "T": "#c8945a"
+   },
+   "parts": {
+    "box": [
+     "kkkkkk",
+     "kTTTTk",
+     "kTkkTk",
+     "kTTTTk",
+     "kkkkkk"
+    ]
+   },
+   "over": [
+    [
+     "box",
+     -3,
+     7,
+     "body"
+    ]
+   ]
+  },
+  "etiqueta-de-oferta": {
+   "note": "Etiqueta de oferta: etiqueta amarilla voladora con «%» rojo y ojos; rebaja la defensa",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "Y": "#ffe04f",
+    "R": "#e0302a",
+    "W": "#ffffff",
+    "E": "#1e1c24"
+   },
+   "parts": {
+    "a": [
+     ".......kk.......",
+     "......k..k......",
+     ".......kk.......",
+     "........k.......",
+     "....kkkkkkkk....",
+     "...kYYYYYYYYk...",
+     "..kYYWEYYWEYYk..",
+     "..kYYYYYYYYYYk..",
+     "..kYRRRYRYRRYk..",
+     "..kYYYRYRYRYYk..",
+     "..kYRRRYRYRRYk..",
+     "..kYYYYYYYYYYk..",
+     "...kYYYYYYYYk...",
+     "....kkkkkkkk...."
+    ],
+    "b": [
+     ".......kk.......",
+     "......k..k......",
+     ".......kk.......",
+     ".......k........",
+     "....kkkkkkkk....",
+     "...kYYYYYYYYk...",
+     "..kYYWEYYWEYYk..",
+     "..kYYYYYYYYYYk..",
+     "..kYRRRYRYRRYk..",
+     "..kYYYRYRYRYYk..",
+     "..kYRRRYRYRRYk..",
+     "..kYYYYYYYYYYk..",
+     "...kYYYYYYYYk...",
+     "....kkkkkkkk...."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "jefe-encargada": {
+   "extends": "maripuri",
+   "note": "Doña Rebeca, Encargada de Rebajas (jefa de la Planta 2): permanente caoba, gafas, chaleco rojo con chapa dorada y pistola de etiquetas",
+   "legend": {
+    "G": "#9a3a20",
+    "g": "#6a2410",
+    "Y": "#1e1c24",
+    "M": "#c02a3a",
+    "P": "#e0302a",
+    "p": "#a01e1e",
+    "F": "#ffd040",
+    "b": "#1e1c24"
+   },
+   "parts": {
+    "gun": [
+     "kkkk.",
+     "kGGGk",
+     ".kkGk",
+     "...kk"
+    ]
+   },
+   "over": [
+    [
+     "gun",
+     12,
+     14,
+     "mari_body"
+    ]
+   ]
+  },
+  "cabezudo": {
+   "note": "Cabezudo: cabezón de cartón piedra con mofletes y nariz roja sobre un cuerpecillo con blusón; golpea con una vejiga",
+   "size": [
+    16,
+    26
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "H": "#3a2a20",
+    "s": "#f0c8a0",
+    "W": "#ffffff",
+    "E": "#1e1c24",
+    "R": "#e04a3a",
+    "D": "#f08a8a",
+    "M": "#a02030",
+    "B": "#3a8fd9",
+    "b": "#2a6aa8",
+    "L": "#e8e0c0",
+    "h": "#f0c8a0"
+   },
+   "parts": {
+    "head": [
+     "....kkkkkkkk....",
+     "..kkHHHHHHHHkk..",
+     ".kHHHHHHHHHHHHk.",
+     "kHHsssssssssHHHk",
+     "kHssssssssssssHk",
+     "kssWWsssssWWsssk",
+     "kssWEsssssWEsssk",
+     "kssssssRssssssk.",
+     "ksDDsssRRssDDsk.",
+     "kssssssssssssk..",
+     ".kssMMMMMMMssk..",
+     "..ksssssssssk...",
+     "...kkkkkkkkk...."
+    ],
+    "body": [
+     "....kkkkkkk.....",
+     "...kBBBBBBBk....",
+     "..khBBBBBBBhk...",
+     "...kbBBBBBbk....",
+     "....kbbbbbk.....",
+     "....kk..kk......",
+     "...kLk..kLk.....",
+     "...kkk..kkk....."
+    ],
+    "body_b": [
+     "....kkkkkkk.....",
+     "...kBBBBBBBk....",
+     "..khBBBBBBBhk...",
+     "...kbBBBBBbk....",
+     "....kbbbbbk.....",
+     "...kk....kk.....",
+     "..kLk....kLk....",
+     "..kkk....kkk...."
+    ],
+    "bladder": [
+     ".kk",
+     "kLLk",
+     "kLLk",
+     ".kk."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "body",
+       0,
+       18
+      ],
+      [
+       "head",
+       0,
+       5
+      ],
+      [
+       "bladder",
+       12,
+       16
+      ]
+     ],
+     [
+      [
+       "body",
+       0,
+       18
+      ],
+      [
+       "head",
+       0,
+       6
+      ],
+      [
+       "bladder",
+       12,
+       17
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "body",
+       0,
+       18
+      ],
+      [
+       "head",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "body_b",
+       0,
+       18
+      ],
+      [
+       "head",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "body",
+       0,
+       18
+      ],
+      [
+       "head",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "body_b",
+       0,
+       18
+      ],
+      [
+       "head",
+       0,
+       6
+      ]
+     ]
+    ]
+   }
+  },
+  "musico-de-charanga": {
+   "extends": "willy",
+   "note": "Músico de charanga: camisa blanca, pañuelo rojo al cuello, faja y trompeta",
+   "legend": {
+    "C": "#d02020",
+    "c": "#f04a40",
+    "O": "#f4f4f0",
+    "o": "#c8c8c0",
+    "L": "#d02020",
+    "l": "#d02020",
+    "w": "#f4f4f0",
+    "Q": "#f4f4f0",
+    "q": "#c8c8c0",
+    "R": "#f4f4f0",
+    "r": "#c8c8c0",
+    "b": "#1e1c24",
+    "Y": "#f0c030"
+   },
+   "parts": {
+    "trumpet": [
+     "....kk",
+     "kkkkYk",
+     "kYYYYY",
+     "kkkkYk",
+     "....kk"
+    ]
+   },
+   "over": [
+    [
+     "trumpet",
+     11,
+     10,
+     "body"
+    ]
+   ]
+  },
+  "vaquilla": {
+   "note": "Vaquilla de las fiestas: becerra negra con manchas blancas y cuernos cortos; persigue lo rojo",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "B": "#2a2428",
+    "W": "#f4f0e8",
+    "E": "#ff4040",
+    "P": "#f0a0a0"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "..W..........W..",
+     "..Wk........kW..",
+     "...kk......kk...",
+     "....kBBBBBBk....",
+     "...kBBWBBWBBk...",
+     "...kBBEBBEBBk...",
+     "...kBBBBBBBBk...",
+     "....kPPPPPPk....",
+     "..kkkBBBBBBkkk..",
+     ".kBBBBBBBBBBBBk.",
+     "kBBWWBBBBBBWWBBk",
+     "kBBBBBBBBBBBBBBk",
+     ".kBBkk.kk.kkBBk.",
+     "..kBk..kk..kBk..",
+     "..kkk......kkk.."
+    ],
+    "b": [
+     "................",
+     "..W..........W..",
+     "..Wk........kW..",
+     "...kk......kk...",
+     "....kBBBBBBk....",
+     "...kBBWBBWBBk...",
+     "...kBBEBBEBBk...",
+     "...kBBBBBBBBk...",
+     "....kPPPPPPk....",
+     "..kkkBBBBBBkkk..",
+     ".kBBBBBBBBBBBBk.",
+     "kBBWWBBBBBBWWBBk",
+     "kBBBBBBBBBBBBBBk",
+     ".kBBkk....kkBBk.",
+     ".kBk........kBk.",
+     ".kkk........kkk."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       -1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       -1
+      ]
+     ]
+    ]
+   }
+  },
+  "feriante": {
+   "extends": "willy",
+   "note": "Feriante: camiseta de tirantes, riñonera, gorra hacia atrás y un petardo encendido",
+   "legend": {
+    "C": "#3a8fd9",
+    "c": "#5aaaf0",
+    "O": "#f4f4f0",
+    "o": "#c8c8c0",
+    "L": "#e0302a",
+    "l": "#e0302a",
+    "w": "#e8b088",
+    "Q": "#3a4a7a",
+    "q": "#2a3458",
+    "R": "#3a4a7a",
+    "r": "#2a3458",
+    "Y": "#ffe04f",
+    "X": "#e0302a"
+   },
+   "parts": {
+    "petardo": [
+     "..Y",
+     ".kX",
+     "kXk",
+     "Xk."
+    ]
+   },
+   "over": [
+    [
+     "petardo",
+     12,
+     12,
+     "body"
+    ]
+   ]
+  },
+  "jefe-giganton": {
+   "note": "El Gigantón (jefe de la Planta 3): gigante de fiestas de 4 m, cabeza pintada con corona, capa y faldón larguísimo (20x31 a escala 2)",
+   "size": [
+    20,
+    32
+   ],
+   "scale": 2,
+   "legend": {
+    "k": "#1e1c24",
+    "Y": "#ffd040",
+    "H": "#3a2a20",
+    "s": "#f0c8a0",
+    "W": "#ffffff",
+    "E": "#1e1c24",
+    "R": "#e04a3a",
+    "D": "#f08a8a",
+    "M": "#a02030",
+    "C": "#a02030",
+    "h": "#f0c8a0",
+    "G": "#ffd040",
+    "V": "#3a5ad0",
+    "v": "#2a3a9a"
+   },
+   "parts": {
+    "a": [
+     "......kkkkkkkk......",
+     ".....kYYkYYkYYk.....",
+     "....kYYYYYYYYYYk....",
+     "....kHHHHHHHHHHk....",
+     "...kHsssssssssHHk...",
+     "...kssWEssssWEssk...",
+     "...ksssssRssssssk...",
+     "...ksDsssRRsssDsk...",
+     "...kssssMMMMsssk....",
+     "....kssssssssssk....",
+     ".....kkssssssk......",
+     "...kkkCCCCCCCkkk....",
+     "..kCCCCCCCCCCCCCk...",
+     ".kCChCCCGGGCCChCCk..",
+     ".kChhkCCGGGCCkhhCk..",
+     "kChk.kCCCCCCCk.khCk.",
+     "kCk..kCCCGCCCk..kCk.",
+     "khk..kCCCGCCCk..khk.",
+     ".k..kVVVVVVVVVk..k..",
+     "....kVVvVVVvVVk.....",
+     "...kVVVVvVVVVVVk....",
+     "...kVvVVVVVvVVVk....",
+     "..kVVVVVVVVVVVVVk...",
+     "..kVVVvVVVVVvVVVk...",
+     ".kVVVVVVVVVVVVVVVk..",
+     ".kVvVVVVVVVVVVvVVk..",
+     "kVVVVVVvVVVvVVVVVVk.",
+     "kVVVVVVVVVVVVVVVVVk.",
+     "kVvVVVVVVVVVVVVvVVk.",
+     "kGGGGGGGGGGGGGGGGGk.",
+     "kkkkkkkkkkkkkkkkkkk."
+    ],
+    "b": [
+     "......kkkkkkkk......",
+     ".....kYYkYYkYYk.....",
+     "....kYYYYYYYYYYk....",
+     "....kHHHHHHHHHHk....",
+     "...kHsssssssssHHk...",
+     "...kssWEssssWEssk...",
+     "...ksssssRssssssk...",
+     "...ksDsssRRsssDsk...",
+     "...kssssMMMMsssk....",
+     "....kssssssssssk....",
+     ".....kkssssssk......",
+     "...kkkCCCCCCCkkk....",
+     "..kCCCCCCCCCCCCCk...",
+     ".kCChCCCGGGCCCChk...",
+     ".kChhkCCGGGCCkhhCk..",
+     "kChk.kCCCCCCCk.khCk.",
+     "kCk..kCCCGCCCk..kCk.",
+     "khk..kCCCGCCCk..khk.",
+     ".k..kVVVVVVVVVk..k..",
+     "....kVVvVVVvVVk.....",
+     "...kVVVVvVVVVVVk....",
+     "...kVvVVVVVvVVVk....",
+     "..kVVVVVVVVVVVVVk...",
+     "..kVVVvVVVVVvVVVk...",
+     ".kVVVVVVVVVVVVVVVk..",
+     ".kVvVVVVVVVVVVvVVk..",
+     "kVVVVVVvVVVvVVVVVVk.",
+     "kVVVVVVVVVVVVVVVVVk.",
+     "kVvVVVVVVVVVVVVvVVk.",
+     "kGGGGGGGGGGGGGGGGGk.",
+     "kkkkkkkkkkkkkkkkkkk."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "b",
+       1,
+       0
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "b",
+       -1,
+       0
+      ]
+     ]
+    ]
+   }
+  },
+  "patito-gigante": {
+   "note": "Patito de goma gigante: amarillo, pico naranja; chilla al reventar",
+   "size": [
+    16,
+    16
+   ],
+   "scale": 1.5,
+   "legend": {
+    "k": "#1e1c24",
+    "Y": "#ffe04f",
+    "y": "#e0b020",
+    "W": "#ffffff",
+    "E": "#1e1c24",
+    "O": "#f08020"
+   },
+   "parts": {
+    "a": [
+     "................",
+     "......kkkk......",
+     ".....kYYYYk.....",
+     "....kYYWEYYkk...",
+     "....kYYYYYYOOk..",
+     "....kYYYYYYkkk..",
+     ".....kYYYYk.....",
+     "..kk.kYYYYk.....",
+     ".kYYkYYYYYYkk...",
+     ".kYYYYYYYYYYYk..",
+     ".kYyYYYYYYYYYYk.",
+     "..kyyYYYYYYYYyk.",
+     "...kyyyyyyyyyk..",
+     "....kkkkkkkkk..."
+    ],
+    "b": [
+     "................",
+     "................",
+     "......kkkk......",
+     ".....kYYYYk.....",
+     "....kYYWEYYkk...",
+     "....kYYYYYYOOk..",
+     "....kYYYYYYkkk..",
+     ".....kYYYYk.....",
+     "..kk.kYYYYk.....",
+     ".kYYkYYYYYYkk...",
+     ".kYYYYYYYYYYYk..",
+     ".kYyYYYYYYYYYYk.",
+     "..kyyYYYYYYYYyk.",
+     "...kyyyyyyyyyk.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "yeti-de-sauna": {
+   "extends": "willy",
+   "note": "Yeti de sauna: peludo y blanco, colorado de calor, toalla a la cintura y gotas de sudor",
+   "legend": {
+    "C": "#f4f4f8",
+    "c": "#ffffff",
+    "s": "#f4c8c0",
+    "S": "#e0a0a0",
+    "m": "#f4f4f8",
+    "h": "#f4f4f8",
+    "w": "#f4f4f8",
+    "O": "#f4f4f8",
+    "o": "#c8d0dc",
+    "L": "#f4f4f8",
+    "l": "#f4f4f8",
+    "Q": "#3a8fd9",
+    "q": "#2a6aa8",
+    "R": "#f4f4f8",
+    "r": "#c8d0dc",
+    "b": "#c8d0dc",
+    "P": "#80d8ff"
+   },
+   "parts": {
+    "drops": [
+     "P.......P",
+     ".........",
+     "..P......"
+    ]
+   },
+   "over": [
+    [
+     "drops",
+     2,
+     4,
+     "body"
+    ]
+   ]
+  },
+  "medusa-de-piscina": {
+   "note": "Medusa de piscina: rosa translúcida con tentáculos que ondulan; solo en el agua",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#a04a7aff",
+    "P": "#ff9ad0c0",
+    "p": "#ff7ac0c0",
+    "W": "#ffffffd0",
+    "E": "#1e1c24"
+   },
+   "parts": {
+    "a": [
+     "................",
+     ".....kkkkkk.....",
+     "....kPPPPPPk....",
+     "...kPPWPPPPPk...",
+     "..kPPWPPPPPPPk..",
+     "..kPPPPEPPEPPk..",
+     "..kPPPPPPPPPPk..",
+     "..kkpkkpkkpkkk..",
+     "...p..p..p..p...",
+     "....p..p..p..p..",
+     "...p..p..p..p...",
+     "....p..p..p..p.."
+    ],
+    "b": [
+     "................",
+     ".....kkkkkk.....",
+     "....kPPPPPPk....",
+     "...kPPWPPPPPk...",
+     "..kPPWPPPPPPPk..",
+     "..kPPPPEPPEPPk..",
+     "..kPPPPPPPPPPk..",
+     "..kkpkkpkkpkkk..",
+     "....p..p..p..p..",
+     "...p..p..p..p...",
+     "....p..p..p..p..",
+     "...p..p..p..p..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       3
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       3
+      ]
+     ]
+    ]
+   }
+  },
+  "monitor-de-aquagym": {
+   "extends": "willy",
+   "note": "Monitor de aquagym: polo turquesa, gorra, silbato y un churro de piscina como arma",
+   "legend": {
+    "C": "#f4f4f0",
+    "c": "#ffffff",
+    "O": "#20b0b0",
+    "o": "#188888",
+    "L": "#ffffff",
+    "l": "#ffffff",
+    "w": "#e8b088",
+    "Q": "#1e1c24",
+    "q": "#121016",
+    "R": "#1e1c24",
+    "r": "#121016",
+    "b": "#f4f4f0",
+    "N": "#ff7ac0",
+    "n": "#d0509a"
+   },
+   "parts": {
+    "churro": [
+     "kkkkkkk",
+     "kNNNNNk",
+     "knnnnnk",
+     "kkkkkkk"
+    ]
+   },
+   "over": [
+    [
+     "churro",
+     10,
+     11,
+     "body"
+    ]
+   ]
+  },
+  "jefe-socorrista": {
+   "note": "La Socorrista Abisal (jefa de la Planta 4): criatura abisal verde con camiseta roja de socorrista y cruz blanca, silbato, sentada en su silla con tentáculos (20x22 a escala 2)",
+   "size": [
+    20,
+    24
+   ],
+   "scale": 2,
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#3a9a8a",
+    "g": "#2a6a60",
+    "W": "#ffffff",
+    "E": "#ffe04f",
+    "R": "#e0302a",
+    "Y": "#ffe04f",
+    "T": "#e8e0c8"
+   },
+   "parts": {
+    "a": [
+     "......kkkkkkkk......",
+     ".....kGGGGGGGGk.....",
+     "....kGGGGGGGGGGk....",
+     "....kGWWGGGGWWGk....",
+     "....kGWEGGGGWEGk....",
+     "....kGGGGGGGGGGk....",
+     "....kGGkkkkkkGGk....",
+     "....kGGkWkWkWGGk....",
+     ".....kGGGGGGGGk.....",
+     "..kkkRRRRRRRRRRkkk..",
+     ".kGGkRRRWWWWRRRkGGk.",
+     "kGgGkRRRWRRWRRRkGgGk",
+     "kGgk.kRRWWWWRRk.kgGk",
+     ".kk..kRRRRRRRRk..kk.",
+     ".....kYYYYYYYYk.....",
+     "...kkkkkkkkkkkkkk...",
+     "...kTkGGkGGkGGkTk...",
+     "...kTkGgkGgkGgkTk...",
+     "...kTk.kGk.kGk.kTk..",
+     "...kTk..kGk.kGk.kTk.",
+     "...kTk...kk..kk.kTk.",
+     "..kkkk..........kkkk"
+    ],
+    "b": [
+     "......kkkkkkkk......",
+     ".....kGGGGGGGGk.....",
+     "....kGGGGGGGGGGk....",
+     "....kGWWGGGGWWGk....",
+     "....kGWEGGGGWEGk....",
+     "....kGGGGGGGGGGk....",
+     "....kGGkkkkkkGGk....",
+     "....kGGkWkWkWGGk....",
+     ".....kGGGGGGGGk.....",
+     "..kkkRRRRRRRRRRkkk..",
+     ".kGGkRRRWWWWRRRkGGk.",
+     "kGgGkRRRWRRWRRRkGgGk",
+     "kGgk.kRRWWWWRRk.kgGk",
+     ".kk..kRRRRRRRRk..kk.",
+     ".....kYYYYYYYYk.....",
+     "...kkkkkkkkkkkkkk...",
+     "...kTkGGkGGkGGkTk...",
+     "...kTkGgkGgkGgkTk...",
+     "...kTk.kGk..kGk.kTk.",
+     "...kTkkGk..kGk..kTk.",
+     "...kTkkk...kk...kTk.",
+     "..kkkk..........kkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "a",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "b",
+       0,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "regidor": {
+   "extends": "willy",
+   "note": "Regidor: camiseta negra de staff, cascos con micro y portapapeles con la cuenta atrás",
+   "legend": {
+    "C": "#1e1c24",
+    "c": "#3a3a44",
+    "O": "#1e1c24",
+    "o": "#121016",
+    "L": "#ffe04f",
+    "l": "#ffe04f",
+    "w": "#1e1c24",
+    "Q": "#3a4a7a",
+    "q": "#2a3458",
+    "R": "#3a4a7a",
+    "r": "#2a3458",
+    "W": "#f4f0e0",
+    "X": "#e0302a"
+   },
+   "parts": {
+    "headset": [
+     "k.......k",
+     "kk.....kk",
+     ".......kX"
+    ],
+    "clipboard": [
+     "kkkk",
+     "kWWk",
+     "kWXk",
+     "kWWk",
+     "kkkk"
+    ]
+   },
+   "over": [
+    [
+     "headset",
+     3,
+     4,
+     "body"
+    ],
+    [
+     "clipboard",
+     12,
+     12,
+     "body"
+    ]
+   ]
+  },
+  "tecnico-de-sonido": {
+   "extends": "willy",
+   "note": "Técnico de sonido: auriculares enormes, chaleco de bolsillos y pértiga con micro",
+   "legend": {
+    "C": "#5a4a3a",
+    "c": "#7a6a5a",
+    "O": "#6a6a4a",
+    "o": "#4a4a34",
+    "L": "#8a8a6a",
+    "l": "#8a8a6a",
+    "w": "#8a8f96",
+    "Q": "#3a4a7a",
+    "q": "#2a3458",
+    "R": "#3a4a7a",
+    "r": "#2a3458",
+    "X": "#e0302a",
+    "G": "#5a5e66"
+   },
+   "parts": {
+    "phones": [
+     "kXk......kXk",
+     "kXk......kXk"
+    ],
+    "boom": [
+     "kkkk.......",
+     "kGGk.......",
+     "kkkkkkkkkkk",
+     "..........k"
+    ]
+   },
+   "over": [
+    [
+     "phones",
+     2,
+     4,
+     "body"
+    ],
+    [
+     "boom",
+     5,
+     -2,
+     "body"
+    ]
+   ]
+  },
+  "figurante": {
+   "extends": "willy",
+   "note": "Figurante: extra con disfraz barato de romano (túnica, casco de cartón con penacho)",
+   "legend": {
+    "C": "#c8b070",
+    "c": "#e8d090",
+    "O": "#f4f0e8",
+    "o": "#c8c0b0",
+    "L": "#e0302a",
+    "l": "#e0302a",
+    "w": "#e8b088",
+    "Q": "#e8b088",
+    "q": "#c08a68",
+    "R": "#e8b088",
+    "r": "#c08a68",
+    "b": "#8a5a34",
+    "X": "#e0302a"
+   },
+   "parts": {
+    "crest": [
+     "XXXXX",
+     ".XXX."
+    ]
+   },
+   "over": [
+    [
+     "crest",
+     5,
+     -2,
+     "body"
+    ]
+   ]
+  },
+  "camara-dron": {
+   "note": "Cámara-dron (enemigo): vuela, deslumbra con el flash y graba",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#c0c6ce",
+    "g": "#8a9098",
+    "L": "#4fe8ff",
+    "R": "#ff3030"
+   },
+   "parts": {
+    "a": [
+     "kkkk....kkkk....",
+     "..kkkkkkkk......",
+     "...kGGGGk.......",
+     "..kGgggggk......",
+     "..kgLLgRgk......",
+     "..kgLLgggk......",
+     "...kkkkkk......."
+    ],
+    "b": [
+     ".kk......kk.....",
+     "..kkkkkkkk......",
+     "...kGGGGk.......",
+     "..kGgggggk......",
+     "..kgLLgRgk......",
+     "..kgLLgggk......",
+     "...kkkkkk......."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "a",
+       2,
+       4
+      ]
+     ],
+     [
+      [
+       "b",
+       2,
+       3
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "a",
+       2,
+       4
+      ]
+     ],
+     [
+      [
+       "b",
+       2,
+       3
+      ]
+     ],
+     [
+      [
+       "a",
+       2,
+       5
+      ]
+     ],
+     [
+      [
+       "b",
+       2,
+       3
+      ]
+     ]
+    ]
+   }
   }
  }
 }

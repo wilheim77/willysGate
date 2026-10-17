@@ -1,9 +1,11 @@
-import { type Entity, type TiledMapJson, type Trap, parseTiledMap, withLighting, withTraps, withZones } from '../../engine';
+import { type Entity, type GameState, type TiledMapJson, type Trap, parseTiledMap, withLighting, withTraps, withZones } from '../../engine';
 import { DND5E_CREATION, SURFACES, buildProtagonist, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import art0x72 from './assets/0x72.json';
 import artLpc from './assets/lpc.json';
+import audio from './assets/audio.json';
+import type { AudioManifest } from '../../src/audio/types';
 import testMap from './maps/test.json';
 import meta from './meta.json';
 import items from './items.json';
@@ -40,6 +42,7 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'hero',
+  audio: audio as AudioManifest,
   items: Object.fromEntries(Object.entries(items).filter(([k]) => !k.startsWith('$'))) as Record<string, { label: string; text?: string }>,
   creation: {
     spec: DND5E_CREATION,
@@ -66,6 +69,8 @@ export const game: GameDefinition = {
       createMonster({ id: 'bandit-1', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-1'), spriteId: 'sinpaga_cuchillero' }),
       createMonster({ id: 'bandit-2', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-2'), spriteId: 'sinpaga_enmascarado' }),
       createMonster({ id: 'thug', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug'), spriteId: 'sinpaga_bruto' }),
+      createMonster({ id: 'thug-2', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug-2'), spriteId: 'sinpaga_bruto' }),
+      createMonster({ id: 'bandit-3', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-3'), spriteId: 'sinpaga_cuchillero' }),
       createMonster({ id: 'skeleton', name: 'Minero muerto', monsterId: 'skeleton', controllerId: AI, factionId: 'sinpaga', position: at('skeleton'), spriteId: 'esqueleto_minero' }),
     ];
     // Phase 4 test: someone to talk to on the way in.
@@ -114,7 +119,9 @@ export const game: GameDefinition = {
       tiles: map.tiles.map((t, i) => (i === 11 * map.width + 10 ? { ...wall } : i === 11 * map.width + 9 ? { ...wall, terrain: 'door_closed' } : t)),
     };
     map.tiles = closed.tiles;
-    const state = withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...usables, ...props] }), painted).state, traps);
+    // Named arrival points, so travelling back to this map knows where to put the party.
+    const withSpawns = (st: GameState): GameState => ({ ...st, systems: { ...st.systems, spawns: spawns as never } });
+    const state = withSpawns(withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...usables, ...props] }), painted).state, traps));
     // The collector carries a lantern: the only light that goes everywhere with the party.
     return withZones(
       withLighting(state, {
