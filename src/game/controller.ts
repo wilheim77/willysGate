@@ -1,0 +1,279 @@
+import {
+  type ActionDef,
+  type ActionTarget,
+  type GameEvent,
+  type GameState,
+  type MoveCommand,
+  SYSTEM_ISSUER,
+  type Vec2,
+  entityAt,
+  gridDistance,
+  inZone,
+  nextAiCommand,
+  posKey,
+  reachableTiles,
+  blockedTiles,
+  zonesOf,
+} from '../../engine';
+import type { MapScene } from '../scenes/MapScene';
+import type { CombatHud } from '../ui/combatHud';
+import type { GameDefinition } from './definition';
+import type { GameStore } from './store';
+
+const AI_STEP_MS = 380;
+
+/**
+ * Turns player input into commands and drives everything that isn't the player:
+ * companions following the leader, encounter triggers and enemy turns. It only
+ * reads state and dispatches commands; the engine decides what happens.
+ */
+export class GameController {
+  private selected: ActionDef | null = null;
+  private aiTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Recent leader positions, so companions walk in single file behind them. */
+  private trail: Vec2[] = [];
+  private leaderMoved = false;
+  scene!: MapScene;
+
+  constructor(
+    private store: GameStore,
+    private game: GameDefinition,
+    private hud: CombatHud,
+  ) {
+    store.subscribe((change, state) => {
+      if (change.kind === 'reset') {
+        this.trail = [];
+        this.selected = null;
+      } else {
+        this.track(change.events);
+        this.hud.logEvents(change.events, state);
+      }
+      this.refresh();
+    });
+  }
+
+  private get state(): GameState {
+    return this.store.state;
+  }
+
+  private isPlayer(id: string | null | undefined): boolean {
+    return !!id && this.state.entities[id]?.controllerId === this.game.playerId;
+  }
+
+  /** Who the player is steering right now: their active character in combat, the leader otherwise. */
+  controlledId(): string {
+    const { turn } = this.state;
+    if (turn.mode === 'combat' && this.isPlayer(turn.activeEntityId)) return turn.activeEntityId!;
+    return this.game.leaderId;
+  }
+
+  // --- Input --------------------------------------------------------------------
+
+  onTileSelected(tile: Vec2): void {
+    if (this.scene.busy) return;
+    const { turn } = this.state;
+    if (turn.mode !== 'combat') {
+      this.dispatchMove(this.game.leaderId, tile);
+      return;
+    }
+    const active = turn.activeEntityId;
+    if (!this.isPlayer(active)) return;
+    if (this.selected) {
+      this.aim(active!, this.selected, tile);
+      return;
+    }
+    const occupant = entityAt(this.state, tile);
+    if (occupant && occupant.id !== active) {
+      this.hud.showEntity(occupant, this.state);
+      return;
+    }
+    this.dispatchMove(active!, tile);
+  }
+
+  selectAction(action: ActionDef | null): void {
+    const active = this.state.turn.activeEntityId;
+    if (!action || !active) {
+      this.selected = null;
+      this.refresh();
+      return;
+    }
+    // Self-targeted actions need no aiming: show the preview straight away.
+    if (action.target.kind === 'self') {
+      this.selected = null;
+      this.confirmPreview(active, action, {});
+      return;
+    }
+    this.selected = action;
+    this.refresh();
+  }
+
+  endTurn(): void {
+    const active = this.state.turn.activeEntityId;
+    if (!active || !this.isPlayer(active) || this.scene.busy) return;
+    this.selected = null;
+    this.report(this.store.dispatch({ type: 'endTurn', issuer: this.game.playerId, entityId: active } as never));
+  }
+
+  private aim(actorId: string, action: ActionDef, tile: Vec2): void {
+    const occupant = entityAt(this.state, tile);
+    const target: ActionTarget = action.target.kind === 'tile' ? { tile } : { entityId: occupant?.id };
+    if (action.target.kind === 'creature' && !occupant) {
+      this.hud.say(this.game.texts.combat?.noTarget ?? '', true);
+      return;
+    }
+    const actor = this.state.entities[actorId]!;
+    const where = target.tile ?? occupant!.position;
+    if (gridDistance(actor.position, where) > action.target.range) {
+      this.hud.say(this.game.texts.errors.out_of_range ?? '', true);
+      return;
+    }
+    this.confirmPreview(actorId, action, target);
+  }
+
+  private confirmPreview(actorId: string, action: ActionDef, target: ActionTarget): void {
+    const preview = this.store.engine.ruleset.previewAction(this.state, actorId, action.id, target);
+    const targetName = target.entityId ? this.state.entities[target.entityId]?.name : undefined;
+    if (preview.affectedTiles) this.scene.setOverlays([], [], preview.affectedTiles);
+    this.hud.showPreview(action, preview, targetName, () => {
+      this.selected = null;
+      this.report(this.store.dispatch({ type: 'act', issuer: this.game.playerId, entityId: actorId, actionId: action.id, target } as never));
+    });
+  }
+
+  private dispatchMove(entityId: string, to: Vec2): void {
+    const command: MoveCommand = { type: 'move', issuer: this.game.playerId, entityId, to };
+    this.report(this.store.dispatch(command));
+  }
+
+  private report(result: ReturnType<GameStore['dispatch']>): void {
+    if (!result.ok) {
+      const t = this.game.texts.errors;
+      this.hud.say(result.error.code === 'action_invalid' ? result.error.message : (t[result.error.code] ?? this.game.texts.ui.genericError), true);
+    }
+  }
+
+  // --- Things that happen on their own ------------------------------------------------
+
+  private track(events: GameEvent[]): void {
+    for (const e of events) {
+      if (e.type === 'entityMoved' && (e as never as { entityId: string }).entityId === this.game.leaderId) {
+        const ev = e as never as { from: Vec2; path: Vec2[] };
+        this.trail.push(ev.from, ...ev.path.slice(0, -1));
+        this.trail = this.trail.slice(-12);
+        this.leaderMoved = this.state.turn.mode !== 'combat';
+      }
+    }
+  }
+
+  /** Called by the scene when animations finish. */
+  onIdle(): void {
+    this.refresh();
+    const { turn } = this.state;
+    if (turn.mode !== 'combat') {
+      if (this.checkEncounters()) return;
+      if (this.leaderMoved) {
+        this.leaderMoved = false;
+        this.followLeader();
+      }
+      return;
+    }
+    const active = turn.activeEntityId;
+    if (active && !this.isPlayer(active)) this.scheduleAi(active);
+  }
+
+  private scheduleAi(entityId: string): void {
+    if (this.aiTimer) return;
+    this.aiTimer = setTimeout(() => {
+      this.aiTimer = null;
+      if (this.scene.busy || this.state.turn.activeEntityId !== entityId) return;
+      const command = nextAiCommand(this.store.engine.ruleset, this.state, entityId);
+      const result = this.store.dispatch(command);
+      // A plan the engine refuses must never stall the fight.
+      if (!result.ok) this.store.dispatch({ type: 'endTurn', issuer: SYSTEM_ISSUER, entityId } as never);
+    }, AI_STEP_MS);
+  }
+
+  /** Starts combat when the leader walks into an encounter zone with enemies still standing. */
+  private checkEncounters(): boolean {
+    const leader = this.state.entities[this.game.leaderId];
+    if (!leader) return false;
+    const ruleset = this.store.engine.ruleset;
+    for (const zone of zonesOf(this.state, 'encounters')) {
+      if (!inZone(zone, leader.position)) continue;
+      const foes = String(zone.properties.participants ?? '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter((id) => this.state.entities[id] && ruleset.isStanding(this.state.entities[id]!));
+      if (foes.length === 0) continue;
+      const party = Object.values(this.state.entities)
+        .filter((e) => e.factionId === leader.factionId && ruleset.isStanding(e))
+        .map((e) => e.id);
+      this.store.dispatch({ type: 'startCombat', issuer: SYSTEM_ISSUER, participants: [...party, ...foes] } as never);
+      return true;
+    }
+    return false;
+  }
+
+  /** Companions walk to the leader's recent footsteps, one tile further back each. */
+  private followLeader(): void {
+    const leader = this.state.entities[this.game.leaderId];
+    if (!leader) return;
+    const ruleset = this.store.engine.ruleset;
+    const companions = Object.values(this.state.entities).filter(
+      (e) => e.id !== leader.id && e.factionId === leader.factionId && this.isPlayer(e.id) && ruleset.isStanding(e),
+    );
+    const taken = new Set([posKey(leader.position)]);
+    companions.forEach((c, i) => {
+      if (gridDistance(c.position, leader.position) <= 1 + i) {
+        taken.add(posKey(c.position));
+        return;
+      }
+      const spot = [...this.trail].reverse().slice(i).find((p) => !taken.has(posKey(p)) && !entityAt(this.state, p)) ?? this.nearestFree(leader.position, taken);
+      if (!spot) return;
+      taken.add(posKey(spot));
+      this.store.dispatch({ type: 'move', issuer: this.game.playerId, entityId: c.id, to: spot } as MoveCommand);
+    });
+  }
+
+  private nearestFree(around: Vec2, taken: Set<string>): Vec2 | null {
+    const ruleset = this.store.engine.ruleset;
+    const tiles = [...reachableTiles(this.state.map, around, 3, { rules: ruleset.movement, blocked: blockedTiles(ruleset, this.state, '') }).values()];
+    return tiles.filter((t) => !taken.has(posKey(t.pos))).sort((a, b) => a.cost - b.cost)[0]?.pos ?? null;
+  }
+
+  // --- Presentation -------------------------------------------------------------------
+
+  private refresh(): void {
+    if (!this.scene) return;
+    const state = this.state;
+    const ruleset = this.store.engine.ruleset;
+    const { turn } = state;
+    const active = turn.mode === 'combat' ? turn.activeEntityId : null;
+    this.scene.setActive(active);
+    const playerTurn = this.isPlayer(active);
+    this.hud.render(state, ruleset, active, playerTurn, this.selected?.id ?? null, (a) => this.selectAction(a), () => this.endTurn());
+
+    if (!active || !playerTurn) {
+      this.scene.setOverlays([], []);
+      return;
+    }
+    const actor = state.entities[active]!;
+    if (this.selected) {
+      const a = this.selected;
+      // Area spells are aimed at a tile: the area is painted once a tile is picked.
+      if (a.target.kind === 'tile') {
+        this.scene.setOverlays([], []);
+        return;
+      }
+      const targets = Object.values(state.entities)
+        .filter((e) => ruleset.isStanding(e) && gridDistance(e.position, actor.position) <= a.target.range)
+        .filter((e) => (a.target.filter === 'hostile' ? e.factionId !== actor.factionId : a.target.filter === 'ally' ? e.factionId === actor.factionId : true))
+        .map((e) => e.id);
+      this.scene.setOverlays([], targets);
+      return;
+    }
+    const left = ruleset.movementBudget(actor, state) - turn.movementUsed;
+    const tiles = left > 0 ? [...reachableTiles(state.map, actor.position, left, { rules: ruleset.movement, blocked: blockedTiles(ruleset, state, active) }).values()].map((t) => t.pos) : [];
+    this.scene.setOverlays(tiles, []);
+  }
+}

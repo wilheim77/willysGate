@@ -328,8 +328,12 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
           expected += isHostile(e, v) ? value : -value * 1.5;
         }
       }
-      if (spell.area && victims.filter((v) => isHostile(e, v)).length === 0) return { valid: true, chance: 0, expectedDamage: 0, breakdown: [{ label: 'No alcanza a ningún enemigo' }] };
+      const affectedTiles = spell.area ? areaTiles(state, e, spell, target.tile ?? targetEntity?.position ?? e.position) : undefined;
+      if (spell.area && victims.filter((v) => isHostile(e, v)).length === 0) {
+        return { valid: true, chance: 0, expectedDamage: 0, breakdown: [{ label: 'No alcanza a ningún enemigo' }], ...(affectedTiles ? { affectedTiles } : {}) };
+      }
       return {
+        ...(affectedTiles ? { affectedTiles } : {}),
         valid: true,
         chance,
         expectedDamage: Math.max(0, expected),

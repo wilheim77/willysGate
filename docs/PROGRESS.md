@@ -42,6 +42,15 @@
 - [x] Arte elegido: 0x72 (base) y Ninja Adventure (exteriores, ya integrado en tierra y acantilados).
 - [x] Confirmado en un móvil real que pellizcar no mueve al personaje.
 
+### Fase 2 (en curso)
+- [x] Motor: combate por turnos, acciones genéricas, interrupciones (ataque de oportunidad), IA genérica y efectos de teletransporte y de máximo de recurso. Esquema v2 con migración.
+- [x] dnd5e: reglas de combate del SRD y las 4 clases con datos del nivel 1 al 6, conjuros de nivel 0 a 3, razas y monstruos.
+- [x] Cliente: encuentro de prueba (grupo a nivel 3 contra los Sinpaga), HUD de combate, vista previa con glosario, registro de tiradas y juice básico. Probado en el navegador: el combate salta, el ataque con vista previa, Manos ardientes con salvaciones y los turnos de la IA funcionan.
+- [x] Tests: 153.
+- [ ] Integrar los sprites del agente de arte (compañeros y variantes de Sinpaga) cuando termine.
+- [ ] Probar el combate completo en el móvil y ajustar el HUD.
+- [ ] Equilibrar el encuentro de prueba y pulir (los compañeros a veces no siguen al líder en desniveles).
+
 ## Planificado para más adelante
 
 - **Efectos y ambiente** (2026-10-17): ver `DESIGN.md` → «Efectos y ambiente».

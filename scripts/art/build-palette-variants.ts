@@ -56,6 +56,8 @@ interface Spec {
   /** Output sheet name, written to public/assets/<preset>/. */
   output: string;
   variants: Record<string, Variant>;
+  /** Extra sprite ids that reuse a variant's art (e.g. older placeholder ids). */
+  aliases?: Record<string, string>;
 }
 
 const args = process.argv.slice(2);
@@ -201,6 +203,13 @@ for (const { id, v, anims } of rows) {
   manifest.sprites[id] = { kind: 'frames', url, facing: spec.facing, animations };
   console.log(`${id} (${v.base}): ${Object.entries(animations).map(([a, f]) => `${a}(${f.length})`).join(', ')}`);
   y += Math.max(...Object.values(anims).flat().map((f) => f.h));
+}
+
+for (const [alias, target] of Object.entries(spec.aliases ?? {})) {
+  if (alias.startsWith('$')) continue;
+  if (!manifest.sprites[target]) throw new Error(`alias ${alias}: unknown variant "${target}"`);
+  manifest.sprites[alias] = manifest.sprites[target];
+  console.log(`${alias} -> ${target}`);
 }
 
 const outDir = join(gameDir, 'public', 'assets', preset);

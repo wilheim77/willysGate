@@ -9,6 +9,11 @@
     "hit": "hit_anim"
   },
   "output": "characters.png",
+  "aliases": {
+    "$comment": "Older placeholder ids used by content (test encounter) -> variant whose art they get.",
+    "bandit": "sinpaga_cuchillero",
+    "thug": "sinpaga_enmascarado"
+  },
   "variants": {
     "cobrador": {
       "base": "doc",

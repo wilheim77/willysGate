@@ -89,7 +89,66 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 #message { color: var(--text); text-align: right; }
 #message.error { color: var(--error); }
 
+/* --- Combat HUD --- */
+#combat[hidden] { display: none; }
+#initiative-wrap {
+  position: fixed; top: 52px; left: 8px; right: 8px; z-index: 2;
+  display: flex; gap: 8px; align-items: center; pointer-events: none;
+}
+#round { color: var(--muted); white-space: nowrap; }
+#initiative { display: flex; gap: 4px; overflow-x: auto; pointer-events: auto; }
+.chip {
+  min-width: 74px; padding: 2px 6px; background: var(--panel); border: 2px solid var(--iron);
+  font-size: 16px; line-height: 1.1; box-shadow: 2px 2px 0 #000;
+}
+.chip.active { border-color: #e8c070; }
+.chip.foe .name { color: #e0a090; }
+.chip.down { opacity: 0.45; text-decoration: line-through; }
+.chip .hp { display: block; height: 4px; background: #000; margin-top: 2px; }
+.chip .hp i { display: block; height: 100%; background: #7a2e22; }
+.chip:not(.foe) .hp i { background: #5f8a4a; }
+#combat-log {
+  position: fixed; left: 8px; top: 100px; z-index: 2; max-width: min(520px, 70vw);
+  font-size: 15px; color: var(--muted); text-shadow: 1px 1px 0 #000; pointer-events: none;
+}
+#combat-log p { margin: 0; }
+#action-bar {
+  position: fixed; left: 0; right: 0; bottom: calc(40px + env(safe-area-inset-bottom)); z-index: 2;
+  background: linear-gradient(transparent, rgba(10, 8, 12, 0.92) 30%);
+  padding: 18px 10px 6px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+#action-bar .card { width: 100%; display: flex; gap: 8px; align-items: baseline; }
+#action-bar .card strong { color: var(--text); font-size: 22px; }
+#action-bar .pip { color: #3a3438; font-size: 18px; }
+#action-bar .pip.on { color: #e8c070; }
+#action-bar .move { color: var(--muted); }
+#action-bar .actions { display: flex; gap: 6px; overflow-x: auto; flex: 1 1 auto; padding-bottom: 2px; }
+#action-bar .actions button { white-space: nowrap; }
+#action-bar button.bonus { border-color: #6b5a3a; }
+#action-bar button.selected { background: #5a3a22; border-color: #e8c070; }
+#action-bar button:disabled { opacity: 0.4; }
+#action-bar .end-turn { background: #3a2222; }
+#action-bar .hint { width: 100%; color: var(--muted); font-size: 16px; }
+#preview-sheet {
+  position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); bottom: calc(150px + env(safe-area-inset-bottom));
+  width: min(420px, calc(100vw - 24px)); background: var(--panel); border: 3px solid var(--iron);
+  box-shadow: 4px 4px 0 #000; padding: 10px 12px;
+}
+#preview-sheet h3 { margin: 0 0 4px; color: var(--accent); font-weight: normal; font-size: 24px; }
+#preview-sheet .big { font-size: 30px; color: #e8d6b0; }
+#preview-sheet .desc { color: var(--muted); margin: 4px 0; }
+#preview-sheet .error { color: var(--error); }
+#preview-sheet dl { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; margin: 6px 0; }
+#preview-sheet dt { color: var(--muted); }
+#preview-sheet dd { margin: 0; text-align: right; }
+#preview-sheet .explain { grid-column: 1 / -1; color: var(--text); background: #120f13; padding: 4px 6px; margin: 2px 0 4px; }
+#preview-sheet .help { min-height: 0; padding: 0 6px; font-size: 14px; }
+#preview-sheet .buttons { display: flex; justify-content: flex-end; gap: 8px; }
+#preview-sheet .confirm { background: #5a3a22; border-color: #e8c070; }
+
 @media (max-width: 560px) {
+  #combat-log { top: 120px; font-size: 13px; }
+  #initiative-wrap { top: 96px; }
   html, body { font-size: 18px; }
   .title { font-size: 22px; }
   button { padding: 2px 7px; }

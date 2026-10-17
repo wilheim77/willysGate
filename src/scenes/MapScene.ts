@@ -1,5 +1,20 @@
 import Phaser from 'phaser';
-import { type EntityMovedEvent, type GameState, type LightSource, type Tile, type Vec2, findPath, isEvent, lightPosition, posKey, tileAt } from '../../engine';
+import {
+  type EntityMovedEvent,
+  type EntityTeleportedEvent,
+  type GameEvent,
+  type GameState,
+  type LightSource,
+  type Tile,
+  type Vec2,
+  blockedTiles,
+  findPath,
+  hasCondition,
+  isEvent,
+  lightPosition,
+  tileAt,
+} from '../../engine';
+import { DEFAULT_FX, Juice, tween } from '../fx/juice';
 import { type AssetManifest, type LpcAnimation, type SpriteArt, assetUrl, tilesetKey } from '../assets/manifest';
 import { LightingLayer } from '../fx/LightingLayer';
 import type { Theme } from '../game/definition';
@@ -12,6 +27,20 @@ export interface MapSceneHooks {
   /** Pointer is over a tile (or nothing). */
   onTileHovered(tile: Vec2 | null): void;
   controlledEntityId(): string;
+  /** All queued events have finished animating. */
+  onIdle?(): void;
+}
+
+/** Texts the event player shows over the map (Spanish, from the game's ui texts). */
+export interface MapSceneTexts {
+  miss: string;
+  crit: string;
+  downed: string;
+  saved: string;
+  failed: string;
+  combatStart: string;
+  victory: string;
+  defeat: string;
 }
 
 const STEP_MS = 160;
@@ -54,6 +83,12 @@ export class MapScene extends Phaser.Scene {
   private breathing = new Map<string, Phaser.Tweens.Tween>();
   private pathPreview!: Phaser.GameObjects.Graphics;
   private animating = 0;
+  private queue: GameEvent[] = [];
+  private playing = false;
+  private juice!: Juice;
+  private overlay!: Phaser.GameObjects.Graphics;
+  private activeRing: Phaser.GameObjects.Ellipse | null = null;
+  private activeId: string | null = null;
   private dragStart: { x: number; y: number; scrollX: number; scrollY: number } | null = null;
   private dragging = false;
   private pinchDistance: number | null = null;
@@ -64,6 +99,7 @@ export class MapScene extends Phaser.Scene {
     private manifest: AssetManifest,
     private theme: Theme,
     private hooks: MapSceneHooks,
+    private texts: MapSceneTexts,
   ) {
     super('map');
     this.grid = new GridProjection(manifest.tile.size, manifest.tile.levelHeight);
@@ -81,11 +117,18 @@ export class MapScene extends Phaser.Scene {
   create(): void {
     this.defineCharacterFrames();
     this.pathPreview = this.add.graphics().setDepth(1_000_000);
+    this.overlay = this.add.graphics().setDepth(999_000);
+    this.juice = new Juice(this, this.grid.tile, DEFAULT_FX);
     this.buildWorld(this.store.state);
 
     const unsubscribe = this.store.subscribe((change, state) => {
-      if (change.kind === 'reset') this.buildWorld(state);
-      else for (const e of change.events) if (isEvent<EntityMovedEvent>(e, 'entityMoved')) this.animateMove(e, state);
+      if (change.kind === 'reset') {
+        this.queue = [];
+        this.buildWorld(state);
+      } else {
+        this.queue.push(...change.events);
+        void this.playQueue();
+      }
     });
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, unsubscribe);
 
@@ -195,6 +238,7 @@ export class MapScene extends Phaser.Scene {
       this.sprites.set(entity.id, sprite);
       this.shadows.set(entity.id, shadow);
       this.idle(entity.id, this.facing.get(entity.id) ?? 's');
+      this.applyFate(entity.id, state);
     }
 
     this.lighting = new LightingLayer(this, map.width * T, map.height * T, T, LIGHTING_DEPTH);
@@ -220,9 +264,9 @@ export class MapScene extends Phaser.Scene {
     return this.grid.tileCentre(p.x, p.y, tile?.height ?? 0);
   }
 
-  private animateMove(event: EntityMovedEvent, state: GameState): void {
+  private animateMove(event: EntityMovedEvent, state: GameState): Promise<void> {
     const sprite = this.sprites.get(event.entityId);
-    if (!sprite) return;
+    if (!sprite) return Promise.resolve();
     this.animating++;
     this.pathPreview.clear();
     this.stopBreathing(event.entityId);
@@ -247,15 +291,230 @@ export class MapScene extends Phaser.Scene {
         onComplete: () => sprite.setDepth(this.grid.depth(step.y, tile.height, 5)),
       };
     });
-    this.tweens.chain({
-      targets: sprite,
-      tweens,
-      onComplete: () => {
-        this.animating--;
-        this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
-      },
+    return new Promise((resolve) => {
+      this.tweens.chain({
+        targets: sprite,
+        tweens,
+        onComplete: () => {
+          this.animating--;
+          this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
+          resolve();
+        },
+      });
     });
   }
+
+  // --- Event playback ------------------------------------------------------------
+
+  /** True while events are animating; input and AI wait for it. */
+  get busy(): boolean {
+    return this.playing || this.animating > 0;
+  }
+
+  /** Plays queued engine events one after another, then resyncs every sprite with the state. */
+  private async playQueue(): Promise<void> {
+    if (this.playing) return;
+    this.playing = true;
+    this.pathPreview.clear();
+    while (this.queue.length > 0) {
+      const event = this.queue.shift()!;
+      try {
+        await this.play(event);
+      } catch (err) {
+        console.error('event playback failed', event, err);
+      }
+    }
+    this.playing = false;
+    this.syncWithState(this.store.state);
+    this.hooks.onIdle?.();
+  }
+
+  private centreOf(id: string): Vec2 | null {
+    const s = this.sprites.get(id);
+    return s ? { x: s.x, y: s.y } : null;
+  }
+
+  private async play(event: GameEvent): Promise<void> {
+    const state = this.store.state;
+    const e = event as GameEvent & Record<string, unknown>;
+    const sprite = (id: unknown) => (typeof id === 'string' ? this.sprites.get(id) : undefined);
+    const T = this.grid.tile;
+    switch (event.type) {
+      case 'entityMoved':
+        return this.animateMove(event as EntityMovedEvent, state);
+      case 'entityTeleported': {
+        const ev = event as EntityTeleportedEvent;
+        const s = sprite(ev.entityId);
+        if (!s) return;
+        await tween(this, { targets: s, alpha: 0, duration: 150 });
+        const c = this.grid.tileCentre(ev.to.x, ev.to.y, tileAt(state.map, ev.to)?.height ?? 0);
+        s.setPosition(c.x, c.y);
+        await tween(this, { targets: s, alpha: 1, duration: 150 });
+        return;
+      }
+      case 'attackRolled': {
+        const attacker = sprite(e.attackerId);
+        const target = this.centreOf(String(e.targetId));
+        if (attacker && target) {
+          this.face(String(e.attackerId), target.x < attacker.x ? 'w' : 'e');
+          await this.juice.lunge(attacker, target);
+        }
+        if (target && !e.hit) await this.juice.floatText(target.x, target.y, this.texts.miss, '#b8b8b8');
+        if (target && e.crit) {
+          this.juice.shake(1.6);
+          void this.juice.floatText(target.x, target.y - T * 0.4, this.texts.crit, '#ffd24a', 0.7);
+          await this.juice.hitStop();
+        }
+        return;
+      }
+      case 'damageDealt': {
+        const s = sprite(e.targetId);
+        if (!s) return;
+        this.juice.burst(s.x, s.y, 0x8a1c14, e.crit ? 14 : 8);
+        void this.juice.floatText(s.x, s.y, `-${e.amount}`, '#ff6a55', e.crit ? 0.8 : 0.6);
+        await this.juice.hit(s);
+        return;
+      }
+      case 'healed': {
+        const s = sprite(e.targetId);
+        if (s && Number(e.amount) > 0) {
+          this.juice.burst(s.x, s.y, 0x7fe08a, 6);
+          await this.juice.floatText(s.x, s.y, `+${e.amount}`, '#8cf09a');
+        }
+        return;
+      }
+      case 'saveRolled': {
+        const s = sprite(e.entityId);
+        const roll = e.roll as { success: boolean } | undefined;
+        if (s && roll) void this.juice.floatText(s.x, s.y - T * 0.3, roll.success ? this.texts.saved : this.texts.failed, roll.success ? '#c8d6ff' : '#ffb070', 0.45);
+        return;
+      }
+      case 'reactionUsed': {
+        const s = sprite(e.entityId);
+        if (s && e.detail) await this.juice.floatText(s.x, s.y - T * 0.3, String(e.detail), '#ffe08a', 0.45);
+        return;
+      }
+      case 'spellCast': {
+        const caster = this.centreOf(String(e.casterId));
+        const target = e.target as { entityId?: string; tile?: Vec2 } | undefined;
+        if (caster) await this.juice.ring(caster.x, caster.y - T * 0.4, 0.6, 0x9ad0ff);
+        const at = target?.tile
+          ? this.grid.tileCentre(target.tile.x, target.tile.y, tileAt(state.map, target.tile)?.height ?? 0)
+          : target?.entityId
+            ? this.centreOf(target.entityId)
+            : null;
+        if (at && (at.x !== caster?.x || at.y !== caster?.y)) await this.juice.ring(at.x, at.y, target?.tile ? 2.5 : 0.8, 0xffa060);
+        return;
+      }
+      case 'downed':
+      case 'died':
+      case 'revived':
+      case 'stabilized': {
+        const s = sprite(e.entityId);
+        if (s && event.type === 'died') this.juice.burst(s.x, s.y, 0x5a0f0a, 16);
+        if (s && event.type === 'downed') void this.juice.floatText(s.x, s.y, this.texts.downed, '#ff8a8a', 0.5);
+        this.applyFate(String(e.entityId), state, true);
+        return;
+      }
+      case 'combatStarted':
+        await this.juice.banner(this.texts.combatStart);
+        return;
+      case 'combatEnded': {
+        const won = e.winner && Object.values(state.entities).some((x) => x.factionId === e.winner && x.controllerId.startsWith('player'));
+        await this.juice.banner(won ? this.texts.victory : this.texts.defeat, won ? '#e8d6b0' : '#ff7a6a');
+        return;
+      }
+      case 'turnStarted': {
+        const s = sprite(e.entityId);
+        if (s) {
+          this.cameras.main.stopFollow();
+          this.cameras.main.pan(s.x, s.y, 250, 'Sine.easeInOut');
+        }
+        return;
+      }
+      default:
+        return;
+    }
+  }
+
+  /** Dead and fallen creatures lie down; the dead fade into the floor. */
+  private applyFate(id: string, state: GameState, animate = false): void {
+    const s = this.sprites.get(id);
+    const e = state.entities[id];
+    if (!s || !e) return;
+    const dead = hasCondition(e, 'dead');
+    const down = hasCondition(e, 'downed');
+    const angle = dead || down ? 90 : 0;
+    const alpha = dead ? 0.55 : 1;
+    if (dead) s.setTint(0x6a6a6a);
+    else if (down) s.setTint(0xc08080);
+    else s.clearTint();
+    if (dead || down) {
+      s.stop();
+      this.stopBreathing(id);
+    } else if (s.angle !== 0) {
+      this.idle(id, this.facing.get(id) ?? 's');
+    }
+    this.shadows.get(id)?.setVisible(!dead);
+    if (animate) this.tweens.add({ targets: s, angle, alpha, duration: 300 });
+    else s.setAngle(angle).setAlpha(alpha);
+    if (dead) s.setDepth(s.depth - 4);
+  }
+
+  /** Safety net after playback: every sprite where the state says it is. */
+  private syncWithState(state: GameState): void {
+    for (const [id, s] of this.sprites) {
+      const e = state.entities[id];
+      if (!e) continue;
+      const c = this.grid.tileCentre(e.position.x, e.position.y, tileAt(state.map, e.position)?.height ?? 0);
+      s.setPosition(c.x, c.y);
+      if (!hasCondition(e, 'dead')) s.setDepth(this.grid.depth(e.position.y, tileAt(state.map, e.position)?.height ?? 0, 5));
+      this.applyFate(id, state);
+    }
+    this.updateActiveRing();
+  }
+
+  // --- Overlays (driven by the controller) -----------------------------------------
+
+  /** Marks the creature whose turn it is with a ring at its feet. */
+  setActive(entityId: string | null): void {
+    this.activeId = entityId;
+    this.updateActiveRing();
+  }
+
+  private updateActiveRing(): void {
+    const s = this.activeId ? this.sprites.get(this.activeId) : undefined;
+    if (!s) {
+      this.activeRing?.setVisible(false);
+      return;
+    }
+    const T = this.grid.tile;
+    if (!this.activeRing) {
+      this.activeRing = this.add.ellipse(0, 0, T * 0.9, T * 0.4).setStrokeStyle(1, 0xe8c070, 0.9).setFillStyle(0xe8c070, 0.12);
+      this.tweens.add({ targets: this.activeRing, alpha: { from: 1, to: 0.4 }, duration: 600, yoyo: true, repeat: -1 });
+    }
+    this.activeRing.setVisible(true).setPosition(s.x, s.y).setDepth(s.depth - 2);
+  }
+
+  /** Tiles the active creature can reach this turn, and creatures/tiles that are valid targets. */
+  setOverlays(moveTiles: Vec2[], targetIds: string[], areaTiles: Vec2[] = []): void {
+    const g = this.overlay.clear();
+    const T = this.grid.tile;
+    const state = this.store.state;
+    for (const p of moveTiles) {
+      const c = this.grid.tileCentre(p.x, p.y, tileAt(state.map, p)?.height ?? 0);
+      g.fillStyle(0x9fc8ff, 0.13).fillRect(c.x - T / 2 + 1, c.y - T / 2 + 1, T - 2, T - 2);
+    }
+    for (const p of areaTiles) {
+      const c = this.grid.tileCentre(p.x, p.y, tileAt(state.map, p)?.height ?? 0);
+      g.fillStyle(0xff8a40, 0.25).fillRect(c.x - T / 2, c.y - T / 2, T, T);
+    }
+    for (const id of targetIds) {
+      const s = this.sprites.get(id);
+      if (s) g.lineStyle(1, 0xff5040, 0.9).strokeRect(s.x - T / 2 + 1, s.y - T + 1, T - 2, T - 2);
+    }
+  }
+
 
   /** Characters face 4 directions: the dominant axis of the step (horizontal on exact diagonals). */
   private directionOf(from: Vec2, to: Vec2): Dir {
@@ -469,7 +728,7 @@ export class MapScene extends Phaser.Scene {
       gestureIsTap = false;
       this.dragStart = null;
       this.dragging = false;
-      if (!isTap || this.animating > 0) return;
+      if (!isTap || this.busy) return;
       const tile = this.pickTile(p.worldX, p.worldY);
       if (tile) this.hooks.onTileSelected(tile);
     });
@@ -490,16 +749,14 @@ export class MapScene extends Phaser.Scene {
 
   private drawPathPreview(target: Vec2 | null): void {
     const g = this.pathPreview.clear();
-    if (!target || this.animating > 0) return;
+    if (!target || this.busy) return;
     const state = this.store.state;
     const mover = state.entities[this.hooks.controlledEntityId()];
     if (!mover) return;
-    const blocked = new Set(
-      Object.values(state.entities)
-        .filter((e) => e.id !== mover.id)
-        .map((e) => posKey(e.position)),
-    );
-    const result = findPath(state.map, mover.position, target, { blocked, rules: this.store.engine.ruleset.movement });
+    const ruleset = this.store.engine.ruleset;
+    const result = findPath(state.map, mover.position, target, { blocked: blockedTiles(ruleset, state, mover.id), rules: ruleset.movement });
+    // In combat, steps beyond this turn's movement are drawn red.
+    const left = state.turn.mode === 'combat' ? ruleset.movementBudget(mover, state) - state.turn.movementUsed : Infinity;
     const T = this.grid.tile;
     const mark = (p: Vec2, color: number, alpha: number, inset: number) => {
       const c = this.grid.tileCentre(p.x, p.y, tileAt(state.map, p)!.height);
@@ -509,9 +766,13 @@ export class MapScene extends Phaser.Scene {
       if (tileAt(state.map, target)?.terrain !== 'void') mark(target, 0x8a2a1e, 0.45, 2);
       return;
     }
+    let cost = 0;
+    let prev = mover.position;
     result.path.forEach((p, i) => {
       const last = i === result.path.length - 1;
-      mark(p, 0xc8b27a, last ? 0.5 : 0.3, last ? 2 : 11);
+      cost += 1 + Math.max(0, (tileAt(state.map, p)?.height ?? 0) - (tileAt(state.map, prev)?.height ?? 0)) * ruleset.movement.climbCost;
+      prev = p;
+      mark(p, cost > left ? 0x8a2a1e : 0xc8b27a, last ? 0.5 : 0.3, last ? 2 : 11);
     });
   }
 }

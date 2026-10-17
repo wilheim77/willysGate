@@ -1,5 +1,5 @@
-import { type TiledMapJson, parseTiledMap, withLighting } from '../../engine';
-import { createCreature, dnd5e } from '../../rulesets/dnd5e';
+import { type Entity, type TiledMapJson, parseTiledMap, withLighting, withZones } from '../../engine';
+import { createCharacter, createMonster, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import art0x72 from './assets/0x72.json';
@@ -9,6 +9,7 @@ import meta from './meta.json';
 import texts from './texts/ui.json';
 
 const PLAYER = 'player:1';
+const AI = 'ai';
 
 export const game: GameDefinition = {
   id: meta.id,
@@ -34,30 +35,29 @@ export const game: GameDefinition = {
   playerId: PLAYER,
   leaderId: 'hero',
   newGame(engine, seed) {
-    const { map, spawns, lighting } = parseTiledMap('test', testMap as TiledMapJson);
-    const state = engine.newGame({
-      seed,
-      map,
-      entities: [
-        // Placeholder protagonist until character creation (Phase 4).
-        createCreature({
-          id: 'hero',
-          name: 'Cobrador',
-          controllerId: PLAYER,
-          factionId: 'party',
-          position: spawns.hero ?? { x: 1, y: 1 },
-          spriteId: 'hero',
-          abilities: { str: 14, dex: 12, con: 13, int: 10, wis: 11, cha: 15 },
-          ac: 14,
-          hp: 11,
-          tags: ['class:fighter', 'race:human', 'prof:intimidation', 'prof:athletics'],
-        }),
-      ],
-    });
+    const { map, spawns, lighting, zones } = parseTiledMap('test', testMap as TiledMapJson);
+    const at = (name: string) => spawns[name] ?? { x: 1, y: 1 };
+    // Test party at level 3 (character creation arrives in Phase 4). Standard array per class.
+    const party: Entity[] = [
+      createCharacter({ id: 'hero', name: 'Cobrador', controllerId: PLAYER, factionId: 'party', position: at('hero'), spriteId: 'wizard', classId: 'wizard', raceId: 'human', level: 3, abilities: { str: 8, dex: 14, con: 13, int: 15, wis: 12, cha: 10 } }),
+      createCharacter({ id: 'garran', name: 'Garrán', controllerId: PLAYER, factionId: 'party', position: at('garran'), spriteId: 'garran', classId: 'fighter', raceId: 'half_orc', level: 3, abilities: { str: 15, dex: 13, con: 14, int: 10, wis: 12, cha: 8 } }),
+      createCharacter({ id: 'dorotea', name: 'Dorotea', controllerId: PLAYER, factionId: 'party', position: at('dorotea'), spriteId: 'dorotea', classId: 'rogue', raceId: 'human', level: 3, abilities: { str: 8, dex: 15, con: 10, int: 14, wis: 12, cha: 13 } }),
+      createCharacter({ id: 'anselmo', name: 'Fray Anselmo', controllerId: PLAYER, factionId: 'party', position: at('anselmo'), spriteId: 'anselmo', classId: 'cleric', raceId: 'halfling', level: 3, abilities: { str: 10, dex: 13, con: 14, int: 8, wis: 15, cha: 12 } }),
+    ];
+    const enemies: Entity[] = [
+      createMonster({ id: 'bandit-1', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-1'), spriteId: 'bandit' }),
+      createMonster({ id: 'bandit-2', name: 'Sinpaga', monsterId: 'bandit', controllerId: AI, factionId: 'sinpaga', position: at('bandit-2'), spriteId: 'bandit' }),
+      createMonster({ id: 'thug', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug'), spriteId: 'thug' }),
+      createMonster({ id: 'skeleton', name: 'Minero muerto', monsterId: 'skeleton', controllerId: AI, factionId: 'sinpaga', position: at('skeleton'), spriteId: 'skeleton' }),
+    ];
+    const state = engine.newGame({ seed, map, entities: [...party, ...enemies] });
     // The collector carries a lantern: the only light that goes everywhere with the party.
-    return withLighting(state, {
-      ...lighting,
-      lights: [...lighting.lights, { id: 'lantern', attachedTo: 'hero', radius: 4, intensity: 0.85, color: '#ffcf8a', flicker: 0.08 }],
-    });
+    return withZones(
+      withLighting(state, {
+        ...lighting,
+        lights: [...lighting.lights, { id: 'lantern', attachedTo: 'hero', radius: 4, intensity: 0.85, color: '#ffcf8a', flicker: 0.08 }],
+      }),
+      zones,
+    );
   },
 };

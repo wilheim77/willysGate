@@ -111,6 +111,8 @@ export interface ActionPreview {
   expectedHealing?: number;
   /** Lines for the tooltip, each optionally linked to a glossary term. */
   breakdown?: { label: string; value?: string; term?: string }[];
+  /** Tiles an area effect would cover, for the UI to paint before confirming. */
+  affectedTiles?: Vec2[];
 }
 
 export interface ActionOutcome {

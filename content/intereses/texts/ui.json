@@ -5,7 +5,14 @@
     "not_your_entity": "Ese no es de los tuyos.",
     "out_of_bounds": "Ahí no hay nada. Ni siquiera suelo.",
     "no_path": "No hay forma de llegar hasta ahí.",
-    "out_of_range": "Demasiado lejos para este turno."
+    "out_of_range": "Demasiado lejos para este turno.",
+    "not_your_turn": "No es tu turno.",
+    "not_in_combat": "No hay combate.",
+    "cannot_act": "Ese personaje no puede actuar.",
+    "unknown_action": "Esa acción no está disponible.",
+    "not_enough_resources": "No te quedan recursos para eso.",
+    "invalid_target": "Ese objetivo no vale.",
+    "action_invalid": "No se puede."
   },
   "terrain": {
     "stone": "piedra",
@@ -31,5 +38,27 @@
     "confirmNew": "¿Empezar de nuevo? Se perderá lo que no hayas guardado.",
     "height": "altura",
     "genericError": "Algo ha salido mal."
+  },
+  "combat": {
+    "miss": "Fallo",
+    "crit": "¡Crítico!",
+    "downed": "Caído",
+    "saved": "Resiste",
+    "failed": "Falla",
+    "combatStart": "Combate",
+    "victory": "Victoria",
+    "defeat": "Derrota",
+    "endTurn": "Terminar turno",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "round": "Ronda",
+    "movement": "Mov.",
+    "enemyTurn": "Turno de",
+    "pickTarget": "Elige un objetivo en el mapa (o pulsa otra vez la acción para cancelar).",
+    "moveOrAct": "Toca una casilla para moverte o elige una acción.",
+    "noTarget": "Ahí no hay nadie.",
+    "damage": "de daño",
+    "healing": "de curación",
+    "sure": "Sin tirada"
   }
 }
