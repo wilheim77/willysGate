@@ -1,0 +1,201 @@
+{
+  "$comment": "Scene 4. The first Callado (template spawn callado-1, faction callados, noncombatant until attacked by the dialogue) carrying silver from the well. With Garrán in the party he is recognised: the forty are alive (cuarenta_vivos).",
+  "id": "callado_pozo",
+  "start": "callado",
+  "nodes": {
+    "callado": {
+      "text": "Un hombre sube del Pozo con un saco a la espalda. Lleva ropa de mina podrida y un collar de plata que le brilla en el cuello. Camina sin prisa y sin pausa, como una noria. Tiene los ojos abiertos y nadie dentro.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "callado_visto",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "garran"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "garran": {
+      "speaker": "garran",
+      "text": "…Bartolo. Es Bartolo Grana. Bajó a la Garganta. Bajó con Ivo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cuarenta_vivos",
+          "value": true
+        }
+      ],
+      "next": "garran_2"
+    },
+    "garran_2": {
+      "text": "Garrán da un paso hacia él. El Callado no le mira. Sigue caminando con el saco, al mismo paso, hacia el carro.",
+      "next": "hub"
+    },
+    "hub": {
+      "text": "El Callado deja el saco en el carro y se da la vuelta, hacia el Pozo. Va a bajar otra vez.",
+      "choices": [
+        {
+          "id": "hablar",
+          "text": "¡Eh! ¿Quién eres?",
+          "once": true,
+          "next": "hablar"
+        },
+        {
+          "id": "saco",
+          "text": "(Mirar el saco.)",
+          "once": true,
+          "next": "saco"
+        },
+        {
+          "id": "medicina",
+          "text": "(Examinarle de cerca: el cuello, los ojos.)",
+          "once": true,
+          "check": {
+            "check": "medicine",
+            "dc": 13,
+            "success": "medicina_ok",
+            "failure": "medicina_mal"
+          }
+        },
+        {
+          "id": "arcana",
+          "text": "[Mago] (Ese collar.)",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "wizard"
+            }
+          },
+          "check": {
+            "check": "arcana",
+            "dc": 12,
+            "success": "arcana_ok",
+            "failure": "arcana_mal"
+          }
+        },
+        {
+          "id": "anselmo",
+          "text": "[Fray Anselmo] Fray, ¿puede hacer algo por él?",
+          "once": true,
+          "when": {
+            "inParty": "anselmo"
+          },
+          "next": "anselmo"
+        },
+        {
+          "text": "Detenerle por la fuerza.",
+          "next": "pelea"
+        },
+        {
+          "text": "Dejarle ir y seguirle con la vista.",
+          "next": "irse"
+        }
+      ]
+    },
+    "hablar": {
+      "text": "Nada. Ni un parpadeo. Desde muy lejos, como de debajo de la tierra, te parece oír que tararea algo. Una canción sin boca.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_canto",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "saco": {
+      "text": "Mineral de plata. Pero no es la plata gris de siempre: brilla con una luz propia, aceitosa, y al acercar la mano notas un zumbido detrás de los ojos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_viva",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "medicina_ok": {
+      "text": "Tiene la piel del cuello quemada bajo el collar, como si el metal estuviera vivo y comiera. Pulso lento. Respira. Está vivo, pero lo que lo mueve no es él.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "callados_controlados",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "medicina_mal": {
+      "text": "El Callado no se deja tocar: se aparta con la misma calma con que haría todo lo demás. No sacas nada en claro, salvo que huele a mina cerrada.",
+      "next": "hub"
+    },
+    "arcana_ok": {
+      "text": "El collar es de la misma plata que el saco, y vibra en el mismo tono. No es un adorno: es una correa. En algún sitio hay alguien con el otro extremo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "callados_controlados",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pista_collera",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "arcana_mal": {
+      "text": "Es un collar. De plata. Te duele la cabeza al mirarlo, y eso ya es un dato, aunque no sepas de qué.",
+      "next": "hub"
+    },
+    "anselmo": {
+      "speaker": "anselmo",
+      "text": "Puedo rezar. Rezar es gratis, y por una vez no voy a cobrar. Pero lo que tiene este hombre no es una herida. Es un amo.",
+      "next": "hub"
+    },
+    "pelea": {
+      "text": "Le pones la mano en el hombro. El Callado suelta el saco, despacio, y se vuelve hacia ti con la misma calma con que cargaba. Esa calma es lo peor.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "callado_atacado",
+          "value": true
+        },
+        {
+          "type": "setEntity",
+          "entityId": "callado-1",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "startCombat",
+          "factions": [
+            "callados"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "callado_abatido",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    "irse": {
+      "text": "El Callado se descuelga por la cuerda del Pozo sin hacer ruido. La polea gira. Abajo, muy abajo, algo la está esperando."
+    }
+  }
+}
