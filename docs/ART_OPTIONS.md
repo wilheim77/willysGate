@@ -39,6 +39,10 @@ En el mismo mapa (`content/intereses/maps/test.json`), con oscuridad, antorchas 
 
 **Decisión (2026-10-17):** 0x72 como base de *Intereses* y **Ninja Adventure (CC0) para exteriores**, con el mismo filtro de color. Recomendación original: 0x72 como base de *Intereses*, con animaciones por código e iluminación como principal fuente de ambiente. LPC se queda en el pipeline como opción para la creación de personaje o para otro juego.
 
+## Lo que falta en 0x72 y cómo se cubre
+
+Los huecos del pack (madera de mina, remate de muro, antorchas, FX, compañeros y enemigos propios) se cubren con arte generado por scripts y recolores; el catálogo de ids, los pipelines y las peticiones al render están en [`ART_CATALOG.md`](ART_CATALOG.md). Previsualizaciones en [`art-previews/`](art-previews/).
+
 ## Cómo entra un pack en el proyecto
 
 1. Las fuentes originales van en `art-src/<pack>/`, con un `SOURCE.md` (origen, autor, licencia y fecha).
