@@ -1409,6 +1409,75 @@
           }
         ]
       }
+    },
+    "barrel": {
+      "kind": "frames",
+      "url": "assets/0x72/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 304,
+            "w": 16,
+            "h": 20
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 304,
+            "w": 16,
+            "h": 20
+          }
+        ]
+      }
+    },
+    "barrel_oil": {
+      "kind": "frames",
+      "url": "assets/0x72/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 324,
+            "w": 16,
+            "h": 20
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 324,
+            "w": 16,
+            "h": 20
+          }
+        ]
+      }
+    },
+    "crate": {
+      "kind": "frames",
+      "url": "assets/0x72/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 344,
+            "w": 16,
+            "h": 24
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 344,
+            "w": 16,
+            "h": 20
+          }
+        ]
+      }
     }
   },
   "props": {
@@ -1589,6 +1658,255 @@
       "fps": 12,
       "loop": false,
       "anchor": "floor"
+    },
+    "fx_explosion": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 128,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 32,
+          "y": 128,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 64,
+          "y": 128,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 96,
+          "y": 128,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 128,
+          "y": 128,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 160,
+          "y": 128,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 192,
+          "y": 128,
+          "w": 32,
+          "h": 32
+        }
+      ],
+      "fps": 14,
+      "loop": false,
+      "anchor": "centre",
+      "light": "#ffb060"
+    },
+    "fx_steam": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 160,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 160,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 160,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 160,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 64,
+          "y": 160,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 10,
+      "loop": false,
+      "anchor": "floor"
+    }
+  },
+  "surfaces": {
+    "oil": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 176,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "grease": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 192,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "fire": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 208,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 208,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 208,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 208,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 8,
+      "loop": true
+    },
+    "water": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 224,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 224,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 224,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 224,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 5,
+      "loop": true
+    },
+    "ice": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 240,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "electrified": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 256,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 256,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 256,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 256,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 12,
+      "loop": true
+    },
+    "blood": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 272,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "rubble": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 288,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
     }
   }
 }

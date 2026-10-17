@@ -6,11 +6,11 @@ Qué ids puede usar el contenido, de dónde sale cada pieza y qué le falta al r
 
 | Script | Entrada | Salida | Qué hace |
 |---|---|---|---|
-| `scripts/art/build-extra-art.ts intereses 0x72` | (código) | `art-src/generated/intereses-0x72-extra.png` + `.txt`, `public/assets/0x72/extra.png`, `props` del manifiesto | Dibuja píxel a píxel, con la paleta de 0x72 y RNG con semilla: tablones, andamios, remate de muro, caras con reborde, rebordes sueltos, antorcha, brasero y FX. Recolorea por luminancia las caras de acantilado de Ninja Adventure. |
+| `scripts/art/build-extra-art.ts intereses 0x72` | (código) | `art-src/generated/intereses-0x72-extra.png` + `.txt`, `public/assets/0x72/extra.png`, `props`, `surfaces` y los sprites `barrel`, `barrel_oil`, `crate` del manifiesto | Dibuja píxel a píxel, con la paleta de 0x72 (`pixel.ts`) y RNG con semilla: tablones, andamios, remate de muro, caras con reborde, rebordes sueltos, antorcha, brasero, FX, y (en `environment-art.ts`) superficies, barriles, explosión y vapor. Recolorea por luminancia las caras de acantilado de Ninja Adventure. |
 | `scripts/art/build-tiles.ts intereses 0x72` | `content/intereses/art/0x72/tiles.json` | `public/assets/0x72/tiles/terrain.png`, `terrain` del manifiesto | Ahora admite celdas `{ "atlas": "<hoja>.png", "sprite": "nombre" }` (con lista `<hoja>.txt`) y un `rim` opcional por terreno. |
 | `scripts/art/build-atlas-sprites.ts intereses 0x72` | `sprites.json` | `sprites` del manifiesto | Sin cambios: personajes 0x72 tal cual. |
 | `scripts/art/build-palette-variants.ts intereses 0x72` | `content/intereses/art/0x72/palettes.json` | `public/assets/0x72/characters.png`, `sprites` del manifiesto | Recolorea personajes 0x72: `map` (color exacto → color, o `transparent`), `adjust` (HSV por rango de tono), `prune` (borra el contorno que queda huérfano), `rules` (solo píxeles interiores o una franja de filas: así se pinta el collar de plata de Absalón). `aliases` da el mismo arte a ids antiguos. Para ver los colores de una base: `node scripts/art/build-palette-variants.ts intereses 0x72 --dump doc elf_f`. |
-| `scripts/art/build-previews.ts intereses 0x72` | manifiesto | `docs/art-previews/0x72-{characters,terrain,props}.png` | Hojas de revisión. |
+| `scripts/art/build-previews.ts intereses 0x72` | manifiesto | `docs/art-previews/0x72-{characters,terrain,props,surfaces}.png` | Hojas de revisión. |
 | `scripts/art/build-cinematics.ts <juego>` | `content/<juego>/cinematics/intro.spec.json` | `public/assets/cinematics/*.png`, `cinematics/intro.json`, `docs/art-previews/<juego>-intro.png` | Viñetas de 320×180 compuestas con operaciones (degradados con tramado, polígonos, tiles y sprites de los packs, sprites del manifiesto, sprites ASCII dibujados a mano, montañas, casas, lluvia, público, luces, viñeteado, texto pixelado). |
 
 ## Sprites (`spriteId`)
@@ -72,6 +72,38 @@ Cada entrada: `{ url, frames: Rect[], fps, loop, anchor: 'wall' | 'floor' | 'cen
 | `fx_hit_spark` | 4, 20 fps | Chispa de impacto |
 | `fx_dust` | 5, 12 fps | Polvareda (pasos, caídas, empujones) |
 
+Añadidos en la Fase 3:
+
+| Id | Frames | Uso |
+|---|---|---|
+| `fx_explosion` | 7 frames de **32×32**, 14 fps, `anchor: centre`, `light: #ffb060` | Destello, bola de fuego, anillo de humo con brasas y humo que se disipa |
+| `fx_steam` | 5, 10 fps | Vapor cuando el agua toca el fuego |
+
+## Superficies (`surfaces` del manifiesto, en `assets/0x72/extra.png`)
+
+Capa de 16×16 que se dibuja **encima del suelo** del tile (y debajo de entidades y objetos). Tienen píxeles semitransparentes y un borde irregular de 0 a 2 px, para que varios tiles seguidos se lean como una mancha continua. Forma: `{ url, frames: Rect[], fps, loop }` (como `props`, sin `anchor`). `fps: 0` significa estática.
+
+| Id | Frames | Aspecto |
+|---|---|---|
+| `oil` | 1 | Charco negro brillante con irisaciones |
+| `grease` | 1 | Mancha parda clara y resbaladiza |
+| `fire` | 4, 8 fps, bucle | Brasas y tres lenguas de fuego desfasadas |
+| `water` | 4, 5 fps, bucle | Charco azul translúcido con ondas |
+| `ice` | 1 | Hielo pálido con grietas y canto iluminado |
+| `electrified` | 4, 12 fps, bucle | Agua oscura con chispazos que saltan |
+| `blood` | 1 | Charco rojo oscuro |
+| `rubble` | 1 | Piedras y cascajo opacos (terreno difícil) |
+
+## Objetos (`sprites`, `kind: 'frames'`)
+
+Frame de 16×20 (la caja de 0x72 mide 16×24), pies abajo. `animations.idle` (1 frame) y `animations.broken` (1 frame: los restos).
+
+| Id | Aspecto |
+|---|---|
+| `barrel` | Barril de duelas con aros de hierro |
+| `barrel_oil` | Barril explosivo: pintado de rojo, franja de aviso amarilla y negra, marca de llama, aceite que gotea por el tapón y charquito al pie |
+| `crate` | La caja de 0x72 tal cual; `broken` dibujado en sus colores |
+
 ## Peticiones al render
 
 Para la sesión principal (`src/`). Ninguna es obligatoria: el arte ya funciona con el render actual, salvo lo que se indica.
@@ -83,6 +115,10 @@ Para la sesión principal (`src/`). Ninguna es obligatoria: el arte ya funciona 
 5. **Escala por sprite**: un `scale` opcional en `SpriteArt` (por ejemplo 1.15 para `garran`, que en 0x72 sale más bajo que los humanos) y respetar sprites de 32×36 (`absalon`, `sinpaga_bruto`), que ya funcionan porque el pivote está en los pies.
 6. **Terreno animado** (opcional, futuro): `frames` por variante con `fps`, para agua o lava.
 7. **Reproductor de cinemáticas** (Fase 6): ver abajo.
+8. **Superficies** (`manifest.surfaces`, Fase 3): un sprite por tile con superficie, a la profundidad del suelo + 1 (encima de su tile y de las sombras de relieve, debajo de entidades). En las animadas, desfasar el frame inicial por posición (por ejemplo `variantHash(x, y) % frames`) para que un charco grande no ondule al unísono. En las estáticas, voltear en X o Y según `variantHash` para romper la repetición. Si el tile está elevado, colocarla sobre la cara superior (no en la cara).
+9. **Luz de las superficies**: `fire` y `electrified` deberían iluminar (`#ff9a4a` radio ~1,5 tiles y `#a0e8ff` radio ~1 con parpadeo fuerte), igual que las antorchas. Es render puro mientras el motor no lo pida en las reglas.
+10. **Objetos rompibles**: al destruirse `barrel`, `barrel_oil` o `crate`, pasar a `animations.broken` (que se queda en el suelo como restos) y, en `barrel_oil`, lanzar `fx_explosion` centrada en el tile (32×32, mayor que un tile: profundidad por encima de las entidades) más temblor de cámara. `fx_steam` donde el agua apaga fuego.
+11. **Bordes de superficie** (opcional, futuro): si el borde irregular no basta, se pueden generar 16 máscaras de borde por vecinos (autotile de 4 bits) desde el mismo script; pedirlo si hace falta.
 
 ### Reproductor de cinemáticas
 

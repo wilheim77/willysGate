@@ -63,7 +63,7 @@ function save(name: string, img: Image, k: number, labels: { text: string; x: nu
     const ox = (i % cols) * cellW, oy = Math.floor(i / cols) * cellH;
     // A strip of floor so colours are judged on the real background.
     for (let tx = 0; tx < 5; tx++) for (let ty = 0; ty < 2; ty++) blit(sheet, tile(floorFrames[(tx + ty) % floorFrames.length]!), ox + 4 + tx * T, oy + 18 + ty * T);
-    const frames = [s.animations.idle[0], ...(s.animations.move ?? []).slice(0, 3), ...(s.animations.hit ?? [])].slice(0, 5);
+    const frames = [s.animations.idle[0], ...(s.animations.move ?? []).slice(0, 3), ...(s.animations.hit ?? []), ...(s.animations.broken ?? [])].slice(0, 5);
     let x = ox + 4;
     for (const r of frames) {
       const img = crop(load(s.url), r.x, r.y, r.w, r.h);
@@ -98,25 +98,35 @@ function save(name: string, img: Image, k: number, labels: { text: string; x: nu
   save('terrain', sheet, 3, labels);
 }
 
-// --- Props and FX (optional) ------------------------------------------------------
-{
-  const props = Object.entries(manifest.props ?? {}) as [string, { url: string; frames: { x: number; y: number; w: number; h: number }[] }][];
-  if (props.length > 0) {
-    const cellH = 44;
-    const sheet = blank(8 * 20 + 8, props.length * cellH);
-    fill(sheet, BG);
-    const labels: { text: string; x: number; y: number }[] = [];
-    props.forEach(([id, p], i) => {
-      const oy = i * cellH;
-      labels.push({ text: id, x: 2, y: oy + 1 });
-      p.frames.slice(0, 8).forEach((r, j) => {
-        const wall = manifest.terrain.wall;
-        if (wall) for (let ty = 0; ty < 2; ty++) blit(sheet, tile(wall.face), 4 + j * 20, oy + 9 + ty * T);
-        blit(sheet, crop(load(p.url), r.x, r.y, r.w, r.h), 4 + j * 20, oy + 9);
-      });
+// --- Props, FX and surfaces (optional) -------------------------------------------------
+type Anim = { url: string; frames: { x: number; y: number; w: number; h: number }[]; anchor?: string };
+/** One row per entry: every frame over a background matching how the client places it. */
+function animSheet(name: string, entries: [string, Anim][], background: (a: Anim) => 'wall' | 'floor' | 'floor3'): void {
+  if (entries.length === 0) return;
+  const cell = 36, rowH = 50;
+  const sheet = blank(8 * cell + 8, entries.length * rowH);
+  fill(sheet, BG);
+  const labels: { text: string; x: number; y: number }[] = [];
+  entries.forEach(([id, a], i) => {
+    const oy = i * rowH;
+    labels.push({ text: `${id} (${a.frames.length})`, x: 2, y: oy + 1 });
+    a.frames.slice(0, 8).forEach((r, j) => {
+      const ox = 4 + j * cell, by = oy + 10;
+      const bg = background(a);
+      if (bg === 'wall' && manifest.terrain.wall) for (let ty = 0; ty < 2; ty++) for (let tx = 0; tx < 2; tx++) blit(sheet, tile(manifest.terrain.wall.face), ox + tx * T, by + ty * T);
+      else for (let ty = 0; ty < 2; ty++) for (let tx = 0; tx < 2; tx++) blit(sheet, tile(floorFrames[(tx + ty) % floorFrames.length]!), ox + tx * T, by + ty * T);
+      const img = crop(load(a.url), r.x, r.y, r.w, r.h);
+      if (bg === 'floor3') {
+        // Surfaces: 2x2 copies to show how they tile.
+        for (let ty = 0; ty < 2; ty++) for (let tx = 0; tx < 2; tx++) blit(sheet, img, ox + tx * T, by + ty * T);
+      } else {
+        blit(sheet, img, ox + Math.floor((2 * T - r.w) / 2), by + 2 * T - r.h);
+      }
     });
-    save('props', sheet, 3, labels);
-  }
+  });
+  save(name, sheet, 3, labels);
 }
+animSheet('props', Object.entries(manifest.props ?? {}) as [string, Anim][], (a) => (a.anchor === 'wall' ? 'wall' : 'floor'));
+animSheet('surfaces', Object.entries(manifest.surfaces ?? {}) as [string, Anim][], () => 'floor3');
 
 if (!existsSync(outDir)) throw new Error('no output');

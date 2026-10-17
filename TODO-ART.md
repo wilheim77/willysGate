@@ -13,7 +13,8 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Garrán más grande | intereses | Recolor de `orc_warrior`, algo más bajo que los humanos | Escala por sprite (petición n.º 5) o retoque a mano a 16×28 |
 | Animaciones de ataque, golpe y muerte (0x72) | intereses | No existen en el pack | Por código (`src/fx/`) |
 | Terreno `scaffold` en los mapas | intereses | Arte y manifiesto listos | Tile lógico en `content/intereses/maps/terrain-logic.png` (sesión principal) |
-| Reproductor de cinemáticas | intereses, willy | **Viñetas y `intro.json` hechos** (borradores de guion) | Fase 6: reproductor (ver `docs/ART_CATALOG.md`); aprobar `docs/intros/INTERESES.md` y `docs/willy/INTRO.md` |
+| Reproductor de cinemáticas | intereses, willy | **Viñetas y `intro.json` hechos** (guion de *Intereses* aprobado) | Fase 6: reproductor (ver `docs/ART_CATALOG.md`); aprobar `docs/willy/INTRO.md` |
+| Superficies, barriles y explosión en el juego | intereses | **Arte hecho** (`surfaces`, `barrel`, `barrel_oil`, `crate`, `fx_explosion`, `fx_steam`) | Peticiones al render n.º 8 a 10 en `docs/ART_CATALOG.md`; bordes por vecinos (n.º 11) solo si hacen falta |
 | Willy en el juego | willy | Solo existe el sprite ASCII de las viñetas | Sprite jugable cuando se decida el pack de *Willy* |
 | Tileset lógico de Tiled | intereses | `content/intereses/maps/terrain-logic.png` | Solo lo usa el editor. Se queda así. |
 
@@ -27,3 +28,4 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Compañeros con aspecto propio | intereses | `cobrador`, `dorotea`, `garran`, `anselmo` (pipeline de paletas) |
 | Enemigos con variantes | intereses | Sinpaga (3), guardia del barón (2), Callados (2), minero de la Cuadrilla, Absalón, esqueleto minero, ahogado |
 | Viñetas del prólogo | intereses, willy | `build-cinematics.ts`; 10 viñetas para *Intereses*, 16 para *Willy* |
+| Entorno táctico (Fase 3) | intereses | Superficies `oil`, `grease`, `fire`, `water`, `ice`, `electrified`, `blood`, `rubble`; objetos `barrel`, `barrel_oil`, `crate` con restos; `fx_explosion` y `fx_steam` (`environment-art.ts`) |
