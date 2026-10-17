@@ -31,21 +31,18 @@ const DIALOGUES = new Set(
 );
 /** The party travels with the leader, so it can speak on any map. */
 const PARTY = ['hero', 'dorotea', 'garran', 'anselmo'];
-/** `TODO:<name>` marks a dialogue or flag the writer has not defined yet (docs/ENGINE_REQUESTS_INTERESES.md, I8). */
-const pending = (v: unknown): boolean => String(v).startsWith('TODO:');
-/** Flags the writer has named but not pushed to flags.json yet. Drop each once it lands. */
-const ANNOUNCED_FLAGS = new Set(['d1_resuelto']);
+
 
 /**
  * Story order (STORY §7): forward exits that must stay shut until the scene before them is
- * resolved. The crypt and the mine wait for flags the writer has not named yet.
+ * resolved.
  */
 const STORY_GATES: Record<string, Record<string, string>> = {
   camino: { 'a-hondonegra': 'prologo_mineros_resuelto' },
   plaza: { 'a-abadia': 'audiencia_concedida', 'a-calles': 'juicio_resuelto', 'a-escorial': 'audiencia_hecha' },
   calles: { 'a-escorial': 'audiencia_hecha' },
   escorial: { 'pozo-del-ahorcado': 'd1_resuelto', bocamina: 'd1_resuelto' },
-  abadia: { 'escalera-cripta': 'TODO:llave_cripta' },
+  abadia: { 'escalera-cripta': 'llave_cripta' },
 };
 
 const RULES = dnd5e.movement;
@@ -165,7 +162,7 @@ describe('Intereses maps', () => {
       it('wires scenes to real dialogues and speakers, and never fights an essential character', () => {
         for (const z of parsed.zones.filter((z) => z.layer === 'scenes')) {
           const p = z.properties;
-          expect(pending(p.dialogue) || DIALOGUES.has(String(p.dialogue)), `${z.name}: no dialogue "${String(p.dialogue)}"`).toBe(true);
+          expect(DIALOGUES.has(String(p.dialogue)), `${z.name}: no dialogue "${String(p.dialogue)}"`).toBe(true);
           if (p.speaker) expect(parsed.spawns[String(p.speaker)] ?? PARTY.includes(String(p.speaker)), `${z.name}: speaker ${String(p.speaker)}`).toBeTruthy();
           for (const id of String(p.fight ?? '').split(',').filter(Boolean)) {
             expect(parsed.spawns[id], `${z.name}: fighter ${id} not on the map`).toBeDefined();
@@ -178,7 +175,7 @@ describe('Intereses maps', () => {
         for (const z of parsed.zones)
           for (const key of ['requiresFlag', 'unlessFlag']) {
             const flag = z.properties[key];
-            if (flag !== undefined) expect(pending(flag) || ANNOUNCED_FLAGS.has(String(flag)) || String(flag) in FLAGS, `${z.layer}/${z.name}.${key} = ${String(flag)}`).toBe(true);
+            if (flag !== undefined) expect(String(flag) in FLAGS, `${z.layer}/${z.name}.${key} = ${String(flag)}`).toBe(true);
           }
       });
 
@@ -238,6 +235,18 @@ describe('Intereses maps', () => {
       });
     });
   }
+
+  it('ships no placeholders: no TODO: anywhere, spawn conditions on real flags', () => {
+    for (const f of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
+      const text = readFileSync(join(dir, f), 'utf8');
+      expect(text.includes('TODO:'), `${f} has a TODO: placeholder`).toBe(false);
+      const json = JSON.parse(text) as { layers: { name: string; objects?: { name: string; properties?: { name: string; value: unknown }[] }[] }[] };
+      for (const o of json.layers.find((l) => l.name === 'spawns')?.objects ?? [])
+        for (const p of o.properties ?? [])
+          if (['requiresFlag', 'unlessFlag', 'requiresAnyFlag'].includes(p.name))
+            for (const flag of String(p.value).split(',')) expect(flag in FLAGS, `${f}: spawn ${o.name}.${p.name} = ${flag}`).toBe(true);
+    }
+  });
 
   it('enters every act map through some exit (except the first)', () => {
     const targets = new Set<string>();

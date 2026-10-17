@@ -8,6 +8,10 @@
 - La premisa la definió el usuario: concurso galáctico retransmitido, 5 plantas con reloj, cásting LitRPG, audiencia, patrocinadores, cajas de botín, logros y Narrador.
 - **Ruleset `rulesets/willy/`:** completo para las 9 clases, con invocaciones y barreras, ganchos de fin de turno e inicio de combate, subida de nivel, y los arreglos de la revisión 4. Falta lo que es del juego (audiencia, valor de objetos) y el salto real del motor (R15). Explota también los barriles `explosivo` al romperse.
 - **Primera versión jugable (`content/willy/game.ts`):** cásting (clase y puntos) → Camerino (Maripuri, Paco, Xelda y Koldo; ascensor de servicio) → prueba hecha a mano de la Planta 1, «Castro Sumergido» (muelle con altura, canal al vacío, charcos de agua, barril de gas; dos ratas, una gaviota y un cangrejo). Mapas construidos en código con los ids de terreno de `ninja.json` (`content/willy/maps.ts`); arranque y cásting en `content/willy/setup.ts`, sin imports del cliente, para que los tests no toquen `src/`. Textos de interfaz en `texts/ui.json`. `GAME=willy npx vite build` compila. **Falta en el cliente:** que `GameDefinition` lleve `maps` y que `src/main.ts` los pase a `createEngine` (sin eso el ascensor no viaja); pedido a la sesión principal.
+- **Plantas procedurales (`content/willy/gen/floor.ts`):** las 5 plantas se montan con piezas de sala de 12 por bioma (`data/rooms/<bioma>.json`; Castro mías, Plantas 2-5 de la sesión de mapas) y `deriveSeed`: camino crítico, ramas y bucles, roles, alturas de sala de un nivel en un nivel, puertas, enemigos por presupuesto, jefe, cajas, trampas, barriles, luces y como mucho una sala de rival. Se validan (todo alcanzable, nadie a menos de 6 casillas de la llegada, 2 cajas como mínimo) y se reintenta. Se generan al empezar la temporada y quedan en `systems.world.stashed` (R21 pide que el `MapBuilder` reciba la semilla). La escalera de la Planta N lleva al `camerino-N`, cuyo ascensor baja a la N+1; tras la 5 no hay ascensor (el final llega en W5).
+- **Rivales procedurales (`content/willy/gen/rivals.ts`):** de `rival-generator.json`, con unicidad en la partida, escalado por planta, cuerpo y paleta del arte modular, frases con variables y un 6 % de legendario. `systems.rivals` guarda de dónde salió cada uno. Falta el pacto y la huida (capa de diálogo y Narrador).
+- **Trampas en el ruleset:** `noticeTrap` (8 + SUE contra la detección) y `triggerTrap` (salvación de AGI: condición, superficie, empuje o caída).
+- **R15:** saltos con el motor y rebote del Pase picado.
 
 ## Hecho (W0)
 
@@ -72,8 +76,7 @@ W0 **aprobada** con estos cambios, ya aplicados en los documentos y los datos:
 
 ## Siguiente paso
 
-- Cuando llegue R15 (salto y rebote del motor): cambiar los saltos con `setPosition` por el salto real y añadir el rebote del Pase picado.
-- Después: plantas procedurales, el sistema de audiencia y patrocinadores, el Narrador y el valor de los objetos (Golpe de valor).
+- Después: mecánicas de planta (marea, cintas: R20 `onRoundEnd`), salas fijas de historia, pacto y huida de rivales, cajas de botín al abrirlas, reloj de planta, audiencia y patrocinadores, Narrador y valor de los objetos (Golpe de valor).
 
 ## Notas para retomar
 

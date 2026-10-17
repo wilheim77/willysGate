@@ -72,6 +72,8 @@ export default {
     { name: 'candil-repisa', at: [22, 5], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
     { name: 'candil-pasarela', at: [29, 15], radius: 3.5, color: '#ffb050', flicker: 0.15 },
     { name: 'brillo-plata', at: [35, 14], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.6 },
+    { name: 'candil-tunel-cripta', at: [15, 25], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7 },
+    { name: 'candil-brecha', at: [30, 15], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7 },
     { name: 'vela-cripta', at: [3, 26], radius: 2.5, color: '#ffd090', flicker: 0.2, intensity: 0.7 },
   ],
   surfaces: [
@@ -97,7 +99,7 @@ export default {
     { name: 'callados-andamios', rect: [14, 7, 15, 15], participants: ['callado-2', 'callado-3', 'callado-4', 'callado_palido-1'] },
     { name: 'callados-cripta', rect: [11, 22, 6, 6], participants: ['callado-5', 'callado-6'] },
     // After the D2 scene (I4: requiresFlag once the writer names it).
-    { name: 'emboscada-sellada', rect: [32, 10, 7, 9], participants: ['callado-7', 'callado-8', 'callado_palido-2'], props: { requiresFlag: 'TODO:d2_resuelta' } },
+    { name: 'emboscada-sellada', rect: [32, 10, 7, 9], participants: ['callado-7', 'callado-8', 'callado_palido-2'], props: { requiresFlag: 'd2_resuelta' } },
   ],
   exits: [
     { name: 'a-escorial-bocamina', rect: [0, 13, 1, 3], to: 'escorial', spawn: 'entry-bocamina' },
@@ -106,6 +108,6 @@ export default {
     { name: 'a-boveda', rect: [39, 13, 1, 3], to: 'boveda', spawn: 'entry-mina' },
   ],
   zones: {
-    scenes: [{ name: 'galeria-sellada', rect: [32, 12, 3, 5], props: { dialogue: 'TODO:galeria_sellada', speaker: 'garran', once: true } }],
+    scenes: [{ name: 'galeria-sellada', rect: [32, 12, 3, 5], props: { dialogue: 'galeria_sellada', speaker: 'garran', once: true } }],
   },
 };

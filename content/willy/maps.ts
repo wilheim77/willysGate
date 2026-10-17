@@ -29,9 +29,9 @@ function find(rows: string[], ch: string): Vec2[] {
   return out;
 }
 
-const zone = (name: string, layer: string, x: number, y: number, width: number, height: number, properties: MapZone['properties'] = {}): MapZone => ({ name, layer, x, y, width, height, properties });
+export const zone = (name: string, layer: string, x: number, y: number, width: number, height: number, properties: MapZone['properties'] = {}): MapZone => ({ name, layer, x, y, width, height, properties });
 
-function prop(id: string, name: string, spriteId: string, position: Vec2, tags: string[] = []): Entity {
+export function prop(id: string, name: string, spriteId: string, position: Vec2, tags: string[] = []): Entity {
   return {
     id,
     name,
@@ -67,9 +67,17 @@ export const CAMERINO_ROWS = [
   '######EE######',
 ];
 
-export function camerino(): MapSetup {
+/** Floors in a season; after the last one the lift has nowhere to go (the ending, W5). */
+export const LAST_FLOOR = 5;
+
+/**
+ * The Camerino after floor `after` (0: before the first). Each one is its own map, so its lift
+ * leads to the next floor: 'camerino' → planta-1, 'camerino-1' → planta-2... The regulars are
+ * the same people; what they sell and say lives in systems, not in the map.
+ */
+export function camerino(after = 0): MapSetup {
   const rows = CAMERINO_ROWS;
-  const map = asciiMap('camerino', rows, {
+  const map = asciiMap(after === 0 ? 'camerino' : `camerino-${after}`, rows, {
     '.': T('moqueta'),
     m: T('moqueta'),
     t: T('tarima', 1),
@@ -90,13 +98,13 @@ export function camerino(): MapSetup {
     ],
     spawns: { llegada: { x: 6, y: 5 }, ascensor: { x: 6, y: 6 } },
     systems: {
-      zones: [zone('ascensor', 'exits', exit[0]!.x, exit[0]!.y, exit.length, 1, { to: 'planta-1', spawn: 'llegada' })] as unknown as JsonValue,
+      zones: (after < LAST_FLOOR ? [zone('ascensor', 'exits', exit[0]!.x, exit[0]!.y, exit.length, 1, { to: `planta-${after + 1}`, spawn: 'llegada' })] : []) as unknown as JsonValue,
       lighting: { ambient: 0.85, lights: [{ id: 'bombillas', position: { x: 6, y: 1 }, radius: 6, intensity: 0.9, color: '#ffe2a8', flicker: 0.02 }] } as unknown as JsonValue,
     },
   };
 }
 
-// --- Planta 1: Castro Sumergido (prueba) ---------------------------------------------------------------
+// --- Prueba del Castro Sumergido (a fixed test map; ?mapa=prueba-castro) ---------------------------------------------------------------
 
 /**
  * A hand-made test of floor 1: a flooded street, the quay above a canal you can be shoved into,
@@ -120,7 +128,7 @@ export const PLANTA1_ROWS = [
 
 export function planta1(): MapSetup {
   const rows = PLANTA1_ROWS;
-  const map = asciiMap('planta-1', rows, {
+  const map = asciiMap('prueba-castro', rows, {
     '.': T('piedra-mojada'),
     w: T('piedra-mojada'),
     E: T('piedra-mojada'),
@@ -154,4 +162,9 @@ export function planta1(): MapSetup {
   };
 }
 
-export const MAPS = { camerino, 'planta-1': planta1 };
+/** Hand-made maps. The floors themselves are generated per run (gen/floor.ts, setup.ts). */
+export const MAPS: Record<string, () => MapSetup> = {
+  camerino: () => camerino(0),
+  ...Object.fromEntries(Array.from({ length: LAST_FLOOR }, (_, i) => [`camerino-${i + 1}`, () => camerino(i + 1)])),
+  'prueba-castro': planta1,
+};

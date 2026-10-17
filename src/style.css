@@ -398,3 +398,16 @@ canvas.portrait { image-rendering: pixelated; display: block; }
 #creation .buttons { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; }
 #creation .buttons button { flex: 1; min-height: 48px; font-size: 22px; }
 #creation .buttons .confirm { background: #5a3a22; border-color: #e8c070; }
+
+/* --- Title screen --- */
+#title[hidden] { display: none; }
+#title {
+  position: fixed; inset: 0; z-index: 7; background: #08070a;
+  display: flex; align-items: center; justify-content: center; padding: 12px;
+}
+#title .panel { display: flex; flex-direction: column; align-items: center; gap: 18px; width: min(960px, 100%); }
+#title img { width: 100%; max-height: 70vh; object-fit: cover; image-rendering: pixelated; border: 3px solid var(--iron); box-shadow: 4px 4px 0 #000; }
+#title h1 { font-weight: normal; font-size: 56px; color: var(--accent); letter-spacing: 4px; }
+#title .buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+#title .buttons button { min-width: 180px; min-height: 52px; font-size: 24px; }
+#title .buttons .confirm { background: #5a3a22; border-color: #e8c070; }

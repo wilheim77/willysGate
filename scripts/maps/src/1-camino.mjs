@@ -40,6 +40,8 @@ const ROWS = [
 const c = new Canvas(32, 18).stamp(0, 0, ROWS, L);
 // Exterior art: the road, scrub, mud in the ditch, rock for the heights and the outcrop.
 c.retile((t, h) => (t === '.' ? 'R' : t === ';' ? 'k' : t === ',' ? (h === 0 ? 'm' : h >= 2 ? 'k' : 's') : t));
+// Fences along the road's north edge (same height as the road: decoration, not a barrier).
+c.rect(1, 7, 6, 1, 'f', 1).rect(9, 7, 5, 1, 'f', 1).rect(25, 7, 6, 1, 'f', 1);
 
 export default {
   id: 'camino',

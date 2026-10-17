@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { type BaseCommand, type GameState, SYSTEM_ISSUER, createEngine, nextAiCommand, surfaceAt, zonesOf } from '../../engine';
 import { willy } from '../../rulesets/willy';
+import { generateFloor } from '../../content/willy/gen/floor';
 import { applyCasting, maps, newWillyGame } from '../../content/willy/setup';
 import ninja from '../../content/willy/assets/ninja.json';
 
@@ -23,7 +24,7 @@ describe('Willy: first playable', () => {
     expect(after.entities.willy!.position).toEqual(s.entities.willy!.position);
   });
 
-  it('the service lift takes Willy down to floor 1, and back', () => {
+  it('the service lift takes Willy down to floor 1, and its stairs up to the next Camerino', () => {
     let s = newWillyGame(engine, 1);
     const lift = zonesOf(s, 'exits')[0]!;
     s = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: { x: lift.x, y: lift.y } } } };
@@ -31,9 +32,11 @@ describe('Willy: first playable', () => {
     if (!down.ok) throw new Error(down.error.message);
     expect(down.state.map.id).toBe('planta-1');
     expect(down.state.entities.maripuri).toBeUndefined();
-    expect(down.state.entities['rata-1']).toBeDefined();
-    expect(surfaceAt(down.state, { x: 6, y: 1 })?.type).toBe('agua');
-    const back = engine.apply({ ...down.state, entities: { ...down.state.entities, willy: { ...down.state.entities.willy!, position: { x: 1, y: 1 } } } }, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: 'camerino', spawn: 'llegada' } as BaseCommand);
+    // The floor generated for this run (seed 1), not a fixed map.
+    expect(down.state.map).toEqual(generateFloor(1, 1).setup.map);
+    expect(zonesOf(down.state, 'encounters').length).toBeGreaterThan(0);
+    const stairs = zonesOf(down.state, 'exits')[0]!;
+    const back = engine.apply({ ...down.state, entities: { ...down.state.entities, willy: { ...down.state.entities.willy!, position: { x: stairs.x, y: stairs.y } } } }, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: 'camerino-1', spawn: 'llegada' } as BaseCommand);
     if (!back.ok) throw new Error(back.error.message);
     expect(back.state.entities.maripuri).toBeDefined();
   });
@@ -44,12 +47,16 @@ describe('Willy: first playable', () => {
     }
   });
 
-  it('the first fight on floor 1 can be played out to the end by the AI on both sides', () => {
-    let s = newWillyGame(engine, 7);
-    const lift = zonesOf(s, 'exits')[0]!;
-    s = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: { x: lift.x, y: lift.y } } } };
-    const down = engine.apply(s, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: 'planta-1', spawn: 'llegada' } as BaseCommand);
-    if (!down.ok) throw new Error(down.error.message);
+  it('?mapa= starts on the hand-made test map or straight on the floor', () => {
+    expect(newWillyGame(engine, 3, { start: 'prueba-castro' }).map.id).toBe('prueba-castro');
+    const f = newWillyGame(engine, 3, { start: 'planta-1' });
+    expect(f.map.id).toBe('planta-1');
+    expect(f.entities.willy!.position).toEqual(generateFloor(3, 1).setup.spawns.llegada);
+    expect(newWillyGame(engine, 3, { start: 'nope' }).map.id).toBe('camerino');
+  });
+
+  it('the hand-made test fight can be played out to the end by the AI on both sides', () => {
+    const down = { state: newWillyGame(engine, 7, { start: 'prueba-castro' }) };
     const foes = zonesOf(down.state, 'encounters')[0]!.properties.participants!.toString().split(',');
     const started = engine.apply(down.state, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants: ['willy', ...foes] } as BaseCommand);
     if (!started.ok) throw new Error(started.error.message);

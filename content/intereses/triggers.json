@@ -1,8 +1,11 @@
 {
-  "$comment": "Conversations the game opens by itself, once, when the party is idle out of combat and the condition holds. map: only on that map.",
+  "$comment": "Conversations the game opens by itself, once, when the party is idle out of combat and the condition holds. map: only on that map. partner: who the party talks to.",
   "triggers": [
+    { "id": "d1_llamada", "when": { "all": [{ "flag": "acceso_contrabando" }, { "notFlag": "d1_resuelto" }] }, "dialogue": "noche_antorchas", "partner": "nella", "map": "plaza" },
+    { "id": "d1_horca", "when": { "all": [{ "flag": "d1_cuadrilla" }, { "flag": "d1_asalto_terminado" }, { "notFlag": "baron_prisionero" }] }, "dialogue": "d1_horca", "partner": "nella", "map": "plaza" },
+    { "id": "d1_abadia_final", "when": { "all": [{ "flag": "d1_abadia" }, { "flag": "d1_asalto_terminado" }, { "notFlag": "llave_cripta" }] }, "dialogue": "d1_abadia_final", "partner": "mazo", "map": "abadia" },
     { "id": "collera", "when": { "all": [{ "flag": "brea_derrotado" }, { "notFlag": "d3_resuelta" }] }, "dialogue": "boveda_collera", "map": "boveda" },
-    { "id": "cobro", "when": { "all": [{ "flag": "d3_resuelta" }, { "notFlag": "d4_resuelta" }] }, "dialogue": "el_cobro", "map": "plaza" },
-    { "id": "epilogo", "when": { "flag": "d4_resuelta" }, "dialogue": "epilogo" }
+    { "id": "cobro", "when": { "all": [{ "flag": "d3_resuelta" }, { "notFlag": "d4_resuelta" }] }, "dialogue": "el_cobro", "partner": "dorotea", "map": "plaza" },
+    { "id": "epilogo", "when": { "all": [{ "flag": "d4_resuelta" }, { "notFlag": "epilogo_visto" }] }, "dialogue": "epilogo" }
   ]
 }

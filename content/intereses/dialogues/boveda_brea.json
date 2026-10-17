@@ -240,6 +240,13 @@
       "text": "Brea toca la collera con dos dedos, como quien afina un instrumento. Los Callados levantan las herramientas a la vez. La Bóveda canta más alto.",
       "effects": [
         {
+          "type": "setEntity",
+          "entityId": "ivo",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
           "type": "startCombat",
           "factions": [
             "callados"

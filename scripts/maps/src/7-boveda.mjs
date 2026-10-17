@@ -39,7 +39,7 @@ export default {
     'powder_keg-1': [23, 16],
     'powder_keg-2': [24, 17],
     'powder_keg-3': [24, 15],
-    'lever-polea': [21, 1], // pulley and chains: drops the ore bucket on the trench (TODO script)
+    'lever-polea': [21, 1], // pulley and chains: drops the ore bucket on the trench (dialogue pulley_polea / lever_polea)
     'pulley-1': [20, 1],
     'inscription-1': [7, 5], // the elvish carving: [Historia] CD 13 for an elf or dwarf
   },
@@ -61,11 +61,11 @@ export default {
   ],
   exits: [{ name: 'a-mina', rect: [0, 11, 1, 3], to: 'mina', spawn: 'entry-boveda' }],
   zones: {
-    scenes: [{ name: 'brea-habla', rect: [3, 10, 4, 5], props: { dialogue: 'TODO:boveda_brea', speaker: 'absalon', once: true } }],
+    scenes: [{ name: 'brea-habla', rect: [3, 10, 4, 5], props: { dialogue: 'boveda_brea', speaker: 'absalon', once: true } }],
     // Proposed layer (I5): Brea's blast sinks the centre. Pit at h0, a shallow edge at h1.
     collapse: [
-      { name: 'derrumbe', rect: [13, 9, 5, 6], props: { height: 0, terrain: 'vault', trigger: 'TODO:brea_vuela_polvorin' } },
-      { name: 'derrumbe-borde', rect: [18, 9, 1, 6], props: { height: 1, terrain: 'vault', trigger: 'TODO:brea_vuela_polvorin' } },
+      { name: 'derrumbe', rect: [13, 9, 5, 6], props: { height: 0, terrain: 'vault', trigger: 'brea_vuela_polvorin' } },
+      { name: 'derrumbe-borde', rect: [18, 9, 1, 6], props: { height: 1, terrain: 'vault', trigger: 'brea_vuela_polvorin' } },
     ],
   },
 };

@@ -1,0 +1,354 @@
+{
+  "$comment": "Room chunks for «El Plató» (15x13 cells, generator: content/willy/gen/floor.ts). Written by the map agent. Marker chars: e enemy, c chest, t trap, b barrel, B gas barrel, l light, P arrival, J boss, X stairs down.",
+  "bioma": "plato",
+  "celda": {
+    "ancho": 15,
+    "alto": 13
+  },
+  "terreno": {
+    ".": {
+      "terrain": "plato"
+    },
+    "m": {
+      "terrain": "moqueta"
+    },
+    "r": {
+      "terrain": "tarima",
+      "height": 1
+    },
+    "R": {
+      "terrain": "tarima",
+      "height": 2
+    },
+    "g": {
+      "terrain": "gradas",
+      "height": 2,
+      "walkable": false
+    },
+    "q": {
+      "terrain": "baldosa-roja"
+    },
+    "a": {
+      "terrain": "baldosa-azul"
+    },
+    "v": {
+      "terrain": "baldosa-verde"
+    },
+    "y": {
+      "terrain": "baldosa-amarilla"
+    },
+    "w": {
+      "terrain": "plato",
+      "surface": "agua"
+    },
+    "#": {
+      "terrain": "muro-plato",
+      "height": 2,
+      "walkable": false
+    },
+    "puerta": {
+      "terrain": "plato"
+    },
+    "relleno": {
+      "terrain": "muro-plato",
+      "height": 2,
+      "walkable": false
+    }
+  },
+  "trampas": {
+    "trampilla-de-escenario": {
+      "nombre": "Trampilla de escenario",
+      "detect": 13,
+      "dif": 13,
+      "dano": "1d6",
+      "efecto": "caida"
+    },
+    "cable-pelado": {
+      "nombre": "Cable pelado",
+      "detect": 12,
+      "dif": 13,
+      "dano": "2d6",
+      "efecto": "electrificada"
+    }
+  },
+  "salas": [
+    {
+      "id": "plato-artistas",
+      "nombre": "Entrada de artistas",
+      "roles": [
+        "inicio"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.##.......##.#",
+        "#.##..l....##.#",
+        "#...mmmmmmm...#",
+        "#...mmmmmmm...#",
+        "#...mmmPmmm...#",
+        "#...mmmmmmm...#",
+        "#.............#",
+        "#.b.........b.#",
+        "#.............#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-principal",
+      "nombre": "Plató principal",
+      "roles": [
+        "jefe"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.ggggggggggg.#",
+        "#.............#",
+        "#..qqq...aaa..#",
+        "#..qqq.J.aaa..#",
+        "#..vvv...yyy..#",
+        "#..vvv.l.yyy..#",
+        "#.............#",
+        "#..e.......e..#",
+        "#.c.........X.#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-concursos",
+      "nombre": "Plató de concursos",
+      "roles": [
+        "combate",
+        "rival"
+      ],
+      "peso": 3,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#..qq.....aa..#",
+        "#..qq..e..aa..#",
+        "#.............#",
+        "#...##...##...#",
+        "#......l......#",
+        "#...##...##...#",
+        "#.............#",
+        "#..vv..e..yy..#",
+        "#..vv.....yy..#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-pasarelas",
+      "nombre": "Pasarelas de técnicos",
+      "roles": [
+        "combate",
+        "rival"
+      ],
+      "peso": 3,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.RRRRRRRRRRR.#",
+        "#.r.........r.#",
+        "#.r..e...e..r.#",
+        "#......l......#",
+        "#.............#",
+        "#...e.....e...#",
+        "#.r.........r.#",
+        "#.RRRRR.RRRRR.#",
+        "#.............#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-decorados",
+      "nombre": "Decorados de cartón",
+      "roles": [
+        "combate"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.#..#...#..#.#",
+        "#.#..#.e.#..#.#",
+        "#.............#",
+        "#..e...l...e..#",
+        "#.............#",
+        "#.#..#...#..#.#",
+        "#.#..#...#..#.#",
+        "#......e......#",
+        "#.b.........B.#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-gradas",
+      "nombre": "Gradas del público",
+      "roles": [
+        "combate"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.ggggg.ggggg.#",
+        "#.ggggg.ggggg.#",
+        "#.............#",
+        "#..e...l...e..#",
+        "#.............#",
+        "#...rrrrrrr...#",
+        "#...rRRRRRr...#",
+        "#...rrrrrrr...#",
+        "#....e...e....#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-camerino",
+      "nombre": "Camerino de estrellas",
+      "roles": [
+        "tesoro"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#..#########..#",
+        "#..#mmmmmmm#..#",
+        "#..#mc.l.cm#..#",
+        "#..###m.m###..#",
+        "#.............#",
+        "#.............#",
+        "#.b.........b.#",
+        "#.............#",
+        "#.............#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-atrezo",
+      "nombre": "Almacén de atrezo",
+      "roles": [
+        "tesoro"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.##.##.##.##.#",
+        "#.##.##.##.##.#",
+        "#.............#",
+        "#...c..l..c...#",
+        "#.............#",
+        "#.##.##.##.##.#",
+        "#.##.##.##.##.#",
+        "#.............#",
+        "#.............#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-trampillas",
+      "nombre": "Trampillas",
+      "roles": [
+        "trampa"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#..t...q...t..#",
+        "#....qqqqq....#",
+        "#....qtqtq....#",
+        "#......l......#",
+        "#....atata....#",
+        "#....aaaaa....#",
+        "#..t...e...t..#",
+        "#.............#",
+        "#.b.........b.#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-cables",
+      "nombre": "Cables pelados",
+      "roles": [
+        "trampa"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.www.....www.#",
+        "#.wtw..t..wtw.#",
+        "#.www.....www.#",
+        "#......l......#",
+        "#..t...e...t..#",
+        "#.............#",
+        "#.www.....www.#",
+        "#.wtw.....wtw.#",
+        "#.www.....www.#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-maquillaje",
+      "nombre": "Pasillo de maquillaje",
+      "roles": [
+        "vacia"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.mmmmmmmmmmm.#",
+        "#.m#m#m#m#m#m.#",
+        "#.mmmmmmmmmmm.#",
+        "#......l......#",
+        "#.............#",
+        "#.mmmmmmmmmmm.#",
+        "#.m#m#m#m#m#m.#",
+        "#.mmmmmmmmmmm.#",
+        "#.............#",
+        "#.............#",
+        "###############"
+      ]
+    },
+    {
+      "id": "plato-oscuras",
+      "nombre": "Plató a oscuras",
+      "roles": [
+        "vacia"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.............#",
+        "#...rrr.rrr...#",
+        "#...rRr.rRr...#",
+        "#...rrr.rrr...#",
+        "#......l......#",
+        "#.............#",
+        "#..b.......b..#",
+        "#.............#",
+        "#.............#",
+        "#.............#",
+        "###############"
+      ]
+    }
+  ]
+}

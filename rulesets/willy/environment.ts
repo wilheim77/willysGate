@@ -1,6 +1,6 @@
-import { type ActionOutcome, type GameState, type RngCursor, type Ruleset, type SurfaceDef, type SurfaceReaction, OBJECT_TAG, hasCondition, hasTag } from '../../engine';
-import { hasTrait } from './character';
-import { rollDice } from './dice';
+import { type ActionOutcome, type GameState, type RngCursor, type Ruleset, type SurfaceDef, type SurfaceReaction, type Trap, OBJECT_TAG, hasCondition, hasTag } from '../../engine';
+import { attr, hasTrait } from './character';
+import { parseDice, rollDice } from './dice';
 import { Resolver, dealDamage, fallDamage, rollSave, standing } from './resolve';
 
 /**
@@ -89,5 +89,42 @@ export function onSurface(ruleset: Ruleset, state: GameState, id: string, surfac
 export function onFall(ruleset: Ruleset, state: GameState, id: string, levels: number, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
   if (state.entities[id]) fallDamage(r, id, levels);
+  return r.outcome();
+}
+
+// --- Traps -----------------------------------------------------------------------------------
+
+/** Spotting a hidden trap nearby: passive, no dice. 8 + SUE against the trap's `detect`. */
+export function noticeTrap(state: GameState, id: string, trap: Trap): boolean {
+  const e = state.entities[id];
+  if (!e) return false;
+  return 8 + attr(e, 'sue') >= Number(trap.params.detect ?? 12);
+}
+
+/** What a trap's `efecto` does beyond damage. Surfaces land on the trap's tile. */
+const TRAP_ELEMENT: Record<string, string> = { fuego: 'fuego', electrificada: 'rayo', hielo: 'frio' };
+
+/**
+ * Stepping on one: save with AGI against its DIF. Success halves the damage and avoids the effect.
+ * Params: { dano: '1d6', dif: 12, efecto? }. The effect is a condition (enredado for 2 turns,
+ * tumbado...), a surface on the tile (fuego, hielo, electrificada...), 'empuje' (thrown 2 tiles
+ * in a random direction) or 'caida' (a trapdoor: a two-level fall).
+ */
+export function triggerTrap(ruleset: Ruleset, state: GameState, id: string, trap: Trap, rng: RngCursor): ActionOutcome {
+  const r = new Resolver(ruleset, state, rng);
+  const e = state.entities[id];
+  if (!e || !standing(e)) return r.outcome();
+  const saved = rollSave(r, id, 'agi', Number(trap.params.dif ?? 12));
+  const effect = trap.params.efecto ? String(trap.params.efecto) : undefined;
+  const raw = rollDice(rng, parseDice(String(trap.params.dano ?? '1d4')));
+  dealDamage(r, id, saved ? Math.floor(raw / 2) : raw, (effect && TRAP_ELEMENT[effect]) ?? 'fisico', undefined, 'trampa');
+  if (saved || !effect || !standing(r.entity(id))) return r.outcome();
+  if (SURFACES[effect]) r.apply({ type: 'spawnSurface', tiles: [{ ...e.position }], surface: effect });
+  else if (effect === 'empuje') {
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]] as const;
+    const [dx, dy] = dirs[rng.die(4) - 1]!;
+    r.apply({ type: 'push', entityId: id, dx, dy, distance: 2 });
+  } else if (effect === 'caida') fallDamage(r, id, 2);
+  else if (!hasTag(e, `inmune:${effect}`)) r.apply({ type: 'applyCondition', entityId: id, condition: effect, ...(effect === 'enredado' ? { remainingTurns: 2 } : {}) });
   return r.outcome();
 }

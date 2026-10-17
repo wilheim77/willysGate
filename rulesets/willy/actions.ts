@@ -13,6 +13,9 @@ import {
   hasLineOfSight,
   inBounds,
   isHostile,
+  type JumpRules,
+  jumpTargets,
+  traceProjectile,
   simulatePush,
   surfaceAt,
   tileAt,
@@ -30,7 +33,6 @@ import {
   countUse,
   damageHooks,
   dealDamage,
-  fallDamage,
   heal,
   heightOf,
   isCreature,
@@ -154,16 +156,16 @@ function explode(r: Resolver, actorId: string, centre: Vec2, radius: number, d: 
 
 // --- Jumps (basket) ---------------------------------------------------------------------------
 
-export interface JumpRules {
-  maxLength: number;
-  maxUp: number;
-  safeDown: number;
-  overEntities?: boolean;
-}
+export type { JumpRules } from '../../engine';
 
-/** Can `actor` jump to `to`? A straight line, over gaps but not through walls or (usually) creatures. */
+/**
+ * Can `actor` jump to `to`? The engine finds the legal landings (straight 8-way lines, over gaps
+ * and pits, never through a wall taller than the jump; R15); this only adds the low ceilings
+ * and says why not, in Spanish.
+ */
 export function jumpCheck(state: GameState, actor: Entity, to: Vec2, rules: JumpRules): string | null {
   if (lowCeiling(state, actor.position) || lowCeiling(state, to)) return 'Techo bajo: aquí no se puede saltar.';
+  if (jumpTargets(willyRef(), state, actor.id, rules).some((l) => l.to.x === to.x && l.to.y === to.y)) return null;
   const line = straightLine(actor.position, to);
   if (!line) return 'Solo se salta en línea recta.';
   const dist = gridDistance(actor.position, to);
@@ -171,17 +173,9 @@ export function jumpCheck(state: GameState, actor: Entity, to: Vec2, rules: Jump
   const land = tileAt(state.map, to);
   if (!land || !land.walkable) return 'No se puede aterrizar ahí.';
   if (occupiedBy(state, to, actor.id)) return 'La casilla de llegada está ocupada.';
-  const h0 = heightOf(state, actor.position);
-  if (land.height - h0 > rules.maxUp) return 'Demasiado alto para saltar.';
-  const top = Math.max(h0, land.height);
-  for (const p of line) {
-    const t = tileAt(state.map, p);
-    if (!t) return 'Fuera del mapa.';
-    const isGap = !t.walkable && (t.terrain === 'void' || t.terrain === 'vacio' || t.terrain === 'foso');
-    if (!t.walkable && !isGap && t.height > top) return 'Hay un muro en medio.';
-    if (!rules.overEntities && occupiedBy(state, p, actor.id)) return 'Hay alguien en medio.';
-  }
-  return null;
+  if (land.height - heightOf(state, actor.position) > rules.maxUp) return 'Demasiado alto para saltar.';
+  if (!rules.overEntities && line.some((p) => occupiedBy(state, p, actor.id))) return 'Hay alguien en medio.';
+  return 'Hay un muro en medio.';
 }
 
 function crossesGap(state: GameState, from: Vec2, to: Vec2): boolean {
@@ -191,13 +185,13 @@ function crossesGap(state: GameState, from: Vec2, to: Vec2): boolean {
   });
 }
 
+/** The engine's jump (falls beyond safeDown go through onFall), plus Willy's 'salto' state and event. */
 export function doJump(r: Resolver, actorId: string, to: Vec2, rules: JumpRules): void {
-  const actor = r.entity(actorId);
-  const from = { ...actor.position };
-  const drop = heightOf(r.state, from) - heightOf(r.state, to);
-  r.apply({ type: 'setPosition', entityId: actorId, position: to }, { type: 'applyCondition', entityId: actorId, condition: 'salto', remainingTurns: 1 });
-  r.emit({ type: 'jumped', entityId: actorId, from, to, subida: -drop, cruzaVacio: crossesGap(r.state, from, to) } as WillyEvent);
-  if (drop > rules.safeDown) fallDamage(r, actorId, drop - rules.safeDown + 1);
+  const from = { ...r.entity(actorId).position };
+  const rise = heightOf(r.state, to) - heightOf(r.state, from);
+  const gap = crossesGap(r.state, from, to);
+  r.apply({ type: 'jump', entityId: actorId, to, safeDown: rules.safeDown }, { type: 'applyCondition', entityId: actorId, condition: 'salto', remainingTurns: 1 });
+  r.emit({ type: 'saltoCompleto', entityId: actorId, from, to, subida: rise, cruzaVacio: gap } as WillyEvent);
 }
 
 /** Best landing tile next to a target for a jumping attack. */
@@ -571,15 +565,18 @@ const HANDLERS: Record<string, Handler> = {
     preview: (s, a, t) => {
       const target = targetEntity(s, t);
       if (!target) return invalid('¿A quién se la pasas?');
-      if (gridDistance(a.position, target.position) > (skillLevel(a, 'pase-picado') >= 2 ? 6 : 5)) return invalid('Demasiado lejos.');
-      if (!hasLineOfSight(s, a.position, target.position)) return invalid('No hay línea de visión (los rebotes llegarán con el motor).');
-      return withPushBonus(s, attackPreviewOf(s, passSpec(a, target.id)), target.id, a.position, 1);
+      const route = passRoute(s, a, target);
+      if (!route) return invalid(`No llega: ni directo ni con ${passBounces(a) === 1 ? 'un rebote' : 'dos rebotes'}.`);
+      return { ...withPushBonus(s, attackPreviewOf(s, passSpec(a, target.id, route)), target.id, route.from, 1), ...(route.path.length ? { affectedTiles: route.path } : {}) };
     },
     perform: (r, id, t) => {
       const me = r.entity(id);
-      const res = resolveAttack(r, passSpec(me, t.entityId!));
+      const route = passRoute(r.state, me, r.entity(t.entityId!));
+      if (!route) return;
+      if (route.bounces.length) r.emit({ type: 'bounced', entityId: id, targetId: t.entityId, bounces: route.bounces, path: route.path } as WillyEvent);
+      const res = resolveAttack(r, passSpec(me, t.entityId!, route));
       if (res.hit) {
-        pushEntity(r, t.entityId!, me.position, 1, id);
+        pushEntity(r, t.entityId!, route.from, 1, id);
         countUse(r, id, 'pase-picado');
       }
     },
@@ -710,8 +707,51 @@ function dunkSpec(a: Entity, target: Entity): AttackSpec {
   };
 }
 
-function passSpec(a: Entity, targetId: string): AttackSpec {
-  return { attackerId: a.id, targetId, label: 'Pase picado', melee: false, dice: dice(skillLevel(a, 'pase-picado') >= 4 ? '1d8' : '1d6'), element: 'golpe' };
+interface PassRoute {
+  /** Where the push comes from: Willy, or the last bounce. */
+  from: Vec2;
+  bounces: Vec2[];
+  /** Tiles the ball crosses (empty for a direct pass). */
+  path: Vec2[];
+  length: number;
+}
+
+const passRange = (a: Entity) => (skillLevel(a, 'pase-picado') >= 2 ? 6 : 5);
+const passBounces = (a: Entity) => (skillLevel(a, 'pase-picado') >= 3 ? 2 : 1);
+
+/**
+ * How the ball gets there: straight if there is a line of sight, else off one or two walls
+ * (the engine traces billiard bounces in the 8 directions; R15). The shortest route wins.
+ */
+function passRoute(state: GameState, a: Entity, target: Entity): PassRoute | null {
+  const range = passRange(a);
+  const direct = gridDistance(a.position, target.position);
+  if (direct <= range && hasLineOfSight(state, a.position, target.position)) return { from: a.position, bounces: [], path: [], length: direct };
+  let best: PassRoute | null = null;
+  for (let dy = -1; dy <= 1; dy++) {
+    for (let dx = -1; dx <= 1; dx++) {
+      if (!dx && !dy) continue;
+      const trace = traceProjectile(willyRef(), state, a.position, { x: a.position.x + dx, y: a.position.y + dy }, { range, maxBounces: passBounces(a), ignore: [a.id] });
+      if (trace.hitId !== target.id || !trace.bounces.length) continue;
+      if (!best || trace.path.length < best.length) best = { from: trace.bounces[trace.bounces.length - 1]!, bounces: trace.bounces, path: trace.path, length: trace.path.length };
+    }
+  }
+  return best;
+}
+
+function passSpec(a: Entity, targetId: string, route?: PassRoute): AttackSpec {
+  const base = parseDice(skillLevel(a, 'pase-picado') >= 4 ? '1d8' : '1d6');
+  // Maestría «Tiro de tres»: 6 tiles or more of flight, double damage.
+  const three = skillLevel(a, 'pase-picado') >= 5 && (route?.length ?? 0) >= 6;
+  return {
+    attackerId: a.id,
+    targetId,
+    label: route?.bounces.length ? 'Pase picado (de rebote)' : 'Pase picado',
+    melee: false,
+    dice: three ? { ...base, count: base.count * 2 } : base,
+    element: 'golpe',
+    ...(route?.bounces.length ? { ignoresCover: true } : {}),
+  };
 }
 
 function alleySpec(a: Entity, targetId: string, assisted: boolean): AttackSpec {

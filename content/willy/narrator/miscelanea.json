@@ -1045,7 +1045,7 @@
     },
     {
       "id": "salto",
-      "evento": "jumped",
+      "evento": "saltoCompleto",
       "donde": {
         "entityId": "willy"
       },

@@ -15,6 +15,7 @@ export class DialogueBox {
   /** The last roll, shown above the next line until the conversation moves on again. */
   private lastRoll: { actor: string; result: CheckResult } | null = null;
   /** A client-side question (disarm this trap? who?) shown in the same panel. */
+  private autoTimer = 0;
   private question: { text: string; options: { label: string; onPick: () => void }[]; closeLabel?: string } | null = null;
 
   constructor(
@@ -89,7 +90,8 @@ export class DialogueBox {
 
     if (this.lastRoll) panel.append(this.rollLine(this.lastRoll));
 
-    const speaker = node.speaker ? state.entities[node.speaker] : undefined;
+    // Someone speaking from off this map (the baron at the inn): the cast says who they are.
+    const speaker = node.speaker ? (state.entities[node.speaker] ?? this.game.cast?.[node.speaker]) : undefined;
     const line = document.createElement('div');
     line.className = speaker ? 'line' : 'line narration';
     if (speaker) {
@@ -106,9 +108,12 @@ export class DialogueBox {
     const list = document.createElement('div');
     list.className = 'choices';
     const choices = dialogueChoices(ruleset, state, tree);
+    clearTimeout(this.autoTimer);
     if (!node.choices || node.choices.length === 0) {
       const goesOn = resolveNext(ruleset, state, d.actorId, node.next) !== undefined;
       list.append(this.button(goesOn ? this.t('continue', 'Continuar') : this.t('endDialogue', 'Terminar'), true, () => this.choose(0)));
+      // Cinematic trees read themselves: time to read the line, then on (a tap still skips ahead).
+      if (tree.cinematic && goesOn) this.autoTimer = window.setTimeout(() => this.choose(0), 2200 + node.text.length * 45);
     }
     choices.forEach((c, i) => {
       let label = `${i + 1}. ${c.text}`;
