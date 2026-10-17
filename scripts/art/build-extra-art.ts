@@ -295,6 +295,117 @@ function gallows(): Image {
   return img;
 }
 
+/** Camp fire: a ring of stones, logs and a 4-frame flame. */
+function campfire(frame: number): Image {
+  const img = blank(T, T);
+  ascii(img, 3, 3, FLAMES[frame]!, FLAME_LEGEND);
+  ascii(img, 4, 2, FLAMES[(frame + 2) % 4]!.slice(0, 5), FLAME_LEGEND);
+  ascii(img, 1, 10, [
+    '..kWWk.kWk....',
+    '.kWwwWkWwWk...',
+    'kSkkWWWWkkSk..',
+    'kSSkkkkkkSSk..',
+    '.kkSSkkSSkk...',
+    '...kk..kk.....',
+  ], { k: 'out', W: 'w3', w: 'w1', S: 's2' });
+  return img;
+}
+
+/** The Sinpaga oil cart: a two-wheeled cart loaded with dripping oil barrels (32x20). */
+function oilCart(): Image {
+  const img = blank(32, 20);
+  rect(img, 2, 9, 26, 5, rgb('w2'));
+  rect(img, 2, 9, 26, 1, rgb('w3'));
+  rect(img, 2, 13, 26, 1, rgb('w0'));
+  rect(img, 26, 11, 6, 1, rgb('w1'));
+  for (const x of [4, 12, 20]) {
+    rect(img, x, 1, 7, 8, rgb('paint'));
+    rect(img, x, 1, 7, 1, rgb('w4'));
+    rect(img, x, 3, 7, 1, rgb('i0'));
+    rect(img, x, 6, 7, 1, rgb('i0'));
+    set(img, x + 3, 4, rgb('warn'));
+  }
+  rect(img, 15, 9, 1, 3, rgb('oil0'));
+  for (const cx of [7, 22]) {
+    ascii(img, cx - 3, 13, ['.kkkkk.', 'kWkWkWk', 'kkWkWkk', 'kWkWkWk', '.kkkkk.'], { k: 'out', W: 'w3' });
+  }
+  return outlined(img);
+}
+
+/** The Pozo del Ahorcado: a stone well with a crossbeam, a frayed rope and no bucket (16x24). */
+function well(): Image {
+  const img = blank(T, 24);
+  rect(img, 2, 1, 2, 14, rgb('w2'));
+  rect(img, 12, 1, 2, 14, rgb('w2'));
+  rect(img, 1, 1, 14, 2, rgb('w3'));
+  rect(img, 7, 3, 1, 7, rgb('d2'));
+  set(img, 7, 10, rgb('d1'));
+  set(img, 6, 11, rgb('d1'));
+  rect(img, 1, 14, 14, 9, rgb('s1'));
+  for (let y = 14; y < 23; y += 3) {
+    rect(img, 1, y, 14, 1, rgb('out'));
+    for (let x = (y / 3) % 2 ? 1 : 4; x < 15; x += 6) rect(img, x, y, 1, 3, rgb('out'));
+  }
+  rect(img, 1, 14, 14, 2, rgb('s2'));
+  rect(img, 3, 15, 10, 1, rgb('void'));
+  return outlined(img);
+}
+
+/** Bear trap (cepo): open jaws when armed, shut and harmless when disarmed. */
+function bearTrap(armed: boolean): Image {
+  const img = blank(T, T);
+  if (armed) {
+    ascii(img, 1, 4, [
+      '.kkkkkkkkkkkk.',
+      'kIkIkIkIkIkIkk',
+      'kIIIIIIIIIIIIk',
+      'kI....kk....Ik',
+      'kI...kIIk...Ik',
+      'kI....kk....Ik',
+      'kIIIIIIIIIIIIk',
+      'kIkIkIkIkIkIkk',
+      '.kkkkkkkkkkkk.',
+    ], { k: 'out', I: 'i1' });
+  } else {
+    ascii(img, 1, 6, [
+      '.kkkkkkkkkkkk.',
+      'kIIIIIIIIIIIIk',
+      'kIkIkIkIkIkIkk',
+      'kIIIIIIIIIIIIk',
+      '.kkkkkkkkkkkk.',
+    ], { k: 'out', I: 'i0' });
+  }
+  return img;
+}
+
+/** A tripwire across the tile, between two stakes. */
+function tripwire(): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 6, ['kk', 'kW', 'kk'], { k: 'out', W: 'w3' });
+  ascii(img, 14, 6, ['kk', 'Wk', 'kk'], { k: 'out', W: 'w3' });
+  rect(img, 2, 7, 12, 1, rgb('s3'));
+  return img;
+}
+
+/** Pressure plate with dart holes (poisoned dart trap). */
+function dartPlate(): Image {
+  const img = blank(T, T);
+  ascii(img, 3, 3, ['kkkkkkkkkk', 'kSSSSSSSSk', 'kSkSSSSkSk', 'kSSSSSSSSk', 'kSSSkkSSSk', 'kSSSkkSSSk', 'kSSSSSSSSk', 'kSkSSSSkSk', 'kSSSSSSSSk', 'kkkkkkkkkk'], { k: 'out', S: 's1' });
+  set(img, 8, 8, rgb('#97da3f'));
+  return img;
+}
+
+/** Dark outline around everything opaque (props drawn without one). */
+function outlined(img: Image): Image {
+  const out = blank(img.width, img.height);
+  img.data.copy(out.data);
+  for (let y = 0; y < img.height; y++) for (let x = 0; x < img.width; x++) {
+    if (get(img, x, y)) continue;
+    if (get(img, x + 1, y) || get(img, x - 1, y) || get(img, x, y + 1) || get(img, x, y - 1)) set(out, x, y, rgb('out'));
+  }
+  return out;
+}
+
 function rim(lip: [Key, Key, Key]): Image {
   const img = blank(T, T);
   for (let x = 0; x < T; x++) {
@@ -483,6 +594,13 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   tapestry: { frames: [tapestry(false)], note: 'Tapiz con el escudo de los Mazo', anchor: 'wall', fps: 0, loop: false },
   tapestry_crossbow: { frames: [tapestry(true)], note: 'Tapiz con una ballesta escondida detrás (asoma la punta)', anchor: 'wall', fps: 0, loop: false },
   gallows: { frames: [gallows()], note: 'Horca de la Torre del Cepo', anchor: 'floor', fps: 0, loop: false },
+  campfire: { frames: [0, 1, 2, 3].map(campfire), note: 'Hoguera de campamento', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
+  oil_cart: { frames: [oilCart()], note: 'Carro de aceite de los Sinpaga (32x20)', anchor: 'floor', fps: 0, loop: false },
+  well: { frames: [well()], note: 'Pozo del Ahorcado', anchor: 'floor', fps: 0, loop: false },
+  trap_beartrap: { frames: [bearTrap(true)], note: 'Cepo armado', anchor: 'floor', fps: 0, loop: false },
+  trap_beartrap_disarmed: { frames: [bearTrap(false)], note: 'Cepo cerrado y desarmado', anchor: 'floor', fps: 0, loop: false },
+  trap_tripwire: { frames: [tripwire()], note: 'Cuerda trampa (detectada)', anchor: 'floor', fps: 0, loop: false },
+  trap_dart: { frames: [dartPlate()], note: 'Placa de dardo envenenado (detectada)', anchor: 'floor', fps: 0, loop: false },
 };
 /** Surface overlays (manifest 'surfaces'): drawn over the floor tile, may be translucent. */
 const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {
