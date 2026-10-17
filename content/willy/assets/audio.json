@@ -1,0 +1,71 @@
+{
+  "music": {
+    "title": { "src": "assets/audio/music/title.ogg", "volume": 0.9 },
+    "exploration": { "src": "assets/audio/music/exploration.ogg" },
+    "combat": { "src": "assets/audio/music/combat.ogg" },
+    "tension": { "src": "assets/audio/music/tension.ogg", "volume": 0.8 },
+    "victory": { "src": "assets/audio/music/victory.ogg", "loop": false },
+    "defeat": { "src": "assets/audio/music/defeat.ogg", "loop": false }
+  },
+  "sfx": {
+    "footstepStone": { "src": ["assets/audio/sfx/footstep_stone_1.ogg", "assets/audio/sfx/footstep_stone_2.ogg"], "volume": 0.5 },
+    "footstepDirt": { "src": ["assets/audio/sfx/footstep_dirt_1.ogg", "assets/audio/sfx/footstep_dirt_2.ogg"], "volume": 0.5 },
+    "hitSlash": { "src": "assets/audio/sfx/hit_slash.ogg" },
+    "hitPierce": { "src": "assets/audio/sfx/hit_pierce.ogg" },
+    "hitBlunt": { "src": "assets/audio/sfx/hit_blunt.ogg" },
+    "miss": { "src": "assets/audio/sfx/miss_swish.ogg" },
+    "bowShot": { "src": "assets/audio/sfx/bow_shot.ogg" },
+    "spellFire": { "src": "assets/audio/sfx/spell_fire.ogg" },
+    "spellCold": { "src": "assets/audio/sfx/spell_cold.ogg" },
+    "spellLightning": { "src": "assets/audio/sfx/spell_lightning.ogg" },
+    "spellThunder": { "src": "assets/audio/sfx/spell_thunder.ogg" },
+    "spellRadiant": { "src": "assets/audio/sfx/spell_radiant.ogg" },
+    "explosion": { "src": "assets/audio/sfx/explosion.ogg" },
+    "barrelBreak": { "src": "assets/audio/sfx/barrel_break.ogg" },
+    "surfaceIgnite": { "src": "assets/audio/sfx/surface_ignite.ogg" },
+    "surfaceFreeze": { "src": "assets/audio/sfx/surface_freeze.ogg" },
+    "surfaceSteam": { "src": "assets/audio/sfx/surface_steam.ogg" },
+    "doorOpen": { "src": "assets/audio/sfx/door_open.ogg" },
+    "chestOpen": { "src": "assets/audio/sfx/chest_open.ogg" },
+    "leverPull": { "src": "assets/audio/sfx/lever_pull.ogg" },
+    "trapClick": { "src": "assets/audio/sfx/trap_click.ogg" },
+    "trapSpring": { "src": "assets/audio/sfx/trap_spring.ogg" },
+    "diceRoll": { "src": "assets/audio/sfx/dice_roll.ogg" },
+    "uiClick": { "src": "assets/audio/sfx/ui_click.ogg", "volume": 0.7 },
+    "uiConfirm": { "src": "assets/audio/sfx/ui_confirm.ogg", "volume": 0.7 },
+    "uiCancel": { "src": "assets/audio/sfx/ui_cancel.ogg", "volume": 0.7 },
+    "levelUp": { "src": "assets/audio/sfx/level_up.ogg" },
+    "crowdApplause": { "src": "assets/audio/sfx/crowd_applause.ogg" },
+    "crowdBoo": { "src": "assets/audio/sfx/crowd_boo.ogg" },
+    "tvJingle": { "src": "assets/audio/sfx/tv_jingle.ogg" },
+    "gameshowBuzzer": { "src": "assets/audio/sfx/gameshow_buzzer.ogg" },
+    "gameshowDing": { "src": "assets/audio/sfx/gameshow_ding.ogg" },
+    "gulls": { "src": "assets/audio/sfx/gulls.ogg", "volume": 0.6 },
+    "sea": { "src": "assets/audio/sfx/sea.ogg", "volume": 0.5 }
+  },
+  "events": {
+    "combatStarted": { "sfx": "tvJingle", "music": "combat" },
+    "combatEnded": { "field": "winner", "map": { "party": "victory" }, "fallback": "defeat", "music": "exploration" },
+    "attackRolled": { "field": "hit", "map": { "false": "miss" } },
+    "damageDealt": {
+      "field": "damageType",
+      "map": {
+        "slashing": "hitSlash",
+        "piercing": "hitPierce",
+        "bludgeoning": "hitBlunt",
+        "fire": "spellFire",
+        "cold": "spellCold",
+        "lightning": "spellLightning",
+        "thunder": "spellThunder",
+        "radiant": "spellRadiant"
+      },
+      "fallback": "hitBlunt"
+    },
+    "trapSpotted": { "sfx": "trapClick" },
+    "trapTriggered": { "sfx": "trapSpring" },
+    "trapDisarmed": { "sfx": "trapClick" },
+    "trapDisarmFailed": { "sfx": "trapSpring" },
+    "dialogueCheck": { "sfx": "diceRoll" }
+  },
+  "_note": "Placeholder: the `willy` ruleset (docs/willy/RULESET.md) isn't implemented yet, so no game.ts wires this in. Event names/fields here mirror dnd5e's engine events as a starting point; revisit once the ruleset lands (crit -> crowdApplause, pifia/fumble -> crowdBoo, floor clear -> gameshowDing, game over -> gameshowBuzzer, coastal floors -> gulls/sea ambience are still unassigned)."
+}

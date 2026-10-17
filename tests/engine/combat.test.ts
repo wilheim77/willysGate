@@ -184,3 +184,20 @@ describe('generic AI', () => {
     expect(nextAiCommand(toyRuleset, s, 'nos')).toMatchObject({ type: 'act', actionId: 'mend', target: { entityId: 'ghoul' } });
   });
 });
+
+describe('skipped turns still pass (review 4)', () => {
+  it('a creature that cannot act still sees its timed conditions run out', () => {
+    const e = createEngine(toyRuleset, 'test');
+    const pool = (n: number) => ({ current: n, max: n });
+    let s = e.newGame({ seed: 1, map: asciiMap(['....']), entities: [makeEntity({ id: 'a', resources: { blood: pool(5) } }), makeEntity({ id: 'z', factionId: 'night', controllerId: 'ai', position: { x: 3, y: 0 }, resources: { blood: pool(5) } })] });
+    const started = e.apply(s, { type: 'startCombat', issuer: 'system', participants: ['a', 'z'] } as never);
+    if (!started.ok) throw new Error();
+    s = { ...started.state, turn: { ...started.state.turn, order: ['a', 'z'], activeEntityId: 'a' } };
+    s = e.applyEffects(s, [{ type: 'applyCondition', entityId: 'z', condition: 'staked', remainingTurns: 1 }]).state;
+    for (let i = 0; i < 3; i++) {
+      const r = e.apply(s, { type: 'endTurn', issuer: 'system', entityId: s.turn.activeEntityId! } as never);
+      if (r.ok) s = r.state;
+    }
+    expect(s.entities.z!.conditions.some((c) => c.id === 'staked')).toBe(false);
+  });
+});

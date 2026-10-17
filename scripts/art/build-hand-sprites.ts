@@ -46,8 +46,10 @@ function paint(img: Image, rows: string[], legend: Record<string, string>, dx: n
     const px = x + dx, py = y + dy;
     if (px < 0 || py < 0 || px >= img.width || py >= img.height) return;
     const i = (py * img.width + px) * 4;
-    const [r, g, b] = hexToRgb(hex);
-    [img.data[i], img.data[i + 1], img.data[i + 2], img.data[i + 3]] = [r, g, b, 255];
+    // '#rrggbb' or '#rrggbbaa' (translucent creatures).
+    const [r, g, b] = hexToRgb(hex.slice(0, 7));
+    const a = hex.length === 9 ? parseInt(hex.slice(7), 16) : 255;
+    [img.data[i], img.data[i + 1], img.data[i + 2], img.data[i + 3]] = [r, g, b, a];
   }));
 }
 

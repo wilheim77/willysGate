@@ -90,6 +90,42 @@
   },
   "ahogado": {
    "tone": "undead"
+  },
+  "mazo": {
+   "tone": "neutral"
+  },
+  "hilda": {
+   "tone": "neutral"
+  },
+  "cirilo": {
+   "tone": "neutral"
+  },
+  "fanatico_pala": {
+   "tone": "foe"
+  },
+  "nella": {
+   "tone": "neutral"
+  },
+  "odda": {
+   "tone": "neutral"
+  },
+  "lisandro": {
+   "tone": "neutral"
+  },
+  "aldeano": {
+   "tone": "neutral"
+  },
+  "aldeana": {
+   "tone": "neutral"
+  },
+  "aldeano_viejo": {
+   "tone": "neutral"
+  },
+  "fiel_pala": {
+   "tone": "neutral"
+  },
+  "viuda": {
+   "tone": "neutral"
   }
  },
  "hand": {

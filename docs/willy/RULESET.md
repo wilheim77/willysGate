@@ -1,7 +1,7 @@
 # Ruleset `willy`: el Reglamento del Concurso
 
 > Estado: **propuesta pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
-> Willy es **siempre humano** (rasgos fijos en `content/willy/data/willy.json`). Clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `classes.json`. Las razas no humanas son ahora mazmorreros rivales (PNJ) en `rivals.json`. Objetos en `items.json`.
+> Willy es **siempre humano** (rasgos fijos en `rulesets/willy/data/willy.json`). Clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `classes.json`. Las razas no humanas son ahora mazmorreros rivales (PNJ) en `rivals.json`. Objetos en `items.json`.
 > Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden las clases Ingeniero (con la habilidad 5G→10G), Funcionario y Jugador de basket, y los modos de eliminación.
 
 ## Objetivos
@@ -310,49 +310,61 @@ Detalle de guardado y reacciones en `DESIGN.md` §12.
 | **Concursante** (normal) | Por defecto | Números de este documento |
 | **Prime time** | Quien quiere sufrir | Reloj ×0,8; enemigos +25 % de vida; patrocinadores más exigentes; audiencia ×1,25 |
 
-## Esbozo de implementación
+## Implementación (`rulesets/willy/`)
 
-Solo documentado: no se crea `rulesets/willy/` hasta que la Fase 2 del motor fije los ganchos de combate (`rollInitiative`, `onTurnStart`, `preview`, `listActions`), para no romper la compilación al integrar.
+Código en TypeScript puro que implementa la interfaz `Ruleset` del motor. Los datos de reglas viven junto al código, como en `dnd5e`: `rulesets/willy/data/classes.json` (clases y habilidades) y `rulesets/willy/data/willy.json` (rasgos fijos de Willy). El contenido del juego puede importarlos; el ruleset nunca importa de `content/`.
 
-```ts
-// rulesets/willy/index.ts (borrador, NO creado todavía)
-export const willy: Ruleset = {
-  id: 'willy',
-  version: 1,
-  stats: {
-    fue: { label: 'Fuerza' }, agi: { label: 'Agilidad' }, man: { label: 'Maña' },
-    agu: { label: 'Aguante' }, car: { label: 'Carisma' }, sue: { label: 'Suerte' },
-    nivel: { label: 'Nivel' }, xp: { label: 'Experiencia' }, armadura: { label: 'Armadura' },
-    // skill:<id> y skillxp:<id> se declaran dinámicamente desde classes.json
-  },
-  resources: {
-    vida: { label: 'Vida', refresh: 'longRest', visible: true },
-    energia: { label: 'Energía', refresh: 'shortRest', visible: true },
-    acciones: { label: 'Acciones', refresh: 'turn' },
-    movimiento: { label: 'Movimiento', refresh: 'turn' },
-    fichas: { label: 'Fichas', refresh: 'never', visible: true },
-  },
-  conditions: { /* tabla de condiciones de arriba */ },
-  movement: { maxStep: 1, climbCost: 1 },
-  movementBudget: (e) => 4 + Math.floor(stat(e, 'agi') / 4),
-  resolveCheck: (state, req, rng) => {
-    const actor = state.entities[req.actorId]!;
-    const attr = CHECK_ATTRIBUTE[req.check];          // 'trepar' -> 'agi', 'forzar' -> 'man'...
-    const d = rng.die(20);
-    const mods = [{ label: ATTR_LABEL[attr], value: stat(actor, attr) }, ...situational(req)];
-    const total = d + mods.reduce((s, m) => s + m.value, 0);
-    return {
-      check: req.check, label: CHECK_LABEL[req.check],
-      dice: [{ sides: 20, rolls: [d], kept: [d] }],
-      modifiers: mods, total, target: req.target, targetLabel: 'DIF',
-      success: d === 20 || (d !== 1 && total >= req.target),
-      outcome: d === 20 ? 'critical_success' : d === 1 ? 'fumble' : undefined,
-    };
-  },
-  difficulty: (state, id, source) => 10 + Math.floor(stat(state.entities[id]!, SOURCE_ATTR[source]) / 2),
-  dialogueConditions: { race: …, class: …, attributeAtLeast: …, skillAtLeast: …, sponsorLikes: … },
-  commands: { attack, shove, throwItem, useItem, useSkill, dash, wait, showOff, openBox },
-};
-```
+| Fichero | Qué hace |
+|---|---|
+| `index.ts` | El ruleset `willy`: atributos, recursos (vida, energía, acciones, fichas, xp y un contador `uso:<habilidad>` por habilidad), estados, glosario, pruebas (`resolveCheck`, `describeCheck`), DIF, movimiento, iniciativa, inicio de turno (ardiendo, envenenado, bailando, electrocutado, «Hablar del tiempo», «Cosas redondas») y fin de combate (vuelve la energía) |
+| `character.ts` | Fórmulas (vida, energía, DEF, movimiento, bono de daño), niveles de habilidad por uso y los constructores `createWilly` y `createCreature` |
+| `resolve.ts` | Tiradas de ataque (con desglose visible: altura, flanqueo, tumbado, oscuridad, cegado, mareado, compulsado), daño y eliminación, salvaciones, empujones con choque y «fuera de plano», caídas |
+| `environment.ts` | Superficies (agua, aceite, fuego, hielo, vapor, tóxico, electrificada, canicas, red, expedientes, gas) y sus reacciones |
+| `actions.ts` | Acciones básicas (golpe, empujar, correr, hacer el ganso) y las habilidades de clase, una función por habilidad |
+| `creation.ts` | Cásting: solo clase y 3 puntos libres; `buildWilly` |
+| `progression.ts` | Experiencia, niveles y efectos de subida de nivel |
+| `more-classes.ts` | Influencer, Bardo, Socorrista, Tasador, Mimo e Ingeniero |
+| `summons.ts` | Invocaciones y barreras |
+| `sheet.ts` | Ficha del personaje para la interfaz |
 
-Tests previstos: tabla de %, críticos y pifias, empujones contra muro/criatura/vacío, caídas por niveles, subida de nivel de habilidad exactamente en el uso 4/12/25/45, «uso sin efecto» que no cuenta, rasgos de los rivales (Burocracia de Gorka descontando su turno).
+### Estado por clase
+
+Las 9 clases están completas, con invocaciones y barreras (`summons.ts`, sobre `spawnEntity`/`despawnEntity` del motor). Lo único que no está en el ruleset:
+
+| Qué | Por qué |
+|---|---|
+| Golpe de valor (Tasador) | Necesita el valor de los objetos de `content/willy/data/items.json`; lo conectará el juego |
+| Directo, Unboxing, Viral, Charanga, Necesita likes, Regateo, Peritaje, Subasta | Son de la audiencia, las cajas y el mercado (sistemas del juego); el ruleset emite los estados y eventos que necesitan |
+| Maestrías muy vistosas (el fan que explota en confeti, la Torre de telefonía, la Versión beta) | Pendientes de una pasada de pulido |
+
+### Invocaciones y barreras
+
+- Fan entusiasta (`fan-entusiasta`, IA aliada), autómatas (los controla el jugador), antena (torreta: dispara al empezar el turno del Ingeniero) y Chencho (lo controla el jugador). Entran en el orden de turno justo detrás de su dueño; las que duran «hasta el final del combate» se van en `onCombatEnd`, las demás al acabar sus rondas, y todas si su dueño cae.
+- Pared invisible y Ventanilla cerrada: objetos que bloquean el paso y la vista, cuentan como muro en los choques y no cuentan para acabar un combate. Chocar con la ventanilla quita 1 acción.
+- Con un aliado cerca (Chencho, un fan, un autómata…), el Alley-oop es el de verdad (2d8); solo, «contra la pared» (1d8).
+
+### Decisiones de la revisión 4
+
+- **Flanqueo:** +2 cuerpo a cuerpo si **cualquier** aliado tuyo está pegado al objetivo (no hace falta que esté al otro lado). Más fácil de leer; el glosario ya lo explica así.
+- **Cobertura:** −2 con un obstáculo entre medias, −5 con dos o más; los ataques cuerpo a cuerpo la ignoran. El vapor tapa la vista.
+- **Afortunado** se gasta en el siguiente ataque; en pruebas fuera de combate dura hasta que caduca (el motor no deja que una prueba aplique efectos).
+- **Empujar** usa su propia tirada (`shoveRolled`) con los mismos números que la vista previa, también para criaturas (que ahora pueden tener su propia Fuerza). La vista previa avisa de la consecuencia («¡fuera de plano!», «~5 de daño») y la IA la tiene en cuenta: los enemigos ya empujan a Willy al vacío.
+- **Enredado** dura 2 turnos (se renueva mientras sigas en la red o en el papeleo) y «Liberarse» (FUE DIF 13) te saca antes.
+- **La experiencia** se guarda como recurso (`xp`, nunca se recarga) y el nivel como atributo (`nivel`).
+- **Terco como una mula** da inmunidad a Asustado; **Petrificado** no recibe daño.
+
+### Ganchos del motor que ya usa
+
+- **Choques (R17):** `onCollision` aplica 1d6 contra un muro, 1d4 a los dos contra una criatura y, si al empujón le quedaba recorrido, lanza a la segunda («¡Strike!»).
+- **Vacío (R18):** `onVoid` elimina a los enemigos normales («fuera de plano») y a los jefes les quita el 20 % y los devuelve a la casilla libre más cercana. Los fosos se marcan con `terrain: 'void'` en Tiled.
+- **Subir de nivel (R19):** `progression.ts` → `levelUpEffects` (nivel +1, 2 puntos de atributo, +3 de vida máxima, 25 % de vida y toda la energía) con `modifyStat`; `levelForXp` con la tabla de experiencia.
+
+- **Invocaciones y barreras (R13):** `spawnEntity`/`despawnEntity`.
+- **Fin de turno e inicio de combate (R20):** «Siesta en la silla» (Socorrista) y «Silencio absoluto» (Mimo).
+
+### Lo que sigue esperando al motor
+
+- **Saltos y rebotes (R15):** de momento el salto es un `setPosition` validado en el ruleset y el Pase picado no rebota.
+- **Fin de ronda (R20):** cintas transportadoras y mareas.
+
+Tests: `tests/rulesets/willy-core.test.ts`, `willy-classes.test.ts`, `willy-classes2.test.ts`, `willy-summons.test.ts` y `willy-review.test.ts` (este recorre todas las habilidades de todas las clases en los niveles 1, 3, 6 y 9) (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).

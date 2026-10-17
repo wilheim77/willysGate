@@ -5,6 +5,7 @@ import { gridDistance } from './grid';
 import { itemCount } from './inventory';
 import { RngCursor } from './rng';
 import type { CheckResult, Ruleset } from './ruleset';
+import { type MapBuilder, changeMap } from './world';
 import { type FlagValue, type GameState, type JsonValue, OBJECT_TAG } from './state';
 
 /**
@@ -26,8 +27,11 @@ export interface DialogueNode {
   /** Applied when the conversation reaches this node. */
   effects?: DialogueEffect[];
   choices?: DialogueChoice[];
-  /** With no choices: continue here (a "Continuar" button), or end when omitted. */
-  next?: string;
+  /**
+   * With no choices: continue here (a "Continuar" button), or end when omitted. A list picks
+   * the first entry whose `when` holds (the last one without `when` is the fallback).
+   */
+  next?: string | { when?: DialogueWhen; next?: string }[];
 }
 
 export interface DialogueChoice {
@@ -54,12 +58,16 @@ export type DialogueWhen =
   | { rule: string; actor?: string; params?: Record<string, JsonValue> }
   | { all: DialogueWhen[] }
   | { any: DialogueWhen[] }
-  | { not: DialogueWhen };
+  | { not: DialogueWhen }
+  /** The entity is in the speaker's party (same controller). */
+  | { inParty: string };
 
 export type DialogueEffect =
   | Effect
-  /** Start a fight with everyone of these factions on the map. */
-  | { type: 'startCombat'; factions: string[] };
+  /** Start a fight with everyone of these factions on the map; optional consequences by outcome. */
+  | { type: 'startCombat'; factions: string[]; onVictory?: Effect[]; onDefeat?: Effect[] }
+  /** The party leaves for another map (a cart ride, a cave-in, "follow me"). */
+  | { type: 'travel'; mapId: string; spawn: string };
 
 export interface DialogueEvent extends GameEvent {
   type: 'dialogueStarted' | 'dialogueNode' | 'dialogueChoice' | 'dialogueEnded';
@@ -80,6 +88,8 @@ export interface DialogueCheckEvent extends GameEvent {
 /** Content the engine looks up by id while running commands. */
 export interface EngineContent {
   dialogues: Record<string, DialogueTree>;
+  /** Builders for the game's maps, by id, used the first time the party travels there. */
+  maps?: Record<string, MapBuilder>;
 }
 
 export const EMPTY_CONTENT: EngineContent = { dialogues: {} };
@@ -102,6 +112,8 @@ export interface StartDialogueCommand extends BaseCommand {
   treeId: string;
   actorId: string;
   partnerId?: string;
+  /** A flag set when it opens (scenes that play once). */
+  markFlag?: string;
 }
 
 export interface ChooseOptionCommand extends BaseCommand {
@@ -132,6 +144,11 @@ export function evaluateCondition(ruleset: Ruleset, state: GameState, actorId: s
   if ('all' in c) return c.all.every((x) => evaluateCondition(ruleset, state, actorId, x));
   if ('any' in c) return c.any.some((x) => evaluateCondition(ruleset, state, actorId, x));
   if ('not' in c) return !evaluateCondition(ruleset, state, actorId, c.not);
+  if ('inParty' in c) {
+    const who = state.entities[c.inParty];
+    const me = state.entities[actorId];
+    return !!who && !!me && who.controllerId === me.controllerId && ruleset.isStanding(who);
+  }
   if ('notFlag' in c) return !state.flags[c.notFlag];
   if ('flag' in c) return c.is === undefined ? !!state.flags[c.flag] : state.flags[c.flag] === c.is;
   if ('item' in c) return itemCount(state, c.owner ?? 'party', c.item) >= (c.atLeast ?? 1);
@@ -139,6 +156,19 @@ export function evaluateCondition(ruleset: Ruleset, state: GameState, actorId: s
   if (!rule) throw new Error(`Unknown dialogue condition "${c.rule}"`);
   const who = c.actor ?? actorId;
   return !!state.entities[who] && rule(state, who, c.params ?? {});
+}
+
+/** Where a choiceless node continues: a fixed id, or the first branch whose condition holds. */
+export function resolveNext(ruleset: Ruleset, state: GameState, actorId: string, next: DialogueNode['next']): string | undefined {
+  if (next === undefined || typeof next === 'string') return next;
+  return next.find((b) => !b.when || evaluateCondition(ruleset, state, actorId, b.when))?.next;
+}
+
+/** Every node id a `next` may lead to (for validation). */
+export function nextTargets(next: DialogueNode['next']): string[] {
+  if (next === undefined) return [];
+  if (typeof next === 'string') return [next];
+  return next.flatMap((b) => (b.next ? [b.next] : []));
 }
 
 /** A choice as the UI shows it. */
@@ -191,7 +221,7 @@ function enterNode(
   if (!node) return fail('invalid_target', `Dialogue ${d.treeId} has no node "${nodeId}"`);
   let next = withDialogue(state, { ...d, nodeId });
   events.push({ type: 'dialogueNode', treeId: d.treeId, nodeId } as DialogueEvent);
-  const applied = applyDialogueEffects(ruleset, next, node.effects ?? [], rng);
+  const applied = applyDialogueEffects(ruleset, next, node.effects ?? [], rng, content);
   if (!applied.ok) return applied;
   next = applied.state;
   events.push(...applied.events);
@@ -203,12 +233,23 @@ function enterNode(
   return { ok: true, state: next, events };
 }
 
-function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor): CommandResult {
-  const plain = effects.filter((e): e is Effect => e.type !== 'startCombat');
+function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor, content: EngineContent): CommandResult {
+  const plain = effects.filter((e): e is Effect => e.type !== 'startCombat' && e.type !== 'travel');
   const applied = applyEffects(ruleset, state, plain);
   let next = applied.state;
   const events: GameEvent[] = [...applied.events];
   for (const e of effects) {
+    if (e.type === 'travel') {
+      const t = e as { mapId: string; spawn: string };
+      const d = dialogueOf(next);
+      const issuer = d ? next.entities[d.actorId]?.controllerId : undefined;
+      const party = Object.values(next.entities).filter((x) => issuer && x.controllerId === issuer).map((x) => x.id);
+      const r = changeMap(next, content.maps ?? {}, t.mapId, t.spawn, party);
+      if (!r.ok) return r;
+      next = r.state;
+      events.push(...r.events);
+      continue;
+    }
     if (e.type !== 'startCombat') continue;
     const factions = (e as { factions: string[] }).factions;
     const leaderSide = Object.values(next.entities).find((x) => x.controllerId.startsWith('player'))?.factionId;
@@ -218,6 +259,10 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
     const r = startCombat({ ...next, rng: rng.state }, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants } as StartCombatCommand, { ruleset });
     if (!r.ok) return r;
     next = r.state;
+    const hooks = e as { onVictory?: Effect[]; onDefeat?: Effect[] };
+    if (leaderSide && (hooks.onVictory || hooks.onDefeat)) {
+      next = { ...next, systems: { ...next.systems, combatHooks: { side: leaderSide, ...(hooks.onVictory ? { onVictory: hooks.onVictory } : {}), ...(hooks.onDefeat ? { onDefeat: hooks.onDefeat } : {}) } as unknown as JsonValue } };
+    }
     rng.state = next.rng;
     events.push(...r.events);
   }
@@ -227,7 +272,8 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
 /** Scripts (the game itself) open conversations directly; players go through `interact`. */
 export const startDialogue: CommandHandler<StartDialogueCommand> = (state, cmd, { ruleset, content = EMPTY_CONTENT }) => {
   if (cmd.issuer !== SYSTEM_ISSUER) return fail('not_your_entity', 'Only the game starts dialogues directly');
-  return openDialogue(ruleset, content, state, cmd.treeId, cmd.actorId, cmd.partnerId);
+  const marked = cmd.markFlag ? { ...state, flags: { ...state.flags, [cmd.markFlag]: true } } : state;
+  return openDialogue(ruleset, content, marked, cmd.treeId, cmd.actorId, cmd.partnerId);
 };
 
 function openDialogue(ruleset: Ruleset, content: EngineContent, state: GameState, treeId: string, actorId: string, partnerId?: string): CommandResult {
@@ -264,7 +310,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
     // A node without choices just continues.
     if (!node.choices || node.choices.length === 0) {
       if (cmd.index !== 0) return fail('invalid_target', 'Only "continue" here');
-      const r = enterNode(ruleset, content, state, d, node.next, events, rng);
+      const r = enterNode(ruleset, content, state, d, resolveNext(ruleset, state, d.actorId, node.next), events, rng);
       return r.ok ? { ...r, state: { ...r.state, rng: rng.state } } : r;
     }
 
@@ -289,7 +335,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
       events.push({ type: 'dialogueCheck', actorId, result: lastCheck } as DialogueCheckEvent);
       target = lastCheck.success ? choice.check.success : choice.check.failure;
     }
-    const applied = applyDialogueEffects(ruleset, { ...next, rng: rng.state }, choice.effects ?? [], rng);
+    const applied = applyDialogueEffects(ruleset, { ...next, rng: rng.state }, choice.effects ?? [], rng, content);
     if (!applied.ok) return applied;
     next = applied.state;
     events.push(...applied.events);

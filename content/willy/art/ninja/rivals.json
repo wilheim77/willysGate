@@ -1,0 +1,1558 @@
+{
+ "$comment": "Modular rivals for Willy (docs/willy/ART_BRIEF.md item 11, rival-generator.json). Per race: a base body with idle/run, indexed colours recoloured by its 5 palettes, and anchors (head, face, hand) in body-part coordinates; accessories by slot with a pivot. Built by scripts/art/build-rivals.ts: one sprite per body and palette, the anchors per frame in the manifest ('rivals'), the accessories as images, and the 5 legendaries composed. Build: `npm run art`.",
+ "output": "rivals.png",
+ "races": {
+  "semigaviota": {
+   "sprite": "rival-cuerpo-semigaviota",
+   "size": [
+    16,
+    26
+   ],
+   "parts": {
+    "body": [
+     "....kkkkk.......",
+     "...kAAAAAk......",
+     "..kAAAAAAAk.....",
+     "..kAAAAeAAkkk...",
+     "..kAAAAAAACCCk..",
+     "..kaAAAAAAkkDCk.",
+     "...kaAAAAk..kk..",
+     "....kkAAk.......",
+     "...kkBBBBkk.....",
+     "..kBBBBBBBBk....",
+     ".kBbkBBBBkbBk...",
+     "kBbbkBBBBkbbBk..",
+     "kbbkBBBBBBkbbk..",
+     ".kk.kBBBBk.kk...",
+     "....kBBBBk......",
+     "....kbbbbk......"
+    ],
+    "legs_a": [
+     ".....kCk.kCk....",
+     ".....kCk.kCk....",
+     ".....kCk.kCk....",
+     "....kCCk.kCCk...",
+     "...kCCCk.kCCCk..",
+     "...kkkkk.kkkkk.."
+    ],
+    "legs_b": [
+     ".....kCkkCk.....",
+     ".....kCkkCk.....",
+     "......kCCk......",
+     ".....kCCkCk.....",
+     "....kCCCkCCk....",
+     "....kkkkkkkk...."
+    ],
+    "legs_c": [
+     "....kCk...kCk...",
+     "...kCk.....kCk..",
+     "...kCk.....kCk..",
+     "..kCCk.....kCCk.",
+     ".kCCCk.....kCCCk",
+     ".kkkkk.....kkkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       20
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "anchors": {
+    "cabeza": [
+     6,
+     0
+    ],
+    "cara": [
+     6,
+     3
+    ],
+    "mano": [
+     12,
+     11
+    ]
+   },
+   "palettes": {
+    "gaviota-patiamarilla": {
+     "A": "#f4f4f0",
+     "a": "#c8ccd0",
+     "B": "#9aa2ac",
+     "b": "#6a727c",
+     "C": "#f0c030",
+     "D": "#e0302a",
+     "e": "#1e1c24"
+    },
+    "gaviota-reidora": {
+     "A": "#2a2a30",
+     "a": "#1a1a20",
+     "B": "#b8c0c8",
+     "b": "#8a929c",
+     "C": "#c02a2a",
+     "D": "#801818",
+     "e": "#f4f4f0"
+    },
+    "gaviota-sombria": {
+     "A": "#e8e8e8",
+     "a": "#b8b8bc",
+     "B": "#4a505a",
+     "b": "#2e343c",
+     "C": "#f0c030",
+     "D": "#e0302a",
+     "e": "#1e1c24"
+    },
+    "gaviota-de-puerto-sucia": {
+     "A": "#c8bca8",
+     "a": "#9a8e7a",
+     "B": "#7a7262",
+     "b": "#544c40",
+     "C": "#c8a040",
+     "D": "#a83a2a",
+     "e": "#1e1c24"
+    },
+    "gaviota-albina": {
+     "A": "#ffffff",
+     "a": "#e0e0e8",
+     "B": "#f0f0f4",
+     "b": "#c8c8d0",
+     "C": "#f0a0b0",
+     "D": "#ff6080",
+     "e": "#e04060"
+    }
+   }
+  },
+  "gnomo-de-jardin": {
+   "sprite": "rival-cuerpo-gnomo-de-jardin",
+   "size": [
+    16,
+    22
+   ],
+   "parts": {
+    "body": [
+     ".......k........",
+     "......kCk.......",
+     ".....kCWCk......",
+     ".....kCCck......",
+     "....kCCCCck.....",
+     "...kCCCCCCck....",
+     "..kkkkkkkkkkk...",
+     "...kAAeAeAk.....",
+     "...kAAAADAk.....",
+     "...kWWWWWWk.....",
+     "..kBWWWWWWBk....",
+     ".kBBkWWWWkBBk...",
+     ".kAkBBWWBBkAk...",
+     "..kkBBBBBBkk....",
+     "...kbBBBBbk....."
+    ],
+    "legs_a": [
+     "...kbbkkbbk.....",
+     "..kDDDk.kDDDk...",
+     "..kkkkk.kkkkk..."
+    ],
+    "legs_b": [
+     "...kbbbbbbk.....",
+     "...kDDDDDDk.....",
+     "...kkkkkkkk....."
+    ],
+    "legs_c": [
+     "..kbbk..kbbk....",
+     ".kDDDk..kDDDk...",
+     ".kkkkk..kkkkk..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       19
+      ],
+      [
+       "body",
+       1,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       19
+      ],
+      [
+       "body",
+       -1,
+       4
+      ]
+     ]
+    ]
+   },
+   "anchors": {
+    "cabeza": [
+     7,
+     0
+    ],
+    "cara": [
+     6,
+     7
+    ],
+    "mano": [
+     2,
+     12
+    ]
+   },
+   "palettes": {
+    "gorro-rojo-clasico": {
+     "C": "#d02020",
+     "c": "#9a1818",
+     "A": "#f0c0a0",
+     "W": "#f4f4f0",
+     "B": "#3a6ad0",
+     "b": "#2a4aa0",
+     "D": "#c06040",
+     "e": "#1e1c24"
+    },
+    "gorro-azul-desvaido": {
+     "C": "#8ab0d0",
+     "c": "#6a8aa8",
+     "A": "#e8c8b0",
+     "W": "#e8e8e0",
+     "B": "#c8a070",
+     "b": "#9a7850",
+     "D": "#c08870",
+     "e": "#1e1c24"
+    },
+    "pintura-descascarillada": {
+     "C": "#c05050",
+     "c": "#e8e0d8",
+     "A": "#d8c0b0",
+     "W": "#d8d4cc",
+     "B": "#7a90b0",
+     "b": "#c8c4bc",
+     "D": "#a07868",
+     "e": "#1e1c24"
+    },
+    "musgo": {
+     "C": "#5a8a3a",
+     "c": "#3a6a2a",
+     "A": "#b0b890",
+     "W": "#c8d0b0",
+     "B": "#4a6a40",
+     "b": "#34502e",
+     "D": "#6a7a4a",
+     "e": "#1e1c24"
+    },
+    "dorado-de-chalé": {
+     "C": "#e8b830",
+     "c": "#a8781e",
+     "A": "#f0d070",
+     "W": "#fff0a0",
+     "B": "#d8a828",
+     "b": "#a8781e",
+     "D": "#c08820",
+     "e": "#5a3a10"
+    }
+   }
+  },
+  "orco-de-oficina": {
+   "sprite": "rival-cuerpo-orco-de-oficina",
+   "size": [
+    16,
+    26
+   ],
+   "parts": {
+    "body": [
+     "...kkkkkkkk.....",
+     "..kAAAAAAAAk....",
+     "..kAAAAAAAAk....",
+     "..kAeAAAAeAk....",
+     "..kAAAAAAAAk....",
+     "..kAWkkkkWAk....",
+     "..kaAAAAAAak....",
+     "...kkaaaakk.....",
+     ".kkBBBBBBBBkk...",
+     "kAkBBBBDBBBkAk..",
+     "kAkBBBBBBBBkAk..",
+     "kAkBBBBDBBBkAk..",
+     "kakbBBBBBBbkak..",
+     ".kkCCCCCCCCkk...",
+     "..kCCCCCCCCk...."
+    ],
+    "legs_a": [
+     "..kCCCkCCCCk....",
+     "..kCCCkCCCCk....",
+     "..kcCCkcCCCk....",
+     "..kkkkkkkkkk....",
+     ".kkkkk.kkkkkk..."
+    ],
+    "legs_b": [
+     "...kCCCCCCk.....",
+     "...kCCCkCCk.....",
+     "...kcCCkcCk.....",
+     "...kkkkkkkk.....",
+     "..kkkkkkkkkk...."
+    ],
+    "legs_c": [
+     "..kCCCk.kCCCk...",
+     ".kCCCk...kCCCk..",
+     ".kcCCk...kcCCk..",
+     ".kkkkk...kkkkk..",
+     "kkkkkk...kkkkkk."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       21
+      ],
+      [
+       "body",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       21
+      ],
+      [
+       "body",
+       0,
+       7
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       21
+      ],
+      [
+       "body",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       21
+      ],
+      [
+       "body",
+       0,
+       7
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       21
+      ],
+      [
+       "body",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       21
+      ],
+      [
+       "body",
+       0,
+       7
+      ]
+     ]
+    ]
+   },
+   "anchors": {
+    "cabeza": [
+     6,
+     0
+    ],
+    "cara": [
+     6,
+     3
+    ],
+    "mano": [
+     12,
+     11
+    ]
+   },
+   "palettes": {
+    "verde-oliva": {
+     "A": "#6a8a4a",
+     "a": "#4a6a34",
+     "W": "#f4ecd8",
+     "e": "#1e1c24",
+     "B": "#f0f0f4",
+     "b": "#c8ccd4",
+     "D": "#3a6ad0",
+     "C": "#4a4a52",
+     "c": "#34343a"
+    },
+    "verde-fluor": {
+     "A": "#7ae04a",
+     "a": "#4ab02a",
+     "W": "#f4ecd8",
+     "e": "#1e1c24",
+     "B": "#f0f0f4",
+     "b": "#c8ccd4",
+     "D": "#3a6ad0",
+     "C": "#4a4a52",
+     "c": "#34343a"
+    },
+    "gris-ojeras": {
+     "A": "#8a9098",
+     "a": "#5a6068",
+     "W": "#f4ecd8",
+     "e": "#3a2a40",
+     "B": "#f0f0f4",
+     "b": "#c8ccd4",
+     "D": "#3a6ad0",
+     "C": "#4a4a52",
+     "c": "#34343a"
+    },
+    "moreno-de-terraza": {
+     "A": "#b07a4a",
+     "a": "#8a5a34",
+     "W": "#f4ecd8",
+     "e": "#1e1c24",
+     "B": "#f0f0f4",
+     "b": "#c8ccd4",
+     "D": "#3a6ad0",
+     "C": "#4a4a52",
+     "c": "#34343a"
+    },
+    "verde-pálido-de-fluorescente": {
+     "A": "#b8d8a8",
+     "a": "#8ab07a",
+     "W": "#f4ecd8",
+     "e": "#1e1c24",
+     "B": "#f0f0f4",
+     "b": "#c8ccd4",
+     "D": "#3a6ad0",
+     "C": "#4a4a52",
+     "c": "#34343a"
+    }
+   }
+  },
+  "fantasma-en-practicas": {
+   "sprite": "rival-cuerpo-fantasma-en-practicas",
+   "size": [
+    16,
+    22
+   ],
+   "parts": {
+    "body": [
+     ".....kkkkk......",
+     "....kAAAAAk.....",
+     "...kAAAAAAAk....",
+     "...kAAeAAeAk....",
+     "...kAAAAAAAk....",
+     "...kAAAkkAAk....",
+     "..kAAAAAAAAAk...",
+     ".kAAAAAAAAAAAk..",
+     "kAAkAAAAAAAkAAk.",
+     "kAAkAAGWAAAkAAk.",
+     ".kkkAAGGAAAkkk..",
+     "...kAAAAAAAk....",
+     "...kaAAAAAak....",
+     "...kaaAAAaak...."
+    ],
+    "hem_a": [
+     "...kAAkAAkAAk...",
+     "...kk.kk.kk.k..."
+    ],
+    "hem_b": [
+     "...kAkAAkAAkk...",
+     "....k.kk.kk.k..."
+    ],
+    "hem_c": [
+     "...kkAAkAAkAk...",
+     "...k.kk.kk.kk..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "hem_a",
+       0,
+       18
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "hem_b",
+       0,
+       17
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "hem_a",
+       0,
+       18
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "hem_b",
+       0,
+       17
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "hem_c",
+       0,
+       18
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "hem_b",
+       0,
+       17
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ]
+    ]
+   },
+   "anchors": {
+    "cabeza": [
+     7,
+     0
+    ],
+    "cara": [
+     7,
+     3
+    ],
+    "mano": [
+     14,
+     8
+    ]
+   },
+   "palettes": {
+    "sabana-blanca": {
+     "A": "#f4f4f0c8",
+     "a": "#c8ccd4c8",
+     "e": "#1e1c24",
+     "G": "#40c060",
+     "W": "#ffffff"
+    },
+    "azul-niebla": {
+     "A": "#a8c8f0b8",
+     "a": "#7898c8b8",
+     "e": "#1e1c24",
+     "G": "#40c060",
+     "W": "#ffffff"
+    },
+    "verde-ectoplasma": {
+     "A": "#9af0a0b8",
+     "a": "#5ac870b8",
+     "e": "#1a4a2a",
+     "G": "#40c060",
+     "W": "#ffffff"
+    },
+    "lila-cursi": {
+     "A": "#e0b0f0b8",
+     "a": "#b080d0b8",
+     "e": "#1e1c24",
+     "G": "#40c060",
+     "W": "#ffffff"
+    },
+    "gris-polvo": {
+     "A": "#b0aca8c0",
+     "a": "#8a8680c0",
+     "e": "#1e1c24",
+     "G": "#40c060",
+     "W": "#ffffff"
+    }
+   }
+  },
+  "minotauro-vegano": {
+   "sprite": "rival-cuerpo-minotauro-vegano",
+   "size": [
+    24,
+    36
+   ],
+   "parts": {
+    "body": [
+     "..kk................kk..",
+     ".kWWk..............kWWk.",
+     ".kWWWk............kWWWk.",
+     "..kWWWkkkkkkkkkkkkWWWk..",
+     "...kkkAAAAAAAAAAAAkkk...",
+     ".....kAAAAAAAAAAAAk.....",
+     "....kkAAeAAAAAAeAAkk....",
+     "...kaAkAAAAAAAAAAkAak...",
+     "....kkAAAAAAAAAAAAkk....",
+     ".....kAAASSSSSSAAAk.....",
+     ".....kAASkSSSSkSAAk.....",
+     "......kASSSSSSSSAk......",
+     ".......kkkSSSSkkk.......",
+     ".....kkAAkkkkkkAAkk.....",
+     "...kkAAAAAAAAAAAAAAkk...",
+     "..kAAAAaAAAAAAAAaAAAAk..",
+     ".kAAAAkaAAAAAAAAakAAAAk.",
+     ".kAAAkkBBBBBBBBBBkkAAAk.",
+     ".kAAAk.kBBBBBBBBk.kAAAk.",
+     ".kaAAk.kBBBbBBBBk.kAAak.",
+     ".kaak..kBBBBBBBBk..kaak.",
+     "..kk...kBBBBBBBBk...kk..",
+     "......kCCCCCCCCCCk......",
+     "......kCCCCkkCCCCk......",
+     "......kCCCk..kCCCk......"
+    ],
+    "legs_a": [
+     "......kAAAk..kAAAk......",
+     "......kAAAk..kAAAk......",
+     "......kaAAk..kaAAk......",
+     "......kaaak..kaaak......",
+     ".....kDDDDk..kDDDDk.....",
+     ".....kkkkkk..kkkkkk....."
+    ],
+    "legs_b": [
+     ".......kAAAkkAAAk.......",
+     ".......kAAAkkAAAk.......",
+     ".......kaAAkkaAAk.......",
+     ".......kaaakkaaak.......",
+     "......kDDDDkDDDDk.......",
+     "......kkkkkkkkkkk......."
+    ],
+    "legs_c": [
+     ".....kAAAk....kAAAk.....",
+     "....kAAAk......kAAAk....",
+     "....kaAAk......kaAAk....",
+     "....kaaak......kaaak....",
+     "...kDDDDk......kDDDDk...",
+     "...kkkkkk......kkkkkk..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       29
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       29
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       29
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       29
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       29
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       29
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "anchors": {
+    "cabeza": [
+     12,
+     4
+    ],
+    "cara": [
+     12,
+     6
+    ],
+    "mano": [
+     21,
+     20
+    ]
+   },
+   "palettes": {
+    "negro-zaino": {
+     "W": "#f4ecd8",
+     "B": "#3a8a4a",
+     "b": "#2a6a3a",
+     "C": "#3a4a7a",
+     "D": "#2a2020",
+     "e": "#1e1c24",
+     "A": "#3a343a",
+     "a": "#221e22",
+     "S": "#8a7a70"
+    },
+    "castaño": {
+     "W": "#f4ecd8",
+     "B": "#3a8a4a",
+     "b": "#2a6a3a",
+     "C": "#3a4a7a",
+     "D": "#2a2020",
+     "e": "#1e1c24",
+     "A": "#8a4a2a",
+     "a": "#6a3420",
+     "S": "#d0a080"
+    },
+    "berrendo": {
+     "W": "#f4ecd8",
+     "B": "#3a8a4a",
+     "b": "#2a6a3a",
+     "C": "#3a4a7a",
+     "D": "#2a2020",
+     "e": "#1e1c24",
+     "A": "#f0ece4",
+     "a": "#2e2a2e",
+     "S": "#f0b0a0"
+    },
+    "cárdeno": {
+     "W": "#f4ecd8",
+     "B": "#3a8a4a",
+     "b": "#2a6a3a",
+     "C": "#3a4a7a",
+     "D": "#2a2020",
+     "e": "#1e1c24",
+     "A": "#6a6a72",
+     "a": "#4a4a52",
+     "S": "#a8a0a0"
+    },
+    "jabonero": {
+     "W": "#f4ecd8",
+     "B": "#3a8a4a",
+     "b": "#2a6a3a",
+     "C": "#3a4a7a",
+     "D": "#2a2020",
+     "e": "#1e1c24",
+     "A": "#e8d8b0",
+     "a": "#c8b48a",
+     "S": "#f0c8b0"
+    }
+   }
+  }
+ },
+ "accessories": {
+  "cabeza": {
+   "gorra": {
+    "rows": [
+     ".kkkkk...",
+     "kCCCCCk..",
+     "kkkkkkkkk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "C": "#3a6ad0"
+    },
+    "pivot": [
+     4,
+     2
+    ]
+   },
+   "boina": {
+    "rows": [
+     "..kkkk..",
+     ".kBBBBk.",
+     "kBBBBBBk",
+     ".kkkkkk."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "B": "#a02030"
+    },
+    "pivot": [
+     4,
+     3
+    ]
+   },
+   "casco-de-moto": {
+    "rows": [
+     "..kkkkkk..",
+     ".kRRRRRRk.",
+     "kRRRRRRRRk",
+     "kRkkkkkkRk",
+     "kRkVVVVkRk",
+     "kRkVVVVkRk",
+     "kRRkkkkRRk",
+     ".kkkkkkkk."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "R": "#e0302a",
+     "V": "#4fe8ff"
+    },
+    "pivot": [
+     5,
+     1
+    ]
+   },
+   "sombrero-de-paja": {
+    "rows": [
+     "...kkkkkk...",
+     "..kYYYYYYk..",
+     "kkkRRRRRRkkk",
+     "kYYYYYYYYYYk",
+     ".kkkkkkkkkk."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "Y": "#e8c870",
+     "R": "#c02a2a"
+    },
+    "pivot": [
+     6,
+     3
+    ]
+   },
+   "pañuelo": {
+    "rows": [
+     "kkkkkkkk.",
+     "kRRWRRRRk",
+     ".kkkkkkRk",
+     ".......kk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "R": "#d02020",
+     "W": "#ffffff"
+    },
+    "pivot": [
+     4,
+     0
+    ]
+   },
+   "corona-de-carton": {
+    "rows": [
+     "k.k.k.k.",
+     "kYkYkYkk",
+     "kYYYYYYk",
+     "kkkkkkkk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "Y": "#d8b070"
+    },
+    "pivot": [
+     4,
+     3
+    ]
+   },
+   "gorro-de-lana": {
+    "rows": [
+     "...kk...",
+     "..kWWk..",
+     ".kkkkkk.",
+     "kRRRRRRk",
+     "kRrRrRrk",
+     "kkkkkkkk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "W": "#ffffff",
+     "R": "#40a060",
+     "r": "#2a7a44"
+    },
+    "pivot": [
+     4,
+     5
+    ]
+   },
+   "visera": {
+    "rows": [
+     "kkkkkkk...",
+     "kGGGGGGkkk",
+     ".kkkkkkkkk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "G": "#40c060"
+    },
+    "pivot": [
+     4,
+     -1
+    ]
+   },
+   "tupé": {
+    "rows": [
+     "...kkk..",
+     "..kHHHk.",
+     ".kHHHHHk",
+     "kHHHHkk.",
+     "kkkk...."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "H": "#2a1e1a"
+    },
+    "pivot": [
+     3,
+     4
+    ]
+   },
+   "auriculares": {
+    "rows": [
+     "..kkkkkk..",
+     ".kk....kk.",
+     ".k......k.",
+     "kRk....kRk",
+     "kRk....kRk",
+     ".k......k."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "R": "#ff4fa0"
+    },
+    "pivot": [
+     5,
+     1
+    ]
+   },
+   "flor": {
+    "rows": [
+     "..k.k..",
+     ".kPkPk.",
+     "kPPYPPk",
+     ".kPkPk.",
+     "..kGk..",
+     "...kG.."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "P": "#ff80b0",
+     "Y": "#ffe04f",
+     "G": "#40a060"
+    },
+    "pivot": [
+     3,
+     5
+    ]
+   }
+  },
+  "cara": {
+   "gafas-de-sol": {
+    "rows": [
+     "kkkk.kkkk",
+     "kBBkkkBBk",
+     ".kk...kk."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "B": "#2a2a40"
+    },
+    "pivot": [
+     4,
+     1
+    ]
+   },
+   "monóculo": {
+    "rows": [
+     "kkk",
+     "kGk",
+     "kkk",
+     "..Y"
+    ],
+    "legend": {
+     "k": "#e0c060",
+     "G": "#c8e8ff",
+     "Y": "#e0c060"
+    },
+    "pivot": [
+     -1,
+     1
+    ]
+   },
+   "bigote-postizo": {
+    "rows": [
+     "kkk.kkk",
+     "kHHkHHk",
+     ".kk.kk."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "H": "#3a2a20"
+    },
+    "pivot": [
+     3,
+     -2
+    ]
+   },
+   "parche": {
+    "rows": [
+     "kkkkkkkkk",
+     "....kBBk.",
+     "....kkk.."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "B": "#1e1c24"
+    },
+    "pivot": [
+     4,
+     0
+    ]
+   },
+   "mascarilla": {
+    "rows": [
+     "kkkkkkk",
+     "kWWWWWk",
+     "kWWWWWk",
+     ".kkkkk."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "W": "#a8d8f0"
+    },
+    "pivot": [
+     3,
+     -2
+    ]
+   },
+   "pintura-de-guerra": {
+    "rows": [
+     "R.....R",
+     "R.....R"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "R": "#e0302a"
+    },
+    "pivot": [
+     3,
+     -1
+    ]
+   },
+   "gafas-de-pasta": {
+    "rows": [
+     "kkkk.kkkk",
+     "kGGkkkGGk",
+     "kkkk.kkkk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "G": "#c8e8ff"
+    },
+    "pivot": [
+     4,
+     1
+    ]
+   }
+  },
+  "mano": {
+   "paraguas": {
+    "rows": [
+     "..kkkkk..",
+     ".kRRRRRk.",
+     "kRRWRRWRk",
+     "kkkkkkkkk",
+     "....k....",
+     "....k....",
+     "....k....",
+     "...kk...."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "R": "#3a6ad0",
+     "W": "#ffffff"
+    },
+    "pivot": [
+     4,
+     7
+    ]
+   },
+   "maletín": {
+    "rows": [
+     "..kk..",
+     ".k..k.",
+     "kkkkkk",
+     "kBBBBk",
+     "kBYBBk",
+     "kkkkkk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "B": "#6a4428",
+     "Y": "#e0c060"
+    },
+    "pivot": [
+     3,
+     1
+    ]
+   },
+   "palo-de-escoba": {
+    "rows": [
+     ".k.",
+     ".W.",
+     ".W.",
+     ".W.",
+     ".W.",
+     ".W.",
+     ".W.",
+     "kkk",
+     "YYY",
+     "YkY"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "W": "#a07040",
+     "Y": "#e8c870"
+    },
+    "pivot": [
+     1,
+     4
+    ]
+   },
+   "sartén": {
+    "rows": [
+     ".kkkk......",
+     "kGGGGkkkkkk",
+     "kGggGkWWWWk",
+     "kGGGGkkkkkk",
+     ".kkkk......"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "G": "#5a5e66",
+     "g": "#3a3e46",
+     "W": "#6a4428"
+    },
+    "pivot": [
+     8,
+     2
+    ]
+   },
+   "megáfono": {
+    "rows": [
+     "....kk",
+     "..kkWk",
+     "kkWWWk",
+     "kRWWWk",
+     "kkWWWk",
+     "..kkWk",
+     "....kk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "W": "#f4f4f0",
+     "R": "#e0302a"
+    },
+    "pivot": [
+     1,
+     3
+    ]
+   },
+   "raqueta": {
+    "rows": [
+     ".kkk.",
+     "kWkWk",
+     "kkWkk",
+     "kWkWk",
+     ".kkk.",
+     "..k..",
+     "..k.."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "W": "#f4f4f0"
+    },
+    "pivot": [
+     2,
+     6
+    ]
+   },
+   "bolsa-de-pipas": {
+    "rows": [
+     "kkkkk",
+     "kYYYk",
+     "kYkYk",
+     "kYYYk",
+     "kkkkk"
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "Y": "#f0c030"
+    },
+    "pivot": [
+     2,
+     2
+    ]
+   },
+   "cuchara-de-madera": {
+    "rows": [
+     ".kk.",
+     "kWWk",
+     "kWWk",
+     ".kk.",
+     ".W..",
+     ".W..",
+     ".W..",
+     ".k.."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "W": "#c08a50"
+    },
+    "pivot": [
+     1,
+     6
+    ]
+   },
+   "abanico": {
+    "rows": [
+     "k.k.k.k",
+     ".kRkRk.",
+     "..kRk..",
+     "...k..."
+    ],
+    "legend": {
+     "k": "#1e1c24",
+     "R": "#e0302a"
+    },
+    "pivot": [
+     3,
+     3
+    ]
+   }
+  }
+ },
+ "legendaries": {
+  "rival-vanesa": {
+   "race": "semigaviota",
+   "palette": "gaviota-patiamarilla",
+   "cara": "gafas-de-sol",
+   "mano": "bolsa-de-pipas",
+   "note": "Vanesa la Gaviota: gafas de sol, bolsa de pipas y carmín en el pico",
+   "extra": [
+    {
+     "rows": [
+      "RR"
+     ],
+     "legend": {
+      "R": "#ff4fa0"
+     },
+     "x": 11,
+     "y": 5
+    }
+   ]
+  },
+  "rival-ceferino": {
+   "race": "gnomo-de-jardin",
+   "palette": "gorro-rojo-clasico",
+   "cara": "monóculo",
+   "note": "Don Ceferino: el gnomo clásico, con monóculo y su caña de pescar del estanque",
+   "extra": [
+    {
+     "rows": [
+      ".......k",
+      "......k.",
+      ".....k..",
+      "....k..b",
+      "...k...b",
+      "..k....b",
+      ".k.....F"
+     ],
+     "legend": {
+      "k": "#7a5030",
+      "b": "#c8e8ff",
+      "F": "#e0302a"
+     },
+     "x": -1,
+     "y": 6
+    }
+   ]
+  },
+  "rival-gorka": {
+   "race": "orco-de-oficina",
+   "palette": "verde-oliva",
+   "cara": "gafas-de-pasta",
+   "mano": "maletín",
+   "note": "Gorka, de Compras: corbata roja, gafas de pasta y maletín",
+   "extra": [
+    {
+     "rows": [
+      "RR",
+      "RR",
+      ".R",
+      "RR",
+      "R."
+     ],
+     "legend": {
+      "R": "#c02020"
+     },
+     "x": 6,
+     "y": 8
+    }
+   ]
+  },
+  "rival-mariluz": {
+   "race": "fantasma-en-practicas",
+   "palette": "sabana-blanca",
+   "cabeza": "flor",
+   "mano": "abanico",
+   "note": "Mari Luz: fantasma en prácticas con flor, abanico y colorete",
+   "extra": [
+    {
+     "rows": [
+      "P.....P"
+     ],
+     "legend": {
+      "P": "#ff9ab8"
+     },
+     "x": 4,
+     "y": 4
+    }
+   ]
+  },
+  "rival-asterio": {
+   "race": "minotauro-vegano",
+   "palette": "castaño",
+   "note": "Asterio: minotauro vegano con aro en la nariz y una zanahoria",
+   "extra": [
+    {
+     "rows": [
+      ".kkk.",
+      "k...k",
+      ".kkk."
+     ],
+     "legend": {
+      "k": "#e0c060"
+     },
+     "x": 10,
+     "y": 11
+    },
+    {
+     "rows": [
+      ".GG",
+      "GG.",
+      ".O.",
+      ".O.",
+      "OO.",
+      "O.."
+     ],
+     "legend": {
+      "G": "#40a060",
+      "O": "#f08020"
+     },
+     "x": 20,
+     "y": 15
+    }
+   ]
+  }
+ }
+}

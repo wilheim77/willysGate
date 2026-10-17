@@ -33,7 +33,21 @@ export type Effect =
   | { type: 'setController'; entityId: string; controllerId: string; factionId?: string }
   /** Change a map tile (a door opens, a bridge collapses). Omitted fields stay as they are. */
   | { type: 'setTile'; position: Vec2; walkable?: boolean; terrain?: string; height?: number }
+  /**
+   * Change many tiles at once (a cave-in, a collapsing floor). Whoever stands on a tile that
+   * sinks more than a step falls (entityFell), and the ruleset deals the damage.
+   */
+  | { type: 'setTiles'; tiles: Vec2[]; walkable?: boolean; terrain?: string; height?: number }
   /** Change how a thing looks or what it is (a chest opens, a lever flips): sprite, name and tags. */
+  /**
+   * Bring something into play: a summon, a barrier, reinforcements. In combat it joins the
+   * turn order right after its owner. With `rounds`, it vanishes after that many rounds.
+   */
+  | { type: 'spawnEntity'; entity: Entity; ownerId?: string; rounds?: number }
+  /** Take something out of play (a summon ending, a barrier dropping). Gone, not dead. */
+  | { type: 'despawnEntity'; entityId: string }
+  /** Raise or lower a stat (levelling up, a curse): stats are the ruleset's numbers. */
+  | { type: 'modifyStat'; entityId: string; stat: string; delta: number }
   | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
 
 export interface ResourceChangedEvent extends GameEvent {
@@ -71,6 +85,11 @@ export interface EntityPushedEvent extends GameEvent {
   to: Vec2;
   /** What it hit if stopped early: a creature, a wall, or nothing. */
   collidedWith?: { entityId?: string; wall?: boolean };
+  /** Shoved over the edge into a pit or off the stage. */
+  into?: 'void';
+  direction?: { dx: number; dy: number };
+  /** Push distance left when it stopped (for chain shoves). */
+  remaining?: number;
 }
 
 /** Dropped more levels than a step allows: the ruleset decides the damage. */
@@ -112,7 +131,30 @@ export interface EntityChangedEvent extends GameEvent {
   spriteId: string;
 }
 
+export interface StatChangedEvent extends GameEvent {
+  type: 'statChanged';
+  entityId: string;
+  stat: string;
+  from: number;
+  to: number;
+}
+
+export interface EntitySpawnedEvent extends GameEvent {
+  type: 'entitySpawned';
+  entityId: string;
+  position: Vec2;
+  ownerId?: string;
+}
+
+export interface EntityDespawnedEvent extends GameEvent {
+  type: 'entityDespawned';
+  entityId: string;
+}
+
 export type EffectEvent =
+  | EntitySpawnedEvent
+  | EntityDespawnedEvent
+  | StatChangedEvent
   | EntityChangedEvent
   | ItemsChangedEvent
   | ControllerChangedEvent
@@ -200,7 +242,16 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         if (sim.to.x !== e.position.x || sim.to.y !== e.position.y || sim.collidedWith) {
           const from = { ...e.position };
           updateEntity(e.id, (x) => ({ ...x, position: { ...sim.to } }));
-          events.push({ type: 'entityPushed', entityId: e.id, from, to: { ...sim.to }, ...(sim.collidedWith ? { collidedWith: sim.collidedWith } : {}) });
+          events.push({
+            type: 'entityPushed',
+            entityId: e.id,
+            from,
+            to: { ...sim.to },
+            direction: { dx: Math.sign(effect.dx), dy: Math.sign(effect.dy) },
+            remaining: sim.remaining,
+            ...(sim.collidedWith ? { collidedWith: sim.collidedWith } : {}),
+            ...(sim.intoVoid ? { into: 'void' } : {}),
+          });
         }
         if (sim.dropped > 0) events.push({ type: 'entityFell', entityId: e.id, levels: sim.dropped });
         break;
@@ -277,6 +328,22 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         events.push({ type: 'controllerChanged', entityId: e.id, controllerId: updated.controllerId, factionId: updated.factionId } as ControllerChangedEvent);
         break;
       }
+      case 'setTiles': {
+        for (const p of effect.tiles) {
+          const before = tileAt(next.map, p);
+          if (!before || !inBounds(next.map, p)) continue;
+          const r = applyEffects(ruleset, next, [{ type: 'setTile', position: p, ...(effect.walkable !== undefined ? { walkable: effect.walkable } : {}), ...(effect.terrain !== undefined ? { terrain: effect.terrain } : {}), ...(effect.height !== undefined ? { height: effect.height } : {}) }]);
+          next = r.state;
+          events.push(...r.events);
+          const drop = before.height - (tileAt(next.map, p)?.height ?? before.height);
+          if (drop > ruleset.movement.maxStep) {
+            for (const e of Object.values(next.entities)) {
+              if (e.position.x === p.x && e.position.y === p.y) events.push({ type: 'entityFell', entityId: e.id, levels: drop });
+            }
+          }
+        }
+        break;
+      }
       case 'setTile': {
         const { x, y } = effect.position;
         if (!inBounds(next.map, effect.position)) throw new Error(`setTile out of the map at ${x},${y}`);
@@ -293,6 +360,50 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         tiles[index] = changed;
         next = { ...next, map: { ...next.map, tiles } };
         events.push({ type: 'tileChanged', position: { x, y }, tile: changed });
+        break;
+      }
+      case 'spawnEntity': {
+        const e = effect.entity;
+        if (next.entities[e.id]) throw new Error(`spawnEntity: "${e.id}" already exists`);
+        const at = e.position;
+        const taken = Object.values(next.entities).some((o) => o.position.x === at.x && o.position.y === at.y && ruleset.isStanding(o) && !o.tags.includes('object'));
+        if (!tileAt(next.map, at)?.walkable || taken) break;
+        next = { ...next, entities: { ...next.entities, [e.id]: e } };
+        if (next.turn.mode === 'combat') {
+          const order = [...next.turn.order];
+          const after = effect.ownerId ? order.indexOf(effect.ownerId) : -1;
+          order.splice(after >= 0 ? after + 1 : order.length, 0, e.id);
+          next = { ...next, turn: { ...next.turn, order } };
+        }
+        if (effect.rounds !== undefined) {
+          const summons = { ...((next.systems.summons as unknown as Record<string, { ownerId?: string; roundsLeft: number }>) ?? {}) };
+          summons[e.id] = { ...(effect.ownerId ? { ownerId: effect.ownerId } : {}), roundsLeft: effect.rounds };
+          next = { ...next, systems: { ...next.systems, summons: summons as never } };
+        }
+        events.push({ type: 'entitySpawned', entityId: e.id, position: { ...at }, ...(effect.ownerId ? { ownerId: effect.ownerId } : {}) });
+        break;
+      }
+      case 'despawnEntity': {
+        if (!next.entities[effect.entityId]) break;
+        const { [effect.entityId]: _gone, ...rest } = next.entities;
+        const summons = { ...((next.systems.summons as unknown as Record<string, unknown>) ?? {}) };
+        delete summons[effect.entityId];
+        let turn = next.turn;
+        if (turn.order.includes(effect.entityId)) {
+          // The turn pointer stays on whoever is active; removing someone else just shortens the order.
+          turn = { ...turn, order: turn.order.filter((id) => id !== effect.entityId) };
+        }
+        next = { ...next, entities: rest, turn, systems: { ...next.systems, summons: summons as never } };
+        events.push({ type: 'entityDespawned', entityId: effect.entityId });
+        break;
+      }
+      case 'modifyStat': {
+        if (!ruleset.stats[effect.stat]) throw new Error(`Unknown stat "${effect.stat}" in ruleset ${ruleset.id}`);
+        updateEntity(effect.entityId, (e) => {
+          const from = e.stats[effect.stat] ?? 0;
+          events.push({ type: 'statChanged', entityId: e.id, stat: effect.stat, from, to: from + effect.delta });
+          return { ...e, stats: { ...e.stats, [effect.stat]: from + effect.delta } };
+        });
         break;
       }
       case 'setEntity': {
@@ -327,7 +438,7 @@ export function simulatePush(
   dx: number,
   dy: number,
   distance: number,
-): { to: Vec2; dropped: number; collidedWith?: { entityId?: string; wall?: boolean } } {
+): { to: Vec2; dropped: number; collidedWith?: { entityId?: string; wall?: boolean }; intoVoid?: boolean; remaining: number } {
   const e = state.entities[entityId]!;
   let pos = { ...e.position };
   let dropped = 0;
@@ -335,14 +446,16 @@ export function simulatePush(
     const step = { x: pos.x + Math.sign(dx), y: pos.y + Math.sign(dy) };
     const here = tileAt(state.map, pos)!;
     const there = tileAt(state.map, step);
+    // Off a cliff into nothing (a pit, the edge of the stage): gone, the ruleset decides what that means.
+    if (inBounds(state.map, step) && there?.terrain === 'void') return { to: step, dropped, intoVoid: true, remaining: distance - i - 1 };
     if (!inBounds(state.map, step) || !there || !there.walkable || there.height - here.height > ruleset.movement.maxStep) {
-      return { to: pos, dropped, collidedWith: { wall: true } };
+      return { to: pos, dropped, collidedWith: { wall: true }, remaining: distance - i };
     }
     const blocker = Object.values(state.entities).find((o) => o.id !== e.id && o.position.x === step.x && o.position.y === step.y && (ruleset.occupiesTile ? ruleset.occupiesTile(o) : ruleset.isStanding(o)));
-    if (blocker) return { to: pos, dropped, collidedWith: { entityId: blocker.id } };
+    if (blocker) return { to: pos, dropped, collidedWith: { entityId: blocker.id }, remaining: distance - i };
     const drop = here.height - there.height;
     if (drop > ruleset.movement.maxStep) dropped += drop;
     pos = step;
   }
-  return { to: pos, dropped };
+  return { to: pos, dropped, remaining: 0 };
 }

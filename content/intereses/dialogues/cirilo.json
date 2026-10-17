@@ -1,0 +1,235 @@
+{
+  "$comment": "Cirilo after the trial (his dialogue switches from juicio_anselmo). If the party fought his fanatics, he must be appeased first (coin or kneeling, no roll). Gives the new-silver clue (pista_plata_nueva) without a roll.",
+  "id": "cirilo",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "text": "Cirilo Hondo limpia la pala con un trapo, despacio, como otros limpian una espada o un cáliz.",
+      "choices": [
+        {
+          "text": "(Hablarle.)",
+          "when": {
+            "notFlag": "santa_pala_hostil"
+          },
+          "next": "hub_intro"
+        },
+        {
+          "text": "(Hablarle.)",
+          "when": {
+            "flag": "santa_pala_hostil"
+          },
+          "next": "hostil"
+        },
+        {
+          "text": "Dejarle con su pala."
+        }
+      ]
+    },
+    "hostil": {
+      "speaker": "cirilo",
+      "text": "Tú cortaste la soga de la tierra. La tierra no olvida. Yo tampoco, pero ella tiene más memoria.",
+      "choices": [
+        {
+          "text": "[10 coronas] Una ofrenda. Para la tierra.",
+          "when": {
+            "item": "coronas",
+            "atLeast": 10
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -10
+            },
+            {
+              "type": "setFlag",
+              "flag": "santa_pala_hostil",
+              "value": false
+            },
+            {
+              "type": "setFlag",
+              "flag": "santa_pala_perdona",
+              "value": true
+            }
+          ],
+          "next": "perdon"
+        },
+        {
+          "text": "[Clérigo] Toda tierra perdona al que se arrodilla. (Arrodillarse en el barro.)",
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "cleric"
+            }
+          },
+          "effects": [
+            {
+              "type": "setFlag",
+              "flag": "santa_pala_hostil",
+              "value": false
+            },
+            {
+              "type": "setFlag",
+              "flag": "santa_pala_perdona",
+              "value": true
+            }
+          ],
+          "next": "perdon"
+        },
+        {
+          "text": "Me marcho."
+        }
+      ]
+    },
+    "perdon": {
+      "speaker": "cirilo",
+      "text": "La tierra acepta. Siempre acepta: es su defecto, y por eso estamos todos encima de ella. Habla, entonces.",
+      "next": "hub"
+    },
+    "hub_intro": {
+      "speaker": "cirilo",
+      "text": "Forastero. ¿Vienes a escuchar o a interrumpir? Últimamente no viene nadie a ninguna de las dos cosas.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "cirilo",
+      "text": "¿Qué quieres saber?",
+      "choices": [
+        {
+          "id": "pala",
+          "text": "¿Qué es la Santa Pala?",
+          "once": true,
+          "next": "pala"
+        },
+        {
+          "id": "sellar",
+          "text": "¿Por qué quiere sellar la mina?",
+          "once": true,
+          "next": "sellar"
+        },
+        {
+          "id": "canto",
+          "text": "Dicen que usted oyó algo en la mina.",
+          "once": true,
+          "next": "canto"
+        },
+        {
+          "id": "raro",
+          "text": "¿Ha visto algo raro en el pueblo?",
+          "once": true,
+          "next": "raro"
+        },
+        {
+          "id": "textos",
+          "text": "¿Hay algo escrito sobre ese canto?",
+          "once": true,
+          "check": {
+            "check": "religion",
+            "dc": 13,
+            "success": "textos_ok",
+            "failure": "textos_mal"
+          }
+        },
+        {
+          "id": "loco",
+          "text": "(Observarle: ¿está loco?)",
+          "once": true,
+          "check": {
+            "check": "insight",
+            "dc": 12,
+            "success": "loco_ok",
+            "failure": "loco_mal"
+          }
+        },
+        {
+          "text": "Nada más, capellán."
+        }
+      ]
+    },
+    "pala": {
+      "speaker": "cirilo",
+      "text": "La primera herramienta. Antes que la espada, antes que el arado. Con una pala se abre la tierra y con una pala se cierra. Nosotros somos de la segunda parte.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_santa_pala",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "sellar": {
+      "speaker": "cirilo",
+      "text": "Porque está despierta. La plata es la sangre de la tierra, y la tierra ha empezado a sangrar por donde no debe. Se cierra la herida y se reza. Es lo que se hace con las heridas.",
+      "next": "hub"
+    },
+    "canto": {
+      "speaker": "cirilo",
+      "text": "Lo oí. En la Garganta, el último día, antes de que bajaran los cuarenta. Yo había ido a bendecir la galería. Me pagaban por bendecir.",
+      "next": "canto_2"
+    },
+    "canto_2": {
+      "speaker": "cirilo",
+      "text": "Era una canción sin boca, detrás de los ojos. Los que estaban más cerca de la pared empezaron a mirarse raro. Yo me fui. No soy valiente: soy el que sigue vivo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_canto",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "raro": {
+      "speaker": "cirilo",
+      "text": "Plata. Nueva, brillante como ojo de pez. La he visto en la mano de una viuda que salía de casa del elfo, de empeñar su alianza. La sangre de la tierra corre otra vez por el valle, forastero.",
+      "next": "raro_2"
+    },
+    "raro_2": {
+      "speaker": "cirilo",
+      "text": "Y la mina lleva ocho meses cerrada. ¿Entiendes lo que eso quiere decir? Que alguien la sigue hiriendo. Por debajo, a escondidas.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_nueva",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "textos_ok": {
+      "speaker": "cirilo",
+      "text": "En los cantares élficos, los viejos, se habla de «el metal que canta» y de las bóvedas que se sellaron para guardarlo. Los elfos no sellan nada que no valga la pena robar.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_metal_que_canta",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "textos_mal": {
+      "speaker": "cirilo",
+      "text": "Escrito, nada. La tierra no sabe escribir; por eso tiene capellanes.",
+      "next": "hub"
+    },
+    "loco_ok": {
+      "text": "Está medio loco. La otra mitad, la que debería preocuparte, dice la verdad: lo que oyera en la Garganta, lo oyó de verdad.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cirilo_dice_verdad",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "loco_mal": {
+      "text": "Cirilo sonríe. No sabrías decir si es la sonrisa de un loco o la de alguien que sabe que lo crees loco.",
+      "next": "hub"
+    }
+  }
+}

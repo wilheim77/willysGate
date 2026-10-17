@@ -1,5 +1,6 @@
 import type { CreationChoices, CreationSpec, DialogueTree, Engine, GameState, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
+import type { AudioManifest } from '../audio/types';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
 export interface UiTexts {
@@ -62,5 +63,7 @@ export interface GameDefinition {
   items?: Record<string, { label: string; text?: string }>;
   /** Conversations and interactable scripts, by id (content/<game>/dialogues/*.json). */
   dialogues?: Record<string, DialogueTree>;
+  /** Music states and sfx, and which engine events trigger them (content/<game>/assets/audio.json). */
+  audio?: AudioManifest;
   newGame(engine: Engine, seed: number): GameState;
 }

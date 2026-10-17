@@ -57,6 +57,21 @@
   },
   "xelda": {
    "tone": "neutral"
+  },
+  "rival-vanesa": {
+   "tone": "enemigo"
+  },
+  "rival-ceferino": {
+   "tone": "enemigo"
+  },
+  "rival-gorka": {
+   "tone": "enemigo"
+  },
+  "rival-mariluz": {
+   "tone": "enemigo"
+  },
+  "rival-asterio": {
+   "tone": "enemigo"
   }
  },
  "hand": {
@@ -1279,5 +1294,6 @@
     ]
    }
   }
- }
+ },
+ "skipPattern": "--"
 }

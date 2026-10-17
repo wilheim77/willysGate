@@ -1,0 +1,184 @@
+{
+  "$comment": "Scene 1. Nella Yesca, leader of the Cuadrilla, in the square. Talking to her unlocks option 7 of the abbey audience (hablo_con_nella).",
+  "id": "nella_yesca",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "text": "Una mujer de luto, con un pañuelo negro y las manos de quien ha cargado cestos desde niña. No lleva armas. No le hacen falta: detrás de ella, a distancia de un grito, hay treinta mineros que la escuchan.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hablo_con_nella",
+          "value": true
+        }
+      ],
+      "next": "nella_1"
+    },
+    "nella_1": {
+      "speaker": "nella",
+      "text": "Nella Yesca. Viuda de Tomé Yesca, que bajó a la Garganta con otros treinta y nueve y no ha subido. Sé quién eres. Lo sabe todo el pueblo.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "nella",
+      "text": "¿Qué quiere el banco de una viuda?",
+      "choices": [
+        {
+          "id": "cuarenta",
+          "text": "¿Qué pasó en la Garganta?",
+          "once": true,
+          "next": "cuarenta"
+        },
+        {
+          "id": "cuadrilla",
+          "text": "¿Qué es la Cuadrilla?",
+          "once": true,
+          "next": "cuadrilla"
+        },
+        {
+          "id": "quiere",
+          "text": "¿Qué quieres tú?",
+          "once": true,
+          "next": "quiere"
+        },
+        {
+          "id": "banco",
+          "text": "El banco solo viene a cobrar al barón.",
+          "once": true,
+          "next": "banco"
+        },
+        {
+          "id": "mirar",
+          "text": "(Observarla mientras habla del barón.)",
+          "once": true,
+          "check": {
+            "check": "insight",
+            "dc": 13,
+            "success": "mirar_ok",
+            "failure": "mirar_mal"
+          }
+        },
+        {
+          "id": "elfo",
+          "text": "[Elfo] ¿Y tu gente me aceptará a mí?",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "next": "elfo"
+        },
+        {
+          "id": "garran",
+          "text": "[Garrán] (Garrán se ha quedado mirando a Nella.)",
+          "once": true,
+          "when": {
+            "flag": "garran_reclutado"
+          },
+          "next": "garran"
+        },
+        {
+          "text": "Nada, de momento.",
+          "next": "adios"
+        }
+      ]
+    },
+    "cuarenta": {
+      "speaker": "nella",
+      "text": "Hace un año el barón pidió dinero para abrir una galería nueva. La Garganta. Bajaron cuarenta, con el capataz, Absalón Brea. Subió Brea solo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_cuarenta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "conoce_brea",
+          "value": true
+        }
+      ],
+      "next": "cuarenta_2"
+    },
+    "cuarenta_2": {
+      "speaker": "nella",
+      "text": "Dijo que fue el grisú. Que se había hundido todo. Al día siguiente mandó sellar la entrada. No dejó que bajara nadie a sacar los cuerpos. Ni uno. Dijo que era peligroso. Como si los muertos fueran a escaparse.",
+      "next": "cuarenta_3"
+    },
+    "cuarenta_3": {
+      "speaker": "nella",
+      "text": "El barón firmó la orden de sellado. Con su firma bonita, de poeta.",
+      "next": "hub"
+    },
+    "cuadrilla": {
+      "speaker": "nella",
+      "text": "Los que quedamos. Mineros sin mina y viudas sin entierro. Odda Hulla y su clan son el núcleo; yo pongo la voz, porque a una viuda la escuchan. A un minero lo ahorcan.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_cuadrilla",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "quiere": {
+      "speaker": "nella",
+      "text": "Ver al barón colgado de esa torre. Y que la mina sea del pueblo, que es quien la ha cavado. No es mucho pedir. Es justo lo que nadie va a darnos.",
+      "next": "hub"
+    },
+    "banco": {
+      "speaker": "nella",
+      "text": "El banco viene a quitarnos lo que el barón no ha sabido quitarnos. Cobra al barón, si puedes. Pero cuando cobres, mira qué te estás llevando.",
+      "next": "hub"
+    },
+    "mirar_ok": {
+      "text": "Cuando dice «barón», Nella mira hacia la abadía y luego, muy rápido, hacia los mineros. Cuenta cabezas. Alguien que cuenta cabezas está pensando en usarlas pronto.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "nella_prepara_algo",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "mirar_mal": {
+      "text": "Nella no aparta los ojos. Ocho meses de luto enseñan a no dejar ver nada.",
+      "next": "hub"
+    },
+    "elfo": {
+      "speaker": "nella",
+      "text": "Yo sí. Odda, no. Y los Hulla son media Cuadrilla. No es nada personal. Bueno, sí lo es, pero tiene trescientos años.",
+      "next": "hub"
+    },
+    "garran": {
+      "speaker": "nella",
+      "text": "Tizón. Te fuiste la misma noche. Tomé decía que eras el mejor barrenero del valle. Que donde tú ponías la carga, la piedra se abría como un libro.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "nella_conoce_garran",
+          "value": true
+        }
+      ],
+      "next": "garran_2"
+    },
+    "garran_2": {
+      "speaker": "garran",
+      "text": "Tomé exageraba.",
+      "next": "garran_3"
+    },
+    "garran_3": {
+      "speaker": "nella",
+      "text": "Tomé está muerto. Ya no exagera nada.",
+      "next": "hub"
+    },
+    "adios": {
+      "speaker": "nella",
+      "text": "Estaré aquí. No tengo otro sitio."
+    }
+  }
+}
