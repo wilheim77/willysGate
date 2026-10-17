@@ -11,8 +11,8 @@
     "cannot_act": "Ese personaje no puede actuar.",
     "unknown_action": "Esa acción no está disponible.",
     "not_enough_resources": "No te quedan recursos para eso.",
-    "invalid_target": "Ese objetivo no vale.",
-    "action_invalid": "No se puede."
+    "invalid_target": "Ese objetivo no sirve.",
+    "action_invalid": "Eso no se puede hacer ahora."
   },
   "terrain": {
     "stone": "piedra",
@@ -32,15 +32,15 @@
     "import": "Importar",
     "new": "Nueva",
     "saved": "Partida guardada.",
-    "saveFailed": "No se pudo guardar: el navegador no permite almacenamiento.",
-    "loaded": "Partida cargada.",
-    "noSave": "No hay ninguna partida guardada.",
+    "saveFailed": "No se pudo guardar: el navegador no deja almacenar nada. Apúntalo a mano.",
+    "loaded": "Partida cargada. Los intereses no han dejado de correr.",
+    "noSave": "No hay ninguna partida guardada. Ni deudas pendientes, por ahora.",
     "exported": "Partida exportada.",
     "imported": "Partida importada.",
     "newGame": "Nueva partida. La deuda sigue siendo la misma.",
-    "confirmNew": "¿Empezar de nuevo? Se perderá lo que no hayas guardado.",
+    "confirmNew": "¿Empezar de nuevo? Lo que no hayas guardado se pierde. Como todo.",
     "height": "altura",
-    "genericError": "Algo ha salido mal."
+    "genericError": "Algo ha salido mal. Esta vez no es culpa de nadie del valle."
   },
   "combat": {
     "miss": "Fallo",
@@ -68,5 +68,14 @@
     "done": "Listo",
     "fell": "¡Caída!",
     "slipped": "¡Resbala!"
+  },
+  "gameOver": {
+    "title": "Fin del trato",
+    "partyWiped": "El grupo ha caído en Hondonegra. La Casa Valcárcel lamentará la pérdida y enviará a otro cobrador. Siempre lo hace.",
+    "heroDied": "El cobrador ha muerto. La deuda, no.",
+    "killedByDorotea": "Dorotea cierra el libro con un golpe seco. Saldo cero.",
+    "load": "Cargar la última partida",
+    "newGame": "Empezar de nuevo",
+    "continue": "Continuar"
   }
 }
