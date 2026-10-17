@@ -92,5 +92,7 @@ export default {
   exits: [
     { name: 'a-plaza', rect: [3, 0, 3, 1], to: 'plaza', spawn: 'entry-escorial' },
     { name: 'a-calles', rect: [0, 11, 1, 3], to: 'calles', spawn: 'entry-escorial' },
+    { name: 'pozo-del-ahorcado', rect: [31, 5, 1, 1], to: 'mina', spawn: 'entry-pozo' },
+    { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina' },
   ],
 };
