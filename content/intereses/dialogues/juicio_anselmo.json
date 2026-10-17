@@ -1,0 +1,601 @@
+{
+  "$comment": "Scene 1. Tag both cirilo and anselmo with dialogue:juicio_anselmo. Fanatics fanatico_1..3 (faction \"fanaticos\") are noncombatant until the fight. Every resolution recruits Anselmo and sets juicio_resuelto.",
+  "id": "juicio_anselmo",
+  "start": "escena",
+  "nodes": {
+    "escena": {
+      "text": "En la plataforma de la Torre del Cepo, un mediano con hábito de fraile tiene la soga al cuello y la boca en marcha. Delante, un capellán flaco con una pala al hombro lee los cargos de un papel que se sabe de memoria. Tres hombres con palas afiladas vigilan que nadie se aburra.",
+      "next": "cirilo_1"
+    },
+    "cirilo_1": {
+      "speaker": "cirilo",
+      "text": "…y por vender indulgencias a plazos, cosa que la Santa Pala tiene por blasfemia, porque la tierra no fía. ¿Quién viene a interrumpir la justicia de la tierra?",
+      "next": "anselmo_1"
+    },
+    "anselmo_1": {
+      "speaker": "anselmo",
+      "text": "¡Gente de bien! Se ve a la legua. Gente con dinero, incluso. Hermanos, no os quepa duda: soy inocente. De casi todo.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "cirilo",
+      "text": "Hablad, forasteros. La tierra escucha. Yo también, pero menos rato.",
+      "choices": [
+        {
+          "id": "cargos",
+          "text": "¿De qué se le acusa?",
+          "once": true,
+          "next": "cargos"
+        },
+        {
+          "id": "quien",
+          "text": "¿Y usted quién es?",
+          "once": true,
+          "next": "quien"
+        },
+        {
+          "id": "mirar",
+          "text": "(Observar al capellán.)",
+          "once": true,
+          "check": {
+            "check": "insight",
+            "dc": 12,
+            "success": "mirar_ok",
+            "failure": "mirar_mal"
+          }
+        },
+        {
+          "text": "Escuche, capellán: ¿qué le dice la tierra, exactamente?",
+          "when": {
+            "flag": "cirilo_quiere_oyente"
+          },
+          "next": "escuchar"
+        },
+        {
+          "id": "persuadir",
+          "text": "Un hereje muerto no paga diezmo. Uno vivo, quizá sí.",
+          "once": true,
+          "check": {
+            "check": "persuasion",
+            "dc": 14,
+            "success": "persuadido",
+            "failure": "ofendido"
+          }
+        },
+        {
+          "id": "religion",
+          "text": "Ese hábito es de los Hermanos de la Cuesta. Ahorcar a uno trae siete años de mala cosecha.",
+          "once": true,
+          "when": {
+            "not": {
+              "rule": "class",
+              "params": {
+                "is": "cleric"
+              }
+            }
+          },
+          "check": {
+            "check": "religion",
+            "dc": 13,
+            "success": "religion_ok",
+            "failure": "religion_mal"
+          }
+        },
+        {
+          "id": "religion_clerigo",
+          "text": "[Clérigo] Hermano, yo respondo por ese hábito. Déjeme examinarle en doctrina.",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "cleric"
+            }
+          },
+          "next": "examen"
+        },
+        {
+          "id": "primo",
+          "text": "[Mediano] ¡Primo! ¿Qué te han hecho? Es mi primo, capellán. Lo reconozco por la cara de culpable.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "halfling"
+            }
+          },
+          "check": {
+            "check": "deception",
+            "dc": 13,
+            "success": "primo_ok",
+            "failure": "primo_mal",
+            "situational": [
+              "advantage"
+            ]
+          }
+        },
+        {
+          "text": "[15 coronas] La Santa Pala acepta limosnas, supongo.",
+          "when": {
+            "all": [
+              {
+                "notFlag": "cirilo_ofendido"
+              },
+              {
+                "item": "coronas",
+                "atLeast": 15
+              }
+            ]
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -15
+            },
+            {
+              "type": "setFlag",
+              "flag": "pagaste_por_anselmo",
+              "value": true
+            }
+          ],
+          "next": "limosna"
+        },
+        {
+          "text": "[25 coronas] Está bien. Veinticinco. Para la tierra.",
+          "when": {
+            "all": [
+              {
+                "flag": "cirilo_ofendido"
+              },
+              {
+                "item": "coronas",
+                "atLeast": 25
+              }
+            ]
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -25
+            },
+            {
+              "type": "setFlag",
+              "flag": "pagaste_por_anselmo",
+              "value": true
+            }
+          ],
+          "next": "limosna"
+        },
+        {
+          "text": "Dorotea, ¿el banco podría adelantarme algo?",
+          "when": {
+            "any": [
+              {
+                "all": [
+                  {
+                    "notFlag": "cirilo_ofendido"
+                  },
+                  {
+                    "not": {
+                      "item": "coronas",
+                      "atLeast": 15
+                    }
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "flag": "cirilo_ofendido"
+                  },
+                  {
+                    "not": {
+                      "item": "coronas",
+                      "atLeast": 25
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "next": "adelanto"
+        },
+        {
+          "text": "Cortar la soga. (Atacar a los fanáticos.)",
+          "next": "soga"
+        },
+        {
+          "text": "No es asunto mío. Todavía.",
+          "next": "irse"
+        }
+      ]
+    },
+    "cargos": {
+      "speaker": "cirilo",
+      "text": "Herejía. Vende el perdón a plazos. Bendice con la mano izquierda. Y comió carne el día de la Pala.",
+      "next": "cargos_2"
+    },
+    "cargos_2": {
+      "speaker": "anselmo",
+      "text": "Era un día muy largo.",
+      "next": "hub"
+    },
+    "quien": {
+      "speaker": "cirilo",
+      "text": "Cirilo Hondo, capellán de la Santa Pala. La tierra habla y yo traduzco. Últimamente habla mucho.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_santa_pala",
+          "value": true
+        }
+      ],
+      "next": "quien_2"
+    },
+    "quien_2": {
+      "speaker": "cirilo",
+      "text": "La plata es la sangre de la tierra, forastero. Quien la saca, la hiere. Quien la vende, la desangra. Y quien la presta…",
+      "next": "quien_3"
+    },
+    "quien_3": {
+      "speaker": "dorotea",
+      "text": "Cobra intereses. Siga, capellán, que esto me interesa profesionalmente.",
+      "next": "hub"
+    },
+    "mirar_ok": {
+      "text": "Cirilo mira más hacia la bocamina que hacia el reo. No busca un hereje. Busca a alguien que le escuche, y en este pueblo ya nadie lo hace.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cirilo_quiere_oyente",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "mirar_mal": {
+      "text": "Cirilo te devuelve la mirada como si estuviera calculando cuánta soga queda en el rollo.",
+      "next": "hub"
+    },
+    "escuchar": {
+      "speaker": "cirilo",
+      "text": "¿Quieres saberlo? ¿De verdad?",
+      "next": "escuchar_2"
+    },
+    "escuchar_2": {
+      "speaker": "cirilo",
+      "text": "Canta. Bajo la mina, bajo el pueblo. Yo la oí una vez, en la Garganta, antes de que la cerraran. Una canción sin boca. Desde entonces, todo lo demás me suena a ruido.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_canto",
+          "value": true
+        }
+      ],
+      "next": "escuchar_3"
+    },
+    "escuchar_3": {
+      "speaker": "cirilo",
+      "text": "Nadie me lo había preguntado. Ni una vez, en ocho meses. Llévate al fraile. Un hombre que escucha vale más que un hereje colgado; y hereje, en este valle, hay para elegir.",
+      "next": "liberado_palabra"
+    },
+    "persuadido": {
+      "speaker": "cirilo",
+      "text": "La tierra… acepta penitencias. Que cave. Que rece. Que no vuelva a fiar el perdón.",
+      "next": "liberado_palabra"
+    },
+    "ofendido": {
+      "speaker": "cirilo",
+      "text": "La tierra no negocia, forastero. Pero la Santa Pala acepta donativos. Y ahora, más caros.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cirilo_ofendido",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "religion_ok": {
+      "speaker": "cirilo",
+      "text": "¿Siete años? Ya llevamos ocho de mala cosecha. No quiero averiguar qué pasa con quince.",
+      "next": "liberado_palabra"
+    },
+    "religion_mal": {
+      "speaker": "cirilo",
+      "text": "Esa orden no existe.",
+      "next": "religion_mal_2"
+    },
+    "religion_mal_2": {
+      "speaker": "anselmo",
+      "text": "Existe, existe. Yo soy la prueba. Bueno, el hábito es la prueba. Yo soy… el contenido.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cirilo_ofendido",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "examen": {
+      "speaker": "hero",
+      "text": "Fray, ¿cuántos son los dones de la tierra?",
+      "next": "examen_2"
+    },
+    "examen_2": {
+      "speaker": "anselmo",
+      "text": "¿Siete? ¿Todos? ¿Los que usted diga?",
+      "next": "examen_3"
+    },
+    "examen_3": {
+      "speaker": "hero",
+      "text": "Siete. Lo ha dicho bien, capellán. Con algo de nervio, pero bien.",
+      "next": "examen_4"
+    },
+    "examen_4": {
+      "speaker": "cirilo",
+      "text": "Ha dicho tres cosas. Pero tú llevas hábito de verdad, y la tierra respeta los hábitos aunque no respete lo que hay dentro. Llévatelo. Y vigílalo: el que miente en la horca miente en todas partes.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cirilo_desconfia",
+          "value": true
+        }
+      ],
+      "next": "liberado_palabra"
+    },
+    "primo_ok": {
+      "speaker": "cirilo",
+      "text": "Primos. Ya decía yo que tenía cara de familia. Mala familia. Llévatelo y que no vuelva a vender lo que no es suyo.",
+      "next": "liberado_palabra"
+    },
+    "primo_mal": {
+      "speaker": "anselmo",
+      "text": "¿Primo? ¿Qué primo? Yo no tengo… ¡Ah! ¡Primo! ¡Primo mío!",
+      "next": "primo_mal_2"
+    },
+    "primo_mal_2": {
+      "speaker": "cirilo",
+      "text": "Dos medianos mintiendo a la vez. La tierra lo ha visto todo. Ahora el perdón sale más caro.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cirilo_ofendido",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "adelanto": {
+      "speaker": "dorotea",
+      "text": "La Casa le adelanta veinte coronas. Al doce por ciento. Mensual. Se lo descuento de la comisión, si llega a haberla.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 20
+        },
+        {
+          "type": "setFlag",
+          "flag": "deuda_con_dorotea",
+          "value": true
+        }
+      ],
+      "next": "adelanto_2"
+    },
+    "adelanto_2": {
+      "speaker": "anselmo",
+      "text": "¡Doce por ciento! Hija, eso ya no es préstamo, es penitencia. Pero acéptelo, señor, acéptelo. La soga cobra más.",
+      "next": "hub"
+    },
+    "limosna": {
+      "text": "Cirilo no toca las monedas. Las recoge uno de los fanáticos, con una pala, como quien recoge algo que ha soltado un animal.",
+      "next": "limosna_2"
+    },
+    "limosna_2": {
+      "speaker": "cirilo",
+      "text": "La tierra acepta. La tierra siempre acepta; ese es su defecto. Bajad al fraile.",
+      "next": "liberado_dinero"
+    },
+    "liberado_palabra": {
+      "text": "Los fanáticos le quitan la soga a Fray Anselmo con más cuidado del que le pusieron. El fraile baja de la plataforma, se palpa el cuello y comprueba que la cabeza sigue en su sitio.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "juicio_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "anselmo_reclutado",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "anselmo_salvado_hablando",
+          "value": true
+        },
+        {
+          "type": "setController",
+          "entityId": "anselmo",
+          "controllerId": "player:1",
+          "factionId": "party"
+        },
+        {
+          "type": "setEntity",
+          "entityId": "anselmo",
+          "removeTags": [
+            "dialogue:juicio_anselmo",
+            "noncombatant"
+          ],
+          "addTags": [
+            "dialogue:anselmo"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "cirilo",
+          "removeTags": [
+            "dialogue:juicio_anselmo"
+          ],
+          "addTags": [
+            "dialogue:cirilo"
+          ]
+        }
+      ],
+      "next": "gracias"
+    },
+    "liberado_dinero": {
+      "text": "Los fanáticos le quitan la soga a Fray Anselmo. El fraile baja de la plataforma, se palpa el cuello y luego, por costumbre, la bolsa.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "juicio_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "anselmo_reclutado",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "anselmo_salvado_pagando",
+          "value": true
+        },
+        {
+          "type": "setController",
+          "entityId": "anselmo",
+          "controllerId": "player:1",
+          "factionId": "party"
+        },
+        {
+          "type": "setEntity",
+          "entityId": "anselmo",
+          "removeTags": [
+            "dialogue:juicio_anselmo",
+            "noncombatant"
+          ],
+          "addTags": [
+            "dialogue:anselmo"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "cirilo",
+          "removeTags": [
+            "dialogue:juicio_anselmo"
+          ],
+          "addTags": [
+            "dialogue:cirilo"
+          ]
+        }
+      ],
+      "next": "gracias"
+    },
+    "gracias": {
+      "speaker": "anselmo",
+      "text": "Gracias, gracias. Que la tierra, o quien sea, os lo pague. Yo no puedo, de momento. Pero os sigo. Uno no se separa de la gente que paga las deudas de otros: es la gente más rara del mundo.",
+      "next": "gracias_2"
+    },
+    "gracias_2": {
+      "speaker": "dorotea",
+      "text": "Le apunto, fray.",
+      "next": "gracias_3"
+    },
+    "gracias_3": {
+      "speaker": "anselmo",
+      "text": "Hija, eso es lo más parecido a una bendición que me han dicho en todo el año."
+    },
+    "soga": {
+      "text": "El cuchillo encuentra la soga antes que los fanáticos encuentran sus palas. Fray Anselmo cae de la plataforma como un saco de harina con opiniones, se pone en pie y, con las manos todavía atadas, decide que ya es de los vuestros.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "juicio_a_golpes",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "santa_pala_hostil",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "juicio_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "anselmo_reclutado",
+          "value": true
+        },
+        {
+          "type": "setController",
+          "entityId": "anselmo",
+          "controllerId": "player:1",
+          "factionId": "party"
+        },
+        {
+          "type": "setEntity",
+          "entityId": "anselmo",
+          "removeTags": [
+            "dialogue:juicio_anselmo",
+            "noncombatant"
+          ],
+          "addTags": [
+            "dialogue:anselmo"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "cirilo",
+          "removeTags": [
+            "dialogue:juicio_anselmo"
+          ],
+          "addTags": [
+            "dialogue:cirilo"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "fanatico_1",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "fanatico_2",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setEntity",
+          "entityId": "fanatico_3",
+          "removeTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "startCombat",
+          "factions": [
+            "fanaticos"
+          ]
+        }
+      ]
+    },
+    "irse": {
+      "speaker": "anselmo",
+      "text": "¡No, no, no! ¡Hermanos! ¡Volved! El capellán todavía tiene que leer los cargos de la cuaresma; tenéis tiempo, pero no tanto."
+    }
+  }
+}

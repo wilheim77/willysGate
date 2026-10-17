@@ -1,0 +1,42 @@
+{
+  "$comment": "Scene 1. Opened by script when the party first enters the square.",
+  "id": "plaza_llegada",
+  "start": "plaza",
+  "nodes": {
+    "plaza": {
+      "text": "Hondonegra huele a ceniza mojada y a río enfermo. La plaza es de barro pisado. En medio se levanta la Torre del Cepo, con su horca, y en la horca hay un fraile. Todavía vivo. Por ahora.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "llegada_hondonegra",
+          "value": true
+        }
+      ],
+      "next": "gente"
+    },
+    "gente": {
+      "text": "Alrededor, el pueblo entero mira sin mirar: mineros sin mina, mujeres de luto con ocho meses de práctica y niños que ya no preguntan. Arriba, en la ladera, la abadía vieja tiene todas las ventanas cerradas.",
+      "next": "dorotea"
+    },
+    "dorotea": {
+      "speaker": "dorotea",
+      "text": "Un ahorcamiento. Al menos en este pueblo todavía funciona algo.",
+      "choices": [
+        {
+          "text": "[Garrán] ¿Te trae recuerdos, Garrán?",
+          "when": {
+            "flag": "garran_reclutado"
+          },
+          "next": "garran"
+        },
+        {
+          "text": "Vamos a ver qué ha hecho ese fraile."
+        }
+      ]
+    },
+    "garran": {
+      "speaker": "garran",
+      "text": "Todos. La horca es nueva. La torre no. Lo demás está igual, pero más flaco."
+    }
+  }
+}

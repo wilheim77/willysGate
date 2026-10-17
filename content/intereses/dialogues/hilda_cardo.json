@@ -1,0 +1,64 @@
+{
+  "$comment": "Scene 2+. Hilda Cardo, seneschal, in the abbey after the audience.",
+  "id": "hilda_cardo",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "speaker": "hilda",
+      "text": "Cobrador. El barón está descansando. Escribir le agota.",
+      "choices": [
+        {
+          "id": "brea",
+          "text": "¿Qué opina usted de Brea?",
+          "once": true,
+          "next": "brea"
+        },
+        {
+          "id": "baron",
+          "text": "¿Cuánto tiempo lleva sirviendo al barón?",
+          "once": true,
+          "next": "baron"
+        },
+        {
+          "text": "[Has visto su mano en la daga] Usted no apuntaba a mí, senescal.",
+          "when": {
+            "all": [
+              {
+                "flag": "hilda_sopesa_traicion"
+              },
+              {
+                "notFlag": "hilda_pacto_tacito"
+              }
+            ]
+          },
+          "next": "daga"
+        },
+        {
+          "text": "Nada, senescal."
+        }
+      ]
+    },
+    "brea": {
+      "speaker": "hilda",
+      "text": "Que es el único hombre del valle que trabaja más que yo. Y que nunca me ha dejado ver en qué.",
+      "next": "hola"
+    },
+    "baron": {
+      "speaker": "hilda",
+      "text": "Lo bastante para saber cuánto vale. Todavía estoy echando la cuenta. Le aviso cuando me salga.",
+      "next": "hola"
+    },
+    "daga": {
+      "speaker": "hilda",
+      "text": "Apunto adonde hay que apuntar. Mi señor tiene muchas virtudes; la de seguir vivo depende de otros. Usted y yo deberíamos hablar algún día, cobrador. No hoy.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hilda_pacto_tacito",
+          "value": true
+        }
+      ],
+      "next": "hola"
+    }
+  }
+}

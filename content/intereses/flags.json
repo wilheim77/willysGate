@@ -106,5 +106,173 @@
     "critical": true,
     "description": "El paso del camino está libre (por las buenas o, tras el combate, por las malas).",
     "setBy": "script: al ganar el combate contra la facción \"mineros\""
+  },
+  "llegada_hondonegra": {
+    "critical": false,
+    "description": "El grupo ha llegado a la plaza de Hondonegra."
+  },
+  "juicio_resuelto": {
+    "critical": true,
+    "description": "El juicio de Fray Anselmo ha terminado (hablando, pagando o a golpes). Abre la audiencia en la abadía."
+  },
+  "anselmo_reclutado": {
+    "critical": false,
+    "description": "Fray Anselmo está en el grupo."
+  },
+  "anselmo_salvado_hablando": {
+    "critical": false,
+    "description": "Salvaste a Anselmo con palabras.",
+    "readBy": "epílogo"
+  },
+  "anselmo_salvado_pagando": {
+    "critical": false,
+    "description": "Salvaste a Anselmo pagando a la Santa Pala.",
+    "readBy": "epílogo"
+  },
+  "juicio_a_golpes": {
+    "critical": false,
+    "description": "Salvaste a Anselmo peleando con los fanáticos."
+  },
+  "santa_pala_hostil": {
+    "critical": false,
+    "description": "La Santa Pala te guarda rencor (peleaste en el juicio). Se puede reparar con Cirilo."
+  },
+  "santa_pala_perdona": {
+    "critical": false,
+    "description": "Cirilo aceptó tu ofrenda tras la pelea del juicio."
+  },
+  "pagaste_por_anselmo": {
+    "critical": false,
+    "description": "Pagaste la «limosna» por Anselmo."
+  },
+  "deuda_con_dorotea": {
+    "critical": false,
+    "description": "Dorotea te adelantó 20 coronas al 12 % mensual.",
+    "readBy": "escena 7 (D4)"
+  },
+  "cirilo_ofendido": {
+    "critical": false,
+    "description": "Cirilo se ofendió en el juicio: la limosna sube a 25 coronas."
+  },
+  "cirilo_quiere_oyente": {
+    "critical": false,
+    "description": "Has notado que Cirilo solo quiere que alguien le escuche."
+  },
+  "cirilo_desconfia": {
+    "critical": false,
+    "description": "Cirilo soltó a Anselmo por tu hábito, pero no se fía."
+  },
+  "conoce_santa_pala": {
+    "critical": false,
+    "description": "Sabes qué es la Santa Pala y que considera la plata «la sangre de la tierra»."
+  },
+  "pista_canto": {
+    "critical": false,
+    "description": "Cirilo oyó un canto en la Garganta antes del derrumbe."
+  },
+  "hablo_con_nella": {
+    "critical": true,
+    "description": "Has hablado con Nella Yesca (desbloquea la opción 7 de la audiencia)."
+  },
+  "conoce_cuarenta": {
+    "critical": true,
+    "description": "Sabes lo de los cuarenta mineros sellados en la Garganta."
+  },
+  "conoce_brea": {
+    "critical": true,
+    "description": "Sabes que Absalón Brea, el capataz, bajó con los cuarenta y subió solo."
+  },
+  "conoce_cuadrilla": {
+    "critical": false,
+    "description": "Sabes qué es la Cuadrilla."
+  },
+  "nella_prepara_algo": {
+    "critical": false,
+    "description": "Has notado que Nella cuenta cabezas: prepara algo (anticipa D1)."
+  },
+  "nella_conoce_garran": {
+    "critical": false,
+    "description": "Nella reconoció a Garrán, el mejor barrenero del valle."
+  },
+  "hulla_hostiles": {
+    "critical": false,
+    "description": "Los Hulla te miran mal (elfo). Se quita convenciendo a Odda."
+  },
+  "hulla_toleran_elfo": {
+    "critical": false,
+    "description": "Odda te tolera pese a ser elfo."
+  },
+  "hulla_insultados": {
+    "critical": false,
+    "description": "Le recordaste el Pleito de las Raíces a Odda. No lo olvidará."
+  },
+  "hulla_aceptan": {
+    "critical": false,
+    "description": "Los Hulla te aceptan como uno de los suyos (enano)."
+  },
+  "odda_conoce_garran": {
+    "critical": false,
+    "description": "Odda ha visto a Garrán de vuelta."
+  },
+  "audiencia_concedida": {
+    "critical": true,
+    "description": "La guardia de la abadía os deja pasar a la audiencia.",
+    "readBy": "script: cambio a la sala capitular"
+  },
+  "anselmo_hablo_habito": {
+    "critical": false,
+    "description": "Anselmo te ha contado la historia de su hábito."
+  },
+  "anselmo_habito_robado": {
+    "critical": false,
+    "description": "Has notado que el hábito de Anselmo no es suyo."
+  },
+  "pista_plata_nueva": {
+    "critical": true,
+    "description": "PISTA CLAVE: aparece plata nueva en un pueblo con la mina cerrada. Fuentes sin tirada: Cirilo, las viudas, el mostrador de Lisandro, el sermón."
+  },
+  "pista_metal_que_canta": {
+    "critical": false,
+    "description": "Los cantares élficos hablan de «el metal que canta» y de bóvedas selladas."
+  },
+  "cirilo_dice_verdad": {
+    "critical": false,
+    "description": "Cirilo está medio loco, pero lo del canto es verdad."
+  },
+  "audiencia_hecha": {
+    "critical": true,
+    "description": "Ha tenido lugar la audiencia con el barón (Dorotea le da tres días)."
+  },
+  "pista_brea_gastos": {
+    "critical": false,
+    "description": "Las cuentas del barón: Brea sigue comprando pólvora y comida para doce en una mina cerrada."
+  },
+  "baron_confeso_brea": {
+    "critical": false,
+    "description": "El barón admite que firmó lo que Brea le puso delante (veta muerta, orden de sellado)."
+  },
+  "abadia_desconfia": {
+    "critical": false,
+    "description": "La guardia de la abadía desconfía: las pruebas en la abadía tienen CD +2."
+  },
+  "hilda_sopesa_traicion": {
+    "critical": false,
+    "description": "Hilda se está pensando si su señor vale más vivo o muerto."
+  },
+  "hilda_pacto_tacito": {
+    "critical": false,
+    "description": "Hilda te ha dado a entender que hablaréis algún día."
+  },
+  "pista_plata_viva": {
+    "critical": false,
+    "description": "El plato de Brea zumba: plata viva."
+  },
+  "enano_mina_viva": {
+    "critical": false,
+    "description": "Como enano, notas que la mina está viva, no muerta como dice Brea."
+  },
+  "elfo_conocia_bisabuelo": {
+    "critical": false,
+    "description": "Conociste al bisabuelo del barón (elfo). Desbloquea una réplica de Lisandro."
   }
 }
