@@ -1,7 +1,7 @@
-import { type ActionOutcome, type GameState, type RngCursor, type Ruleset, type SurfaceDef, type SurfaceReaction, type Trap, OBJECT_TAG, hasCondition, hasTag } from '../../engine';
+import { type ActionOutcome, type GameState, type RngCursor, type Ruleset, type SurfaceDef, type SurfaceReaction, type Trap, OBJECT_TAG, hasCondition, hasTag, tileAt, zonesOf } from '../../engine';
 import { attr, hasTrait } from './character';
 import { parseDice, rollDice } from './dice';
-import { Resolver, dealDamage, fallDamage, rollSave, standing } from './resolve';
+import { Resolver, type WillyEvent, dealDamage, fallDamage, rollSave, standing } from './resolve';
 
 /**
  * Willy's surfaces (RULESET.md → «Superficies») as engine data, and what they do to whoever
@@ -126,5 +126,57 @@ export function triggerTrap(ruleset: Ruleset, state: GameState, id: string, trap
     r.apply({ type: 'push', entityId: id, dx, dy, distance: 2 });
   } else if (effect === 'caida') fallDamage(r, id, 2);
   else if (!hasTag(e, `inmune:${effect}`)) r.apply({ type: 'applyCondition', entityId: id, condition: effect, ...(effect === 'enredado' ? { remainingTurns: 2 } : {}) });
+  return r.outcome();
+}
+
+// --- Floor mechanics at the end of each round ---------------------------------------------------------
+
+/**
+ * Conveyor belts and tides, from the map's zones (the floor generator writes them):
+ * - layer 'cintas', 1×1, properties { dx, dy }: whoever stands on it is carried 1 tile, into
+ *   pits and fire too (a push, so walls and other creatures stop it and «¡Strike!» applies).
+ * - layer 'marea', properties { ciclo, altura, arrastre }: every `ciclo` rounds the tide comes in
+ *   over the tiles at `altura` or below, soaking and dragging everyone there `arrastre` tiles
+ *   south; the round before, it bubbles (event mareaAviso).
+ */
+export function onRoundEnd(ruleset: Ruleset, state: GameState, round: number, rng: RngCursor): ActionOutcome {
+  const r = new Resolver(ruleset, state, rng);
+  const standingOn = (x: number, y: number) => Object.values(r.state.entities).filter((e) => e.position.x === x && e.position.y === y && standing(e) && !e.tags.includes(OBJECT_TAG) && !hasTag(e, 'jefe'));
+
+  const belts = zonesOf(state, 'cintas');
+  if (belts.length) {
+    // Furthest along first, so a queue on the belt moves together instead of bumping.
+    const riders = belts
+      .flatMap((z) => standingOn(z.x, z.y).map((e) => ({ e, dx: Number(z.properties.dx ?? 1), dy: Number(z.properties.dy ?? 0) })))
+      .sort((a, b) => b.e.position.x * b.dx + b.e.position.y * b.dy - (a.e.position.x * a.dx + a.e.position.y * a.dy));
+    for (const { e, dx, dy } of riders) {
+      if (!r.state.entities[e.id] || !standing(r.entity(e.id))) continue;
+      r.apply({ type: 'push', entityId: e.id, dx, dy, distance: 1 });
+      r.emit({ type: 'cinta', entityId: e.id } as WillyEvent);
+    }
+  }
+
+  for (const z of zonesOf(state, 'marea')) {
+    const cycle = Math.max(2, Number(z.properties.ciclo ?? 3));
+    const level = Number(z.properties.altura ?? 0);
+    const phase = round % cycle;
+    if (phase === cycle - 1) r.emit({ type: 'mareaAviso', zone: z.name } as WillyEvent);
+    if (phase !== 0) continue;
+    const tiles: { x: number; y: number }[] = [];
+    for (let y = z.y; y < z.y + z.height; y++) for (let x = z.x; x < z.x + z.width; x++) {
+      const t = tileAt(r.state.map, { x, y });
+      if (t?.walkable && t.height <= level) tiles.push({ x, y });
+    }
+    if (!tiles.length) continue;
+    r.apply({ type: 'spawnSurface', tiles, surface: 'agua', turns: 2 });
+    r.emit({ type: 'marea', zone: z.name, tiles: tiles.length } as WillyEvent);
+    const drag = Number(z.properties.arrastre ?? 1);
+    // Who was there when the water came in (dragged once, not again from the tile they land on).
+    const caught = tiles.flatMap((p) => standingOn(p.x, p.y));
+    for (const e of caught) {
+      if (!hasTrait(e, 'pez') && !hasTag(e, 'inmune:empapado')) r.apply({ type: 'applyCondition', entityId: e.id, condition: 'empapado', remainingTurns: 2 });
+      if (drag > 0) r.apply({ type: 'push', entityId: e.id, dx: 0, dy: 1, distance: drag });
+    }
+  }
   return r.outcome();
 }

@@ -21,7 +21,7 @@ import './more-classes';
 import './summons';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, allAbilityIds } from './data';
-import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onSurface, triggerTrap } from './environment';
+import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
@@ -312,6 +312,7 @@ export const willy: Ruleset = {
   onFall: (state, id, levels, rng) => onFall(willy, state, id, levels, rng),
   onCollision: (state, id, hit, push, rng) => onCollision(willy, state, id, hit, push, rng),
   onVoid: (state, id, rng) => onVoid(willy, state, id, rng),
+  onRoundEnd: (state, round, rng) => onRoundEnd(willy, state, round, rng),
   noticeTrap: (state, id, trap) => noticeTrap(state, id, trap),
   triggerTrap: (state, id, trap, rng) => triggerTrap(willy, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
