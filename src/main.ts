@@ -27,6 +27,7 @@ const manifest = game.art.presets[requestedArt ?? ''] ?? game.art.presets[game.a
 const sheet = new CharacterSheet(game, engine.ruleset, manifest);
 const party = new PartyBar(game, engine.ruleset, manifest, (id) => sheet.open(store.state, id));
 combatHud.onInspect = (id) => sheet.open(store.state, id);
+combatHud.setManifest(manifest);
 const renderParty = () => {
   const { turn } = store.state;
   party.render(store.state, turn.mode === 'combat' ? turn.activeEntityId : null);

@@ -1,5 +1,7 @@
 import type { ActionDef, ActionPreview, CheckResult, Entity, GameEvent, GameState, Ruleset } from '../../engine';
+import type { AssetManifest } from '../assets/manifest';
 import type { GameDefinition } from '../game/definition';
+import { portrait } from './portraits';
 
 /**
  * DOM overlay for combat: initiative order, the active character's card and actions,
@@ -18,6 +20,10 @@ export class CombatHud {
   private logLines = document.createElement('div');
   private logToggle = document.createElement('button');
   private logOpen = false;
+  /** Art preset used for the chip portraits (presentation only). */
+  private manifest: AssetManifest | null = null;
+  /** One portrait canvas per entity, reused across renders so it is drawn once. */
+  private portraits = new Map<string, HTMLCanvasElement>();
   /** Tap on an initiative chip: open that creature's sheet. */
   onInspect: (id: string) => void = () => undefined;
 
@@ -42,6 +48,21 @@ export class CombatHud {
     });
     this.logEl.replaceChildren(this.logToggle, this.logLines);
     this.renderLog();
+  }
+
+  setManifest(manifest: AssetManifest): void {
+    this.manifest = manifest;
+    this.portraits.clear();
+  }
+
+  private chipPortrait(e: Entity): HTMLCanvasElement | null {
+    if (!this.manifest) return null;
+    let c = this.portraits.get(e.id);
+    if (!c) {
+      c = portrait(this.manifest, e.spriteId, 32);
+      this.portraits.set(e.id, c);
+    }
+    return c;
   }
 
   private t(key: string, fallback = ''): string {
@@ -87,6 +108,9 @@ export class CombatHud {
         chip.classList.toggle('down', !ruleset.isStanding(e));
         chip.innerHTML = `<span class="name"></span><span class="hp"><i style="width:${hp ? Math.round((100 * hp.current) / Math.max(1, hp.max)) : 0}%"></i></span>`;
         chip.querySelector('.name')!.textContent = e.name;
+        chip.title = e.name;
+        const face = this.chipPortrait(e);
+        if (face) chip.prepend(face);
         return chip;
       }),
     );
