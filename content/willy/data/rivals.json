@@ -1,18 +1,17 @@
 {
-  "$comment": "Mazmorreros rivales: otros concursantes de ¡Mazmorreros! que no son humanos. Antes eran razas jugables; desde la decisión del usuario (Willy es siempre humano) son PNJ con sus rasgos de raza. Aparecen en salas de rol 'rival' de las plantas indicadas (una por planta como mucho) y en escenas fijas. Se pueden derrotar, pactar con ellos o dejarles marchar. Ver docs/willy/STORY.md → «Mazmorreros rivales» y DESIGN.md → «Mazmorreros rivales».",
-  "version": 1,
+  "$comment": "Mazmorreros rivales legendarios: cinco PNJ escritos a mano que salen como apariciones raras (probabilidadLegendario en rival-generator.json). El resto de rivales se generan con rival-generator.json. Un legendario sale como mucho una vez por partida y nunca en dos partidas seguidas. Ver docs/willy/DESIGN.md → «Mazmorreros rivales procedurales».",
+  "version": 2,
   "reglas": {
-    "salasPorPlanta": 1,
-    "rolSala": "rival",
-    "conocerlos": "La primera vez que aparecen, el Narrador los presenta (banco narrator/plantas.json → rivalAparece).",
-    "controlador": "ai",
+    "legendario": true,
+    "plantasPosibles": "las indicadas en cada uno",
     "faccion": "rivales",
+    "controlador": "ai",
     "aliadoTemporal": {
       "duracion": "combate",
       "controlador": "ia-aliada"
     }
   },
-  "rivales": [
+  "legendarios": [
     {
       "id": "rival-vanesa",
       "nombre": "Vanesa la Gaviota",
@@ -91,7 +90,8 @@
         "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
         "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
         "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
-      }
+      },
+      "legendario": true
     },
     {
       "id": "rival-ceferino",
@@ -168,7 +168,8 @@
         "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
         "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
         "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
-      }
+      },
+      "legendario": true
     },
     {
       "id": "rival-gorka",
@@ -242,7 +243,8 @@
         "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
         "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
         "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
-      }
+      },
+      "legendario": true
     },
     {
       "id": "rival-mariluz",
@@ -317,7 +319,8 @@
         "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
         "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
         "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
-      }
+      },
+      "legendario": true
     },
     {
       "id": "rival-asterio",
@@ -394,7 +397,8 @@
         "derrotado": "Eliminado del concurso. Suelta una caja de plata y sus fichas.",
         "pacto": "Se le convence o se le ayuda: no ataca en lo que queda de planta y la próxima vez que aparece llega como aliado temporal (lo controla la IA aliada) durante un combate.",
         "huida": "Si se le deja estar, se lleva el botín de la sala y reaparece más tarde, un poco más fuerte (+20 % de vida)."
-      }
+      },
+      "legendario": true
     }
   ]
 }
