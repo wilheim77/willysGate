@@ -43,7 +43,7 @@ export type SpriteArt =
    * 2-direction sprite from a packed atlas (e.g. 0x72): frames per logical animation
    * (idle, move, hit...). Drawn facing `facing`; the renderer flips it for the other side.
    */
-  | { kind: 'frames'; url: string; facing: 'left' | 'right'; animations: Record<string, Rect[]> };
+  | { kind: 'frames'; url: string; facing: 'left' | 'right'; animations: Record<string, Rect[]>; scale?: number };
 
 /** Per-game mapping from game ids (terrain, spriteId) to art files. See content/<game>/assets/manifest.json. */
 export interface AssetManifest {

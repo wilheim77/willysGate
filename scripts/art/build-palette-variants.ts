@@ -200,7 +200,9 @@ for (const { id, v, anims } of rows) {
       return placed;
     });
   }
-  manifest.sprites[id] = { kind: 'frames', url, facing: spec.facing, animations };
+  // Optional per-variant display scale (e.g. a half-orc a bit bigger than humans).
+  const scale = (v as { scale?: number }).scale;
+  manifest.sprites[id] = { kind: 'frames', url, facing: spec.facing, animations, ...(scale ? { scale } : {}) };
   console.log(`${id} (${v.base}): ${Object.entries(animations).map(([a, f]) => `${a}(${f.length})`).join(', ')}`);
   y += Math.max(...Object.values(anims).flat().map((f) => f.h));
 }

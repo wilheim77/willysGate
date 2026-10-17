@@ -25,7 +25,13 @@
         "#aa8d7a": "#6e5442",
         "#d3bfa9": "#97785c"
       },
-      "rules": [{ "from": "#222222", "to": "#2e2622", "interior": true }]
+      "rules": [
+        {
+          "from": "#222222",
+          "to": "#2e2622",
+          "interior": true
+        }
+      ]
     },
     "dorotea": {
       "base": "elf_f",
@@ -48,7 +54,8 @@
         "#314152": "#434a3a",
         "#8f4029": "#6b4a30",
         "#62232f": "#3e2c22"
-      }
+      },
+      "scale": 1.15
     },
     "anselmo": {
       "base": "dwarf_f",
@@ -167,7 +174,17 @@
         "#97da3f": "transparent"
       },
       "prune": "#222222",
-      "rules": [{ "from": "#222222", "to": "#c9d1d6", "interior": true, "rows": [9, 9] }]
+      "rules": [
+        {
+          "from": "#222222",
+          "to": "#c9d1d6",
+          "interior": true,
+          "rows": [
+            9,
+            9
+          ]
+        }
+      ]
     },
     "esqueleto_minero": {
       "base": "skelet",

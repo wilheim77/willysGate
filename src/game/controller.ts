@@ -214,7 +214,11 @@ export class GameController {
     return false;
   }
 
-  /** Companions walk to the leader's recent footsteps, one tile further back each. */
+  /**
+   * Companions walk to the leader's recent footsteps, one tile further back each. If a
+   * footstep can't be reached (a ledge too high, someone in the way), they try the free
+   * tiles nearest the leader instead of standing still.
+   */
   private followLeader(): void {
     const leader = this.state.entities[this.game.leaderId];
     if (!leader) return;
@@ -228,17 +232,25 @@ export class GameController {
         taken.add(posKey(c.position));
         return;
       }
-      const spot = [...this.trail].reverse().slice(i).find((p) => !taken.has(posKey(p)) && !entityAt(this.state, p)) ?? this.nearestFree(leader.position, taken);
-      if (!spot) return;
-      taken.add(posKey(spot));
-      this.store.dispatch({ type: 'move', issuer: this.game.playerId, entityId: c.id, to: spot } as MoveCommand);
+      const trailSpots = [...this.trail].reverse().slice(i);
+      const candidates = [...trailSpots, ...this.freeAround(leader.position)].filter((p) => !taken.has(posKey(p)) && !entityAt(this.state, p));
+      for (const spot of candidates) {
+        const result = this.store.dispatch({ type: 'move', issuer: this.game.playerId, entityId: c.id, to: spot } as MoveCommand);
+        if (result.ok) {
+          taken.add(posKey(spot));
+          return;
+        }
+      }
     });
   }
 
-  private nearestFree(around: Vec2, taken: Set<string>): Vec2 | null {
+  /** Free tiles near a point, closest first. */
+  private freeAround(around: Vec2): Vec2[] {
     const ruleset = this.store.engine.ruleset;
-    const tiles = [...reachableTiles(this.state.map, around, 3, { rules: ruleset.movement, blocked: blockedTiles(ruleset, this.state, '') }).values()];
-    return tiles.filter((t) => !taken.has(posKey(t.pos))).sort((a, b) => a.cost - b.cost)[0]?.pos ?? null;
+    return [...reachableTiles(this.state.map, around, 4, { rules: ruleset.movement, blocked: blockedTiles(ruleset, this.state, '') }).values()]
+      .filter((t) => t.cost > 0)
+      .sort((a, b) => a.cost - b.cost)
+      .map((t) => t.pos);
   }
 
   // --- Presentation -------------------------------------------------------------------

@@ -525,7 +525,8 @@
             "h": 23
           }
         ]
-      }
+      },
+      "scale": 1.15
     },
     "bandit": {
       "kind": "frames",

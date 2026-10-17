@@ -241,7 +241,7 @@ export class MapScene extends Phaser.Scene {
       const depth = this.grid.depth(entity.position.y, tile.height, 5);
       // Soft contact shadow, drawn by code so any art pack gets one.
       const shadow = this.add.ellipse(c.x, c.y, T * 0.7, T * 0.28, 0x000000, 0.35).setDepth(depth - 1);
-      const sprite = this.add.sprite(c.x, c.y, imageKey(art.url)).setDepth(depth);
+      const sprite = this.add.sprite(c.x, c.y, imageKey(art.url)).setDepth(depth).setScale(this.baseScale(entity.spriteId));
       this.sprites.set(entity.id, sprite);
       this.shadows.set(entity.id, shadow);
       this.idle(entity.id, this.facing.get(entity.id) ?? 's');
@@ -721,14 +721,19 @@ export class MapScene extends Phaser.Scene {
     this.stopBreathing(entityId);
     this.breathing.set(
       entityId,
-      this.tweens.add({ targets: sprite, scaleY: 1.025, duration: 1200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }),
+      this.tweens.add({ targets: sprite, scaleY: this.baseScale(this.spriteIdOf(entityId)) * 1.025, duration: 1200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }),
     );
   }
 
   private stopBreathing(entityId: string): void {
     this.breathing.get(entityId)?.remove();
     this.breathing.delete(entityId);
-    this.sprites.get(entityId)?.setScale(1);
+    this.sprites.get(entityId)?.setScale(this.baseScale(this.spriteIdOf(entityId)));
+  }
+
+  private baseScale(spriteId: string): number {
+    const art = this.manifest.sprites[spriteId];
+    return art?.kind === 'frames' ? (art.scale ?? 1) : 1;
   }
 
   // --- Input -------------------------------------------------------------
