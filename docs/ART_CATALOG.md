@@ -108,6 +108,11 @@ Recolores de 0x72 con detalle propio (`palettes.json`). Vista previa: [`art-prev
 
 Ya existían: `absalon` (Brea), `callado`, `callado_palido`, `minero_cuadrilla`, `guardia_baron`, `guardia_baron_sargento`, los compañeros y los Sinpaga.
 
+**Calles y Escorial** (vista previa: [`art-previews/0x72-escorial-calles.png`](art-previews/0x72-escorial-calles.png)):
+- PNJ: `fiel_pala` (vecino con escapulario ocre de la Santa Pala) y `viuda` (velo y luto negros, para las viudas de los cuarenta).
+- Props: `campfire` (hoguera de campamento, 4 frames, luz), `oil_cart` (carro de aceite de los Sinpaga con tres barriles, 32×20), `well` (el Pozo del Ahorcado, 16×24).
+- Trampas detectadas (en lugar de los pinchos genéricos): `trap_beartrap` / `trap_beartrap_disarmed` (cepo), `trap_tripwire` (cuerda) y `trap_dart` (placa de dardo envenenado).
+
 **Atrezo** (`props`): `tapestry` (tapiz con el escudo de los Mazo, `wall`, 16×24), `tapestry_crossbow` (el mismo con la punta de la ballesta asomando: la pista para la frase de Garrán) y `gallows` (horca de la Torre del Cepo, `floor`, 16×32).
 
 ## Objetos interactivos (Fase 4)

@@ -630,6 +630,33 @@
         "#b58057": "#d0a07a",
         "#8a503e": "#a87050"
       }
+    },
+    "fiel_pala": {
+      "base": "elf_m",
+      "note": "Fiel de la Santa Pala: vecino con escapulario ocre y ropa parda",
+      "map": {
+        "#facb3e": "#4a3424",
+        "#ee8e2e": "#2e2018",
+        "#4ba747": "#a8884a",
+        "#3d734f": "#7a6034",
+        "#314152": "#3a3430",
+        "#5698cc": "#4a4038",
+        "#fccba3": "#e0b090",
+        "#e2b694": "#c09070"
+      }
+    },
+    "viuda": {
+      "base": "elf_f",
+      "note": "Viuda de uno de los cuarenta: velo y luto negros",
+      "map": {
+        "#facb3e": "#1e1a1e",
+        "#ee8e2e": "#121014",
+        "#4ba747": "#2a2428",
+        "#3d734f": "#1a161a",
+        "#da4e38": "#2a2428",
+        "#5698cc": "#5a4a3a",
+        "#fccba3": "#e0b498"
+      }
     }
   }
 }
