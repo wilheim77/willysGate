@@ -72,21 +72,37 @@ export function buildWorld(engine: ReturnType<typeof makeEngine>, seed: number, 
   const npcs: Entity[] = [
     createMonster({ id: 'viejo', name: 'Viejo minero', monsterId: 'bandit', controllerId: AI, factionId: 'neutral', position: { x: 5, y: 4 }, spriteId: 'minero_cuadrilla', extraTags: ['dialogue:viejo_minero', 'noncombatant'] }),
   ];
-  // Everyone the story's dialogues talk to (content/intereses/cast.json), so every tree can be walked here.
-  const cast = JSON.parse(readFileSync(join(CONTENT_DIR, 'cast.json'), 'utf8')) as Record<string, { name: string; monsterId: string; spriteId: string; faction: string; noncombatant?: boolean; dialogue?: string | null }>;
+  // Everyone the story's dialogues talk to (content/intereses/cast.json, a design doc for the
+  // map builder — game.ts does not consume it itself yet), so every dialogue tree can be
+  // walked here even before its map placement exists. Most entries are monsters/NPCs
+  // (`monsterId`); a few are inert objects (`prop`, e.g. a chest or a pulpit) — build each
+  // with the right constructor rather than assuming everyone is a creature.
+  const cast = JSON.parse(readFileSync(join(CONTENT_DIR, 'cast.json'), 'utf8')) as Record<
+    string,
+    { name?: string; monsterId?: string; prop?: string; spriteId: string; faction?: string; noncombatant?: boolean; dialogue?: string | null }
+  >;
+  // PropSpec only knows these kinds; cast.json's design doc uses others too (e.g. "object"
+  // for a pulpit, which doesn't map to anything createProp accepts) - fall back to "crate"
+  // as a harmless placeholder rather than failing the whole build over a label mismatch.
+  const KNOWN_PROP_KINDS = new Set(['barrel_oil', 'barrel', 'crate', 'chest', 'door', 'lever']);
   const known = new Set([...party, ...enemies, ...npcs].map((e) => e.id));
   let slot = 0;
   for (const [id, c] of Object.entries(cast)) {
     if (id.startsWith('$') || known.has(id)) continue;
     const position = { x: 1 + (slot % 6), y: 15 + Math.floor(slot / 6) };
     slot++;
+    if (c.prop) {
+      const kind = (KNOWN_PROP_KINDS.has(c.prop) ? c.prop : 'crate') as 'barrel_oil' | 'barrel' | 'crate' | 'chest' | 'door' | 'lever';
+      npcs.push(createProp({ id, kind, position, spriteId: c.spriteId, name: c.name, extraTags: c.dialogue ? [`dialogue:${c.dialogue}`] : [] }));
+      continue;
+    }
     npcs.push(
       createMonster({
         id,
-        name: c.name,
-        monsterId: c.monsterId === 'companion' || c.monsterId === 'commoner' ? 'bandit' : c.monsterId,
+        name: c.name!,
+        monsterId: c.monsterId === 'companion' || c.monsterId === 'commoner' ? 'bandit' : c.monsterId!,
         controllerId: AI,
-        factionId: c.faction,
+        factionId: c.faction!,
         position,
         spriteId: c.spriteId,
         extraTags: [...(c.dialogue ? [`dialogue:${c.dialogue}`] : []), ...(c.noncombatant ? ['noncombatant'] : [])],
@@ -139,4 +155,4 @@ export function buildWorld(engine: ReturnType<typeof makeEngine>, seed: number, 
 }
 
 export const PARTY_IDS = ['hero', 'garran', 'dorotea', 'anselmo'];
-export const ENEMY_IDS = ['bandit-1', 'bandit-2', 'thug', 'skeleton'];
+export const ENEMY_IDS = ['bandit-1', 'bandit-2', 'bandit-3', 'thug', 'thug-2', 'skeleton'];
