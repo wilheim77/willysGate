@@ -1,0 +1,186 @@
+{
+  "$comment": "Bancos de frases del Narrador: combate. Formato en docs/willy/DESIGN.md → «Narrador». Variables: {enemigo}, {objeto}, {dano}, {vida}, {espectadores}. Filtros: {x:el} artículo determinado (el/la), {x:un} indeterminado, {x:del}, {x:al}, {x:o} terminación de género (o/a), {x:Mayus} primera en mayúscula. 'si' filtra por contexto; a igualdad, gana la línea más específica.",
+  "version": 1,
+  "bancos": [
+    {
+      "id": "combateInicio", "evento": "combatStarted", "probabilidad": 0.7, "prioridad": 2, "memoria": 8,
+      "lineas": [
+        { "id": "ci-01", "texto": "¡Combate! Que alguien avise al público, que están en el baño." },
+        { "id": "ci-02", "texto": "Monstruos a la vista. Willy los mira. Ellos miran a Willy. Nadie quiere estar aquí, pero aquí estamos." },
+        { "id": "ci-03", "texto": "Empieza la pelea. Las apuestas en las gradas están tres a uno. En contra, claro." },
+        { "id": "ci-04", "texto": "Ahí vienen. Producción me pide que diga algo épico. Algo épico." },
+        { "id": "ci-05", "texto": "Combate por turnos. Como el ambulatorio, pero con más dientes." },
+        { "id": "ci-06", "texto": "Atención, que esto se pone interesante. O no. Depende de ti, la verdad." },
+        { "id": "ci-07", "texto": "Si alguien en casa quiere ir a por palomitas, que sea ahora." },
+        { "id": "ci-08", "texto": "{enemigo:un:Mayus} y compañía. Han venido a por ti. Tú has venido a por el concurso. Uno de los dos se va a llevar un disgusto." },
+        { "id": "ci-09", "texto": "Más monstruos. Esta mazmorra tiene más plantilla que un ministerio.", "si": { "planta": { "min": 2 } } },
+        { "id": "ci-10", "texto": "Ratas. Siempre empiezan con ratas. Es tradición desde la Temporada 1 de los krell.", "si": { "enemigo.plantilla": "rata-portuaria" } },
+        { "id": "ci-11", "texto": "Gaviotas. Willy las conoce bien. Le han robado más bocadillos que cualquier atracador.", "si": { "enemigo.plantilla": "gaviota-de-lonja" } },
+        { "id": "ci-12", "texto": "Maniquíes. No se mueven si los miras. Así que no parpadees. Nunca. Suerte.", "si": { "enemigo.plantilla": "maniqui" } },
+        { "id": "ci-13", "texto": "Cabezudos. Con esas cabezas, cualquiera diría que piensan. No piensan.", "si": { "enemigo.plantilla": "cabezudo" } },
+        { "id": "ci-14", "texto": "Patos de goma gigantes. Ningún niño volverá a bañarse tranquilo en catorce galaxias.", "si": { "enemigo.plantilla": "patito-gigante" } },
+        { "id": "ci-15", "texto": "Figurantes. Cobran por estar ahí. Tú no. Piénsalo mientras les pegas.", "si": { "enemigo.plantilla": "figurante" } },
+        { "id": "ci-16", "texto": "Combate a oscuras. A los monstruos les da igual. A ti, no tanto.", "si": { "luzSala": { "max": 0.3 } } },
+        { "id": "ci-17", "texto": "Combate con poco reloj. Si quieres un consejo: rapidito.", "si": { "relojPct": { "max": 25 } } }
+      ]
+    },
+    {
+      "id": "enemigoEliminado", "evento": "entityDefeated", "donde": { "objetivo.faccion": "monstruos" }, "probabilidad": 0.55, "prioridad": 3, "memoria": 12,
+      "lineas": [
+        { "id": "ee-01", "texto": "{enemigo:el:Mayus} ha caído. Descanse en paz, o en lo que sea que descansen estas cosas." },
+        { "id": "ee-02", "texto": "Uno menos. Quedan... bueno, quedan muchos. Pero uno menos." },
+        { "id": "ee-03", "texto": "Fuera de combate. {enemigo:el:Mayus} no estaba en su mejor día. Ni en su último, ya que estamos." },
+        { "id": "ee-04", "texto": "Eliminad{enemigo:o}. El público aplaude con educación, como en el tenis." },
+        { "id": "ee-05", "texto": "Y {enemigo:el} se despide del concurso. Tenía familia. Bueno, tenía hermanos. Están aquí al lado. Vienen a por ti." },
+        { "id": "ee-06", "texto": "Correcto. Eficaz. Un poco soso. Pero correcto." },
+        { "id": "ee-07", "texto": "{enemigo:el:Mayus}, eliminad{enemigo:o}. Producción ya le ha buscado sustituto. Producción siempre tiene sustitutos." },
+        { "id": "ee-08", "texto": "Otro para la estadística. Willy no lleva la cuenta. Yo sí. Es mi trabajo." },
+        { "id": "ee-09", "texto": "Ha caído {enemigo:el}. No lo echaremos de menos. No lo conocíamos." },
+        { "id": "ee-10", "texto": "Eliminación limpia. Mi abuela, que era un ciempiés, lo habría hecho con más gracia. Pero limpia." },
+        { "id": "ee-11", "texto": "Con {objeto:el}. Patético, pero efectivo.", "si": { "objeto.etiquetas": { "tiene": "absurdo" } } },
+        { "id": "ee-12", "texto": "Eliminad{enemigo:o} con {objeto:un}. Los fabricantes de {objeto:el} no contemplaban este uso en las instrucciones.", "si": { "objeto": { "existe": true } } },
+        { "id": "ee-13", "texto": "¡Y abajo! {enemigo:el:Mayus} ha descubierto la gravedad de la forma tradicional.", "si": { "causa": "caida" } },
+        { "id": "ee-14", "texto": "Caída libre. Sin paracaídas. Sin dignidad. La Colmena está extasiada.", "si": { "causa": "caida" } },
+        { "id": "ee-15", "texto": "¡Fuera de plano! {enemigo:el:Mayus} ya no forma parte de este programa. Ni de este nivel de la realidad.", "si": { "causa": "fueraDePlano" } },
+        { "id": "ee-16", "texto": "Al vacío. Lo más bonito de esta mazmorra es que siempre hay un sitio al que caer.", "si": { "causa": "fueraDePlano" } },
+        { "id": "ee-17", "texto": "Al pozo. Sin escalas. Lord Vórtax lo ha visto en bucle dos veces mientras escribo esto.", "si": { "causa": "fueraDePlano" } },
+        { "id": "ee-18", "texto": "A la brasa. {enemigo:el:Mayus} queda en su punto. Los Hermanos Pérez piden la receta.", "si": { "elemento": "fuego" } },
+        { "id": "ee-19", "texto": "Churruscad{enemigo:o}. Huele a domingo de barbacoa en el monte.", "si": { "elemento": "fuego" } },
+        { "id": "ee-20", "texto": "Electrocutad{enemigo:o}. Se le ha quedado el pelo como a un presentador de los ochenta.", "si": { "elemento": "rayo" } },
+        { "id": "ee-21", "texto": "Contra la pared. La pared ha ganado. Las paredes siempre ganan.", "si": { "causa": "choque", "con": "muro" } },
+        { "id": "ee-22", "texto": "¡Choque frontal! Dos monstruos, un solo destino y un ruido muy satisfactorio.", "si": { "causa": "choque", "con": "entidad" } },
+        { "id": "ee-23", "texto": "Eliminado por un decorado. Cartón piedra, dos toneladas, cero remordimientos.", "si": { "causa": "decorado" } },
+        { "id": "ee-24", "texto": "La superficie ha hecho el trabajo sucio. Tú solo has puesto la idea. Así trabajan los directivos.", "si": { "causa": "superficie" } },
+        { "id": "ee-25", "texto": "Un golpe crítico. {enemigo:el:Mayus} no ha sabido ni qué le ha dado. Yo tampoco, ha ido muy rápido.", "si": { "critico": true } },
+        { "id": "ee-26", "texto": "¡Liquidación por cierre! Doña Rebeca habría estado orgullosa. Si no fuera su empleado.", "si": { "planta": 2, "objetivo.plantilla": { "en": ["maniqui", "reponedor-zombi", "carrito-poseido"] } } },
+        { "id": "ee-27", "texto": "Fin de la fiesta para {enemigo:el}. Mañana, resaca eterna.", "si": { "planta": 3 } },
+        { "id": "ee-28", "texto": "{enemigo:el:Mayus} se queda flotando boca arriba. Como en el balneario, pero para siempre.", "si": { "planta": 4 } },
+        { "id": "ee-29", "texto": "Corten. {enemigo:el:Mayus} sale de escena. Que pase el siguiente.", "si": { "planta": 5 } },
+        { "id": "ee-30", "texto": "Era un mímico. Ahora es un cofre. Un cofre de verdad. Qué ironía tan triste.", "si": { "objetivo.plantilla": "mimico" } },
+        { "id": "ee-31", "texto": "Eliminad{enemigo:o} mientras bailaba. Se fue con ritmo, que es lo que importa.", "si": { "objetivo.condiciones": { "tiene": "bailando" } } },
+        { "id": "ee-32", "texto": "Eliminad{enemigo:o} con un pan. Del día anterior. Mamá Clementina no sabe si aplaudir o llorar.", "si": { "objeto": "barra-de-pan" } }
+      ]
+    },
+    {
+      "id": "multiEliminacion", "evento": "multiKill", "probabilidad": 1, "prioridad": 4, "memoria": 6,
+      "lineas": [
+        { "id": "mk-01", "texto": "¡Dos de golpe! Eso es optimizar recursos. Glorp Ecosoluciones toma nota.", "si": { "cantidad": 2 } },
+        { "id": "mk-02", "texto": "Doblete. El público de las gradas ha hecho la ola. Algunos tienen tentáculos y han hecho dos olas.", "si": { "cantidad": 2 } },
+        { "id": "mk-03", "texto": "¡Tres! ¡Tres en un turno! ¡Que alguien me traiga agua, que me ha dado algo!", "si": { "cantidad": 3 } },
+        { "id": "mk-04", "texto": "¡Triplete! Esto es lo que vinimos a ver. Bueno, vinimos a ver cómo te morías, pero esto también vale.", "si": { "cantidad": 3 } },
+        { "id": "mk-05", "texto": "¡{cantidad} de una tacada! He perdido la compostura. Y la voz. Y una apuesta.", "si": { "cantidad": { "min": 4 } } },
+        { "id": "mk-06", "texto": "Varios a la vez. En Castro a esto se le llama «hacer el día». Aquí lo llamamos «récord de audiencia»." }
+      ]
+    },
+    {
+      "id": "willyAtacaFalla", "evento": "attackResolved", "donde": { "actor.id": "willy", "acierto": false }, "probabilidad": 0.45, "prioridad": 1, "memoria": 10,
+      "lineas": [
+        { "id": "fa-01", "texto": "Fallo. El aire ha quedado bien golpeado, eso sí." },
+        { "id": "fa-02", "texto": "Nada. {enemigo:el:Mayus} ni se ha enterado. Bueno, se ha enterado de que lo has intentado." },
+        { "id": "fa-03", "texto": "Ha fallado. En las gradas alguien ha dicho «uy». Muchos alguien. Catorce galaxias de «uy»." },
+        { "id": "fa-04", "texto": "Fallado. Es estadística, no es personal. Bueno, un poco personal sí es." },
+        { "id": "fa-05", "texto": "Al aire. Si el aire fuera el enemigo, ya habrías ganado." },
+        { "id": "fa-06", "texto": "Fallo. Con esa probabilidad... bueno, con esa probabilidad, fallar era muy probable.", "si": { "probabilidad": { "max": 40 } } },
+        { "id": "fa-07", "texto": "¡Fallo con un {probabilidad} % a favor! Las matemáticas acaban de reírse de ti en directo.", "si": { "probabilidad": { "min": 80 } } },
+        { "id": "fa-08", "texto": "A oscuras se apunta peor. Eso o que tienes la puntería de un gnomo de jardín.", "si": { "oscuridad": true } }
+      ]
+    },
+    {
+      "id": "critico", "evento": "attackResolved", "donde": { "actor.id": "willy", "critico": true }, "probabilidad": 0.9, "prioridad": 4, "memoria": 8,
+      "lineas": [
+        { "id": "cr-01", "texto": "¡VEINTE! ¡CRÍTICO! ¡Que suene la sirena!" },
+        { "id": "cr-02", "texto": "¡Golpe crítico! {enemigo:el:Mayus} acaba de recibir {dano} de daño y una lección de humildad." },
+        { "id": "cr-03", "texto": "Un veinte natural. El dado te quiere. Disfrútalo, que el dado es muy cambiante." },
+        { "id": "cr-04", "texto": "¡Crítico! Lo repetimos a cámara lenta. Otra vez. Otra vez. Vale, ya." },
+        { "id": "cr-05", "texto": "¡CRÍ-TI-CO! Perdón. Me he emocionado. No volverá a pasar. Probablemente volverá a pasar." },
+        { "id": "cr-06", "texto": "Doble de daño. Doble de audiencia. Doble de sueldo para mí no, pero algo es algo." }
+      ]
+    },
+    {
+      "id": "pifia", "evento": "checkRolled", "donde": { "actor.id": "willy", "natural": 1 }, "probabilidad": 1, "prioridad": 4, "memoria": 8,
+      "lineas": [
+        { "id": "pi-01", "texto": "Un uno. Un uno natural. Es precioso. Es horrible. Es televisión." },
+        { "id": "pi-02", "texto": "Pifia. Willy acaba de hacer algo que no estaba en ningún manual. Ni en ningún planeta." },
+        { "id": "pi-03", "texto": "Un uno. Producción ya lo ha metido en el resumen de la semana." },
+        { "id": "pi-04", "texto": "¡Pifia! Se le ha resbalado {objeto:el}. Y la dignidad. Sobre todo la dignidad.", "si": { "objeto": { "existe": true } } },
+        { "id": "pi-05", "texto": "El dado ha sacado un uno. El dado, al menos, es sincero." },
+        { "id": "pi-06", "texto": "Uno. Lo bueno de tocar fondo es que ya solo puedes subir. Lo malo es que esto es una mazmorra y el fondo está más abajo." }
+      ]
+    },
+    {
+      "id": "willyRecibeDano", "evento": "resourceChanged", "donde": { "entityId": "willy", "resource": "vida", "delta": { "max": -1 } }, "probabilidad": 0.35, "prioridad": 2, "memoria": 12, "enfriamientoTurnos": 1,
+      "lineas": [
+        { "id": "rd-01", "texto": "Eso ha dolido. Lo sé porque has hecho una mueca. Y porque te ha bajado la vida." },
+        { "id": "rd-02", "texto": "Au. Bueno, «au» lo digo yo. Willy ha dicho algo más castizo que no podemos emitir." },
+        { "id": "rd-03", "texto": "{dano} de daño. Apúntalo en el libro de reclamaciones. Nadie lo leerá, pero desahoga." },
+        { "id": "rd-04", "texto": "Golpe recibido. Seguros La Prudente acaba de subirte la prima." },
+        { "id": "rd-05", "texto": "Le han dado. El público suspira. Algunos de pena. Otros de gusto. No les juzgues." },
+        { "id": "rd-06", "texto": "Eso va a dejar marca. Tranquilo, el maquillaje del plató lo tapa todo." },
+        { "id": "rd-07", "texto": "{dano} de golpe. ¡Ese es mucho daño! Si te sirve de consuelo, ha quedado muy bien en cámara.", "si": { "dano": { "min": 8 } } },
+        { "id": "rd-08", "texto": "Te quedan {vida} de vida. No es para alarmarse. Bueno, un poco sí.", "si": { "vidaPct": { "max": 40 } } },
+        { "id": "rd-09", "texto": "Willy está a punto de convertirse en un recuerdo. Come algo, hombre. Por tu madre.", "si": { "vidaPct": { "max": 20 } } },
+        { "id": "rd-10", "texto": "Te estás quemando. Literalmente. Te lo digo por si no te habías dado cuenta.", "si": { "elemento": "fuego" } },
+        { "id": "rd-11", "texto": "Calambrazo. El bigote se te ha puesto de punta. Te queda bien, por cierto.", "si": { "elemento": "rayo" } },
+        { "id": "rd-12", "texto": "Te ha mordido un cofre. Hace cuarenta temporadas que existen los mímicos. Cuarenta.", "si": { "fuente.plantilla": "mimico" } },
+        { "id": "rd-13", "texto": "Una caída. A la Colmena le ha encantado. A tus rodillas, no tanto.", "si": { "causa": "caida" } },
+        { "id": "rd-14", "texto": "Trampa. La has pisado tú solo, sin que nadie te empujara. Es casi admirable.", "si": { "causa": "trampa" } }
+      ]
+    },
+    {
+      "id": "empujon", "evento": "entityPushed", "donde": { "actor.id": "willy" }, "probabilidad": 0.4, "prioridad": 2, "memoria": 8,
+      "lineas": [
+        { "id": "em-01", "texto": "¡Empujón! El arte del «aparta, que voy»." },
+        { "id": "em-02", "texto": "Por favor, circule. Dicho con las manos." },
+        { "id": "em-03", "texto": "Contra el muro. El muro no se mueve. {enemigo:el:Mayus} sí, pero ya no mucho.", "si": { "choque": "muro" } },
+        { "id": "em-04", "texto": "¡Strike! Dos bolos de un solo empujón.", "si": { "choque": "entidad" } },
+        { "id": "em-05", "texto": "A la piscina. Bueno, al charco. Bueno, a donde sea. La cuestión es que se moje.", "si": { "destino": "agua" } },
+        { "id": "em-06", "texto": "Directo al fuego. Los Hermanos Pérez acaban de abrir una botella.", "si": { "destino": "fuego" } },
+        { "id": "em-07", "texto": "Le has empujado hacia la cinta. La cinta hará el resto. La cinta siempre hace el resto.", "si": { "destino": "cinta" } }
+      ]
+    },
+    {
+      "id": "combateVictoria", "evento": "combatEnded", "donde": { "resultado": "victoria" }, "probabilidad": 0.6, "prioridad": 2, "memoria": 10,
+      "lineas": [
+        { "id": "cv-01", "texto": "Combate ganado. Tómate un respiro. Uno corto. El reloj no se ha jubilado." },
+        { "id": "cv-02", "texto": "Victoria. El público aplaude. Yo también, pero por dentro, que tengo una reputación." },
+        { "id": "cv-03", "texto": "Ya está. La energía vuelve a tope. La dignidad, a medias." },
+        { "id": "cv-04", "texto": "Fin del combate. Producción manda a los de limpieza. Ah, no, que el de limpieza eras tú en la Temporada 31. Bueno, otro." },
+        { "id": "cv-05", "texto": "Ganado sin un rasguño. Seguros La Prudente se acaba de enamorar.", "si": { "vidaPerdida": 0 } },
+        { "id": "cv-06", "texto": "Ganado con un hilo de vida. Así, sí. Así se hace televisión.", "si": { "vidaPct": { "max": 15 } } },
+        { "id": "cv-07", "texto": "Un combate muy largo. El público ha cambiado de canal dos veces y ha vuelto. Por lealtad, supongo.", "si": { "rondas": { "min": 8 } } },
+        { "id": "cv-08", "texto": "Rápido y limpio. Como un butano bien instalado.", "si": { "rondas": { "max": 2 } } }
+      ]
+    },
+    {
+      "id": "willyEliminado", "evento": "runEnded", "donde": { "resultado": "eliminado" }, "probabilidad": 1, "prioridad": 5, "memoria": 6,
+      "lineas": [
+        { "id": "we-01", "texto": "Willy ha caído. El público guarda un minuto de silencio. Ya está. Era un minuto de silencio galáctico: dura menos." },
+        { "id": "we-02", "texto": "Eliminado. Pero tranquilo: Producción no puede permitirse perder a un concursante con tanta audiencia. Vuelves al Camerino." },
+        { "id": "we-03", "texto": "Fin. O no. Esto es televisión: aquí nadie se muere del todo hasta que lo dice el guion." },
+        { "id": "we-04", "texto": "Willy, eliminado. En la cabina hay alguien llorando. No soy yo. Es el técnico. Bueno, un poco yo." },
+        { "id": "we-05", "texto": "Eliminado por {enemigo:un}. Qué manera más tonta de irse. Vuelve, que el público quiere revancha.", "si": { "enemigo": { "existe": true } } },
+        { "id": "we-06", "texto": "Eliminado por tu propia mano. O por tu propia bombona. Hay que tener talento.", "si": { "actor.id": "willy" } }
+      ]
+    },
+    {
+      "id": "jefeEntrada", "evento": "roomEntered", "donde": { "rol": "jefe" }, "probabilidad": 1, "prioridad": 5, "memoria": 0,
+      "lineas": [
+        { "id": "je-1a", "texto": "Señoras, señores y entidades: ¡Su Majestad el Centollo! Dos metros de marisco con mala leche. El reloj se para. Esto es el plato fuerte.", "si": { "planta": 1 } },
+        { "id": "je-2a", "texto": "Desde lo alto de las cajas registradoras, la mujer que nunca ha devuelto un ticket: ¡Doña Rebeca, Encargada de Rebajas!", "si": { "planta": 2 } },
+        { "id": "je-3a", "texto": "Cuatro metros de cartón piedra, un señor sudando dentro y tres cabezudos con ganas de bronca: ¡el Gigantón!", "si": { "planta": 3 } },
+        { "id": "je-4a", "texto": "En su silla, con su silbato y con más tentáculos que pacientes: ¡la Socorrista Abisal! Nadie se baña después de comer en su piscina. Nadie vuelve a bañarse.", "si": { "planta": 4 } },
+        { "id": "je-5a", "texto": "Y ahora sí. Dientes perfectos, traje de lentejuelas, seis ojos y ni una arruga: el presentador de ¡Mazmorreros!, ¡FAUSTO BRILLANTE! Yo me callo. Por una vez.", "si": { "planta": 5 } }
+      ]
+    },
+    {
+      "id": "jefeDerrotado", "evento": "entityDefeated", "donde": { "objetivo.tipo": "jefe" }, "probabilidad": 1, "prioridad": 5, "memoria": 0,
+      "lineas": [
+        { "id": "jd-1", "texto": "¡El Centollo ha caído! Esta noche, en Castro, habría mariscada. Aquí, una caja de plata. No es lo mismo, pero brilla.", "si": { "planta": 1 } },
+        { "id": "jd-2", "texto": "Doña Rebeca, liquidada. Todo debe desaparecer. Y ha desaparecido. Pasen por caja.", "si": { "planta": 2 } },
+        { "id": "jd-3", "texto": "¡Ha caído el Gigantón! El señor que iba dentro sale, se seca el sudor y pide un bocadillo. Se lo ha ganado. Y tú, una caja de oro.", "si": { "planta": 3 } },
+        { "id": "jd-4", "texto": "La Socorrista Abisal ya no rescatará a nadie. Silbato confiscado. Piscina, por fin, abierta al público.", "si": { "planta": 4 } },
+        { "id": "jd-5", "texto": "Fausto Brillante... ha caído. Catorce galaxias en silencio. Luego, el aplauso más largo de la historia de la cadena. Yo no aplaudo. Tengo las manos ocupadas. Secándome los ojos. De alergia.", "si": { "planta": 5 } }
+      ]
+    }
+  ]
+}

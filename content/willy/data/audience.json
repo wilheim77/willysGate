@@ -1,0 +1,75 @@
+{
+  "$comment": "Audiencia (contador de espectadores). Borrador pendiente de aprobación; reglas en docs/willy/DESIGN.md → «Audiencia». Es un medidor del estado (sistema genérico de medidores, ENGINE_REQUESTS.md). La audiencia nunca te hace perder: solo da premios.",
+  "version": 1,
+  "inicial": 1000,
+  "maximo": 999000000,
+  "formula": "ganancia = base × multPlanta × (1 + 0,05 × Carisma) × novedad × multiplicadores de objetos y clase. Las pérdidas son porcentuales y no bajan del mínimo de la planta.",
+  "porPlanta": {
+    "1": { "mult": 1, "minimo": 500 },
+    "2": { "mult": 4, "minimo": 3000 },
+    "3": { "mult": 12, "minimo": 15000 },
+    "4": { "mult": 35, "minimo": 60000 },
+    "5": { "mult": 100, "minimo": 200000 }
+  },
+  "novedad": {
+    "$comment": "Lo nuevo gusta más; lo repetido, menos. La clave de novedad es el 'id' de la regla más la causa o el objeto.",
+    "primeraVezEnPartida": 2.0,
+    "repeticionesRecientes": { "ventanaTurnos": 5, "multiplicadores": [1.0, 0.7, 0.5, 0.3] }
+  },
+  "ganancias": [
+    { "id": "eliminar", "patron": { "evento": "entityDefeated", "donde": { "objetivo.faccion": "monstruos", "objetivo.tipo": "normal" } }, "base": 100 },
+    { "id": "eliminar-elite", "patron": { "evento": "entityDefeated", "donde": { "objetivo.tipo": "elite" } }, "base": 400 },
+    { "id": "eliminar-jefe", "patron": { "evento": "entityDefeated", "donde": { "objetivo.tipo": "jefe" } }, "base": 5000 },
+    { "id": "muerte-caida", "patron": { "evento": "entityDefeated", "donde": { "causa": "caida" } }, "base": 300 },
+    { "id": "fuera-de-plano", "patron": { "evento": "entityDefeated", "donde": { "causa": "fueraDePlano" } }, "base": 600 },
+    { "id": "muerte-superficie", "patron": { "evento": "entityDefeated", "donde": { "causa": "superficie" } }, "base": 250 },
+    { "id": "muerte-choque", "patron": { "evento": "entityDefeated", "donde": { "causa": "choque" } }, "base": 250 },
+    { "id": "muerte-decorado", "patron": { "evento": "entityDefeated", "donde": { "causa": "decorado" } }, "base": 800 },
+    { "id": "muerte-con-objeto-raro", "patron": { "evento": "entityDefeated", "donde": { "arma.etiquetas": { "tiene": "absurdo" } } }, "base": 300 },
+    { "id": "multi-2", "patron": { "evento": "multiKill", "donde": { "cantidad": 2 } }, "base": 300 },
+    { "id": "multi-3", "patron": { "evento": "multiKill", "donde": { "cantidad": { "min": 3 } } }, "base": 1000 },
+    { "id": "critico", "patron": { "evento": "attackResolved", "donde": { "actor.id": "willy", "critico": true } }, "base": 200 },
+    { "id": "pifia", "patron": { "evento": "checkRolled", "donde": { "actor.id": "willy", "natural": 1 } }, "base": 150 },
+    { "id": "reaccion", "patron": { "evento": "surfaceReacted" }, "base": 150, "porCampo": { "enemigosAfectados": 100 } },
+    { "id": "empujon-choque", "patron": { "evento": "entityPushed", "donde": { "actor.id": "willy", "choque": { "en": ["muro", "entidad"] } } }, "base": 100 },
+    { "id": "explosion", "patron": { "evento": "objectDestroyed", "donde": { "explota": true } }, "base": 200, "porCampo": { "enemigosAfectados": 200 } },
+    { "id": "al-filo", "patron": { "evento": "combatEnded", "donde": { "resultado": "victoria", "vidaPct": { "max": 10 } } }, "base": 1000 },
+    { "id": "caer-tu", "patron": { "evento": "fell", "donde": { "entidad.id": "willy" } }, "base": 200 },
+    { "id": "ganso", "patron": { "evento": "showOff" }, "base": 150, "decrecientePorCombate": 0.5 },
+    { "id": "caja-oro", "patron": { "evento": "boxOpened", "donde": { "caja": "oro" } }, "base": 500 },
+    { "id": "caja-legendaria", "patron": { "evento": "boxOpened", "donde": { "caja": "legendaria" } }, "base": 2000 },
+    { "id": "logro", "patron": { "evento": "achievementUnlocked" }, "base": 300 },
+    { "id": "habilidad-nueva", "patron": { "evento": "skillUsed", "donde": { "primeraVezEnPartida": true } }, "base": 200 },
+    { "id": "maestria", "patron": { "evento": "skillLevelUp", "donde": { "nivel": 5 } }, "base": 1500 },
+    { "id": "salida-al-filo", "patron": { "evento": "floorExited", "donde": { "metodo": "escalera", "relojRestantePct": { "max": 10 } } }, "base": 2000 },
+    { "id": "derrumbe", "patron": { "evento": "floorExited", "donde": { "metodo": "derrumbe" } }, "base": 1500 },
+    { "id": "drama", "patron": { "evento": "attackResolved", "donde": { "objetivo.id": "willy", "critico": true } }, "base": 100 },
+    { "id": "foco", "patron": { "evento": "attackResolved", "donde": { "actor.id": "willy", "bajoFoco": true } }, "base": 0, "multiplicador": 2, "comentario": "Planta 5: bajo un foco, todo lo que ganas en ese ataque vale el doble." }
+  ],
+  "perdidas": [
+    { "id": "esperar", "patron": { "evento": "turnEnded", "donde": { "entityId": "willy", "esperar": true } }, "pct": 2 },
+    { "id": "turno-soso", "patron": { "evento": "turnEnded", "donde": { "entityId": "willy", "sinEfecto": true } }, "pct": 1 },
+    { "id": "monotonia", "patron": { "evento": "actionRepeated", "donde": { "veces": { "min": 3 } } }, "pct": 1, "comentario": "La misma acción con el mismo objeto o habilidad 3 o más veces seguidas." },
+    { "id": "huida", "patron": { "evento": "combatEnded", "donde": { "resultado": "huida" } }, "pct": 5 }
+  ],
+  "aburrimiento": {
+    "$comment": "Fuera de combate: si pasa este tiempo de reloj sin ningún evento de la lista de ganancias, se pierde un porcentaje.",
+    "segundosDeReloj": 30,
+    "pct": 1
+  },
+  "expectacionAlEntrarEnPlanta": { "pct": 10 },
+  "tramos": [
+    { "desde": 0, "nombre": "Cuatro gatos" },
+    { "desde": 1000, "nombre": "Audiencia de barrio" },
+    { "desde": 10000, "nombre": "Audiencia local" },
+    { "desde": 100000, "nombre": "Audiencia regional" },
+    { "desde": 1000000, "nombre": "Audiencia planetaria" },
+    { "desde": 10000000, "nombre": "Audiencia galáctica" },
+    { "desde": 100000000, "nombre": "Fenómeno de masas" }
+  ],
+  "presentacion": {
+    "formato": "Número abreviado a la española: 1.250 → «1,2 mil»; 3.400.000 → «3,4 M».",
+    "flechas": "Al ganar: el número sube con un contador rodante y aparece «+N» flotando sobre la causa. Al perder: parpadea en rojo y baja despacio.",
+    "nuncaCastiga": "La audiencia no quita vida, ni objetos, ni te elimina. Solo da cajas (hitos), activa patrocinadores y paga la prima de fin de planta."
+  }
+}

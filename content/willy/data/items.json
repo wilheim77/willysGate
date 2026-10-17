@@ -1,0 +1,451 @@
+{
+  "$comment": "Objetos de Willy el mazmorrero. Borrador pendiente de aprobación; formato en docs/willy/DESIGN.md → «Objetos». Rareza = bronce | plata | oro | legendaria (los mismos niveles que las cajas). 'inicial': true = solo como objeto de partida de una clase, nunca en cajas. Efectos: los del motor (modifyResource, applyCondition, removeCondition, setFlag; push y spawnSurface planificados para la Fase 3) y macros del ruleset willy (damage, heal, clearSurface, revealFloor, teleport, addItem, addClock). $self = quien lo usa, $target = entidad objetivo, $tile = casilla objetivo, $each = cada entidad del área que pasa el filtro.",
+  "version": 1,
+  "items": [
+    { "id": "bombona-de-butano", "nombre": "Bombona de butano", "rareza": "bronce", "tipo": "herramienta", "ranura": "espalda", "inicial": true,
+      "descripcion": "Doce kilos y medio de gas y de compromiso profesional. Willy no la suelta ni para dormir.",
+      "regla": "Para el Butanero, munición de sus habilidades. Para los demás, se puede lanzar (alcance 3): 1d6 de golpe, y si le da el fuego, explota (2d6 en radio 1).",
+      "usar": { "objetivo": "enemigo", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
+      ] },
+      "etiquetas": ["explosivo"], "valor": 0 },
+    { "id": "llave-inglesa", "nombre": "Llave inglesa", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+      "descripcion": "Para apretar reguladores y aflojar mandíbulas.",
+      "regla": "Golpe de 1d6.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
+      ] }, "valor": 4 },
+    { "id": "bocadillo-de-chorizo", "nombre": "Bocadillo de chorizo", "rareza": "bronce", "tipo": "consumible", "inicial": true,
+      "descripcion": "Envuelto en papel de aluminio por una madre que no se fía de la comida de otros planetas.",
+      "regla": "Recuperas 6 de vida.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [{ "type": "heal", "entityId": "$self", "amount": "6" }] },
+      "etiquetas": ["comida", "carne", "curacion"], "valor": 4 },
+    { "id": "palo-de-selfie", "nombre": "Palo de selfie", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+      "descripcion": "Extensible hasta metro y medio. Ideal para mantener a los monstruos, y a los fans, a distancia.",
+      "regla": "Alcance 2. Golpe de 1d4.",
+      "usar": { "objetivo": "enemigo", "alcance": 2, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "golpe" }
+      ] }, "valor": 4 },
+    { "id": "aro-de-luz", "nombre": "Aro de luz", "rareza": "bronce", "tipo": "equipo", "ranura": "amuleto", "inicial": true,
+      "descripcion": "Para que se te vea bien la cara mientras te persigue un cangrejo.",
+      "regla": "+1 Carisma. Llevas luz de radio 3.",
+      "pasivo": [{ "stat": "car", "delta": 1 }],
+      "luz": { "radius": 3, "intensity": 0.8, "color": "#f4f0ff", "flicker": 0 }, "valor": 5 },
+    { "id": "batido-de-proteinas", "nombre": "Batido de proteínas", "rareza": "bronce", "tipo": "consumible", "inicial": true,
+      "descripcion": "Sabor «galleta». Textura «argamasa».",
+      "regla": "Recuperas 4 de vida y quedas Animado 2 turnos.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "heal", "entityId": "$self", "amount": "4" },
+        { "type": "applyCondition", "entityId": "$self", "condition": "animado", "remainingTurns": 2 }
+      ] },
+      "etiquetas": ["comida", "curacion"], "valor": 4 },
+    { "id": "teclado-casio", "nombre": "Teclado Casio", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+      "descripcion": "Con el ritmo «bossa nova» preprogramado. Pesa lo suyo, y se nota en la cabeza de quien lo recibe.",
+      "regla": "Golpe de 1d6. Las canciones del Bardo necesitan llevarlo equipado.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
+      ] }, "valor": 4 },
+    { "id": "pandereta", "nombre": "Pandereta", "rareza": "bronce", "tipo": "equipo", "ranura": "amuleto", "inicial": true,
+      "descripcion": "Nadie ha pedido nunca una pandereta. Y sin embargo, aquí está.",
+      "regla": "+1 Carisma. «Hacer el ganso» da un 50 % más de audiencia.",
+      "pasivo": [{ "stat": "car", "delta": 1 }, { "stat": "bonoGanso", "delta": 50 }], "valor": 3 },
+    { "id": "botella-de-kalimotxo", "nombre": "Botella de kalimotxo", "rareza": "bronce", "tipo": "consumible", "inicial": true,
+      "descripcion": "Vino de mesa y refresco de cola a partes iguales. Patrimonio inmaterial del norte.",
+      "regla": "Recuperas 6 de vida, pero quedas Mareado 1 turno.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "heal", "entityId": "$self", "amount": "6" },
+        { "type": "applyCondition", "entityId": "$self", "condition": "mareado", "remainingTurns": 1 }
+      ] },
+      "etiquetas": ["comida", "curacion"], "valor": 3 },
+    { "id": "silbato-de-socorrista", "nombre": "Silbato de socorrista", "rareza": "bronce", "tipo": "equipo", "ranura": "amuleto", "inicial": true,
+      "descripcion": "Naranja fosforito. Su pitido atraviesa paredes, tímpanos y voluntades.",
+      "regla": "+1 Aguante. El Silbatazo del Socorrista lo necesita.",
+      "pasivo": [{ "stat": "agu", "delta": 1 }], "valor": 3 },
+    { "id": "flotador-de-patito", "nombre": "Flotador de patito", "rareza": "bronce", "tipo": "equipo", "ranura": "torso", "inicial": true,
+      "descripcion": "Talla infantil. Aprieta un poco, pero flota que da gusto.",
+      "regla": "En agua, +2 DEF y nunca quedas Tumbado.",
+      "pasivo": [{ "stat": "defEnAgua", "delta": 2 }],
+      "inmunidades": [{ "condicion": "tumbado", "origen": "agua" }], "valor": 3 },
+    { "id": "crema-solar", "nombre": "Crema solar factor 50", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 2,
+      "descripcion": "Protege del sol, de las llamas y, según el bote, «del envejecimiento prematuro». Aquí abajo, lo prematuro es otra cosa.",
+      "regla": "Inmune a Ardiendo durante 3 turnos.",
+      "usar": { "objetivo": "aliado", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "removeCondition", "entityId": "$target", "condition": "ardiendo" },
+        { "type": "applyCondition", "entityId": "$target", "condition": "protegidoFuego", "remainingTurns": 3 }
+      ] }, "valor": 4 },
+    { "id": "lupa-de-tasador", "nombre": "Lupa de tasador", "rareza": "bronce", "tipo": "equipo", "ranura": "amuleto", "inicial": true,
+      "descripcion": "Con mango de nácar. Hace que todo parezca más valioso, incluido el miedo.",
+      "regla": "+1 Maña. Ves la vida exacta de los enemigos.",
+      "pasivo": [{ "stat": "man", "delta": 1 }, { "stat": "verVida", "delta": 1 }], "valor": 4 },
+    { "id": "baston-con-pomo", "nombre": "Bastón con pomo", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+      "descripcion": "El pomo es de plata de ley. El tasador lo ha comprobado. Dos veces. Mientras le atacaban.",
+      "regla": "Golpe de 1d6.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
+      ] }, "valor": 6 },
+    { "id": "pastillas-juanola", "nombre": "Pastillas Juanola", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 5,
+      "descripcion": "La lata metálica de toda la vida. Aclaran la garganta y, misteriosamente, la mente.",
+      "regla": "Gratis: te quita Mareado y recuperas 1 de energía.",
+      "usar": { "objetivo": "self", "coste": {}, "efectos": [
+        { "type": "removeCondition", "entityId": "$self", "condition": "mareado" },
+        { "type": "modifyResource", "entityId": "$self", "resource": "energia", "delta": 1 }
+      ] }, "valor": 3 },
+    { "id": "guantes-blancos", "nombre": "Guantes blancos", "rareza": "bronce", "tipo": "equipo", "ranura": "manos", "inicial": true,
+      "descripcion": "Impolutos. Nadie sabe cómo los mantiene así un mimo que duerme en una mazmorra.",
+      "regla": "+1 Agilidad.",
+      "pasivo": [{ "stat": "agi", "delta": 1 }], "valor": 3 },
+    { "id": "maquillaje-de-mimo", "nombre": "Maquillaje de mimo", "rareza": "bronce", "tipo": "equipo", "ranura": "cabeza", "inicial": true,
+      "descripcion": "Blanco de base, lágrima negra y un gesto de tristeza que desconcierta a los monstruos.",
+      "regla": "+1 DEF.",
+      "pasivo": [{ "stat": "armadura", "delta": 1 }], "valor": 3 },
+    { "id": "barra-de-pan", "nombre": "Barra de pan del día anterior", "rareza": "bronce", "tipo": "consumible", "inicial": true,
+      "descripcion": "Dura como un remo. Se puede comer o se puede usar. No las dos cosas.",
+      "regla": "Comerla: recuperas 4. O lanzarla (alcance 3): 1d6 de golpe.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [{ "type": "heal", "entityId": "$self", "amount": "4" }] },
+      "usoAlternativo": { "objetivo": "enemigo", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
+      ] },
+      "etiquetas": ["comida", "curacion"], "valor": 1 },
+
+    { "id": "tirita-de-dibujos", "nombre": "Tirita de dibujos", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "Con un dragoncito sonriente. Cura poco, pero anima mucho.",
+      "regla": "Recuperas 3 de vida y se quita Envenenado.",
+      "usar": { "objetivo": "aliado", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "heal", "entityId": "$target", "amount": "3" },
+        { "type": "removeCondition", "entityId": "$target", "condition": "envenenado" }
+      ] },
+      "etiquetas": ["curacion"], "valor": 3 },
+    { "id": "cafe-de-maquina", "nombre": "Café de máquina", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "Vaso de plástico, removedor de plástico, sabor a plástico. Funciona.",
+      "regla": "Gratis: ganas 1 acción extra este turno.",
+      "usar": { "objetivo": "self", "coste": {}, "efectos": [
+        { "type": "modifyResource", "entityId": "$self", "resource": "acciones", "delta": 1 }
+      ] }, "valor": 6 },
+    { "id": "frasco-de-aceite", "nombre": "Frasco de aceite de oliva", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "Virgen extra. Una tragedia gastronómica, un milagro táctico.",
+      "regla": "Lanza (alcance 4): charco de aceite de radio 1. Resbala y arde.",
+      "usar": { "objetivo": "casilla", "alcance": 4, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$tile", "surface": "aceite", "radius": 1 }
+      ] }, "valor": 5 },
+    { "id": "mechero-de-gasolinera", "nombre": "Mechero de gasolinera", "rareza": "bronce", "tipo": "consumible", "usos": 3,
+      "descripcion": "Con la foto de un torero. Funciona a la tercera, siempre a la tercera.",
+      "regla": "Alcance 1: prende fuego a una casilla. Si hay aceite o gas, arde todo.",
+      "usar": { "objetivo": "casilla", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$tile", "surface": "fuego", "radius": 0 }
+      ] }, "valor": 4 },
+    { "id": "cubo-de-agua", "nombre": "Cubo de agua", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "Agua del Cantábrico, con su sal y sus cosas flotando.",
+      "regla": "Lanza (alcance 3): charco de agua de radio 1. Apaga el fuego.",
+      "usar": { "objetivo": "casilla", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$tile", "surface": "agua", "radius": 1 }
+      ] }, "valor": 3 },
+    { "id": "bolsa-de-canicas", "nombre": "Bolsa de canicas", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "Las de cristal con espiral de colores. La «gorda» te la quedas tú.",
+      "regla": "Lanza (alcance 3): radio 1 de canicas. Quien entra, prueba de AGI DIF 13 o Tumbado.",
+      "usar": { "objetivo": "casilla", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$tile", "surface": "canicas", "radius": 1 }
+      ] }, "valor": 4 },
+    { "id": "red-de-pesca", "nombre": "Red de pesca", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "Remendada por la abuela de alguien en el muelle. Ha pescado bocartes, chicharros y un guardia civil.",
+      "regla": "Lanza (alcance 3): el objetivo queda Enredado.",
+      "usar": { "objetivo": "enemigo", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "applyCondition", "entityId": "$target", "condition": "enredado" }
+      ] }, "valor": 5 },
+    { "id": "lata-de-bonito", "nombre": "Lata de bonito del norte", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "En aceite de oliva. La abres con los dientes si hace falta; Willy lo ha hecho.",
+      "regla": "Recuperas 5 de vida. Además, el aceite de la lata deja un charco a tus pies.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "heal", "entityId": "$self", "amount": "5" },
+        { "type": "spawnSurface", "at": "$self", "surface": "aceite", "radius": 0 }
+      ] },
+      "etiquetas": ["comida", "carne", "curacion"], "valor": 4 },
+    { "id": "pincho-de-tortilla", "nombre": "Pincho de tortilla", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "Con cebolla. El debate está cerrado. Willy lo cerró.",
+      "regla": "Recuperas 5 de vida.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [{ "type": "heal", "entityId": "$self", "amount": "5" }] },
+      "etiquetas": ["comida", "curacion"], "valor": 4 },
+    { "id": "mapa-de-planta", "nombre": "Plano de evacuación", "rareza": "bronce", "tipo": "consumible",
+      "descripcion": "«Usted está aquí.» Es lo único que pone claro.",
+      "regla": "Revela la distribución de la planta y dónde está la salida (no los enemigos).",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [{ "type": "revealFloor", "what": "salas" }] }, "valor": 5 },
+    { "id": "petardo", "nombre": "Petardo de feria", "rareza": "bronce", "tipo": "consumible", "usos": 2,
+      "descripcion": "Un «trueno» de los gordos. En su envoltorio pone «No apto para menores», en tres idiomas que no existen.",
+      "regla": "Lanza (alcance 4): 1d6 de fuego en la casilla y empuja 1 a lo que esté al lado.",
+      "usar": { "objetivo": "casilla", "alcance": 4, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$each", "amount": "1d6", "element": "fuego", "area": { "radio": 0 } },
+        { "type": "push", "entityId": "$each", "from": "$tile", "distance": 1, "area": { "radio": 1 } }
+      ] },
+      "etiquetas": ["explosivo"], "valor": 5 },
+    { "id": "casco-de-obra", "nombre": "Casco de obra", "rareza": "bronce", "tipo": "equipo", "ranura": "cabeza",
+      "descripcion": "Amarillo, abollado y con una pegatina: «Yo sobreviví a la Temporada 31».",
+      "regla": "+3 de vida máxima.",
+      "pasivo": [{ "stat": "vidaMax", "delta": 3 }], "valor": 8 },
+    { "id": "guantes-de-fregar", "nombre": "Guantes de fregar", "rareza": "bronce", "tipo": "equipo", "ranura": "manos",
+      "descripcion": "Rosas, talla única. Protegen de lo que hay en la lonja y de saber qué es.",
+      "regla": "Inmune a Envenenado por superficies.",
+      "inmunidades": [{ "condicion": "envenenado", "origen": "superficie" }], "valor": 7 },
+    { "id": "chubasquero", "nombre": "Chubasquero amarillo", "rareza": "bronce", "tipo": "equipo", "ranura": "torso",
+      "descripcion": "Uniforme oficial de cualquier castreño de octubre a junio. Y de julio a septiembre, por si acaso.",
+      "regla": "Nunca quedas Empapado. +1 DEF.",
+      "pasivo": [{ "stat": "armadura", "delta": 1 }],
+      "inmunidades": [{ "condicion": "empapado" }], "valor": 7 },
+    { "id": "moneda-de-cinco-duros", "nombre": "Moneda de cinco duros", "rareza": "bronce", "tipo": "equipo", "ranura": "amuleto",
+      "descripcion": "Con agujero. De 1990. Willy jura que da suerte; las estadísticas, a medias.",
+      "regla": "+1 Suerte. Los enemigos sueltan un 10 % más de fichas.",
+      "pasivo": [{ "stat": "sue", "delta": 1 }, { "stat": "bonoFichas", "delta": 10 }], "valor": 6 },
+    { "id": "paraguas", "nombre": "Paraguas de propaganda", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "De una caja de ahorros que ya no existe. Ni la caja ni los ahorros.",
+      "regla": "Golpe de 1d4. Mientras lo llevas, +2 DEF contra ataques a distancia.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "golpe" }
+      ] },
+      "pasivo": [{ "stat": "defDistancia", "delta": 2 }], "valor": 5 },
+
+    { "id": "ballesta-de-feria", "nombre": "Ballesta de feria", "rareza": "plata", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "De la caseta de tiro. Tiene la mira torcida a propósito; alguien la enderezó.",
+      "regla": "A distancia (alcance 5): 1d6+1.",
+      "usar": { "objetivo": "enemigo", "alcance": 5, "lineaDeVision": true, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6+1", "element": "golpe" }
+      ] }, "valor": 15 },
+    { "id": "antorcha-de-verbena", "nombre": "Antorcha de verbena", "rareza": "plata", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "Del desfile de antorchas de las fiestas. Ilumina, calienta y, aplicada con decisión, discute.",
+      "regla": "Golpe de fuego de 1d6 que deja Ardiendo 2 turnos. Luz de radio 3.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "fuego" },
+        { "type": "applyCondition", "entityId": "$target", "condition": "ardiendo", "remainingTurns": 2 }
+      ] },
+      "luz": { "radius": 3, "intensity": 0.8, "color": "#ffb45e", "flicker": 0.12 }, "valor": 14 },
+    { "id": "remo-de-trainera", "nombre": "Remo de trainera", "rareza": "plata", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "Tres metros de madera de la regata de la Concha. El que lo usaba también medía tres metros.",
+      "regla": "A dos manos, alcance 2. Golpe de 1d8 que empuja 1 casilla.",
+      "usar": { "objetivo": "enemigo", "alcance": 2, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d8", "element": "golpe" },
+        { "type": "push", "entityId": "$target", "from": "$self", "distance": 1 }
+      ] }, "valor": 16 },
+    { "id": "grapadora-industrial", "nombre": "Grapadora industrial", "rareza": "plata", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "Grapa doscientas hojas o el pie de un maniquí al suelo, lo que llegue antes.",
+      "regla": "A distancia (alcance 3): 1d4 y el objetivo queda Enredado.",
+      "usar": { "objetivo": "enemigo", "alcance": 3, "lineaDeVision": true, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "golpe" },
+        { "type": "applyCondition", "entityId": "$target", "condition": "enredado" }
+      ] }, "valor": 14 },
+    { "id": "botas-de-agua", "nombre": "Botas de agua", "rareza": "plata", "tipo": "equipo", "ranura": "pies",
+      "descripcion": "Verdes, de las de toda la vida. En la Planta 1 son traje de gala.",
+      "regla": "No resbalas en agua, aceite ni hielo, y nunca quedas Empapado.",
+      "inmunidades": [{ "condicion": "empapado" }, { "condicion": "tumbado", "origen": "superficie" }], "valor": 12 },
+    { "id": "chaleco-reflectante", "nombre": "Chaleco reflectante", "rareza": "plata", "tipo": "equipo", "ranura": "torso",
+      "descripcion": "Obligatorio según la normativa. Los monstruos también la han leído y lo agradecen.",
+      "regla": "+4 de vida máxima, pero no puedes quedar Escondido.",
+      "pasivo": [{ "stat": "vidaMax", "delta": 4 }],
+      "inmunidades": [{ "condicion": "escondido" }], "valor": 12 },
+    { "id": "frontal-de-espeleologo", "nombre": "Frontal de espeleólogo", "rareza": "plata", "tipo": "equipo", "ranura": "cabeza",
+      "descripcion": "Con pilas de un tamaño que dejó de fabricarse. Hay cuatro de repuesto y se racionan.",
+      "regla": "+1 Maña. Luz de radio 4.",
+      "pasivo": [{ "stat": "man", "delta": 1 }],
+      "luz": { "radius": 4, "intensity": 0.9, "color": "#fff3c4", "flicker": 0.02 }, "valor": 13 },
+    { "id": "megafono", "nombre": "Megáfono de manifestación", "rareza": "plata", "tipo": "consumible", "usos": 2,
+      "descripcion": "Todavía tiene grabado «¡Que no nos cierren la lonja!». Funciona igual de bien con monstruos.",
+      "regla": "Cono de 3 casillas: los enemigos quedan Asustados 2 turnos.",
+      "usar": { "objetivo": "cono", "alcance": 3, "filtro": "enemigos", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "applyCondition", "entityId": "$each", "condition": "asustado", "remainingTurns": 2 }
+      ] }, "valor": 12 },
+    { "id": "bote-de-pimienta", "nombre": "Bote de pimienta", "rareza": "plata", "tipo": "consumible",
+      "descripcion": "Pimienta negra molida. A las gaviotas les da por estornudar y replantearse su vida.",
+      "regla": "Lanza (alcance 3): los enemigos en radio 1 quedan Cegados 2 turnos.",
+      "usar": { "objetivo": "area", "alcance": 3, "radio": 1, "filtro": "enemigos", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "applyCondition", "entityId": "$each", "condition": "cegado", "remainingTurns": 2 }
+      ] }, "valor": 11 },
+    { "id": "garrafa-de-lejia", "nombre": "Garrafa de lejía", "rareza": "plata", "tipo": "consumible",
+      "descripcion": "Con la etiqueta en un idioma que no existe. Desinfecta suelos, paredes y voluntades.",
+      "regla": "Lanza (alcance 3): charco tóxico de radio 1 (Envenenado).",
+      "usar": { "objetivo": "casilla", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$tile", "surface": "toxico", "radius": 1 }
+      ] }, "valor": 11 },
+    { "id": "extintor", "nombre": "Extintor de nieve carbónica", "rareza": "plata", "tipo": "consumible",
+      "descripcion": "Escupe una niebla helada que apaga incendios y, de paso, congela al que está detrás.",
+      "regla": "Radio 2 a tu alrededor: apaga el fuego, el agua se hiela y los enemigos Empapados quedan Congelados 1 turno.",
+      "usar": { "objetivo": "area", "radio": 2, "centro": "$self", "filtro": "enemigos", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "spawnSurface", "at": "$self", "surface": "frio", "radius": 2 },
+        { "type": "applyCondition", "entityId": "$each", "condition": "congelado", "remainingTurns": 1, "si": { "condicion": "empapado" } }
+      ] },
+      "desbloqueo": "logro:pista-de-patinaje", "valor": 15 },
+    { "id": "tartera-de-mama", "nombre": "Tartera de mamá", "rareza": "plata", "tipo": "consumible", "usos": 3,
+      "descripcion": "Lentejas para tres días. «Que estás muy delgado, hijo.»",
+      "regla": "Recuperas 5 de vida. Tres usos.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "efectos": [{ "type": "heal", "entityId": "$self", "amount": "5" }] },
+      "etiquetas": ["comida", "curacion"], "valor": 12 },
+    { "id": "manual-de-prevencion", "nombre": "Manual de prevención de riesgos", "rareza": "plata", "tipo": "equipo", "ranura": "amuleto",
+      "descripcion": "Trescientas páginas. Nadie lo ha leído, pero en el bolsillo del pecho para un dardo.",
+      "regla": "Las trampas te hacen 2 de daño menos y las detectas con +3.",
+      "pasivo": [{ "stat": "reduccionTrampas", "delta": 2 }, { "stat": "deteccion", "delta": 3 }],
+      "desbloqueo": "logro:prevencion-de-riesgos", "valor": 13 },
+    { "id": "cascabel-delator", "nombre": "Cascabel delator", "rareza": "plata", "tipo": "equipo", "ranura": "amuleto",
+      "descripcion": "Tintinea cuando hay un mímico cerca. También cuando andas, así que hay que estar atento.",
+      "regla": "Al entrar en una planta, los mímicos quedan marcados en el mapa.",
+      "disparadores": [{ "al": "inicioPlanta", "efectos": [{ "type": "setFlag", "flag": "planta:mimicosVisibles", "value": true }] }],
+      "desbloqueo": "logro:no-todo-lo-que-brilla", "valor": 12 },
+    { "id": "pendiente-del-mimico", "nombre": "Pendiente del mímico", "rareza": "plata", "tipo": "equipo", "ranura": "amuleto", "maldito": true,
+      "descripcion": "Precioso. Se mueve un poco cuando no lo miras. Te mira cuando no lo mueves.",
+      "regla": "MALDITO. Los cofres de la planta dan 1 objeto más, pero uno de cada cuatro es un mímico. No te lo puedes quitar hasta el Camerino.",
+      "pasivo": [{ "stat": "objetosPorCofre", "delta": 1 }, { "stat": "mimicosPct", "delta": 25 }], "valor": 10 },
+    { "id": "gafas-de-sol-nocturnas", "nombre": "Gafas de sol nocturnas", "rareza": "plata", "tipo": "equipo", "ranura": "cabeza", "maldito": true,
+      "descripcion": "Te hacen sentir increíblemente competente y casi completamente ciego.",
+      "regla": "MALDITO. +2 Maña y +2 Carisma, pero tu luz pierde 2 de radio.",
+      "pasivo": [{ "stat": "man", "delta": 2 }, { "stat": "car", "delta": 2 }, { "stat": "radioLuz", "delta": -2 }], "valor": 10 },
+
+    { "id": "martillo-neumatico", "nombre": "Martillo neumático", "rareza": "oro", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "De las obras eternas del paseo marítimo. Hace un ruido que el público adora y los vecinos no.",
+      "regla": "2 acciones. Golpe de 1d10+2 que empuja 2 casillas. Rompe objetos de un golpe.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 2 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "1d10+2", "element": "golpe" },
+        { "type": "push", "entityId": "$target", "from": "$self", "distance": 2 }
+      ] },
+      "desbloqueo": "logro:strike", "valor": 25 },
+    { "id": "monopatin-cohete", "nombre": "Monopatín cohete", "rareza": "oro", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "Merchandising oficial de la Temporada 19. Lo retiraron por «exceso de entusiasmo».",
+      "regla": "Saltas a una casilla libre a 5 o menos, ignorando la altura. Al aterrizar, empujas 1 a los adyacentes.",
+      "usar": { "objetivo": "casilla", "alcance": 5, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "teleport", "entityId": "$self", "to": "$tile", "ignoraAltura": true },
+        { "type": "push", "entityId": "$each", "from": "$tile", "distance": 1, "area": { "radio": 1 } }
+      ] }, "valor": 24 },
+    { "id": "capa-de-veterano", "nombre": "Capa de concursante veterano", "rareza": "oro", "tipo": "equipo", "ranura": "torso",
+      "descripcion": "Bordado: «Finalista, Temporada 27». El finalista no la echa de menos; está presentando en otro planeta.",
+      "regla": "+1 Fuerza y +1 Aguante. Una vez por planta, si caes a 0 de vida, te levantas con 5.",
+      "pasivo": [{ "stat": "fue", "delta": 1 }, { "stat": "agu", "delta": 1 }],
+      "disparadores": [{ "al": "caerACero", "unaVezPor": "planta", "efectos": [{ "type": "heal", "entityId": "$self", "amount": "5" }] }], "valor": 30 },
+    { "id": "termo-sin-fondo", "nombre": "Termo sin fondo", "rareza": "oro", "tipo": "equipo", "ranura": "amuleto",
+      "descripcion": "Nunca se vacía. Nadie sabe quién lo rellena. Nadie ha preguntado, por si acaso.",
+      "regla": "Al empezar tu turno, 25 % de ganar 1 acción extra.",
+      "disparadores": [{ "al": "inicioTurno", "probabilidad": 0.25, "efectos": [
+        { "type": "modifyResource", "entityId": "$self", "resource": "acciones", "delta": 1 }
+      ] }],
+      "desbloqueo": "logro:cafeina-como-estilo-de-vida", "valor": 28 },
+    { "id": "dado-trucado", "nombre": "Dado trucado de la tómbola", "rareza": "oro", "tipo": "equipo", "ranura": "amuleto",
+      "descripcion": "Requisado al feriante de la Planta 3. Pesa más por un lado. Por el lado bueno.",
+      "regla": "Una vez por planta, en una tirada, tiras dos d20 y te quedas el mejor. +1 Suerte.",
+      "pasivo": [{ "stat": "sue", "delta": 1 }],
+      "disparadores": [{ "al": "tirada", "unaVezPor": "planta", "manual": true, "efectos": [
+        { "type": "applyCondition", "entityId": "$self", "condition": "afortunado", "remainingTurns": 1 }
+      ] }], "valor": 26 },
+    { "id": "ancla-del-puerto", "nombre": "Ancla del puerto", "rareza": "oro", "tipo": "equipo", "ranura": "amuleto",
+      "descripcion": "Una ancla pequeñita, de las de llavero. Pesa como una de verdad. Nadie entiende la física de este sitio.",
+      "regla": "+4 de vida máxima y +1 Aguante. Nadie puede empujarte.",
+      "pasivo": [{ "stat": "vidaMax", "delta": 4 }, { "stat": "agu", "delta": 1 }],
+      "inmunidades": [{ "efecto": "push" }],
+      "desbloqueo": "logro:esto-no-es-un-atajo", "valor": 28 },
+    { "id": "mochila-sin-fondo", "nombre": "Mochila sin fondo", "rareza": "oro", "tipo": "equipo", "ranura": "amuleto",
+      "descripcion": "Dentro cabe todo. Lo difícil es encontrar algo. Dicen que hay un concursante de la Temporada 4 aún buscando las llaves.",
+      "regla": "+3 huecos de mochila.",
+      "pasivo": [{ "stat": "huecos", "delta": 3 }], "valor": 24 },
+    { "id": "rayo-embotellado", "nombre": "Rayo embotellado", "rareza": "oro", "tipo": "consumible",
+      "descripcion": "Una tormenta pequeña en una botella de gaseosa. Agitar antes de no usar.",
+      "regla": "Lanza (alcance 4): 2d6 de rayo en radio 1. Si cae en agua, electrifica todo el charco.",
+      "usar": { "objetivo": "area", "alcance": 4, "radio": 1, "filtro": "todos", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$each", "amount": "2d6", "element": "rayo" },
+        { "type": "spawnSurface", "at": "$tile", "surface": "rayo", "radius": 0 }
+      ] },
+      "desbloqueo": "logro:cortocircuito", "valor": 22 },
+    { "id": "trompeta-de-charanga", "nombre": "Trompeta de charanga", "rareza": "oro", "tipo": "consumible", "usos": 2,
+      "descripcion": "Suena como una alarma de incendios afinada por un tuba. Nadie se queda a escuchar la segunda nota.",
+      "regla": "Los enemigos en radio 3 son empujados 1 casilla y quedan Asustados 2 turnos.",
+      "usar": { "objetivo": "area", "radio": 3, "centro": "$self", "filtro": "enemigos", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "push", "entityId": "$each", "from": "$self", "distance": 1 },
+        { "type": "applyCondition", "entityId": "$each", "condition": "asustado", "remainingTurns": 2 }
+      ] }, "valor": 22 },
+    { "id": "carrito-de-maripuri", "nombre": "Carrito de la compra de Maripuri", "rareza": "oro", "tipo": "herramienta", "ranura": "mano",
+      "descripcion": "De cuadros escoceses, con dos ruedas que chirrían. Ha atropellado a más gente en el mercado que todos los coches de Castro.",
+      "regla": "Embestida: avanzas hasta 4 casillas en línea; cada enemigo en el camino recibe 1d6 y es empujado 2 casillas a un lado.",
+      "usar": { "objetivo": "linea", "alcance": 4, "filtro": "enemigos", "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$each", "amount": "1d6", "element": "golpe" },
+        { "type": "push", "entityId": "$each", "from": "$self", "distance": 2, "lateral": true },
+        { "type": "teleport", "entityId": "$self", "to": "$tile" }
+      ] },
+      "desbloqueo": "logro:atropello-con-ruedas-chirriantes", "valor": 26 },
+
+    { "id": "remo-de-la-castrena", "nombre": "Remo de la Castreña", "rareza": "legendaria", "tipo": "herramienta", "ranura": "mano", "unico": true,
+      "descripcion": "El remo de la trainera que ganó la Bandera de la Concha el año en que Willy nació. Su padre lo jura. Su padre no remaba.",
+      "regla": "Alcance 2. Golpe de 2d6 que empuja 3 casillas. Si el objetivo choca, el choque hace el doble.",
+      "usar": { "objetivo": "enemigo", "alcance": 2, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "2d6", "element": "golpe" },
+        { "type": "push", "entityId": "$target", "from": "$self", "distance": 3, "multiplicadorChoque": 2 }
+      ] },
+      "desbloqueo": "logro:ley-de-la-gravedad", "valor": 60 },
+    { "id": "cronometro-de-regidor", "nombre": "Cronómetro de regidor", "rareza": "legendaria", "tipo": "equipo", "ranura": "amuleto", "unico": true,
+      "descripcion": "Robado del cuello de un regidor. Controla los tiempos del programa. Los de verdad.",
+      "regla": "Una vez por planta: añades 2 minutos al reloj de la planta.",
+      "usar": { "objetivo": "self", "coste": { "acciones": 1 }, "unaVezPor": "planta", "efectos": [{ "type": "addClock", "seconds": 120 }] },
+      "desbloqueo": "logro:al-filo-del-derrumbe", "valor": 60 },
+    { "id": "cuaderno-de-quejas", "nombre": "Libro de reclamaciones", "rareza": "legendaria", "tipo": "equipo", "ranura": "amuleto", "unico": true,
+      "descripcion": "El oficial de Canal Abismo. Tiene once mil años de quejas. Nadie las ha leído, pero pesan y eso cuenta.",
+      "regla": "Cada vez que recibes daño, ganas 1 de energía.",
+      "disparadores": [{ "al": "recibirDano", "efectos": [{ "type": "modifyResource", "entityId": "$self", "resource": "energia", "delta": 1 }] }],
+      "desbloqueo": "logro:primera-eliminacion", "valor": 55 },
+    { "id": "microfono-de-oro", "nombre": "Micrófono de oro", "rareza": "legendaria", "tipo": "equipo", "ranura": "amuleto", "unico": true,
+      "descripcion": "El premio al Mejor Momento de la Temporada 33. Lo ganó un concursante que se cayó por unas escaleras durante seis minutos.",
+      "regla": "+2 Carisma. Todo lo que hace ganar audiencia vale el doble.",
+      "pasivo": [{ "stat": "car", "delta": 2 }, { "stat": "multAudiencia", "delta": 100 }],
+      "desbloqueo": "logro:prime-time", "valor": 60 },
+    { "id": "espada-del-campeon-krell", "nombre": "Espada del campeón krell", "rareza": "legendaria", "tipo": "herramienta", "ranura": "mano", "unico": true,
+      "descripcion": "Del ganador de la Temporada 40. Los krell se morían con estilo; este, además, perdió la espada en un váter de la Planta 4.",
+      "regla": "Golpe de 2d8. Con 20 natural, el golpe hace el triple en vez del doble.",
+      "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
+        { "type": "damage", "entityId": "$target", "amount": "2d8", "element": "golpe", "multiplicadorCritico": 3 }
+      ] },
+      "desbloqueo": "logro:rebajas-definitivas", "valor": 65 },
+    { "id": "llavero-de-produccion", "nombre": "Llavero de Producción", "rareza": "legendaria", "tipo": "equipo", "ranura": "amuleto", "unico": true,
+      "descripcion": "Doscientas llaves, ninguna etiquetada. Xelda lleva tres temporadas buscándolo y no piensa preguntar por qué lo tienes.",
+      "regla": "Las salas secretas y las puertas cerradas de cada planta aparecen en el mapa y se abren sin prueba.",
+      "disparadores": [{ "al": "inicioPlanta", "efectos": [
+        { "type": "setFlag", "flag": "planta:secretasVisibles", "value": true },
+        { "type": "setFlag", "flag": "planta:abrirSinPrueba", "value": true }
+      ] }],
+      "desbloqueo": "logro:esto-no-estaba-en-el-plano", "valor": 55 },
+
+    { "id": "aviso-pausa-publicitaria", "nombre": "Aviso de Producción: pausa publicitaria", "rareza": "plata", "tipo": "aviso",
+      "descripcion": "«Interrumpimos la emisión para un mensaje de nuestros patrocinadores. Concursantes: no se muevan. O sí, da igual, nadie mira.»",
+      "regla": "Al recogerlo: +90 segundos al reloj de la planta.",
+      "alRecoger": [{ "type": "addClock", "seconds": 90 }], "valor": 0 },
+    { "id": "aviso-dia-de-la-luz", "nombre": "Aviso de Producción: iluminación completa", "rareza": "bronce", "tipo": "aviso",
+      "descripcion": "«Por exigencias del guion, en la próxima planta se encienden todos los focos. Se ruega no acostumbrarse.»",
+      "regla": "Al recogerlo: la próxima planta está totalmente iluminada.",
+      "alRecoger": [{ "type": "setFlag", "flag": "mod:plantaIluminada", "value": 1 }], "valor": 0 },
+    { "id": "aviso-huelga-de-figurantes", "nombre": "Aviso de Producción: huelga de figurantes", "rareza": "plata", "tipo": "aviso",
+      "descripcion": "«Los monstruos de la próxima planta secundan el paro convocado por mejora de condiciones. Se cubrirán servicios mínimos.»",
+      "regla": "Al recogerlo: la próxima planta tiene un 25 % menos de enemigos.",
+      "alRecoger": [{ "type": "setFlag", "flag": "mod:huelgaFigurantes", "value": 1 }], "valor": 0 },
+    { "id": "aviso-especial-audiencia", "nombre": "Aviso de Producción: especial de audiencia", "rareza": "plata", "tipo": "aviso",
+      "descripcion": "«Esta noche, especial de máxima audiencia. Más monstruos, más espectadores, más cajas. Menos garantías.»",
+      "regla": "Al recogerlo: la próxima planta tiene un 50 % más de enemigos y la audiencia que ganas en ella vale 1,5 veces.",
+      "alRecoger": [{ "type": "setFlag", "flag": "mod:especialAudiencia", "value": 1 }], "valor": 0 },
+    { "id": "aviso-paga-extra", "nombre": "Aviso de Producción: paga extra", "rareza": "oro", "tipo": "aviso",
+      "descripcion": "«Con carácter excepcional y sin que sirva de precedente, se abona una paga extra. Se ruega no comentarlo con los demás concursantes.»",
+      "regla": "Al recogerlo: +60 fichas y la próxima caja de bronce que recibas será de plata.",
+      "alRecoger": [
+        { "type": "modifyResource", "entityId": "$self", "resource": "fichas", "delta": 60 },
+        { "type": "setFlag", "flag": "mod:mejorarSiguienteCaja", "value": 1 }
+      ], "valor": 0 },
+    { "id": "aviso-mudanza-de-trampas", "nombre": "Aviso de Producción: revisión de trampas", "rareza": "bronce", "tipo": "aviso",
+      "descripcion": "«Hoy pasa la revisión anual de trampas. Por favor, no las pisen mientras el técnico las señaliza.»",
+      "regla": "Al recogerlo: todas las trampas de la planta actual quedan a la vista.",
+      "alRecoger": [{ "type": "setFlag", "flag": "planta:trampasVisibles", "value": true }], "valor": 0 },
+
+    { "id": "gorra-de-butanero", "nombre": "Gorra de butanero", "rareza": "bronce", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Naranja, con visera curva y el logo de una bombona. La de Willy de toda la vida, pero con brillo de concurso.",
+      "regla": "Cosmético.", "desbloqueo": "logro:en-antena", "valor": 0 },
+    { "id": "casco-vikingo-de-carton", "nombre": "Casco vikingo de cartón", "rareza": "plata", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Hecho con una caja de botín vacía. Los cuernos son dos rollos de papel de cocina, usados con respeto.",
+      "regla": "Cosmético.", "desbloqueo": "logro:coleccionista-de-carton", "valor": 0 },
+    { "id": "corona-de-roscon", "nombre": "Corona del roscón", "rareza": "oro", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "De papel dorado. Te tocó el haba y la corona: el año que viene pagas tú el roscón, si hay año que viene.",
+      "regla": "Cosmético.", "desbloqueo": "logro:esto-deberia-estar-en-un-museo", "valor": 0 },
+    { "id": "tupe-de-presentador", "nombre": "Tupé de presentador", "rareza": "legendaria", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Recuperado del suelo del plató tras el combate final. Tiene más laca que pelo y más pelo que vergüenza.",
+      "regla": "Cosmético.", "desbloqueo": "logro:fin-de-temporada", "valor": 0 },
+    { "id": "camiseta-planta-1", "nombre": "Camiseta «Sobreviví a la Planta 1»", "rareza": "bronce", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Merchandising oficial. Talla única: «galáctica». A Willy le llega por las rodillas.",
+      "regla": "Cosmético.", "desbloqueo": "logro:marisco-de-temporada", "valor": 0 },
+    { "id": "aureola-de-favorito", "nombre": "Aureola de favorito del público", "rareza": "legendaria", "tipo": "cosmetico", "ranura": "aspecto",
+      "descripcion": "Brilla con la luz serena de quien sabe que el público no le dejará morir. Todavía.",
+      "regla": "Cosmético. Brilla un poco (luz de radio 1, sin efecto en las reglas).", "desbloqueo": "logro:expediente-de-oro", "valor": 0 }
+  ]
+}

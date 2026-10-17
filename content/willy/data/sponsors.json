@@ -1,0 +1,326 @@
+{
+  "$comment": "Patrocinadores. Borrador pendiente de aprobación; reglas en docs/willy/DESIGN.md → «Patrocinadores». La afinidad es un medidor por patrocinador (sistema de medidores, ENGINE_REQUESTS.md). 'gusta' y 'disgusta' usan los mismos patrones de evento que los logros. Los mensajes siguen el formato de línea del Narrador (id, texto, peso opcional, si opcional).",
+  "version": 1,
+  "reglas": {
+    "afinidad": { "min": -50, "max": 150, "inicial": 0 },
+    "estados": [
+      { "id": "neutral", "desde": -19 },
+      { "id": "interesado", "desde": 20 },
+      { "id": "aFavor", "desde": 50 },
+      { "id": "fan", "desde": 100 }
+    ],
+    "retirada": { "umbral": -20, "texto": "Si la afinidad baja de −20, el patrocinador retira su apoyo: deja de mandar regalos hasta que vuelva a subir a 30." },
+    "vuelta": { "umbral": 30 },
+    "aviso": { "texto": "Antes de retirarse, al cruzar 0 hacia abajo desde «interesado» o más, manda un mensaje de aviso. Nunca se retira sin avisar." },
+    "regalos": {
+      "alLlegarA": { "interesado": "mensaje", "aFavor": "regalo", "fan": "regaloGrande" },
+      "cadaAfinidadExtra": 40,
+      "maxPorPlanta": 2,
+      "entrega": "Fuera de combate: cae del techo en paracaídas junto a Willy. En combate: cae al final de la ronda (el público lo adora). En el Camerino: lo trae Xelda."
+    },
+    "carisma": "La afinidad ganada se multiplica por 1 + 0,05 × Carisma. La perdida no.",
+    "relevancia": "Un patrocinador solo mira (y suma o resta) si la audiencia actual supera su 'audienciaMinima'. Así aparecen poco a poco."
+  },
+  "patrocinadores": [
+    {
+      "id": "butanos-perez",
+      "nombre": "Butanos Hermanos Pérez",
+      "lema": "«Calor de hogar en catorce galaxias.»",
+      "descripcion": "Empresa familiar galáctica de gas. Dirigida por los hermanos Pérez, tres entidades gaseosas que sospechosamente se parecen al antiguo jefe de Willy.",
+      "personalidad": "Campechanos, ruidosos y pirómanos con licencia. Tratan a Willy como a un sobrino. Se ofenden si apagas un fuego.",
+      "color": "#ff7a1a",
+      "retrato": "sponsor-butanos",
+      "audienciaMinima": 0,
+      "tutorial": true,
+      "gusta": [
+        { "patron": { "evento": "entityDefeated", "donde": { "elemento": "fuego" } }, "afinidad": 6 },
+        { "patron": { "evento": "surfaceReacted", "donde": { "resultado": { "en": ["llamas", "explosion"] } } }, "afinidad": 8 },
+        { "patron": { "evento": "objectDestroyed", "donde": { "explota": true } }, "afinidad": 6 },
+        { "patron": { "evento": "skillUsed", "donde": { "habilidad": { "en": ["lanzar-bombona", "fuga-de-gas", "cadena-de-reparto", "reparto-urgente"] } } }, "afinidad": 4 }
+      ],
+      "disgusta": [
+        { "patron": { "evento": "surfaceReacted", "donde": { "de": "fuego", "con": { "en": ["agua", "frio"] }, "actor.id": "willy" } }, "afinidad": -6 },
+        { "patron": { "evento": "itemUsed", "donde": { "item": "extintor" } }, "afinidad": -10 }
+      ],
+      "regalos": [
+        { "item": "mechero-de-gasolinera", "peso": 4 },
+        { "item": "petardo", "peso": 4 },
+        { "item": "frasco-de-aceite", "peso": 3 },
+        { "item": "antorcha-de-verbena", "peso": 2 },
+        { "caja": "plata", "peso": 2 }
+      ],
+      "regaloGrande": { "caja": "oro" },
+      "mensajes": {
+        "interes": [
+          { "id": "bp-int-1", "texto": "¡Hombre, un butanero! Aquí los Hermanos Pérez. Sigue así, chaval, que esto calienta." },
+          { "id": "bp-int-2", "texto": "Nos ha gustado ese fueguito. Nos ha recordado a la fábrica en verano." }
+        ],
+        "regalo": [
+          { "id": "bp-reg-1", "texto": "Te mandamos algo para que no se te apague la alegría. Ni nada de lo que tengas cerca." },
+          { "id": "bp-reg-2", "texto": "Regalo de la casa. Si explota, era así. Si no explota, también." },
+          { "id": "bp-reg-3", "texto": "De parte de los tres hermanos. Bueno, de dos; el tercero está en mantenimiento." }
+        ],
+        "aviso": [
+          { "id": "bp-avi-1", "texto": "Oye, sobrino, ¿apagando fuegos? Eso es de bomberos. Nosotros pagamos para que ardan." },
+          { "id": "bp-avi-2", "texto": "Mucha agua vemos últimamente. Mucha. Nos estamos empezando a preocupar." }
+        ],
+        "retirada": [
+          { "id": "bp-ret-1", "texto": "Lo sentimos, chaval. Contigo no hay chispa. Cerramos la llave de paso." }
+        ],
+        "vuelta": [
+          { "id": "bp-vue-1", "texto": "¡Así se hace! Ya sabíamos nosotros que el fuego no se olvida. Volvemos a abrir el grifo." }
+        ]
+      }
+    },
+    {
+      "id": "la-prudente",
+      "nombre": "Seguros La Prudente",
+      "lema": "«Porque lo peor siempre puede pasar. Y suele.»",
+      "descripcion": "Aseguradora intergaláctica con sede en un asteroide blindado. Tiene a Willy asegurado sin habérselo preguntado.",
+      "personalidad": "Educada, pasivo-agresiva y obsesionada con los riesgos. Te quiere vivo por pura contabilidad. Odia todo lo que el público adora.",
+      "color": "#3a8fd9",
+      "retrato": "sponsor-prudente",
+      "audienciaMinima": 2000,
+      "gusta": [
+        { "patron": { "evento": "combatEnded", "donde": { "resultado": "victoria", "vidaPerdidaPct": { "max": 10 } } }, "afinidad": 10 },
+        { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "curacion" }, "actor.vidaPct": { "max": 50 } } }, "afinidad": 4 },
+        { "patron": { "evento": "trapDetected", "donde": { "actor.id": "willy" } }, "afinidad": 3 },
+        { "patron": { "evento": "rested" }, "afinidad": 5 }
+      ],
+      "disgusta": [
+        { "patron": { "evento": "fell", "donde": { "entidad.id": "willy" } }, "afinidad": -6 },
+        { "patron": { "evento": "turnStarted", "donde": { "entityId": "willy", "actor.vidaPct": { "max": 20 } } }, "afinidad": -3 },
+        { "patron": { "evento": "trapTriggered", "donde": { "entidad.id": "willy" } }, "afinidad": -4 },
+        { "patron": { "evento": "showOff", "donde": { "adyacenteAEnemigo": true } }, "afinidad": -5 }
+      ],
+      "regalos": [
+        { "item": "tirita-de-dibujos", "peso": 4 },
+        { "item": "casco-de-obra", "peso": 3 },
+        { "item": "chaleco-reflectante", "peso": 2 },
+        { "item": "manual-de-prevencion", "peso": 2 },
+        { "caja": "plata", "peso": 2 }
+      ],
+      "regaloGrande": { "item": "capa-de-veterano" },
+      "mensajes": {
+        "interes": [
+          { "id": "lp-int-1", "texto": "Seguros La Prudente le saluda. Hemos observado que sigue usted con vida. Le animamos a continuar en esa línea." },
+          { "id": "lp-int-2", "texto": "Nuestros actuarios valoran positivamente su falta de heridas. Siga así. Por favor." }
+        ],
+        "regalo": [
+          { "id": "lp-reg-1", "texto": "Adjuntamos material de seguridad. Úselo. Le estaremos mirando." },
+          { "id": "lp-reg-2", "texto": "Obsequio por buena conducta. Esta póliza no cubre caídas, fuego, monstruos ni presentadores." },
+          { "id": "lp-reg-3", "texto": "Le enviamos esto para reducir la probabilidad de tener que pagarle algo. A usted o a sus herederos." }
+        ],
+        "aviso": [
+          { "id": "lp-avi-1", "texto": "Le recordamos que lanzarse al vacío no está incluido en su póliza. Ni en ninguna. Ni en ningún planeta." },
+          { "id": "lp-avi-2", "texto": "Su nivel de vida actual nos genera ansiedad. Y a nuestro departamento jurídico, también." }
+        ],
+        "retirada": [
+          { "id": "lp-ret-1", "texto": "Seguros La Prudente rescinde su contrato por conducta temeraria reiterada. Le deseamos suerte. La va a necesitar, según nuestras tablas." }
+        ],
+        "vuelta": [
+          { "id": "lp-vue-1", "texto": "Tras revisar su expediente, reactivamos su cobertura. Con franquicia. Y vigilancia." }
+        ]
+      }
+    },
+    {
+      "id": "vortax",
+      "nombre": "Lord Vórtax",
+      "lema": "«Entretenme o desaparece.»",
+      "descripcion": "Emperador del Sector 7. Tiene once lunas, cuarenta concubinos y un aburrimiento crónico que solo cura la violencia elegante.",
+      "personalidad": "Aristócrata, teatral, cruel con estilo. Desprecia la torpeza y la piedad. Habla de usted y en tercera persona.",
+      "color": "#8e1f3a",
+      "retrato": "sponsor-vortax",
+      "audienciaMinima": 50000,
+      "gusta": [
+        { "patron": { "evento": "entityDefeated", "donde": { "causa": { "en": ["fueraDePlano", "caida", "choque", "decorado"] } } }, "afinidad": 8 },
+        { "patron": { "evento": "attackResolved", "donde": { "actor.id": "willy", "critico": true } }, "afinidad": 5 },
+        { "patron": { "evento": "entityDefeated", "donde": { "actor.id": "willy", "objetivo.vidaMaxPct": { "min": 100 } } }, "afinidad": 6 },
+        { "patron": { "evento": "entityDefeated", "donde": { "objetivo.tipo": "jefe" } }, "afinidad": 15 }
+      ],
+      "disgusta": [
+        { "patron": { "evento": "combatEnded", "donde": { "resultado": "huida" } }, "afinidad": -12 },
+        { "patron": { "evento": "dialogueChoice", "donde": { "etiquetas": { "tiene": "piedad" } } }, "afinidad": -8 },
+        { "patron": { "evento": "turnEnded", "donde": { "entityId": "willy", "esperar": true } }, "afinidad": -3 }
+      ],
+      "regalos": [
+        { "item": "remo-de-trainera", "peso": 3 },
+        { "item": "martillo-neumatico", "peso": 2 },
+        { "item": "ballesta-de-feria", "peso": 3 },
+        { "item": "megafono", "peso": 2 },
+        { "caja": "oro", "peso": 1 }
+      ],
+      "regaloGrande": { "caja": "oro" },
+      "mensajes": {
+        "interes": [
+          { "id": "vx-int-1", "texto": "Lord Vórtax ha levantado una ceja. Una. Considérese afortunado." },
+          { "id": "vx-int-2", "texto": "Ese empujón tenía cierta poesía. Lord Vórtax quiere más poesía." }
+        ],
+        "regalo": [
+          { "id": "vx-reg-1", "texto": "Lord Vórtax le concede un juguete. Rompa algo con él. Algo que grite." },
+          { "id": "vx-reg-2", "texto": "Un obsequio imperial. Si lo usa con torpeza, Lord Vórtax lo sabrá. Lord Vórtax siempre lo sabe." },
+          { "id": "vx-reg-3", "texto": "Por la caída de antes. Lord Vórtax la ha visto doce veces. En bucle. Desde la bañera." }
+        ],
+        "aviso": [
+          { "id": "vx-avi-1", "texto": "Lord Vórtax bosteza. Nadie ha sobrevivido nunca a un segundo bostezo de Lord Vórtax." },
+          { "id": "vx-avi-2", "texto": "¿Piedad? ¿Aquí? Lord Vórtax empieza a sentir vergüenza ajena, y eso le irrita profundamente." }
+        ],
+        "retirada": [
+          { "id": "vx-ret-1", "texto": "Lord Vórtax le retira su favor. Es usted, a partir de ahora, decoración." }
+        ],
+        "vuelta": [
+          { "id": "vx-vue-1", "texto": "Lord Vórtax reconsidera. Ha sido usted lo bastante cruel para hacerle olvidar su decepción. Por ahora." }
+        ]
+      }
+    },
+    {
+      "id": "clementina",
+      "nombre": "Mamá Clementina",
+      "lema": "«¡A comer, que se enfría!»",
+      "descripcion": "Influencer de cocina con cinco mil millones de seguidores en treinta planetas. Cocina con seis brazos y regaña con los seis.",
+      "personalidad": "Cariñosa, mandona y un poco cursi. Trata a Willy como a un hijo que no come bien. Odia la violencia «ordinaria» y la mala educación.",
+      "color": "#f28ab2",
+      "retrato": "sponsor-clementina",
+      "audienciaMinima": 500,
+      "gusta": [
+        { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "comida" } } }, "afinidad": 5 },
+        { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "comida" }, "enCombate": true } }, "afinidad": 3 },
+        { "patron": { "evento": "dialogueChoice", "donde": { "etiquetas": { "tiene": "amable" } } }, "afinidad": 6 },
+        { "patron": { "evento": "npcHelped" }, "afinidad": 8 }
+      ],
+      "disgusta": [
+        { "patron": { "evento": "dialogueChoice", "donde": { "etiquetas": { "tiene": "grosero" } } }, "afinidad": -6 },
+        { "patron": { "evento": "itemSold", "donde": { "item.etiquetas": { "tiene": "comida" } } }, "afinidad": -4 },
+        { "patron": { "evento": "entityDefeated", "donde": { "actor.id": "willy", "objetivo.etiquetas": { "tiene": "cria" } } }, "afinidad": -5 }
+      ],
+      "regalos": [
+        { "item": "pincho-de-tortilla", "peso": 4 },
+        { "item": "tartera-de-mama", "peso": 3 },
+        { "item": "lata-de-bonito", "peso": 3 },
+        { "item": "cafe-de-maquina", "peso": 2 },
+        { "caja": "plata", "peso": 1 }
+      ],
+      "regaloGrande": { "item": "termo-sin-fondo" },
+      "mensajes": {
+        "interes": [
+          { "id": "mc-int-1", "texto": "¡Ay, qué chico más majo! Pero estás muy delgado, cariño. ¿Has comido?" },
+          { "id": "mc-int-2", "texto": "Me encanta que comas en mitad de la pelea. Eso es tener prioridades." }
+        ],
+        "regalo": [
+          { "id": "mc-reg-1", "texto": "Te mando un tupper, cielo. Devuélvemelo, que es de los buenos." },
+          { "id": "mc-reg-2", "texto": "Para que repongas fuerzas. Y abrígate, que en la planta de abajo hay corriente." },
+          { "id": "mc-reg-3", "texto": "¡Receta exclusiva para mi concursante favorito! No se lo digas a los demás, que se ponen celosos." }
+        ],
+        "aviso": [
+          { "id": "mc-avi-1", "texto": "Cariño, esa boca. Hay niños viéndonos en cuarenta planetas." },
+          { "id": "mc-avi-2", "texto": "¿Has vendido la comida? ¿La comida? Me estás rompiendo los seis corazones." }
+        ],
+        "retirada": [
+          { "id": "mc-ret-1", "texto": "No estoy enfadada, estoy decepcionada. Que es peor. Ya no te mando más tuppers." }
+        ],
+        "vuelta": [
+          { "id": "mc-vue-1", "texto": "Bueno, venga, ven aquí. Te perdono. Pero termínate el plato." }
+        ]
+      }
+    },
+    {
+      "id": "colmena",
+      "nombre": "La Colmena",
+      "lema": "«NOSOTROS VEMOS. NOSOTROS CAEMOS. NOSOTROS AMAMOS CAER.»",
+      "descripcion": "Club de fans con mente colmena: ochocientos millones de insectos de un mismo planeta que piensan a la vez y comparten una sola afición: las caídas.",
+      "personalidad": "Entusiasta, extraña y en mayúsculas. Habla en plural. Celebra cualquier caída, incluidas las tuyas. No entiende el concepto de «suelo».",
+      "color": "#c9b000",
+      "retrato": "sponsor-colmena",
+      "audienciaMinima": 0,
+      "gusta": [
+        { "patron": { "evento": "fell" }, "afinidad": 5 },
+        { "patron": { "evento": "fell", "donde": { "entidad.id": "willy" } }, "afinidad": 4 },
+        { "patron": { "evento": "entityDefeated", "donde": { "causa": { "en": ["caida", "fueraDePlano"] } } }, "afinidad": 6 },
+        { "patron": { "evento": "attackResolved", "donde": { "actor.id": "willy", "alturaRelativa": { "min": 1 } } }, "afinidad": 2 },
+        { "patron": { "evento": "floorExited", "donde": { "metodo": "derrumbe" } }, "afinidad": 20 }
+      ],
+      "disgusta": [
+        { "patron": { "evento": "combatEnded", "donde": { "caidas": 0, "rondas": { "min": 4 } } }, "afinidad": -4 },
+        { "patron": { "evento": "itemEquipped", "donde": { "item": "ancla-del-puerto" } }, "afinidad": -10 }
+      ],
+      "regalos": [
+        { "item": "monopatin-cohete", "peso": 2 },
+        { "item": "bolsa-de-canicas", "peso": 4 },
+        { "item": "frasco-de-aceite", "peso": 3 },
+        { "item": "remo-de-trainera", "peso": 2 },
+        { "caja": "plata", "peso": 2 }
+      ],
+      "regaloGrande": { "caja": "oro" },
+      "mensajes": {
+        "interes": [
+          { "id": "co-int-1", "texto": "NOSOTROS HEMOS VISTO ESA CAÍDA. NOSOTROS LA HEMOS SENTIDO EN LAS ANTENAS." },
+          { "id": "co-int-2", "texto": "TÚ ESTÁS ARRIBA. ELLOS ESTÁN ABAJO. NOSOTROS ESTAMOS NERVIOSOS." }
+        ],
+        "regalo": [
+          { "id": "co-reg-1", "texto": "OFRENDA. PARA QUE MÁS COSAS CAIGAN. TAMBIÉN TÚ, SI QUIERES. NO ES OBLIGATORIO. SÍ LO ES." },
+          { "id": "co-reg-2", "texto": "LA COLMENA TE QUIERE. LA COLMENA QUIERE VERTE CAER. SON LA MISMA COSA." },
+          { "id": "co-reg-3", "texto": "HEMOS VOTADO. OCHOCIENTOS MILLONES A FAVOR. UNO EN CONTRA. YA NO ESTÁ." }
+        ],
+        "aviso": [
+          { "id": "co-avi-1", "texto": "SUELO. SUELO. SUELO. NOSOTROS NOS ABURRIMOS DEL SUELO." },
+          { "id": "co-avi-2", "texto": "¿POR QUÉ NO CAE NADIE? NOSOTROS NO LO ENTENDEMOS. NOSOTROS ESTAMOS TRISTES. EN PLURAL." }
+        ],
+        "retirada": [
+          { "id": "co-ret-1", "texto": "LA COLMENA SE VA A VER OTRO CANAL. EN OTRO CANAL HAY UN PRECIPICIO." }
+        ],
+        "vuelta": [
+          { "id": "co-vue-1", "texto": "HAS CAÍDO. NOSOTROS HEMOS VUELTO. NOSOTROS SIEMPRE VOLVEMOS CUANDO ALGO CAE." }
+        ]
+      }
+    },
+    {
+      "id": "glorp",
+      "nombre": "Glorp Ecosoluciones",
+      "lema": "«Reutiliza, reduce, revienta (con responsabilidad).»",
+      "descripcion": "Startup ecologista de un planeta pantano. Vende soluciones sostenibles a problemas que nadie tiene y tiene problemas que nadie soluciona.",
+      "personalidad": "Optimista, pedante y llena de jerga de empresa verde. Adora el ingenio con lo que hay a mano. Detesta el derroche y las llamas sin control.",
+      "color": "#3fbf6a",
+      "retrato": "sponsor-glorp",
+      "audienciaMinima": 10000,
+      "gusta": [
+        { "patron": { "evento": "surfaceReacted", "donde": { "resultado": { "en": ["hielo", "vapor", "electrificada"] } } }, "afinidad": 7 },
+        { "patron": { "evento": "entityDefeated", "donde": { "causa": { "en": ["superficie", "choque", "caida", "fueraDePlano"] } } }, "afinidad": 4 },
+        { "patron": { "evento": "combatEnded", "donde": { "resultado": "victoria", "consumiblesUsados": 0 } }, "afinidad": 6 }
+      ],
+      "disgusta": [
+        { "patron": { "evento": "itemUsed", "donde": { "item.tipo": "consumible", "actor.id": "willy" } }, "afinidad": -2 },
+        { "patron": { "evento": "surfaceCreated", "donde": { "superficie": "fuego", "casillas": { "min": 6 } } }, "afinidad": -5 },
+        { "patron": { "evento": "surfaceCreated", "donde": { "superficie": "toxico" } }, "afinidad": -4 }
+      ],
+      "regalos": [
+        { "item": "cubo-de-agua", "peso": 4 },
+        { "item": "extintor", "peso": 3 },
+        { "item": "botas-de-agua", "peso": 2 },
+        { "item": "rayo-embotellado", "peso": 2 },
+        { "caja": "plata", "peso": 2 }
+      ],
+      "regaloGrande": { "item": "ancla-del-puerto" },
+      "mensajes": {
+        "interes": [
+          { "id": "gl-int-1", "texto": "¡Hola, eco-héroe! En Glorp nos encanta tu forma de optimizar los recursos del entorno. ¡Sinergias!" },
+          { "id": "gl-int-2", "texto": "Agua, hielo, rayo: economía circular aplicada al combate. Te queremos en nuestro próximo informe de sostenibilidad." }
+        ],
+        "regalo": [
+          { "id": "gl-reg-1", "texto": "Te enviamos un kit de soluciones sostenibles. Envase cien por cien reciclado. El contenido, no tanto." },
+          { "id": "gl-reg-2", "texto": "¡Regalo con huella de carbono neutra! Bueno, neutra para nosotros. Para ti, ya veremos." },
+          { "id": "gl-reg-3", "texto": "Esto es para que sigas reutilizando el escenario. El planeta te lo agradece. Bueno, el planeta ya no existe, pero lo agradecería." }
+        ],
+        "aviso": [
+          { "id": "gl-avi-1", "texto": "Hemos detectado un consumo de consumibles poco sostenible. ¿Has pensado en tirar a alguien a un charco, que es gratis?" },
+          { "id": "gl-avi-2", "texto": "Tanto fuego nos preocupa. Las emisiones, la imagen de marca, las cejas de los concursantes..." }
+        ],
+        "retirada": [
+          { "id": "gl-ret-1", "texto": "Lamentamos comunicarte que tu perfil ya no está alineado con nuestros valores. Te deseamos un futuro sostenible. En otra parte." }
+        ],
+        "vuelta": [
+          { "id": "gl-vue-1", "texto": "¡Has vuelto a la senda verde! Reactivamos la colaboración. Sinergias otra vez." }
+        ]
+      }
+    }
+  ]
+}

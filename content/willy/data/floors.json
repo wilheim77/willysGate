@@ -1,0 +1,353 @@
+{
+  "$comment": "Las cinco plantas y el Camerino. Borrador pendiente de aprobación. 'generacion' es la especificación que consume el generador procedural genérico del motor (ENGINE_REQUESTS.md → R1); las piezas 'fijas' son mapas de Tiled hechos a mano (content/willy/maps/fixed/), las 'plantillas' son piezas prefabricadas (content/willy/maps/rooms/<bioma>/) que el generador combina. Reloj en segundos de emisión (DESIGN.md → «Reloj de planta»). Estadísticas de enemigos en el formato del ruleset willy (RULESET.md).",
+  "version": 1,
+  "reloj": {
+    "costes": {
+      "pasoExploracion": 1,
+      "rondaCombate": 15,
+      "interaccion": 3,
+      "pruebaFueraDeCombate": 5,
+      "abrirCaja": 0,
+      "menus": 0
+    },
+    "avisos": [50, 25, 10],
+    "pausaEnJefe": true,
+    "multDificultad": { "turista": 1.5, "concursante": 1.0, "primetime": 0.8 },
+    "derrumbe": {
+      "orden": "Salas de mayor a menor distancia a la salida en el grafo de salas.",
+      "segundosPorSala": 10,
+      "avisoPrevio": "La sala tiembla y se agrieta durante 1 ronda (o 10 s de reloj) antes de caer.",
+      "alCaerWilly": "Baja a la planta siguiente sin pasar por el Camerino. Pierde el 30 % de su vida máxima, pero el derrumbe nunca le deja por debajo de 1. Llega Tumbado.",
+      "alCaerEnemigo": "Eliminado, sin experiencia."
+    }
+  },
+  "plantas": [
+    {
+      "id": 1,
+      "nombre": "Castro Sumergido",
+      "bioma": "castro",
+      "descripcion": "Una copia del pueblo bajo tierra, con agua por los tobillos. Calles estrechas, soportales, la lonja y bodegas.",
+      "relojSegundos": 1200,
+      "luzAmbiente": 0.55,
+      "musica": "castro-sumergido",
+      "mecanica": {
+        "id": "charcos-y-redes",
+        "nombre": "Charcos y redes",
+        "texto": "Muchas casillas empiezan con agua; las redes de pesca colgadas se pueden cortar para que caigan sobre los enemigos. En la sala del jefe, la marea sube y baja.",
+        "reglas": {
+          "aguaInicialPct": 25,
+          "redesPorSala": [0, 2],
+          "marea": { "soloEnRoles": ["jefe", "marea"], "cicloRondas": 3, "alturaInundada": 0, "aviso": "El agua burbujea una ronda antes de subir", "arrastre": 1 }
+        }
+      },
+      "generacion": {
+        "celda": { "ancho": 13, "alto": 11 },
+        "rejilla": { "columnas": 5, "filas": 4 },
+        "salas": [7, 9],
+        "caminoCritico": [5, 6],
+        "ramas": [1, 2],
+        "probBucle": 0.15,
+        "alturaBase": { "min": 0, "max": 1, "maxSaltoEntreSalas": 1 },
+        "fijas": [
+          { "id": "p1-calle-de-willy", "rol": "inicio", "mapa": "fixed/p1-calle-de-willy.json", "celdas": [2, 1], "posicion": "inicioCamino", "comentario": "La calle de Willy y la plaza: aquí ocurre el cásting (creación de personaje)." },
+          { "id": "p1-tutorial-combate", "rol": "tutorial", "mapa": "fixed/p1-tutorial-combate.json", "celdas": [1, 1], "posicion": { "caminoCritico": 1 }, "comentario": "Primer combate guiado: dos ratas y un barril de aceite." },
+          { "id": "p1-lonja", "rol": "jefe", "mapa": "fixed/p1-lonja.json", "celdas": [2, 2], "posicion": "finCamino" }
+        ],
+        "roles": {
+          "combate": { "peso": 55 },
+          "tesoro": { "peso": 15, "soloEnRamas": true },
+          "trampa": { "peso": 15 },
+          "vacia": { "peso": 15 },
+          "marea": { "peso": 0 }
+        },
+        "plantillas": "rooms/castro/",
+        "presupuestoEnemigos": { "base": 4, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
+        "trampas": { "tipos": ["anzuelo", "trampilla-alcantarilla"], "porSala": [0, 2] },
+        "cofres": { "porRol": { "tesoro": [1, 2], "combate": [0, 1] } }
+      },
+      "enemigos": {
+        "gaviota-de-lonja": { "nombre": "Gaviota de lonja", "genero": "f", "tipo": "normal", "coste": 1, "vida": 6, "def": 11, "ataque": 3, "dano": "1d4", "movimiento": 6, "rasgos": ["vuela", "roba-objeto"], "xp": 10, "etiquetas": ["animal"] },
+        "rata-portuaria": { "nombre": "Rata portuaria", "genero": "f", "tipo": "normal", "coste": 1, "vida": 5, "def": 10, "ataque": 2, "dano": "1d4", "movimiento": 5, "rasgos": ["manada"], "xp": 10, "etiquetas": ["animal"] },
+        "cangrejo-con-casco": { "nombre": "Cangrejo con casco", "genero": "m", "tipo": "normal", "coste": 2, "vida": 10, "def": 14, "ataque": 3, "dano": "1d6", "movimiento": 3, "rasgos": ["caparazon", "anda-de-lado"], "xp": 15, "etiquetas": ["animal", "rojo"] },
+        "bocarte-andante": { "nombre": "Bocarte andante", "genero": "m", "tipo": "normal", "coste": 1, "vida": 4, "def": 12, "ataque": 2, "dano": "1d3", "movimiento": 5, "rasgos": ["banco: aparecen de 3 en 3", "resbaladizo"], "xp": 8, "etiquetas": ["animal"] },
+        "mimico": { "nombre": "Mímico", "genero": "m", "tipo": "elite", "coste": 4, "vida": 20, "def": 13, "ataque": 5, "dano": "1d8", "movimiento": 3, "rasgos": ["disfrazado-de-cofre", "mordisco-agarre"], "xp": 40, "etiquetas": [] }
+      },
+      "jefe": {
+        "id": "jefe-centollo",
+        "nombre": "Su Majestad el Centollo",
+        "genero": "m",
+        "vida": 60, "def": 16, "ataque": 5, "dano": "2d6", "movimiento": 3,
+        "tamano": "grande",
+        "fases": [
+          { "hasta": 100, "comportamiento": "Con la marea alta, nada y golpea con las pinzas; su caparazón le da +6 DEF mientras está en agua profunda." },
+          { "hasta": 50, "comportamiento": "Llama a dos cangrejos con casco cada 3 rondas. Con la marea baja queda varado una ronda: DEF normal y se le puede empujar contra los pilares de la lonja (choque doble)." }
+        ],
+        "debilidad": "Marea baja + empujón contra pilar; el rayo en el agua le hace doble.",
+        "xp": 150,
+        "etiquetas": ["rojo"]
+      },
+      "escena": "Cásting en la plaza (inicio)."
+    },
+    {
+      "id": 2,
+      "nombre": "Hipermercado Eterno",
+      "bioma": "hiper",
+      "descripcion": "Pasillos infinitos, escaleras mecánicas, hilo musical y una megafonía que anuncia ofertas imposibles.",
+      "relojSegundos": 1020,
+      "luzAmbiente": 0.9,
+      "musica": "hilo-musical",
+      "mecanica": {
+        "id": "cintas-y-carritos",
+        "nombre": "Cintas y carritos",
+        "texto": "Las cintas transportadoras y las escaleras mecánicas mueven 1 casilla a quien esté encima al final de cada ronda, también hacia fosos y fuego. Los carritos se empujan: avanzan hasta chocar y arrollan lo que encuentran.",
+        "reglas": {
+          "cintasPorSala": [1, 3],
+          "carritosPorSala": [1, 3],
+          "carrito": { "dano": "1d6", "empuje": "hasta chocar (máx. 6)", "comentario": "Empujar un carrito cuesta 1 acción y no necesita prueba." },
+          "ofertaFlash": { "cadaRondas": 4, "texto": "La megafonía anuncia una oferta: todos los enemigos corren 2 casillas hacia un punto señalado." }
+        }
+      },
+      "generacion": {
+        "celda": { "ancho": 15, "alto": 11 },
+        "rejilla": { "columnas": 6, "filas": 4 },
+        "salas": [9, 11],
+        "caminoCritico": [6, 7],
+        "ramas": [2, 3],
+        "probBucle": 0.3,
+        "alturaBase": { "min": 0, "max": 2, "maxSaltoEntreSalas": 1, "comentario": "Las diferencias de altura grandes se salvan con escaleras mecánicas dentro de las plantillas." },
+        "fijas": [
+          { "id": "p2-entrada", "rol": "inicio", "mapa": "fixed/p2-entrada.json", "celdas": [1, 1], "posicion": "inicioCamino" },
+          { "id": "p2-congelados", "rol": "escena", "mapa": "fixed/p2-congelados.json", "celdas": [1, 1], "posicion": { "caminoCriticoPct": [0.4, 0.6] }, "comentario": "Koldo atrapado en congelados." },
+          { "id": "p2-cajas-registradoras", "rol": "jefe", "mapa": "fixed/p2-cajas.json", "celdas": [2, 2], "posicion": "finCamino" }
+        ],
+        "roles": { "combate": { "peso": 55 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 15 } },
+        "plantillas": "rooms/hiper/",
+        "presupuestoEnemigos": { "base": 6, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
+        "trampas": { "tipos": ["suelo-mojado", "estanteria-inestable"], "porSala": [0, 2] },
+        "cofres": { "porRol": { "tesoro": [1, 2], "combate": [0, 1] } }
+      },
+      "enemigos": {
+        "maniqui": { "nombre": "Maniquí", "genero": "m", "tipo": "normal", "coste": 2, "vida": 12, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 4, "rasgos": ["quieto-si-le-miras: no se mueve si Willy está en línea recta"], "xp": 15, "etiquetas": ["constructo"] },
+        "carrito-poseido": { "nombre": "Carrito poseído", "genero": "m", "tipo": "normal", "coste": 2, "vida": 10, "def": 13, "ataque": 4, "dano": "1d6", "movimiento": 6, "rasgos": ["embiste-en-linea", "se-estrella"], "xp": 15, "etiquetas": ["constructo"] },
+        "reponedor-zombi": { "nombre": "Reponedor zombi", "genero": "m", "tipo": "normal", "coste": 2, "vida": 16, "def": 11, "ataque": 4, "dano": "1d8", "movimiento": 3, "rasgos": ["guardia", "repone: deja cajas que bloquean"], "xp": 18, "etiquetas": [] },
+        "etiqueta-de-oferta": { "nombre": "Etiqueta de oferta", "genero": "f", "tipo": "normal", "coste": 1, "vida": 4, "def": 14, "ataque": 5, "dano": "1d4", "movimiento": 7, "rasgos": ["vuela", "rebaja: −1 DEF al golpear"], "xp": 10, "etiquetas": ["rojo"] },
+        "mimico": { "nombre": "Mímico", "genero": "m", "tipo": "elite", "coste": 4, "vida": 24, "def": 13, "ataque": 6, "dano": "1d8+1", "movimiento": 3, "rasgos": ["disfrazado-de-cofre", "mordisco-agarre"], "xp": 40, "etiquetas": [] }
+      },
+      "jefe": {
+        "id": "jefe-encargada",
+        "nombre": "Doña Rebeca, Encargada de Rebajas",
+        "genero": "f",
+        "vida": 90, "def": 15, "ataque": 6, "dano": "1d10+2", "movimiento": 4,
+        "tamano": "normal",
+        "fases": [
+          { "hasta": 100, "comportamiento": "Desde lo alto de las cajas registradoras (altura 2) lanza etiquetas y empuja carritos con un megáfono." },
+          { "hasta": 60, "comportamiento": "«¡Liquidación total!»: activa todas las cintas hacia el centro, donde hay una trituradora de cartón (foso)." },
+          { "hasta": 25, "comportamiento": "Baja al suelo y embiste. Si choca contra una estantería, se le cae encima (Aturdida 1 ronda)." }
+        ],
+        "debilidad": "Subir a las cajas por la escalera mecánica de servicio o tirarle un carrito a la base de su torre.",
+        "xp": 200,
+        "etiquetas": []
+      },
+      "escena": "Koldo en congelados."
+    },
+    {
+      "id": 3,
+      "nombre": "La Verbena Sin Fin",
+      "bioma": "verbena",
+      "descripcion": "Unas fiestas patronales eternas, de noche: farolillos, orquesta, tómbola, casetas y toro de fuego.",
+      "relojSegundos": 960,
+      "luzAmbiente": 0.25,
+      "musica": "verbena",
+      "mecanica": {
+        "id": "fuego-y-polvora",
+        "nombre": "Fuego y pólvora",
+        "texto": "Hogueras, barriles de pólvora y petardos por todas partes. Cada pocas rondas, un castillo de fuegos artificiales marca casillas que explotarán en la ronda siguiente. Los farolillos dan luz; si se rompen, la zona queda a oscuras.",
+        "reglas": {
+          "barrilesPorSala": [1, 3],
+          "hoguerasPorSala": [0, 2],
+          "fuegosArtificiales": { "cadaRondas": 3, "casillasMarcadas": [3, 6], "dano": "2d6", "elemento": "fuego", "aviso": "Las casillas se marcan con un círculo de chispas una ronda antes" },
+          "farolillos": { "luz": { "radius": 3, "intensity": 0.7, "color": "#ffd27a" }, "rompibles": true }
+        }
+      },
+      "generacion": {
+        "celda": { "ancho": 15, "alto": 13 },
+        "rejilla": { "columnas": 6, "filas": 5 },
+        "salas": [10, 12],
+        "caminoCritico": [6, 8],
+        "ramas": [2, 3],
+        "probBucle": 0.35,
+        "alturaBase": { "min": 0, "max": 2, "maxSaltoEntreSalas": 1, "comentario": "Escenarios de orquesta y tarimas dan altura dentro de las salas." },
+        "fijas": [
+          { "id": "p3-entrada", "rol": "inicio", "mapa": "fixed/p3-entrada.json", "celdas": [1, 1], "posicion": "inicioCamino" },
+          { "id": "p3-tombola", "rol": "escena", "mapa": "fixed/p3-tombola.json", "celdas": [1, 1], "posicion": { "caminoCriticoPct": [0.3, 0.7] }, "comentario": "Tómbola: prueba de Suerte para ganar o perder un objeto." },
+          { "id": "p3-plaza-mayor", "rol": "jefe", "mapa": "fixed/p3-plaza-mayor.json", "celdas": [2, 2], "posicion": "finCamino" }
+        ],
+        "roles": { "combate": { "peso": 55 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 15 } },
+        "plantillas": "rooms/verbena/",
+        "presupuestoEnemigos": { "base": 7, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
+        "trampas": { "tipos": ["traca-enterrada", "toro-de-fuego"], "porSala": [0, 2] },
+        "cofres": { "porRol": { "tesoro": [1, 2], "combate": [0, 1] } }
+      },
+      "enemigos": {
+        "cabezudo": { "nombre": "Cabezudo", "genero": "m", "tipo": "normal", "coste": 2, "vida": 14, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 4, "rasgos": ["vejiga: golpe que empuja 1", "cabezon: −2 a que le empujen"], "xp": 18, "etiquetas": ["rojo"] },
+        "musico-de-charanga": { "nombre": "Músico de charanga", "genero": "m", "tipo": "normal", "coste": 2, "vida": 10, "def": 11, "ataque": 3, "dano": "1d4", "movimiento": 4, "rasgos": ["a-distancia 4", "anima: aliados en radio 2 +1 daño"], "xp": 16, "etiquetas": [] },
+        "vaquilla": { "nombre": "Vaquilla", "genero": "f", "tipo": "normal", "coste": 3, "vida": 18, "def": 12, "ataque": 5, "dano": "1d8", "movimiento": 6, "rasgos": ["embestida: empuja 2", "persigue-rojo"], "xp": 22, "etiquetas": ["animal"] },
+        "feriante": { "nombre": "Feriante", "genero": "m", "tipo": "normal", "coste": 2, "vida": 12, "def": 13, "ataque": 4, "dano": "1d6", "movimiento": 4, "rasgos": ["lanza-petardos", "huye-con-poca-vida"], "xp": 18, "etiquetas": [] },
+        "mimico": { "nombre": "Mímico", "genero": "m", "tipo": "elite", "coste": 4, "vida": 28, "def": 14, "ataque": 6, "dano": "1d10", "movimiento": 3, "rasgos": ["disfrazado-de-cofre", "mordisco-agarre"], "xp": 45, "etiquetas": [] }
+      },
+      "jefe": {
+        "id": "jefe-giganton",
+        "nombre": "El Gigantón y sus Cabezudos",
+        "genero": "m",
+        "vida": 120, "def": 14, "ataque": 7, "dano": "2d8", "movimiento": 3,
+        "tamano": "enorme",
+        "fases": [
+          { "hasta": 100, "comportamiento": "Gira sobre sí mismo cada 2 rondas golpeando todo en radio 2 y empujando 2. Tres cabezudos lo escoltan." },
+          { "hasta": 50, "comportamiento": "Su armazón de madera arde si le alcanza el fuego: pierde 5 de vida por ronda pero hace +1d6. Se tambalea." },
+          { "hasta": 20, "comportamiento": "Tambaleándose: un empujón con éxito lo tumba. Tumbado, recibe el doble de daño durante 1 ronda y aplasta lo que haya donde cae." }
+        ],
+        "debilidad": "Fuego en el armazón y empujarlo cuando se tambalea; cuidado con dónde cae.",
+        "xp": 250,
+        "etiquetas": []
+      },
+      "escena": "La tómbola."
+    },
+    {
+      "id": 4,
+      "nombre": "Balneario Glaciar",
+      "bioma": "balneario",
+      "descripcion": "Un balneario de lujo congelado a medias: termas humeantes, saunas, piscinas de hielo y toallas que crujen.",
+      "relojSegundos": 900,
+      "luzAmbiente": 0.6,
+      "musica": "balneario",
+      "mecanica": {
+        "id": "frio-y-vapor",
+        "nombre": "Frío y vapor",
+        "texto": "Piscinas calientes y frías. El agua se congela con frío y se evapora con fuego; el vapor tapa la vista. Las rejillas de las saunas sueltan vapor cada pocas rondas. Sobre hielo te deslizas.",
+        "reglas": {
+          "piscinasPorSala": [1, 2],
+          "hieloInicialPct": 20,
+          "rejillasVapor": { "cadaRondas": 3, "radio": 1, "duracion": 2 },
+          "corrienteFria": { "cadaRondas": 5, "texto": "Una ráfaga congela el agua de una sala durante 2 rondas" }
+        }
+      },
+      "generacion": {
+        "celda": { "ancho": 15, "alto": 13 },
+        "rejilla": { "columnas": 6, "filas": 5 },
+        "salas": [10, 12],
+        "caminoCritico": [7, 8],
+        "ramas": [2, 3],
+        "probBucle": 0.3,
+        "alturaBase": { "min": 0, "max": 3, "maxSaltoEntreSalas": 1, "comentario": "Termas en terrazas: mucha altura." },
+        "fijas": [
+          { "id": "p4-recepcion", "rol": "inicio", "mapa": "fixed/p4-recepcion.json", "celdas": [1, 1], "posicion": "inicioCamino" },
+          { "id": "p4-sauna-de-paco", "rol": "escena", "mapa": "fixed/p4-sauna.json", "celdas": [1, 1], "posicion": { "caminoCriticoPct": [0.4, 0.6] }, "comentario": "Sucursal del Bar Paco: descanso a mitad de planta (recupera la mitad de la vida, no guarda)." },
+          { "id": "p4-piscina-olimpica", "rol": "jefe", "mapa": "fixed/p4-piscina.json", "celdas": [2, 2], "posicion": "finCamino" }
+        ],
+        "roles": { "combate": { "peso": 55 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 15 } },
+        "plantillas": "rooms/balneario/",
+        "presupuestoEnemigos": { "base": 8, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
+        "trampas": { "tipos": ["suelo-pulido", "chorro-helado"], "porSala": [0, 2] },
+        "cofres": { "porRol": { "tesoro": [1, 2], "combate": [0, 1] } }
+      },
+      "enemigos": {
+        "patito-gigante": { "nombre": "Patito de goma gigante", "genero": "m", "tipo": "normal", "coste": 2, "vida": 16, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 5, "rasgos": ["flota", "chillido: Aturde 1 al morir en radio 1"], "xp": 20, "etiquetas": [] },
+        "yeti-de-sauna": { "nombre": "Yeti de sauna", "genero": "m", "tipo": "normal", "coste": 3, "vida": 24, "def": 12, "ataque": 5, "dano": "1d10", "movimiento": 4, "rasgos": ["inmune-frio", "sudoroso: deja agua al moverse"], "xp": 26, "etiquetas": [] },
+        "medusa-de-piscina": { "nombre": "Medusa de piscina", "genero": "f", "tipo": "normal", "coste": 2, "vida": 10, "def": 13, "ataque": 5, "dano": "1d6", "movimiento": 3, "rasgos": ["solo-en-agua", "veneno"], "xp": 18, "etiquetas": [] },
+        "monitor-de-aquagym": { "nombre": "Monitor de aquagym", "genero": "m", "tipo": "normal", "coste": 2, "vida": 14, "def": 13, "ataque": 4, "dano": "1d6", "movimiento": 5, "rasgos": ["churro: alcance 2 y empuja 1", "arenga: aliados +1 movimiento"], "xp": 20, "etiquetas": [] },
+        "mimico": { "nombre": "Mímico", "genero": "m", "tipo": "elite", "coste": 4, "vida": 32, "def": 14, "ataque": 7, "dano": "1d10+1", "movimiento": 3, "rasgos": ["disfrazado-de-cofre", "mordisco-agarre"], "xp": 50, "etiquetas": [] }
+      },
+      "jefe": {
+        "id": "jefe-socorrista",
+        "nombre": "La Socorrista Abisal",
+        "genero": "f",
+        "vida": 150, "def": 15, "ataque": 7, "dano": "2d8", "movimiento": 2,
+        "tamano": "enorme",
+        "fases": [
+          { "hasta": 100, "comportamiento": "Sentada en su silla (altura 3), «rescata» con tentáculos: atrae 3 casillas hacia la piscina profunda y sopla el silbato (Aturde a quien esté en agua)." },
+          { "hasta": 50, "comportamiento": "Se lanza a la piscina. Mientras está en el agua es casi intocable, pero si se congela la piscina queda atrapada (Congelada, +2 daño de golpe)." },
+          { "hasta": 25, "comportamiento": "Furiosa: la piscina hierve y lo cubre todo de vapor. Hay que guiarse por el silbato." }
+        ],
+        "debilidad": "Congelar la piscina con ella dentro; atacar desde las gradas altas.",
+        "xp": 300,
+        "etiquetas": ["rojo"]
+      },
+      "escena": "La sauna de Paco."
+    },
+    {
+      "id": 5,
+      "nombre": "El Plató",
+      "bioma": "plato",
+      "descripcion": "Los bastidores de ¡Mazmorreros!: cables, focos, decorados de cartón piedra, camerinos ajenos y regidores con auriculares.",
+      "relojSegundos": 900,
+      "luzAmbiente": 0.3,
+      "musica": "plato",
+      "mecanica": {
+        "id": "focos-y-camaras",
+        "nombre": "Focos y cámaras",
+        "texto": "Focos móviles iluminan zonas: bajo un foco, ganas el doble de audiencia y tienes +2 a atacar, pero todos los enemigos te ven y te atacan con +2. Los decorados se pueden derribar sobre los enemigos. Los cables pelados electrifican el agua derramada.",
+        "reglas": {
+          "focosPorSala": [1, 3],
+          "foco": { "radio": 1, "mueveCadaRondas": 2, "bonoAtaque": 2, "multAudiencia": 2 },
+          "decorados": { "porSala": [1, 3], "dano": "2d6", "caida": "1 casilla en la dirección del empujón" },
+          "cables": { "porSala": [0, 2], "electrificaAgua": true }
+        }
+      },
+      "generacion": {
+        "celda": { "ancho": 15, "alto": 13 },
+        "rejilla": { "columnas": 6, "filas": 5 },
+        "salas": [10, 12],
+        "caminoCritico": [7, 8],
+        "ramas": [2, 3],
+        "probBucle": 0.25,
+        "alturaBase": { "min": 0, "max": 2, "maxSaltoEntreSalas": 1, "comentario": "Pasarelas de técnicos sobre los platós." },
+        "fijas": [
+          { "id": "p5-entrada-de-artistas", "rol": "inicio", "mapa": "fixed/p5-entrada.json", "celdas": [1, 1], "posicion": "inicioCamino" },
+          { "id": "p5-despacho-de-xelda", "rol": "escena", "mapa": "fixed/p5-despacho.json", "celdas": [1, 1], "posicion": { "caminoCriticoPct": [0.5, 0.7] }, "comentario": "Revelación: qué pasa con los ganadores de otras temporadas." },
+          { "id": "p5-plato-principal", "rol": "jefe", "mapa": "fixed/p5-plato-principal.json", "celdas": [3, 2], "posicion": "finCamino" }
+        ],
+        "roles": { "combate": { "peso": 60 }, "tesoro": { "peso": 15, "soloEnRamas": true }, "trampa": { "peso": 15 }, "vacia": { "peso": 10 } },
+        "plantillas": "rooms/plato/",
+        "presupuestoEnemigos": { "base": 9, "porProfundidad": 1, "multRol": { "combate": 1.0, "trampa": 0.5, "tesoro": 0.7, "vacia": 0 } },
+        "trampas": { "tipos": ["trampilla-de-escenario", "cable-pelado"], "porSala": [0, 2] },
+        "cofres": { "porRol": { "tesoro": [1, 2], "combate": [0, 1] } }
+      },
+      "enemigos": {
+        "regidor": { "nombre": "Regidor", "genero": "m", "tipo": "normal", "coste": 2, "vida": 16, "def": 13, "ataque": 5, "dano": "1d8", "movimiento": 5, "rasgos": ["cuenta-atras: marca a Willy; en 2 rondas, +4 a que le acierten"], "xp": 24, "etiquetas": [] },
+        "camara-dron": { "nombre": "Cámara-dron", "genero": "f", "tipo": "normal", "coste": 2, "vida": 10, "def": 15, "ataque": 5, "dano": "1d6", "movimiento": 6, "rasgos": ["vuela", "flash: Ciega 1 ronda", "graba: +audiencia si Willy hace algo espectacular cerca"], "xp": 22, "etiquetas": ["constructo"] },
+        "tecnico-de-sonido": { "nombre": "Técnico de sonido", "genero": "m", "tipo": "normal", "coste": 3, "vida": 20, "def": 13, "ataque": 5, "dano": "1d8", "movimiento": 4, "rasgos": ["acople: Aturde en cono 3", "guardia"], "xp": 28, "etiquetas": [] },
+        "figurante": { "nombre": "Figurante", "genero": "m", "tipo": "normal", "coste": 1, "vida": 8, "def": 11, "ataque": 4, "dano": "1d6", "movimiento": 4, "rasgos": ["multitud: aparecen de 4 en 4", "sobreactuado: al caer, empuja 1 a los adyacentes"], "xp": 12, "etiquetas": [] },
+        "mimico": { "nombre": "Mímico", "genero": "m", "tipo": "elite", "coste": 4, "vida": 36, "def": 15, "ataque": 7, "dano": "2d6", "movimiento": 3, "rasgos": ["disfrazado-de-cofre", "mordisco-agarre"], "xp": 55, "etiquetas": [] }
+      },
+      "jefe": {
+        "id": "jefe-presentador",
+        "nombre": "Fausto Brillante",
+        "genero": "m",
+        "vida": 200, "def": 16, "ataque": 8, "dano": "2d8+2", "movimiento": 5,
+        "tamano": "normal",
+        "fases": [
+          { "hasta": 100, "comportamiento": "Decorado «Concurso de preguntas»: plataformas de altura que suben y bajan; Fausto lanza tarjetas afiladas desde arriba." },
+          { "hasta": 66, "comportamiento": "Decorado «Programa de cocina»: fogones (fuego) y piletas (agua); invoca a dos figurantes cada 2 rondas." },
+          { "hasta": 33, "comportamiento": "Decorado «Gran final»: el público vota cada ronda (según tu audiencia) entre ayudarte (curación o foco a tu favor) o ayudarle a él. Los focos caen." }
+        ],
+        "debilidad": "Cuanta más audiencia tengas, más votos a tu favor en la fase final.",
+        "xp": 400,
+        "etiquetas": []
+      },
+      "escena": "El despacho de Xelda."
+    }
+  ],
+  "camerino": {
+    "id": "camerino",
+    "nombre": "El Camerino",
+    "mapa": "fixed/camerino.json",
+    "descripcion": "Zona segura entre plantas, hecha a mano y la misma siempre (con detalles que cambian por planta). Bastidores con espejos de bombillas, un pasillo de moqueta y tres puestos.",
+    "puestos": [
+      { "id": "ultramarinos", "npc": "maripuri", "funcion": "Comprar y vender (loot-tables.json → mercado)." },
+      { "id": "bar-paco", "npc": "paco", "funcion": "Descansar: recupera toda la vida y la energía. Una vez por Camerino." },
+      { "id": "produccion", "npc": "xelda", "funcion": "Guardar la partida («firmar el parte de planta»), ver el reglamento y las probabilidades de las cajas." }
+    ],
+    "visitante": { "npc": "koldo", "funcion": "Conversación nueva en cada Camerino; misión opcional para la planta siguiente." },
+    "salida": "Un ascensor de servicio con un cartel: «Planta siguiente. No apto para cardíacos. Ni para nadie.»"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "$comment": "Glosario del menú de pausa y fuente de los tooltips (cada término tiene un id que los desgloses pueden enlazar con 'term'). Borrador pendiente de aprobación. Lenguaje llano, con un toque del Narrador al final de cada entrada.",
+  "version": 1,
+  "secciones": [
+    {
+      "id": "basico", "titulo": "Lo básico",
+      "terminos": [
+        { "id": "d20", "nombre": "Tirada (d20)", "texto": "Casi todo se decide tirando un dado de 20 caras y sumando un atributo. Si igualas o superas el número objetivo, lo consigues. Antes de tirar ves la probabilidad en %.", "narrador": "Es como la vida, pero con las cuentas a la vista." },
+        { "id": "critico", "nombre": "Crítico", "texto": "Si el dado saca un 20, aciertas siempre y haces el doble de daño.", "narrador": "El público grita. Yo hago como que no." },
+        { "id": "pifia", "nombre": "Pifia", "texto": "Si el dado saca un 1, fallas siempre y pasa algo un poco ridículo.", "narrador": "Al público le gusta casi tanto como un crítico." },
+        { "id": "dif", "nombre": "DIF (dificultad)", "texto": "El número que hay que igualar en una prueba: 10 es fácil, 16 normal, 20 difícil.", "narrador": "Lo pone Producción. Producción es mala." },
+        { "id": "def", "nombre": "Defensa", "texto": "Lo difícil que es acertarle a alguien. Tu tirada de ataque tiene que igualarla o superarla.", "narrador": "Los cangrejos la tienen alta. Los fantasmas, rara." },
+        { "id": "turno", "nombre": "Turno", "texto": "En combate, cada uno actúa cuando le toca, en el orden de la barra de arriba. En tu turno tienes movimiento y 2 acciones.", "narrador": "Puedes pensar todo lo que quieras. El reloj no corre mientras piensas." },
+        { "id": "accion", "nombre": "Acciones", "texto": "Atacar, usar un objeto, empujar o una habilidad gastan acciones (normalmente 1). Tienes 2 por turno.", "narrador": "El café de máquina da una más. No es un consejo médico." },
+        { "id": "esperar", "nombre": "Esperar", "texto": "Termina tu turno sin hacer nada más.", "narrador": "Legal. Aburrido. El público lo castiga." }
+      ]
+    },
+    {
+      "id": "personaje", "titulo": "Tu personaje",
+      "terminos": [
+        { "id": "atributos", "nombre": "Atributos", "texto": "Fuerza (pegar y empujar), Agilidad (disparar, esquivar, moverse), Maña (habilidades, trampas), Aguante (vida, resistir), Carisma (audiencia, patrocinadores, precios) y Suerte (azar y botín).", "narrador": "Seis números que te definen. A Willy le define más el bigote." },
+        { "id": "vida", "nombre": "Vida", "texto": "Si llega a 0, quedas eliminado y vuelves al último Camerino. Se recupera con comida, subiendo de nivel y descansando en el Bar Paco.", "narrador": "Cuídala. Es la única que tienes, aunque la tele diga lo contrario." },
+        { "id": "energia", "nombre": "Energía", "texto": "La gastan las habilidades. Se recupera entera al acabar cada combate.", "narrador": "Úsala sin miedo. Guardarla es de cobardes y de ahorradores." },
+        { "id": "nivel", "nombre": "Nivel", "texto": "Al ganar experiencia subes de nivel: más vida, 2 puntos de atributo y, en niveles pares, una ventaja a elegir.", "narrador": "Pasa a menudo. Es lo que tiene la televisión: todo sube rápido." },
+        { "id": "habilidad-nivel", "nombre": "Nivel de habilidad", "texto": "Cada habilidad sube del 1 al 5 a base de usarla con efecto. A nivel 3 y 5 gana algo especial.", "narrador": "Empuja mucho y empujarás mejor. Filosofía oriental de mercadillo." },
+        { "id": "raza-clase", "nombre": "Raza y clase", "texto": "Lo que eliges en el cásting. Cada una tiene ventajas de verdad y una desventaja cómica, también de verdad.", "narrador": "Un minotauro vegano. Lo que hay que ver." }
+      ]
+    },
+    {
+      "id": "entorno", "titulo": "Entorno",
+      "terminos": [
+        { "id": "altura", "nombre": "Altura", "texto": "Atacar desde más arriba da +2 por nivel (máximo +4). Subir un nivel cuesta 1 de movimiento extra; dos o más niveles hay que trepar.", "narrador": "Las gaviotas lo saben desde siempre." },
+        { "id": "caida", "nombre": "Caídas", "texto": "Bajar 1 nivel no hace daño; 2 niveles, 1d6, y +1d6 por cada nivel más. Quien cae queda Tumbado.", "narrador": "La gravedad no tiene patrocinador, pero debería." },
+        { "id": "empujar", "nombre": "Empujar", "texto": "Mueve a un enemigo 1 casilla. Contra un muro: 1d6 de daño. Contra otro: 1d4 a los dos. Al vacío: eliminado (los jefes no caen, pero les duele).", "narrador": "El arma favorita del público. Y la mía." },
+        { "id": "agua", "nombre": "Agua", "texto": "Deja Empapado. Con rayo se electrifica; con frío se hiela; con fuego se hace vapor.", "narrador": "En la Planta 1 hay de sobra. Es Castro." },
+        { "id": "aceite", "nombre": "Aceite", "texto": "Resbala (prueba de Agilidad o Tumbado) y arde con fuerza si le llega fuego.", "narrador": "Virgen extra. Qué desperdicio." },
+        { "id": "fuego", "nombre": "Fuego", "texto": "Deja Ardiendo (1d4 por turno). Se apaga solo en 3 turnos o con agua.", "narrador": "Los Hermanos Pérez lo patrocinan." },
+        { "id": "hielo", "nombre": "Hielo", "texto": "Al pisarlo te deslizas una casilla más en la dirección en que ibas. Ojo con los bordes.", "narrador": "Una pista de patinaje con fosos. Lo mejor de la Planta 4." },
+        { "id": "vapor", "nombre": "Vapor", "texto": "Tapa la vista: no se puede atacar a distancia a través de él. Se disipa en 2 turnos.", "narrador": "Como el baño del Bar Paco un sábado." },
+        { "id": "toxico", "nombre": "Tóxico", "texto": "Deja Envenenado: 1 de daño por turno durante 3 turnos.", "narrador": "Glorp Ecosoluciones lo desaprueba. Con razón." },
+        { "id": "electrificada", "nombre": "Electrificada", "texto": "Agua con corriente: quien está dentro queda Electrocutado (pierde 1 acción) y recibe daño.", "narrador": "Huele a calamares. Siempre huele a calamares." },
+        { "id": "cinta", "nombre": "Cintas y escaleras mecánicas", "texto": "Al final de cada ronda mueven 1 casilla a todo lo que tengan encima, también hacia el peligro.", "narrador": "El Hipermercado Eterno: llegar es fácil, salir no." },
+        { "id": "foco", "nombre": "Focos", "texto": "Bajo un foco (Planta 5) ganas el doble de audiencia y +2 a atacar, pero te atacan con +2.", "narrador": "La fama tiene un precio. Este." }
+      ]
+    },
+    {
+      "id": "concurso", "titulo": "El concurso",
+      "terminos": [
+        { "id": "audiencia", "nombre": "Audiencia", "texto": "Los espectadores. Suben con lo espectacular (usar el entorno, combos, riesgo, críticos) y bajan si te aburres o repites lo mismo. Nunca te hacen daño: dan cajas al llegar a ciertas cifras y una prima al final de cada planta.", "narrador": "Catorce galaxias mirando. Sonríe." },
+        { "id": "patrocinadores", "nombre": "Patrocinadores", "texto": "Seis marcas y personajes que siguen el programa. Cada uno tiene gustos. Si le gustas, te manda mensajes y regalos; si haces lo que odia, te avisa y, si sigues, retira su apoyo hasta que le reconquistes. Toca su retrato para ver qué le gusta.", "narrador": "Igual que en la vida real, pero con más tentáculos." },
+        { "id": "reloj", "nombre": "Reloj de planta", "texto": "El tiempo que le queda a la planta. Solo corre cuando haces cosas (andar: 1 s por casilla; cada ronda de combate: 15 s). Pensar, mirar menús y abrir cajas es gratis. Se para contra el jefe. Avisa al 50, 25 y 10 %.", "narrador": "Es televisión: el tiempo es dinero, pero el tuyo no vale mucho." },
+        { "id": "derrumbe", "nombre": "Derrumbe", "texto": "Si el reloj llega a 0, la planta se hunde sala a sala, empezando por las más lejanas a la salida. Si te pilla, caes a la planta siguiente con menos vida y sin pasar por el Camerino. El derrumbe nunca te elimina por sí solo.", "narrador": "Bajas igual. Pero por la vía rápida y sin café." },
+        { "id": "camerino", "nombre": "Camerino", "texto": "Zona segura entre plantas: tienda de Maripuri, descanso en el Bar Paco, guardado con Xelda y charla con Koldo.", "narrador": "El único sitio donde nadie te quiere matar. Salvo Koldo, de aburrimiento." },
+        { "id": "ganso", "nombre": "Hacer el ganso", "texto": "Acción que no sirve para nada salvo para ganar un poco de audiencia. Cada vez da menos en el mismo combate.", "narrador": "El arte en su forma más pura." },
+        { "id": "fichas", "nombre": "Fichas", "texto": "La moneda del concurso. Se ganan eliminando enemigos, en cofres y cajas, y vendiendo. Se gastan en Ultramarinos Maripuri.", "narrador": "No se pueden cambiar por euros. Lo hemos preguntado." }
+      ]
+    },
+    {
+      "id": "cajas", "titulo": "Cajas de botín",
+      "terminos": [
+        { "id": "caja", "nombre": "Cajas de botín", "texto": "Regalos del concurso con objetos y fichas. Se ganan con logros, hitos de audiencia, patrocinadores, jefes y la prima de fin de planta. Nunca se compran: ni con dinero real ni con fichas.", "narrador": "Esto es un concurso, no una tragaperras. Lo dice Producción, que algo sabrá." },
+        { "id": "caja-bronce", "nombre": "Caja de bronce", "texto": "2 objetos. Casi siempre de bronce; a veces de plata; muy pocas veces de oro.", "narrador": "Huele a almacén." },
+        { "id": "caja-plata", "nombre": "Caja de plata", "texto": "3 objetos, al menos uno de plata o mejor.", "narrador": "Con lazo azul." },
+        { "id": "caja-oro", "nombre": "Caja de oro", "texto": "3 objetos, al menos uno de oro o mejor.", "narrador": "Trae música propia." },
+        { "id": "caja-legendaria", "nombre": "Caja legendaria", "texto": "4 objetos, al menos uno legendario.", "narrador": "Flota. No preguntes." },
+        { "id": "garantia", "nombre": "Garantía", "texto": "Si abres 8 cajas seguidas sin ningún objeto de oro, la siguiente trae uno seguro. Con 20 sin legendario, igual. El contador está en la pantalla de apertura.", "narrador": "La suerte se puede negociar. Un poco." },
+        { "id": "probabilidades", "nombre": "Probabilidades", "texto": "En la pantalla de cada caja, «Ver probabilidades» muestra exactamente qué puede salir y con qué probabilidad.", "narrador": "Transparencia total. Somos una cadena muy seria." },
+        { "id": "maldito", "nombre": "Objeto maldito", "texto": "Tiene una ventaja grande y una pega. Lo pone bien claro. Una vez puesto, no te lo quitas hasta el siguiente Camerino.", "narrador": "Lo pone en la etiqueta. En rojo. Con una calavera." },
+        { "id": "mimico", "nombre": "Mímico", "texto": "Un monstruo disfrazado de cofre (desde la Planta 2). Se delata si lo miras de cerca con buena Maña.", "narrador": "Muerde. Y tiene opiniones." }
+      ]
+    },
+    {
+      "id": "condiciones", "titulo": "Estados",
+      "terminos": [
+        { "id": "ardiendo", "nombre": "Ardiendo", "texto": "1d4 de fuego al empezar el turno. El agua lo apaga.", "narrador": "Rueda por el suelo. O no, como quieras." },
+        { "id": "empapado", "nombre": "Empapado", "texto": "El rayo te hace el doble. No puedes arder. Con frío, te congelas.", "narrador": "Como un domingo en Castro." },
+        { "id": "congelado", "nombre": "Congelado", "texto": "No puedes moverte y recibes +2 de daño de golpe.", "narrador": "Muy fresquito." },
+        { "id": "electrocutado", "nombre": "Electrocutado", "texto": "Pierdes 1 acción el próximo turno.", "narrador": "Se te pone el bigote de punta." },
+        { "id": "envenenado", "nombre": "Envenenado", "texto": "1 de daño por turno durante 3 turnos. La tirita lo quita.", "narrador": "Nada que no cure una tirita con dibujos." },
+        { "id": "tumbado", "nombre": "Tumbado", "texto": "Levantarse cuesta medio movimiento; te pegan con +3 cuerpo a cuerpo.", "narrador": "Desde el suelo se ve el techo. Precioso techo." },
+        { "id": "aturdido", "nombre": "Aturdido", "texto": "Pierdes el turno.", "narrador": "Pajaritos." },
+        { "id": "asustado", "nombre": "Asustado", "texto": "Tienes que alejarte de quien te asustó.", "narrador": "Prudencia, lo llaman los cobardes." },
+        { "id": "cegado", "nombre": "Cegado", "texto": "−5 a atacar.", "narrador": "Culpa del flash." },
+        { "id": "enredado", "nombre": "Enredado", "texto": "No te puedes mover hasta liberarte (prueba de Fuerza, 1 acción). El fuego quema la red.", "narrador": "Pescado del día." },
+        { "id": "bailando", "nombre": "Bailando", "texto": "Al empezar su turno se mueve 1 casilla al azar, aunque sea hacia un foso o el fuego.", "narrador": "Paquito el Chocolatero no perdona." },
+        { "id": "mareado", "nombre": "Mareado", "texto": "−2 a todo.", "narrador": "El kalimotxo, seguramente." },
+        { "id": "escondido", "nombre": "Escondido", "texto": "Los enemigos no te eligen como objetivo. Se pierde al atacar.", "narrador": "Muy útil. Muy poco televisivo." },
+        { "id": "animado", "nombre": "Animado", "texto": "+1 al daño.", "narrador": "Venga, venga, venga." },
+        { "id": "dormido", "nombre": "Dormido", "texto": "Pierdes el turno; te despiertas si te hacen daño.", "narrador": "La siesta es sagrada. Incluso aquí." },
+        { "id": "petrificado", "nombre": "Petrificado", "texto": "No actúa ni recibe daño. Si lo empujas, se rompe.", "narrador": "Una pieza de museo." }
+      ]
+    }
+  ]
+}
