@@ -24,7 +24,7 @@ describe('Willy: first playable', () => {
     expect(after.entities.willy!.position).toEqual(s.entities.willy!.position);
   });
 
-  it('the service lift takes Willy down to floor 1, and back', () => {
+  it('the service lift takes Willy down to floor 1, and its stairs up to the next Camerino', () => {
     let s = newWillyGame(engine, 1);
     const lift = zonesOf(s, 'exits')[0]!;
     s = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: { x: lift.x, y: lift.y } } } };
@@ -36,7 +36,7 @@ describe('Willy: first playable', () => {
     expect(down.state.map).toEqual(generateFloor(1, 1).setup.map);
     expect(zonesOf(down.state, 'encounters').length).toBeGreaterThan(0);
     const stairs = zonesOf(down.state, 'exits')[0]!;
-    const back = engine.apply({ ...down.state, entities: { ...down.state.entities, willy: { ...down.state.entities.willy!, position: { x: stairs.x, y: stairs.y } } } }, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: 'camerino', spawn: 'llegada' } as BaseCommand);
+    const back = engine.apply({ ...down.state, entities: { ...down.state.entities, willy: { ...down.state.entities.willy!, position: { x: stairs.x, y: stairs.y } } } }, { type: 'travel', issuer: 'player:1', entityId: 'willy', mapId: 'camerino-1', spawn: 'llegada' } as BaseCommand);
     if (!back.ok) throw new Error(back.error.message);
     expect(back.state.entities.maripuri).toBeDefined();
   });
