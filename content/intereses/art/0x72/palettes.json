@@ -657,6 +657,34 @@
         "#5698cc": "#5a4a3a",
         "#fccba3": "#e0b498"
       }
+    },
+    "ivo": {
+      "base": "elf_m",
+      "note": "Ivo, el medio hermano de Garrán, entre los Callados: pálido, pelo negro, mirada vacía y el pañuelo rojo de minero que aún conserva",
+      "map": {
+        "#facb3e": "#2a2224",
+        "#ee8e2e": "#1a1416",
+        "#fccba3": "#c9c2b8",
+        "#e2b694": "#9e978e",
+        "#4ba747": "#5a5650",
+        "#3d734f": "#3e3b38",
+        "#314152": "#4a3a30",
+        "#5698cc": "#e6ecef"
+      },
+      "decals": [
+        {
+          "rows": [
+            "RRRR",
+            ".RR."
+          ],
+          "legend": {
+            "R": "#b02a2a"
+          },
+          "x": 5,
+          "y": -9,
+          "from": "bottom"
+        }
+      ]
     }
   }
 }
