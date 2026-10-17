@@ -20,6 +20,8 @@ interface PortraitSpec {
   defaultTone: string;
   /** Sprites to leave out (objects, placeholders). */
   skip: string[];
+  /** Regular expression of sprite ids to leave out (e.g. palette variants). */
+  skipPattern?: string;
   /** Per-sprite overrides: backdrop tone, integer scale, extra rows of headroom, horizontal nudge. */
   sprites: Record<string, { tone?: string; scale?: number; headroom?: number; dx?: number; label?: string }>;
   /** Hand-designed busts that replace the generated ones (bigger, with real faces). */
@@ -96,7 +98,7 @@ function frame(img: Image, S = img.width): void {
 }
 
 const ids = Object.entries(manifest.sprites as Record<string, { kind: string; url: string; animations: Record<string, { x: number; y: number; w: number; h: number }[]> }>)
-  .filter(([id, s]) => s.kind === 'frames' && !spec.skip.includes(id));
+  .filter(([id, s]) => s.kind === 'frames' && !spec.skip.includes(id) && !(spec.skipPattern && new RegExp(spec.skipPattern).test(id)));
 // Aliases share art: render each distinct frame once.
 const seen = new Map<string, number>();
 const cells: Image[] = [];
