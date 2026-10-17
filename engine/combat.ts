@@ -216,6 +216,20 @@ function advanceOrder(ruleset: Ruleset, state: GameState, rng: RngCursor): { sta
       events.push(...r.events);
     }
     next = { ...next, turn: { ...next.turn, round: round + 1 } };
+    // Timed summons count down; the expired ones leave.
+    const summons = (next.systems.summons as unknown as Record<string, { roundsLeft: number }> | undefined) ?? {};
+    const expired: Effect[] = [];
+    const kept: Record<string, { roundsLeft: number }> = {};
+    for (const [id, sm] of Object.entries(summons)) {
+      if (sm.roundsLeft <= 1) expired.push({ type: 'despawnEntity', entityId: id });
+      else kept[id] = { ...sm, roundsLeft: sm.roundsLeft - 1 };
+    }
+    if (Object.keys(summons).length) {
+      next = { ...next, systems: { ...next.systems, summons: kept as never } };
+      const r = applyEffects(ruleset, next, expired);
+      next = r.state;
+      events.push(...r.events);
+    }
     const aged = ageSurfaces(next, ruleset.surfaces);
     next = aged.state;
     if (aged.changed.length) events.push({ type: 'surfaceChanged', changes: aged.changed } as GameEvent);

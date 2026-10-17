@@ -34,6 +34,13 @@ export type Effect =
   /** Change a map tile (a door opens, a bridge collapses). Omitted fields stay as they are. */
   | { type: 'setTile'; position: Vec2; walkable?: boolean; terrain?: string; height?: number }
   /** Change how a thing looks or what it is (a chest opens, a lever flips): sprite, name and tags. */
+  /**
+   * Bring something into play: a summon, a barrier, reinforcements. In combat it joins the
+   * turn order right after its owner. With `rounds`, it vanishes after that many rounds.
+   */
+  | { type: 'spawnEntity'; entity: Entity; ownerId?: string; rounds?: number }
+  /** Take something out of play (a summon ending, a barrier dropping). Gone, not dead. */
+  | { type: 'despawnEntity'; entityId: string }
   /** Raise or lower a stat (levelling up, a curse): stats are the ruleset's numbers. */
   | { type: 'modifyStat'; entityId: string; stat: string; delta: number }
   | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
@@ -127,7 +134,21 @@ export interface StatChangedEvent extends GameEvent {
   to: number;
 }
 
+export interface EntitySpawnedEvent extends GameEvent {
+  type: 'entitySpawned';
+  entityId: string;
+  position: Vec2;
+  ownerId?: string;
+}
+
+export interface EntityDespawnedEvent extends GameEvent {
+  type: 'entityDespawned';
+  entityId: string;
+}
+
 export type EffectEvent =
+  | EntitySpawnedEvent
+  | EntityDespawnedEvent
   | StatChangedEvent
   | EntityChangedEvent
   | ItemsChangedEvent
@@ -318,6 +339,41 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         tiles[index] = changed;
         next = { ...next, map: { ...next.map, tiles } };
         events.push({ type: 'tileChanged', position: { x, y }, tile: changed });
+        break;
+      }
+      case 'spawnEntity': {
+        const e = effect.entity;
+        if (next.entities[e.id]) throw new Error(`spawnEntity: "${e.id}" already exists`);
+        const at = e.position;
+        const taken = Object.values(next.entities).some((o) => o.position.x === at.x && o.position.y === at.y && ruleset.isStanding(o) && !o.tags.includes('object'));
+        if (!tileAt(next.map, at)?.walkable || taken) break;
+        next = { ...next, entities: { ...next.entities, [e.id]: e } };
+        if (next.turn.mode === 'combat') {
+          const order = [...next.turn.order];
+          const after = effect.ownerId ? order.indexOf(effect.ownerId) : -1;
+          order.splice(after >= 0 ? after + 1 : order.length, 0, e.id);
+          next = { ...next, turn: { ...next.turn, order } };
+        }
+        if (effect.rounds !== undefined) {
+          const summons = { ...((next.systems.summons as unknown as Record<string, { ownerId?: string; roundsLeft: number }>) ?? {}) };
+          summons[e.id] = { ...(effect.ownerId ? { ownerId: effect.ownerId } : {}), roundsLeft: effect.rounds };
+          next = { ...next, systems: { ...next.systems, summons: summons as never } };
+        }
+        events.push({ type: 'entitySpawned', entityId: e.id, position: { ...at }, ...(effect.ownerId ? { ownerId: effect.ownerId } : {}) });
+        break;
+      }
+      case 'despawnEntity': {
+        if (!next.entities[effect.entityId]) break;
+        const { [effect.entityId]: _gone, ...rest } = next.entities;
+        const summons = { ...((next.systems.summons as unknown as Record<string, unknown>) ?? {}) };
+        delete summons[effect.entityId];
+        let turn = next.turn;
+        if (turn.order.includes(effect.entityId)) {
+          // The turn pointer stays on whoever is active; removing someone else just shortens the order.
+          turn = { ...turn, order: turn.order.filter((id) => id !== effect.entityId) };
+        }
+        next = { ...next, entities: rest, turn, systems: { ...next.systems, summons: summons as never } };
+        events.push({ type: 'entityDespawned', entityId: effect.entityId });
         break;
       }
       case 'modifyStat': {

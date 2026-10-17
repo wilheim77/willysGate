@@ -69,3 +69,22 @@ describe('modifyStat and deriveSeed (R19, R12)', () => {
     expect(deriveSeed(42, 'loot')).not.toBe(deriveSeed(43, 'loot'));
   });
 });
+
+describe('summons (R13)', () => {
+  it('spawn joins the fight after its owner and leaves when its rounds run out', () => {
+    const e = createEngine(toyRuleset, 'test');
+    const pool = (n: number) => ({ current: n, max: n });
+    let s = e.newGame({ seed: 1, map: asciiMap(['......']), entities: [makeEntity({ id: 'a', resources: { blood: pool(5) } }), makeEntity({ id: 'z', factionId: 'night', controllerId: 'ai', position: { x: 5, y: 0 }, resources: { blood: pool(5) } })] });
+    const started = e.apply(s, { type: 'startCombat', issuer: 'system', participants: ['a', 'z'] } as never);
+    if (!started.ok) throw new Error();
+    s = { ...started.state, turn: { ...started.state.turn, order: ['a', 'z'], activeEntityId: 'a' } };
+    s = applyEffects(toyRuleset, s, [{ type: 'spawnEntity', entity: makeEntity({ id: 'imp', position: { x: 1, y: 0 }, resources: { blood: pool(2) } }), ownerId: 'a', rounds: 1 }]).state;
+    expect(s.turn.order).toEqual(['a', 'imp', 'z']);
+    for (let i = 0; i < 3 && s.entities.imp; i++) {
+      const r = e.apply(s, { type: 'endTurn', issuer: 'system', entityId: s.turn.activeEntityId! } as never);
+      if (r.ok) s = r.state;
+    }
+    expect(s.entities.imp).toBeUndefined();
+    expect(s.turn.order).toEqual(['a', 'z']);
+  });
+});

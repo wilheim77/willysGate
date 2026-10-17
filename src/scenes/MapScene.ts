@@ -467,6 +467,8 @@ export class MapScene extends Phaser.Scene {
         this.focusOn(this.hooks.controlledEntityId());
         return;
       }
+      case 'entitySpawned':
+      case 'entityDespawned':
       case 'entityChanged':
       case 'tileChanged': {
         // A chest opens, a door swings, a lever flips: rebuild the world from state.
