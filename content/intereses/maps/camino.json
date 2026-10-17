@@ -116,7 +116,7 @@
     },
     {
      "id": 5,
-     "name": "minero_hambriento-1",
+     "name": "minero_cabecilla",
      "type": "",
      "point": true,
      "x": 656,
@@ -128,7 +128,7 @@
     },
     {
      "id": 6,
-     "name": "minero_hambriento-2",
+     "name": "minero_hambriento_1",
      "type": "",
      "point": true,
      "x": 720,
@@ -140,7 +140,7 @@
     },
     {
      "id": 7,
-     "name": "minero_hambriento-3",
+     "name": "minero_hambriento_2",
      "type": "",
      "point": true,
      "x": 688,
@@ -152,7 +152,7 @@
     },
     {
      "id": 8,
-     "name": "minero_hambriento-4",
+     "name": "minero_hambriento_3",
      "type": "",
      "point": true,
      "x": 880,
@@ -446,17 +446,22 @@
       {
        "name": "dialogue",
        "type": "string",
-       "value": "TODO:mineros_hambrientos"
+       "value": "camino_mineros"
       },
       {
        "name": "speaker",
        "type": "string",
-       "value": "minero_hambriento-1"
+       "value": "minero_cabecilla"
       },
       {
        "name": "once",
        "type": "bool",
        "value": true
+      },
+      {
+       "name": "fight",
+       "type": "string",
+       "value": "minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3"
       }
      ]
     }
