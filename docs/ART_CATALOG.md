@@ -433,3 +433,20 @@ Dibujados por `scripts/art/spell-fx.ts` con rampas de la paleta de 0x72 (fuego, 
 - `hurt` (2 frames, ~12 fps, sin bucle): destello blanco y retroceso con tinte rojo.
 
 Se derivan del frame `idle` de cada personaje con `scripts/art/build-action-anims.ts`, así que conservan el estilo de 0x72. Todos los frames de estos sprites pasan a `assets/0x72/actors.png`. Los frames nuevos son más anchos (relleno simétrico de 4 px, 8 px en los de 32), así que el pivote de los pies no se mueve. Vista previa: [`art-previews/0x72-actions.png`](art-previews/0x72-actions.png). **Petición al cliente:** reproducir `attack`, `cast` y `hurt` cuando lleguen los eventos correspondientes y volver a `idle`.
+
+# Fuentes de luz y palanca (pulido de la demo)
+
+| Id | Tipo | Descripción |
+|---|---|---|
+| `candles` | prop, `floor`, luz `#ffc070` | Tres velas de sebo con goterones (capilla, cripta). 3 frames. |
+| `oil_lamp` | prop, `wall`, luz `#ffb050` | Candil de barro colgado de una escarpia. 3 frames. |
+| `lantern` | prop, `floor`, luz `#ffb050` | Farol de hierro con ventanas de cuerno. 3 frames. |
+| `lever` | sprite (`idle`, `up`, `down`, `pull`) | Palanca redibujada sobre placa de piedra, con pomo rojo grande: se lee como algo que se usa. Sustituye a la de 0x72. |
+
+Las luces sin `prop` en los mapas iluminan sin que se vea de dónde sale la luz. Sugerencia para `mapas`:
+
+- `candles` para `velas-capilla-*` y `vela-cripta`.
+- `oil_lamp` para `candil-*` y `lampara-empenos`.
+- `lantern` para `farol-pozo` y `farol-polvorin`.
+- `campfire` para las `hoguera-*` si no tienen ya un spawn `campfire` debajo.
+- Los `brillo-*` (plata, resonadores) pueden seguir sin prop.
