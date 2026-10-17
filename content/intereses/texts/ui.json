@@ -40,7 +40,8 @@
     "newGame": "Nueva partida. La deuda sigue siendo la misma.",
     "confirmNew": "¿Empezar de nuevo? Lo que no hayas guardado se pierde. Como todo.",
     "height": "altura",
-    "genericError": "Algo ha salido mal. Esta vez no es culpa de nadie del valle."
+    "genericError": "Algo ha salido mal. Esta vez no es culpa de nadie del valle.",
+    "closedWay": "Por ahí no se pasa. Todavía."
   },
   "combat": {
     "miss": "Fallo",

@@ -76,6 +76,8 @@ export interface GameDefinition {
   triggers?: { id: string; when: DialogueWhen; dialogue: string; partner?: string; map?: string }[];
   /** Story-driven levelling: the party reaches each level when its condition holds. */
   levels?: { rules: { level: number; when: DialogueWhen }[]; levelUp(entity: Entity, level: number): Entity; texts?: Record<string, Record<string, string>> };
+  /** The journal: the first objective whose condition holds is shown as the current goal. */
+  objectives?: { when?: DialogueWhen; text: string }[];
   /** A narrator's line for an engine event, if any (Willy's Narrador). Cosmetic. */
   narrate?(event: GameEvent, state: GameState): string | null;
   /** A conversation that opens as soon as the protagonist is created. */

@@ -401,6 +401,12 @@ export class GameController {
   private checkExits(): boolean {
     const leader = this.state.entities[this.game.leaderId];
     if (!leader || dialogueOf(this.state)) return false;
+    // A way the story hasn't opened yet: say so instead of leaving the player standing there.
+    const shut = zonesOf(this.state, 'exits').find((z) => inZone(z, leader.position) && !this.zoneAllowed(z));
+    if (shut) {
+      this.hud.say(String(shut.properties.closedText ?? (this.game.texts.ui as Record<string, string>).closedWay ?? 'Por ahí no se puede pasar todavía.'), true);
+      return false;
+    }
     const exit = zonesOf(this.state, 'exits').find((z) => inZone(z, leader.position) && z.properties.to && z.properties.spawn && this.zoneAllowed(z));
     if (!exit) return false;
     this.trail = [];

@@ -240,7 +240,9 @@ function performActionOnce(ruleset: Ruleset, state: GameState, attackerId: strin
 function onCombatEnd(ruleset: Ruleset, state: GameState, winner: string | null): ActionOutcome {
   const r = new Resolver(ruleset, state, null as never);
   for (const e of Object.values(state.entities)) {
-    if (e.factionId === winner && hasCondition(e, 'downed')) heal(r, e.id, 1);
+    // The winners get their fallen up; story characters (and bystanders) always come round.
+    const keeps = e.tags.includes('essential') || e.tags.includes('noncombatant');
+    if (hasCondition(e, 'downed') && !hasCondition(e, 'dead') && (e.factionId === winner || keeps)) heal(r, e.id, 1);
     if ((e.resources.extra_action?.current ?? 0) > 0) r.apply({ type: 'modifyResource', entityId: e.id, resource: 'extra_action', delta: -1 });
   }
   return r.outcome();

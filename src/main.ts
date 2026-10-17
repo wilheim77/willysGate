@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine } from '../engine';
+import { type CheckResult, createEngine, evaluateCondition } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -111,6 +111,27 @@ if (game.narrate) {
     }
   });
   box.addEventListener('click', () => (box.hidden = true));
+}
+
+// The journal: what to do now. A 📜 button shows it; a change of objective is announced.
+if (game.objectives?.length) {
+  const current = () => {
+    const leader = store.state.entities[game.leaderId];
+    if (!leader) return '';
+    return game.objectives!.find((o: { when?: Parameters<typeof evaluateCondition>[3]; text: string }) => !o.when || evaluateCondition(store.engine.ruleset, store.state, leader.id, o.when))?.text ?? '';
+  };
+  const button = document.createElement('button');
+  button.textContent = '📜';
+  button.title = game.texts.combat?.journal ?? 'Diario';
+  button.setAttribute('aria-label', button.title);
+  button.addEventListener('click', () => dialogue.ask(current(), [], game.texts.combat?.ok ?? 'Vale'));
+  document.querySelector('.hud-top nav')!.prepend(button);
+  let last = current();
+  store.subscribe(() => {
+    const now = current();
+    if (now && now !== last) hud.say(`📜 ${now}`);
+    last = now;
+  });
 }
 
 const creation = new CreationScreen(store, game);
