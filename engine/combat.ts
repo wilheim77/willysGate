@@ -181,7 +181,7 @@ function beginTurn(ruleset: Ruleset, state: GameState, entityId: string, rng: Rn
   let id = entityId;
   for (let guard = 0; guard <= next.turn.order.length; guard++) {
     const entity = next.entities[id];
-    next = { ...next, turn: { ...next.turn, activeEntityId: id, movementUsed: 0 } };
+    next = { ...next, turn: { ...next.turn, activeEntityId: id, activeIndex: next.turn.order.indexOf(id), movementUsed: 0 } };
     events.push({ type: 'turnStarted', entityId: id, round: next.turn.round } as TurnStartedEvent);
     if (entity) {
       const refreshed = applyEffects(ruleset, next, refreshTurnResources(ruleset, entity));
@@ -227,7 +227,9 @@ function beginTurn(ruleset: Ruleset, state: GameState, entityId: string, rng: Rn
  */
 function advanceOrder(ruleset: Ruleset, state: GameState, rng: RngCursor): { state: GameState; nextId: string; events: GameEvent[] } {
   const { order, activeEntityId, round } = state.turn;
-  const index = order.indexOf(activeEntityId ?? '');
+  let index = order.indexOf(activeEntityId ?? '');
+  // The active one left play mid-turn (a summon expiring): continue from where it stood.
+  if (index < 0) index = Math.min(state.turn.activeIndex ?? 0, order.length) - 1;
   const nextIndex = (index + 1) % order.length;
   let next: GameState = state;
   const events: GameEvent[] = [];
@@ -334,9 +336,9 @@ export const endTurn: CommandHandler<EndTurnCommand> = (state, cmd, { ruleset })
     ending = r.state;
     endEvents.push(...r.events);
   }
-  if (!ending.entities[cmd.entityId]) ending = state;
-  const ticked = decrementConditions(ending, cmd.entityId);
-  const expiredEffects: Effect[] = ticked.entities[cmd.entityId]!.conditions
+  // If the turn's owner left play during its own end (a self-destructing automaton), keep the result.
+  const ticked = ending.entities[cmd.entityId] ? decrementConditions(ending, cmd.entityId) : ending;
+  const expiredEffects: Effect[] = (ticked.entities[cmd.entityId]?.conditions ?? [])
     .filter((c) => c.remainingTurns !== undefined && c.remainingTurns <= 0)
     .map((c) => ({ type: 'removeCondition', entityId: cmd.entityId, condition: c.id }));
   const expired = applyEffects(ruleset, ticked, expiredEffects);

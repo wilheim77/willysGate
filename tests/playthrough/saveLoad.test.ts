@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { SYSTEM_ISSUER, nextAiCommand, type BaseCommand } from '../../engine';
+import { SYSTEM_ISSUER, nextAiCommand, worldOf, type BaseCommand } from '../../engine';
 import { dnd5e } from '../../rulesets/dnd5e';
-import { buildWorld, ENEMY_IDS, makeEngine, PARTY_IDS } from './setup';
+import { PARTY_IDS, buildActWorld, buildTestWorld, hostileGroups, makeEngine } from './setup';
 
 /**
  * Save/load roundtrip: at random points during a combat run, serializing then
@@ -15,44 +15,69 @@ const DEEP = process.env.QA_DEEP === '1';
 const SEEDS = DEEP ? [1, 2, 3, 4, 5] : [1];
 const CHECKPOINT_EVERY = 7;
 
+function soakWithCheckpoints(engine: ReturnType<typeof makeEngine>, label: string, seed: number, state: ReturnType<typeof buildTestWorld>, participants: string[]) {
+  const started = engine.apply(state, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants } as BaseCommand & { participants: string[] });
+  expect(started.ok, started.ok ? '' : `${label}: startCombat failed`).toBe(true);
+  if (!started.ok) return;
+
+  let s = started.state;
+  let step = 0;
+  let checkpoints = 0;
+  while (s.turn.mode === 'combat' && step < 400 && checkpoints < 15) {
+    step++;
+    if (step % CHECKPOINT_EVERY === 0) {
+      checkpoints++;
+      const json = engine.serialize(s);
+      let reloaded: ReturnType<typeof engine.deserialize>;
+      expect(() => (reloaded = engine.deserialize(json)), `${label} seed=${seed} step=${step}: deserialize threw`).not.toThrow();
+      expect(JSON.stringify(reloaded!), `${label} seed=${seed} step=${step}: reloaded state differs from the saved one`).toBe(JSON.stringify(s));
+
+      // The reloaded copy must behave identically going forward: same next AI command.
+      const activeId = s.turn.activeEntityId!;
+      const fromOriginal = nextAiCommand(dnd5e, s, activeId);
+      const fromReloaded = nextAiCommand(dnd5e, reloaded!, activeId);
+      expect(JSON.stringify(fromReloaded), `${label} seed=${seed} step=${step}: reloaded state picks a different AI command`).toBe(JSON.stringify(fromOriginal));
+    }
+
+    const activeId = s.turn.activeEntityId!;
+    const cmd = nextAiCommand(dnd5e, s, activeId);
+    const result = engine.apply(s, cmd);
+    expect(result.ok, `${label} seed=${seed} step=${step}: AI command failed`).toBe(true);
+    if (!result.ok) break;
+    s = result.state;
+  }
+  expect(checkpoints, `${label} seed=${seed}: fight ended too fast to exercise any checkpoint`).toBeGreaterThan(0);
+}
+
 describe('save/load roundtrip', () => {
   const engine = makeEngine();
 
   for (const seed of SEEDS) {
-    it(`combat state survives serialize/deserialize at several checkpoints (seed ${seed})`, () => {
-      const world = buildWorld(engine, seed);
-      const participants = [...PARTY_IDS, ...ENEMY_IDS];
-      const started = engine.apply(world, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants } as BaseCommand & { participants: string[] });
-      expect(started.ok).toBe(true);
-      if (!started.ok) return;
+    it(`legacy test arena survives serialize/deserialize at several checkpoints (seed ${seed})`, () => {
+      soakWithCheckpoints(engine, 'test', seed, buildTestWorld(engine, seed), [...PARTY_IDS, 'garran', 'anselmo', 'bandit-1', 'bandit-2', 'thug', 'skeleton']);
+    });
 
-      let state = started.state;
-      let step = 0;
-      let checkpoints = 0;
-      while (state.turn.mode === 'combat' && step < 400 && checkpoints < 15) {
-        step++;
-        if (step % CHECKPOINT_EVERY === 0) {
-          checkpoints++;
-          const json = engine.serialize(state);
-          let reloaded: ReturnType<typeof engine.deserialize>;
-          expect(() => (reloaded = engine.deserialize(json)), `seed=${seed} step=${step}: deserialize threw`).not.toThrow();
-          expect(JSON.stringify(reloaded!), `seed=${seed} step=${step}: reloaded state differs from the saved one`).toBe(JSON.stringify(state));
-
-          // The reloaded copy must behave identically going forward: same next AI command.
-          const activeId = state.turn.activeEntityId!;
-          const fromOriginal = nextAiCommand(dnd5e, state, activeId);
-          const fromReloaded = nextAiCommand(dnd5e, reloaded!, activeId);
-          expect(JSON.stringify(fromReloaded), `seed=${seed} step=${step}: reloaded state picks a different AI command`).toBe(JSON.stringify(fromOriginal));
-        }
-
-        const activeId = state.turn.activeEntityId!;
-        const cmd = nextAiCommand(dnd5e, state, activeId);
-        const result = engine.apply(state, cmd);
-        expect(result.ok, `seed=${seed} step=${step}: AI command failed`).toBe(true);
-        if (!result.ok) break;
-        state = result.state;
-      }
-      expect(checkpoints, `seed=${seed}: fight ended too fast to exercise any checkpoint`).toBeGreaterThan(0);
+    it(`real act map ("escorial") survives serialize/deserialize at several checkpoints (seed ${seed})`, () => {
+      const world = buildActWorld(engine, seed, 'escorial');
+      const groups = hostileGroups(world);
+      const participants = [...PARTY_IDS, ...Object.values(groups).flat()];
+      soakWithCheckpoints(engine, 'escorial', seed, world, participants);
     });
   }
+
+  it('save/load survives a map change (systems.world stash/restore)', () => {
+    const engine2 = makeEngine();
+    const start = buildActWorld(engine2, 1, 'camino');
+    const result = engine2.apply(start, { type: 'travel', issuer: SYSTEM_ISSUER, entityId: 'hero', mapId: 'plaza', spawn: 'entry-camino' } as BaseCommand & {
+      entityId: string;
+      mapId: string;
+      spawn: string;
+    });
+    expect(result.ok, result.ok ? '' : `travel failed: ${JSON.stringify((result as { error: unknown }).error)}`).toBe(true);
+    if (!result.ok) return;
+    expect(result.state.map.id).toBe('plaza');
+    expect(worldOf(result.state).stashed.camino, 'camino should be stashed after leaving it').toBeDefined();
+    const reloaded = engine2.deserialize(engine2.serialize(result.state));
+    expect(JSON.stringify(reloaded)).toBe(JSON.stringify(result.state));
+  });
 });

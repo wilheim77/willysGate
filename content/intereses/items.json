@@ -3,5 +3,8 @@
   "coronas": { "label": "Coronas", "text": "La moneda del Ducado. Nunca hay suficientes, y siempre son de otro." },
   "llave_herrumbrosa": { "label": "Llave herrumbrosa", "text": "Se la dio un viejo minero a cambio de pan. Abre algo. Eso dijo." },
   "pagare_valcarcel": { "label": "Pagaré de Valcárcel", "text": "Un pagaré con el sello del banco. Alguien de este valle debe más de lo que dice." },
-  "libro_cuentas_lisandro": { "label": "Libro de cuentas de Lisandro", "text": "Letra preciosa y paciente. Cuarenta libras de plata por semana, de «A. B.», por el Pozo. Y una última hoja con el sello de la Casa: embargo preferente. Comprador previsto: A. B." }
+  "libro_cuentas_lisandro": { "label": "Libro de cuentas de Lisandro", "text": "Letra preciosa y paciente. Cuarenta libras de plata por semana, de «A. B.», por el Pozo. Y una última hoja con el sello de la Casa: embargo preferente. Comprador previsto: A. B." },
+  "llave_cripta": { "label": "Llave de la cripta", "text": "Se la dio el barón «por los servicios prestados». Abre la escalera de los monjes, que bajaron a la mina «por motivos»." },
+  "sello_baron": { "label": "Sello del barón", "text": "El sello de los Mazo, con su escudo de un mazo, por si quedaba alguna duda. Hace falta para el embargo. Vale exactamente una comisión." },
+  "collera": { "label": "Collera de plata viva", "text": "Zumba. Una vez por combate, ordena a un enemigo y te obedece un turno. Desde que la llevas, el canto no se calla, y las curas de Anselmo te sanan la mitad." }
 }

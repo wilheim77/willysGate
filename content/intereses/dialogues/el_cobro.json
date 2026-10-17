@@ -1,0 +1,628 @@
+{
+  "$comment": "Scene 7 / D4. Opened by the game in the Pico Roto (or the plaza) once d3_resuelta is set (speaker dorotea). Hilda brings the seal if she ran off with it. Burning the deed turns Dorotea against the party (faction valcarcel).",
+  "id": "el_cobro",
+  "start": "mesa",
+  "nodes": {
+    "mesa": {
+      "text": "En la mesa del Pico Roto, entre un vino agrio y una vela que no da para más, Dorotea Vane extiende un pergamino con el sello de la Casa Valcárcel. Escritura de embargo. Hondonegra entera, con su mina, su río gris y su gente, cabe en una hoja si la letra es pequeña.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "cobro_empezado",
+          "value": true
+        }
+      ],
+      "next": "dorotea_1"
+    },
+    "dorotea_1": {
+      "speaker": "dorotea",
+      "text": "Hemos llegado a la parte que me gusta, cobrador: la de firmar. Usted decide qué. Yo apunto.",
+      "next": [
+        {
+          "when": {
+            "all": [
+              {
+                "flag": "hilda_huyo_sello"
+              },
+              {
+                "notFlag": "hilda_se_va"
+              }
+            ]
+          },
+          "next": "hilda_1"
+        },
+        {
+          "when": {
+            "all": [
+              {
+                "flag": "d2_encubierto"
+              },
+              {
+                "notFlag": "dorotea_uso_palanca"
+              }
+            ]
+          },
+          "next": "presion"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "hilda_1": {
+      "speaker": "hilda",
+      "text": "Buenas noches. Traigo algo que les hace falta. El sello del barón. Me lo llevé la noche de las antorchas; alguien tenía que salvar lo único que valía algo en esa abadía.",
+      "next": "hilda_2"
+    },
+    "hilda_2": {
+      "speaker": "hilda",
+      "text": "El precio es su comisión, cobrador. Entera. Con eso me compro un sitio lejos donde nadie sepa lo que es una senescal. No regateo: no me queda tiempo.",
+      "choices": [
+        {
+          "text": "Trato. El sello por la comisión.",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "sello_baron",
+              "count": 1
+            },
+            {
+              "type": "setFlag",
+              "flag": "sello_comprado",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "flag": "sin_comision",
+              "value": true
+            }
+          ],
+          "next": "hilda_si"
+        },
+        {
+          "text": "No.",
+          "next": "hilda_no"
+        }
+      ]
+    },
+    "hilda_si": {
+      "speaker": "hilda",
+      "text": "Un placer, cobrador. Es la primera vez en años que alguien me paga lo que valgo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hilda_se_va",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "all": [
+              {
+                "flag": "d2_encubierto"
+              },
+              {
+                "notFlag": "dorotea_uso_palanca"
+              }
+            ]
+          },
+          "next": "presion"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "hilda_no": {
+      "speaker": "hilda",
+      "text": "Como quiera. El sello me lo guardo. Siempre habrá otro banco.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hilda_se_va",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "all": [
+              {
+                "flag": "d2_encubierto"
+              },
+              {
+                "notFlag": "dorotea_uso_palanca"
+              }
+            ]
+          },
+          "next": "presion"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "presion": {
+      "speaker": "dorotea",
+      "text": "Antes de que elija, le recuerdo algo. Treinta coronas. «Tizón, G., cargas, Garganta». Usted decidió que no había pasado nada. Si no firma lo que la Casa necesita, pasará en voz alta, en la plaza.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "dorotea_uso_palanca",
+          "value": true
+        }
+      ],
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "dorotea",
+      "text": "¿Y bien?",
+      "choices": [
+        {
+          "text": "Ejecutar el embargo. Que la Casa se quede con todo.",
+          "when": {
+            "any": [
+              {
+                "any": [
+                  {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "baron_muerto"
+                        }
+                      },
+                      {
+                        "notFlag": "hilda_huyo_sello"
+                      }
+                    ]
+                  },
+                  {
+                    "item": "sello_baron",
+                    "atLeast": 1
+                  }
+                ]
+              },
+              {
+                "flag": "baron_muerto"
+              }
+            ]
+          },
+          "lockedHint": "[Hace falta el sello del barón, o el barón muerto]",
+          "next": "embargo"
+        },
+        {
+          "text": "La mina es de la Cuadrilla. El barón lo firmará.",
+          "when": {
+            "not": {
+              "flag": "baron_muerto"
+            }
+          },
+          "lockedHint": "[El barón ha muerto]",
+          "next": "cuadrilla_firma"
+        },
+        {
+          "id": "falsificar",
+          "text": "La mina es de la Cuadrilla. Y la firma del barón… la pongo yo.",
+          "once": true,
+          "when": {
+            "not": {
+              "rule": "class",
+              "params": {
+                "is": "rogue"
+              }
+            }
+          },
+          "check": {
+            "check": "deception",
+            "dc": 15,
+            "success": "falsa_ok",
+            "failure": "falsa_mal"
+          }
+        },
+        {
+          "id": "falsificar_p",
+          "text": "[Pícaro] La firma del barón la he visto tres veces. Con una basta.",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "rogue"
+            }
+          },
+          "check": {
+            "check": "deception",
+            "dc": 15,
+            "success": "falsa_ok",
+            "failure": "falsa_mal",
+            "situational": [
+              "advantage"
+            ]
+          }
+        },
+        {
+          "text": "Refinanciar. Un préstamo nuevo para el barón.",
+          "when": {
+            "not": {
+              "flag": "baron_muerto"
+            }
+          },
+          "lockedHint": "[El barón ha muerto]",
+          "next": "refinanciar"
+        },
+        {
+          "text": "Quemar la escritura y llevarme toda la plata que pueda cargar.",
+          "next": "quemar"
+        },
+        {
+          "text": "Déjeme pensarlo."
+        }
+      ]
+    },
+    "embargo": {
+      "text": "El sello baja sobre la cera roja con un ruido muy pequeño. Hondonegra pasa a ser propiedad de la Casa Valcárcel a las nueve y cuarto de la noche, según consta.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d4_embargo",
+          "value": true
+        }
+      ],
+      "next": "embargo_2"
+    },
+    "embargo_2": {
+      "speaker": "dorotea",
+      "text": "Saldo cero. Mi deuda con la Casa queda cancelada con este acto. Soy libre, cobrador. Es una sensación muy rara. Se parece mucho a no tener nada que hacer.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "dorotea_libre",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "notFlag": "sin_comision"
+          },
+          "next": "embargo_3"
+        },
+        {
+          "next": "embargo_4"
+        }
+      ]
+    },
+    "embargo_3": {
+      "speaker": "dorotea",
+      "text": "Su comisión: el diez por ciento. Cuatrocientas coronas, más la parte de los intereses. Le apunto que la ha cobrado. Es la única línea de este libro que se escribe con alegría.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 400
+        },
+        {
+          "type": "setFlag",
+          "flag": "comision_cobrada",
+          "value": true
+        }
+      ],
+      "next": "embargo_4"
+    },
+    "embargo_4": {
+      "speaker": "dorotea",
+      "text": "El regente será el señor Fuss. Ya lo sabía, ¿verdad? Todos lo sabíamos. Por eso firmamos tan bien."
+    },
+    "cuadrilla_firma": {
+      "speaker": "mazo",
+      "text": "Firmo. Firmo lo que me pongan delante; es mi gran talento. Por una vez, que sirva para algo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_cuadrilla",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "mina_del_pueblo",
+          "value": true
+        }
+      ],
+      "next": "dorotea_queda"
+    },
+    "falsa_ok": {
+      "text": "La firma te sale mejor que al barón. Con más convicción, incluso. Nella Yesca la mira mucho rato y luego dobla el papel sin decir nada, como quien guarda una reliquia.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_cuadrilla",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "mina_del_pueblo",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "firma_falsa",
+          "value": true
+        }
+      ],
+      "next": "dorotea_queda"
+    },
+    "falsa_mal": {
+      "text": "La firma tiembla. Dorotea la mira un instante y no dice nada; no le hace falta. La escritura de la Cuadrilla irá a los tribunales del Ducado, donde la esperan, con los brazos abiertos, trescientos años de pleitos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_cuadrilla",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "mina_en_pleito",
+          "value": true
+        }
+      ],
+      "next": "dorotea_queda"
+    },
+    "dorotea_queda": {
+      "speaker": "dorotea",
+      "text": "La Casa no va a aceptarlo. Y yo, sin este embargo, sigo debiendo lo que debía. Que es todo.",
+      "choices": [
+        {
+          "id": "convencer",
+          "text": "[Pruebas] El banco la ha usado como a todos, Dorotea. Lo sabe. Está en el libro de Lisandro. Quédese con nosotros.",
+          "once": true,
+          "when": {
+            "flag": "pista_banco_complice"
+          },
+          "check": {
+            "check": "persuasion",
+            "dc": 15,
+            "success": "dorotea_si",
+            "failure": "dorotea_no"
+          }
+        },
+        {
+          "text": "Lo siento, Dorotea.",
+          "next": "dorotea_no"
+        }
+      ]
+    },
+    "dorotea_si": {
+      "speaker": "dorotea",
+      "text": "…Una omisión, no un error. Pero son muchas omisiones. Muy bien, cobrador. Me quedo. No por usted: por la columna del debe, que hace años que no cuadra.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "dorotea_de_tu_lado",
+          "value": true
+        }
+      ]
+    },
+    "dorotea_no": {
+      "speaker": "dorotea",
+      "text": "No lo sienta. Apúntelo. Yo ya lo he hecho.",
+      "next": "dorotea_no_2"
+    },
+    "dorotea_no_2": {
+      "text": "Dorotea cierra el libro con un golpe seco y se va. En la puerta se detiene, como si fuera a decir algo, y no lo dice. Te ha dejado apuntado. Eso no prescribe.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "dorotea_se_va",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "te_deja_apuntado",
+          "value": true
+        },
+        {
+          "type": "setController",
+          "entityId": "dorotea",
+          "controllerId": "ai",
+          "factionId": "valcarcel"
+        },
+        {
+          "type": "setEntity",
+          "entityId": "dorotea",
+          "addTags": [
+            "noncombatant"
+          ]
+        }
+      ]
+    },
+    "refinanciar": {
+      "speaker": "mazo",
+      "text": "¿Otro préstamo? ¿Para pagar el primero? Hilda, ¿esto es buena idea?",
+      "next": [
+        {
+          "when": {
+            "all": [
+              {
+                "notFlag": "hilda_se_va"
+              },
+              {
+                "notFlag": "hilda_huyo_sello"
+              }
+            ]
+          },
+          "next": "refi_hilda"
+        },
+        {
+          "next": "refi_2"
+        }
+      ]
+    },
+    "refi_hilda": {
+      "speaker": "hilda",
+      "text": "Es la única que nos dejan tener, excelencia.",
+      "next": "refi_2"
+    },
+    "refi_2": {
+      "speaker": "dorotea",
+      "text": "Cuatro mil coronas, más intereses, refinanciadas a veinte años al nueve por ciento, con la mina como garantía y el pueblo como garantía de la garantía. La Casa queda muy satisfecha. Todos viven. Nadie es libre. Es el final perfecto.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_resuelta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d4_refinanciar",
+          "value": true
+        }
+      ],
+      "next": "refi_3"
+    },
+    "refi_3": {
+      "speaker": "dorotea",
+      "text": "Yo, por cierto, tampoco. Mi deuda sigue donde estaba. Le apunto que lo sabía cuando eligió."
+    },
+    "quemar": {
+      "text": "La escritura arde rápido; la letra pequeña, la que más. Dorotea mira el fuego sin moverse. Luego abre el libro por la página lacrada y rompe el lacre con la uña.",
+      "next": "quemar_2"
+    },
+    "quemar_2": {
+      "speaker": "dorotea",
+      "text": "«Si el cobrador se convierte en un estorbo.» Lo siento, cobrador. Está escrito. Y yo cumplo lo que está escrito: es lo único que he hecho bien en mi vida.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d4_quemar",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "orden_sellada_abierta",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "quemar_garran"
+        },
+        {
+          "next": "quemar_anselmo"
+        }
+      ]
+    },
+    "quemar_garran": {
+      "speaker": "garran",
+      "text": "Contadora. Si sacas ese cuchillo, yo saco el mío. Y el mío es más grande. Lo digo sin ningún respeto.",
+      "next": "quemar_anselmo"
+    },
+    "quemar_anselmo": {
+      "text": "Nadie dice nada más. Ya está todo dicho.",
+      "next": [
+        {
+          "when": {
+            "all": [
+              {
+                "inParty": "anselmo"
+              },
+              {
+                "flag": "juicio_a_golpes"
+              }
+            ]
+          },
+          "next": "anselmo_huye"
+        },
+        {
+          "next": "pelea"
+        }
+      ]
+    },
+    "anselmo_huye": {
+      "speaker": "anselmo",
+      "text": "Me salvasteis a golpes, y a golpes no sé estar. Que la tierra os sea leve. A todos. Rezaré por el que gane; por adelantado, como siempre.",
+      "effects": [
+        {
+          "type": "setController",
+          "entityId": "anselmo",
+          "controllerId": "ai",
+          "factionId": "neutral"
+        },
+        {
+          "type": "setEntity",
+          "entityId": "anselmo",
+          "addTags": [
+            "noncombatant"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "anselmo_huyo",
+          "value": true
+        }
+      ],
+      "next": "pelea"
+    },
+    "pelea": {
+      "text": "Dorotea saca un estilete del lomo del libro. Siempre estuvo ahí. Lo has visto cien veces y nunca lo has visto.",
+      "effects": [
+        {
+          "type": "setController",
+          "entityId": "dorotea",
+          "controllerId": "ai",
+          "factionId": "valcarcel"
+        },
+        {
+          "type": "startCombat",
+          "factions": [
+            "valcarcel"
+          ],
+          "onVictory": [
+            {
+              "type": "setFlag",
+              "flag": "dorotea_muerta",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "flag": "d4_resuelta",
+              "value": true
+            },
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": 600
+            }
+          ],
+          "onDefeat": [
+            {
+              "type": "setFlag",
+              "flag": "cobrador_muerto",
+              "value": true
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

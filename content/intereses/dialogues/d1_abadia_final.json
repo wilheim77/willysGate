@@ -1,0 +1,79 @@
+{
+  "$comment": "D1 aftermath if the party defended the abbey (d1_abadia). Abbey scene zone with requiresFlag d1_abadia, after the fight (speaker mazo). Gives the crypt key.",
+  "id": "d1_abadia_final",
+  "start": "patio",
+  "nodes": {
+    "patio": {
+      "text": "Amanece en el patio de la abadía. Hay mineros muertos a los que conocías de nombre. Hilda limpia la ballesta. El barón ha salido de su sala por primera vez en meses, y lo mira todo como si fuera un poema que no se atreve a terminar.",
+      "next": "nella"
+    },
+    "nella": {
+      "text": "Nella Yesca está de rodillas en el barro, con las manos atadas y la cara rota. No ha soltado el pañuelo negro.",
+      "choices": [
+        {
+          "text": "Que la encierren. Ya ha perdido suficiente.",
+          "next": "presa"
+        },
+        {
+          "text": "No intervenir.",
+          "next": "muerta"
+        }
+      ]
+    },
+    "presa": {
+      "speaker": "hilda",
+      "text": "A la cripta, entonces. Viva y encerrada. Es lo que hacemos aquí con todo lo que no sabemos qué hacer.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "nella_presa",
+          "value": true
+        }
+      ],
+      "next": "mazo"
+    },
+    "muerta": {
+      "text": "Hilda mira al barón. El barón mira a otro lado. Hilda tensa la ballesta. El ruido es muy pequeño para lo que significa.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "nella_muerta",
+          "value": true
+        }
+      ],
+      "next": "mazo"
+    },
+    "mazo": {
+      "speaker": "mazo",
+      "text": "Le debo la vida, cobrador. Es una deuda incómoda; no sé a qué interés se paga. Tome: la llave de la cripta. Debajo hay un pasadizo de los monjes que baja hasta la mina. Se marcharon «por motivos». Creo que los motivos están ahí abajo.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "llave_cripta",
+          "count": 1
+        },
+        {
+          "type": "setFlag",
+          "flag": "llave_cripta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "ruta_cripta",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "baron_vivo_d1",
+          "value": true
+        }
+      ],
+      "next": "mazo_2"
+    },
+    "mazo_2": {
+      "speaker": "mazo",
+      "text": "Y si ve a Brea, dígale… no, no le diga nada. Pegue usted primero. Lo dejo a su criterio, que parece usted de los que tienen."
+    }
+  }
+}

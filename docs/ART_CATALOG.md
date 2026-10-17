@@ -378,3 +378,16 @@ Vista previa (superficie y cara de cada terreno): [`art-previews/willy-plantas-2
 | 2 · Hipermercado | `hiper` (linóleo), `hiper-oferta` (flecha de oferta), `estanteria` (góndola vista desde arriba; cara: baldas con productos), `cinta` (cinta transportadora con galones; la planta 2 la usa como terreno que empuja) |
 | 3 · Verbena | `verbena` (adoquines con confeti y serpentinas), `escenario` (tarima de orquesta con bombillas; cara: faldón rojo con flecos), `muro-verbena` (tejados con banderines; cara: fachada encalada con balcón y maceta) |
 | 4 · Balneario | `azulejo` (gresite azul claro), `piscina` (agua profunda con reflejos), `hielo-balneario` (azulejo helado con grietas), `muro-balneario` (techo nevado; cara: azulejo blanco con franja azul y carámbanos) |
+
+## Atrezo de bioma de las Plantas 2-5
+
+Vista previa: [`art-previews/willy-biome-props.png`](art-previews/willy-biome-props.png). Los que son entidades (`sprites`, con `spriteId` en `prop(...)` de `maps.ts`) ocupan casilla; los `props` del manifiesto son decoración que dibuja el cliente.
+
+| Planta | `sprites` (entidades) | `props` (decoración) |
+|---|---|---|
+| 2 · Hipermercado | `estanteria-hiper` (16×24; `broken`: volcada con género por el suelo), `caja-registradora` (16×20), `cesta-ofertas`, `carrito` (ya existía) | La cinta es el terreno `cinta` |
+| 3 · Verbena | `altavoz-verbena` (16×24, bocina en poste), `caseta-feria` (32×24, «TOMBOLA» con toldo) | `farolillo` (pared, 2 frames, luz `#ffb040`), `banderines` (pared, 32×8) |
+| 4 · Balneario | `tumbona`, `flotador`, `sombrilla` (16×28) | `escalera-piscina` (suelo, borde de la piscina), `puerta-sauna` (pared, 16×24, vapor animado) |
+| 5 · Plató | `camara-estudio` (16×24, piloto rojo parpadeando en `idle`), `monitor-escenario`, `silla-director` (16×20) | `cables` (suelo), `claqueta` (suelo) |
+
+Las luces del plató ya existían en P2: `foco-movil`, `cono-de-luz` y `parrilla-de-focos`.

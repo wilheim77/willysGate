@@ -131,7 +131,7 @@
     },
     "banco": {
       "speaker": "nella",
-      "text": "El banco viene a quitarnos lo que el barón no ha sabido quitarnos. Cobra al barón, si puedes. Pero cuando cobres, mira qué te estás llevando.",
+      "text": "Cobra al barón, si puedes. Pero cuando cobres, mira bien qué te llevas.",
       "next": "hub"
     },
     "mirar_ok": {

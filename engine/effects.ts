@@ -46,6 +46,11 @@ export type Effect =
   | { type: 'spawnEntity'; entity: Entity; ownerId?: string; rounds?: number }
   /** Take something out of play (a summon ending, a barrier dropping). Gone, not dead. */
   | { type: 'despawnEntity'; entityId: string }
+  /**
+   * A jump to `to` (validate with jumpTargets first). Dropping more than `safeDown` levels
+   * counts as a fall of the extra levels; landing on traps and surfaces works as for pushes.
+   */
+  | { type: 'jump'; entityId: string; to: Vec2; safeDown?: number }
   /** Raise or lower a stat (levelling up, a curse): stats are the ruleset's numbers. */
   | { type: 'modifyStat'; entityId: string; stat: string; delta: number }
   | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
@@ -362,18 +367,37 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         events.push({ type: 'tileChanged', position: { x, y }, tile: changed });
         break;
       }
+      case 'jump': {
+        const e = next.entities[effect.entityId];
+        if (!e) throw new Error(`Effect targets unknown entity "${effect.entityId}"`);
+        const from = { ...e.position };
+        const drop = (tileAt(next.map, from)?.height ?? 0) - (tileAt(next.map, effect.to)?.height ?? 0);
+        updateEntity(e.id, (x) => ({ ...x, position: { ...effect.to } }));
+        // Reported like a teleport, so traps and the renderer treat the landing the same way.
+        events.push({ type: 'entityTeleported', entityId: e.id, from, to: { ...effect.to } });
+        events.push({ type: 'jumped', entityId: e.id, from, to: { ...effect.to } } as never);
+        const extra = drop - (effect.safeDown ?? ruleset.movement.maxStep);
+        if (extra > 0) events.push({ type: 'entityFell', entityId: e.id, levels: extra + 1 });
+        break;
+      }
       case 'spawnEntity': {
         const e = effect.entity;
         if (next.entities[e.id]) throw new Error(`spawnEntity: "${e.id}" already exists`);
         const at = e.position;
         const taken = Object.values(next.entities).some((o) => o.position.x === at.x && o.position.y === at.y && ruleset.isStanding(o) && !o.tags.includes('object'));
-        if (!tileAt(next.map, at)?.walkable || taken) break;
+        if (!tileAt(next.map, at)?.walkable || taken) {
+          events.push({ type: 'entitySpawnFailed', entityId: e.id, position: { ...at } } as never);
+          break;
+        }
         next = { ...next, entities: { ...next.entities, [e.id]: e } };
         if (next.turn.mode === 'combat') {
           const order = [...next.turn.order];
           const after = effect.ownerId ? order.indexOf(effect.ownerId) : -1;
           order.splice(after >= 0 ? after + 1 : order.length, 0, e.id);
-          next = { ...next, turn: { ...next.turn, order } };
+          // It acts right after its owner: same initiative, a hair lower.
+          const owner = effect.ownerId ? next.turn.initiative[effect.ownerId] : undefined;
+          const initiative = { ...next.turn.initiative, [e.id]: owner !== undefined ? owner - 0.001 : 0 };
+          next = { ...next, turn: { ...next.turn, order, initiative } };
         }
         if (effect.rounds !== undefined) {
           const summons = { ...((next.systems.summons as unknown as Record<string, { ownerId?: string; roundsLeft: number }>) ?? {}) };

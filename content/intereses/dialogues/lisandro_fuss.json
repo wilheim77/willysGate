@@ -75,6 +75,26 @@
           "value": true
         }
       ],
+      "next": [
+        {
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "enano_garran"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "enano_garran": {
+      "speaker": "garran",
+      "text": "Os parecéis más de lo que creéis. Los dos me miráis igual.",
+      "next": "enano_garran_2"
+    },
+    "enano_garran_2": {
+      "speaker": "lisandro",
+      "text": "Qué observación tan… semiorca. Siéntese, señor Tizón. No; mejor no se siente. Las sillas son de época.",
       "next": "hub"
     },
     "hub": {

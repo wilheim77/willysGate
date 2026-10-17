@@ -1,4 +1,4 @@
-import { type StartCombatCommand, startCombat } from './combat';
+import { type StartCombatCommand, applyOutcome, startCombat } from './combat';
 import { type BaseCommand, type CommandHandler, type CommandResult, type GameEvent, SYSTEM_ISSUER, fail, requireControlled } from './command-types';
 import { type Effect, applyEffects } from './effects';
 import { gridDistance } from './grid';
@@ -147,7 +147,8 @@ export function evaluateCondition(ruleset: Ruleset, state: GameState, actorId: s
   if ('inParty' in c) {
     const who = state.entities[c.inParty];
     const me = state.entities[actorId];
-    return !!who && !!me && who.controllerId === me.controllerId && ruleset.isStanding(who);
+    // Belonging is about who leads them, not whether they're on their feet right now.
+    return !!who && !!me && who.controllerId === me.controllerId && !who.conditions.some((c) => c.id === 'dead');
   }
   if ('notFlag' in c) return !state.flags[c.notFlag];
   if ('flag' in c) return c.is === undefined ? !!state.flags[c.flag] : state.flags[c.flag] === c.is;
@@ -234,8 +235,12 @@ function enterNode(
 }
 
 function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor, content: EngineContent): CommandResult {
-  const plain = effects.filter((e): e is Effect => e.type !== 'startCombat' && e.type !== 'travel');
-  const applied = applyEffects(ruleset, state, plain);
+  const plain = effects
+    .filter((e): e is Effect => e.type !== 'startCombat' && e.type !== 'travel')
+    .map((e) => bindPartner(state, e))
+    .filter((e): e is Effect => e !== null);
+  // Through applyOutcome, so a cave-in or a shove from a dialogue still hurts (falls, surfaces).
+  const applied = applyOutcome(ruleset, state, { effects: plain, events: [] }, rng);
   let next = applied.state;
   const events: GameEvent[] = [...applied.events];
   for (const e of effects) {
@@ -256,6 +261,15 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
     const participants = Object.values(next.entities)
       .filter((x) => ruleset.isStanding(x) && (factions.includes(x.factionId) || x.factionId === leaderSide))
       .map((x) => x.id);
+    const hooks0 = e as { onVictory?: Effect[] };
+    const foes = participants.filter((id) => next.entities[id]!.factionId !== leaderSide);
+    if (foes.length === 0) {
+      // Nobody left to fight (they're dead or gone): it counts as won, never as a dead end.
+      const won = applyOutcome(ruleset, next, { effects: hooks0.onVictory ?? [], events: [] }, rng);
+      next = won.state;
+      events.push(...won.events);
+      continue;
+    }
     const r = startCombat({ ...next, rng: rng.state }, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants } as StartCombatCommand, { ruleset });
     if (!r.ok) return r;
     next = r.state;
@@ -267,6 +281,21 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
     events.push(...r.events);
   }
   return { ok: true, state: next, events };
+}
+
+/**
+ * Generic scripts (any door, any well) refer to whatever the party is talking to as
+ * "$partner": its id, or its tile for setTile.
+ */
+function bindPartner(state: GameState, effect: Effect): Effect | null {
+  const d = dialogueOf(state);
+  const partner = d?.partnerId ? state.entities[d.partnerId] : undefined;
+  const e = { ...effect } as Record<string, unknown>;
+  // Opened without anyone to talk to (a test, a script): the "$partner" parts have nothing to act on.
+  if (!partner) return e.entityId === '$partner' || e.position === '$partner' ? null : effect;
+  if (e.entityId === '$partner') e.entityId = partner.id;
+  if (e.position === '$partner') e.position = { ...partner.position };
+  return e as unknown as Effect;
 }
 
 /** Scripts (the game itself) open conversations directly; players go through `interact`. */

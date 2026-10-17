@@ -1,0 +1,60 @@
+{
+  "$comment": "Spawn door-cripta in the abbey crypt. Opens with the baron's key (after defending the abbey). Optional route; the Pozo always works.",
+  "id": "door_cripta",
+  "start": "puerta",
+  "nodes": {
+    "puerta": {
+      "text": "Una puerta de roble con herrajes de monasterio, en el fondo de la cripta. Huele a cera vieja y, por debajo, a mina.",
+      "choices": [
+        {
+          "text": "Abrir con la llave del barón.",
+          "when": {
+            "item": "llave_cripta",
+            "atLeast": 1
+          },
+          "lockedHint": "[Hace falta la llave de la cripta]",
+          "next": "abierta"
+        },
+        {
+          "id": "ganzua",
+          "text": "Forzar la cerradura.",
+          "once": true,
+          "check": {
+            "check": "sleight_of_hand",
+            "dc": 17,
+            "success": "abierta",
+            "failure": "atascada"
+          }
+        },
+        {
+          "text": "Dejarla."
+        }
+      ]
+    },
+    "abierta": {
+      "text": "La cerradura gira con un suspiro. Detrás, unas escaleras de piedra bajan hacia la oscuridad, gastadas por pies que no tenían prisa. Los monjes se fueron «por motivos». Los motivos siguen ahí abajo.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "door-cripta",
+          "removeTags": [
+            "dialogue:door_cripta",
+            "obstacle"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "cripta_abierta",
+          "value": true
+        }
+      ]
+    },
+    "atascada": {
+      "text": "La cerradura es de cuando las cerraduras se hacían para durar más que los ladrones. Lo consigue.",
+      "next": "puerta"
+    }
+  }
+}

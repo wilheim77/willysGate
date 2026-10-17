@@ -137,6 +137,10 @@ export const travel: CommandHandler<TravelCommand> = (state, cmd, { content }) =
         walker.position.x >= z.x && walker.position.x < z.x + z.width && walker.position.y >= z.y && walker.position.y < z.y + z.height,
     );
     if (!exit) return fail('out_of_range', 'Not standing on that exit');
+    // Story gates: the abbey door opens only with an audience, the crypt only with the key.
+    const req = exit.properties.requiresFlag;
+    const unless = exit.properties.unlessFlag;
+    if ((req && !state.flags[String(req)]) || (unless && state.flags[String(unless)])) return fail('cannot_act', 'That way is closed for now');
   } else {
     issuer = state.entities[cmd.entityId]?.controllerId ?? cmd.issuer;
   }

@@ -47,8 +47,8 @@
     "readBy": "epílogo"
   },
   "garran_reclutado": {
-    "critical": false,
-    "description": "Garrán está en el grupo."
+    "critical": true,
+    "description": "Garrán se ha unido al grupo (inevitable: todas las salidas de camino_garran lo reclutan). Se pone a false si se va (D2, D3)."
   },
   "garran_era_barrenero": {
     "critical": false,
@@ -151,7 +151,7 @@
   },
   "deuda_con_dorotea": {
     "critical": false,
-    "description": "Dorotea te adelantó 20 coronas al 12 % mensual.",
+    "description": "Dorotea te adelantó 25 coronas (una sola vez) al 12 % mensual.",
     "readBy": "escena 7 (D4)"
   },
   "cirilo_ofendido": {
@@ -428,5 +428,335 @@
     "critical": false,
     "description": "Mataste al Callado del Pozo.",
     "readBy": "escena 5"
+  },
+  "garran_visto": {
+    "critical": false,
+    "description": "Ya se ha descrito a Garrán en la cuneta."
+  },
+  "mineros_vistos": {
+    "critical": false,
+    "description": "Ya se ha descrito a los mineros que cortan el camino."
+  },
+  "juicio_visto": {
+    "critical": false,
+    "description": "Ya se ha descrito el juicio en la plaza."
+  },
+  "juicio_aplazado": {
+    "critical": false,
+    "description": "Te marchaste del juicio: la limosna sube a 25 coronas."
+  },
+  "d1_resuelto": {
+    "critical": true,
+    "description": "D1 resuelta por cualquier vía (unirse, defender, mediar o no hacer nada). Abre la mina.",
+    "readBy": "mapa: salidas a la mina"
+  },
+  "d1_cuadrilla": {
+    "critical": false,
+    "description": "D1: te uniste a la Cuadrilla.",
+    "readBy": "mapa: encuentro de la guardia; escena d1_horca"
+  },
+  "d1_abadia": {
+    "critical": false,
+    "description": "D1: defendiste la abadía.",
+    "readBy": "mapa: encuentro de la Cuadrilla; escena d1_abadia_final"
+  },
+  "d1_mediar": {
+    "critical": false,
+    "description": "D1: intentaste mediar."
+  },
+  "d1_nada": {
+    "critical": false,
+    "description": "D1: no hiciste nada.",
+    "readBy": "epílogo"
+  },
+  "hulla_luchan": {
+    "critical": false,
+    "description": "Los Hulla luchan a tu lado en el asalto.",
+    "readBy": "mapa: encuentro de la abadía"
+  },
+  "hulla_no_luchan": {
+    "critical": false,
+    "description": "Los Hulla se niegan a luchar junto a un elfo.",
+    "readBy": "mapa: encuentro de la abadía"
+  },
+  "abadia_hostil": {
+    "critical": false,
+    "description": "La abadía te es hostil."
+  },
+  "pueblo_hostil": {
+    "critical": false,
+    "description": "El pueblo se ha vuelto contra ti (precios de la posada, la Santa Pala no cura).",
+    "readBy": "cliente: precios y curas"
+  },
+  "baron_confeso_publico": {
+    "critical": false,
+    "description": "El barón reconoció en público lo de los cuarenta (tregua)."
+  },
+  "odda_muerta": {
+    "critical": false,
+    "description": "Odda Hulla murió en el tumulto de la tregua."
+  },
+  "tregua_d1": {
+    "critical": false,
+    "description": "La mediación consiguió una tregua."
+  },
+  "mediacion_fallida": {
+    "critical": false,
+    "description": "La mediación fracasó: se suman los costes de los dos bandos."
+  },
+  "baron_prisionero": {
+    "critical": false,
+    "description": "La Cuadrilla tiene al barón en la Torre del Cepo."
+  },
+  "baron_muerto": {
+    "critical": false,
+    "description": "El barón Ulric Mazo ha muerto (sin heredero)."
+  },
+  "baron_vivo_d1": {
+    "critical": false,
+    "description": "El barón sobrevivió a la noche de las antorchas."
+  },
+  "hilda_huyo_sello": {
+    "critical": false,
+    "description": "Hilda ha huido con el sello del barón."
+  },
+  "cuadrilla_resentida": {
+    "critical": false,
+    "description": "Te pusiste delante de la soga: la Cuadrilla no te lo agradece."
+  },
+  "ruta_bocamina": {
+    "critical": false,
+    "description": "La Cuadrilla te abre la bocamina principal."
+  },
+  "ruta_cripta": {
+    "critical": false,
+    "description": "El barón te ha dado el paso por la cripta."
+  },
+  "llave_cripta": {
+    "critical": false,
+    "description": "Tienes la llave de la cripta (abre la escalera de la cripta a la mina).",
+    "readBy": "mapa: salida escalera-cripta"
+  },
+  "nella_presa": {
+    "critical": false,
+    "description": "Nella acabó presa en la cripta."
+  },
+  "nella_muerta": {
+    "critical": false,
+    "description": "Nella murió tras la defensa de la abadía."
+  },
+  "bocamina_abierta": {
+    "critical": false,
+    "description": "La bocamina principal está abierta."
+  },
+  "cripta_abierta": {
+    "critical": false,
+    "description": "La puerta de la cripta está abierta."
+  },
+  "restos_cuarenta": {
+    "critical": false,
+    "description": "Has encontrado los restos de los cuarenta en la Galería Sellada."
+  },
+  "nomina_tizon": {
+    "critical": false,
+    "description": "La nómina del barón: «Tizón, G. Cargas, Garganta. Treinta coronas»."
+  },
+  "dorotea_sabia_garran": {
+    "critical": false,
+    "description": "Dorotea sabía lo de Garrán desde el principio."
+  },
+  "d2_resuelta": {
+    "critical": true,
+    "description": "D2 resuelta (encubrir, confesar o echar a Garrán). Abre la emboscada de la Galería Sellada.",
+    "readBy": "mapa: emboscada-sellada"
+  },
+  "d2_encubierto": {
+    "critical": false,
+    "description": "D2: encubriste a Garrán."
+  },
+  "dorotea_palanca_garran": {
+    "critical": false,
+    "description": "Dorotea guarda lo de Garrán como palanca para D4."
+  },
+  "d2_confesara": {
+    "critical": false,
+    "description": "D2: Garrán confesará al volver."
+  },
+  "garran_sin_nada_que_perder": {
+    "critical": false,
+    "description": "Garrán pelea en la Bóveda como quien no tiene nada que perder (ventaja en combate).",
+    "readBy": "script/ruleset: bonificación de Garrán en la Bóveda"
+  },
+  "d2_expulsado": {
+    "critical": false,
+    "description": "D2: echaste a Garrán; baja solo a buscar a Ivo.",
+    "readBy": "mapa: Garrán herido y neutral en la Bóveda"
+  },
+  "boveda_vista": {
+    "critical": false,
+    "description": "Has entrado en la Bóveda."
+  },
+  "garran_bloqueado": {
+    "critical": false,
+    "description": "Ivo reconoció a Garrán y él se bloqueó un turno."
+  },
+  "brea_duda": {
+    "critical": false,
+    "description": "Brea dudó ante las pruebas: los Callados pierden un turno."
+  },
+  "pista_resonadores": {
+    "critical": false,
+    "description": "Los resonadores y la collera son la cuerda de los Callados."
+  },
+  "brea_vuela_polvorin": {
+    "critical": false,
+    "description": "A mitad del combate, Brea vuela un polvorín y hunde parte del suelo.",
+    "setBy": "script del jefe (mapa boveda, capa collapse)"
+  },
+  "brea_derrotado": {
+    "critical": false,
+    "description": "Brea ha caído (onVictory del combate de la Bóveda). Abre D3 (boveda_collera). No es «crítica» porque solo se gana peleando: es el jefe.",
+    "setBy": "onVictory del combate de la Bóveda",
+    "readBy": "script: abrir boveda_collera"
+  },
+  "origen_enemistad": {
+    "critical": false,
+    "description": "Has leído la losa de la Bóveda: el origen real de la enemistad entre elfos y enanos."
+  },
+  "d3_resuelta": {
+    "critical": true,
+    "description": "D3 resuelta (destruir, ponerse o sellar). Abre el cobro.",
+    "readBy": "script: abrir el_cobro"
+  },
+  "d3_destruida": {
+    "critical": false,
+    "description": "D3: destruiste la collera. La mina pierde casi todo su valor."
+  },
+  "d3_puesta": {
+    "critical": false,
+    "description": "D3: te pusiste la collera.",
+    "readBy": "ruleset: desventaja en Sabiduría, curas de Anselmo a la mitad"
+  },
+  "d3_sellada": {
+    "critical": false,
+    "description": "D3: sellaste la mina."
+  },
+  "callados_libres": {
+    "critical": false,
+    "description": "Los Callados han quedado libres."
+  },
+  "ivo_muerto": {
+    "critical": false,
+    "description": "Ivo ha muerto."
+  },
+  "ivo_se_despidio": {
+    "critical": false,
+    "description": "Ivo se despidió de Garrán."
+  },
+  "oye_el_canto": {
+    "critical": false,
+    "description": "Oyes el canto de la plata viva."
+  },
+  "garran_odia_collera": {
+    "critical": false,
+    "description": "Garrán no te perdona la collera."
+  },
+  "garran_se_queda_abajo": {
+    "critical": false,
+    "description": "Garrán se quedó en la Bóveda sellada con Ivo."
+  },
+  "cobro_empezado": {
+    "critical": false,
+    "description": "Dorotea ha puesto la escritura de embargo sobre la mesa."
+  },
+  "sello_comprado": {
+    "critical": false,
+    "description": "Compraste el sello del barón a Hilda con tu comisión."
+  },
+  "sin_comision": {
+    "critical": false,
+    "description": "Has dado tu comisión a cambio del sello."
+  },
+  "hilda_se_va": {
+    "critical": false,
+    "description": "Hilda ha hecho su oferta y se ha marchado."
+  },
+  "dorotea_uso_palanca": {
+    "critical": false,
+    "description": "Dorotea te ha recordado lo de Garrán para presionarte."
+  },
+  "d4_resuelta": {
+    "critical": true,
+    "description": "D4 resuelta. Abre el epílogo.",
+    "readBy": "script: abrir epilogo"
+  },
+  "d4_embargo": {
+    "critical": false,
+    "description": "D4: ejecutaste el embargo."
+  },
+  "d4_cuadrilla": {
+    "critical": false,
+    "description": "D4: diste la mina a la Cuadrilla."
+  },
+  "d4_refinanciar": {
+    "critical": false,
+    "description": "D4: refinanciaste la deuda del barón."
+  },
+  "d4_quemar": {
+    "critical": false,
+    "description": "D4: quemaste la escritura."
+  },
+  "dorotea_libre": {
+    "critical": false,
+    "description": "Dorotea es libre (saldo cero)."
+  },
+  "comision_cobrada": {
+    "critical": false,
+    "description": "Cobraste tu comisión."
+  },
+  "mina_del_pueblo": {
+    "critical": false,
+    "description": "La mina es del pueblo."
+  },
+  "firma_falsa": {
+    "critical": false,
+    "description": "Falsificaste la firma del barón."
+  },
+  "mina_en_pleito": {
+    "critical": false,
+    "description": "La escritura de la Cuadrilla acabó en los tribunales."
+  },
+  "dorotea_de_tu_lado": {
+    "critical": false,
+    "description": "Dorotea se queda contigo."
+  },
+  "dorotea_se_va": {
+    "critical": false,
+    "description": "Dorotea se marcha."
+  },
+  "te_deja_apuntado": {
+    "critical": false,
+    "description": "Dorotea te deja apuntado."
+  },
+  "orden_sellada_abierta": {
+    "critical": false,
+    "description": "Dorotea abrió su orden sellada."
+  },
+  "anselmo_huyo": {
+    "critical": false,
+    "description": "Anselmo huyó antes del combate contra Dorotea."
+  },
+  "dorotea_muerta": {
+    "critical": false,
+    "description": "Mataste a Dorotea."
+  },
+  "cobrador_muerto": {
+    "critical": false,
+    "description": "Dorotea te mató.",
+    "readBy": "script: fin de partida"
+  },
+  "epilogo_visto": {
+    "critical": false,
+    "description": "Has visto el epílogo."
   }
 }

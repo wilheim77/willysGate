@@ -1,0 +1,842 @@
+{
+  "$comment": "Epilogue. Opened by the game once d4_resuelta is set and no fight is running. Each vignette picks its variant from D1-D4.",
+  "id": "epilogo",
+  "start": "inicio",
+  "nodes": {
+    "inicio": {
+      "text": "Hondonegra, un mes después.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "epilogo_visto",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "flag": "baron_muerto"
+          },
+          "next": "baron_muerto"
+        },
+        {
+          "when": {
+            "flag": "d4_refinanciar"
+          },
+          "next": "baron_refi"
+        },
+        {
+          "when": {
+            "flag": "d4_cuadrilla"
+          },
+          "next": "baron_cuadrilla"
+        },
+        {
+          "next": "baron_embargo"
+        }
+      ]
+    },
+    "baron_muerto": {
+      "text": "El barón Ulric Mazo está enterrado en el cementerio de la abadía, bajo una lápida con un poema suyo. Es el peor que escribió. Lo eligieron por eso.",
+      "next": [
+        {
+          "when": {
+            "flag": "nella_muerta"
+          },
+          "next": "nella_muerta"
+        },
+        {
+          "when": {
+            "flag": "nella_presa"
+          },
+          "next": "nella_presa"
+        },
+        {
+          "when": {
+            "flag": "mina_del_pueblo"
+          },
+          "next": "nella_mina"
+        },
+        {
+          "next": "nella_resto"
+        }
+      ]
+    },
+    "baron_refi": {
+      "text": "El barón Ulric Mazo sigue en su sala capitular, comiendo pasas y debiendo dinero. Ahora debe más, a veinte años. Dice que es la primera vez que tiene un futuro.",
+      "next": [
+        {
+          "when": {
+            "flag": "nella_muerta"
+          },
+          "next": "nella_muerta"
+        },
+        {
+          "when": {
+            "flag": "nella_presa"
+          },
+          "next": "nella_presa"
+        },
+        {
+          "when": {
+            "flag": "mina_del_pueblo"
+          },
+          "next": "nella_mina"
+        },
+        {
+          "next": "nella_resto"
+        }
+      ]
+    },
+    "baron_cuadrilla": {
+      "text": "El barón Ulric Mazo vive en la abadía como invitado del pueblo. Le dejan escribir. Le han pedido, por favor, que no lea en voz alta.",
+      "next": [
+        {
+          "when": {
+            "flag": "nella_muerta"
+          },
+          "next": "nella_muerta"
+        },
+        {
+          "when": {
+            "flag": "nella_presa"
+          },
+          "next": "nella_presa"
+        },
+        {
+          "when": {
+            "flag": "mina_del_pueblo"
+          },
+          "next": "nella_mina"
+        },
+        {
+          "next": "nella_resto"
+        }
+      ]
+    },
+    "baron_embargo": {
+      "text": "El barón Ulric Mazo se marchó a la ciudad con lo puesto y un cuaderno. La Casa Valcárcel le ha embargado hasta las rimas.",
+      "next": [
+        {
+          "when": {
+            "flag": "nella_muerta"
+          },
+          "next": "nella_muerta"
+        },
+        {
+          "when": {
+            "flag": "nella_presa"
+          },
+          "next": "nella_presa"
+        },
+        {
+          "when": {
+            "flag": "mina_del_pueblo"
+          },
+          "next": "nella_mina"
+        },
+        {
+          "next": "nella_resto"
+        }
+      ]
+    },
+    "nella_muerta": {
+      "text": "Nella Yesca está enterrada junto a los cuarenta, con el pañuelo negro. Por fin tiene una tumba a la que ir. La suya.",
+      "next": [
+        {
+          "when": {
+            "flag": "odda_muerta"
+          },
+          "next": "odda_muerta"
+        },
+        {
+          "when": {
+            "flag": "origen_enemistad"
+          },
+          "next": "odda_origen"
+        },
+        {
+          "next": "odda_resto"
+        }
+      ]
+    },
+    "nella_presa": {
+      "text": "Nella Yesca sigue en la cripta de la abadía. Las viudas le llevan comida los domingos. Ninguna lo dice en voz alta, pero esperan.",
+      "next": [
+        {
+          "when": {
+            "flag": "odda_muerta"
+          },
+          "next": "odda_muerta"
+        },
+        {
+          "when": {
+            "flag": "origen_enemistad"
+          },
+          "next": "odda_origen"
+        },
+        {
+          "next": "odda_resto"
+        }
+      ]
+    },
+    "nella_mina": {
+      "text": "Nella Yesca dirige la mina del pueblo desde una mesa de cocina. Paga los jornales a tiempo. Es la única patrona de la historia del valle que lo hace, y no se lo perdonan.",
+      "next": [
+        {
+          "when": {
+            "flag": "odda_muerta"
+          },
+          "next": "odda_muerta"
+        },
+        {
+          "when": {
+            "flag": "origen_enemistad"
+          },
+          "next": "odda_origen"
+        },
+        {
+          "next": "odda_resto"
+        }
+      ]
+    },
+    "nella_resto": {
+      "text": "Nella Yesca sigue en la plaza, con el pañuelo negro y treinta hombres que la escuchan. Ya no tiene un barón al que colgar. Está buscando a quién.",
+      "next": [
+        {
+          "when": {
+            "flag": "odda_muerta"
+          },
+          "next": "odda_muerta"
+        },
+        {
+          "when": {
+            "flag": "origen_enemistad"
+          },
+          "next": "odda_origen"
+        },
+        {
+          "next": "odda_resto"
+        }
+      ]
+    },
+    "odda_muerta": {
+      "text": "Odda Hulla murió en la plaza la noche de las antorchas, delante del barón. Los Hulla han tallado su nombre en la bocamina. No han tallado si fue para protegerle o para cogerle primero. No hace falta.",
+      "next": [
+        {
+          "when": {
+            "flag": "sello_comprado"
+          },
+          "next": "hilda_vendio"
+        },
+        {
+          "when": {
+            "flag": "hilda_huyo_sello"
+          },
+          "next": "hilda_huyo"
+        },
+        {
+          "next": "hilda_resto"
+        }
+      ]
+    },
+    "odda_origen": {
+      "text": "Odda Hulla sigue picando. Alguien le contó lo que decía la losa de la Bóveda. Escupió, dijo que eran cuentos de elfos y esa noche no durmió.",
+      "next": [
+        {
+          "when": {
+            "flag": "sello_comprado"
+          },
+          "next": "hilda_vendio"
+        },
+        {
+          "when": {
+            "flag": "hilda_huyo_sello"
+          },
+          "next": "hilda_huyo"
+        },
+        {
+          "next": "hilda_resto"
+        }
+      ]
+    },
+    "odda_resto": {
+      "text": "Odda Hulla sigue picando. Hay cosas que no cambian con un acto de embargo.",
+      "next": [
+        {
+          "when": {
+            "flag": "sello_comprado"
+          },
+          "next": "hilda_vendio"
+        },
+        {
+          "when": {
+            "flag": "hilda_huyo_sello"
+          },
+          "next": "hilda_huyo"
+        },
+        {
+          "next": "hilda_resto"
+        }
+      ]
+    },
+    "hilda_vendio": {
+      "text": "Hilda Cardo vive lejos, en una ciudad donde nadie sabe lo que es una senescal. Ha comprado una casa con tu comisión. Dicen que es muy competente. Lo es.",
+      "next": [
+        {
+          "when": {
+            "flag": "d3_sellada"
+          },
+          "next": "cirilo_sellada"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "cirilo_puesta"
+        },
+        {
+          "next": "cirilo_resto"
+        }
+      ]
+    },
+    "hilda_huyo": {
+      "text": "Hilda Cardo desapareció con el sello del barón. Hay rumores de que lo ha vendido a otro banco. Los bancos se compran sellos entre ellos, como los niños los cromos.",
+      "next": [
+        {
+          "when": {
+            "flag": "d3_sellada"
+          },
+          "next": "cirilo_sellada"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "cirilo_puesta"
+        },
+        {
+          "next": "cirilo_resto"
+        }
+      ]
+    },
+    "hilda_resto": {
+      "text": "Hilda Cardo sigue en la abadía, al lado de su señor, con la mano en la daga. Sigue echando la cuenta. Todavía no le sale.",
+      "next": [
+        {
+          "when": {
+            "flag": "d3_sellada"
+          },
+          "next": "cirilo_sellada"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "cirilo_puesta"
+        },
+        {
+          "next": "cirilo_resto"
+        }
+      ]
+    },
+    "cirilo_sellada": {
+      "text": "Cirilo Hondo tocó las campanas el día que se selló la mina, y las siguió tocando hasta que se le partieron las manos. Dice que ya no oye el canto. Lo dice muy a menudo.",
+      "next": [
+        {
+          "when": {
+            "flag": "d4_embargo"
+          },
+          "next": "lisandro_regente"
+        },
+        {
+          "when": {
+            "flag": "mina_en_pleito"
+          },
+          "next": "lisandro_pleito"
+        },
+        {
+          "next": "lisandro_resto"
+        }
+      ]
+    },
+    "cirilo_puesta": {
+      "text": "Cirilo Hondo predica contra ti en la capilla de la Santa Pala. Dice que llevas la sangre de la tierra al cuello. Tiene razón, y la gente empieza a escucharle.",
+      "next": [
+        {
+          "when": {
+            "flag": "d4_embargo"
+          },
+          "next": "lisandro_regente"
+        },
+        {
+          "when": {
+            "flag": "mina_en_pleito"
+          },
+          "next": "lisandro_pleito"
+        },
+        {
+          "next": "lisandro_resto"
+        }
+      ]
+    },
+    "cirilo_resto": {
+      "text": "Cirilo Hondo sigue predicando en la bocamina. Ahora dice que la tierra se calló. No sabe si eso es bueno. Nadie lo sabe.",
+      "next": [
+        {
+          "when": {
+            "flag": "d4_embargo"
+          },
+          "next": "lisandro_regente"
+        },
+        {
+          "when": {
+            "flag": "mina_en_pleito"
+          },
+          "next": "lisandro_pleito"
+        },
+        {
+          "next": "lisandro_resto"
+        }
+      ]
+    },
+    "lisandro_regente": {
+      "text": "Lisandro Fuss es regente de Hondonegra en nombre de la Casa Valcárcel. Ha limpiado los cristales de la abadía. Es lo primero que ha cambiado, y lo último.",
+      "next": [
+        {
+          "when": {
+            "flag": "d3_destruida"
+          },
+          "next": "callados_libres"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "callados_tuyos"
+        },
+        {
+          "next": "callados_abajo"
+        }
+      ]
+    },
+    "lisandro_pleito": {
+      "text": "Lisandro Fuss ha presentado recurso contra la escritura de la Cuadrilla. El pleito durará décadas. Él tiene tiempo. Siempre tiene tiempo.",
+      "next": [
+        {
+          "when": {
+            "flag": "d3_destruida"
+          },
+          "next": "callados_libres"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "callados_tuyos"
+        },
+        {
+          "next": "callados_abajo"
+        }
+      ]
+    },
+    "lisandro_resto": {
+      "text": "Lisandro Fuss sigue detrás de su mostrador, pesando alianzas. A la segunda pesan menos. Siempre pesan menos.",
+      "next": [
+        {
+          "when": {
+            "flag": "d3_destruida"
+          },
+          "next": "callados_libres"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "callados_tuyos"
+        },
+        {
+          "next": "callados_abajo"
+        }
+      ]
+    },
+    "callados_libres": {
+      "text": "Los Callados que quedaron vivos volvieron al pueblo. Algunos hablan. Otros solo miran la mina desde la plaza, todas las tardes, a la misma hora, como si esperaran el cambio de turno.",
+      "next": [
+        {
+          "when": {
+            "flag": "garran_se_queda_abajo"
+          },
+          "next": "garran_abajo"
+        },
+        {
+          "when": {
+            "flag": "d2_expulsado"
+          },
+          "next": "garran_solo"
+        },
+        {
+          "when": {
+            "all": [
+              {
+                "flag": "d2_confesara"
+              },
+              {
+                "flag": "nella_muerta"
+              }
+            ]
+          },
+          "next": "garran_confeso_sin_nella"
+        },
+        {
+          "when": {
+            "flag": "d2_confesara"
+          },
+          "next": "garran_confeso"
+        },
+        {
+          "when": {
+            "flag": "garran_odia_collera"
+          },
+          "next": "garran_collera"
+        },
+        {
+          "next": "garran_resto"
+        }
+      ]
+    },
+    "callados_tuyos": {
+      "text": "Los Callados te siguen. No hablan, no cobran, no se quejan. Son los mejores trabajadores que has tenido nunca. Eso es lo que más te asusta.",
+      "next": [
+        {
+          "when": {
+            "flag": "garran_se_queda_abajo"
+          },
+          "next": "garran_abajo"
+        },
+        {
+          "when": {
+            "flag": "d2_expulsado"
+          },
+          "next": "garran_solo"
+        },
+        {
+          "when": {
+            "all": [
+              {
+                "flag": "d2_confesara"
+              },
+              {
+                "flag": "nella_muerta"
+              }
+            ]
+          },
+          "next": "garran_confeso_sin_nella"
+        },
+        {
+          "when": {
+            "flag": "d2_confesara"
+          },
+          "next": "garran_confeso"
+        },
+        {
+          "when": {
+            "flag": "garran_odia_collera"
+          },
+          "next": "garran_collera"
+        },
+        {
+          "next": "garran_resto"
+        }
+      ]
+    },
+    "callados_abajo": {
+      "text": "Los Callados se quedaron abajo, con la plata viva, debajo de todo. Algunas noches, si pegas la oreja a la escombrera, se oye algo. Ya nadie dice que sean ellos.",
+      "next": [
+        {
+          "when": {
+            "flag": "garran_se_queda_abajo"
+          },
+          "next": "garran_abajo"
+        },
+        {
+          "when": {
+            "flag": "d2_expulsado"
+          },
+          "next": "garran_solo"
+        },
+        {
+          "when": {
+            "all": [
+              {
+                "flag": "d2_confesara"
+              },
+              {
+                "flag": "nella_muerta"
+              }
+            ]
+          },
+          "next": "garran_confeso_sin_nella"
+        },
+        {
+          "when": {
+            "flag": "d2_confesara"
+          },
+          "next": "garran_confeso"
+        },
+        {
+          "when": {
+            "flag": "garran_odia_collera"
+          },
+          "next": "garran_collera"
+        },
+        {
+          "next": "garran_resto"
+        }
+      ]
+    },
+    "garran_abajo": {
+      "text": "Garrán Tizón se quedó en la Bóveda con su hermano. En la bocamina sellada alguien ha dejado un par de botas. Ninguna de las dos es suya.",
+      "next": [
+        {
+          "when": {
+            "flag": "anselmo_huyo"
+          },
+          "next": "anselmo_huyo"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "anselmo_collera"
+        },
+        {
+          "next": "anselmo_resto"
+        }
+      ]
+    },
+    "garran_solo": {
+      "text": "Garrán Tizón se marchó del valle sin despedirse. En el camino, una mujer dice que vio a un semiorco sentado en una cuneta, descalzo, con una bota en cada mano.",
+      "next": [
+        {
+          "when": {
+            "flag": "anselmo_huyo"
+          },
+          "next": "anselmo_huyo"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "anselmo_collera"
+        },
+        {
+          "next": "anselmo_resto"
+        }
+      ]
+    },
+    "garran_confeso_sin_nella": {
+      "text": "Garrán Tizón contó lo de las cargas en la plaza. No quedaba nadie con autoridad para juzgarle, así que se juzgó solo. Trabaja gratis en la mina, desescombrando la Garganta. Dice que le quedan treinta coronas por pagar.",
+      "next": [
+        {
+          "when": {
+            "flag": "anselmo_huyo"
+          },
+          "next": "anselmo_huyo"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "anselmo_collera"
+        },
+        {
+          "next": "anselmo_resto"
+        }
+      ]
+    },
+    "garran_confeso": {
+      "text": "Garrán Tizón contó lo de las cargas en la plaza. Nella Yesca le escuchó entero y luego le dio un pico. «Desescombra la Garganta», le dijo. «Cuando acabes, hablamos.» Todavía no ha acabado.",
+      "next": [
+        {
+          "when": {
+            "flag": "anselmo_huyo"
+          },
+          "next": "anselmo_huyo"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "anselmo_collera"
+        },
+        {
+          "next": "anselmo_resto"
+        }
+      ]
+    },
+    "garran_collera": {
+      "text": "Garrán Tizón sigue a tu lado. No te ha perdonado lo de la collera. Tampoco se ha ido. Cada noche se sienta a mirarte dormir, por si acaso. No dice por si acaso qué.",
+      "next": [
+        {
+          "when": {
+            "flag": "anselmo_huyo"
+          },
+          "next": "anselmo_huyo"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "anselmo_collera"
+        },
+        {
+          "next": "anselmo_resto"
+        }
+      ]
+    },
+    "garran_resto": {
+      "text": "Garrán Tizón sigue contigo. Nadie sabe lo de las treinta coronas, salvo tú, él y una contable. Es mucha gente para un secreto.",
+      "next": [
+        {
+          "when": {
+            "flag": "anselmo_huyo"
+          },
+          "next": "anselmo_huyo"
+        },
+        {
+          "when": {
+            "flag": "d3_puesta"
+          },
+          "next": "anselmo_collera"
+        },
+        {
+          "next": "anselmo_resto"
+        }
+      ]
+    },
+    "anselmo_huyo": {
+      "text": "Fray Anselmo vende indulgencias a plazos en otro valle. Nadie le conoce. La despensa está llena. Por las noches reza, y algo le contesta, y él sigue sin saber qué.",
+      "next": [
+        {
+          "when": {
+            "flag": "dorotea_muerta"
+          },
+          "next": "dorotea_muerta"
+        },
+        {
+          "when": {
+            "flag": "dorotea_libre"
+          },
+          "next": "dorotea_libre"
+        },
+        {
+          "when": {
+            "flag": "dorotea_de_tu_lado"
+          },
+          "next": "dorotea_contigo"
+        },
+        {
+          "when": {
+            "flag": "te_deja_apuntado"
+          },
+          "next": "dorotea_se_fue"
+        },
+        {
+          "next": "dorotea_resto"
+        }
+      ]
+    },
+    "anselmo_collera": {
+      "text": "Fray Anselmo sigue a tu lado. Cuando te cura, la herida se cierra a medias. «El dios no quiere tocarte», dice. Lo dice con pena. Es la primera vez que no lo cobra.",
+      "next": [
+        {
+          "when": {
+            "flag": "dorotea_muerta"
+          },
+          "next": "dorotea_muerta"
+        },
+        {
+          "when": {
+            "flag": "dorotea_libre"
+          },
+          "next": "dorotea_libre"
+        },
+        {
+          "when": {
+            "flag": "dorotea_de_tu_lado"
+          },
+          "next": "dorotea_contigo"
+        },
+        {
+          "when": {
+            "flag": "te_deja_apuntado"
+          },
+          "next": "dorotea_se_fue"
+        },
+        {
+          "next": "dorotea_resto"
+        }
+      ]
+    },
+    "anselmo_resto": {
+      "text": "Fray Anselmo se ha quedado en Hondonegra, de capellán sin licencia. Bautiza a plazos y entierra al contado. Dice que es la primera vez que un sitio le parece casa.",
+      "next": [
+        {
+          "when": {
+            "flag": "dorotea_muerta"
+          },
+          "next": "dorotea_muerta"
+        },
+        {
+          "when": {
+            "flag": "dorotea_libre"
+          },
+          "next": "dorotea_libre"
+        },
+        {
+          "when": {
+            "flag": "dorotea_de_tu_lado"
+          },
+          "next": "dorotea_contigo"
+        },
+        {
+          "when": {
+            "flag": "te_deja_apuntado"
+          },
+          "next": "dorotea_se_fue"
+        },
+        {
+          "next": "dorotea_resto"
+        }
+      ]
+    },
+    "dorotea_muerta": {
+      "text": "Dorotea Vane murió con el libro abierto. En la última página, con su letra exacta, había una sola anotación: tu nombre. Al lado, una cifra. No has conseguido averiguar qué significa.",
+      "next": "gancho"
+    },
+    "dorotea_libre": {
+      "text": "Dorotea Vane es libre. Saldo cero. Vive en una casa pequeña con un libro en blanco que no se atreve a empezar. Una vez al mes, por costumbre, apunta lo que no debe a nadie.",
+      "next": "gancho"
+    },
+    "dorotea_contigo": {
+      "text": "Dorotea Vane sigue a tu lado. Sigue debiéndole todo a la Casa. Dice que ahora lleva dos libros: el de la Casa y el tuyo. No te deja ver ninguno.",
+      "next": "gancho"
+    },
+    "dorotea_se_fue": {
+      "text": "Dorotea Vane volvió a la ciudad. La Casa le asignó otro encargo, otro valle, otro cobrador. Te tiene apuntado. Eso no prescribe.",
+      "next": "gancho"
+    },
+    "dorotea_resto": {
+      "text": "Dorotea Vane sigue debiendo lo que debía. La Casa está muy satisfecha con ella. Es lo peor que se puede decir de alguien.",
+      "next": "gancho"
+    },
+    "gancho": {
+      "text": "En el camino de Hondonegra, entre colinas peladas, un jinete baja hacia el valle con una cartera de cuero y una carta con el sello de la Casa. No viene a por el barón. Viene a por ti.",
+      "next": "fin"
+    },
+    "fin": {
+      "text": "La Casa Valcárcel nunca envía un solo cobrador."
+    }
+  }
+}
