@@ -54,6 +54,7 @@ export default {
     'entry-camino': [2, 15],
     'entry-abadia': [23, 2],
     'entry-calles': [27, 9],
+    'entry-escorial': [13, 19],
     // The trial (scene 1).
     anselmo: [10, 6],
     cirilo: [12, 7],
@@ -85,6 +86,7 @@ export default {
   exits: [
     { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza' },
     { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza' },
+    { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza' },
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],
   zones: {

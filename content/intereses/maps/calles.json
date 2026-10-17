@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 30,
+ "nextobjectid": 31,
  "properties": [
   {
    "name": "name",
@@ -698,6 +698,29 @@
        "value": "entry-calles"
       }
      ]
+    },
+    {
+     "id": 29,
+     "name": "a-escorial",
+     "type": "",
+     "x": 1056,
+     "y": 288,
+     "width": 32,
+     "height": 128,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "escorial"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-calles"
+      }
+     ]
     }
    ]
   },
@@ -712,7 +735,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 29,
+     "id": 30,
      "name": "sermon",
      "type": "",
      "x": 416,
