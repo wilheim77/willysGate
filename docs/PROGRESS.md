@@ -61,7 +61,8 @@
 - [x] Arte (agente de arte): superficies animadas, barriles, cajas rotas, explosión y vapor.
 - [x] Mapa de prueba con meseta alta, aceite, agua, escombros, cajas y barriles.
 - [x] Corregido: tocar el sprite de un enemigo lo selecciona (antes podía caer en la casilla de arriba).
-- [x] Tests: 189.
+- [x] El fuego recorre todo el charco de aceite o grasa conectado, y el rayo toda el agua conectada. Probado en el navegador: explosión del barril, aceite ardiendo y luz del fuego.
+- [x] Tests: 190.
 - [ ] Prueba del usuario en el móvil.
 
 ## Planificado para más adelante

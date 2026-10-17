@@ -33,8 +33,8 @@ export const SURFACES: Record<string, SurfaceDef> = {
 
 /** Element hitting a surface (or a bare tile, ''): what it becomes, or null to remove it. */
 export const SURFACE_REACTIONS: SurfaceReaction[] = [
-  { surface: 'oil', element: 'fire', result: 'fire' },
-  { surface: 'grease', element: 'fire', result: 'fire' },
+  { surface: 'oil', element: 'fire', result: 'fire', spreads: true },
+  { surface: 'grease', element: 'fire', result: 'fire', spreads: true },
   { surface: 'water', element: 'fire', result: null },
   { surface: 'ice', element: 'fire', result: 'water' },
   { surface: 'fire', element: 'water', result: null },
@@ -42,8 +42,8 @@ export const SURFACE_REACTIONS: SurfaceReaction[] = [
   { surface: 'blood', element: 'fire', result: null },
   { surface: 'water', element: 'cold', result: 'ice' },
   { surface: 'blood', element: 'cold', result: 'ice' },
-  { surface: 'water', element: 'lightning', result: 'electrified' },
-  { surface: 'blood', element: 'lightning', result: 'electrified' },
+  { surface: 'water', element: 'lightning', result: 'electrified', spreads: true },
+  { surface: 'blood', element: 'lightning', result: 'electrified', spreads: true },
   { surface: '', element: 'water', result: 'water' },
   { surface: 'fire', element: 'fire', result: 'fire' },
 ];

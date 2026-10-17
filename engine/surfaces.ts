@@ -29,6 +29,8 @@ export interface SurfaceReaction {
   surface: string;
   element: string;
   result: string | null;
+  /** The change runs through every connected tile of the same surface (fire along a pool of oil). */
+  spreads?: boolean;
 }
 
 export interface SurfaceInstance {

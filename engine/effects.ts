@@ -185,15 +185,26 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         const reactions = ruleset.surfaceReactions ?? [];
         const layer = { ...surfacesOf(next) };
         const changes: SurfaceChangedEvent['changes'] = [];
-        for (const t of effect.tiles) {
-          if (!surfaceable(next, t)) continue;
+        const queue = [...effect.tiles];
+        const seen = new Set<string>();
+        while (queue.length) {
+          const t = queue.shift()!;
           const key = posKey(t);
+          if (seen.has(key) || !surfaceable(next, t)) continue;
+          seen.add(key);
           const current = layer[key]?.type ?? '';
           const reaction = reactions.find((r) => r.surface === current && r.element === effect.element);
           if (!reaction) continue;
           if (reaction.result === null) delete layer[key];
           else layer[key] = makeSurface(defs, reaction.result);
           changes.push({ tile: t, from: current || null, to: reaction.result });
+          if (!reaction.spreads) continue;
+          for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+              const n = { x: t.x + dx, y: t.y + dy };
+              if ((dx || dy) && layer[posKey(n)]?.type === current) queue.push(n);
+            }
+          }
         }
         next = withSurfaces(next, layer);
         if (changes.length) events.push({ type: 'surfaceChanged', changes });

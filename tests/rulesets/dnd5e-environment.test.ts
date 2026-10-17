@@ -49,6 +49,15 @@ describe('push and falls under 5e', () => {
 });
 
 describe('surfaces under 5e', () => {
+  it('fire runs along a connected pool of oil, but not to a separate one', () => {
+    let s = engine.newGame({ seed: 1, map: asciiMap(['.......']), entities: [] });
+    const oil = [0, 1, 2, 4].map((x) => ({ x, y: 0 }));
+    s = engine.applyEffects(s, [{ type: 'spawnSurface', tiles: oil, surface: 'oil' }]).state;
+    s = engine.applyEffects(s, [{ type: 'applyElement', tiles: [{ x: 0, y: 0 }], element: 'fire' }]).state;
+    expect([0, 1, 2].map((x) => surfaceAt(s, { x, y: 0 })?.type)).toEqual(['fire', 'fire', 'fire']);
+    expect(surfaceAt(s, { x: 4, y: 0 })?.type).toBe('oil');
+  });
+
   it('fire spells ignite oil and grease; fire burns those who stand in it', () => {
     let s = fight([pc('mage', 'wizard', 5, 0, 0), monster('b', 'bandit', 6, 0)], ['........'], 'mage');
     s = engine.applyEffects(s, [{ type: 'spawnSurface', tiles: [{ x: 6, y: 0 }, { x: 5, y: 0 }], surface: 'oil' }]).state;
@@ -56,7 +65,7 @@ describe('surfaces under 5e', () => {
     expect(r.ok).toBe(true);
     if (!r.ok) return;
     expect(surfaceAt(r.state, { x: 6, y: 0 })?.type).toBe('fire');
-    expect(surfaceAt(r.state, { x: 5, y: 0 })?.type).toBe('oil'); // only the target tile caught
+    expect(surfaceAt(r.state, { x: 5, y: 0 })?.type).toBe('fire'); // the connected oil catches too
   });
 
   it('cold freezes water and lightning electrifies it', () => {
