@@ -43,6 +43,7 @@ export default {
     'entry-bocamina': [2, 13],
     'entry-pozo': [21, 2],
     'entry-cripta': [2, 27],
+    'entry-boveda': [37, 14],
     // Callados in the working (scaffolds and ledge).
     'callado-2': [17, 10],
     'callado-3': [30, 12],
@@ -102,6 +103,7 @@ export default {
     { name: 'a-escorial-bocamina', rect: [0, 13, 1, 3], to: 'escorial', spawn: 'entry-bocamina' },
     { name: 'a-escorial-pozo', rect: [21, 0, 1, 1], to: 'escorial', spawn: 'entry-pozo' },
     { name: 'a-abadia-cripta', rect: [0, 26, 1, 3], to: 'abadia', spawn: 'entry-cripta' },
+    { name: 'a-boveda', rect: [39, 13, 1, 3], to: 'boveda', spawn: 'entry-mina' },
   ],
   zones: {
     scenes: [{ name: 'galeria-sellada', rect: [32, 12, 3, 5], props: { dialogue: 'TODO:galeria_sellada', speaker: 'garran', once: true } }],
