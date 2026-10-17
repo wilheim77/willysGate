@@ -29,6 +29,8 @@ const AI_STEP_MS = 380;
  */
 export class GameController {
   private selected: ActionDef | null = null;
+  /** Creatures picked so far for multi-target actions (Bless, Magic Missile...). */
+  private picks: string[] = [];
   private aiTimer: ReturnType<typeof setTimeout> | null = null;
   /** Recent leader positions, so companions walk in single file behind them. */
   private trail: Vec2[] = [];
@@ -92,6 +94,7 @@ export class GameController {
 
   selectAction(action: ActionDef | null): void {
     const active = this.state.turn.activeEntityId;
+    this.picks = [];
     if (!action || !active) {
       this.selected = null;
       this.refresh();
@@ -116,6 +119,11 @@ export class GameController {
 
   private aim(actorId: string, action: ActionDef, tile: Vec2): void {
     const occupant = entityAt(this.state, tile);
+    const max = action.target.maxTargets ?? 1;
+    if (action.target.kind === 'creature' && max > 1) {
+      this.pick(actorId, action, occupant?.id);
+      return;
+    }
     const target: ActionTarget = action.target.kind === 'tile' ? { tile } : { entityId: occupant?.id };
     if (action.target.kind === 'creature' && !occupant) {
       this.hud.say(this.game.texts.combat?.noTarget ?? '', true);
@@ -130,12 +138,44 @@ export class GameController {
     this.confirmPreview(actorId, action, target);
   }
 
+  /** Multi-target picking: tap to add (or remove, if repeats aren't allowed); full list opens the preview. */
+  private pick(actorId: string, action: ActionDef, id: string | undefined): void {
+    if (!id) {
+      this.hud.say(this.game.texts.combat?.noTarget ?? '', true);
+      return;
+    }
+    const actor = this.state.entities[actorId]!;
+    const target = this.state.entities[id]!;
+    if (gridDistance(actor.position, target.position) > action.target.range) {
+      this.hud.say(this.game.texts.errors.out_of_range ?? '', true);
+      return;
+    }
+    const hostile = target.factionId !== actor.factionId;
+    if ((action.target.filter === 'hostile' && !hostile) || (action.target.filter === 'ally' && hostile)) {
+      this.hud.say(this.game.texts.errors.invalid_target ?? '', true);
+      return;
+    }
+    if (!action.target.allowRepeat && this.picks.includes(id)) this.picks = this.picks.filter((p) => p !== id);
+    else this.picks.push(id);
+    if (this.picks.length >= (action.target.maxTargets ?? 1)) this.finishPicking();
+    else this.refresh();
+  }
+
+  /** Confirms a multi-target action with the creatures picked so far. */
+  finishPicking(): void {
+    const active = this.state.turn.activeEntityId;
+    if (!this.selected || !active || this.picks.length === 0) return;
+    this.confirmPreview(active, this.selected, { entityIds: [...this.picks] });
+  }
+
   private confirmPreview(actorId: string, action: ActionDef, target: ActionTarget): void {
     const preview = this.store.engine.ruleset.previewAction(this.state, actorId, action.id, target);
     const targetName = target.entityId ? this.state.entities[target.entityId]?.name : undefined;
     if (preview.affectedTiles) this.scene.setOverlays([], [], preview.affectedTiles);
-    this.hud.showPreview(action, preview, targetName, () => {
+    const names = target.entityIds?.map((id) => this.state.entities[id]?.name).join(', ');
+    this.hud.showPreview(action, preview, names ?? targetName, () => {
       this.selected = null;
+      this.picks = [];
       this.report(this.store.dispatch({ type: 'act', issuer: this.game.playerId, entityId: actorId, actionId: action.id, target } as never));
     });
   }
@@ -263,7 +303,11 @@ export class GameController {
     const active = turn.mode === 'combat' ? turn.activeEntityId : null;
     this.scene.setActive(active);
     const playerTurn = this.isPlayer(active);
-    this.hud.render(state, ruleset, active, playerTurn, this.selected?.id ?? null, (a) => this.selectAction(a), () => this.endTurn());
+    const picking =
+      this.selected && (this.selected.target.maxTargets ?? 1) > 1
+        ? { count: this.picks.length, max: this.selected.target.maxTargets!, onDone: () => this.finishPicking() }
+        : undefined;
+    this.hud.render(state, ruleset, active, playerTurn, this.selected?.id ?? null, (a) => this.selectAction(a), () => this.endTurn(), picking);
 
     if (!active || !playerTurn) {
       this.scene.setOverlays([], []);
@@ -281,7 +325,7 @@ export class GameController {
         .filter((e) => ruleset.isStanding(e) && gridDistance(e.position, actor.position) <= a.target.range)
         .filter((e) => (a.target.filter === 'hostile' ? e.factionId !== actor.factionId : a.target.filter === 'ally' ? e.factionId === actor.factionId : true))
         .map((e) => e.id);
-      this.scene.setOverlays([], targets);
+      this.scene.setOverlays([], targets, [], this.picks);
       return;
     }
     const left = ruleset.movementBudget(actor, state) - turn.movementUsed;

@@ -566,7 +566,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** Tiles the active creature can reach this turn, and creatures/tiles that are valid targets. */
-  setOverlays(moveTiles: Vec2[], targetIds: string[], areaTiles: Vec2[] = []): void {
+  setOverlays(moveTiles: Vec2[], targetIds: string[], areaTiles: Vec2[] = [], pickedIds: string[] = []): void {
     const g = this.overlay.clear();
     const T = this.grid.tile;
     const state = this.store.state;
@@ -582,6 +582,14 @@ export class MapScene extends Phaser.Scene {
       const s = this.sprites.get(id);
       if (s) g.lineStyle(1, 0xff5040, 0.9).strokeRect(s.x - T / 2 + 1, s.y - T + 1, T - 2, T - 2);
     }
+    // Picked creatures (multi-target spells): filled marker, one notch per repeated pick.
+    pickedIds.forEach((id, i) => {
+      const s = this.sprites.get(id);
+      if (!s) return;
+      const repeats = pickedIds.slice(0, i).filter((p) => p === id).length;
+      g.fillStyle(0xe8c070, 0.35).fillRect(s.x - T / 2 + 1, s.y - T + 1, T - 2, T - 2);
+      g.fillStyle(0xe8c070, 1).fillRect(s.x - T / 2 + 2 + repeats * 4, s.y - T - 3, 3, 3);
+    });
   }
 
 

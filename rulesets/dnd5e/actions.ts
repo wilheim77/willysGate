@@ -89,7 +89,13 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
       label: spell.label,
       description: spell.text,
       cost,
-      target: { kind: spell.target, range: spell.range, ...(spell.filter ? { filter: spell.filter } : {}) },
+      target: {
+        kind: spell.target,
+        range: spell.range,
+        ...(spell.filter ? { filter: spell.filter } : {}),
+        // Bless/Aid pick several creatures; Magic Missile/Scorching Ray spread darts or rays.
+        ...(spell.maxTargets ? { maxTargets: spell.maxTargets } : spell.multi && !spell.area ? { maxTargets: spell.multi, allowRepeat: true } : {}),
+      },
       tags: ['spell', spell.level === 0 ? 'cantrip' : `level${spell.level}`, ...(spell.damage ? ['damage'] : []), ...(spell.heal ? ['heal'] : []), ...(spell.area ? ['area'] : [])],
     });
   }
@@ -240,6 +246,10 @@ function areaVictims(state: GameState, caster: Entity, spell: SpellData, target:
 function spellTargets(state: GameState, caster: Entity, spell: SpellData, target: ActionTarget): Entity[] {
   if (spell.area) return areaVictims(state, caster, spell, target);
   if (spell.target === 'self') return [caster];
+  // Explicit picks (the player chose each creature) win over the automatic choice.
+  if (target.entityIds && target.entityIds.length > 0) {
+    return [...new Set(target.entityIds)].map((id) => state.entities[id]).filter((e): e is Entity => !!e).slice(0, spell.maxTargets ?? 1);
+  }
   const chosen = target.entityId ? state.entities[target.entityId] : undefined;
   if (!chosen) return [];
   if (!spell.maxTargets || spell.maxTargets <= 1) return [chosen];
@@ -248,6 +258,17 @@ function spellTargets(state: GameState, caster: Entity, spell: SpellData, target
     .filter((e) => e.id !== chosen.id && standing(e) && !isHostile(e, caster) && gridDistance(e.position, caster.position) <= spell.range)
     .sort((a, b) => missing(b) - missing(a) || a.id.localeCompare(b.id));
   return [chosen, ...others].slice(0, spell.maxTargets);
+}
+
+/**
+ * One target per dart/ray: the player's picks, spread round-robin if they picked fewer
+ * than the spell has; all on the single target otherwise.
+ */
+function dartTargets(spell: SpellData, target: ActionTarget): string[] {
+  const n = spell.multi ?? 1;
+  const picks = target.entityIds && target.entityIds.length > 0 ? target.entityIds : target.entityId ? [target.entityId] : [];
+  if (picks.length === 0) return [];
+  return Array.from({ length: n }, (_, i) => picks[i % picks.length]!);
 }
 
 function spellAttackSpec(caster: Entity, spell: SpellData, targetId: string): AttackSpec {
@@ -272,7 +293,8 @@ function spellAttackSpec(caster: Entity, spell: SpellData, targetId: string): At
 export function previewAction(state: GameState, actorId: string, actionId: string, target: ActionTarget): ActionPreview {
   const e = state.entities[actorId]!;
   const [kind, id] = actionId.split(':') as [string, string];
-  const targetEntity = target.entityId ? state.entities[target.entityId] : undefined;
+  const firstId = target.entityId ?? target.entityIds?.[0];
+  const targetEntity = firstId ? state.entities[firstId] : undefined;
 
   if (kind === 'attack') {
     if (!targetEntity || !standing(targetEntity)) return { valid: false, reason: 'No hay a quién atacar ahí.' };
@@ -304,14 +326,21 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
     if (spell.target === 'creature' && (!targetEntity || (!standing(targetEntity) && !spell.heal))) return { valid: false, reason: 'Objetivo no válido.' };
 
     const victims = spellTargets(state, e, spell, target);
+    const shots = dartTargets(spell, target);
     if (spell.attack && targetEntity) {
+      let expected = 0;
+      let chance = 0;
+      for (const t of shots) {
+        const p = attackPreview(state, spellAttackSpec(e, spell, t));
+        expected += p.expected;
+        chance = Math.max(chance, p.chance);
+      }
       const p = attackPreview(state, spellAttackSpec(e, spell, targetEntity.id));
-      const n = spell.multi ?? 1;
-      return { valid: true, chance: p.chance, expectedDamage: p.expected * n, breakdown: attackBreakdown(p, n, false) };
+      return { valid: true, chance, expectedDamage: expected, breakdown: attackBreakdown(p, shots.length, false) };
     }
     if (spell.autoHit && spell.damage) {
       const d = spellDamage(e, spell)!;
-      return { valid: true, chance: 1, expectedDamage: averageOf(d) * (spell.multi ?? 1), breakdown: [{ label: 'Impacta siempre', value: '100 %', term: 'hit_chance' }] };
+      return { valid: true, chance: 1, expectedDamage: averageOf(d) * shots.length, breakdown: [{ label: 'Impacta siempre', value: '100 %', term: 'hit_chance' }, { label: 'Dardos', value: String(shots.length) }] };
     }
     if (spell.save) {
       const dc = spellDc(e, ability);
@@ -347,9 +376,9 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
     if (spell.heal) {
       const slot = spell.level === 0 ? 0 : (lowestSlot(e, spell.level) ?? spell.level);
       const amount = healAmount(e, spell, slot);
-      return { valid: true, chance: 1, expectedHealing: amount * victims.length, breakdown: [{ label: `Cura ~${amount} por objetivo` }] };
+      return { valid: true, chance: 1, expectedHealing: amount * victims.length, breakdown: [{ label: `Cura ~${amount} por objetivo` }, { label: 'Objetivos', value: String(victims.length) }] };
     }
-    return { valid: true, chance: 1 };
+    return { valid: true, chance: 1, ...(spell.maxTargets ? { breakdown: [{ label: 'Objetivos', value: String(victims.length) }] } : {}) };
   }
 
   if (kind === 'feature' || kind === 'basic') {
@@ -516,9 +545,9 @@ function castSpell(r: Resolver, casterId: string, spell: SpellData, spellId: str
 
   const victims = spellTargets(r.state, caster, spell, target);
   if (spell.attack) {
-    for (let i = 0; i < (spell.multi ?? 1); i++) {
-      const t = r.entity(target.entityId!);
-      if (!standing(t)) break;
+    for (const id of dartTargets(spell, target)) {
+      const t = r.entity(id);
+      if (!standing(t)) continue;
       const { hit } = resolveAttack(r, spellAttackSpec(r.entity(casterId), spell, t.id));
       if (hit) r.apply(...conditionFor(t.id));
     }
@@ -526,7 +555,7 @@ function castSpell(r: Resolver, casterId: string, spell: SpellData, spellId: str
   }
   if (spell.autoHit && spell.damage) {
     const d = spellDamage(caster, spell)!;
-    for (let i = 0; i < (spell.multi ?? 1); i++) dealDamage(r, target.entityId!, sum(rollDice(r.rng, d.count, d.sides)) + d.bonus, spell.damage.type);
+    for (const id of dartTargets(spell, target)) dealDamage(r, id, sum(rollDice(r.rng, d.count, d.sides)) + d.bonus, spell.damage.type);
     return;
   }
   if (spell.save) {

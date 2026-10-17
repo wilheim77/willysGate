@@ -59,6 +59,9 @@
     "noTarget": "Ahí no hay nadie.",
     "damage": "de daño",
     "healing": "de curación",
-    "sure": "Sin tirada"
+    "sure": "Sin tirada",
+    "pickTargets": "Toca para elegir hasta",
+    "targets": "Objetivos",
+    "done": "Listo"
   }
 }

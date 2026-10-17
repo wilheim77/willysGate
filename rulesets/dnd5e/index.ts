@@ -86,7 +86,7 @@ const conditions: Record<string, ConditionDef> = {
   dodging: { label: 'Esquivando', description: 'Los ataques contra él tienen desventaja.' },
   dashing: { label: 'Corriendo', description: 'Movimiento doble este turno.' },
   disengaged: { label: 'Retirándose', description: 'No provoca ataques de oportunidad.' },
-  turned: { label: 'Expulsado', description: 'Huye del clérigo y no puede acercarse.' },
+  turned: { label: 'Expulsado', description: 'Se acobarda y pierde sus turnos hasta que algo le hace daño.' },
   spirit_guardians: { label: 'Espíritus guardianes', description: 'Los enemigos que empiezan su turno cerca reciben daño radiante.' },
 };
 
@@ -145,6 +145,8 @@ function resolveCheck(state: GameState, req: CheckRequest, rng: Parameters<Rules
     const expert = hasTag(actor, proficiencyTag.replace('prof:', 'expert:'));
     modifiers.push({ label: expert ? 'Pericia' : 'Competencia', value: profBonus(actor) * (expert ? 2 : 1), term: 'proficiency' } as never);
   }
+  // Guidance: +1d4 to ability checks while it lasts (not to saving throws).
+  if (!isSave && hasCondition(actor, 'guided_check')) modifiers.push({ label: 'Orientación divina', value: rng.die(4), term: 'bless' });
   const result = d20Check(rng, { check: req.check, label, mode: resolveRollMode(advantage, disadvantage), modifiers, target: req.target });
   result.targetTerm = 'dc';
   return result;
@@ -251,7 +253,8 @@ export const dnd5e: Ruleset = {
     const dex = abilityModifier(stat(e, 'dex', 10));
     return rng.die(20) + dex + stat(e, 'dex', 10) / 100;
   },
-  canAct: (e) => standing(e) && !['paralyzed', 'stunned', 'unconscious', 'incapacitated'].some((c) => hasCondition(e, c)),
+  // Turned undead cower (simplified: they lose their turns until something hurts them).
+  canAct: (e) => standing(e) && !['paralyzed', 'stunned', 'unconscious', 'incapacitated', 'turned'].some((c) => hasCondition(e, c)),
   isStanding: (e) => standing(e) && isAlive(e),
   onTurnStart: (state, id, rng) => onTurnStart(dnd5e, state, id, rng),
   listActions,

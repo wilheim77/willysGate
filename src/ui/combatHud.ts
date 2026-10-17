@@ -37,6 +37,7 @@ export class CombatHud {
     selectedActionId: string | null,
     onAction: (a: ActionDef | null) => void,
     onEndTurn: () => void,
+    picking?: { count: number; max: number; onDone: () => void },
   ): void {
     const inCombat = state.turn.mode === 'combat';
     this.root.hidden = !inCombat;
@@ -105,6 +106,14 @@ export class CombatHud {
     const hint = document.createElement('div');
     hint.className = 'hint';
     hint.textContent = selectedActionId ? this.t('pickTarget', 'Elige objetivo') : this.t('moveOrAct', 'Toca una casilla para moverte o elige una acción');
+    if (picking) {
+      hint.textContent = `${this.t('pickTargets', 'Elige hasta')} ${picking.max} · ${this.t('targets', 'Objetivos')}: ${picking.count}/${picking.max} `;
+      const done = document.createElement('button');
+      done.textContent = this.t('done', 'Listo');
+      done.disabled = picking.count === 0;
+      done.addEventListener('click', picking.onDone);
+      hint.append(done);
+    }
     this.bar.replaceChildren(card, buttons, end, hint);
   }
 

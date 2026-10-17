@@ -202,3 +202,40 @@ describe('AI with 5e rules', () => {
     expect(['move', 'endTurn']).toContain(next.type);
   });
 });
+
+describe('multi-target spells', () => {
+  it('Bless takes the allies the player picks (up to 3)', () => {
+    const s = fight(game([pc('anselmo', 'cleric', 3, 0, 0), pc('garran', 'fighter', 3, 1, 0), pc('dorotea', 'rogue', 3, 2, 0), pc('mage', 'wizard', 3, 3, 0), monster('b', 'bandit', 4, 2)]), 'anselmo');
+    const r = act(s, 'anselmo', 'spell:bless', { entityIds: ['garran', 'mage'] });
+    const blessed = Object.values(r.state.entities).filter((e) => hasCondition(e, 'blessed')).map((e) => e.id).sort();
+    expect(blessed).toEqual(['garran', 'mage']);
+    expect(engine.apply(s, { type: 'act', issuer: 'player:1', entityId: 'anselmo', actionId: 'spell:bless', target: { entityIds: ['garran', 'mage', 'dorotea', 'anselmo'] } } as never)).toMatchObject({
+      ok: false,
+      error: { code: 'invalid_target' },
+    });
+    expect(engine.apply(s, { type: 'act', issuer: 'player:1', entityId: 'anselmo', actionId: 'spell:bless', target: { entityIds: ['garran', 'b'] } } as never)).toMatchObject({
+      ok: false,
+      error: { code: 'invalid_target' },
+    });
+  });
+
+  it('Magic Missile spreads its three darts over the picked targets', () => {
+    const s = fight(game([pc('mage', 'wizard', 3, 0, 0), monster('b1', 'thug', 4, 0), monster('b2', 'thug', 4, 2)]), 'mage');
+    const r = act(s, 'mage', 'spell:magic_missile', { entityIds: ['b1', 'b2', 'b1'] });
+    const hits = r.events.filter((e) => isEvent(e, 'damageDealt')).map((e) => (e as never as { targetId: string }).targetId);
+    expect(hits.sort()).toEqual(['b1', 'b1', 'b2']);
+  });
+
+  it('a single picked target still gets every dart', () => {
+    const s = fight(game([pc('mage', 'wizard', 3, 0, 0), monster('b1', 'thug', 4, 0)]), 'mage');
+    const r = act(s, 'mage', 'spell:magic_missile', { entityId: 'b1' });
+    expect(r.events.filter((e) => isEvent(e, 'damageDealt'))).toHaveLength(3);
+  });
+
+  it('Guidance adds 1d4 to ability checks', () => {
+    let s = game([pc('anselmo', 'cleric', 3, 0, 0)]);
+    s = engine.applyEffects(s, [{ type: 'applyCondition', entityId: 'anselmo', condition: 'guided_check' }]).state;
+    const { result } = engine.check(s, { actorId: 'anselmo', check: 'perception', target: 10 });
+    expect(result.modifiers.map((m) => m.label)).toContain('Orientación divina');
+  });
+});

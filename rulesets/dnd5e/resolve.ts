@@ -215,6 +215,7 @@ export function dealDamage(r: Resolver, targetId: string, raw: number, type: str
   if (amount <= 0) return 0;
   const hp = target.resources.hp?.current ?? 0;
   r.emit({ type: 'damageDealt', targetId, amount, damageType: type, crit } as DamageDealtEvent);
+  if (hasCondition(target, 'turned')) r.apply({ type: 'removeCondition', entityId: targetId, condition: 'turned' });
 
   if (hasCondition(target, 'downed')) {
     // Hitting someone already down makes them bleed out faster.

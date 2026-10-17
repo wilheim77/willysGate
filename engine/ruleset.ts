@@ -91,6 +91,10 @@ export interface ActionDef {
     range: number;
     /** For creature targets. */
     filter?: 'hostile' | 'ally' | 'any';
+    /** Up to this many creatures may be chosen (Bless: 3). Default 1. */
+    maxTargets?: number;
+    /** The same creature may be picked more than once (Magic Missile darts). */
+    allowRepeat?: boolean;
   };
   /** Free-form hints for UI and AI: 'attack', 'melee', 'ranged', 'spell', 'heal', 'buff'... */
   tags: string[];
@@ -98,7 +102,15 @@ export interface ActionDef {
 
 export interface ActionTarget {
   entityId?: string;
+  /** Several creatures, for actions with target.maxTargets > 1 (in pick order; may repeat if allowed). */
+  entityIds?: string[];
   tile?: Vec2;
+}
+
+/** All creatures an action target names, single or multiple. */
+export function targetIds(target: ActionTarget): string[] {
+  if (target.entityIds && target.entityIds.length > 0) return target.entityIds;
+  return target.entityId ? [target.entityId] : [];
 }
 
 export interface ActionPreview {

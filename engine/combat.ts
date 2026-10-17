@@ -9,7 +9,7 @@ import {
 import { type Effect, type EffectEvent, applyEffects } from './effects';
 import { type Vec2, gridDistance } from './grid';
 import { RngCursor } from './rng';
-import type { ActionOutcome, ActionTarget, Ruleset } from './ruleset';
+import { type ActionOutcome, type ActionTarget, type Ruleset, targetIds } from './ruleset';
 import { EXPLORATION_TURN, type Entity, type GameState } from './state';
 
 // --- Commands & events ------------------------------------------------------
@@ -224,14 +224,23 @@ export const act: CommandHandler<ActCommand> = (state, cmd, { ruleset }) => {
   }
 
   // Generic targeting checks; rules-specific ones (line of sight, conditions) are the ruleset's.
-  const targetPos = targetPosition(state, entity, action.target.kind, cmd.target);
-  if (!targetPos) return fail('invalid_target', 'Missing or unknown target');
-  if (gridDistance(entity.position, targetPos) > action.target.range) return fail('out_of_range', 'Target out of range');
   if (action.target.kind === 'creature') {
-    const target = state.entities[cmd.target.entityId!]!;
-    const filter = action.target.filter ?? 'any';
-    if (filter === 'hostile' && !isHostile(entity, target)) return fail('invalid_target', 'Target is not hostile');
-    if (filter === 'ally' && isHostile(entity, target)) return fail('invalid_target', 'Target is not an ally');
+    const ids = targetIds(cmd.target);
+    if (ids.length === 0) return fail('invalid_target', 'Missing target');
+    if (ids.length > (action.target.maxTargets ?? 1)) return fail('invalid_target', 'Too many targets');
+    if (!action.target.allowRepeat && new Set(ids).size !== ids.length) return fail('invalid_target', 'Repeated target');
+    for (const id of ids) {
+      const target = state.entities[id];
+      if (!target) return fail('invalid_target', `Unknown target ${id}`);
+      if (gridDistance(entity.position, target.position) > action.target.range) return fail('out_of_range', 'Target out of range');
+      const filter = action.target.filter ?? 'any';
+      if (filter === 'hostile' && !isHostile(entity, target)) return fail('invalid_target', 'Target is not hostile');
+      if (filter === 'ally' && isHostile(entity, target)) return fail('invalid_target', 'Target is not an ally');
+    }
+  } else {
+    const targetPos = targetPosition(state, entity, action.target.kind, cmd.target);
+    if (!targetPos) return fail('invalid_target', 'Missing or unknown target');
+    if (gridDistance(entity.position, targetPos) > action.target.range) return fail('out_of_range', 'Target out of range');
   }
   const preview = ruleset.previewAction(state, entity.id, action.id, cmd.target);
   if (!preview.valid) return fail('action_invalid', preview.reason ?? 'Invalid action');
