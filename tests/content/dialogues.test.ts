@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { type DialogueTree, type DialogueWhen, createEngine } from '../../engine';
+import { type DialogueNode, type DialogueTree, type DialogueWhen, createEngine, nextTargets } from '../../engine';
 import { createCharacter, dnd5e } from '../../rulesets/dnd5e';
 import { asciiMap } from '../fixtures/helpers';
 
@@ -32,7 +32,7 @@ describe('dialogue content', () => {
         for (const item of itemsIn(tree.nodes)) expect(items[item], `item "${item}" missing from items.json`).toBeDefined();
         expect(tree.nodes[tree.start]).toBeDefined();
         for (const [id, node] of Object.entries(tree.nodes)) {
-          const links = [node.next, ...(node.choices ?? []).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
+          const links = [...nextTargets(node.next), ...(node.choices ?? []).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
           for (const l of links) expect(tree.nodes[l], `${id} -> ${l}`).toBeDefined();
           // No softlocks: a node with choices always offers one with no condition and no roll.
           if (node.choices?.length) {
@@ -45,13 +45,15 @@ describe('dialogue content', () => {
         }
         // Every node can reach the end of the conversation.
         // Only through choices that are always offered (no `when`), so a closed door can't hide the exit.
-        const ends = new Set(Object.entries(tree.nodes).filter(([, n]) => (!n.choices?.length && !n.next) || n.choices?.some((c) => !c.next && !c.check && !c.when)).map(([k]) => k));
+        // A conditional next always has a way out when its last branch has no condition.
+        const endsHere = (n: DialogueNode) => !n.choices?.length && (n.next === undefined || (Array.isArray(n.next) && n.next.some((b) => !b.next)));
+        const ends = new Set(Object.entries(tree.nodes).filter(([, n]) => endsHere(n) || n.choices?.some((c) => !c.next && !c.check && !c.when)).map(([k]) => k));
         let grew = true;
         while (grew) {
           grew = false;
           for (const [k, n] of Object.entries(tree.nodes)) {
             if (ends.has(k)) continue;
-            const outs = [n.next, ...(n.choices ?? []).filter((c) => !c.when).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
+            const outs = [...(Array.isArray(n.next) ? n.next.filter((b) => !b.when).flatMap((b) => (b.next ? [b.next] : [])) : nextTargets(n.next)), ...(n.choices ?? []).filter((c) => !c.when).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
             if (outs.some((o) => ends.has(o))) {
               ends.add(k);
               grew = true;

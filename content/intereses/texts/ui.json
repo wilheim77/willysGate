@@ -20,6 +20,9 @@
     "slag": "escoria",
     "wall": "muro",
     "planks": "tablones",
+    "scaffold": "andamio",
+    "door_closed": "puerta cerrada",
+    "door_open": "puerta abierta",
     "void": "vacío"
   },
   "ui": {

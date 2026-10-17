@@ -286,6 +286,7 @@ export class GameController {
     const { turn } = this.state;
     if (turn.mode !== 'combat') {
       if (this.checkEncounters()) return;
+      if (this.checkScenes()) return;
       if (this.checkExits()) return;
       if (this.pendingInteract) {
         const id = this.pendingInteract;
@@ -325,11 +326,38 @@ export class GameController {
   }
 
   /** Starts combat when the leader walks into an encounter zone with enemies still standing. */
+  /** Flag conditions a zone may carry: requiresFlag / unlessFlag. */
+  private zoneAllowed(z: { properties: Record<string, unknown> }): boolean {
+    const req = z.properties.requiresFlag;
+    const unless = z.properties.unlessFlag;
+    if (req && !this.state.flags[String(req)]) return false;
+    if (unless && this.state.flags[String(unless)]) return false;
+    return true;
+  }
+
+  /** The leader walked into a scene: someone there starts talking (avoidable fights, the trial...). */
+  private checkScenes(): boolean {
+    const leader = this.state.entities[this.game.leaderId];
+    if (!leader || dialogueOf(this.state)) return false;
+    for (const z of zonesOf(this.state, 'scenes')) {
+      if (!inZone(z, leader.position) || !this.zoneAllowed(z)) continue;
+      const dialogue = String(z.properties.dialogue ?? '');
+      if (!dialogue || dialogue.startsWith('TODO') || !this.game.dialogues?.[dialogue]) continue;
+      const seen = `scene:${z.name}`;
+      if (z.properties.once !== false && this.state.flags[seen]) continue;
+      const speaker = z.properties.speaker ? this.state.entities[String(z.properties.speaker)] : undefined;
+      if (z.properties.speaker && (!speaker || !this.store.engine.ruleset.isStanding(speaker))) continue;
+      const r = this.store.dispatch({ type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: dialogue, actorId: leader.id, markFlag: seen, ...(speaker ? { partnerId: speaker.id } : {}) } as never);
+      if (r.ok) return true;
+    }
+    return false;
+  }
+
   /** The leader stepped onto an exit: the whole party travels to the next map. */
   private checkExits(): boolean {
     const leader = this.state.entities[this.game.leaderId];
     if (!leader || dialogueOf(this.state)) return false;
-    const exit = zonesOf(this.state, 'exits').find((z) => inZone(z, leader.position) && z.properties.to && z.properties.spawn);
+    const exit = zonesOf(this.state, 'exits').find((z) => inZone(z, leader.position) && z.properties.to && z.properties.spawn && this.zoneAllowed(z));
     if (!exit) return false;
     this.trail = [];
     this.leaderMoved = false;
@@ -343,7 +371,7 @@ export class GameController {
     if (!leader) return false;
     const ruleset = this.store.engine.ruleset;
     for (const zone of zonesOf(this.state, 'encounters')) {
-      if (!inZone(zone, leader.position)) continue;
+      if (!inZone(zone, leader.position) || !this.zoneAllowed(zone)) continue;
       const foes = String(zone.properties.participants ?? '')
         .split(',')
         .map((s) => s.trim())

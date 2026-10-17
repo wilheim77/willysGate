@@ -12,7 +12,7 @@ export const SURFACES: Record<string, SurfaceDef> = {
   aceite: { label: 'Aceite', hazard: 0.5, color: '#4a3c1c' },
   fuego: { label: 'Fuego', hazard: 4, durationRounds: 3, light: { radius: 3, intensity: 0.9, color: '#ff8a30' }, color: '#e2601e' },
   hielo: { label: 'Hielo', hazard: 1, color: '#bfe4f0' },
-  vapor: { label: 'Vapor', durationRounds: 2, color: '#d8dde0' },
+  vapor: { label: 'Vapor', durationRounds: 2, color: '#d8dde0', blocksSight: true },
   toxico: { label: 'Tóxico', hazard: 2, durationRounds: 4, color: '#7ab03a' },
   electrificada: { label: 'Agua electrificada', hazard: 4, durationRounds: 1, expiresInto: 'agua', light: { radius: 2, intensity: 0.5, color: '#9fd8ff' }, color: '#5ab0e0' },
   canicas: { label: 'Canicas', hazard: 1, color: '#c0a0ff' },
@@ -56,7 +56,7 @@ export function onSurface(ruleset: Ruleset, state: GameState, id: string, surfac
   switch (surface) {
     case 'agua':
       if (hasCondition(e, 'ardiendo')) r.apply({ type: 'removeCondition', entityId: id, condition: 'ardiendo' });
-      cond('empapado', 2);
+      if (!hasTrait(e, 'pez')) cond('empapado', 2);
       break;
     case 'fuego':
       if (!hasCondition(e, 'empapado')) cond('ardiendo', 2);
@@ -71,7 +71,8 @@ export function onSurface(ruleset: Ruleset, state: GameState, id: string, surfac
       break;
     case 'red':
     case 'expedientes':
-      if (trigger === 'enter' || surface === 'expedientes') cond('enredado');
+      // Lasts 2 turns, renewed while you stay in it; «Liberarse» (FUE DIF 13) gets you out earlier.
+      if (trigger === 'enter' || surface === 'expedientes') cond('enredado', 2);
       break;
     case 'aceite':
     case 'canicas':

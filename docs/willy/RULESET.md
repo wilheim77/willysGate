@@ -322,22 +322,49 @@ Código en TypeScript puro que implementa la interfaz `Ruleset` del motor. Los d
 | `environment.ts` | Superficies (agua, aceite, fuego, hielo, vapor, tóxico, electrificada, canicas, red, expedientes, gas) y sus reacciones |
 | `actions.ts` | Acciones básicas (golpe, empujar, correr, hacer el ganso) y las habilidades de clase, una función por habilidad |
 | `creation.ts` | Cásting: solo clase y 3 puntos libres; `buildWilly` |
+| `progression.ts` | Experiencia, niveles y efectos de subida de nivel |
+| `more-classes.ts` | Influencer, Bardo, Socorrista, Tasador, Mimo e Ingeniero |
+| `summons.ts` | Invocaciones y barreras |
 | `sheet.ts` | Ficha del personaje para la interfaz |
 
 ### Estado por clase
 
-| Clase | Estado |
+Las 9 clases están completas, con invocaciones y barreras (`summons.ts`, sobre `spawnEntity`/`despawnEntity` del motor). Lo único que no está en el ruleset:
+
+| Qué | Por qué |
 |---|---|
-| Butanero | Hecha: Lanzar bombona (con gas), Reparto a domicilio, Fuga de gas, Cadena de reparto, Reparto urgente, Espalda de hierro, Riesgo laboral |
-| Funcionario | Hecha salvo Ventanilla cerrada (necesita entidades temporales: R13) |
-| Jugador de basket | Hecha salvo Tiempo muerto (invocación: R13). Alley-oop solo en versión «contra la pared» hasta que haya invocaciones. Pase picado sin rebote (R15) |
-| Influencer, Bardo, Socorrista, Tasador, Mimo, Ingeniero | Pendientes (siguiente hito) |
+| Golpe de valor (Tasador) | Necesita el valor de los objetos de `content/willy/data/items.json`; lo conectará el juego |
+| Directo, Unboxing, Viral, Charanga, Necesita likes, Regateo, Peritaje, Subasta | Son de la audiencia, las cajas y el mercado (sistemas del juego); el ruleset emite los estados y eventos que necesitan |
+| Maestrías muy vistosas (el fan que explota en confeti, la Torre de telefonía, la Versión beta) | Pendientes de una pasada de pulido |
 
-### Limitaciones mientras llegan las peticiones al motor
+### Invocaciones y barreras
 
-- **Vacío:** el motor trata el vacío como un muro al empujar; el ruleset detecta que lo que hay detrás es `void`/`foso` y elimina al empujado (R18).
-- **Saltos:** se hacen con `setPosition` comprobando el salto en el ruleset (R15).
-- **Subir de nivel:** no hay efecto para cambiar atributos; la subida de nivel la hará el juego fuera de combate (R19).
-- **Invocaciones y barreras:** ocultas hasta que exista `spawnEntity` (R13).
+- Fan entusiasta (`fan-entusiasta`, IA aliada), autómatas (los controla el jugador), antena (torreta: dispara al empezar el turno del Ingeniero) y Chencho (lo controla el jugador). Entran en el orden de turno justo detrás de su dueño; las que duran «hasta el final del combate» se van en `onCombatEnd`, las demás al acabar sus rondas, y todas si su dueño cae.
+- Pared invisible y Ventanilla cerrada: objetos que bloquean el paso y la vista, cuentan como muro en los choques y no cuentan para acabar un combate. Chocar con la ventanilla quita 1 acción.
+- Con un aliado cerca (Chencho, un fan, un autómata…), el Alley-oop es el de verdad (2d8); solo, «contra la pared» (1d8).
 
-Tests: `tests/rulesets/willy-core.test.ts` y `willy-classes.test.ts` (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).
+### Decisiones de la revisión 4
+
+- **Flanqueo:** +2 cuerpo a cuerpo si **cualquier** aliado tuyo está pegado al objetivo (no hace falta que esté al otro lado). Más fácil de leer; el glosario ya lo explica así.
+- **Cobertura:** −2 con un obstáculo entre medias, −5 con dos o más; los ataques cuerpo a cuerpo la ignoran. El vapor tapa la vista.
+- **Afortunado** se gasta en el siguiente ataque; en pruebas fuera de combate dura hasta que caduca (el motor no deja que una prueba aplique efectos).
+- **Empujar** usa su propia tirada (`shoveRolled`) con los mismos números que la vista previa, también para criaturas (que ahora pueden tener su propia Fuerza). La vista previa avisa de la consecuencia («¡fuera de plano!», «~5 de daño») y la IA la tiene en cuenta: los enemigos ya empujan a Willy al vacío.
+- **Enredado** dura 2 turnos (se renueva mientras sigas en la red o en el papeleo) y «Liberarse» (FUE DIF 13) te saca antes.
+- **La experiencia** se guarda como recurso (`xp`, nunca se recarga) y el nivel como atributo (`nivel`).
+- **Terco como una mula** da inmunidad a Asustado; **Petrificado** no recibe daño.
+
+### Ganchos del motor que ya usa
+
+- **Choques (R17):** `onCollision` aplica 1d6 contra un muro, 1d4 a los dos contra una criatura y, si al empujón le quedaba recorrido, lanza a la segunda («¡Strike!»).
+- **Vacío (R18):** `onVoid` elimina a los enemigos normales («fuera de plano») y a los jefes les quita el 20 % y los devuelve a la casilla libre más cercana. Los fosos se marcan con `terrain: 'void'` en Tiled.
+- **Subir de nivel (R19):** `progression.ts` → `levelUpEffects` (nivel +1, 2 puntos de atributo, +3 de vida máxima, 25 % de vida y toda la energía) con `modifyStat`; `levelForXp` con la tabla de experiencia.
+
+- **Invocaciones y barreras (R13):** `spawnEntity`/`despawnEntity`.
+- **Fin de turno e inicio de combate (R20):** «Siesta en la silla» (Socorrista) y «Silencio absoluto» (Mimo).
+
+### Lo que sigue esperando al motor
+
+- **Saltos y rebotes (R15):** de momento el salto es un `setPosition` validado en el ruleset y el Pase picado no rebota.
+- **Fin de ronda (R20):** cintas transportadoras y mareas.
+
+Tests: `tests/rulesets/willy-core.test.ts`, `willy-classes.test.ts`, `willy-classes2.test.ts`, `willy-summons.test.ts` y `willy-review.test.ts` (este recorre todas las habilidades de todas las clases en los niveles 1, 3, 6 y 9) (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).

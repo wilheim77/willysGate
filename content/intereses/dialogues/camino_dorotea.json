@@ -1,0 +1,248 @@
+{
+  "$comment": "Prologue. Started by script at the beginning of the act (actor: hero, partner: dorotea). Gives the travel money.",
+  "id": "camino_dorotea",
+  "start": "inicio",
+  "nodes": {
+    "inicio": {
+      "text": "El camino de Hondonegra baja entre colinas peladas, con un frío de los que no se quitan con ropa. Dorotea Vane camina dos pasos detrás de ti, con el libro abierto, como si el paisaje le debiera algo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "prologo_iniciado",
+          "value": true
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 30
+        }
+      ],
+      "next": "viaticos"
+    },
+    "viaticos": {
+      "speaker": "dorotea",
+      "text": "Antes de que se me olvide, que no se me olvida nunca: viáticos. Treinta coronas. Se le descontarán de la comisión.",
+      "next": "repaso"
+    },
+    "repaso": {
+      "speaker": "dorotea",
+      "text": "Repasemos. El barón Ulric Mazo debe a la Casa Valcárcel cuatro mil coronas. Más intereses. Usted cobra y se queda el diez por ciento. Yo compruebo que el resto llega entero.",
+      "choices": [
+        {
+          "id": "no_paga",
+          "text": "¿Y si no paga?",
+          "once": true,
+          "next": "no_paga"
+        },
+        {
+          "id": "libro",
+          "text": "¿Qué apunta en ese libro?",
+          "once": true,
+          "next": "libro"
+        },
+        {
+          "id": "mazo",
+          "text": "¿Qué sabemos del barón?",
+          "once": true,
+          "next": "mazo"
+        },
+        {
+          "id": "guerrero",
+          "text": "[Guerrero] He cobrado deudas con una pica. Esto no puede ser peor.",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "fighter"
+            }
+          },
+          "next": "guerrero"
+        },
+        {
+          "id": "picaro",
+          "text": "[Pícaro] La última vez que entré en una casa de Valcárcel fue por la ventana.",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "rogue"
+            }
+          },
+          "next": "picaro"
+        },
+        {
+          "id": "mago",
+          "text": "[Mago] Sigo sin entender qué pinta un mago cobrando deudas.",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "wizard"
+            }
+          },
+          "next": "mago"
+        },
+        {
+          "id": "clerigo",
+          "text": "[Clérigo] Mi prior dice que esto es una obra de caridad.",
+          "once": true,
+          "when": {
+            "rule": "class",
+            "params": {
+              "is": "cleric"
+            }
+          },
+          "next": "clerigo"
+        },
+        {
+          "id": "elfo",
+          "text": "[Elfo] Mi familia tenía cuenta en Valcárcel antes de que hubiera Valcárcel.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "next": "elfo"
+        },
+        {
+          "id": "enano",
+          "text": "[Enano] Hondonegra es tierra de mina. Allí me entenderán.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "next": "enano"
+        },
+        {
+          "id": "semiorco",
+          "text": "[Semiorco] En ese pueblo nadie me va a abrir la puerta.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "half_orc"
+            }
+          },
+          "next": "semiorco"
+        },
+        {
+          "id": "mediano",
+          "text": "[Mediano] Nadie va a tomarse en serio a un cobrador de mi estatura.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "halfling"
+            }
+          },
+          "next": "mediano"
+        },
+        {
+          "text": "En marcha.",
+          "next": "marcha"
+        }
+      ]
+    },
+    "no_paga": {
+      "speaker": "dorotea",
+      "text": "Entonces hay procedimientos.",
+      "next": "no_paga_2"
+    },
+    "no_paga_2": {
+      "speaker": "hero",
+      "text": "¿Qué procedimientos?",
+      "next": "no_paga_3"
+    },
+    "no_paga_3": {
+      "speaker": "dorotea",
+      "text": "Los de la letra pequeña. Por eso es pequeña: para que quepan muchos.",
+      "next": "repaso"
+    },
+    "libro": {
+      "speaker": "dorotea",
+      "text": "Deudas. Las que se pagan con dinero y las otras. Las otras son más difíciles de cobrar, pero no prescriben.",
+      "next": "libro_2"
+    },
+    "libro_2": {
+      "speaker": "hero",
+      "text": "¿Y yo qué le debo?",
+      "next": "libro_3"
+    },
+    "libro_3": {
+      "speaker": "dorotea",
+      "text": "De momento, treinta coronas y la paciencia que llevo gastada desde la última posada. Le apunto.",
+      "next": "repaso"
+    },
+    "mazo": {
+      "speaker": "dorotea",
+      "text": "Culto, cobarde y aficionado a la poesía. Tres defectos que en un deudor suelen ir juntos. Pidió el préstamo para abrir una galería nueva. La galería se hundió. El préstamo no.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "conoce_garganta",
+          "value": true
+        }
+      ],
+      "next": "repaso"
+    },
+    "guerrero": {
+      "speaker": "dorotea",
+      "text": "Con una pica se cobra una vez. Con un contrato, todos los meses. Por eso la Casa no contrata compañías: las compañías se disuelven cuando dejan de cobrar. Usted lo sabe mejor que nadie.",
+      "next": "repaso"
+    },
+    "picaro": {
+      "speaker": "dorotea",
+      "text": "Lo sé. Consta en su expediente. La ventana también consta: se la cobramos al dueño de la casa, por negligencia.",
+      "next": "repaso"
+    },
+    "mago": {
+      "speaker": "dorotea",
+      "text": "La Academia le expulsó y la Casa le pagó los estudios. Usted sabe aritmética. Haga la cuenta de cuántos favores como este le quedan.",
+      "next": "repaso"
+    },
+    "clerigo": {
+      "speaker": "dorotea",
+      "text": "Su prior le ha dejado como garantía de un préstamo. La caridad, en efecto, empieza por casa. Por la de él.",
+      "next": "repaso"
+    },
+    "elfo": {
+      "speaker": "dorotea",
+      "text": "Lo sabemos, y le tratamos con el respeto que se debe a un depositante. En Hondonegra hay enanos. Ellos le tratarán con el respeto que se debe a un bosque talado.",
+      "next": "repaso"
+    },
+    "enano": {
+      "speaker": "dorotea",
+      "text": "Le entenderán dentro de la mina. Fuera de ella le mirarán las manos, y luego la bolsa. Esa mina lleva ocho meses cerrada.",
+      "next": "repaso"
+    },
+    "semiorco": {
+      "speaker": "dorotea",
+      "text": "No necesita que le abran. Lleva la carta del banco. Esa carta abre más puertas que una cara agradable, y la suya, con todos mis respetos…",
+      "next": "semiorco_2"
+    },
+    "semiorco_2": {
+      "speaker": "hero",
+      "text": "¿Con todos sus respetos?",
+      "next": "semiorco_3"
+    },
+    "semiorco_3": {
+      "speaker": "dorotea",
+      "text": "Es una forma de hablar. No le apunto nada por ella.",
+      "next": "repaso"
+    },
+    "mediano": {
+      "speaker": "dorotea",
+      "text": "Le subestimarán. Aprovéchelo: en este oficio es lo único que sale gratis.",
+      "next": "repaso"
+    },
+    "marcha": {
+      "text": "Dorotea cierra el libro con un golpe seco, el único ruido que hace en todo el día. El camino sigue bajando. Hondonegra, como todas las deudas, está más lejos de lo que parecía."
+    }
+  }
+}

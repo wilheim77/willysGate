@@ -11,14 +11,19 @@ import {
   gridDistance,
   hasCondition,
   hasTag,
+  isHostile,
   stat,
+  surfaceAt,
 } from '../../engine';
 import { d20Check, resolveRollMode } from '../common/d20';
-import { listActions, performAction, previewAction } from './actions';
+import { listActions, performAction, previewAction, setWillyRef } from './actions';
+import './more-classes';
+import './summons';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, onFall, onSurface } from './environment';
-import { Resolver, type WillyEvent, canAct, chanceD20, dealDamage, pushEntity, standing } from './resolve';
+import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
+import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
 
 /**
@@ -68,6 +73,13 @@ const conditions: Record<string, ConditionDef> = {
   corriendo: { label: 'Corriendo', description: 'Otro movimiento completo este turno.' },
   salto: { label: 'En el aire', description: 'Acaba de saltar: puede hacer un mate.' },
   'cafe-tomado': { label: 'Café tomado', description: 'Ya ha hecho la pausa del café en este combate.' },
+  pasodoble: { label: 'Pasodoble', description: '+2 a acertar.' },
+  viral: { label: 'Viral', description: 'El próximo momento espectacular vale el triple de audiencia.' },
+  orquesta: { label: 'Orquesta en directo', description: 'Cada turno, los enemigos bailan y tú te curas.' },
+  'bis-activo': { label: '¡Otra, otra!', description: 'Repitiendo la última canción.' },
+  estudiado: { label: 'Estudiado', description: 'El Tasador le ha echado el ojo: le acierta mejor y con más críticos.' },
+  encajado: { label: 'En una caja invisible', description: 'No puede moverse ni actuar, ni nadie le puede tocar.' },
+  pena: { label: 'Qué pena', description: 'Ha roto algo de época: pierde 1 acción.' },
   eliminado: { label: 'Eliminado', description: 'Fuera del concurso. O de esta planta, al menos.' },
 };
 
@@ -159,11 +171,12 @@ function difficulty(state: GameState, entityId: string, source: string): number 
   return 10 + Math.floor(attr(e, a) / 2);
 }
 
-const NO_MOVE = ['aturdido', 'congelado', 'enredado', 'dormido', 'petrificado', 'eliminado'];
+const NO_MOVE = ['aturdido', 'congelado', 'enredado', 'dormido', 'petrificado', 'eliminado', 'encajado'];
 
-function movementBudget(e: Parameters<Ruleset['movementBudget']>[0]): number {
+function movementBudget(e: Parameters<Ruleset['movementBudget']>[0], state: GameState): number {
   if (NO_MOVE.some((c) => hasCondition(e, c))) return 0;
-  const base = baseMovement(e) - (hasTrait(e, 'clonc') ? 1 : 0);
+  const inWater = hasTrait(e, 'pez') && surfaceAt(state, e.position)?.type === 'agua';
+  const base = baseMovement(e) - (hasTrait(e, 'clonc') ? 1 : 0) + (inWater ? 2 : 0) + (hasCondition(e, 'pasodoble') && skillLevel(e, 'pasodoble') >= 5 ? 2 : 0);
   const total = base * (hasCondition(e, 'corriendo') ? 2 : 1);
   const standUp = hasCondition(e, 'tumbado') ? Math.ceil(base / 2) : 0;
   return Math.max(0, total - standUp);
@@ -185,6 +198,21 @@ function onTurnStart(ruleset: Ruleset, state: GameState, id: string, rng: RngCur
     const [dx, dy] = dirs[rng.die(8) - 1]!;
     pushEntity(r, id, { x: e.position.x - dx, y: e.position.y - dy }, 1);
   }
+  if (hasCondition(e, 'pena')) {
+    r.apply({ type: 'modifyResource', entityId: id, resource: 'acciones', delta: -1 }, { type: 'removeCondition', entityId: id, condition: 'pena' });
+  }
+  // Orquesta completa: everyone around keeps dancing and the Bardo heals.
+  if (hasCondition(e, 'orquesta')) {
+    heal(r, id, skillLevel(e, 'orquesta-completa') >= 3 ? 5 : 3);
+    for (const v of Object.values(state.entities)) {
+      if (!standing(v) || !isHostile(v, e) || gridDistance(v.position, e.position) > 6) continue;
+      r.apply({ type: 'applyCondition', entityId: v.id, condition: 'bailando', sourceId: id, remainingTurns: 1 });
+      if (skillLevel(e, 'orquesta-completa') >= 4) dealDamage(r, v.id, rng.die(4), 'golpe', id, 'pisoton');
+    }
+  }
+  // Antennas fire when their engineer's turn starts; automatons far from the engineer lose the signal.
+  antennaShots(r, id);
+  if (automatonSignal(state, e) < 0) r.apply({ type: 'applyCondition', entityId: id, condition: 'mareado', remainingTurns: 1 });
   // «Hablar del tiempo»: the first combat turn on each map, Willy loses an action chatting about the weather.
   const flag = `willy:tiempo:${state.map.id}`;
   if (hasTrait(e, 'hablar-del-tiempo') && state.turn.mode === 'combat' && !state.flags[flag]) {
@@ -203,6 +231,29 @@ function onTurnStart(ruleset: Ruleset, state: GameState, id: string, rng: RngCur
   return r.outcome();
 }
 
+/** «Siesta en la silla» (Socorrista): ending a turn without moving may put you to sleep. */
+function onTurnEnd(ruleset: Ruleset, state: GameState, id: string, rng: RngCursor): ActionOutcome {
+  const r = new Resolver(ruleset, state, rng);
+  const e = state.entities[id];
+  if (!e || !standing(e) || !hasTrait(e, 'siesta-en-la-silla') || state.turn.movementUsed > 0) return r.outcome();
+  const dif = hasTrait(e, 'tumbona-portatil') ? 6 : 10;
+  if (!rollSave(r, id, 'agu', dif)) {
+    r.apply({ type: 'applyCondition', entityId: id, condition: 'dormido', remainingTurns: 2 });
+    r.emit({ type: 'traitTriggered', entityId: id, rasgo: 'siesta-en-la-silla' } as WillyEvent);
+  }
+  return r.outcome();
+}
+
+/** «Silencio absoluto» (Mimo): unnoticed when a fight starts. */
+function onCombatStart(ruleset: Ruleset, state: GameState, rng: RngCursor): ActionOutcome {
+  const r = new Resolver(ruleset, state, rng);
+  for (const id of state.turn.order) {
+    const e = state.entities[id];
+    if (e && standing(e) && hasTrait(e, 'silencio')) r.apply({ type: 'applyCondition', entityId: id, condition: 'escondido' });
+  }
+  return r.outcome();
+}
+
 /** End of a fight: energy comes back (the «short rest»), one-per-combat things reset. */
 function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
   const r = new Resolver(ruleset, state, null as never);
@@ -212,6 +263,8 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
     if (en && en.current < en.max) r.apply({ type: 'modifyResource', entityId: e.id, resource: 'energia', delta: en.max - en.current });
     for (const c of ['cafe-tomado', 'corriendo', 'salto']) if (hasCondition(e, c)) r.apply({ type: 'removeCondition', entityId: e.id, condition: c });
   }
+  // Summons and barriers go home when the fight is over.
+  for (const e of Object.values(r.state.entities)) if (e.tags.some((t) => t.startsWith('invocado-por:'))) r.apply({ type: 'despawnEntity', entityId: e.id });
   return r.outcome();
 }
 
@@ -243,23 +296,31 @@ export const willy: Ruleset = {
     return rng.die(20) + agi + (hasTag(e, 'pc') ? 0.5 : 0) + agi / 100;
   },
   canAct,
-  isStanding: standing,
+  // Barriers block tiles but do not count as anyone's side for ending a fight.
+  isStanding: (e) => standing(e) && !hasTag(e, 'barrera'),
   occupiesTile: (e) => standing(e),
   onTurnStart: (state, id, rng) => onTurnStart(willy, state, id, rng),
   listActions,
   previewAction,
   performAction: (state, actorId, actionId, target, rng) => performAction(willy, state, actorId, actionId, target, rng),
   onCombatEnd: (state) => onCombatEnd(willy, state),
+  onTurnEnd: (state, id, rng) => onTurnEnd(willy, state, id, rng),
+  onCombatStart: (state, rng) => onCombatStart(willy, state, rng),
   surfaces: SURFACES,
   surfaceReactions: SURFACE_REACTIONS,
   onSurface: (state, id, surface, trigger, rng) => onSurface(willy, state, id, surface, trigger, rng),
   onFall: (state, id, levels, rng) => onFall(willy, state, id, levels, rng),
+  onCollision: (state, id, hit, push, rng) => onCollision(willy, state, id, hit, push, rng),
+  onVoid: (state, id, rng) => onVoid(willy, state, id, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
 };
+
+setWillyRef(willy);
 
 export { ATTRS, ATTR_LABELS, createCreature, createWilly, defence, skillLevel, type CreatureSpec, type WillySpec } from './character';
 export { CLASSES } from './data';
 export { WILLY_CREATION, buildWilly, defaultCreation } from './creation';
+export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
 export { HANDLERS, areaTiles } from './actions';
 export type { AttackRolledEvent, DamageDealtEvent, WillyEvent } from './resolve';

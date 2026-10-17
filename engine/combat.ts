@@ -156,6 +156,18 @@ export function checkCombatEnd(ruleset: Ruleset, state: GameState): { state: Gam
   }
   // Nobody tracks turns any more: per-turn resources come back.
   for (const e of Object.values(next.entities)) next = applyEffects(ruleset, next, refreshTurnResources(ruleset, e)).state;
+  // Story consequences declared when the fight started (a dialogue's "if we win…").
+  const hooks = next.systems.combatHooks as unknown as { side: string; onVictory?: Effect[]; onDefeat?: Effect[] } | undefined;
+  if (hooks) {
+    const { combatHooks: _done, ...systems } = next.systems;
+    next = { ...next, systems };
+    const consequences = winner === hooks.side ? hooks.onVictory : hooks.onDefeat;
+    if (consequences?.length) {
+      const r = applyEffects(ruleset, next, consequences);
+      next = r.state;
+      events.push(...r.events);
+    }
+  }
   return { state: next, events };
 }
 
@@ -190,6 +202,16 @@ function beginTurn(ruleset: Ruleset, state: GameState, entityId: string, rng: Rn
     if (ended.events.length) return { state: ended.state, events: [...events, ...ended.events] };
     const current = next.entities[id];
     if (current && ruleset.canAct(current)) return { state: next, events };
+    // A skipped turn still passes: timed conditions (stunned, asleep) tick down, or they'd never end.
+    if (current) {
+      const ticked = decrementConditions(next, id);
+      const gone: Effect[] = ticked.entities[id]!.conditions
+        .filter((c) => c.remainingTurns !== undefined && c.remainingTurns <= 0)
+        .map((c) => ({ type: 'removeCondition', entityId: id, condition: c.id }));
+      const r = applyEffects(ruleset, ticked, gone);
+      next = r.state;
+      events.push(...r.events);
+    }
     const advanced = advanceOrder(ruleset, next, rng);
     next = advanced.state;
     events.push(...advanced.events);
@@ -277,13 +299,21 @@ export const startCombat: CommandHandler<StartCombatCommand> = (state, cmd, { ru
     rng: rng.state,
     turn: { mode: 'combat', round: 1, activeEntityId: null, order, initiative, movementUsed: 0 },
   };
-  const first = beginTurn(ruleset, started, order[0]!, rng);
+  let opened = started;
+  const openEvents: GameEvent[] = [];
+  if (ruleset.onCombatStart) {
+    const r = applyOutcome(ruleset, started, ruleset.onCombatStart(started, rng), rng);
+    opened = r.state;
+    openEvents.push(...r.events);
+  }
+  const first = beginTurn(ruleset, opened, opened.turn.order[0] ?? order[0]!, rng);
   return {
     ok: true,
     state: { ...first.state, rng: rng.state },
     events: [
       ...(talking ? [{ type: 'dialogueEnded', treeId: talking.treeId ?? '' } as GameEvent] : []),
       { type: 'combatStarted', order, initiative } as CombatStartedEvent,
+      ...openEvents,
       ...first.events,
     ],
   };
@@ -296,16 +326,24 @@ export const endTurn: CommandHandler<EndTurnCommand> = (state, cmd, { ruleset })
     const actor = requireControlled(state, cmd.issuer, cmd.entityId);
     if (!actor.ok) return actor;
   }
-  const ticked = decrementConditions(state, cmd.entityId);
+  const rng = new RngCursor(state.rng);
+  let ending = state;
+  const endEvents: GameEvent[] = [];
+  if (ruleset.onTurnEnd) {
+    const r = applyOutcome(ruleset, state, ruleset.onTurnEnd(state, cmd.entityId, rng), rng);
+    ending = r.state;
+    endEvents.push(...r.events);
+  }
+  if (!ending.entities[cmd.entityId]) ending = state;
+  const ticked = decrementConditions(ending, cmd.entityId);
   const expiredEffects: Effect[] = ticked.entities[cmd.entityId]!.conditions
     .filter((c) => c.remainingTurns !== undefined && c.remainingTurns <= 0)
     .map((c) => ({ type: 'removeCondition', entityId: cmd.entityId, condition: c.id }));
   const expired = applyEffects(ruleset, ticked, expiredEffects);
 
-  const rng = new RngCursor(expired.state.rng);
   const advanced = advanceOrder(ruleset, expired.state, rng);
   const begun = beginTurn(ruleset, advanced.state, advanced.nextId, rng);
-  return { ok: true, state: { ...begun.state, rng: rng.state }, events: [...expired.events, ...advanced.events, ...begun.events] };
+  return { ok: true, state: { ...begun.state, rng: rng.state }, events: [...endEvents, ...expired.events, ...advanced.events, ...begun.events] };
 };
 
 export const act: CommandHandler<ActCommand> = (state, cmd, { ruleset }) => {

@@ -346,7 +346,29 @@
         "patrocinio-cruzado",
         "hater-convertido"
       ],
-      "fraseNarrador": "Influencer. Por fin alguien que entiende de qué va este programa. Me das un poco de asco."
+      "fraseNarrador": "Influencer. Por fin alguien que entiende de qué va este programa. Me das un poco de asco.",
+      "invocaciones": {
+        "fan-entusiasta": {
+          "nombre": "Fan entusiasta",
+          "genero": "m",
+          "descripcion": "Lleva tu cara en la camiseta y no te deja en paz. En combate, tampoco al enemigo.",
+          "spriteId": "fan-entusiasta",
+          "vida": 10,
+          "def": 11,
+          "ataque": 3,
+          "dano": "1d6",
+          "movimiento": 5,
+          "duracion": {
+            "turnos": 3
+          },
+          "ia": "agresivo",
+          "control": "ia-aliada",
+          "etiquetas": [
+            "invocacion",
+            "humano"
+          ]
+        }
+      }
     },
     {
       "id": "bardo-de-verbena",

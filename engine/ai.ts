@@ -72,6 +72,10 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
     .listActions(state, actor.id)
     .filter((a) => Object.entries(a.cost).every(([r, n]) => (actor.resources[r]?.current ?? 0) >= n));
   const others = Object.values(state.entities).filter((e) => e.id !== actor.id && ruleset.isStanding(e) && !e.tags.includes(OBJECT_TAG));
+  // Fallen friends can still be saved: healing and support actions may target them.
+  const fallenFriends = Object.values(state.entities).filter(
+    (e) => e.id !== actor.id && !ruleset.isStanding(e) && !e.tags.includes(OBJECT_TAG) && !isHostile(actor, e) && ruleset.occupiesTile?.(e) !== false,
+  );
   let best: Candidate | null = null;
 
   for (const action of affordable) {
@@ -81,7 +85,7 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
       action.target.kind === 'self'
         ? [actor]
         : action.target.kind === 'creature'
-          ? others.filter((e) => matchesFilter(actor, e, action.target.filter))
+          ? [...others, ...(action.tags.includes('heal') || action.tags.includes('support') ? fallenFriends : [])].filter((e) => matchesFilter(actor, e, action.target.filter))
           : others.filter((e) => isHostile(actor, e));
     for (const target of targets) {
       // Try the tiles from which the target is in range, nearest first.

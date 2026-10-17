@@ -1,0 +1,62 @@
+{
+  "$comment": "Talking to Dorotea from the party.",
+  "id": "dorotea",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "speaker": "dorotea",
+      "text": "¿Sí? Si es una consulta, sea breve. Si es una queja, sea más breve todavía.",
+      "choices": [
+        {
+          "id": "deuda",
+          "text": "¿Por qué hace este trabajo?",
+          "once": true,
+          "next": "deuda"
+        },
+        {
+          "text": "¿Cuánto llevamos gastado?",
+          "next": "gastos"
+        },
+        {
+          "id": "mirar",
+          "text": "(Fijarse en cómo sujeta el libro.)",
+          "once": true,
+          "check": {
+            "check": "insight",
+            "dc": 14,
+            "success": "perspicaz",
+            "failure": "nada"
+          }
+        },
+        {
+          "text": "Nada. Siga apuntando."
+        }
+      ]
+    },
+    "deuda": {
+      "speaker": "dorotea",
+      "text": "Porque la Casa me paga. Si quiere una respuesta más larga, la Casa también la cobra.",
+      "next": "hola"
+    },
+    "gastos": {
+      "speaker": "dorotea",
+      "text": "Más de lo que vamos a recuperar y menos de lo que va a costar. Como siempre. Le apunto la pregunta.",
+      "next": "hola"
+    },
+    "perspicaz": {
+      "text": "Lo sujeta contra el pecho, como otros sujetan una reliquia o un escudo. Hay una página que nunca abre delante de ti. Tiene el canto lacrado.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "dorotea_orden_sellada_vista",
+          "value": true
+        }
+      ],
+      "next": "hola"
+    },
+    "nada": {
+      "text": "Lo sujeta como sujeta todo: con exactitud. Te devuelve la mirada sin parpadear y apunta algo. Seguramente sobre ti.",
+      "next": "hola"
+    }
+  }
+}

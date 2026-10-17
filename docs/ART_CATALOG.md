@@ -91,6 +91,30 @@ Añadidos en la Fase 3:
 | `fx_explosion` | 7 frames de **32×32**, 14 fps, `anchor: centre`, `light: #ffb060` | Destello, bola de fuego, anillo de humo con brasas y humo que se disipa |
 | `fx_steam` | 5, 10 fps | Vapor cuando el agua toca el fuego |
 
+## PNJ de Hondonegra y atrezo del pueblo (para `mapas` y `guion`)
+
+Recolores de 0x72 con detalle propio (`palettes.json`). Vista previa: [`art-previews/0x72-npcs-hondonegra.png`](art-previews/0x72-npcs-hondonegra.png).
+
+| Id | Base | Aspecto |
+|---|---|---|
+| `mazo` | `elf_m` | El barón Ulric Mazo: jubón morado con aro de oro y pluma de poeta |
+| `hilda` | `elf_f` | Hilda Cardo, la senescal: moño gris, vestido gris verdoso, manojo de llaves |
+| `cirilo` | `wizzard_m` | Cirilo Hondo, capellán de la Santa Pala: capucha y sotana pardas, barba gris, pala |
+| `fanatico_pala` | `wizzard_f` | Fanático de la Santa Pala: capucha de arpillera ocre y pala |
+| `nella` | `elf_f` | Nella Yesca: luto negro y pañuelo rojo de la Cuadrilla |
+| `odda` | `dwarf_f` | Odda Hulla: trenzas cobrizas, ropa de mina, martillo |
+| `lisandro` | `elf_m` | Lisandro Fuss, el prestamista elfo: levita verde oscuro, botones y bolsa de oro |
+| `aldeano`, `aldeana`, `aldeano_viejo` | `elf_m`, `elf_f`, `wizzard_m` | Vecinos de Hondonegra con ropa gastada |
+
+Ya existían: `absalon` (Brea), `callado`, `callado_palido`, `minero_cuadrilla`, `guardia_baron`, `guardia_baron_sargento`, los compañeros y los Sinpaga.
+
+**Calles y Escorial** (vista previa: [`art-previews/0x72-escorial-calles.png`](art-previews/0x72-escorial-calles.png)):
+- PNJ: `fiel_pala` (vecino con escapulario ocre de la Santa Pala) y `viuda` (velo y luto negros, para las viudas de los cuarenta).
+- Props: `campfire` (hoguera de campamento, 4 frames, luz), `oil_cart` (carro de aceite de los Sinpaga con tres barriles, 32×20), `well` (el Pozo del Ahorcado, 16×24).
+- Trampas detectadas (en lugar de los pinchos genéricos): `trap_beartrap` / `trap_beartrap_disarmed` (cepo), `trap_tripwire` (cuerda) y `trap_dart` (placa de dardo envenenado).
+
+**Atrezo** (`props`): `tapestry` (tapiz con el escudo de los Mazo, `wall`, 16×24), `tapestry_crossbow` (el mismo con la punta de la ballesta asomando: la pista para la frase de Garrán) y `gallows` (horca de la Torre del Cepo, `floor`, 16×32).
+
 ## Objetos interactivos (Fase 4)
 
 Vista previa: [`art-previews/0x72-interactables.png`](art-previews/0x72-interactables.png).
@@ -305,3 +329,17 @@ Vista previa: [`art-previews/willy-plato.png`](art-previews/willy-plato.png).
 | `gradas` | terreno | Gradas vistas desde arriba con el público (no transitables) |
 
 Los focos, su cono, la parrilla de focos y las cámaras-dron ya estaban en P2.
+
+## P3: jefes y enemigos de todas las plantas (`hand-sprites.json`)
+
+Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-hand.png). Los humanoides extienden la plantilla de Willy (sin parecerse a él: otra paleta y otros accesorios). Los jefes grandes se dibujan pequeños y llevan `scale` 2 en el manifiesto.
+
+| Planta | Ids |
+|---|---|
+| 1 | `jefe-centollo` (centollo enorme con corona, 24×18, `scale` 2) |
+| 2 · Hipermercado | `maniqui` (sin cara, conjunto de temporada), `carrito-poseido` (ojos verdes furiosos), `reponedor-zombi` (piel verdosa, chaleco del híper, caja al hombro), `etiqueta-de-oferta` (etiqueta voladora con «%»), `jefe-encargada` (Doña Rebeca: permanente caoba, gafas, chaleco rojo y pistola de etiquetas) |
+| 3 · Verbena | `cabezudo` (cabezón de cartón piedra con vejiga), `musico-de-charanga` (camisa blanca, pañuelo rojo, trompeta), `vaquilla` (becerra negra con manchas), `feriante` (tirantes, gorra, petardo), `jefe-giganton` (gigante de fiestas con corona y faldón, 20×32, `scale` 2) |
+| 4 · Balneario | `patito-gigante` (`scale` 1.5), `yeti-de-sauna` (peludo, colorado, toalla, sudor), `medusa-de-piscina` (rosa translúcida), `monitor-de-aquagym` (polo turquesa, churro de piscina), `jefe-socorrista` (criatura abisal con camiseta de socorrista sentada en su silla, tentáculos, 20×24, `scale` 2) |
+| 5 · Plató | `regidor` (cascos con micro, portapapeles), `tecnico-de-sonido` (auriculares, pértiga), `figurante` (romano de cartón), `camara-dron` (enemigo) |
+
+`mimico` sale en todas las plantas (ya estaba en P1).
