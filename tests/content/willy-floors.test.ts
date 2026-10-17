@@ -33,9 +33,11 @@ describe('Willy: room chunks', () => {
 });
 
 describe('Willy: procedural floor 1', () => {
-  it('500 seeds: every floor generates and keeps its guarantees', () => {
+  // 100 seeds in the everyday check (fast), 500 with QA_DEEP=1.
+  const SEEDS = process.env.QA_DEEP === '1' ? 500 : 100;
+  it(`${SEEDS} seeds: every floor generates and keeps its guarantees`, () => {
     let rivals = 0;
-    for (let seed = 1; seed <= 500; seed++) {
+    for (let seed = 1; seed <= SEEDS; seed++) {
       const f = generateFloor(seed, 1);
       const { map, entities, spawns, systems } = f.setup;
       const arrival = spawns.llegada!;

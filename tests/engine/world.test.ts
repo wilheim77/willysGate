@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type BaseCommand, type GameState, type MapSetup, createEngine, lightingOf, spawnsOf, withLighting, withZones, worldOf } from '../../engine';
+import { type BaseCommand, type GameState, type MapSetup, changeMap, createEngine, lightingOf, presenceTag, spawnsOf, withLighting, withZones, worldOf } from '../../engine';
 import { toyRuleset } from '../fixtures/toyRuleset';
 import { asciiMap, makeEntity } from '../fixtures/helpers';
 
@@ -78,5 +78,26 @@ describe('collapse (I5)', () => {
     const r = engine.applyEffects(s, [{ type: 'setTiles', tiles: [{ x: 0, y: 0 }, { x: 1, y: 0 }], height: 0 }]);
     expect(r.state.map.tiles[0]!.height).toBe(0);
     expect(r.events).toContainEqual({ type: 'entityFell', entityId: 'a', levels: 3 });
+  });
+});
+
+describe('story-conditional presence', () => {
+  it('someone with a presence rule appears only once the flag is set (checked on arrival)', () => {
+    const night = (): MapSetup => ({
+      map: asciiMap(['....'], 'gate'),
+      entities: [makeEntity({ id: 'raider', controllerId: 'ai', factionId: 'night', position: { x: 3, y: 0 }, resources: { blood: pool(4) }, tags: [presenceTag({ requiresFlag: 'attack' })] })],
+      spawns: { in: { x: 0, y: 0 } },
+    });
+    const e = createEngine(toyRuleset, 'test', { dialogues: {}, maps: { gate: night } });
+    const s0 = { ...village(), systems: { ...village().systems, spawns: { gate: { x: 5, y: 0 } } } };
+    const calm = changeMap(s0, { gate: night }, 'gate', 'in', ['hero']);
+    expect(calm.ok && calm.state.entities.raider).toBeUndefined();
+    if (!calm.ok) throw new Error();
+    const back = changeMap(calm.state, { gate: night }, 'village', 'gate', ['hero']);
+    if (!back.ok) throw new Error();
+    const alarmed = { ...back.state, flags: { ...back.state.flags, attack: true } };
+    const again = changeMap(alarmed, { gate: night }, 'gate', 'in', ['hero']);
+    expect(again.ok && again.state.entities.raider).toBeDefined();
+    void e;
   });
 });
