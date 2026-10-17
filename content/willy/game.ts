@@ -11,10 +11,9 @@ import texts from './texts/ui.json';
 
 /**
  * «Willy el mazmorrero», first playable: the casting (class + free points), then the Camerino
- * (safe zone), then a hand-made test of floor 1 through the service lift. The procedural floors,
- * the show (audience, sponsors, boxes) and the narrator come in the next phases (docs/willy/DESIGN.md).
- *
- * The client still has to pass `maps` to the engine (EngineContent.maps) for the lift to work.
+ * (safe zone), then floor 1, generated for the run, through the service lift (?mapa=prueba-castro
+ * opens the hand-made test map). The show (audience, sponsors, boxes) and the narrator come in
+ * the next phases (docs/willy/DESIGN.md).
  */
 export { maps };
 
