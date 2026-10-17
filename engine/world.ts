@@ -19,15 +19,46 @@ export interface MapSetup {
   systems?: Record<string, JsonValue>;
 }
 
-export type MapBuilder = () => MapSetup;
+/** Builds a map the first time someone arrives; it may read the state (run seed, what happened before). */
+export type MapBuilder = (context?: { state: GameState }) => MapSetup;
 
 /** Systems that belong to a map and travel with it into the stash. */
 export const MAP_SYSTEMS = ['surfaces', 'traps', 'zones', LIGHTING_SYSTEM, 'spawns'] as const;
+
+/**
+ * Someone who is only there under certain story conditions (the night attackers at the
+ * abbey gate). Kept aside on their map until the flags say so, re-checked on every arrival.
+ */
+export interface Presence {
+  requiresFlag?: string;
+  unlessFlag?: string;
+  /** Any one of these flags. */
+  requiresAnyFlag?: string[];
+}
+
+export const PRESENCE_TAG = 'presence:';
+
+/** Tag form of a presence rule, carried by the entity itself. */
+export function presenceTag(p: Presence): string {
+  return PRESENCE_TAG + JSON.stringify(p);
+}
+
+function presentNow(state: GameState, e: Entity): boolean {
+  const tag = e.tags.find((t) => t.startsWith(PRESENCE_TAG));
+  if (!tag) return true;
+  const p = JSON.parse(tag.slice(PRESENCE_TAG.length)) as Presence;
+  if (p.requiresFlag && !state.flags[p.requiresFlag]) return false;
+  if (p.unlessFlag && state.flags[p.unlessFlag]) return false;
+  if (p.requiresAnyFlag?.length && !p.requiresAnyFlag.some((f) => state.flags[f])) return false;
+  return true;
+}
 
 interface StashedMap {
   map: GridMap;
   entities: Record<string, Entity>;
   systems: Record<string, JsonValue>;
+  /** Entities whose presence rule doesn't hold yet. */
+  dormant?: Record<string, Entity>;
 }
 
 export interface WorldState {
@@ -59,22 +90,29 @@ export function changeMap(state: GameState, builders: Record<string, MapBuilder>
   const world = worldOf(state);
   if (mapId === state.map.id) return fail('invalid_target', `Already on ${mapId}`);
   const stashedTarget = world.stashed[mapId];
-  const built = stashedTarget ? null : builders[mapId]?.();
+  const built = stashedTarget ? null : builders[mapId]?.({ state });
   if (!stashedTarget && !built) return fail('invalid_target', `No map "${mapId}"`);
 
   // Leave the current map as it is.
   const goers = new Set(travellers.filter((id) => state.entities[id]));
   const staying = Object.fromEntries(Object.entries(state.entities).filter(([id]) => !goers.has(id)));
+  const leftDormant = (state.systems.dormant as unknown as Record<string, Entity> | undefined) ?? {};
   const carried = (state.systems[LIGHTING_SYSTEM] as unknown as LightingState | undefined)?.lights.filter((l) => l.attachedTo && goers.has(l.attachedTo)) ?? [];
   const leftSystems: Record<string, JsonValue> = {};
   for (const k of MAP_SYSTEMS) if (state.systems[k] !== undefined) leftSystems[k] = state.systems[k]!;
   const leftLighting = leftSystems[LIGHTING_SYSTEM] as unknown as LightingState | undefined;
   if (leftLighting) leftSystems[LIGHTING_SYSTEM] = { ...leftLighting, lights: leftLighting.lights.filter((l) => !(l.attachedTo && goers.has(l.attachedTo))) } as unknown as JsonValue;
-  const stashed = { ...world.stashed, [state.map.id]: { map: state.map, entities: staying, systems: leftSystems } };
+  const stashed = { ...world.stashed, [state.map.id]: { map: state.map, entities: staying, systems: leftSystems, dormant: leftDormant } };
   delete stashed[mapId];
 
   // Arrive.
-  const target = stashedTarget ?? { map: built!.map, entities: Object.fromEntries(built!.entities.map((e) => [e.id, e])), systems: { ...(built!.systems ?? {}), spawns: built!.spawns as unknown as JsonValue } };
+  const arriving = stashedTarget ?? { map: built!.map, entities: Object.fromEntries(built!.entities.map((e) => [e.id, e])), systems: { ...(built!.systems ?? {}), spawns: built!.spawns as unknown as JsonValue }, dormant: {} };
+  // Who is here now depends on the story so far.
+  const everyone = { ...(arriving.dormant ?? {}), ...arriving.entities };
+  const present: Record<string, Entity> = {};
+  const dormant: Record<string, Entity> = {};
+  for (const [id, e] of Object.entries(everyone)) (presentNow(state, e) ? present : dormant)[id] = e;
+  const target = { ...arriving, entities: present };
   const spawns = (target.systems.spawns as unknown as Record<string, Vec2> | undefined) ?? {};
   const origin = spawns[spawn];
   if (!origin) return fail('invalid_target', `Map ${mapId} has no spawn "${spawn}"`);
@@ -91,6 +129,7 @@ export function changeMap(state: GameState, builders: Record<string, MapBuilder>
   const arrivedLighting = systems[LIGHTING_SYSTEM] as unknown as LightingState | undefined;
   if (carried.length) systems[LIGHTING_SYSTEM] = { ambient: arrivedLighting?.ambient ?? 1, lights: [...(arrivedLighting?.lights ?? []), ...carried] } as unknown as JsonValue;
   systems.world = { current: mapId, stashed } as unknown as JsonValue;
+  systems.dormant = dormant as unknown as JsonValue;
 
   const next: GameState = { ...state, map: target.map, entities: { ...target.entities, ...placed }, systems };
   return { ok: true, state: next, events: [{ type: 'mapChanged', from: state.map.id, to: mapId, spawn } as MapChangedEvent] };

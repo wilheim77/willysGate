@@ -109,7 +109,7 @@ describe('Jugador de basket', () => {
     const r = engine.apply(s, { type: 'act', issuer: 'player:1', entityId: 'b', actionId: 'hab:gran-salto', target: { tile: { x: 3, y: 0 } } } as never);
     if (!r.ok) throw new Error(r.error.message);
     expect(r.state.entities.b!.position).toEqual({ x: 3, y: 0 });
-    expect(r.events).toContainEqual(expect.objectContaining({ type: 'jumped', cruzaVacio: true }));
+    expect(r.events).toContainEqual(expect.objectContaining({ type: 'saltoCompleto', cruzaVacio: true }));
     expect(hasCondition(r.state.entities.b!, 'salto')).toBe(true);
     // Too far, through a wall, or under a low ceiling: no.
     expect(willy.previewAction(s, 'b', 'hab:gran-salto', { tile: { x: 5, y: 0 } }).valid).toBe(false);
@@ -141,6 +141,21 @@ describe('Jugador de basket', () => {
     const s = game([W('b', 'jugador-de-basket', 0, 0), rat('r', 4, 0, { vida: 40 })]);
     const { state } = until(s, 'b', 'hab:pase-picado', { entityId: 'r' }, (st) => st.entities.r!.position.x === 5);
     expect(state.entities.r!.resources.vida!.current).toBeLessThan(40);
+  });
+
+  it('Pase picado bounces off the wall round a pillar, ignores cover and pushes from the bounce', () => {
+    const rows = ['......', '......', '..#...', '......'];
+    const s = game([W('b', 'jugador-de-basket', 0, 2), rat('r', 4, 2, { vida: 40 })], rows);
+    const p = willy.previewAction(s, 'b', 'hab:pase-picado', { entityId: 'r' });
+    expect(p.valid).toBe(true);
+    expect(p.breakdown?.some((b) => String(b.label).startsWith('Cubierto'))).toBe(false);
+    const { state, events } = until(s, 'b', 'hab:pase-picado', { entityId: 'r' }, (st) => st.entities.r!.resources.vida!.current < 40);
+    expect(events).toContainEqual(expect.objectContaining({ type: 'bounced' }));
+    // The push comes from where the ball bounced, not from the thrower.
+    expect(state.entities.r!.position).not.toEqual({ x: 5, y: 2 });
+    // Nowhere to bounce: out.
+    const boxed = game([W('b', 'jugador-de-basket', 0, 0), rat('r', 4, 0)], ['..#...']);
+    expect(willy.previewAction(boxed, 'b', 'hab:pase-picado', { entityId: 'r' }).valid).toBe(false);
   });
 
   it('Alley-oop (auto, off the wall) jumps next to the target and dunks', () => {

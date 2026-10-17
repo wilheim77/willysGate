@@ -10,6 +10,7 @@ import {
   makeSurface,
   parseTiledMap,
   posKey,
+  presenceTag,
   tileAt,
 } from '../../engine';
 import { SURFACES, createCharacter, createMonster, createProp } from '../../rulesets/dnd5e';
@@ -120,7 +121,7 @@ const USABLE_KINDS = new Set(['chest', 'door', 'lever']);
 export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>): MapSetup {
   const json = ACT_MAPS[mapId];
   if (!json) throw new Error(`Unknown map "${mapId}"`);
-  const { map, spawns, lighting, zones } = parseTiledMap(mapId, json);
+  const { map, spawns, lighting, zones, spawnProperties } = parseTiledMap(mapId, json);
   const entities: Entity[] = [];
   for (const [name, position] of Object.entries(spawns)) {
     if (name.startsWith('entry-') || name.startsWith('todo-') || PARTY_SPAWNS.has(name)) continue;
@@ -164,6 +165,18 @@ export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>)
     // Unknown spawn names are content bugs; the map test reports them, the game skips them.
   }
 
+  // Story-conditional spawns (the night attackers at the abbey gate): present only when the flags say.
+  for (let i = 0; i < entities.length; i++) {
+    const e = entities[i]!;
+    const p = spawnProperties[e.id];
+    if (!p || !(p.requiresFlag || p.unlessFlag || p.requiresAnyFlag)) continue;
+    const presence = {
+      ...(p.requiresFlag ? { requiresFlag: String(p.requiresFlag) } : {}),
+      ...(p.unlessFlag ? { unlessFlag: String(p.unlessFlag) } : {}),
+      ...(p.requiresAnyFlag ? { requiresAnyFlag: String(p.requiresAnyFlag).split(',').map((f) => f.trim()).filter(Boolean) } : {}),
+    };
+    entities[i] = { ...e, tags: [...e.tags, presenceTag(presence)] };
+  }
   // Spawn-specific scripts (a Callado who talks, a well you can lower yourself into).
   for (let i = 0; i < entities.length; i++) {
     const e = entities[i]!;

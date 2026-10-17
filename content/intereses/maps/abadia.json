@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 30,
+ "nextobjectid": 39,
  "properties": [
   {
    "name": "name",
@@ -297,6 +297,130 @@
      "height": 0,
      "rotation": 0,
      "visible": true
+    },
+    {
+     "id": 20,
+     "name": "minero_cuadrilla-1",
+     "type": "",
+     "point": true,
+     "x": 272,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "requiresAnyFlag",
+       "type": "string",
+       "value": "d1_cuadrilla,d1_abadia"
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "minero_cuadrilla-2",
+     "type": "",
+     "point": true,
+     "x": 624,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "requiresAnyFlag",
+       "type": "string",
+       "value": "d1_cuadrilla,d1_abadia"
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "minero_cuadrilla-3",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "requiresAnyFlag",
+       "type": "string",
+       "value": "d1_cuadrilla,d1_abadia"
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "hulla-1",
+     "type": "",
+     "point": true,
+     "x": 336,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "requiresAnyFlag",
+       "type": "string",
+       "value": "d1_cuadrilla,d1_abadia"
+      },
+      {
+       "name": "unlessFlag",
+       "type": "string",
+       "value": "hulla_no_luchan"
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "hulla-2",
+     "type": "",
+     "point": true,
+     "x": 560,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "requiresAnyFlag",
+       "type": "string",
+       "value": "d1_cuadrilla,d1_abadia"
+      },
+      {
+       "name": "unlessFlag",
+       "type": "string",
+       "value": "hulla_no_luchan"
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "odda",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_abadia"
+      }
+     ]
     }
    ]
   },
@@ -311,7 +435,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 20,
+     "id": 26,
      "name": "brasero-sala-1",
      "type": "",
      "point": true,
@@ -350,7 +474,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 27,
      "name": "brasero-sala-2",
      "type": "",
      "point": true,
@@ -389,7 +513,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 28,
      "name": "antorcha-claustro-1",
      "type": "",
      "point": true,
@@ -428,7 +552,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 29,
      "name": "antorcha-claustro-2",
      "type": "",
      "point": true,
@@ -467,7 +591,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 30,
      "name": "antorcha-puerta-1",
      "type": "",
      "point": true,
@@ -506,7 +630,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 31,
      "name": "antorcha-puerta-2",
      "type": "",
      "point": true,
@@ -545,7 +669,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 32,
      "name": "vela-cripta",
      "type": "",
      "point": true,
@@ -589,7 +713,54 @@
    "visible": true,
    "x": 0,
    "y": 0,
-   "objects": []
+   "objects": [
+    {
+     "id": 33,
+     "name": "d1-asalto",
+     "type": "",
+     "x": 0,
+     "y": 288,
+     "width": 896,
+     "height": 416,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "participants",
+       "type": "string",
+       "value": "guardia_baron-1,guardia_baron-2,guardia_baron-3,guardia_baron-4,guardia_baron_sargento-1,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_cuadrilla"
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "name": "d1-defensa",
+     "type": "",
+     "x": 0,
+     "y": 288,
+     "width": 896,
+     "height": 416,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "participants",
+       "type": "string",
+       "value": "odda,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_abadia"
+      }
+     ]
+    }
+   ]
   },
   {
    "id": 5,
@@ -624,7 +795,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 35,
      "name": "a-plaza",
      "type": "",
      "x": 352,
@@ -647,7 +818,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 36,
      "name": "escalera-cripta",
      "type": "",
      "x": 832,
@@ -670,7 +841,7 @@
       {
        "name": "requiresFlag",
        "type": "string",
-       "value": "TODO:llave_cripta"
+       "value": "llave_cripta"
       }
      ]
     }
@@ -687,7 +858,40 @@
    "y": 0,
    "objects": [
     {
-     "id": 29,
+     "id": 37,
+     "name": "d1-abadia-final",
+     "type": "",
+     "x": 224,
+     "y": 32,
+     "width": 512,
+     "height": 224,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "d1_abadia_final"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "mazo"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_abadia"
+      }
+     ]
+    },
+    {
+     "id": 38,
      "name": "audiencia",
      "type": "",
      "x": 384,

@@ -12,13 +12,15 @@ import { trapsOf, withTraps } from './traps';
 import { type Vec2, gridDistance } from './grid';
 import { RngCursor } from './rng';
 import { type ActionOutcome, type ActionTarget, type Ruleset, targetIds } from './ruleset';
-import { EXPLORATION_TURN, type Entity, type GameState } from './state';
+import { EXPLORATION_TURN, type Entity, type GameState, type JsonValue } from './state';
 
 // --- Commands & events ------------------------------------------------------
 
 export interface StartCombatCommand extends BaseCommand {
   type: 'startCombat';
   participants: string[];
+  /** Story consequences when it ends: for `side` winning, losing, or either way. */
+  hooks?: { side: string; onVictory?: Effect[]; onDefeat?: Effect[]; onEnd?: Effect[] };
 }
 
 export interface EndTurnCommand extends BaseCommand {
@@ -157,11 +159,11 @@ export function checkCombatEnd(ruleset: Ruleset, state: GameState): { state: Gam
   // Nobody tracks turns any more: per-turn resources come back.
   for (const e of Object.values(next.entities)) next = applyEffects(ruleset, next, refreshTurnResources(ruleset, e)).state;
   // Story consequences declared when the fight started (a dialogue's "if we win…").
-  const hooks = next.systems.combatHooks as unknown as { side: string; onVictory?: Effect[]; onDefeat?: Effect[] } | undefined;
+  const hooks = next.systems.combatHooks as unknown as { side: string; onVictory?: Effect[]; onDefeat?: Effect[]; onEnd?: Effect[] } | undefined;
   if (hooks) {
     const { combatHooks: _done, ...systems } = next.systems;
     next = { ...next, systems };
-    const consequences = winner === hooks.side ? hooks.onVictory : hooks.onDefeat;
+    const consequences = [...((winner === hooks.side ? hooks.onVictory : hooks.onDefeat) ?? []), ...(hooks.onEnd ?? [])];
     if (consequences?.length) {
       const r = applyEffects(ruleset, next, consequences);
       next = r.state;
@@ -297,7 +299,7 @@ export const startCombat: CommandHandler<StartCombatCommand> = (state, cmd, { ru
   const { dialogue: _dropped, ...systems } = state.systems;
   const started: GameState = {
     ...state,
-    systems,
+    systems: cmd.hooks ? { ...systems, combatHooks: cmd.hooks as unknown as JsonValue } : systems,
     rng: rng.state,
     turn: { mode: 'combat', round: 1, activeEntityId: null, order, initiative, movementUsed: 0 },
   };

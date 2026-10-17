@@ -225,6 +225,7 @@ export function dealDamage(r: Resolver, targetId: string, raw: number, type: str
   r.emit({ type: 'damageDealt', targetId, amount, damageType: type, crit } as DamageDealtEvent);
   if (hasCondition(target, 'turned')) r.apply({ type: 'removeCondition', entityId: targetId, condition: 'turned' });
 
+  if (hasCondition(target, 'downed') && hasTag(target, 'essential') && !hasTag(target, 'pc')) return amount;
   if (hasCondition(target, 'downed')) {
     // Hitting someone already down makes them bleed out faster.
     const bleed = target.resources.bleed?.current ?? 0;
@@ -259,6 +260,13 @@ function dropToZero(r: Resolver, id: string, type: string, crit: boolean, amount
       { type: 'applyCondition', entityId: id, condition: 'downed' },
       { type: 'removeCondition', entityId: id, condition: 'stable' },
       { type: 'modifyResource', entityId: id, resource: 'bleed', delta: 3 },
+    );
+    r.emit({ type: 'downed', entityId: id } as FateEvent);
+  } else if (hasTag(e, 'essential')) {
+    // The story needs them later: they're knocked out, not killed (and don't bleed out).
+    r.apply(
+      { type: 'applyCondition', entityId: id, condition: 'downed' },
+      { type: 'applyCondition', entityId: id, condition: 'stable' },
     );
     r.emit({ type: 'downed', entityId: id } as FateEvent);
   } else {

@@ -13,6 +13,7 @@ import {
   trapAt,
   trapsOf,
   dialogueOf,
+  evaluateCondition,
   entityAt,
   gridDistance,
   inZone,
@@ -45,6 +46,8 @@ export class GameController {
   /** Recent leader positions, so companions walk in single file behind them. */
   private trail: Vec2[] = [];
   private leaderMoved = false;
+  /** Story triggers already offered since the party arrived on this map. */
+  private triggersShown = new Set<string>();
   /** Who the leader is walking up to talk to (or open, or pull). */
   private pendingInteract: string | null = null;
   scene!: MapScene;
@@ -55,6 +58,7 @@ export class GameController {
     private hud: CombatHud,
   ) {
     store.subscribe((change, state) => {
+      if (change.kind === 'reset' || change.events.some((e) => e.type === 'mapChanged')) this.triggersShown.clear();
       if (change.kind === 'reset') {
         this.trail = [];
         this.selected = null;
@@ -287,6 +291,7 @@ export class GameController {
     if (turn.mode !== 'combat') {
       if (this.checkEncounters()) return;
       if (this.checkScenes()) return;
+      if (this.checkTriggers()) return;
       if (this.checkExits()) return;
       if (this.pendingInteract) {
         const id = this.pendingInteract;
@@ -353,6 +358,23 @@ export class GameController {
     return false;
   }
 
+  /** Story beats the game opens itself (the epilogue once the last decision is made). */
+  private checkTriggers(): boolean {
+    const leader = this.state.entities[this.game.leaderId];
+    if (!leader || dialogueOf(this.state)) return false;
+    const ruleset = this.store.engine.ruleset;
+    for (const t of this.game.triggers ?? []) {
+      // Offered once per visit to the map while its condition holds: "let me think about it" just
+      // postpones it until you come back (the condition itself says when it's settled).
+      if (this.triggersShown.has(t.id) || (t.map && t.map !== this.state.map.id) || !this.game.dialogues?.[t.dialogue]) continue;
+      if (!evaluateCondition(ruleset, this.state, leader.id, t.when)) continue;
+      this.triggersShown.add(t.id);
+      const r = this.store.dispatch({ type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: t.dialogue, actorId: leader.id, ...(t.partner && this.state.entities[t.partner] ? { partnerId: t.partner } : {}) } as never);
+      if (r.ok) return true;
+    }
+    return false;
+  }
+
   /** The leader stepped onto an exit: the whole party travels to the next map. */
   private checkExits(): boolean {
     const leader = this.state.entities[this.game.leaderId];
@@ -380,7 +402,12 @@ export class GameController {
       const party = Object.values(this.state.entities)
         .filter((e) => e.factionId === leader.factionId && ruleset.isStanding(e))
         .map((e) => e.id);
-      this.store.dispatch({ type: 'startCombat', issuer: SYSTEM_ISSUER, participants: [...party, ...foes] } as never);
+      // Zone consequences: setFlag when the fight ends either way, winFlag only if the party wins.
+      const flag = (f: unknown) => ({ type: 'setFlag', flag: String(f), value: true });
+      const hooks = zone.properties.setFlag || zone.properties.winFlag
+        ? { side: leader.factionId, ...(zone.properties.winFlag ? { onVictory: [flag(zone.properties.winFlag)] } : {}), ...(zone.properties.setFlag ? { onEnd: [flag(zone.properties.setFlag)] } : {}) }
+        : undefined;
+      this.store.dispatch({ type: 'startCombat', issuer: SYSTEM_ISSUER, participants: [...party, ...foes], ...(hooks ? { hooks } : {}) } as never);
       return true;
     }
     return false;

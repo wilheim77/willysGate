@@ -650,7 +650,7 @@
       "recompensas": [{ "tipo": "caja", "nivel": "plata" }] },
     { "id": "por-encima-del-foso", "nombre": "Por encima del foso", "categoria": "basket", "oculto": false,
       "descripcion": "Salta por encima de un foso o del vacío.",
-      "condicion": { "contar": { "evento": "jumped", "donde": { "entityId": "willy", "cruzaVacio": true } }, "min": 1, "ambito": "siempre" },
+      "condicion": { "contar": { "evento": "saltoCompleto", "donde": { "entityId": "willy", "cruzaVacio": true } }, "min": 1, "ambito": "siempre" },
       "narrador": "Ha saltado el foso. Sin carrerilla. La Colmena está decepcionada: esperaba que cayera. Pero aplaude igual.",
       "recompensas": [{ "tipo": "xp", "cantidad": 25 }] },
     { "id": "a-tablero", "nombre": "A tablero", "categoria": "basket", "oculto": false,

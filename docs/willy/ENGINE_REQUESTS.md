@@ -23,12 +23,13 @@
 | R12 | ✅ **Hecho** (`deriveSeed`). RNG derivados por propósito | `engine/rng.ts` | W3 | Todos |
 | R13 | ✅ **Invocaciones hechas y usadas** (`spawnEntity`/`despawnEntity`). Efectos adicionales, macros de ruleset e **invocaciones** (`spawnEntity` con dueño, controlador, duración e IA) | `engine/effects.ts` + IA | W2-W4 | Todos (refuerzos de jefes, invocaciones de clérigo en *Intereses*) |
 | R14 | ✅ **Hecho** (`markers` y propiedades del mapa). Capa `markers` en el cargador de Tiled | `engine/tiled.ts` | W3 | *Intereses* (interactuables) |
-| R15 | **Salto** (mover ignorando `maxStep` y huecos dentro de un presupuesto) y **trazado con rebote** | `engine/pathfinding.ts` + `engine/los.ts` | W2 | Pícaros y monjes de *Intereses*, saltos de vampiros |
+| R15 | ✅ **Hecho y usado** (`engine/jump.ts`: `jumpTargets`, efecto `jump`, `traceProjectile`; saltos del Jugador de basket y rebote del Pase picado). **Salto** (mover ignorando `maxStep` y huecos dentro de un presupuesto) y **trazado con rebote** | `engine/pathfinding.ts` + `engine/los.ts` | W2 | Pícaros y monjes de *Intereses*, saltos de vampiros |
 | R16 | **Generador por tablas y plantillas** (PNJ, nombres, frases) con unicidad | `engine/procgen/tables.ts` | W4 | Bandidos y aldeanos de *Intereses*, cazadores de vampiros |
 | R17 | ✅ **Hecho y usado** (`Ruleset.onCollision`; «¡Strike!» en *Willy*). `onCollision` del ruleset en los empujones (choques en cadena, «¡Strike!») | `engine/effects.ts` | W2 | *Intereses* (empujones) |
 | R18 | ✅ **Hecho y usado** (`intoVoid`, `Ruleset.onVoid`). Empujar **al vacío**: casillas `void`/foso que se pueden atravesar al ser empujado | `engine/effects.ts` (`simulatePush`) | W2 | Fosos de la mina de *Intereses* |
 | R19 | ✅ **Hecho y usado** (subida de nivel en `rulesets/willy/progression.ts`). Efecto `modifyStat` (subir atributos y nivel) | `engine/effects.ts` | W5 | Subida de nivel de *Intereses* |
 | R20 | ✅ en parte: `blocksSight`, `onTurnEnd` y `onCombatStart` hechos y usados; falta `onRoundEnd`. `SurfaceDef.blocksSight` (vapor) y gancho `onRoundEnd` (cintas transportadoras, mareas) | `engine/surfaces.ts`, `engine/los.ts`, `engine/combat.ts` | W3 | Niebla y humo en *Intereses* |
+| R21 | **`MapBuilder` con el estado** (semilla de la partida) para generar plantas al llegar | `engine/world.ts` | W3 | Mazmorras procedurales de cualquier juego |
 
 Ninguna mete reglas de *Willy* ni de d20 en `engine/`.
 
@@ -497,3 +498,11 @@ Además, en el perfil por navegador (R6): `rivalesRecientes: string[]` (últimos
 - `Ruleset.onRoundEnd?(state, rng): ActionOutcome`: para cintas transportadoras y mareas (Plantas 1 y 2), que mueven a todo lo que tienen encima al acabar cada ronda.
 - `Ruleset.onTurnEnd?(state, entityId, rng)` y `onCombatStart?(state, rng)`: la «Siesta en la silla» de la Socorrista (si acaba el turno sin moverse) y el «Silencio absoluto» del Mimo (empieza el combate escondido). Hoy el segundo se aplica en su primer turno.
 
+
+## R21. `MapBuilder` con el estado
+
+**Qué.** `type MapBuilder = (state: GameState) => MapSetup` (o un contexto con `seed`), y que `changeMap` se lo pase.
+
+**Por qué.** Las plantas de *Willy* se generan con la semilla de la partida. Un `MapBuilder` sin argumentos no la conoce, así que hoy `content/willy/setup.ts` genera las plantas al empezar la temporada y las deja en `systems.world.stashed`. Funciona, pero obliga a generar todas las plantas por adelantado (más peso en la partida guardada) y no permite generar la Planta N+1 según lo que pasó en la N (rivales que vuelven, intento tras un derrumbe).
+
+**Mientras tanto:** se generan al empezar; el builder `planta-1` es solo un respaldo con semilla fija (para partidas antiguas).

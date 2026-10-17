@@ -70,6 +70,13 @@
     "faction": "cuadrilla",
     "noncombatant": true
   },
+  "hulla": {
+    "name": "Minero de los Hulla",
+    "monsterId": "bandit",
+    "spriteId": "minero_cuadrilla",
+    "faction": "cuadrilla",
+    "noncombatant": true
+  },
   "viuda": {
     "name": "Viuda",
     "monsterId": "commoner",

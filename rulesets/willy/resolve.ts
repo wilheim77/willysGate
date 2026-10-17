@@ -89,7 +89,8 @@ export interface WillyEvent extends GameEvent {
     | 'skillUsed'
     | 'skillLevelUp'
     | 'showOff'
-    | 'jumped'
+    | 'saltoCompleto'
+    | 'bounced'
     | 'collided'
     | 'fueraDePlano'
     | 'strike'
@@ -145,6 +146,8 @@ export interface AttackSpec {
   extraDamage?: number;
   /** Natural roll that is a critical (20 by default; the Tasador's Ojo clínico lowers it). */
   critOn?: number;
+  /** A shot that came off a wall (Pase picado's bounce) doesn't care about cover. */
+  ignoresCover?: boolean;
 }
 
 /** All visible to-hit modifiers ("+2 desde arriba"), so the preview and the roll agree. */
@@ -158,7 +161,7 @@ export function attackModifiers(state: GameState, attacker: Entity, target: Enti
   if (flank && spec.melee) mods.push({ label: 'Flanqueo', value: 2, term: 'flanqueo' });
   if (hasCondition(target, 'tumbado')) mods.push({ label: 'Objetivo tumbado', value: spec.melee ? 3 : -2, term: 'tumbado' });
   if (lightLevelAt(state, target.position) < 0.25) mods.push({ label: 'A oscuras', value: -2, term: 'oscuridad' });
-  const cover = coverPenalty(state, attacker.position, target.position);
+  const cover = spec.ignoresCover ? 0 : coverPenalty(state, attacker.position, target.position);
   if (cover) mods.push({ label: cover === -5 ? 'Cubierto del todo' : 'Cubierto a medias', value: cover, term: 'cobertura' });
   if (hasCondition(attacker, 'cegado')) mods.push({ label: 'Cegado', value: -5, term: 'cegado' });
   if (hasCondition(attacker, 'mareado')) mods.push({ label: 'Mareado', value: -2, term: 'mareado' });

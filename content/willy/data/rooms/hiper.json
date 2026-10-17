@@ -1,0 +1,315 @@
+{
+  "$comment": "Room chunks for floor 2, «Hipermercado Eterno» (15x11 cells, generator: content/willy/gen/floor.ts). Written by the map agent. Format: docs/willy/DESIGN.md §3 and the castro.json sample. Marker chars: e enemy, c chest, t trap, b barrel, B gas barrel, l light, P arrival, J boss, X stairs down.",
+  "bioma": "hiper",
+  "celda": {
+    "ancho": 15,
+    "alto": 11
+  },
+  "terreno": {
+    ".": {
+      "terrain": "hiper"
+    },
+    "o": {
+      "terrain": "hiper-oferta"
+    },
+    ">": {
+      "terrain": "cinta"
+    },
+    "u": {
+      "terrain": "hiper",
+      "height": 1
+    },
+    "U": {
+      "terrain": "hiper",
+      "height": 2
+    },
+    "w": {
+      "terrain": "hiper",
+      "surface": "agua"
+    },
+    "#": {
+      "terrain": "estanteria",
+      "height": 2,
+      "walkable": false
+    },
+    "puerta": {
+      "terrain": "hiper-oferta"
+    },
+    "relleno": {
+      "terrain": "estanteria",
+      "height": 2,
+      "walkable": false
+    }
+  },
+  "trampas": {
+    "suelo-mojado": {
+      "nombre": "Suelo recién fregado",
+      "detect": 11,
+      "dif": 12,
+      "dano": "1d4",
+      "efecto": "tumbado"
+    },
+    "estanteria-inestable": {
+      "nombre": "Estantería inestable",
+      "detect": 13,
+      "dif": 13,
+      "dano": "2d6"
+    }
+  },
+  "salas": [
+    {
+      "id": "hiper-entrada",
+      "nombre": "Entrada de clientes",
+      "roles": [
+        "inicio"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.##.......##.#",
+        "#.##...l...##.#",
+        "#.............#",
+        "#......P......#",
+        "#.............#",
+        "#.b.........b.#",
+        "#.##..ooo..##.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-cajas",
+      "nombre": "Cajas registradoras",
+      "roles": [
+        "jefe"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.#.#.#.#.#.#.#",
+        "#.#.#.#.#.#.#.#",
+        "#.............#",
+        "#..e...J...e..#",
+        "#......l......#",
+        "#...uuu.uuu...#",
+        "#.X.uuu.uuu.c.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-congelados",
+      "nombre": "Pasillo de congelados",
+      "roles": [
+        "combate",
+        "rival"
+      ],
+      "peso": 3,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.###########.#",
+        "#....e....w...#",
+        "#.............#",
+        "#.####.e.####.#",
+        "#.............#",
+        "#...w..l..e...#",
+        "#.###########.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-fruteria",
+      "nombre": "Frutería",
+      "roles": [
+        "combate",
+        "rival"
+      ],
+      "peso": 3,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.##...#...##.#",
+        "#.##..e#e..##.#",
+        "#.............#",
+        "#...##.l.##...#",
+        "#.b.##...##.b.#",
+        "#.............#",
+        "#.##..e.e..##.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-escaleras",
+      "nombre": "Escaleras mecánicas",
+      "roles": [
+        "combate"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#.............#",
+        "#.UUUU...UUUU.#",
+        "#.UUUUu.uUUUU.#",
+        "#.UUUU...UUUU.#",
+        "#......e......#",
+        "#.>>>>>>>>>>>.#",
+        "#...e..l..e...#",
+        "#..b.......b..#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-almacen",
+      "nombre": "Almacén",
+      "roles": [
+        "combate"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.>>>>>.>>>>>.#",
+        "#.............#",
+        "#.##.##.##.##.#",
+        "#...e.....e...#",
+        "#.##.##.##.##.#",
+        "#......e......#",
+        "#.b...l.....B.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-despacho",
+      "nombre": "Despacho del encargado",
+      "roles": [
+        "tesoro"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.............#",
+        "#..#########..#",
+        "#..#.c...c.#..#",
+        "#..#...l...#..#",
+        "#..###...###..#",
+        "#.............#",
+        "#.b.........b.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-electronica",
+      "nombre": "Sección de electrónica",
+      "roles": [
+        "tesoro"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.uuu.....uuu.#",
+        "#.u#u..c..u#u.#",
+        "#.uuu.....uuu.#",
+        "#......l......#",
+        "#...##...##...#",
+        "#...##.c.##...#",
+        "#.............#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-limpieza",
+      "nombre": "Pasillo de limpieza",
+      "roles": [
+        "trampa"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.www.....www.#",
+        "#.wtw..t..wtw.#",
+        "#....w...w....#",
+        "#..t...l...t..#",
+        "#....w...w....#",
+        "#.www..e..www.#",
+        "#.wtw.....wtw.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-estanterias",
+      "nombre": "Estanterías inestables",
+      "roles": [
+        "trampa"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.#.#.#.#.#.#.#",
+        "#.#.#.#t#.#.#.#",
+        "#.............#",
+        "#..e...l...e..#",
+        "#.............#",
+        "#.#.#t#.#.#.#.#",
+        "#.#.#.#.#.#.#.#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-carritos",
+      "nombre": "Pasillo de carritos",
+      "roles": [
+        "vacia"
+      ],
+      "peso": 2,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.............#",
+        "#.b..##o##..b.#",
+        "#....##o##....#",
+        "#......l......#",
+        "#....##o##....#",
+        "#.b..##o##..b.#",
+        "#.............#",
+        "#......o......#",
+        "###############"
+      ]
+    },
+    {
+      "id": "hiper-aparcamiento",
+      "nombre": "Aparcamiento de carros",
+      "roles": [
+        "vacia"
+      ],
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#......o......#",
+        "#.uuu.....uuu.#",
+        "#.uUu.....uUu.#",
+        "#.uuu.....uuu.#",
+        "#......l......#",
+        "#..ooo...ooo..#",
+        "#.............#",
+        "#...#.....#...#",
+        "#......o......#",
+        "###############"
+      ]
+    }
+  ]
+}
