@@ -60,9 +60,14 @@
     },
     "trapSpotted": { "sfx": "trapClick" },
     "trapTriggered": { "sfx": "trapSpring" },
-    "trapDisarmed": { "sfx": "trapClick" },
-    "trapDisarmFailed": { "sfx": "trapSpring" },
-    "dialogueCheck": { "sfx": "diceRoll" }
+    "trapDisarmed": { "sfx": ["diceRoll", "trapClick"] },
+    "trapDisarmFailed": { "sfx": ["diceRoll", "trapSpring"] },
+    "dialogueCheck": { "sfx": "diceRoll" },
+    "dialogueChoice": { "sfx": "uiClick" }
   },
-  "_note": "The `willy` ruleset emits damage with an `element` field in Spanish (golpe/fuego/frio/rayo/agua), not `damageType` like dnd5e, and its player faction is `concursantes` (see content/willy/setup.ts) — mapped above accordingly. Still unassigned: crit -> crowdApplause, pifia/fumble -> crowdBoo, floor clear -> gameshowDing, game over -> gameshowBuzzer, and gulls/sea for coastal floors (no matching engine event yet; wire client-side per map if needed)."
+  "maps": {
+    "camerino": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
+    "planta-1": { "ambience": { "src": "assets/audio/ambience/planta-1.ogg", "volume": 0.7 } }
+  },
+  "_note": "The `willy` ruleset emits damage with an `element` field in Spanish (golpe/fuego/frio/rayo/agua), not `damageType` like dnd5e, and its player faction is `concursantes` (see content/willy/setup.ts) — mapped above accordingly. gulls/sea are now the planta-1 ambience bed (above) rather than standalone sfx. Still unassigned: crit -> crowdApplause, pifia/fumble -> crowdBoo, floor clear -> gameshowDing, game over -> gameshowBuzzer (no matching engine event yet)."
 }

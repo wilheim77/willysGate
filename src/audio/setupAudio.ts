@@ -27,17 +27,22 @@ export function setupAudio(store: GameStore, game: GameDefinition): AudioManager
 
   store.subscribe((change: StoreChange) => {
     if (change.kind === 'reset') {
+      manager.setMap(store.state.map.id);
       syncMusicToTurnMode();
       return;
     }
     for (const event of change.events) {
       manager.handleEvent(event.type, event as unknown as Record<string, unknown>);
+      // mapChanged (engine/world.ts) carries the new map id as `to`; switches the
+      // ambience bed and re-resolves the current music state's per-map override.
+      if (event.type === 'mapChanged') manager.setMap((event as unknown as { to: string }).to);
     }
     // A combat/exploration switch may also need to happen even if the game's manifest
     // doesn't wire a `music` field onto combatStarted/combatEnded directly.
     if (change.events.some((e) => e.type === 'combatStarted' || e.type === 'combatEnded')) syncMusicToTurnMode();
   });
 
+  manager.setMap(store.state.map.id);
   syncMusicToTurnMode();
   return manager;
 }
