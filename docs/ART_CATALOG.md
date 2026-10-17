@@ -197,3 +197,35 @@ Dibujados a mano como partes ASCII: `willy` es la plantilla (gorra, bigote, cuer
 | `caja-plata` | Cofre metálico con remaches y lazo azul (recolor de `chest_full` de 0x72 con decal) |
 | `caja-oro` | Cofre dorado con herrajes de oro viejo |
 | `caja-legendaria` | Cofre morado del plató con neón cian y gema fucsia; **el render debería hacerlo flotar** (balanceo vertical de 1-2 px) |
+
+## Terrenos de Castro Sumergido y del Camerino (`tiles.json`, dibujados por `build-willy-art.ts`)
+
+| Terreno | Superficie | Cara |
+|---|---|---|
+| `piedra-mojada` | Adoquines grises mojados con brillos (3 variantes) | Muro de muelle con línea de marea y algas |
+| `agua` | Agua por los tobillos sobre adoquines, con ondas y espuma (2) | Muro de muelle |
+| `muelle` | Losas de arenisca, una con argolla de amarre | Muro de muelle (el borde con caída) |
+| `soportal` | Baldosas de damero gastadas | Arco abierto a la sombra |
+| `lonja` | Azulejo blanco con escamas y sumidero | Fachada ocre |
+| `muro-castro` | Tejado de teja roja visto desde arriba | Fachada ocre con ventana de contraventanas verdes |
+| `moqueta` | Moqueta de terciopelo rojo con rombos dorados | Pared del plató |
+| `tarima` | Tarima de escenario con marcas de cinta | Pared del plató |
+| `muro-plato` | Techo del plató | Pared morada con tira de neón |
+
+Vista previa: [`art-previews/ninja-terrain.png`](art-previews/ninja-terrain.png).
+
+## Mobiliario del Camerino (`props`, en `assets/ninja/extra.png`)
+
+| Id | Tamaño | Notas |
+|---|---|---|
+| `espejo-bombillas` | 16×16, 2 frames (bombillas que parpadean), `wall`, luz `#fff0c0` | Espejo de camerino |
+| `mostrador-maripuri` | 32×20, `floor` | Mostrador de ultramarinos con tortilla, cubo de agua, tarro y botella |
+| `barra-paco` | 32×20, `floor` | Barra con grifos de cerveza y cafetera |
+| `mesa-xelda` | 32×22, `floor`, luz `#4fe8ff` | Mesa de producción con dos monitores (gráfica de audiencia) y portapapeles |
+| `ascensor-servicio` | 16×32, frames cerrado/abierto, `wall` | Ascensor de servicio con piloto rojo/verde |
+
+Vista previa: [`art-previews/ninja-props.png`](art-previews/ninja-props.png).
+
+## Marcos de carta por rareza (`ui` del manifiesto)
+
+`{ url, x, y, w: 24, h: 24, slice: 8 }`: marco *9-slice* (esquinas de 8 px) para `carta-bronce`, `carta-plata`, `carta-oro` y `carta-legendaria`, con los colores de `rarezas`. **Petición al render:** dibujarlos con `border-image` (CSS) o *nine-slice* escalado entero.

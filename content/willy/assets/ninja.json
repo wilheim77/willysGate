@@ -4,8 +4,90 @@
     "size": 16,
     "levelHeight": 6
   },
-  "tilesets": {},
-  "terrain": {},
+  "tilesets": {
+    "terrain": {
+      "url": "assets/ninja/tiles/terrain.png",
+      "frameWidth": 16,
+      "frameHeight": 16
+    }
+  },
+  "terrain": {
+    "piedra-mojada": {
+      "tileset": "terrain",
+      "frames": [
+        0,
+        1,
+        2
+      ],
+      "face": 3
+    },
+    "agua": {
+      "tileset": "terrain",
+      "frames": [
+        4,
+        5
+      ],
+      "face": 6
+    },
+    "muelle": {
+      "tileset": "terrain",
+      "frames": [
+        7,
+        8,
+        9
+      ],
+      "face": 10
+    },
+    "soportal": {
+      "tileset": "terrain",
+      "frames": [
+        11,
+        12
+      ],
+      "face": 13
+    },
+    "lonja": {
+      "tileset": "terrain",
+      "frames": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "face": 18
+    },
+    "muro-castro": {
+      "tileset": "terrain",
+      "frames": [
+        19,
+        20
+      ],
+      "face": 21
+    },
+    "moqueta": {
+      "tileset": "terrain",
+      "frames": [
+        22,
+        23
+      ],
+      "face": 24
+    },
+    "tarima": {
+      "tileset": "terrain",
+      "frames": [
+        25,
+        26
+      ],
+      "face": 27
+    },
+    "muro-plato": {
+      "tileset": "terrain",
+      "frames": [
+        28
+      ],
+      "face": 29
+    }
+  },
   "sprites": {
     "willy-butanero": {
       "kind": "frames",
@@ -1240,6 +1322,126 @@
           }
         ]
       }
+    }
+  },
+  "props": {
+    "espejo-bombillas": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 16,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 16,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 2,
+      "loop": true,
+      "anchor": "wall",
+      "light": "#fff0c0"
+    },
+    "mostrador-maripuri": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 32,
+          "w": 32,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "barra-paco": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 52,
+          "w": 32,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "mesa-xelda": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 72,
+          "w": 32,
+          "h": 22
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor",
+      "light": "#4fe8ff"
+    },
+    "ascensor-servicio": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 94,
+          "w": 16,
+          "h": 32
+        },
+        {
+          "x": 16,
+          "y": 94,
+          "w": 16,
+          "h": 32
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "wall"
+    }
+  },
+  "ui": {
+    "carta-bronce": {
+      "url": "assets/ninja/extra.png",
+      "x": 0,
+      "y": 126,
+      "w": 24,
+      "h": 24,
+      "slice": 8
+    },
+    "carta-plata": {
+      "url": "assets/ninja/extra.png",
+      "x": 24,
+      "y": 126,
+      "w": 24,
+      "h": 24,
+      "slice": 8
+    },
+    "carta-oro": {
+      "url": "assets/ninja/extra.png",
+      "x": 48,
+      "y": 126,
+      "w": 24,
+      "h": 24,
+      "slice": 8
+    },
+    "carta-legendaria": {
+      "url": "assets/ninja/extra.png",
+      "x": 72,
+      "y": 126,
+      "w": 24,
+      "h": 24,
+      "slice": 8
     }
   }
 }
