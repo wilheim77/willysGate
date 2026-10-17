@@ -52,6 +52,7 @@
 - [x] Escala por sprite (Garrán a 1,15). Los seguidores ya buscan otra casilla si la suya no es alcanzable.
 - [ ] Pendiente del arte: polvo al moverse, tile lógico de `scaffold` y reproductor de cinemáticas (Fase 6).
 - [x] Integrada la rama `willy` (Fase W0 de *Willy el mazmorrero*: diseño, ruleset, narrador, logros, botín, procedural y peticiones al motor). Pendiente de aprobación del usuario: ver `docs/willy/PROGRESS.md`.
+- [x] Integradas las clases nuevas de Willy: Funcionario, Jugador de basket e Ingeniero (con el 5G secreto que sube hasta 10G). Nueva petición al motor R15 (salto y rebote de proyectiles).
 - [ ] Probar el combate completo en el móvil y ajustar el HUD.
 - [ ] Equilibrar el encuentro de prueba y pulir (los compañeros a veces no siguen al líder en desniveles).
 
