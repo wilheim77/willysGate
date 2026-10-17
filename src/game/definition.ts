@@ -59,6 +59,10 @@ export interface GameDefinition {
     defaults(): CreationChoices;
     apply(engine: Engine, state: GameState, choices: CreationChoices): GameState;
   };
+  /** Named characters, so a conversation can show who speaks even when they're not on this map. */
+  cast?: Record<string, { name: string; spriteId: string }>;
+  /** Title screen key art (relative to the game's public folder). */
+  titleImage?: string;
   /** Names and flavour of inventory items, by id (content/<game>/items.json). */
   items?: Record<string, { label: string; text?: string }>;
   /** Conversations and interactable scripts, by id (content/<game>/dialogues/*.json). */

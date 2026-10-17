@@ -18,6 +18,8 @@ export interface DialogueTree {
   id: string;
   start: string;
   nodes: Record<string, DialogueNode>;
+  /** Long runs without choices (an epilogue): the client may advance by itself. */
+  cinematic?: boolean;
 }
 
 export interface DialogueNode {
