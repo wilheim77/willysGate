@@ -14,6 +14,8 @@ export class Hud {
   private messageTimer = 0;
   /** Called after "Nueva": the client opens character creation. */
   onNewGame: () => void = () => undefined;
+  /** Starting-map override for new games (?mapa=). */
+  startOptions: { start?: string } | undefined;
 
   constructor(
     private store: GameStore,
@@ -82,7 +84,7 @@ export class Hud {
         break;
       case 'new':
         if (!confirm(t.confirmNew)) return;
-        this.store.load(this.game.newGame(this.store.engine, randomSeed()));
+        this.store.load(this.game.newGame(this.store.engine, randomSeed(), this.startOptions));
         this.say(t.newGame);
         this.onNewGame();
         break;
