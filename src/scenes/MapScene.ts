@@ -62,6 +62,8 @@ export interface MapSceneTexts {
 }
 
 const STEP_MS = 160;
+/** Out of combat walking is brisker: exploring shouldn't feel like wading. */
+const EXPLORE_STEP_MS = 95;
 const TAP_SLOP = 8;
 /** Zoom limits and defaults are expressed as on-screen pixels per tile, whatever the art's tile size. */
 const MIN_TILE_PX = 24;
@@ -361,13 +363,16 @@ export class MapScene extends Phaser.Scene {
     return this.grid.tileCentre(p.x, p.y, tile?.height ?? 0);
   }
 
-  private animateMove(event: EntityMovedEvent, state: GameState): Promise<void> {
+  private animateMove(event: EntityMovedEvent, state: GameState, blocking = true): Promise<void> {
     const sprite = this.sprites.get(event.entityId);
     if (!sprite) return Promise.resolve();
-    this.animating++;
+    // A follower already mid-walk jumps to where its last walk was going before starting the next.
+    this.tweens.killTweensOf(sprite);
+    if (blocking) this.animating++;
     this.pathPreview.clear();
     this.stopBreathing(event.entityId);
-    this.cameras.main.startFollow(sprite, true, 0.12, 0.12);
+    if (blocking) this.cameras.main.startFollow(sprite, true, 0.12, 0.12);
+    const stepMs = state.turn.mode === 'combat' ? STEP_MS : EXPLORE_STEP_MS;
 
     let prev = event.from;
     const tweens = event.path.map((step) => {
@@ -379,7 +384,7 @@ export class MapScene extends Phaser.Scene {
       return {
         x: c.x,
         y: c.y,
-        duration: STEP_MS,
+        duration: stepMs,
         onStart: () => {
           // While crossing two tiles, draw in front of both.
           sprite.setDepth(Math.max(this.grid.depth(from.y, fromTile.height, 5), this.grid.depth(step.y, tile.height, 5)));
@@ -393,7 +398,7 @@ export class MapScene extends Phaser.Scene {
         targets: sprite,
         tweens,
         onComplete: () => {
-          this.animating--;
+          if (blocking) this.animating--;
           this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
           resolve();
         },
@@ -437,8 +442,15 @@ export class MapScene extends Phaser.Scene {
     const sprite = (id: unknown) => (typeof id === 'string' ? this.sprites.get(id) : undefined);
     const T = this.grid.tile;
     switch (event.type) {
-      case 'entityMoved':
-        return this.animateMove(event as EntityMovedEvent, state);
+      case 'entityMoved': {
+        const ev = event as EntityMovedEvent;
+        // Exploring: companions catch up in the background; only the leader's walk holds input.
+        if (state.turn.mode !== 'combat' && ev.entityId !== this.hooks.controlledEntityId()) {
+          void this.animateMove(ev, state, false);
+          return;
+        }
+        return this.animateMove(ev, state);
+      }
       case 'entityTeleported': {
         const ev = event as EntityTeleportedEvent;
         const s = sprite(ev.entityId);
@@ -552,9 +564,13 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       case 'mapChanged': {
-        // A new place: rebuild everything and look at the party.
+        // A new place: rebuild everything and put the camera on the leader (not on a sprite
+        // of the map we just left, which the camera might still be following).
+        this.cameras.main.stopFollow();
         this.buildWorld(state);
         this.focusOn(this.hooks.controlledEntityId());
+        const lead = this.sprites.get(this.hooks.controlledEntityId());
+        if (lead) this.cameras.main.startFollow(lead, true, 0.12, 0.12);
         return;
       }
       case 'controllerChanged':
