@@ -12,7 +12,7 @@ import { ACT_MAP_IDS, LEGACY_TEST_DIALOGUE_IDS, START, buildWorld, loadDialogues
  *  starting a conversation only ever needs "hero" to exist). */
 function bestMapFor(tree: DialogueTree, dialogues: Record<string, DialogueTree>): string {
   const referenced = new Set(
-    [...JSON.stringify(tree).matchAll(/"entityId"\s*:\s*"([^"]+)"/g)].map((m) => m[1]!).filter((id) => !['hero', 'dorotea', 'party'].includes(id)),
+    [...JSON.stringify(tree).matchAll(/"entityId"\s*:\s*"([^"]+)"/g)].map((m) => m[1]!).filter((id) => !['hero', 'dorotea', 'garran', 'anselmo', 'party'].includes(id)), // companions travel with the party
   );
   if (referenced.size === 0) return START;
   for (const mapId of ACT_MAP_IDS) {
