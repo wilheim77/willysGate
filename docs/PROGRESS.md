@@ -90,7 +90,7 @@
 - [x] Cliente: ventana de diálogo con retrato, opciones «[Persuasión] CD 13 · 40 %», opciones bloqueadas con pista («[Elfo]») y el d20 en pantalla tras cada tirada. Tocar a alguien con quien se puede hablar te acerca y abre la conversación.
 - [x] Prueba de contenido: enlaces válidos, reglas y pruebas existentes, **sin bloqueos** (cada nodo con opciones tiene una sin condición ni tirada, y todo nodo puede llegar al final).
 - [x] PNJ de prueba: el viejo minero en el mapa de prueba.
-- [ ] Creación de personaje con compra de puntos.
+- [x] Creación de personaje con compra de puntos: pasos como datos (`engine/creation.ts`), 5e los rellena (nombre, raza, clase, 27 puntos de 8 a 15, «Recomendado» por clase, bonos de raza visibles), pantalla al empezar y tras «Nueva», con «Partida rápida».
 - [ ] Interactuables y trampas (cofres, palancas, puertas; trampas con Percepción y desactivar).
 - [ ] Escena «El camino»: Dorotea, reclutamiento de Garrán, mineros hambrientos evitables hablando.
 - [ ] Peticiones de Willy al motor: cambio de mapa (R10), causa en eventos (R11), semillas derivadas (R12), marcadores (R14).

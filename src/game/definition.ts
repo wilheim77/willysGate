@@ -1,4 +1,4 @@
-import type { DialogueTree, Engine, GameState, Ruleset } from '../../engine';
+import type { CreationChoices, CreationSpec, DialogueTree, Engine, GameState, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
@@ -13,6 +13,8 @@ export interface UiTexts {
   >;
   /** Combat HUD and map texts (miss, crit, endTurn...). */
   combat?: Record<string, string>;
+  /** Character creation screen texts (title, start, recommended...). */
+  creation?: Record<string, string>;
 }
 
 /** Visual identity of a game: CSS custom properties applied to the HUD, plus the UI font. */
@@ -50,6 +52,12 @@ export interface GameDefinition {
   playerId: string;
   /** Entity the player controls at the start (party leader). */
   leaderId: string;
+  /** Protagonist creation: the ruleset's steps, default answers, and how the answers enter the game. */
+  creation?: {
+    spec: CreationSpec;
+    defaults(): CreationChoices;
+    apply(engine: Engine, state: GameState, choices: CreationChoices): GameState;
+  };
   /** Conversations and interactable scripts, by id (content/<game>/dialogues/*.json). */
   dialogues?: Record<string, DialogueTree>;
   newGame(engine: Engine, seed: number): GameState;

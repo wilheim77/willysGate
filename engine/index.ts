@@ -12,6 +12,7 @@ export * from './los';
 export * from './surfaces';
 export * from './inventory';
 export * from './dialogue';
+export * from './creation';
 export * from './checks';
 export * from './save';
 export * from './tiled';

@@ -1,5 +1,5 @@
 import { type Entity, type TiledMapJson, parseTiledMap, withLighting, withZones } from '../../engine';
-import { SURFACES, createCharacter, createMonster, createProp, dnd5e } from '../../rulesets/dnd5e';
+import { DND5E_CREATION, SURFACES, buildProtagonist, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import art0x72 from './assets/0x72.json';
@@ -36,6 +36,16 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'hero',
+  creation: {
+    spec: DND5E_CREATION,
+    defaults: defaultCreation,
+    // The protagonist replaces the placeholder hero in place: same spot, look and level.
+    apply(_engine, state, choices) {
+      const hero = state.entities.hero!;
+      const built = buildProtagonist(choices, { id: hero.id, controllerId: hero.controllerId, factionId: hero.factionId, position: hero.position, spriteId: hero.spriteId, level: 3 });
+      return { ...state, entities: { ...state.entities, hero: built } };
+    },
+  },
   dialogues: Object.fromEntries([viejoMinero].map((d) => [d.id, d as unknown as DialogueTree])),
   newGame(engine, seed) {
     const { map, spawns, lighting, zones } = parseTiledMap('test', testMap as TiledMapJson);

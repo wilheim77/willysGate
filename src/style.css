@@ -344,3 +344,34 @@ canvas.portrait { image-rendering: pixelated; display: block; }
 #dialogue .roll.failure .die { border-color: var(--accent); color: #e0a090; }
 @keyframes die-roll { from { transform: rotate(-200deg) scale(0.6); } to { transform: rotate(0) scale(1); } }
 @media (prefers-reduced-motion: reduce) { #dialogue .roll .die { animation: none; } }
+
+/* --- Character creation --- */
+#creation[hidden] { display: none; }
+#creation {
+  position: fixed; inset: 0; z-index: 6; background: rgba(6, 5, 8, 0.92);
+  display: flex; justify-content: center; align-items: stretch; padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+}
+#creation .panel {
+  width: min(560px, 100%); overflow-y: auto; background: var(--panel); border: 3px solid var(--iron);
+  box-shadow: 4px 4px 0 #000; padding: 10px 14px;
+}
+#creation h2 { margin: 0 0 4px; font-weight: normal; font-size: 32px; color: var(--accent); }
+#creation h3 { margin: 12px 0 4px; font-weight: normal; font-size: 22px; color: #e8c070; border-bottom: 1px solid var(--iron); }
+#creation input[type='text'] {
+  font: inherit; font-size: 22px; width: 100%; min-height: 44px; padding: 2px 8px;
+  color: var(--text); background: #120f13; border: 2px solid var(--iron);
+}
+#creation .options { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+#creation .option { display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 44px; padding: 6px 8px; white-space: normal; }
+#creation .option strong { font-weight: normal; font-size: 20px; }
+#creation .option span { color: var(--muted); font-size: 15px; line-height: 1.15; }
+#creation .option.selected { border-color: var(--gold, #e8c070); background: #3a2a1e; }
+#creation .help-text { color: var(--muted); margin: 0 0 6px; font-size: 16px; }
+#creation .budget { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 20px; }
+#creation .stat { display: grid; grid-template-columns: 1fr 44px 32px 44px 1fr; align-items: center; gap: 6px; margin: 4px 0; }
+#creation .stat .value { text-align: center; font-size: 22px; }
+#creation .stat .final { color: var(--muted); text-align: right; }
+#creation .stat button { min-height: 40px; padding: 0; }
+#creation .buttons { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; }
+#creation .buttons button { flex: 1; min-height: 48px; font-size: 22px; }
+#creation .buttons .confirm { background: #5a3a22; border-color: #e8c070; }

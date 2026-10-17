@@ -8,6 +8,7 @@ import './style.css';
 import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { DialogueBox } from './ui/dialogueBox';
+import { CreationScreen } from './ui/creationScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
 
@@ -44,6 +45,11 @@ store.subscribe((change, state) => {
   dialogue.render(state);
 });
 dialogue.render(store.state);
+
+// A new game starts with character creation.
+const creation = new CreationScreen(store, game);
+hud.onNewGame = () => creation.open();
+creation.open();
 
 const combat = game.texts.combat ?? {};
 const scene = new MapScene(
