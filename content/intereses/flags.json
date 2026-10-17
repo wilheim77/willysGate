@@ -238,5 +238,41 @@
   "cirilo_dice_verdad": {
     "critical": false,
     "description": "Cirilo está medio loco, pero lo del canto es verdad."
+  },
+  "audiencia_hecha": {
+    "critical": true,
+    "description": "Ha tenido lugar la audiencia con el barón (Dorotea le da tres días)."
+  },
+  "pista_brea_gastos": {
+    "critical": false,
+    "description": "Las cuentas del barón: Brea sigue comprando pólvora y comida para doce en una mina cerrada."
+  },
+  "baron_confeso_brea": {
+    "critical": false,
+    "description": "El barón admite que firmó lo que Brea le puso delante (veta muerta, orden de sellado)."
+  },
+  "abadia_desconfia": {
+    "critical": false,
+    "description": "La guardia de la abadía desconfía: las pruebas en la abadía tienen CD +2."
+  },
+  "hilda_sopesa_traicion": {
+    "critical": false,
+    "description": "Hilda se está pensando si su señor vale más vivo o muerto."
+  },
+  "hilda_pacto_tacito": {
+    "critical": false,
+    "description": "Hilda te ha dado a entender que hablaréis algún día."
+  },
+  "pista_plata_viva": {
+    "critical": false,
+    "description": "El plato de Brea zumba: plata viva."
+  },
+  "enano_mina_viva": {
+    "critical": false,
+    "description": "Como enano, notas que la mina está viva, no muerta como dice Brea."
+  },
+  "elfo_conocia_bisabuelo": {
+    "critical": false,
+    "description": "Conociste al bisabuelo del barón (elfo). Desbloquea una réplica de Lisandro."
   }
 }
