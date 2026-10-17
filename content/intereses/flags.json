@@ -353,5 +353,80 @@
   "posadera_vino": {
     "critical": false,
     "description": "Pagaste un vino a Remedios."
+  },
+  "escorial_libre": {
+    "critical": true,
+    "description": "Los Sinpaga ya no cortan el paso al Pozo (pagados, convencidos, asustados o vencidos con onVictory)."
+  },
+  "sinpaga_pagados": {
+    "critical": false,
+    "description": "Pagaste 40 coronas a los Sinpaga."
+  },
+  "sinpaga_pagados_por_brea": {
+    "critical": false,
+    "description": "Los Sinpaga cobran de Brea por vigilar el Escorial."
+  },
+  "sinpaga_convencidos": {
+    "critical": false,
+    "description": "Convenciste a los Sinpaga de que Brea los venderá."
+  },
+  "sinpaga_contra_brea": {
+    "critical": false,
+    "description": "Los Sinpaga han visto el libro de Lisandro y van a por Brea.",
+    "readBy": "escena 5 / epílogo"
+  },
+  "sinpaga_huyeron": {
+    "critical": false,
+    "description": "Los Sinpaga huyeron del Escorial."
+  },
+  "sinpaga_sin_altura": {
+    "critical": false,
+    "description": "Engañaste a los Sinpaga (enano) para que bajaran de las crestas."
+  },
+  "sinpaga_combate": {
+    "critical": false,
+    "description": "Peleaste con los Sinpaga."
+  },
+  "rumor_garran_garganta": {
+    "critical": false,
+    "description": "Los Sinpaga acusan a Garrán de haber cerrado la Garganta.",
+    "readBy": "escena 5 (D2)"
+  },
+  "acceso_contrabando": {
+    "critical": true,
+    "description": "El Pozo del Ahorcado no está cegado: polea nueva y cuerda que baja a la mina."
+  },
+  "garran_conoce_pozo": {
+    "critical": false,
+    "description": "Garrán sabe que el Pozo da a las galerías viejas y a la Garganta."
+  },
+  "pista_callados_marchan": {
+    "critical": false,
+    "description": "Rastro de muchas botas al mismo paso, y rodadas hacia la casa de Lisandro."
+  },
+  "callado_visto": {
+    "critical": true,
+    "description": "Has visto al primer Callado sacar plata por el Pozo."
+  },
+  "cuarenta_vivos": {
+    "critical": false,
+    "description": "Garrán reconoció al Callado: Bartolo Grana, uno de los cuarenta. Siguen vivos."
+  },
+  "callados_controlados": {
+    "critical": false,
+    "description": "Los Callados están vivos, pero algo los mueve."
+  },
+  "pista_collera": {
+    "critical": false,
+    "description": "El collar del Callado es una correa: alguien sujeta el otro extremo (la collera)."
+  },
+  "callado_atacado": {
+    "critical": false,
+    "description": "Atacaste al Callado del Pozo."
+  },
+  "callado_abatido": {
+    "critical": false,
+    "description": "Mataste al Callado del Pozo.",
+    "readBy": "escena 5"
   }
 }
