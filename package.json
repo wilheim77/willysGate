@@ -12,6 +12,7 @@
     "typecheck": "tsc -p engine/tsconfig.json && tsc -p rulesets/tsconfig.json && tsc -p tests/tsconfig.json && tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:qa": "QA_DEEP=1 vitest run tests/playthrough",
     "coverage": "vitest run --coverage",
     "check": "npm run typecheck && npm test",
     "art": "node scripts/art/build-tiles.ts intereses lpc && node scripts/art/build-characters.ts intereses lpc && node scripts/art/build-extra-art.ts intereses 0x72 && node scripts/art/build-tiles.ts intereses 0x72 && node scripts/art/build-atlas-sprites.ts intereses 0x72 && node scripts/art/build-palette-variants.ts intereses 0x72 && node scripts/art/build-hand-sprites.ts intereses 0x72 && node scripts/art/build-portraits.ts intereses 0x72 && node scripts/art/build-previews.ts intereses 0x72 && node scripts/art/build-cinematics.ts intereses && node scripts/art/build-cinematics.ts willy && node scripts/art/build-willy-art.ts willy ninja && node scripts/art/build-tiles.ts willy ninja && node scripts/art/build-palette-variants.ts willy ninja && node scripts/art/build-hand-sprites.ts willy ninja && node scripts/art/build-rivals.ts willy ninja && node scripts/art/build-portraits.ts willy ninja && node scripts/art/build-previews.ts willy ninja",
