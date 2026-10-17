@@ -4719,6 +4719,448 @@
           }
         ]
       }
+    },
+    "companero-jonatan": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 1084,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "companero-kevin": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 1114,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "companero-loli": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 1144,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "companero-rosario": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 1174,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "companero-plata": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1204,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 16,
+            "y": 1204,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1204,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1204,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 64,
+            "y": 1204,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "companero-iker": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 1234,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "companero-neptuno": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 32,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 96,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 112,
+            "y": 1264,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "companero-tornillo": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 1286,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 1286,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 1286,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 1286,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 1286,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 1286,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
     }
   },
   "props": {
@@ -6136,11 +6578,11 @@
       "h": 32
     },
     "chencho-el-base": {
-      "url": "assets/ninja/portraits.png",
-      "x": 96,
-      "y": 64,
-      "w": 32,
-      "h": 32
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 816,
+      "y": 0,
+      "w": 48,
+      "h": 48
     },
     "fan-entusiasta": {
       "url": "assets/ninja/portraits.png",
@@ -6449,6 +6891,62 @@
       "y": 224,
       "w": 32,
       "h": 32
+    },
+    "companero-jonatan": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 432,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "companero-kevin": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 480,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "companero-loli": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 528,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "companero-rosario": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 576,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "companero-plata": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 624,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "companero-iker": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 672,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "companero-neptuno": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 720,
+      "y": 0,
+      "w": 48,
+      "h": 48
+    },
+    "companero-tornillo": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 768,
+      "y": 0,
+      "w": 48,
+      "h": 48
     },
     "patrocinador-butanos-perez": {
       "url": "assets/ninja/portraits-hand.png",

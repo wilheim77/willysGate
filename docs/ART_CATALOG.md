@@ -452,3 +452,19 @@ Las luces sin `prop` en los mapas iluminan sin que se vea de dónde sale la luz.
 - Los `brillo-*` (plata, resonadores) pueden seguir sin prop.
 
 **Aros de bando** (props `floor`, 16×7, dibujar bajo los pies): `marker_party` (dorado, continuo), `marker_ally` (verde, a trazos: aliados que luchan por el grupo con IA), `marker_enemy` (rojo, grueso) y `marker_neutral` (gris, a trazos). **Petición al cliente:** el mapa solo marca al personaje activo; estos aros permiten distinguir bandos de un vistazo.
+
+## Compañeros de *Willy* (uno por clase)
+
+Sprites a mano (`hand-sprites.json`, `idle` y `move`, mirando a la derecha; el cliente los voltea) y bustos de 48×48 (`portraits.json`, con el mismo id). Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-hand.png) y [`art-previews/ninja-portraits-hand.png`](art-previews/ninja-portraits-hand.png).
+
+| Id | Clase | Aspecto |
+|---|---|---|
+| `companero-jonatan` | butanero | Aprendiz: gorra del revés, mono naranja y azul, carretilla de una rueda con un camping gas |
+| `companero-kevin` | influencer | Sudadera, cascos al cuello, móvil vertical en estabilizador y foco LED |
+| `companero-loli` | bardo-de-verbena | Cantante de orquesta: permanente cardada, lentejuelas, micro con cable en espiral |
+| `companero-neptuno` | socorrista | Terranova negro con chaleco salvavidas naranja (16×22, ancho) |
+| `companero-rosario` | tasador | Doña Rosario: bajita, permanente gris, abrigo negro, perlas y bolso enorme |
+| `companero-plata` | mimo | Estatua humana plateada con bombín; `idle` congelado con el sombrero de las monedas, `move` a tirones |
+| `companero-tornillo` | ingeniero | Autómata de hojalata redondeado: una antena, soplete por mano, le falta un tornillo (16×22) |
+| `companero-iker` | funcionario | Becario: camisa grande, corbata torcida, acreditación, gafas, grapadora y termo |
+| `chencho-el-base` | jugador-de-basket | Sprite existente; busto nuevo con la cinta roja |
