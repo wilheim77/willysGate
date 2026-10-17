@@ -26,6 +26,8 @@ c.put(5, 21, '+');
 // A storehouse across the lane (solid), and the Lloro running south from a culvert.
 c.rect(16, 14, 11, 6, '#');
 c.rect(16, 13, 11, 1, '=', 1); // the storehouse's loading dock (h1): a little height over the street
+// The yard behind the pawnshop and the storehouse, fenced (h1: a low barrier, two gaps).
+c.rect(14, 22, 5, 1, 'f', 1).rect(21, 22, 6, 1, 'f', 1);
 c.rect(29, 13, 2, 11, '~', 0); // the Lloro
 c.rect(28, 13, 1, 11, 'Y', 0).rect(31, 13, 1, 11, 'Z', 0); // its banks (water to the east / west)
 // Exterior art: cobbles on the street, scrub in the yards, timber houses, stone for the chapel
@@ -78,6 +80,8 @@ export default {
     { name: 'velas-capilla-1', at: [12, 1], radius: 3, color: '#ffd090', flicker: 0.2, intensity: 0.8 },
     { name: 'velas-capilla-2', at: [17, 1], radius: 3, color: '#ffd090', flicker: 0.2, intensity: 0.8 },
     { name: 'candil-viudas', at: [27, 2], radius: 3, color: '#ffc070', flicker: 0.15, intensity: 0.7 },
+    { name: 'candil-patio', at: [6, 22], radius: 3, color: '#ffb050', flicker: 0.12, intensity: 0.7 },
+    { name: 'candil-lloro', at: [30, 17], radius: 3, color: '#ffc070', flicker: 0.12, intensity: 0.7 },
     { name: 'lampara-empenos', at: [10, 16], radius: 3.5, color: '#ffd090', flicker: 0.08 },
   ],
   surfaces: [{ name: 'el-lloro', rect: [29, 13, 2, 11], surface: 'water' }],

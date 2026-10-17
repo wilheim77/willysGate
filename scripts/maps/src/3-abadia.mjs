@@ -75,6 +75,15 @@ export default {
     'barrel-1': [18, 12],
     'crate-3': [11, 18],
     'crate-4': [17, 18],
+    // D1, the night of the torches: the Cuadrilla at the gate (only that night). With the party
+    // (d1_cuadrilla) they storm it; against it (d1_abadia) they are the enemy, Odda leading.
+    // The Hulla stay out of the assault if hulla_no_luchan.
+    'minero_cuadrilla-1': { at: [8, 19], requiresAnyFlag: 'd1_cuadrilla,d1_abadia' },
+    'minero_cuadrilla-2': { at: [19, 19], requiresAnyFlag: 'd1_cuadrilla,d1_abadia' },
+    'minero_cuadrilla-3': { at: [14, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia' },
+    'hulla-1': { at: [10, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia', unlessFlag: 'hulla_no_luchan' },
+    'hulla-2': { at: [17, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia', unlessFlag: 'hulla_no_luchan' },
+    odda: { at: [13, 20], requiresFlag: 'd1_abadia' },
   },
   lights: [
     { name: 'brasero-sala-1', at: [10, 6], radius: 5, color: '#ffb060', flicker: 0.12, prop: 'brazier' },
@@ -88,9 +97,24 @@ export default {
   exits: [
     { name: 'a-plaza', rect: [11, 21, 6, 1], to: 'plaza', spawn: 'entry-abadia' },
     // The crypt stairs down to the mine: the baron's key (D1, defend). I2: requiresFlag.
-    { name: 'escalera-cripta', rect: [26, 1, 1, 1], to: 'mina', spawn: 'entry-cripta', props: { requiresFlag: 'TODO:llave_cripta' } },
+    { name: 'escalera-cripta', rect: [26, 1, 1, 1], to: 'mina', spawn: 'entry-cripta', props: { requiresFlag: 'llave_cripta' } },
+  ],
+  encounters: [
+    {
+      name: 'd1-asalto',
+      rect: [0, 9, 28, 13],
+      participants: ['guardia_baron-1', 'guardia_baron-2', 'guardia_baron-3', 'guardia_baron-4', 'guardia_baron_sargento-1', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
+      props: { requiresFlag: 'd1_cuadrilla' },
+    },
+    {
+      name: 'd1-defensa',
+      rect: [0, 9, 28, 13],
+      participants: ['odda', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
+      props: { requiresFlag: 'd1_abadia' },
+    },
   ],
   zones: {
-    scenes: [{ name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'audiencia_abadia', speaker: 'mazo', once: true } }],
+    scenes: [
+      { name: 'd1-abadia-final', rect: [7, 1, 16, 7], props: { dialogue: 'd1_abadia_final', speaker: 'mazo', once: true, requiresFlag: 'd1_abadia' } },{ name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'audiencia_abadia', speaker: 'mazo', once: true } }],
   },
 };

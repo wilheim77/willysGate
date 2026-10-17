@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 41,
+ "nextobjectid": 43,
  "properties": [
   {
    "name": "name",
@@ -524,6 +524,74 @@
     },
     {
      "id": 27,
+     "name": "candil-tunel-cripta",
+     "type": "",
+     "point": true,
+     "x": 496,
+     "y": 816,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.7
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.18
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "candil-brecha",
+     "type": "",
+     "point": true,
+     "x": 976,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.7
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.18
+      }
+     ]
+    },
+    {
+     "id": 29,
      "name": "vela-cripta",
      "type": "",
      "point": true,
@@ -569,7 +637,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 30,
      "name": "callados-andamios",
      "type": "",
      "x": 448,
@@ -587,7 +655,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 31,
      "name": "callados-cripta",
      "type": "",
      "x": 352,
@@ -605,7 +673,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 32,
      "name": "emboscada-sellada",
      "type": "",
      "x": 1024,
@@ -623,7 +691,7 @@
       {
        "name": "requiresFlag",
        "type": "string",
-       "value": "TODO:d2_resuelta"
+       "value": "d2_resuelta"
       }
      ]
     }
@@ -640,7 +708,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 31,
+     "id": 33,
      "name": "filtracion",
      "type": "",
      "x": 640,
@@ -658,7 +726,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 34,
      "name": "brecha",
      "type": "",
      "x": 992,
@@ -676,7 +744,7 @@
      ]
     },
     {
-     "id": 33,
+     "id": 35,
      "name": "escombros-sellada",
      "type": "",
      "x": 1152,
@@ -706,7 +774,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 34,
+     "id": 36,
      "name": "tablon-podrido",
      "type": "",
      "x": 928,
@@ -764,7 +832,7 @@
      ]
     },
     {
-     "id": 35,
+     "id": 37,
      "name": "cable-derrumbe",
      "type": "",
      "x": 288,
@@ -839,7 +907,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 36,
+     "id": 38,
      "name": "a-escorial-bocamina",
      "type": "",
      "x": 0,
@@ -862,7 +930,7 @@
      ]
     },
     {
-     "id": 37,
+     "id": 39,
      "name": "a-escorial-pozo",
      "type": "",
      "x": 672,
@@ -885,7 +953,7 @@
      ]
     },
     {
-     "id": 38,
+     "id": 40,
      "name": "a-abadia-cripta",
      "type": "",
      "x": 0,
@@ -908,7 +976,7 @@
      ]
     },
     {
-     "id": 39,
+     "id": 41,
      "name": "a-boveda",
      "type": "",
      "x": 1248,
@@ -943,7 +1011,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 40,
+     "id": 42,
      "name": "galeria-sellada",
      "type": "",
      "x": 1024,
@@ -956,7 +1024,7 @@
       {
        "name": "dialogue",
        "type": "string",
-       "value": "TODO:galeria_sellada"
+       "value": "galeria_sellada"
       },
       {
        "name": "speaker",

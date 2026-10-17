@@ -1,5 +1,6 @@
 {
   "$comment": "Dialogues for specific spawns that aren't cast entries (a generic Callado who talks, a well you can use). Key: <mapId>:<spawn name>.",
   "escorial:callado-1": "callado_pozo",
-  "escorial:well-1": "pozo_ahorcado"
+  "escorial:well-1": "pozo_ahorcado",
+  "boveda:inscription-1": "inscripcion_boveda"
 }
