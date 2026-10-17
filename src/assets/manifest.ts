@@ -56,6 +56,8 @@ export interface AssetManifest {
   props?: Record<string, PropArt>;
   /** Animated overlays for surfaces (oil, fire, ice...), drawn over the floor. */
   surfaces?: Record<string, { url: string; frames: Rect[]; fps: number; loop: boolean }>;
+  /** Hand-made HUD portraits by spriteId; otherwise the HUD crops the sprite's idle frame. */
+  portraits?: Record<string, Rect & { url: string }>;
 }
 
 export const tilesetKey = (id: string): string => `tileset:${id}`;

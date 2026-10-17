@@ -64,7 +64,9 @@
 - [x] Corregido: tocar el sprite de un enemigo lo selecciona (antes podía caer en la casilla de arriba).
 - [x] El fuego recorre todo el charco de aceite o grasa conectado, y el rayo toda el agua conectada. Probado en el navegador: explosión del barril, aceite ardiendo y luz del fuego.
 - [x] Los ataques contra objetos (barriles, cajas) impactan siempre, sin crítico; la vista previa y el registro lo indican.
-- [x] Tests: 191.
+- [x] Fichas de personaje: retratos del grupo siempre en pantalla; tocar un retrato o una ficha de iniciativa abre la ficha (combate, características, habilidades, recursos, armas, conjuros, rasgos, defensas, estados), con «?» del glosario. El ruleset la rellena con `describeEntity` (genérico en el motor).
+- [x] Registro de combate plegable (una línea / panel con desplazamiento); se recuerda la elección.
+- [x] Tests: 195.
 - [ ] Prueba del usuario en el móvil.
 
 ## Planificado para más adelante

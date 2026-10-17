@@ -80,8 +80,26 @@ export interface Ruleset {
   /** Plain-language explanations for terms shown in the UI (CA, CD, ventaja...). Keys are `term` ids. */
   glossary: Record<string, GlossaryEntry>;
 
+  /** Character sheet for the UI, as generic sections; the client only lays it out. */
+  describeEntity?(state: GameState, entityId: string): EntitySheet;
+
   /** Migrations of ruleset-owned data, from version N to N+1. */
   migrations?: Record<number, (state: Record<string, unknown>) => Record<string, unknown>>;
+}
+
+/** A character sheet the ruleset fills and any client can show. */
+export interface EntitySheet {
+  /** One line under the name: "Semiorco · Guerrero 3". */
+  subtitle?: string;
+  sections: SheetSection[];
+}
+
+export interface SheetSection {
+  title: string;
+  /** Short label/value pairs ("CA" → "16"), optionally linked to a glossary term. */
+  rows?: { label: string; value?: string; term?: string }[];
+  /** Longer entries with an explanation (features, spells). */
+  items?: { label: string; text?: string; term?: string }[];
 }
 
 export interface GlossaryEntry {

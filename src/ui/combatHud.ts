@@ -15,8 +15,34 @@ export class CombatHud {
   private toast = document.querySelector<HTMLElement>('#message')!;
   private lines: string[] = [];
   private toastTimer = 0;
+  private logLines = document.createElement('div');
+  private logToggle = document.createElement('button');
+  private logOpen = false;
+  /** Tap on an initiative chip: open that creature's sheet. */
+  onInspect: (id: string) => void = () => undefined;
 
-  constructor(private game: GameDefinition) {}
+  constructor(private game: GameDefinition) {
+    // Collapsed by default on phones (one line); the choice is remembered per browser.
+    try {
+      const saved = localStorage.getItem('combatLogOpen');
+      this.logOpen = saved === null ? window.innerWidth > 560 : saved === '1';
+    } catch {
+      this.logOpen = window.innerWidth > 560;
+    }
+    this.logLines.className = 'lines';
+    this.logToggle.className = 'toggle';
+    this.logToggle.addEventListener('click', () => {
+      this.logOpen = !this.logOpen;
+      try {
+        localStorage.setItem('combatLogOpen', this.logOpen ? '1' : '0');
+      } catch {
+        // Storage may be unavailable (private mode); the toggle still works for this session.
+      }
+      this.renderLog();
+    });
+    this.logEl.replaceChildren(this.logToggle, this.logLines);
+    this.renderLog();
+  }
 
   private t(key: string, fallback = ''): string {
     return this.game.texts.combat?.[key] ?? fallback;
@@ -51,9 +77,10 @@ export class CombatHud {
     this.order.replaceChildren(
       ...state.turn.order.map((id) => {
         const e = state.entities[id];
-        const chip = document.createElement('div');
+        const chip = document.createElement('button');
         chip.className = 'chip';
         if (!e) return chip;
+        chip.addEventListener('click', () => this.onInspect(id));
         const hp = e.resources[health];
         chip.classList.toggle('active', id === activeId);
         chip.classList.toggle('foe', e.controllerId !== this.game.playerId);
@@ -244,13 +271,22 @@ export class CombatHud {
           break;
       }
     }
-    this.logEl.replaceChildren(
-      ...this.lines.slice(-4).map((l) => {
+    this.renderLog();
+  }
+
+  private renderLog(): void {
+    const shown = this.logOpen ? this.lines.slice(-30) : this.lines.slice(-1);
+    this.logEl.classList.toggle('open', this.logOpen);
+    this.logToggle.textContent = this.logOpen ? `${this.t('log', 'Registro')} ▴` : '▾';
+    this.logToggle.setAttribute('aria-label', this.logOpen ? this.t('hideLog', 'Ocultar registro') : this.t('showLog', 'Mostrar registro'));
+    this.logLines.replaceChildren(
+      ...shown.map((l) => {
         const p = document.createElement('p');
         p.textContent = l;
         return p;
       }),
     );
+    this.logLines.scrollTop = this.logLines.scrollHeight;
   }
 
   private push(line: string): void {

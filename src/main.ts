@@ -5,6 +5,7 @@ import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
 import './style.css';
+import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
@@ -16,10 +17,23 @@ applyTheme(game.theme);
 const engine = createEngine(game.ruleset, game.id);
 const store = new GameStore(engine, game.newGame(engine, randomSeed()));
 const hud = new Hud(store, game);
-const controller = new GameController(store, game, new CombatHud(game));
+const combatHud = new CombatHud(game);
+const controller = new GameController(store, game, combatHud);
 
 const requestedArt = new URLSearchParams(location.search).get('arte');
 const manifest = game.art.presets[requestedArt ?? ''] ?? game.art.presets[game.art.default]!;
+
+// Party portraits and character sheets (tap a portrait or an initiative chip).
+const sheet = new CharacterSheet(game, engine.ruleset, manifest);
+const party = new PartyBar(game, engine.ruleset, manifest, (id) => sheet.open(store.state, id));
+combatHud.onInspect = (id) => sheet.open(store.state, id);
+const renderParty = () => {
+  const { turn } = store.state;
+  party.render(store.state, turn.mode === 'combat' ? turn.activeEntityId : null);
+  sheet.refresh(store.state);
+};
+store.subscribe(renderParty);
+renderParty();
 
 const combat = game.texts.combat ?? {};
 const scene = new MapScene(

@@ -1,3 +1,4 @@
+import { describeEntity } from './sheet';
 import {
   type ActionOutcome,
   type CheckRequest,
@@ -272,6 +273,7 @@ export const dnd5e: Ruleset = {
   surfaceReactions: SURFACE_REACTIONS,
   onSurface: (state, id, surface, trigger, rng) => onSurface(dnd5e, state, id, surface, trigger, rng),
   onFall: (state, id, levels, rng) => onFall(dnd5e, state, id, levels, rng),
+  describeEntity: (state, id) => describeEntity(state, id, { resources, conditions }),
 };
 setDnd5eRef(dnd5e);
 
@@ -318,5 +320,6 @@ export { CLASSES, MONSTERS, RACES, SPELLS, WEAPONS } from './data';
 export { areaTiles, DAMAGE_LABELS } from './actions';
 export { createProp, SURFACES, type PropSpec } from './environment';
 export { coverBetween } from './cover';
+export { FEATURES } from './sheet';
 export type { AttackRolledEvent, DamageDealtEvent, FateEvent, HealedEvent, SaveRolledEvent } from './resolve';
 export type { Ability } from './abilities';
