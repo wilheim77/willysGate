@@ -261,6 +261,15 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
     const participants = Object.values(next.entities)
       .filter((x) => ruleset.isStanding(x) && (factions.includes(x.factionId) || x.factionId === leaderSide))
       .map((x) => x.id);
+    const hooks0 = e as { onVictory?: Effect[] };
+    const foes = participants.filter((id) => next.entities[id]!.factionId !== leaderSide);
+    if (foes.length === 0) {
+      // Nobody left to fight (they're dead or gone): it counts as won, never as a dead end.
+      const won = applyOutcome(ruleset, next, { effects: hooks0.onVictory ?? [], events: [] }, rng);
+      next = won.state;
+      events.push(...won.events);
+      continue;
+    }
     const r = startCombat({ ...next, rng: rng.state }, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants } as StartCombatCommand, { ruleset });
     if (!r.ok) return r;
     next = r.state;
