@@ -34,12 +34,18 @@
     "uiClick": { "src": "assets/audio/sfx/ui_click.ogg", "volume": 0.7 },
     "uiConfirm": { "src": "assets/audio/sfx/ui_confirm.ogg", "volume": 0.7 },
     "uiCancel": { "src": "assets/audio/sfx/ui_cancel.ogg", "volume": 0.7 },
-    "levelUp": { "src": "assets/audio/sfx/level_up.ogg" }
+    "levelUp": { "src": "assets/audio/sfx/level_up.ogg" },
+    "critHit": { "src": "assets/audio/sfx/crit_hit.ogg" },
+    "deathToll": { "src": "assets/audio/sfx/death_toll.ogg" },
+    "downedThud": { "src": "assets/audio/sfx/downed_thud.ogg" },
+    "mapWhoosh": { "src": "assets/audio/sfx/map_whoosh.ogg", "volume": 0.8 }
   },
   "events": {
     "combatStarted": { "music": "combat" },
-    "combatEnded": { "field": "winner", "map": { "party": "victory" }, "fallback": "defeat", "music": "exploration" },
-    "attackRolled": { "field": "hit", "map": { "false": "miss" } },
+    "attackRolled": [
+      { "field": "hit", "map": { "false": "miss" } },
+      { "field": "crit", "map": { "true": "critHit" } }
+    ],
     "damageDealt": {
       "field": "damageType",
       "map": {
@@ -54,6 +60,12 @@
       },
       "fallback": "hitBlunt"
     },
+    "downed": { "sfx": "downedThud" },
+    "died": { "sfx": "deathToll" },
+    "exploded": { "sfx": ["explosion", "barrelBreak"] },
+    "surfaceChanged": { "arrayField": "changes", "itemField": "to", "map": { "fire": "surfaceIgnite", "ice": "surfaceFreeze" } },
+    "statChanged": { "field": "stat", "map": { "level": "levelUp" } },
+    "mapChanged": { "sfx": "mapWhoosh" },
     "trapSpotted": { "sfx": "trapClick" },
     "trapTriggered": { "sfx": "trapSpring" },
     "trapDisarmed": { "sfx": ["diceRoll", "trapClick"] },
@@ -69,6 +81,7 @@
       }
     }
   },
+  "outcomeMusic": { "field": "winner", "map": { "party": "victory" }, "fallback": "defeat" },
   "maps": {
     "camino": { "ambience": { "src": "assets/audio/ambience/camino.ogg", "volume": 0.8 } },
     "plaza": { "ambience": { "src": "assets/audio/ambience/plaza.ogg", "volume": 0.8 } },

@@ -81,5 +81,12 @@ Catálogo de fuentes candidatas y su selección en `docs/AUDIO.md`. Todos los fi
 | `music/boveda/combat.ogg` | intereses | Hard Boss Battle 1 | MintoDog | CC0 1.0 | https://opengameart.org/content/hard-boss-battle-1 |
 | `ambience/camerino.ogg` | willy | Ambience Pack 1 -- Sci Fi Horror (`Infestation in the Control Room`) | Joth | CC0 1.0 | https://opengameart.org/content/ambience-pack-1-sci-fi-horror |
 | `ambience/planta-1.ogg` (mezcla) | willy | Ocean Waves.wav + seagull.wav (reutilizados de `sfx/sea.ogg`/`sfx/gulls.ogg`) | Noted451; speakingmusic | CC0 1.0 | https://freesound.org/people/Noted451/sounds/531015/ ; https://freesound.org/people/speakingmusic/sounds/586831/ |
+| `sfx/crit_hit.ogg`, `sfx/downed_thud.ogg`, `sfx/death_toll.ogg` | intereses, willy | Impact Sounds (`impactPunch_heavy_001`, `impactSoft_heavy_003`, `impactBell_heavy_002`) | Kenney | CC0 1.0 | https://kenney.nl/assets/impact-sounds |
+| `sfx/map_whoosh.ogg` | intereses, willy | Swishes Sound Pack (`swish-7`) | artisticdude | CC0 1.0 | https://opengameart.org/content/swishes-sound-pack |
+| `ambience/planta-2.ogg` | willy | Shop Theme (`Buy Something! (Radio Edit)`) | CleytonKauffman | CC0 1.0 | https://opengameart.org/content/shop-theme |
+| `ambience/planta-3.ogg` | willy | Children's March Theme | CleytonKauffman | CC0 1.0 | https://opengameart.org/content/childrens-march-theme |
+| `ambience/planta-4.ogg` (con eco añadido) | willy | Dripping water loop | Independent.nu, enviado por qubodup | CC0 1.0 | https://opengameart.org/content/dripping-water-loop |
+| `ambience/planta-5.ogg` (copia exacta de `ambience/plaza.ogg` de *Intereses*, mismo público de fondo) | willy | Crowd Shouting/Speaking Ambience | StarNinjas | CC0 1.0 | https://opengameart.org/content/crowd-shoutingspeaking-ambience |
+| `music/planta-5/combat.ogg` | willy | Bouncy Hamster Dancing (Menu Music?) | cynicmusic | CC0 1.0 | https://opengameart.org/content/bouncy-hamster-dancing-menu-music |
 
 **Atribución obligatoria:** `sfx/bow_shot.ogg` (Ogrebane, "Battle Sound Effects", CC-BY 3.0), `ambience/boveda.ogg` (qubodup / Iwan Gabovitch, "Dark Ambience Loop", CC-BY 3.0: https://creativecommons.org/licenses/by/3.0/) y la capa de perro de `ambience/calles.ogg` (HaelDB, "Dog barking mono", OGA-BY 3.0: http://opengameart.org/content/oga-by-30-faq). El resto de audio es CC0 1.0 (sin condiciones), pero se atribuye igualmente aquí por buena práctica.
