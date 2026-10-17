@@ -288,3 +288,20 @@ Vista previa (paletas por raza, legendarios y combinaciones al azar): [`art-prev
 - **Legendarios** (`sprites`, compuestos): `rival-vanesa` (gaviota patiamarilla, gafas de sol, bolsa de pipas, carmín), `rival-ceferino` (gorro rojo clásico, monóculo y caña de pescar), `rival-gorka` (verde oliva, corbata roja, gafas de pasta, maletín), `rival-mariluz` (sábana blanca, flor, abanico y colorete) y `rival-asterio` (castaño, aro en la nariz y zanahoria).
 
 **Petición al render:** componer rivales = sprite de cuerpo con paleta + hasta 3 accesorios en sus anclajes (mismo frame, misma profundidad +1). Para los accesorios de mano conviene dibujarlos detrás del cuerpo cuando mira a la izquierda (mano de atrás), o aceptar que siempre queden delante.
+
+## P3: el Presentador y su plató (Planta 5)
+
+Vista previa: [`art-previews/willy-plato.png`](art-previews/willy-plato.png).
+
+| Id | Tipo | Aspecto |
+|---|---|---|
+| `jefe-presentador` | sprite (16×30, idle 4, move 4) | Pelo engominado con sienes canas, piel algo pálida, sonrisa con colmillos discretos, **un único brillo rojo en un ojo**, traje impecable con corbata granate y micrófono. Caricatura amable, sin parecido con nadie |
+| `jefe-presentador-murcielagos` | sprite (32×24, 4 frames) | Fase 2, «Pausa publicitaria»: nube de ocho murciélagos con micrófonos diminutos |
+| `atril-rojo`, `atril-azul`, `atril-verde` | props (16×20, `floor`) | Atriles de concursante; frame 0 apagado, frame 1 con el pulsador encendido |
+| `panel-de-preguntas` | prop (48×32, `wall`) | Panel con la pregunta y respuestas A/B/C; frame 0 sin respuesta, frames 1-3 iluminan A, B o C |
+| `plato` | terreno | Suelo negro brillante del plató con marcas de cinta |
+| `baldosa-<color>` y `baldosa-<color>-encendida` | terreno (`roja`, `azul`, `verde`, `amarilla`) | Baldosas de respuesta: apagadas (tramadas) y encendidas; el cambio es un `setTile` |
+| `trampilla-abierta` | terreno | Trampilla de escenario abierta (la caída de 1 nivel) |
+| `gradas` | terreno | Gradas vistas desde arriba con el público (no transitables) |
+
+Los focos, su cono, la parrilla de focos y las cámaras-dron ya estaban en P2.
