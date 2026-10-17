@@ -405,7 +405,7 @@
     },
     {
      "id": 25,
-     "name": "odda",
+     "name": "odda_noche",
      "type": "",
      "point": true,
      "x": 432,
@@ -734,6 +734,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "d1_cuadrilla"
+      },
+      {
+       "name": "setFlag",
+       "type": "string",
+       "value": "d1_asalto_terminado"
       }
      ]
     },
@@ -751,12 +756,17 @@
       {
        "name": "participants",
        "type": "string",
-       "value": "odda,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2"
+       "value": "odda_noche,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2"
       },
       {
        "name": "requiresFlag",
        "type": "string",
        "value": "d1_abadia"
+      },
+      {
+       "name": "setFlag",
+       "type": "string",
+       "value": "d1_asalto_terminado"
       }
      ]
     }
