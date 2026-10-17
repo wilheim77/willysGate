@@ -26,7 +26,21 @@ c.put(5, 21, '+');
 // A storehouse across the lane (solid), and the Lloro running south from a culvert.
 c.rect(16, 14, 11, 6, '#');
 c.rect(16, 13, 11, 1, '=', 1); // the storehouse's loading dock (h1): a little height over the street
-c.rect(29, 13, 2, 11, ',', 0);
+c.rect(29, 13, 2, 11, '~', 0); // the Lloro
+c.rect(28, 13, 1, 11, 'b', 0).rect(31, 13, 1, 11, 'b', 0); // its banks
+// Exterior art: cobbles on the street, scrub in the yards, timber houses, stone for the chapel
+// rock face and the pawnshop.
+c.retile((t, h, x, y) => {
+  if (t === '#') {
+    if (y <= 8 && x >= 9 && x <= 20) return 'W'; // the chapel's rock
+    if (y >= 14 && x >= 3 && x <= 13) return 'W'; // Lisandro's
+    if (y >= 14) return 'g';
+    return (x + y) % 2 ? 'h' : 'g';
+  }
+  if (t === '.' && y >= 9 && y <= 12) return 'c';
+  if (t === ',') return 's';
+  return t;
+});
 
 export default {
   id: 'calles',

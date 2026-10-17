@@ -26,6 +26,19 @@ export const TERRAIN_CHARS = {
   '-': 'rails',
   '|': 'rails_v',
   v: 'vault',
+  s: 'scrub',
+  k: 'rock',
+  c: 'cobble',
+  S: 'slag_heap',
+  R: 'road',
+  I: 'road_v',
+  m: 'mud',
+  '~': 'river',
+  b: 'riverbank',
+  f: 'fence',
+  h: 'house',
+  g: 'house_plain',
+  W: 'stone_wall',
 };
 
 function props(obj = {}) {

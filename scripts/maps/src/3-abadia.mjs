@@ -44,6 +44,8 @@ const ROWS = [
 ];
 
 const c = new Canvas(28, 22).stamp(0, 0, ROWS, L);
+// Exterior art: the cloister garden, the outer walls and gate in rough stone, the road outside.
+c.retile((t, h, x, y) => (t === '#' && (y >= 15 || x === 0 || x === 27) ? 'W' : t === ',' ? (y >= 17 ? 'R' : 's') : t));
 
 export default {
   id: 'abadia',

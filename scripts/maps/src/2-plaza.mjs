@@ -46,6 +46,14 @@ const ROWS = [
 const c = new Canvas(30, 22).stamp(0, 0, ROWS.map((r) => r.padEnd(30, '#')), L);
 c.rect(17, 12, 2, 2, ',', 0); // around the well (a prop)
 c.put(25, 15, '/', 0); // the door of El Pico Roto
+// Exterior art: packed earth for the square, cobbles up the abbey road and on the terrace,
+// timber houses alternating, the Torre del Cepo in stone.
+c.retile((t, h, x, y) => {
+  if (t === '#') return x >= 8 && x <= 11 && y >= 3 && y <= 5 ? 'W' : (x + y) % 2 ? 'h' : 'g';
+  if (t === '.') return 'c';
+  if (t === ',') return y >= 19 ? 'I' : 'R';
+  return t;
+});
 
 export default {
   id: 'plaza',
