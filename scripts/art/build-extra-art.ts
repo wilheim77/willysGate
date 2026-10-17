@@ -1,78 +1,26 @@
 // Draws the 16 px art that no pack provides, in 0x72's palette, pixel by pixel:
 // wooden planks and scaffolds for the mine, a solid wall top, platform rims,
 // cliff faces recoloured from Ninja Adventure, an animated wall torch and brazier,
-// and small combat FX (blood decals, hit spark, dust puff).
+// small combat FX (blood decals, hit spark, dust puff), and the tactical environment
+// from environment-art.ts: surface overlays, barrels/crate and explosion/steam.
 //   node scripts/art/build-extra-art.ts <game> <preset>
 // Output:
 //   art-src/generated/<game>-<preset>-extra.png + .txt ("name x y w h" list), used by
 //     tiles.json cells such as { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_1" };
-//   content/<game>/public/assets/<preset>/extra.png and the manifest's 'props' entries
-//     (animated props and FX, as frame rects).
+//   content/<game>/public/assets/<preset>/extra.png and the manifest's 'props' (animated
+//     props and FX), 'surfaces' (overlays) and object 'sprites' (barrel, barrel_oil, crate).
 // Everything is deterministic (seeded RNG), so re-running gives identical files.
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
-import { type Rgb, hexToRgb } from './color.ts';
+import { type Rgb } from './color.ts';
+import { type Rect, readSpriteList } from './sprite-list.ts';
+import { FLAMES, FLAME_LEGEND, type Key, T, ascii, get, rect, rgb, rng, set } from './pixel.ts';
+import * as env from './environment-art.ts';
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
 const gameDir = join(root, 'content', game);
-const T = 16;
-
-// --- Palette (0x72 DungeonTileset II colours, plus a few muted wood/iron steps) ---
-const C = {
-  out: '#222222', void: '#111111', ink: '#1a1416',
-  s0: '#483b3a', s1: '#775c55', s2: '#aa8d7a', s3: '#d3bfa9', cap: '#2e2627',
-  w0: '#2c1d1b', w1: '#4a2e27', w2: '#64402f', w3: '#7d5536', w4: '#966b42',
-  i0: '#333333', i1: '#55565c', i2: '#878b91',
-  f0: '#62232f', f1: '#8f4029', f2: '#c56025', f3: '#ee8e2e', f4: '#facb3e', f5: '#fdf7ed',
-  b0: '#3a0e15', b1: '#5c1a22', b2: '#7e2629', b3: '#a03a30',
-  d0: '#5e4a42', d1: '#775c55', d2: '#9a8070', d3: '#bba48e',
-};
-type Key = keyof typeof C;
-const rgb = (k: Key | string): Rgb => hexToRgb(k in C ? C[k as Key] : k);
-
-/** Deterministic RNG (mulberry32). */
-function rng(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function set(img: Image, x: number, y: number, c: Rgb | null): void {
-  if (x < 0 || y < 0 || x >= img.width || y >= img.height) return;
-  const i = (y * img.width + x) * 4;
-  if (!c) {
-    img.data[i + 3] = 0;
-    return;
-  }
-  [img.data[i], img.data[i + 1], img.data[i + 2], img.data[i + 3]] = [c[0], c[1], c[2], 255];
-}
-function get(img: Image, x: number, y: number): Rgb | null {
-  if (x < 0 || y < 0 || x >= img.width || y >= img.height) return null;
-  const i = (y * img.width + x) * 4;
-  return img.data[i + 3] ? [img.data[i]!, img.data[i + 1]!, img.data[i + 2]!] : null;
-}
-function rect(img: Image, x: number, y: number, w: number, h: number, c: Rgb): void {
-  for (let yy = y; yy < y + h; yy++) for (let xx = x; xx < x + w; xx++) set(img, xx, yy, c);
-}
-/** Paints an ASCII drawing; each char looks up `legend` ('.' or ' ' = leave as is). */
-function ascii(img: Image, x0: number, y0: number, rows: string[], legend: Record<string, Key | null>): void {
-  rows.forEach((row, y) => {
-    [...row].forEach((ch, x) => {
-      if (ch === '.' || ch === ' ') return;
-      const k = legend[ch];
-      if (k === undefined) throw new Error(`no colour for "${ch}"`);
-      set(img, x0 + x, y0 + y, k === null ? null : rgb(k));
-    });
-  });
-}
-
 // --- Tiles -------------------------------------------------------------------
 
 /** Horizontal mine planks: three boards with staggered joints, nails and coal grime. */
@@ -177,7 +125,7 @@ function planksFace(): Image {
 }
 
 /** Solid top for walls: dark capstones with the 0x72 lit edge on the south side. */
-function wallTop(atlas: Image, list: Record<string, { x: number; y: number }>, seed: number): Image {
+function wallTop(atlas: Image, list: Record<string, Rect>, seed: number): Image {
   const r = rng(seed);
   const img = blank(T, T);
   rect(img, 0, 0, T, T, rgb('cap'));
@@ -250,14 +198,6 @@ function rim(lip: [Key, Key, Key]): Image {
 }
 
 // --- Props ---------------------------------------------------------------------
-
-const FLAME_LEGEND: Record<string, Key> = { r: 'f1', o: 'f2', y: 'f3', Y: 'f4', w: 'f5', d: 'f0' };
-const FLAMES: string[][] = [
-  ['...d...', '..ro...', '..royr.', '.royYo.', '.roYYyr', '.ryYwyr', '..yYYy.', '..oyyo.'],
-  ['....d..', '...or..', '..royr.', '.ryYyo.', 'royYYyr', '.ryYwyr', '..yYYy.', '..oyyo.'],
-  ['..d....', '..or...', '.royr..', '.royYo.', '.ryYYor', 'ryYwYyr', '.yYYYy.', '..oyyo.'],
-  ['.......', '...d...', '..ror..', '..oyYr.', '.ryYYo.', '.ryYwyr', '..yYYy.', '..oyyo.'],
-];
 
 /** Wall torch: iron cup and bracket, wooden haft, 4-frame flame. Hangs on a wall face. */
 function torch(frame: number): Image {
@@ -392,13 +332,10 @@ function dustPuff(frame: number): Image {
 // --- Build -----------------------------------------------------------------------
 
 const atlas = readPng(join(root, 'art-src', '0x72-dungeontileset-ii', '0x72_DungeonTilesetII_v1.7.png'));
-const list: Record<string, { x: number; y: number }> = {};
-for (const line of readFileSync(join(root, 'art-src', '0x72-dungeontileset-ii', 'tile_list_v1.7'), 'utf8').split('\n')) {
-  const [name, x, y] = line.trim().split(/\s+/);
-  if (name && y !== undefined) list[name] = { x: Number(x), y: Number(y) };
-}
+const list = readSpriteList(join(root, 'art-src', '0x72-dungeontileset-ii', 'tile_list_v1.7'));
 const ninjaRelief = readPng(join(root, 'art-src', 'ninja-adventure', 'TilesetRelief.png'));
 const wallMid = crop(atlas, list.wall_mid!.x, list.wall_mid!.y, T, T);
+const crate0x72 = crop(atlas, list.crate!.x, list.crate!.y, list.crate!.w, list.crate!.h);
 
 const tiles: [string, Image][] = [
   ['planks_1', planks(11)],
@@ -417,7 +354,8 @@ const tiles: [string, Image][] = [
   ['rim_dirt', rim(['d0', 'd2', 'd3'])],
   ['rim_wood', rim(['w2', 'w3', 'w4'])],
 ];
-const props: Record<string, { frames: Image[]; note: string; anchor: 'wall' | 'floor' | 'centre'; fps: number; loop: boolean; light?: string }> = {
+type Anchor = 'wall' | 'floor' | 'centre';
+const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps: number; loop: boolean; light?: string }> = {
   torch_wall: { frames: [0, 1, 2, 3].map(torch), note: 'Antorcha de pared', anchor: 'wall', fps: 8, loop: true, light: '#ffb060' },
   brazier: { frames: [0, 1, 2, 3].map(brazier), note: 'Brasero de hierro', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
   blood_1: { frames: [bloodSplat(1)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
@@ -425,27 +363,58 @@ const props: Record<string, { frames: Image[]; note: string; anchor: 'wall' | 'f
   blood_3: { frames: [bloodSplat(13)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
   fx_hit_spark: { frames: [0, 1, 2, 3].map(hitSpark), note: 'Chispa de impacto', anchor: 'centre', fps: 20, loop: false },
   fx_dust: { frames: [0, 1, 2, 3, 4].map(dustPuff), note: 'Polvareda (pasos, caídas)', anchor: 'floor', fps: 12, loop: false },
+  fx_explosion: { frames: env.explosion(), note: 'Explosión (32x32, centrada)', anchor: 'centre', fps: 14, loop: false, light: '#ffb060' },
+  fx_steam: { frames: env.steam(), note: 'Vapor (agua y fuego)', anchor: 'floor', fps: 10, loop: false },
+};
+/** Surface overlays (manifest 'surfaces'): drawn over the floor tile, may be translucent. */
+const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {
+  oil: { frames: env.oil(), fps: 0, loop: false },
+  grease: { frames: env.grease(), fps: 0, loop: false },
+  fire: { frames: env.fire(), fps: 8, loop: true },
+  water: { frames: env.water(), fps: 5, loop: true },
+  ice: { frames: env.ice(), fps: 0, loop: false },
+  electrified: { frames: env.electrified(), fps: 12, loop: true },
+  blood: { frames: env.bloodPool(), fps: 0, loop: false },
+  rubble: { frames: env.rubble(), fps: 0, loop: false },
+};
+/** Objects (manifest 'sprites', kind 'frames'): idle + broken. */
+const objects: Record<string, { idle: Image; broken: Image }> = {
+  barrel: { idle: env.barrel(), broken: env.barrelBroken() },
+  barrel_oil: { idle: env.barrelOil(), broken: env.barrelOilBroken() },
+  crate: { idle: crate0x72, broken: env.crateBroken() },
 };
 
-// Sheet: row 0 = tiles, then one row per prop.
-const cols = Math.max(tiles.length, ...Object.values(props).map((p) => p.frames.length));
-const rows = 1 + Object.keys(props).length;
-const sheet = blank(cols * T, rows * T);
+// Sheet: one row per group of frames; each row as tall as its tallest frame.
+type Row = { name: string; frames: Image[] };
+const rows: Row[] = [
+  ...tiles.map(([name, img]) => ({ name, frames: [img] })),
+  ...Object.entries(props).map(([name, p]) => ({ name, frames: p.frames })),
+  ...Object.entries(surfaces).map(([name, s]) => ({ name: `surface_${name}`, frames: s.frames })),
+  ...Object.entries(objects).map(([name, o]) => ({ name: `object_${name}`, frames: [o.idle, o.broken] })),
+];
+// Tiles share the first row so build-tiles can keep reading them by name.
+const tileRow = rows.splice(0, tiles.length);
+const layout = new Map<string, Rect[]>();
+const width = Math.max(tileRow.length * T, ...rows.map((r) => r.frames.reduce((w, f) => w + f.width, 0)));
+const height = T + rows.reduce((h, r) => h + Math.max(...r.frames.map((f) => f.height)), 0);
+const sheet = blank(width, height);
 const names: string[] = [];
-tiles.forEach(([name, img], i) => {
-  blit(sheet, img, i * T, 0);
-  names.push(`${name} ${i * T} 0 ${T} ${T}`);
+tileRow.forEach((r, i) => {
+  blit(sheet, r.frames[0]!, i * T, 0);
+  names.push(`${r.name} ${i * T} 0 ${T} ${T}`);
 });
-const manifestProps: Record<string, unknown> = {};
-Object.entries(props).forEach(([id, p], r) => {
-  const y = (r + 1) * T;
-  const frames = p.frames.map((img, f) => {
-    blit(sheet, img, f * T, y);
-    names.push(`${id}_f${f} ${f * T} ${y} ${T} ${T}`);
-    return { x: f * T, y, w: T, h: T };
-  });
-  manifestProps[id] = { url: `assets/${preset}/extra.png`, frames, fps: p.fps, loop: p.loop, anchor: p.anchor, ...(p.light ? { light: p.light } : {}) };
-});
+let y = T;
+for (const r of rows) {
+  let x = 0;
+  layout.set(r.name, r.frames.map((img, f) => {
+    blit(sheet, img, x, y);
+    names.push(`${r.name}_f${f} ${x} ${y} ${img.width} ${img.height}`);
+    const rect = { x, y, w: img.width, h: img.height };
+    x += img.width;
+    return rect;
+  }));
+  y += Math.max(...r.frames.map((f) => f.height));
+}
 
 const genDir = join(root, 'art-src', 'generated');
 mkdirSync(genDir, { recursive: true });
@@ -456,9 +425,17 @@ const outDir = join(gameDir, 'public', 'assets', preset);
 mkdirSync(outDir, { recursive: true });
 copyFileSync(join(genDir, `${base}.png`), join(outDir, 'extra.png'));
 
+const url = `assets/${preset}/extra.png`;
 const manifestPath = join(gameDir, 'assets', `${preset}.json`);
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-manifest.props = manifestProps;
+manifest.props = Object.fromEntries(Object.entries(props).map(([id, p]) => [
+  id,
+  { url, frames: layout.get(id)!, fps: p.fps, loop: p.loop, anchor: p.anchor, ...(p.light ? { light: p.light } : {}) },
+]));
+manifest.surfaces = Object.fromEntries(Object.entries(surfaces).map(([id, s]) => [id, { url, frames: layout.get(`surface_${id}`)!, fps: s.fps, loop: s.loop }]));
+for (const id of Object.keys(objects)) {
+  const [idle, broken] = layout.get(`object_${id}`)!;
+  manifest.sprites[id] = { kind: 'frames', url, facing: 'right', animations: { idle: [idle], broken: [broken] } };
+}
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-console.log(`${preset} extra art: ${tiles.length} tiles, ${Object.keys(props).length} props -> art-src/generated/${base}.png`);
-
+console.log(`${preset} extra art: ${tiles.length} tiles, ${Object.keys(props).length} props, ${Object.keys(surfaces).length} surfaces, ${Object.keys(objects).length} objects -> art-src/generated/${base}.png`);
