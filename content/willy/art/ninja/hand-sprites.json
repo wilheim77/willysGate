@@ -1494,6 +1494,495 @@
      ]
     ]
    }
+  },
+  "automata-repetidor": {
+   "note": "Autómata repetidor: cubo de chapa con patas, antena y luz verde",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "M": "#c0c6ce",
+    "m": "#8a9098",
+    "E": "#4fe8ff",
+    "g": "#5a5e66",
+    "G": "#40e060",
+    "D": "#1a6a2a"
+   },
+   "parts": {
+    "body": [
+     "...kkkkkkkkkk...",
+     "...kMMMMMMMMk...",
+     "...kMmmmmmmMk...",
+     "...kMmEmmEmMk...",
+     "...kMmmmmmmMk...",
+     "...kMmgggggMk...",
+     "...kMmmmmmmMk...",
+     "...kmmmmmmmmk...",
+     "...kkkkkkkkkk..."
+    ],
+    "antenna_on": [
+     "G",
+     "k",
+     "k"
+    ],
+    "antenna_off": [
+     "D",
+     "k",
+     "k"
+    ],
+    "legs_a": [
+     "....kk....kk....",
+     "....km....km....",
+     "...kmk...kmk....",
+     "...kk....kk....."
+    ],
+    "legs_b": [
+     "....kk....kk....",
+     "....km....km....",
+     "....kmk..kmk....",
+     "....kk...kk....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ],
+      [
+       "antenna_on",
+       8,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ],
+      [
+       "antenna_off",
+       8,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ],
+      [
+       "antenna_on",
+       8,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "antenna_on",
+       8,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ],
+      [
+       "antenna_off",
+       8,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "antenna_off",
+       8,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "antena-repetidora": {
+   "note": "Antena repetidora: mástil de celosía (16x32) con emisores y piloto rojo parpadeante",
+   "size": [
+    16,
+    32
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "M": "#c0c6ce",
+    "m": "#8a9098",
+    "R": "#ff3030",
+    "r": "#7a1818",
+    "B": "#4fe8ff"
+   },
+   "parts": {
+    "mast": [
+     ".......k........",
+     "......kMk.......",
+     "..kMk.kMk.kMk...",
+     "..kMkkkMkkkMk...",
+     "...kkkMMMkkk....",
+     "......kMk.......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     ".....kMkMk......",
+     ".....kkMkk......",
+     "....kkkkkkk.....",
+     "...kMMMMMMMk....",
+     "...kmmmmmmmk....",
+     "...kkkkkkkkk...."
+    ],
+    "light_on": [
+     "R"
+    ],
+    "light_off": [
+     "r"
+    ],
+    "beam": [
+     "B.........B"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "mast",
+       0,
+       2
+      ],
+      [
+       "light_on",
+       7,
+       1
+      ],
+      [
+       "beam",
+       2,
+       4
+      ]
+     ],
+     [
+      [
+       "mast",
+       0,
+       2
+      ],
+      [
+       "light_off",
+       7,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "chencho-el-base": {
+   "note": "Chencho el base: bajito y rápido, camiseta de tirantes del Brazomar, cinta roja",
+   "size": [
+    16,
+    22
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "h": "#3a2a20",
+    "X": "#d02020",
+    "s": "#e8b088",
+    "S": "#c08a68",
+    "e": "#1e1c24",
+    "W": "#f4f4f4",
+    "L": "#2a8a3a",
+    "G": "#2a8a3a",
+    "g": "#1e6a2a",
+    "b": "#f4f4f4",
+    "o": "#e87a2a"
+   },
+   "parts": {
+    "body": [
+     "....kkkkkk......",
+     "...khhhhhhk.....",
+     "...kXXXXXXk.....",
+     "...ksesssek.....",
+     "...kssssssk.....",
+     "....ksSSsk......",
+     "..kkWWWWWWkk....",
+     ".ksWWLLWWWWsk...",
+     ".ksWWLWWWWWsk...",
+     ".kskWWWWWWksk...",
+     "..kGGGGGGGGk....",
+     "..kGGGkGGGGk...."
+    ],
+    "legs_stand": [
+     "..kssk.kssk.....",
+     "..kssk.kssk.....",
+     "..kWWk.kWWk.....",
+     "..kbbk.kbbk.....",
+     ".kbbbk.kbbbk....",
+     ".kkkkk.kkkkk...."
+    ],
+    "legs_a": [
+     "..kssk..kssk....",
+     ".kssk....kssk...",
+     ".kWWk....kWWk...",
+     "kbbk......kbbk..",
+     "kbbbk.....kbbbk.",
+     "kkkkk.....kkkkk."
+    ],
+    "legs_b": [
+     "...ksskssk......",
+     "...ksskssk......",
+     "...kWWkWWk......",
+     "...kbbkbbk......",
+     "..kbbbkbbbk.....",
+     "..kkkkkkkkk....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       16
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       16
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       16
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       16
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       16
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       16
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ]
+   }
+  },
+  "fan-entusiasta": {
+   "note": "Fan entusiasta (Colaboración de la Influencer): alienígena peludo morado con mano de espuma; da saltitos",
+   "size": [
+    16,
+    18
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "Y": "#ffe04f",
+    "P": "#a060e0",
+    "W": "#ffffff",
+    "E": "#1e1c24",
+    "R": "#ff4fa0",
+    "F": "#ffe04f"
+   },
+   "parts": {
+    "up": [
+     "...Y......Y.....",
+     "....k....k...FF.",
+     "....kkkkkk..kFFk",
+     "...kPPPPPPk.kFk.",
+     "..kPPWEPWEPkkFk.",
+     "..kPPPPPPPPk.k..",
+     "..kPPkkkkPPk....",
+     "..kPPPRRPPPk....",
+     "...kPPPPPPkk....",
+     "..kPPPPPPPPk....",
+     ".kPPPPPPPPPPk...",
+     ".kPPPPPPPPPPk...",
+     "..kPPPPPPPPk....",
+     "...kPk..kPk.....",
+     "...kk....kk....."
+    ],
+    "down": [
+     "................",
+     "...Y......Y.....",
+     "....k....k......",
+     "....kkkkkk......",
+     "...kPPPPPPk.....",
+     "..kPPWEPWEPk.FF.",
+     "..kPPPPPPPPkkFFk",
+     "..kPPkkkkPPk.kk.",
+     "...kPPPPPPkk....",
+     "..kPPPPPPPPk....",
+     ".kPPPPPPPPPPk...",
+     ".kPPPPPPPPPPk...",
+     "..kPPPPPPPPk....",
+     "...kPk..kPk.....",
+     "...kk....kk....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "down",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "up",
+       0,
+       1
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "down",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "up",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "down",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "up",
+       0,
+       2
+      ]
+     ]
+    ]
+   }
   }
  }
 }

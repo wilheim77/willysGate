@@ -9,7 +9,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
 import { type Rgb, hexToRgb, mix } from './color.ts';
-import { drawText } from './font.ts';
+import { drawText, textWidth } from './font.ts';
 import { type Shape, paintBust } from './portrait-painter.ts';
 
 interface PortraitSpec {
@@ -164,7 +164,8 @@ if (hand) {
   for (let i = 0; i < big.data.length; i += 4) [big.data[i], big.data[i + 1], big.data[i + 2], big.data[i + 3]] = [20, 18, 22, 255];
   busts.forEach(([id], i) => {
     blit(big, scaleUp(crop(handSheet, i * H, 0, H, H), 3), 12 + i * (H * 3 + 12), 8);
-    drawText(big, id, 12 + i * (H * 3 + 12), H * 3 + 14, [200, 196, 186], 2);
+    const label = id.replace(/^patrocinador-/, '');
+    drawText(big, label, 12 + i * (H * 3 + 12), H * 3 + 14, [200, 196, 186], textWidth(label, 2) <= H * 3 + 8 ? 2 : 1);
   });
   writePng(join(root, 'docs', 'art-previews', `${preset}-portraits-hand.png`), big);
 
