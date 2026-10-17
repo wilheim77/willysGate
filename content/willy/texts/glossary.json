@@ -23,7 +23,8 @@
         { "id": "energia", "nombre": "Energía", "texto": "La gastan las habilidades. Se recupera entera al acabar cada combate.", "narrador": "Úsala sin miedo. Guardarla es de cobardes y de ahorradores." },
         { "id": "nivel", "nombre": "Nivel", "texto": "Al ganar experiencia subes de nivel: más vida, 2 puntos de atributo y, en niveles pares, una ventaja a elegir.", "narrador": "Pasa a menudo. Es lo que tiene la televisión: todo sube rápido." },
         { "id": "habilidad-nivel", "nombre": "Nivel de habilidad", "texto": "Cada habilidad sube del 1 al 5 a base de usarla con efecto. A nivel 3 y 5 gana algo especial.", "narrador": "Empuja mucho y empujarás mejor. Filosofía oriental de mercadillo." },
-        { "id": "raza-clase", "nombre": "Raza y clase", "texto": "Lo que eliges en el cásting. Cada una tiene ventajas de verdad y una desventaja cómica, también de verdad.", "narrador": "Un minotauro vegano. Lo que hay que ver." }
+        { "id": "clase", "nombre": "Clase", "texto": "El oficio que eliges en el cásting. Willy siempre es humano (de Castro, de toda la vida); lo que cambia es la clase. Cada una tiene ventajas de verdad y una desventaja cómica, también de verdad.", "narrador": "Un funcionario con plaza o un pívot de dos metros. Lo que hay que ver." },
+        { "id": "rivales", "nombre": "Mazmorreros rivales", "texto": "Otros concursantes que no son humanos: una semigaviota, un gnomo de jardín, un orco de oficina, una fantasma en prácticas y un minotauro vegano. Aparecen en algunas plantas. Puedes pelear, pactar con ellos o dejarles ir; si pactas, pueden ayudarte más adelante.", "narrador": "La competencia. Más rara que tú, que ya es decir." }
       ]
     },
     {

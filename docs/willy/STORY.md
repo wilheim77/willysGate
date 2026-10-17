@@ -31,7 +31,8 @@ Al fondo de la Planta 5 espera el presentador, **Jordi Hurtado, el Inmortal**. Q
 - Fuerte por oficio, paciente por carácter y testarudo por ser de Castro.
 - Habla poco. Cuando habla, suele tener razón o hambre.
 - Su único lujo es la **bombona**: no la suelta en todo el juego. Es su arma de partida si elige la clase Butanero, y un objeto de broma recurrente si no.
-- **Raza y clase:** al empezar la Planta 1, el Sistema del concurso le obliga a elegir entre opciones absurdas (ver `RULESET.md`): 6 razas y 9 clases. Willy sigue siendo Willy por dentro, aunque por fuera sea un gnomo de jardín.
+- **Siempre humano.** Willy es humano, de Castro y con bigote: no se elige raza. Sus rasgos de castreño (terco como una mula, hijo del Cantábrico, hablar del tiempo) son fijos (`content/willy/data/willy.json`).
+- **Clase:** al empezar la Planta 1, el Sistema del concurso le obliga a elegir un oficio entre opciones absurdas (ver `RULESET.md`): 9 clases.
 - **Ingeniero** (clase especial, dedicada a un amigo del usuario): Willy aparece como el técnico que estaba montando una antena en el tejado de la lonja cuando se acabó el mundo, y al que media comarca culpa del apocalipsis «por lo de las ondas». Construye autómatas de chapa y suelda con arcos voltaicos. Tiene una habilidad que se llama **5G**, a la vista desde el principio para tentar al jugador… y que no hace nada. La primera vez que la usa, el Narrador se ríe («¡Ya sabíamos que el 5G no servía para nada! A lo mejor si lo subes a 6G…»), pero la habilidad sube con el uso a 6G, 7G… hasta **10G**, donde es absurdamente poderosa. Es el chiste recurrente de la clase. El humor es siempre cariñoso: el chiste son los conspiranoicos, nunca el ingeniero, que es el más competente de la mazmorra y el más cansado de dar explicaciones.
 - **Funcionario:** veinte años en la ventanilla 4 del registro de Castro. Lanza impresos que aturden, llena el suelo de expedientes, se toma su pausa del café y no hay quien lo mueva de su sitio. La sátira es sobre la burocracia (los formularios imposibles, el «vuelva usted mañana», el silencio administrativo), no sobre quienes trabajan en ella: el Funcionario es eficaz, puntual y el único que se sabe todos los trámites.
 - **Jugador de basket:** pívot de dos metros cuatro del Club Baloncesto Brazomar, de Regional. Salta fosos, sube cornisas de un salto, machaca desde arriba y rebota el balón en las paredes. Su perdición: los techos bajos y cualquier cosa redonda, a la que no puede evitar tirarle a canasta.
@@ -80,6 +81,22 @@ Los gustos chocan entre sí a propósito: Butanos Pérez y Glorp no pueden estar
 - **El Narrador y él:** llevan juntos desde siempre. El Narrador se queja de él, pero en el fondo es su único amigo en cuarenta temporadas.
 - Es el jefe de la Planta 5 y el último combate, en directo y con público. Fases, arena y frases en `floors.json` → planta 5 → `jefe`.
 
+### Mazmorreros rivales
+
+Otros concursantes de *¡Mazmorreros!* que **no son humanos**. Willy siempre es humano; estos cinco son la competencia. Datos en `content/willy/data/rivals.json` (rasgos, estadísticas, frases y plantas donde aparecen).
+
+| Rival | Raza | Quién es | Plantas | Cómo se le trata |
+|---|---|---|---|---|
+| **Vanesa la Gaviota** | Semigaviota | De Laredo. Simpática, descarada y cleptómana: te saluda mientras te quita el bocadillo | 1, 3 | Compite por los cofres; en combate prefiere robar a pelear |
+| **Don Ceferino** | Gnomo de jardín | Gnomo jubilado de un chalé de Santoña. Lento, gruñón y digno; cree que la mazmorra es su jardín | 2, 4 | Bloquea un pasillo: rodearlo, convencerlo o tumbarlo |
+| **Gorka, de Compras** | Orco de oficina | De un parque empresarial de Bilbao. Competitivo, habla de «sinergias». Rival declarado de Willy, buen tipo en el fondo | 2, 3, 5 | Duelo delante de cámara; se para a rellenar formularios al subir de nivel |
+| **Mari Luz** | Fantasma en prácticas | Recién contratada, amabilísima, se disculpa cada vez que asusta. Quiere contrato fijo de aparición | 3, 4 | Si la ayudas, se une como aliada en un combate; si no, te asusta en el peor momento |
+| **Asterio** | Minotauro vegano | Enorme, tranquilo y filosófico. Sabe dónde está la salida y no soporta el rojo | 4, 5 | Te enseña la salida a cambio de comida sin carne; embiste si ve rojo o fuego |
+
+- Cada rival conserva **los rasgos que tenía como raza** (Planeo, Pose de estatua, Burocracia, Incorpóreo, Embestida…), ahora como rasgos de PNJ.
+- Aparecen en una sala de rol `rival` (como mucho una por planta) o en escenas fijas. Tres desenlaces: **derrotarlo** (caja de plata), **pactar** (no ataca y la próxima vez llega como aliado temporal controlado por la IA) o **dejarle ir** (se lleva el botín de la sala y vuelve más fuerte).
+- Koldo, el de Bilbao, es el rival **humano** y amistoso del Camerino; no combate.
+
 ## 3. Las cinco plantas
 
 Cada planta tiene un bioma, enemigos propios, una **mecánica característica** y un **jefe**. Los números están en `content/willy/data/floors.json`.
@@ -95,7 +112,7 @@ Cada planta tiene un bioma, enemigos propios, una **mecánica característica** 
 ### Planta 1: Castro Sumergido (tutorial disfrazado)
 Willy despierta en una copia exacta de su calle, pero bajo tierra y con agua por los tobillos. Es el sitio que mejor conoce y el más seguro para aprender. Enemigos: **gaviotas de lonja**, **ratas portuarias**, **cangrejos con casco** y **bocartes andantes**. El jefe, el Centollo, vive en la lonja y solo se le puede dañar cuando la marea baja y queda varado.
 
-**Escena fija:** la plaza de Willy, donde el Sistema le obliga a elegir raza y clase («el cásting»).
+**Escena fija:** la plaza de Willy, donde el Sistema le obliga a elegir clase («el cásting»). Al salir de la zona de tutorial puede aparecer Vanesa la Gaviota, la primera rival.
 
 ### Planta 2: Hipermercado Eterno
 Un hipermercado infinito, con hilo musical y megafonía que anuncia ofertas imposibles. Enemigos: **maniquíes**, **carritos poseídos**, **reponedores zombis** y **etiquetas de oferta** voladoras. Doña Rebeca dirige su ejército de carritos desde lo alto de las cajas registradoras.

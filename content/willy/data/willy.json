@@ -1,0 +1,67 @@
+{
+  "$comment": "Willy, el personaje del jugador. Siempre es humano (castreño): no se elige raza. Estos rasgos son fijos y se suman a los de la clase elegida en el cásting. Borrador; ver docs/willy/RULESET.md → «Atributos» y «Willy, humano de Castro».",
+  "version": 1,
+  "id": "willy",
+  "nombre": "Willy",
+  "nombreCompleto": "Guillermo Saiz",
+  "genero": "m",
+  "origen": "Castreño de pura cepa",
+  "descripcion": "Criado entre bocartes, sirimiri y bilbaínos de fin de semana. No destaca en nada, pero no se rinde en nada tampoco.",
+  "atributosBase": {
+    "fue": 5,
+    "agi": 5,
+    "man": 5,
+    "agu": 5,
+    "car": 5,
+    "sue": 5
+  },
+  "atributosOrigen": {
+    "fue": 1,
+    "agi": 1,
+    "man": 1,
+    "agu": 1,
+    "car": 1,
+    "sue": 1
+  },
+  "puntosLibres": 3,
+  "ventajas": [
+    {
+      "id": "terco-como-una-mula",
+      "nombre": "Terco como una mula",
+      "texto": "Inmune a Asustado.",
+      "mecanica": {
+        "inmune": [
+          "asustado"
+        ]
+      }
+    },
+    {
+      "id": "hijo-del-cantabrico",
+      "nombre": "Hijo del Cantábrico",
+      "texto": "El agua no te frena y nadas sin prueba. Empapado no te hace daño doble de rayo.",
+      "mecanica": {
+        "costeAgua": 0,
+        "ignora": [
+          "empapado:rayoDoble"
+        ]
+      }
+    }
+  ],
+  "desventaja": {
+    "id": "hablar-del-tiempo",
+    "nombre": "Hablar del tiempo",
+    "texto": "En el primer combate de cada planta pierdes 1 acción comentando lo raro que está el tiempo aquí abajo.",
+    "mecanica": {
+      "al": "primerTurnoCombatePlanta",
+      "acciones": -1
+    }
+  },
+  "ventajasDeOrigen": {
+    "$comment": "Entradas del mazo de ventajas de niveles pares que sustituyen a las de raza: se ofrece una de clase, una de estas y una general.",
+    "sirimiri-interior": "Inmune a Empapado y +1 DEF en salas con agua.",
+    "bocartes-de-la-abuela": "La comida cura +2.",
+    "cabezoneria": "+2 a resistir empujones y a liberarte de Enredado.",
+    "de-toda-la-vida": "+1 a todos los atributos que estén por debajo de 6.",
+    "conozco-a-alguien": "Maripuri te hace un 15 % de descuento."
+  }
+}

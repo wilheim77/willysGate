@@ -46,8 +46,8 @@
       "id": "t04-casting", "zona": "p1-calle-de-willy",
       "disparador": { "evento": "tutorialDone", "donde": { "id": "t03-audiencia" } },
       "texto": [
-        "Y ahora, el momento favorito del público: ¡el cásting! El Sistema del concurso te deja elegir qué eres y a qué te dedicas.",
-        "Cada opción tiene ventajas de verdad y desventajas ridículas, también de verdad. Si no sabes qué coger, «Lo que es Willy de verdad»: castreño y butanero. Nadie te juzgará. Yo sí, pero en privado."
+        "Y ahora, el momento favorito del público: ¡el cásting! El Sistema del concurso te deja elegir a qué te dedicas. Lo que eres ya está decidido: humano, de Castro y con bigote.",
+        "Cada opción tiene ventajas de verdad y desventajas ridículas, también de verdad. Si no sabes qué coger, «Lo que es Willy de verdad»: butanero. Nadie te juzgará. Yo sí, pero en privado."
       ],
       "accion": "abrirCreacionPersonaje",
       "completar": { "evento": "characterCreated" }
