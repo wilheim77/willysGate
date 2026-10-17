@@ -313,6 +313,13 @@ const OPS: Record<string, (img: Image, op: Op) => void> = {
       x += w + (op.gap ?? 1);
     }
   },
+  /** Grid lines every `size` pixels (top and left edge of each cell). */
+  grid(img, op) {
+    const c = colour(op.color);
+    for (let y = op.y; y < op.y + op.h; y++) for (let x = op.x; x < op.x + op.w; x++) {
+      if ((x - op.x) % op.size === 0 || (y - op.y) % op.size === 0) plot(img, x, y, c, op.alpha ?? 1);
+    }
+  },
   noise(img, op) {
     const r = rng(op.seed ?? 5), c = colour(op.color);
     const x0 = op.x ?? 0, y0 = op.y ?? 0, w = op.w ?? img.width, h = op.h ?? img.height;

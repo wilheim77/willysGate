@@ -17,22 +17,33 @@ const GLYPHS: Record<string, number[]> = {
   '!': [2, 2, 2, 0, 2], '¡': [2, 0, 2, 2, 2], '¿': [2, 0, 2, 4, 3], '?': [6, 1, 2, 0, 2], "'": [2, 2, 0, 0, 0], '%': [5, 1, 2, 4, 5], '+': [0, 2, 7, 2, 0],
 };
 
+// Letters that need 5 columns to stay readable (MSB = left column of 5).
+const WIDE: Record<string, number[]> = { M: [17, 27, 21, 17, 17], W: [17, 17, 21, 21, 10] };
+
 const FOLD: Record<string, string> = { Á: 'A', É: 'E', Í: 'I', Ó: 'O', Ú: 'U', Ü: 'U' };
+
+function norm(raw: string): string {
+  const up = raw === '×' ? 'x' : raw.toUpperCase();
+  return FOLD[up] ?? up;
+}
 
 /** Pixel width of `text` at `scale`. */
 export function textWidth(text: string, scale = 1): number {
-  return text.length * 4 * scale - scale;
+  let w = 0;
+  for (const raw of text) w += (WIDE[norm(raw)] ? 6 : 4) * scale;
+  return w - scale;
 }
 
 /** Draws `text` (upper-cased; accents folded) at (x, y) in an opaque colour. */
 export function drawText(img: Image, text: string, x: number, y: number, rgb: Rgb, scale = 1): void {
   let cx = x;
   for (const raw of text) {
-    const up = raw === '×' ? 'x' : raw.toUpperCase();
-    const g = GLYPHS[FOLD[up] ?? up] ?? GLYPHS['?']!;
+    const key = norm(raw);
+    const cols = WIDE[key] ? 5 : 3;
+    const g = WIDE[key] ?? GLYPHS[key] ?? GLYPHS['?']!;
     for (let row = 0; row < 5; row++) {
-      for (let col = 0; col < 3; col++) {
-        if (!(g[row]! & (4 >> col))) continue;
+      for (let col = 0; col < cols; col++) {
+        if (!(g[row]! & ((1 << (cols - 1)) >> col))) continue;
         for (let sy = 0; sy < scale; sy++) {
           for (let sx = 0; sx < scale; sx++) {
             const px = cx + col * scale + sx, py = y + row * scale + sy;
@@ -43,6 +54,6 @@ export function drawText(img: Image, text: string, x: number, y: number, rgb: Rg
         }
       }
     }
-    cx += 4 * scale;
+    cx += (cols + 1) * scale;
   }
 }
