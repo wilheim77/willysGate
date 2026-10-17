@@ -1,0 +1,11 @@
+{
+  "$comment": "The miners after the toll is settled peacefully.",
+  "id": "camino_mineros_despues",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "speaker": "minero_cabecilla",
+      "text": "Ya habéis pasado. Seguid, que nos tapáis el poco sol que queda."
+    }
+  }
+}
