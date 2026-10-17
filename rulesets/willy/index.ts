@@ -19,6 +19,7 @@ import { d20Check, resolveRollMode } from '../common/d20';
 import { listActions, performAction, previewAction, setWillyRef } from './actions';
 import './more-classes';
 import './summons';
+import { syncCompanions } from './companions';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
@@ -247,6 +248,8 @@ function onTurnEnd(ruleset: Ruleset, state: GameState, id: string, rng: RngCurso
 /** «Silencio absoluto» (Mimo): unnoticed when a fight starts. */
 function onCombatStart(ruleset: Ruleset, state: GameState, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
+  // Companions catch up with Willy's level, and the ones that fell on another map are back.
+  r.apply(...syncCompanions(state));
   for (const id of state.turn.order) {
     const e = state.entities[id];
     if (e && standing(e) && hasTrait(e, 'silencio')) r.apply({ type: 'applyCondition', entityId: id, condition: 'escondido' });
@@ -323,6 +326,7 @@ setWillyRef(willy);
 export { ATTRS, ATTR_LABELS, createCreature, createWilly, defence, skillLevel, type CreatureSpec, type WillySpec } from './character';
 export { CLASSES } from './data';
 export { WILLY_CREATION, buildWilly, defaultCreation } from './creation';
+export { COMPANIONS, companionOfClass, companionStats, createCompanion, syncCompanions } from './companions';
 export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
 export { HANDLERS, areaTiles } from './actions';

@@ -814,6 +814,9 @@ function displayName(actor: Entity, data: AbilityData): string {
   return byLevel ?? data.nombre;
 }
 
+/** Other sources of actions (companions register theirs here, avoiding an import cycle). */
+export const extraActionSources: ((state: GameState, e: Entity) => ActionDef[])[] = [];
+
 export function listActions(state: GameState, actorId: string): ActionDef[] {
   const e = state.entities[actorId];
   if (!e || !standing(e)) return [];
@@ -825,6 +828,7 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
     const target = id === 'basic:golpe' ? { ...base, range: reachOf(e) } : base;
     out.push({ id, label: meta.label, description: meta.description, cost: { acciones: 1 }, target, tags: h.tags });
   }
+  for (const source of extraActionSources) out.push(...source(state, e));
   const cls = CLASSES[classOf(e) ?? ''];
   if (!cls) return out;
   for (const data of cls.habilidades) {
