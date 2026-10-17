@@ -82,44 +82,6 @@
         }
       ]
     },
-    "garran": {
-      "base": "orc_warrior",
-      "note": "Garrán Tizón: semiorco grande, piel verde oliva, colmillos, cinturón de cuero y pico de minero a la espalda",
-      "map": {
-        "#3d734f": "#76865a",
-        "#314152": "#4a553e",
-        "#8f4029": "#7a5434",
-        "#62232f": "#3e3028"
-      },
-      "scale": 1.15,
-      "decals": [
-        {
-          "rows": [
-            ".kkkkkk.",
-            "kIIIIiik",
-            "kkkwkkkk",
-            "..kwk...",
-            "..kwk...",
-            "..kwk...",
-            "..kwk...",
-            "..kwk...",
-            "..kwk...",
-            "..kkk..."
-          ],
-          "legend": {
-            "k": "#222222",
-            "I": "#a8adb3",
-            "i": "#55565c",
-            "w": "#8e6040"
-          },
-          "x": -1,
-          "y": -4,
-          "from": "top",
-          "behind": true
-        }
-      ],
-      "padTop": 4
-    },
     "anselmo": {
       "base": "dwarf_f",
       "note": "Fray Anselmo: mediano con hábito pardo de capucha, cordón claro y crucifijo de latón",

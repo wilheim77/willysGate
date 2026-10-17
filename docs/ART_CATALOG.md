@@ -10,6 +10,7 @@ Qué ids puede usar el contenido, de dónde sale cada pieza y qué le falta al r
 | `scripts/art/build-tiles.ts intereses 0x72` | `content/intereses/art/0x72/tiles.json` | `public/assets/0x72/tiles/terrain.png`, `terrain` del manifiesto | Ahora admite celdas `{ "atlas": "<hoja>.png", "sprite": "nombre" }` (con lista `<hoja>.txt`) y un `rim` opcional por terreno. |
 | `scripts/art/build-atlas-sprites.ts intereses 0x72` | `sprites.json` | `sprites` del manifiesto | Sin cambios: personajes 0x72 tal cual. |
 | `scripts/art/build-palette-variants.ts intereses 0x72` | `content/intereses/art/0x72/palettes.json` | `public/assets/0x72/characters.png`, `sprites` del manifiesto | Recolorea personajes 0x72: `map` (color exacto → color, o `transparent`), `adjust` (HSV por rango de tono), `prune` (borra el contorno que queda huérfano), `rules` (solo píxeles interiores o una franja de filas: así se pinta el collar de plata de Absalón). `decals` estampa detalles dibujados a mano (ASCII) en cada frame, relativos a la parte de arriba o de abajo del sprite para que sigan su balanceo; `padTop` añade filas transparentes encima para los que sobresalen (sombrero, pico). `aliases` da el mismo arte a ids antiguos. Para ver los colores de una base: `node scripts/art/build-palette-variants.ts intereses 0x72 --dump doc elf_f`. |
+| `scripts/art/build-hand-sprites.ts intereses 0x72` | `content/intereses/art/0x72/hand-sprites.json` | `public/assets/0x72/hand.png`, `sprites` del manifiesto, `docs/art-previews/0x72-hand.png` | Personajes dibujados a mano como partes ASCII (cuerpo, piernas en varias poses) que se apilan por frame con desplazamientos; sustituye al recolor del mismo id. |
 | `scripts/art/build-portraits.ts intereses 0x72` | `content/intereses/art/0x72/portraits.json` | `public/assets/0x72/portraits.png`, `portraits` del manifiesto, `docs/art-previews/0x72-portraits.png` | Bustos de 32×32 para el HUD: la parte de arriba del primer frame de idle, a escala entera, sobre un fondo enmarcado cuyo tono distingue grupo (cálido), enemigos (sangre), no muertos (frío) y neutrales. |
 | `scripts/art/build-previews.ts intereses 0x72` | manifiesto | `docs/art-previews/0x72-{characters,terrain,props,surfaces}.png` | Hojas de revisión. |
 | `scripts/art/build-cinematics.ts <juego>` | `content/<juego>/cinematics/intro.spec.json` | `public/assets/cinematics/*.png`, `cinematics/intro.json`, `docs/art-previews/<juego>-intro.png` | Viñetas de 320×180 compuestas con operaciones (degradados con tramado, polígonos, tiles y sprites de los packs, sprites del manifiesto, sprites ASCII dibujados a mano, montañas, casas, lluvia, público, luces, viñeteado, texto pixelado). |
@@ -22,7 +23,7 @@ Todos son `kind: 'frames'`, miran a la derecha y tienen `idle` (4) y `move` (4);
 |---|---|---|---|
 | `cobrador` | `doc` | 16×23 | Protagonista: cobrador encapuchado, capa gris pizarra, correa de latón, máscara de cuero y **farol encendido** en la mano de atrás |
 | `dorotea` | `elf_f` | 16×28, hit | Dorotea Vane: pelo negro, lazo azul tinta, vestido granate y **su libro de cuentas** («Le apunto») |
-| `garran` | `orc_warrior` | 16×27, `scale` 1.15 | Garrán Tizón: semiorco, piel verde oliva, colmillos y **pico de minero** a la espalda |
+| `garran` | **dibujado a mano** (`hand-sprites.json`) | 16×28, idle 4, run 4, hit 1 | Garrán Tizón: semiorco grande de hombros anchos, moño, colmillos, chaleco de cuero y **pico de minero** en la mano de atrás |
 | `anselmo` | `dwarf_f` | 16×28, hit | Fray Anselmo: mediano con hábito pardo de capucha, cordón claro y **crucifijo de latón** |
 | `sinpaga_cuchillero` | `elf_m` | 16×28, hit | Bandido Sinpaga, jubón rojo sucio y **cuchillo** en la mano |
 | `sinpaga_enmascarado` | `masked_orc` | 16×23 | Bandido Sinpaga con **máscara de calavera** y ropa roja de la banda |
@@ -51,6 +52,8 @@ Todos son `kind: 'frames'`, miran a la derecha y tienen `idle` (4) y `move` (4);
 **Lectura a primera vista:** cada miembro del grupo tiene un color y un detalle propio (pizarra y farol; verde oliva y pico; granate y libro; pardo y crucifijo). Los Sinpaga comparten el rojo sucio de la banda. Comparativa en [`art-previews/0x72-party-before-after.png`](art-previews/0x72-party-before-after.png).
 
 ## Retratos (`portraits` del manifiesto)
+
+**Grupo (48×48, pintados):** `cobrador`, `garran`, `dorotea` y `anselmo` tienen bustos de 48×48 con cara propia (`hand` en `portraits.json`, pintados con formas y rampas de luz por `scripts/art/portrait-painter.ts`) en `assets/0x72/portraits-hand.png`. Vista previa: [`art-previews/0x72-portraits-hand.png`](art-previews/0x72-portraits-hand.png). **El resto (32×32)** se genera desde el sprite. El HUD debe usar escala entera según `w`/`h` de cada entrada: 48 a 1× en la barra del grupo y a 2× (96) en la ficha.
 
 `{ [spriteId]: { url, x, y, w, h } }`, celdas de 32×32 en `assets/0x72/portraits.png`. Hay retrato para todos los personajes (también los alias e ids provisionales); no para `barrel`, `barrel_oil` ni `crate`. Vista previa: [`art-previews/0x72-portraits.png`](art-previews/0x72-portraits.png). El HUD debería escalarlos con vecino más cercano (`image-rendering: pixelated`) a 2× o 3×.
 
