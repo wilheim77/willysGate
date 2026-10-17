@@ -6,7 +6,7 @@
 
 - **Fase W0, Diseño:** **completada y aprobada con cambios** (2026-10-17). Ver «Decisiones del usuario».
 - La premisa la definió el usuario: concurso galáctico retransmitido, 5 plantas con reloj, cásting LitRPG, audiencia, patrocinadores, cajas de botín, logros y Narrador.
-- No hay código del juego todavía (ni `game.ts` ni `rulesets/willy/`), a propósito: el build intentaría desplegarlo.
+- **Ruleset `rulesets/willy/` en marcha** (hito 1: núcleo + Butanero, Funcionario y Jugador de basket, con tests). Aún no hay `game.ts`.
 
 ## Hecho (W0)
 
@@ -17,7 +17,7 @@
 | Reglamento d20 propio (atributos visibles, niveles frecuentes, habilidades que suben con el uso) | [`RULESET.md`](RULESET.md) |
 | Diseño completo: procedural, reloj, audiencia, patrocinadores, cajas, logros, Narrador, Camerino, onboarding, arte, fases | [`DESIGN.md`](DESIGN.md) |
 | Peticiones al motor y al cliente (R1-R15) | [`ENGINE_REQUESTS.md`](ENGINE_REQUESTS.md) |
-| Willy siempre humano (rasgos fijos) y 9 clases, incluidas las especiales Ingeniero, Funcionario y Jugador de basket (57 habilidades y mazo de ventajas) | `content/willy/data/willy.json`, `classes.json` |
+| Willy siempre humano (rasgos fijos) y 9 clases, incluidas las especiales Ingeniero, Funcionario y Jugador de basket (57 habilidades y mazo de ventajas) | `rulesets/willy/data/willy.json`, `classes.json` |
 | 5 mazmorreros rivales no humanos (antes razas jugables) | `content/willy/data/rivals.json` |
 | 93 objetos (27 iniciales de clase, 66 de botín, avisos y cosméticos) | `content/willy/data/items.json` |
 | Cajas, tablas de botín, piedad, cofres, botín de enemigos y mercado | `content/willy/data/loot-tables.json` |

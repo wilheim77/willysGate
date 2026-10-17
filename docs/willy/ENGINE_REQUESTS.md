@@ -23,6 +23,10 @@
 | R14 | Capa `markers` en el cargador de Tiled | `engine/tiled.ts` | W3 | *Intereses* (interactuables) |
 | R15 | **Salto** (mover ignorando `maxStep` y huecos dentro de un presupuesto) y **trazado con rebote** | `engine/pathfinding.ts` + `engine/los.ts` | W2 | Pícaros y monjes de *Intereses*, saltos de vampiros |
 | R16 | **Generador por tablas y plantillas** (PNJ, nombres, frases) con unicidad | `engine/procgen/tables.ts` | W4 | Bandidos y aldeanos de *Intereses*, cazadores de vampiros |
+| R17 | `onCollision` del ruleset en los empujones (choques en cadena, «¡Strike!») | `engine/effects.ts` | W2 | *Intereses* (empujones) |
+| R18 | Empujar **al vacío**: casillas `void`/foso que se pueden atravesar al ser empujado | `engine/effects.ts` (`simulatePush`) | W2 | Fosos de la mina de *Intereses* |
+| R19 | Efecto `modifyStat` (subir atributos y nivel) | `engine/effects.ts` | W5 | Subida de nivel de *Intereses* |
+| R20 | `SurfaceDef.blocksSight` (vapor) y gancho `onRoundEnd` (cintas transportadoras, mareas) | `engine/surfaces.ts`, `engine/los.ts`, `engine/combat.ts` | W3 | Niebla y humo en *Intereses* |
 
 Ninguna mete reglas de *Willy* ni de d20 en `engine/`.
 
@@ -466,3 +470,27 @@ export function generate(spec: GenSpec, tables: Record<string, Table>, seed: num
 Además, en el perfil por navegador (R6): `rivalesRecientes: string[]` (últimos 40 nombre+apellido) y `legendarioAnterior?: string`, para no repetir entre partidas seguidas. El juego los copia al `GameState` al empezar la partida.
 
 **Tests:** reproducibilidad, unicidad con conflictos forzados, exclusión entre partidas, pesos respetados en 10 000 tiradas, dependencia entre campos.
+
+## R17. Choques en los empujones
+
+**Qué.** Cuando un `push` se para contra un muro o una criatura, el motor llama a un gancho opcional del ruleset: `onCollision?(state, pushedId, collidedWith, rng): ActionOutcome`.
+
+**Por qué.** Hoy el ruleset de *Willy* aplica el daño del choque (1d6 contra un muro, 1d4 a los dos contra una criatura) solo en los empujones que provoca él mismo. Los empujones encadenados (la criatura golpeada sale despedida también, «¡Strike!») y los empujones de otros sistemas (cintas, mareas) no pasan por ahí.
+
+## R18. Empujar al vacío
+
+**Qué.** `simulatePush` trata cualquier casilla no transitable como muro. Propuesta: las casillas con una propiedad `pit: true` (o `terrain: 'void'`) dejan entrar al empujado, y el motor emite `entityFellIntoPit { entityId }`. El ruleset decide qué pasa (en *Willy*: eliminado salvo jefes, que pierden el 20 %).
+
+**Mientras tanto:** el ruleset mira la casilla de detrás del choque y, si es vacío, elimina al empujado sin moverlo.
+
+## R19. Efecto `modifyStat`
+
+**Qué.** `{ type: 'modifyStat'; entityId; stat; delta }`, con evento `statChanged`.
+
+**Por qué.** Subir de nivel en *Willy* suma 2 puntos de atributo y +1 al nivel; los objetos pasivos también tocan atributos. Sin este efecto, el ruleset no puede hacerlo desde una acción.
+
+## R20. Vapor que tapa la vista y gancho de fin de ronda
+
+- `SurfaceDef.blocksSight?: boolean`: `hasLineOfSight` lo respeta (el vapor de *Willy* y la niebla de *Intereses*).
+- `Ruleset.onRoundEnd?(state, rng): ActionOutcome`: para cintas transportadoras y mareas (Plantas 1 y 2), que mueven a todo lo que tienen encima al acabar cada ronda.
+

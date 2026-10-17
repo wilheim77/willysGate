@@ -1,7 +1,7 @@
 # Ruleset `willy`: el Reglamento del Concurso
 
 > Estado: **propuesta pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
-> Willy es **siempre humano** (rasgos fijos en `content/willy/data/willy.json`). Clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `classes.json`. Las razas no humanas son ahora mazmorreros rivales (PNJ) en `rivals.json`. Objetos en `items.json`.
+> Willy es **siempre humano** (rasgos fijos en `rulesets/willy/data/willy.json`). Clases (9, incluidas las especiales **Ingeniero**, **Funcionario** y **Jugador de basket**) en `classes.json`. Las razas no humanas son ahora mazmorreros rivales (PNJ) en `rivals.json`. Objetos en `items.json`.
 > Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden las clases Ingeniero (con la habilidad 5G→10G), Funcionario y Jugador de basket, y los modos de eliminación.
 
 ## Objetivos
@@ -310,49 +310,34 @@ Detalle de guardado y reacciones en `DESIGN.md` §12.
 | **Concursante** (normal) | Por defecto | Números de este documento |
 | **Prime time** | Quien quiere sufrir | Reloj ×0,8; enemigos +25 % de vida; patrocinadores más exigentes; audiencia ×1,25 |
 
-## Esbozo de implementación
+## Implementación (`rulesets/willy/`)
 
-Solo documentado: no se crea `rulesets/willy/` hasta que la Fase 2 del motor fije los ganchos de combate (`rollInitiative`, `onTurnStart`, `preview`, `listActions`), para no romper la compilación al integrar.
+Código en TypeScript puro que implementa la interfaz `Ruleset` del motor. Los datos de reglas viven junto al código, como en `dnd5e`: `rulesets/willy/data/classes.json` (clases y habilidades) y `rulesets/willy/data/willy.json` (rasgos fijos de Willy). El contenido del juego puede importarlos; el ruleset nunca importa de `content/`.
 
-```ts
-// rulesets/willy/index.ts (borrador, NO creado todavía)
-export const willy: Ruleset = {
-  id: 'willy',
-  version: 1,
-  stats: {
-    fue: { label: 'Fuerza' }, agi: { label: 'Agilidad' }, man: { label: 'Maña' },
-    agu: { label: 'Aguante' }, car: { label: 'Carisma' }, sue: { label: 'Suerte' },
-    nivel: { label: 'Nivel' }, xp: { label: 'Experiencia' }, armadura: { label: 'Armadura' },
-    // skill:<id> y skillxp:<id> se declaran dinámicamente desde classes.json
-  },
-  resources: {
-    vida: { label: 'Vida', refresh: 'longRest', visible: true },
-    energia: { label: 'Energía', refresh: 'shortRest', visible: true },
-    acciones: { label: 'Acciones', refresh: 'turn' },
-    movimiento: { label: 'Movimiento', refresh: 'turn' },
-    fichas: { label: 'Fichas', refresh: 'never', visible: true },
-  },
-  conditions: { /* tabla de condiciones de arriba */ },
-  movement: { maxStep: 1, climbCost: 1 },
-  movementBudget: (e) => 4 + Math.floor(stat(e, 'agi') / 4),
-  resolveCheck: (state, req, rng) => {
-    const actor = state.entities[req.actorId]!;
-    const attr = CHECK_ATTRIBUTE[req.check];          // 'trepar' -> 'agi', 'forzar' -> 'man'...
-    const d = rng.die(20);
-    const mods = [{ label: ATTR_LABEL[attr], value: stat(actor, attr) }, ...situational(req)];
-    const total = d + mods.reduce((s, m) => s + m.value, 0);
-    return {
-      check: req.check, label: CHECK_LABEL[req.check],
-      dice: [{ sides: 20, rolls: [d], kept: [d] }],
-      modifiers: mods, total, target: req.target, targetLabel: 'DIF',
-      success: d === 20 || (d !== 1 && total >= req.target),
-      outcome: d === 20 ? 'critical_success' : d === 1 ? 'fumble' : undefined,
-    };
-  },
-  difficulty: (state, id, source) => 10 + Math.floor(stat(state.entities[id]!, SOURCE_ATTR[source]) / 2),
-  dialogueConditions: { race: …, class: …, attributeAtLeast: …, skillAtLeast: …, sponsorLikes: … },
-  commands: { attack, shove, throwItem, useItem, useSkill, dash, wait, showOff, openBox },
-};
-```
+| Fichero | Qué hace |
+|---|---|
+| `index.ts` | El ruleset `willy`: atributos, recursos (vida, energía, acciones, fichas, xp y un contador `uso:<habilidad>` por habilidad), estados, glosario, pruebas (`resolveCheck`, `describeCheck`), DIF, movimiento, iniciativa, inicio de turno (ardiendo, envenenado, bailando, electrocutado, «Hablar del tiempo», «Cosas redondas») y fin de combate (vuelve la energía) |
+| `character.ts` | Fórmulas (vida, energía, DEF, movimiento, bono de daño), niveles de habilidad por uso y los constructores `createWilly` y `createCreature` |
+| `resolve.ts` | Tiradas de ataque (con desglose visible: altura, flanqueo, tumbado, oscuridad, cegado, mareado, compulsado), daño y eliminación, salvaciones, empujones con choque y «fuera de plano», caídas |
+| `environment.ts` | Superficies (agua, aceite, fuego, hielo, vapor, tóxico, electrificada, canicas, red, expedientes, gas) y sus reacciones |
+| `actions.ts` | Acciones básicas (golpe, empujar, correr, hacer el ganso) y las habilidades de clase, una función por habilidad |
+| `creation.ts` | Cásting: solo clase y 3 puntos libres; `buildWilly` |
+| `sheet.ts` | Ficha del personaje para la interfaz |
 
-Tests previstos: tabla de %, críticos y pifias, empujones contra muro/criatura/vacío, caídas por niveles, subida de nivel de habilidad exactamente en el uso 4/12/25/45, «uso sin efecto» que no cuenta, rasgos de los rivales (Burocracia de Gorka descontando su turno).
+### Estado por clase
+
+| Clase | Estado |
+|---|---|
+| Butanero | Hecha: Lanzar bombona (con gas), Reparto a domicilio, Fuga de gas, Cadena de reparto, Reparto urgente, Espalda de hierro, Riesgo laboral |
+| Funcionario | Hecha salvo Ventanilla cerrada (necesita entidades temporales: R13) |
+| Jugador de basket | Hecha salvo Tiempo muerto (invocación: R13). Alley-oop solo en versión «contra la pared» hasta que haya invocaciones. Pase picado sin rebote (R15) |
+| Influencer, Bardo, Socorrista, Tasador, Mimo, Ingeniero | Pendientes (siguiente hito) |
+
+### Limitaciones mientras llegan las peticiones al motor
+
+- **Vacío:** el motor trata el vacío como un muro al empujar; el ruleset detecta que lo que hay detrás es `void`/`foso` y elimina al empujado (R18).
+- **Saltos:** se hacen con `setPosition` comprobando el salto en el ruleset (R15).
+- **Subir de nivel:** no hay efecto para cambiar atributos; la subida de nivel la hará el juego fuera de combate (R19).
+- **Invocaciones y barreras:** ocultas hasta que exista `spawnEntity` (R13).
+
+Tests: `tests/rulesets/willy-core.test.ts` y `willy-classes.test.ts` (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).
