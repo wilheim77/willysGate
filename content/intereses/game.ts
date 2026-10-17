@@ -4,6 +4,8 @@ import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import art0x72 from './assets/0x72.json';
 import artLpc from './assets/lpc.json';
+import audio from './assets/audio.json';
+import type { AudioManifest } from '../../src/audio/types';
 import testMap from './maps/test.json';
 import meta from './meta.json';
 import items from './items.json';
@@ -40,6 +42,7 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'hero',
+  audio: audio as AudioManifest,
   items: Object.fromEntries(Object.entries(items).filter(([k]) => !k.startsWith('$'))) as Record<string, { label: string; text?: string }>,
   creation: {
     spec: DND5E_CREATION,
