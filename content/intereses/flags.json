@@ -10,7 +10,8 @@
   },
   "pista_carros": {
     "critical": false,
-    "description": "Prueba: por la noche suben carros cargados de una mina cerrada."
+    "description": "Prueba: por la noche suben carros cargados de una mina cerrada.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "cofre_aguja_vista": {
     "critical": false,
@@ -18,19 +19,23 @@
   },
   "cofre_abierto": {
     "critical": false,
-    "description": "Prueba: has abierto el cofre."
+    "description": "Prueba: has abierto el cofre.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "almacen_abierto": {
     "critical": false,
-    "description": "Prueba: la puerta del almacén está abierta."
+    "description": "Prueba: la puerta del almacén está abierta.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "prologo_iniciado": {
     "critical": false,
-    "description": "Dorotea ha dado la charla del camino y los viáticos (30 coronas)."
+    "description": "Dorotea ha dado la charla del camino y los viáticos (30 coronas).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "conoce_garganta": {
     "critical": false,
-    "description": "Sabes que el préstamo era para una galería nueva que se hundió."
+    "description": "Sabes que el préstamo era para una galería nueva que se hundió.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "dorotea_orden_sellada_vista": {
     "critical": false,
@@ -52,7 +57,8 @@
   },
   "garran_era_barrenero": {
     "critical": false,
-    "description": "Garrán te ha dicho que en la mina ponía las cargas."
+    "description": "Garrán te ha dicho que en la mina ponía las cargas.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "garran_hablo_marcha": {
     "critical": false,
@@ -60,11 +66,13 @@
   },
   "garran_oculta_algo": {
     "critical": false,
-    "description": "Has notado que Garrán miente sobre la noche en que se fue."
+    "description": "Has notado que Garrán miente sobre la noche en que se fue.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "conoce_mina_cerrada": {
     "critical": false,
-    "description": "Los mineros del camino te han hablado del cierre de la mina."
+    "description": "Los mineros del camino te han hablado del cierre de la mina.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mineros_enfadados": {
     "critical": false,
@@ -72,31 +80,38 @@
   },
   "mineros_pagados": {
     "critical": false,
-    "description": "Pagaste el peaje de los mineros."
+    "description": "Pagaste el peaje de los mineros.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mineros_convencidos": {
     "critical": false,
-    "description": "Convenciste a los mineros con la promesa de reabrir la mina."
+    "description": "Convenciste a los mineros con la promesa de reabrir la mina.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mineros_huyeron": {
     "critical": false,
-    "description": "Asustaste a los mineros del camino."
+    "description": "Asustaste a los mineros del camino.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mineros_combate": {
     "critical": false,
-    "description": "Peleaste con los mineros del camino."
+    "description": "Peleaste con los mineros del camino.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mineros_recuerdan_garran": {
     "critical": false,
-    "description": "Los mineros reconocieron a Garrán: se fue la noche del derrumbe."
+    "description": "Los mineros reconocieron a Garrán: se fue la noche del derrumbe.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mineros_amigos_enano": {
     "critical": false,
-    "description": "Los mineros te tomaron por uno de los suyos (enano)."
+    "description": "Los mineros te tomaron por uno de los suyos (enano).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mineros_deben_al_elfo": {
     "critical": false,
-    "description": "Prestaste 20 coronas a los mineros (elfo)."
+    "description": "Prestaste 20 coronas a los mineros (elfo).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "rumor_semiorco": {
     "critical": false,
@@ -121,7 +136,8 @@
   },
   "anselmo_reclutado": {
     "critical": false,
-    "description": "Fray Anselmo está en el grupo."
+    "description": "Fray Anselmo está en el grupo.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "anselmo_salvado_hablando": {
     "critical": false,
@@ -143,11 +159,13 @@
   },
   "santa_pala_perdona": {
     "critical": false,
-    "description": "Cirilo aceptó tu ofrenda tras la pelea del juicio."
+    "description": "Cirilo aceptó tu ofrenda tras la pelea del juicio.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pagaste_por_anselmo": {
     "critical": false,
-    "description": "Pagaste la «limosna» por Anselmo."
+    "description": "Pagaste la «limosna» por Anselmo.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "deuda_con_dorotea": {
     "critical": false,
@@ -164,15 +182,18 @@
   },
   "cirilo_desconfia": {
     "critical": false,
-    "description": "Cirilo soltó a Anselmo por tu hábito, pero no se fía."
+    "description": "Cirilo soltó a Anselmo por tu hábito, pero no se fía.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "conoce_santa_pala": {
     "critical": false,
-    "description": "Sabes qué es la Santa Pala y que considera la plata «la sangre de la tierra»."
+    "description": "Sabes qué es la Santa Pala y que considera la plata «la sangre de la tierra».",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pista_canto": {
     "critical": false,
-    "description": "Cirilo oyó un canto en la Garganta antes del derrumbe."
+    "description": "Cirilo oyó un canto en la Garganta antes del derrumbe.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "hablo_con_nella": {
     "critical": true,
@@ -180,39 +201,48 @@
   },
   "conoce_cuarenta": {
     "critical": true,
-    "description": "Sabes lo de los cuarenta mineros sellados en la Garganta."
+    "description": "Sabes lo de los cuarenta mineros sellados en la Garganta.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "conoce_brea": {
     "critical": true,
-    "description": "Sabes que Absalón Brea, el capataz, bajó con los cuarenta y subió solo."
+    "description": "Sabes que Absalón Brea, el capataz, bajó con los cuarenta y subió solo.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "conoce_cuadrilla": {
     "critical": false,
-    "description": "Sabes qué es la Cuadrilla."
+    "description": "Sabes qué es la Cuadrilla.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "nella_prepara_algo": {
     "critical": false,
-    "description": "Has notado que Nella cuenta cabezas: prepara algo (anticipa D1)."
+    "description": "Has notado que Nella cuenta cabezas: prepara algo (anticipa D1).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "nella_conoce_garran": {
     "critical": false,
-    "description": "Nella reconoció a Garrán, el mejor barrenero del valle."
+    "description": "Nella reconoció a Garrán, el mejor barrenero del valle.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "hulla_hostiles": {
     "critical": false,
-    "description": "Los Hulla te miran mal (elfo). Se quita convenciendo a Odda."
+    "description": "Los Hulla te miran mal (elfo). Se quita convenciendo a Odda.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "hulla_toleran_elfo": {
     "critical": false,
-    "description": "Odda te tolera pese a ser elfo."
+    "description": "Odda te tolera pese a ser elfo.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "hulla_insultados": {
     "critical": false,
-    "description": "Le recordaste el Pleito de las Raíces a Odda. No lo olvidará."
+    "description": "Le recordaste el Pleito de las Raíces a Odda. No lo olvidará.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "hulla_aceptan": {
     "critical": false,
-    "description": "Los Hulla te aceptan como uno de los suyos (enano)."
+    "description": "Los Hulla te aceptan como uno de los suyos (enano).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "odda_conoce_garran": {
     "critical": false,
@@ -229,7 +259,8 @@
   },
   "anselmo_habito_robado": {
     "critical": false,
-    "description": "Has notado que el hábito de Anselmo no es suyo."
+    "description": "Has notado que el hábito de Anselmo no es suyo.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pista_plata_nueva": {
     "critical": true,
@@ -237,11 +268,13 @@
   },
   "pista_metal_que_canta": {
     "critical": false,
-    "description": "Los cantares élficos hablan de «el metal que canta» y de bóvedas selladas."
+    "description": "Los cantares élficos hablan de «el metal que canta» y de bóvedas selladas.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "cirilo_dice_verdad": {
     "critical": false,
-    "description": "Cirilo está medio loco, pero lo del canto es verdad."
+    "description": "Cirilo está medio loco, pero lo del canto es verdad.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "audiencia_hecha": {
     "critical": true,
@@ -249,11 +282,13 @@
   },
   "pista_brea_gastos": {
     "critical": false,
-    "description": "Las cuentas del barón: Brea sigue comprando pólvora y comida para doce en una mina cerrada."
+    "description": "Las cuentas del barón: Brea sigue comprando pólvora y comida para doce en una mina cerrada.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "baron_confeso_brea": {
     "critical": false,
-    "description": "El barón admite que firmó lo que Brea le puso delante (veta muerta, orden de sellado)."
+    "description": "El barón admite que firmó lo que Brea le puso delante (veta muerta, orden de sellado).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "abadia_desconfia": {
     "critical": false,
@@ -269,11 +304,13 @@
   },
   "pista_plata_viva": {
     "critical": false,
-    "description": "El plato de Brea zumba: plata viva."
+    "description": "El plato de Brea zumba: plata viva.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "enano_mina_viva": {
     "critical": false,
-    "description": "Como enano, notas que la mina está viva, no muerta como dice Brea."
+    "description": "Como enano, notas que la mina está viva, no muerta como dice Brea.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "elfo_conocia_bisabuelo": {
     "critical": false,
@@ -315,11 +352,13 @@
   },
   "lisandro_sospechoso": {
     "critical": false,
-    "description": "Has notado que Lisandro espera entregas de plata desde el Pozo."
+    "description": "Has notado que Lisandro espera entregas de plata desde el Pozo.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pista_lisandro_sabe": {
     "critical": false,
-    "description": "Lisandro deja caer que el valle valdrá mucho más de lo que cree el barón."
+    "description": "Lisandro deja caer que el valle valdrá mucho más de lo que cree el barón.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "lisandro_ofrece_trato": {
     "critical": false,
@@ -328,7 +367,8 @@
   },
   "lisandro_ofendido": {
     "critical": false,
-    "description": "Amenazaste a Lisandro sin éxito: sus préstamos te salen más caros."
+    "description": "Amenazaste a Lisandro sin éxito: sus préstamos te salen más caros.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "deuda_con_lisandro": {
     "critical": false,
@@ -336,7 +376,8 @@
   },
   "pista_sinpaga": {
     "critical": false,
-    "description": "Los Sinpaga controlan el Escorial y no dejan acercarse a nadie."
+    "description": "Los Sinpaga controlan el Escorial y no dejan acercarse a nadie.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "garran_sabe_ivo_cuarenta": {
     "critical": false,
@@ -348,7 +389,8 @@
   },
   "pista_callado": {
     "critical": false,
-    "description": "La posadera vio a un hombre que no hablaba pagar con plata sin acuñar (primer Callado)."
+    "description": "La posadera vio a un hombre que no hablaba pagar con plata sin acuñar (primer Callado).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "posadera_vino": {
     "critical": false,
@@ -356,11 +398,13 @@
   },
   "escorial_libre": {
     "critical": true,
-    "description": "Los Sinpaga ya no cortan el paso al Pozo (pagados, convencidos, asustados o vencidos con onVictory)."
+    "description": "Los Sinpaga ya no cortan el paso al Pozo (pagados, convencidos, asustados o vencidos con onVictory).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "sinpaga_pagados": {
     "critical": false,
-    "description": "Pagaste 40 coronas a los Sinpaga."
+    "description": "Pagaste 40 coronas a los Sinpaga.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "sinpaga_pagados_por_brea": {
     "critical": false,
@@ -368,7 +412,8 @@
   },
   "sinpaga_convencidos": {
     "critical": false,
-    "description": "Convenciste a los Sinpaga de que Brea los venderá."
+    "description": "Convenciste a los Sinpaga de que Brea los venderá.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "sinpaga_contra_brea": {
     "critical": false,
@@ -377,15 +422,18 @@
   },
   "sinpaga_huyeron": {
     "critical": false,
-    "description": "Los Sinpaga huyeron del Escorial."
+    "description": "Los Sinpaga huyeron del Escorial.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "sinpaga_sin_altura": {
     "critical": false,
-    "description": "Engañaste a los Sinpaga (enano) para que bajaran de las crestas."
+    "description": "Engañaste a los Sinpaga (enano) para que bajaran de las crestas.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "sinpaga_combate": {
     "critical": false,
-    "description": "Peleaste con los Sinpaga."
+    "description": "Peleaste con los Sinpaga.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "rumor_garran_garganta": {
     "critical": false,
@@ -398,11 +446,13 @@
   },
   "garran_conoce_pozo": {
     "critical": false,
-    "description": "Garrán sabe que el Pozo da a las galerías viejas y a la Garganta."
+    "description": "Garrán sabe que el Pozo da a las galerías viejas y a la Garganta.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pista_callados_marchan": {
     "critical": false,
-    "description": "Rastro de muchas botas al mismo paso, y rodadas hacia la casa de Lisandro."
+    "description": "Rastro de muchas botas al mismo paso, y rodadas hacia la casa de Lisandro.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "callado_visto": {
     "critical": true,
@@ -410,19 +460,23 @@
   },
   "cuarenta_vivos": {
     "critical": false,
-    "description": "Garrán reconoció al Callado: Bartolo Grana, uno de los cuarenta. Siguen vivos."
+    "description": "Garrán reconoció al Callado: Bartolo Grana, uno de los cuarenta. Siguen vivos.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "callados_controlados": {
     "critical": false,
-    "description": "Los Callados están vivos, pero algo los mueve."
+    "description": "Los Callados están vivos, pero algo los mueve.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pista_collera": {
     "critical": false,
-    "description": "El collar del Callado es una correa: alguien sujeta el otro extremo (la collera)."
+    "description": "El collar del Callado es una correa: alguien sujeta el otro extremo (la collera).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "callado_atacado": {
     "critical": false,
-    "description": "Atacaste al Callado del Pozo."
+    "description": "Atacaste al Callado del Pozo.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "callado_abatido": {
     "critical": false,
@@ -443,7 +497,8 @@
   },
   "juicio_aplazado": {
     "critical": false,
-    "description": "Te marchaste del juicio: la limosna sube a 25 coronas."
+    "description": "Te marchaste del juicio: la limosna sube a 25 coronas.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "d1_resuelto": {
     "critical": true,
@@ -468,7 +523,8 @@
   },
   "d1_mediar": {
     "critical": false,
-    "description": "D1: intentaste mediar."
+    "description": "D1: intentaste mediar.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "d1_nada": {
     "critical": false,
@@ -487,7 +543,8 @@
   },
   "abadia_hostil": {
     "critical": false,
-    "description": "La abadía te es hostil."
+    "description": "La abadía te es hostil.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pueblo_hostil": {
     "critical": false,
@@ -496,7 +553,8 @@
   },
   "baron_confeso_publico": {
     "critical": false,
-    "description": "El barón reconoció en público lo de los cuarenta (tregua)."
+    "description": "El barón reconoció en público lo de los cuarenta (tregua).",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "odda_muerta": {
     "critical": false,
@@ -504,11 +562,13 @@
   },
   "tregua_d1": {
     "critical": false,
-    "description": "La mediación consiguió una tregua."
+    "description": "La mediación consiguió una tregua.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mediacion_fallida": {
     "critical": false,
-    "description": "La mediación fracasó: se suman los costes de los dos bandos."
+    "description": "La mediación fracasó: se suman los costes de los dos bandos.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "baron_prisionero": {
     "critical": false,
@@ -520,7 +580,8 @@
   },
   "baron_vivo_d1": {
     "critical": false,
-    "description": "El barón sobrevivió a la noche de las antorchas."
+    "description": "El barón sobrevivió a la noche de las antorchas.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "hilda_huyo_sello": {
     "critical": false,
@@ -528,7 +589,8 @@
   },
   "cuadrilla_resentida": {
     "critical": false,
-    "description": "Te pusiste delante de la soga: la Cuadrilla no te lo agradece."
+    "description": "Te pusiste delante de la soga: la Cuadrilla no te lo agradece.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "ruta_bocamina": {
     "critical": false,
@@ -536,7 +598,8 @@
   },
   "ruta_cripta": {
     "critical": false,
-    "description": "El barón te ha dado el paso por la cripta."
+    "description": "El barón te ha dado el paso por la cripta.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "llave_cripta": {
     "critical": false,
@@ -553,23 +616,28 @@
   },
   "bocamina_abierta": {
     "critical": false,
-    "description": "La bocamina principal está abierta."
+    "description": "La bocamina principal está abierta.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "cripta_abierta": {
     "critical": false,
-    "description": "La puerta de la cripta está abierta."
+    "description": "La puerta de la cripta está abierta.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "restos_cuarenta": {
     "critical": false,
-    "description": "Has encontrado los restos de los cuarenta en la Galería Sellada."
+    "description": "Has encontrado los restos de los cuarenta en la Galería Sellada.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "nomina_tizon": {
     "critical": false,
-    "description": "La nómina del barón: «Tizón, G. Cargas, Garganta. Treinta coronas»."
+    "description": "La nómina del barón: «Tizón, G. Cargas, Garganta. Treinta coronas».",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "dorotea_sabia_garran": {
     "critical": false,
-    "description": "Dorotea sabía lo de Garrán desde el principio."
+    "description": "Dorotea sabía lo de Garrán desde el principio.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "d2_resuelta": {
     "critical": true,
@@ -582,7 +650,8 @@
   },
   "dorotea_palanca_garran": {
     "critical": false,
-    "description": "Dorotea guarda lo de Garrán como palanca para D4."
+    "description": "Dorotea guarda lo de Garrán como palanca para D4.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "d2_confesara": {
     "critical": false,
@@ -600,24 +669,29 @@
   },
   "boveda_vista": {
     "critical": false,
-    "description": "Has entrado en la Bóveda."
+    "description": "Has entrado en la Bóveda.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "garran_bloqueado": {
     "critical": false,
-    "description": "Ivo reconoció a Garrán y él se bloqueó un turno."
+    "description": "Ivo reconoció a Garrán y él se bloqueó un turno.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "brea_duda": {
     "critical": false,
-    "description": "Brea dudó ante las pruebas: los Callados pierden un turno."
+    "description": "Brea dudó ante las pruebas: los Callados pierden un turno.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "pista_resonadores": {
     "critical": false,
-    "description": "Los resonadores y la collera son la cuerda de los Callados."
+    "description": "Los resonadores y la collera son la cuerda de los Callados.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "brea_vuela_polvorin": {
     "critical": false,
     "description": "A mitad del combate, Brea vuela un polvorín y hunde parte del suelo.",
-    "setBy": "script del jefe (mapa boveda, capa collapse)"
+    "setBy": "script del jefe (mapa boveda, capa collapse)",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "brea_derrotado": {
     "critical": false,
@@ -649,19 +723,23 @@
   },
   "callados_libres": {
     "critical": false,
-    "description": "Los Callados han quedado libres."
+    "description": "Los Callados han quedado libres.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "ivo_muerto": {
     "critical": false,
-    "description": "Ivo ha muerto."
+    "description": "Ivo ha muerto.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "ivo_se_despidio": {
     "critical": false,
-    "description": "Ivo se despidió de Garrán."
+    "description": "Ivo se despidió de Garrán.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "oye_el_canto": {
     "critical": false,
-    "description": "Oyes el canto de la plata viva."
+    "description": "Oyes el canto de la plata viva.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "garran_odia_collera": {
     "critical": false,
@@ -673,7 +751,8 @@
   },
   "cobro_empezado": {
     "critical": false,
-    "description": "Dorotea ha puesto la escritura de embargo sobre la mesa."
+    "description": "Dorotea ha puesto la escritura de embargo sobre la mesa.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "sello_comprado": {
     "critical": false,
@@ -718,7 +797,8 @@
   },
   "comision_cobrada": {
     "critical": false,
-    "description": "Cobraste tu comisión."
+    "description": "Cobraste tu comisión.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mina_del_pueblo": {
     "critical": false,
@@ -726,7 +806,8 @@
   },
   "firma_falsa": {
     "critical": false,
-    "description": "Falsificaste la firma del barón."
+    "description": "Falsificaste la firma del barón.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "mina_en_pleito": {
     "critical": false,
@@ -738,7 +819,8 @@
   },
   "dorotea_se_va": {
     "critical": false,
-    "description": "Dorotea se marcha."
+    "description": "Dorotea se marcha.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "te_deja_apuntado": {
     "critical": false,
@@ -746,7 +828,8 @@
   },
   "orden_sellada_abierta": {
     "critical": false,
-    "description": "Dorotea abrió su orden sellada."
+    "description": "Dorotea abrió su orden sellada.",
+    "readBy": "registro: nada lo lee todavía (contexto para el acto II y para depurar partidas)"
   },
   "anselmo_huyo": {
     "critical": false,
