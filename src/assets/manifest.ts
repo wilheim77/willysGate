@@ -4,6 +4,20 @@ export interface TerrainArt {
   frames: number[];
   /** Vertical texture shown under raised tiles (cliffs, wall faces). */
   face: number;
+  /** Optional lip drawn once at the south edge of raised tiles (only its top rows are opaque). */
+  rim?: number;
+}
+
+/** Animated decoration or effect (torches, blood decals, hit sparks), drawn by the client. */
+export interface PropArt {
+  url: string;
+  frames: Rect[];
+  fps: number;
+  loop: boolean;
+  /** 'wall': on a wall face above the tile; 'floor': feet on the tile centre; 'centre': tile centre. */
+  anchor: 'wall' | 'floor' | 'centre';
+  /** Light colour if this prop is a light source. */
+  light?: string;
 }
 
 export interface LpcAnimation {
@@ -39,6 +53,7 @@ export interface AssetManifest {
   tilesets: Record<string, { url: string; frameWidth: number; frameHeight: number }>;
   terrain: Record<string, TerrainArt>;
   sprites: Record<string, SpriteArt>;
+  props?: Record<string, PropArt>;
 }
 
 export const tilesetKey = (id: string): string => `tileset:${id}`;

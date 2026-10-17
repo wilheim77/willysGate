@@ -12,6 +12,7 @@ import {
   hasCondition,
   isEvent,
   lightPosition,
+  lightingOf,
   tileAt,
 } from '../../engine';
 import { DEFAULT_FX, Juice, tween } from '../fx/juice';
@@ -93,6 +94,7 @@ export class MapScene extends Phaser.Scene {
   private dragging = false;
   private pinchDistance: number | null = null;
   private grid: GridProjection;
+  private propSprites: Phaser.GameObjects.Sprite[] = [];
 
   constructor(
     private store: GameStore,
@@ -109,13 +111,14 @@ export class MapScene extends Phaser.Scene {
     for (const [id, ts] of Object.entries(this.manifest.tilesets)) {
       this.load.spritesheet(tilesetKey(id), assetUrl(ts.url), { frameWidth: ts.frameWidth, frameHeight: ts.frameHeight });
     }
-    for (const art of Object.values(this.manifest.sprites)) {
+    for (const art of [...Object.values(this.manifest.sprites), ...Object.values(this.manifest.props ?? {})]) {
       if (!this.textures.exists(imageKey(art.url))) this.load.image(imageKey(art.url), assetUrl(art.url));
     }
   }
 
   create(): void {
     this.defineCharacterFrames();
+    this.defineProps();
     this.pathPreview = this.add.graphics().setDepth(1_000_000);
     this.overlay = this.add.graphics().setDepth(999_000);
     this.juice = new Juice(this, this.grid.tile, DEFAULT_FX);
@@ -199,6 +202,10 @@ export class MapScene extends Phaser.Scene {
           .setDepth(depth);
         this.worldObjects.push(face);
       }
+      if (h > 0 && art.rim !== undefined) {
+        // A single lip at the platform's south edge (the rest of the frame is transparent).
+        this.worldObjects.push(this.add.image(c.x, c.y + T, key, art.rim).setDepth(depth + 0.5));
+      }
       const frame = art.frames[variantHash(pos.x, pos.y) % art.frames.length]!;
       this.worldObjects.push(this.add.image(c.x, c.y, key, frame).setDepth(depth + 1));
 
@@ -241,7 +248,20 @@ export class MapScene extends Phaser.Scene {
       this.applyFate(entity.id, state);
     }
 
-    this.lighting = new LightingLayer(this, map.width * T, map.height * T, T, LIGHTING_DEPTH);
+    const props = this.manifest.props ?? {};
+    const torchProp = props.torch_wall ? 'torch_wall' : undefined;
+    for (const p of this.propSprites) p.destroy();
+    this.propSprites = [];
+    for (const light of lightingOf(state).lights) {
+      const propId = light.prop ?? torchProp;
+      if (light.attachedTo || !light.position || !propId || !props[propId]) continue;
+      const c = this.grid.tileCentre(light.position.x, light.position.y, tileAt(map, light.position)?.height ?? 0);
+      const yOffset = props[propId]!.anchor === 'wall' ? -T * 0.6 : 0;
+      const sprite = this.add.sprite(c.x, c.y + yOffset, imageKey(props[propId]!.url)).setDepth(this.grid.depth(light.position.y, 9, 6));
+      sprite.play(`prop:${propId}`);
+      this.propSprites.push(sprite);
+    }
+    this.lighting = new LightingLayer(this, map.width * T, map.height * T, T, LIGHTING_DEPTH, !torchProp);
   }
 
   override update(time: number): void {
@@ -370,6 +390,8 @@ export class MapScene extends Phaser.Scene {
       case 'damageDealt': {
         const s = sprite(e.targetId);
         if (!s) return;
+        this.playProp('fx_hit_spark', s.x, s.y - T * 0.4, 2_000_000);
+        if (['slashing', 'piercing', 'bludgeoning'].includes(String(e.damageType))) this.bloodDecal(s.x, s.y, s.depth);
         this.juice.burst(s.x, s.y, 0x8a1c14, e.crit ? 14 : 8);
         void this.juice.floatText(s.x, s.y, `-${e.amount}`, '#ff6a55', e.crit ? 0.8 : 0.6);
         await this.juice.hit(s);
@@ -472,6 +494,53 @@ export class MapScene extends Phaser.Scene {
       this.applyFate(id, state);
     }
     this.updateActiveRing();
+  }
+
+  // --- Props and decals ------------------------------------------------------------
+
+  private defineProps(): void {
+    for (const [id, prop] of Object.entries(this.manifest.props ?? {})) {
+      const texture = this.textures.get(imageKey(prop.url));
+      prop.frames.forEach((r, f) => {
+        const frame = texture.add(`prop:${id}-${f}`, 0, r.x, r.y, r.w, r.h);
+        if (frame && prop.anchor === 'floor') {
+          frame.customPivot = true;
+          frame.pivotX = 0.5;
+          frame.pivotY = (r.h - 1) / r.h;
+        }
+      });
+      if (this.anims.exists(`prop:${id}`)) continue;
+      this.anims.create({
+        key: `prop:${id}`,
+        frames: prop.frames.map((_, f) => ({ key: imageKey(prop.url), frame: `prop:${id}-${f}` })),
+        frameRate: prop.fps,
+        repeat: prop.loop ? -1 : 0,
+      });
+    }
+  }
+
+  /** One-shot animated effect (hit spark, dust) that removes itself. */
+  private playProp(id: string, x: number, y: number, depth: number): void {
+    const prop = this.manifest.props?.[id];
+    if (!prop) return;
+    const s = this.add.sprite(x, y, imageKey(prop.url)).setDepth(depth).setBlendMode(Phaser.BlendModes.ADD);
+    s.play(`prop:${id}`);
+    s.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => s.destroy());
+  }
+
+  /** Blood stays on the floor for a while after a hit, then fades. */
+  private bloodDecal(x: number, y: number, depthAbove: number): void {
+    const props = this.manifest.props ?? {};
+    const ids = Object.keys(props).filter((k) => k.startsWith('blood_'));
+    if (ids.length === 0) return;
+    const id = ids[Math.floor(Math.random() * ids.length)]!;
+    const prop = props[id]!;
+    const decal = this.add
+      .image(x + (Math.random() - 0.5) * this.grid.tile * 0.4, y + this.grid.tile * 0.1, imageKey(prop.url), `prop:${id}-0`)
+      .setDepth(depthAbove - 4)
+      .setAlpha(0.85);
+    this.worldObjects.push(decal);
+    this.tweens.add({ targets: decal, alpha: 0, delay: 25_000, duration: 4_000, onComplete: () => decal.destroy() });
   }
 
   // --- Overlays (driven by the controller) -----------------------------------------

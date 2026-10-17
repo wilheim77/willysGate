@@ -47,7 +47,8 @@
 - [x] dnd5e: reglas de combate del SRD y las 4 clases con datos del nivel 1 al 6, conjuros de nivel 0 a 3, razas y monstruos.
 - [x] Cliente: encuentro de prueba (grupo a nivel 3 contra los Sinpaga), HUD de combate, vista previa con glosario, registro de tiradas y juice básico. Probado en el navegador: el combate salta, el ataque con vista previa, Manos ardientes con salvaciones y los turnos de la IA funcionan.
 - [x] Tests: 153.
-- [ ] Integrar los sprites del agente de arte (compañeros y variantes de Sinpaga) cuando termine.
+- [x] Integrada la rama `art`: compañeros y Sinpaga recoloreados, tablones, andamio, techos de muro, antorchas y braseros animados, sangre, chispas, rebordes y las intros en viñetas de ambos juegos (guion de Intereses como borrador en `docs/intros/INTERESES.md`, pendiente de aprobación). En el render ya funcionan las antorchas, la sangre, las chispas y los rebordes.
+- [ ] Pendiente del arte: escala por sprite (Garrán más grande), polvo al moverse, tile lógico de `scaffold` y reproductor de cinemáticas (Fase 6).
 - [ ] Probar el combate completo en el móvil y ajustar el HUD.
 - [ ] Equilibrar el encuentro de prueba y pulir (los compañeros a veces no siguen al líder en desniveles).
 

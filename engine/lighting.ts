@@ -18,6 +18,8 @@ export interface LightSource {
   /** Visual only: hex colour and flicker amount (0..1) for the renderer. */
   color?: string;
   flicker?: number;
+  /** Visual only: which prop the renderer draws for it (e.g. 'torch_wall', 'brazier'). */
+  prop?: string;
 }
 
 export interface LightingState {

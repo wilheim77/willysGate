@@ -23,6 +23,8 @@ export class LightingLayer {
     height: number,
     private tile: number,
     depth: number,
+    /** When the art pack provides animated torches, the scene draws those instead of the code flame. */
+    private drawFlames = true,
   ) {
     LightingLayer.ensureTextures(scene);
     this.darkness = scene.add.renderTexture(0, 0, width, height).setOrigin(0).setDepth(depth);
@@ -66,7 +68,7 @@ export class LightingLayer {
       this.glows.set(light.id, glow);
 
       // Fixed lights are torches/braziers: show the flame itself.
-      if (!light.attachedTo) {
+      if (!light.attachedTo && this.drawFlames) {
         const flame = this.flames.get(light.id) ?? this.scene.add.image(0, 0, FLAME_TEXTURE).setBlendMode(Phaser.BlendModes.ADD);
         flame.setPosition(p.x, p.y - this.tile * 0.3).setScale(0.9 + 0.25 * (wobble - 1) * 4).setTint(color).setDepth(this.darkness.depth + 2);
         this.flames.set(light.id, flame);

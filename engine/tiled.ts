@@ -118,6 +118,7 @@ export function parseTiledMap(id: string, json: TiledMapJson): ParsedMap {
     };
     if (typeof p.color === 'string') light.color = p.color;
     if (typeof p.flicker === 'number') light.flicker = p.flicker;
+    if (typeof p.prop === 'string') light.prop = p.prop;
     lights.push(light);
   }
   const ambient = propsOf(json.properties).ambientLight;
