@@ -800,12 +800,15 @@ function river(seed: number, frame: number): Image {
 }
 
 /** River bank: mud with the water lapping along the north edge. */
-function riverBank(seed: number): Image {
+function riverBank(seed: number, waterSide: 'n' | 'e' | 'w' | 's' = 'n'): Image {
   const img = mud(seed);
   const r = rng(seed + 5);
-  for (let x = 0; x < T; x++) {
+  for (let i = 0; i < T; i++) {
     const h = 3 + Math.floor(r() * 2);
-    for (let y = 0; y < h; y++) set(img, x, y, rgb(hex(y === h - 1 ? EXT.river[4] : EXT.river[2])));
+    for (let d = 0; d < h; d++) {
+      const [x, y] = waterSide === 'n' ? [i, d] : waterSide === 's' ? [i, T - 1 - d] : waterSide === 'w' ? [d, i] : [T - 1 - d, i];
+      set(img, x, y, rgb(hex(d === h - 1 ? EXT.river[4] : EXT.river[2])));
+    }
   }
   return img;
 }
@@ -820,6 +823,52 @@ function slagHeap(seed: number): Image {
   }
   for (let i = 0; i < 5; i++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(hex(r() < 0.5 ? '#6a4030' : '#8a90a0')));
   return img;
+}
+
+/**
+ * Blend fringe: the terrain's own texture cut to a ragged band along one side of the tile (or a
+ * ragged blob in one corner), with a darker lip where it ends. Drawn by the renderer over a
+ * lower-priority neighbour: edges.n is the fringe along that tile's north edge.
+ */
+type Side = 'n' | 'e' | 's' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+function fringe(src: Image, side: Side, seed: number): Image {
+  const r = rng(seed);
+  const img = blank(T, T);
+  const depth = Array.from({ length: T }, () => 2 + Math.floor(r() * 3));
+  for (let i = 1; i < T - 1; i++) depth[i] = Math.round((depth[i - 1]! + depth[i]! * 2 + depth[i + 1]!) / 4);
+  const keep = (x: number, y: number): boolean => {
+    switch (side) {
+      case 'n': return y < depth[x]!;
+      case 's': return T - 1 - y < depth[x]!;
+      case 'w': return x < depth[y]!;
+      case 'e': return T - 1 - x < depth[y]!;
+      default: {
+        const cx = side.includes('e') ? T - 1 : 0, cy = side.includes('n') ? 0 : T - 1;
+        return Math.hypot(x - cx, y - cy) < 3.5 + depth[(x + y) % T]! * 0.4;
+      }
+    }
+  };
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) if (keep(x, y)) {
+    const c = get(src, x, y);
+    if (c) set(img, x, y, c);
+  }
+  // Darker lip along the fringe's inner border.
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    if (!get(img, x, y)) continue;
+    const border = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => {
+      const xx = x + dx!, yy = y + dy!;
+      return xx >= 0 && yy >= 0 && xx < T && yy < T && !get(img, xx, yy);
+    });
+    if (border) {
+      const c = get(img, x, y)!;
+      set(img, x, y, [Math.round(c[0] * 0.65), Math.round(c[1] * 0.65), Math.round(c[2] * 0.65)]);
+    }
+  }
+  return img;
+}
+
+function blendSet(name: string, src: Image, seed: number): [string, Image][] {
+  return (['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'] as Side[]).map((side, i) => [`${name}_blend_${side}`, fringe(src, side, seed + i)]);
 }
 
 /** Tileable smooth value noise (local copy so this file only depends on pixel.ts helpers). */
@@ -1056,9 +1105,19 @@ const tiles: [string, Image][] = [
   ['river_2', river(222, 2)],
   ['riverbank_1', riverBank(223)],
   ['riverbank_2', riverBank(224)],
+  ['riverbank_w_1', riverBank(241, 'w')],
+  ['riverbank_w_2', riverBank(242, 'w')],
+  ['riverbank_e_1', riverBank(243, 'e')],
+  ['riverbank_e_2', riverBank(244, 'e')],
+  ['riverbank_s_1', riverBank(245, 's')],
   ['slag_heap_1', slagHeap(225)],
   ['slag_heap_2', slagHeap(226)],
   ['slag_heap_3', slagHeap(227)],
+  // Blend fringes (terrain.blend): each blending terrain spilling onto a lower-priority neighbour.
+  ...blendSet('scrub', scrubTile, 301),
+  ...blendSet('mud', mud(205), 311),
+  ...blendSet('slag_heap', slagHeap(225), 321),
+  ...blendSet('cobble', cobbles(211), 331),
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps: number; loop: boolean; light?: string }> = {

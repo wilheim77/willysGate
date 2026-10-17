@@ -108,6 +108,8 @@ Dibujados por `build-extra-art.ts` en una paleta seca, fría y apagada (la noche
 | `river`, `riverbank` | El Lloro: agua gris de los relaves / orilla de barro con el agua lamiendo el borde norte | Talud de tierra |
 | `slag_heap` | Escoria granulada con brasas y destellos de plata | Escoria gris oscura |
 
+**Transiciones (`terrain.<id>.blend`)**: `{ priority, edges: { n, e, s, w, ne, nw, se, sw } }`, frames del mismo tileset. Cada frame es un flequillo irregular de la textura del terreno con un borde algo más oscuro; el render lo dibuja sobre la cara superior del vecino de menor prioridad (misma altura), en orden de prioridad; las esquinas solo cuando ninguno de los dos vecinos ortogonales es ese terreno. Prioridades: `scrub` 4; `mud`, `riverbank*`, `slag_heap` 3; `cobble` 2; `road`, `road_v` 1. La orilla tiene variantes por lado del agua: `riverbank` (agua al norte), `riverbank_s`, `riverbank_w` y `riverbank_e`.
+
 ## PNJ de Hondonegra y atrezo del pueblo (para `mapas` y `guion`)
 
 Recolores de 0x72 con detalle propio (`palettes.json`). Vista previa: [`art-previews/0x72-npcs-hondonegra.png`](art-previews/0x72-npcs-hondonegra.png).
