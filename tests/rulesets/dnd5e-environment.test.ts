@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type BaseCommand, type Entity, type GameState, type Trap, RngCursor, SYSTEM_ISSUER, createEngine, hasCondition, nextAiCommand, surfaceAt, withTraps } from '../../engine';
+import { type BaseCommand, type Entity, type GameState, type Trap, RngCursor, SYSTEM_ISSUER, applyOutcome, createEngine, hasCondition, nextAiCommand, surfaceAt, withTraps } from '../../engine';
 import { coverBetween, createCharacter, createMonster, createProp, dnd5e } from '../../rulesets/dnd5e';
 import { asciiMap } from '../fixtures/helpers';
 
@@ -257,5 +257,18 @@ describe('traps under 5e', () => {
     if (!r.ok) throw new Error(r.error.code);
     expect(hasCondition(r.state.entities.m!, 'mage_armor')).toBe(true);
     expect(hasCondition(r.state.entities.m!, 'restrained')).toBe(false);
+  });
+});
+
+describe('essential characters (review 7)', () => {
+  it('an essential NPC dropped to 0 is knocked out and stable, never killed', () => {
+    const ivo = createMonster({ id: 'ivo', monsterId: 'bandit', controllerId: 'ai', factionId: 'callados', position: { x: 1, y: 0 }, spriteId: 'ivo', extraTags: ['essential'] });
+    let s = engine.newGame({ seed: 1, map: asciiMap(['...']), entities: [ivo] });
+    s = engine.applyEffects(s, [{ type: 'modifyResource', entityId: 'ivo', resource: 'hp', delta: 1 - s.entities.ivo!.resources.hp!.current }]).state;
+    // Burning at 1 HP drops him; burning again while down still doesn't kill.
+    let r = applyOutcome(dnd5e, s, dnd5e.onSurface!(s, 'ivo', 'fire', 'turnStart', new RngCursor(s.rng)), new RngCursor(s.rng));
+    expect(hasCondition(r.state.entities.ivo!, 'downed')).toBe(true);
+    r = applyOutcome(dnd5e, r.state, dnd5e.onSurface!(r.state, 'ivo', 'fire', 'turnStart', new RngCursor(r.state.rng)), new RngCursor(r.state.rng));
+    expect(hasCondition(r.state.entities.ivo!, 'dead')).toBe(false);
   });
 });

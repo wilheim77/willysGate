@@ -12,7 +12,8 @@
   "aliases": {
     "$comment": "Older placeholder ids used by content (test encounter) -> variant whose art they get.",
     "bandit": "sinpaga_cuchillero",
-    "thug": "sinpaga_enmascarado"
+    "thug": "sinpaga_enmascarado",
+    "posadera": "aldeana"
   },
   "variants": {
     "dorotea": {

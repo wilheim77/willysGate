@@ -1887,6 +1887,994 @@
       "color": "#d6c08e"
      }
     ]
+   },
+   "mazo": {
+    "tone": "neutral",
+    "kit": {
+     "skin": [
+      "#b08a72",
+      "#e0bea2",
+      "#f4dcc4"
+     ],
+     "body": {
+      "ramp": [
+       "#3a1446",
+       "#5a2a6a",
+       "#7a3a8a"
+      ]
+     },
+     "collar": {
+      "style": "v",
+      "ramp": [
+       "#3a1446",
+       "#5a2a6a",
+       "#7a3a8a"
+      ],
+      "shirt": [
+       "#b8b0a0",
+       "#e0d8c8",
+       "#f4ecdc"
+      ]
+     },
+     "hair": {
+      "style": "short",
+      "ramp": [
+       "#6a4a2a",
+       "#8a6a40",
+       "#b8905a"
+      ]
+     },
+     "eyes": {
+      "iris": "#6a8a5a"
+     },
+     "brows": {
+      "style": "worried"
+     },
+     "mouth": "frown",
+     "marks": [
+      "sweat"
+     ]
+    },
+    "shapes": [
+     {
+      "op": "line",
+      "points": [
+       [
+        15,
+        33
+       ],
+       [
+        23,
+        44
+       ]
+      ],
+      "color": "#d8b050"
+     },
+     {
+      "op": "line",
+      "points": [
+       [
+        32,
+        33
+       ],
+       [
+        24,
+        44
+       ]
+      ],
+      "color": "#d8b050"
+     },
+     {
+      "op": "px",
+      "color": "#e0c060",
+      "at": [
+       [
+        13,
+        25
+       ],
+       [
+        13,
+        26
+       ]
+      ]
+     },
+     {
+      "op": "px",
+      "color": "#8a6a20",
+      "at": [
+       [
+        14,
+        26
+       ]
+      ]
+     },
+     {
+      "op": "poly",
+      "points": [
+       [
+        37,
+        31
+       ],
+       [
+        42,
+        27
+       ],
+       [
+        41,
+        33
+       ],
+       [
+        38,
+        38
+       ]
+      ],
+      "ramp": [
+       "#b8b4ac",
+       "#e8e4dc",
+       "#ffffff"
+      ]
+     },
+     {
+      "op": "line",
+      "points": [
+       [
+        35,
+        47
+       ],
+       [
+        41,
+        30
+       ]
+      ],
+      "color": "#d8d4cc"
+     }
+    ]
+   },
+   "hilda": {
+    "tone": "neutral",
+    "kit": {
+     "skin": [
+      "#a88470",
+      "#d8b49a",
+      "#ecd0b8"
+     ],
+     "body": {
+      "ramp": [
+       "#2a3428",
+       "#4a5a48",
+       "#647a60"
+      ],
+      "style": "narrow"
+     },
+     "collar": {
+      "style": "high",
+      "ramp": [
+       "#34402e",
+       "#4a5a48",
+       "#647a60"
+      ]
+     },
+     "hair": {
+      "style": "bun",
+      "ramp": [
+       "#5a5a62",
+       "#8a8a90",
+       "#b0b0b8"
+      ]
+     },
+     "eyes": {
+      "style": "narrow",
+      "iris": "#5a6a7a"
+     },
+     "brows": {
+      "style": "angry",
+      "color": "#5a5a62"
+     },
+     "mouth": "flat",
+     "marks": [
+      "wrinkles"
+     ]
+    },
+    "shapes": [
+     {
+      "op": "ellipse",
+      "cx": 37,
+      "cy": 41,
+      "rx": 4,
+      "ry": 4,
+      "ramp": [
+       "#6e5426",
+       "#a07c40",
+       "#d0a85c"
+      ]
+     },
+     {
+      "op": "ellipse",
+      "cx": 37,
+      "cy": 41,
+      "rx": 2,
+      "ry": 2,
+      "color": "#3a3438",
+      "flat": true
+     },
+     {
+      "op": "rect",
+      "x": 39,
+      "y": 43,
+      "w": 2,
+      "h": 5,
+      "ramp": [
+       "#6e5426",
+       "#a07c40",
+       "#d0a85c"
+      ]
+     },
+     {
+      "op": "px",
+      "color": "#d0a85c",
+      "at": [
+       [
+        41,
+        45
+       ],
+       [
+        41,
+        47
+       ]
+      ]
+     },
+     {
+      "op": "rect",
+      "x": 34,
+      "y": 44,
+      "w": 2,
+      "h": 4,
+      "ramp": [
+       "#6e5426",
+       "#a07c40",
+       "#d0a85c"
+      ]
+     },
+     {
+      "op": "px",
+      "color": "#d0a85c",
+      "at": [
+       [
+        33,
+        46
+       ]
+      ]
+     }
+    ]
+   },
+   "nella": {
+    "tone": "neutral",
+    "kit": {
+     "skin": [
+      "#b08a72",
+      "#e0bea2",
+      "#f4dcc4"
+     ],
+     "body": {
+      "ramp": [
+       "#141016",
+       "#241e24",
+       "#3a3038"
+      ]
+     },
+     "collar": {
+      "style": "scarf",
+      "ramp": [
+       "#7a1a1a",
+       "#c02a2a",
+       "#e04a3a"
+      ]
+     },
+     "hair": {
+      "style": "long",
+      "ramp": [
+       "#3a2618",
+       "#5a3a24",
+       "#6a4a30"
+      ]
+     },
+     "eyes": {
+      "iris": "#4a3a2a"
+     },
+     "brows": {
+      "style": "angry"
+     },
+     "mouth": "flat"
+    }
+   },
+   "odda": {
+    "tone": "neutral",
+    "under": [
+     {
+      "op": "line",
+      "points": [
+       [
+        38,
+        48
+       ],
+       [
+        43,
+        14
+       ]
+      ],
+      "color": "#7a5032"
+     },
+     {
+      "op": "line",
+      "points": [
+       [
+        39,
+        48
+       ],
+       [
+        44,
+        14
+       ]
+      ],
+      "color": "#9a6a44"
+     },
+     {
+      "op": "rect",
+      "x": 38,
+      "y": 8,
+      "w": 11,
+      "h": 7,
+      "ramp": [
+       "#55565c",
+       "#878b91",
+       "#c0c4c8"
+      ]
+     }
+    ],
+    "kit": {
+     "skin": [
+      "#a8704e",
+      "#d8a07a",
+      "#f0c09a"
+     ],
+     "head": {
+      "rx": 12,
+      "ry": 11,
+      "cy": 22,
+      "jaw": true
+     },
+     "body": {
+      "ramp": [
+       "#26262c",
+       "#3a3a42",
+       "#56565e"
+      ],
+      "style": "broad"
+     },
+     "collar": {
+      "style": "v",
+      "ramp": [
+       "#26262c",
+       "#3a3a42",
+       "#56565e"
+      ],
+      "shirt": [
+       "#4a3226",
+       "#7a5434",
+       "#9a6a44"
+      ]
+     },
+     "hair": {
+      "style": "braids",
+      "ramp": [
+       "#6a2a10",
+       "#a0481c",
+       "#c86a30"
+      ]
+     },
+     "brows": {
+      "color": "#8a3a18"
+     },
+     "mouth": "smirk",
+     "marks": [
+      "freckles"
+     ]
+    }
+   },
+   "cirilo": {
+    "tone": "neutral",
+    "under": [
+     {
+      "op": "line",
+      "points": [
+       [
+        7,
+        48
+       ],
+       [
+        9,
+        13
+       ]
+      ],
+      "color": "#7a5032"
+     },
+     {
+      "op": "line",
+      "points": [
+       [
+        8,
+        48
+       ],
+       [
+        10,
+        13
+       ]
+      ],
+      "color": "#9a6a44"
+     },
+     {
+      "op": "poly",
+      "points": [
+       [
+        4,
+        2
+       ],
+       [
+        14,
+        2
+       ],
+       [
+        14,
+        11
+       ],
+       [
+        9,
+        15
+       ],
+       [
+        4,
+        11
+       ]
+      ],
+      "ramp": [
+       "#55565c",
+       "#878b91",
+       "#c0c4c8"
+      ]
+     }
+    ],
+    "kit": {
+     "skin": [
+      "#9a6448",
+      "#c8946a",
+      "#e0b088"
+     ],
+     "body": {
+      "ramp": [
+       "#3a2a1a",
+       "#4a3624",
+       "#6a5034"
+      ],
+      "style": "robe"
+     },
+     "hair": {
+      "style": "hood",
+      "ramp": [
+       "#3a2a1a",
+       "#6a5034",
+       "#8a6a48"
+      ]
+     },
+     "beard": {
+      "style": "scruffy",
+      "ramp": [
+       "#6a6660",
+       "#8a8680",
+       "#b8b4ac"
+      ]
+     },
+     "eyes": {
+      "style": "wide",
+      "iris": "#6a8aa0"
+     },
+     "brows": {
+      "style": "raised",
+      "color": "#8a8680"
+     },
+     "mouth": "open"
+    },
+    "shapes": [
+     {
+      "op": "px",
+      "color": "#c0c4c8",
+      "at": [
+       [
+        6,
+        4
+       ],
+       [
+        6,
+        5
+       ],
+       [
+        7,
+        4
+       ]
+      ]
+     }
+    ]
+   },
+   "lisandro": {
+    "tone": "neutral",
+    "kit": {
+     "skin": [
+      "#c8a088",
+      "#ecd0b8",
+      "#fae8d8"
+     ],
+     "ears": "pointed",
+     "head": {
+      "rx": 9.5
+     },
+     "body": {
+      "ramp": [
+       "#0e2a20",
+       "#1e4a3a",
+       "#2e6a52"
+      ]
+     },
+     "collar": {
+      "style": "tie",
+      "ramp": [
+       "#0e2a20",
+       "#1e4a3a",
+       "#2e6a52"
+      ],
+      "shirt": [
+       "#b8b8b0",
+       "#e8e8e0",
+       "#ffffff"
+      ],
+      "tie": "#143428"
+     },
+     "hair": {
+      "style": "slick",
+      "ramp": [
+       "#a8802a",
+       "#d8b048",
+       "#f4d878"
+      ]
+     },
+     "eyes": {
+      "style": "narrow",
+      "iris": "#6ac0a0"
+     },
+     "brows": {
+      "style": "raised",
+      "color": "#a8802a"
+     },
+     "mouth": "smirk"
+    },
+    "shapes": [
+     {
+      "op": "px",
+      "color": "#e0c060",
+      "at": [
+       [
+        19,
+        40
+       ],
+       [
+        19,
+        44
+       ],
+       [
+        28,
+        40
+       ],
+       [
+        28,
+        44
+       ]
+      ]
+     },
+     {
+      "op": "ellipse",
+      "cx": 39,
+      "cy": 43,
+      "rx": 5,
+      "ry": 4.5,
+      "ramp": [
+       "#6e5426",
+       "#a07c40",
+       "#d0a85c"
+      ]
+     },
+     {
+      "op": "poly",
+      "points": [
+       [
+        36,
+        38
+       ],
+       [
+        42,
+        38
+       ],
+       [
+        40,
+        40
+       ],
+       [
+        38,
+        40
+       ]
+      ],
+      "ramp": [
+       "#4a3214",
+       "#6e5426",
+       "#8a6a34"
+      ]
+     },
+     {
+      "op": "px",
+      "color": "#f4d878",
+      "at": [
+       [
+        38,
+        43
+       ],
+       [
+        40,
+        44
+       ]
+      ]
+     }
+    ]
+   },
+   "absalon": {
+    "tone": "foe",
+    "kit": {
+     "skin": [
+      "#6e4434",
+      "#a8765a",
+      "#c8946e"
+     ],
+     "head": {
+      "rx": 12.5,
+      "ry": 12,
+      "cy": 20,
+      "jaw": true
+     },
+     "body": {
+      "ramp": [
+       "#6e4434",
+       "#a8765a",
+       "#c8946e"
+      ],
+      "style": "broad"
+     },
+     "hair": {
+      "style": "bald",
+      "ramp": [
+       "#6e4434",
+       "#a8765a",
+       "#c8946e"
+      ]
+     },
+     "beard": {
+      "style": "stubble",
+      "ramp": [
+       "#4a2e24",
+       "#5a3a2c",
+       "#6e4434"
+      ]
+     },
+     "eyes": {
+      "style": "narrow",
+      "iris": "#3a2a24"
+     },
+     "brows": {
+      "style": "angry",
+      "color": "#3b2a24"
+     },
+     "mouth": "frown",
+     "marks": [
+      "scar"
+     ]
+    },
+    "shapes": [
+     {
+      "op": "poly",
+      "points": [
+       [
+        0,
+        48
+       ],
+       [
+        4,
+        40
+       ],
+       [
+        12,
+        48
+       ]
+      ],
+      "ramp": [
+       "#3b2a24",
+       "#5a4030",
+       "#7a5a44"
+      ]
+     },
+     {
+      "op": "poly",
+      "points": [
+       [
+        48,
+        48
+       ],
+       [
+        44,
+        40
+       ],
+       [
+        36,
+        48
+       ]
+      ],
+      "ramp": [
+       "#3b2a24",
+       "#5a4030",
+       "#7a5a44"
+      ]
+     },
+     {
+      "op": "ellipse",
+      "cx": 24,
+      "cy": 33,
+      "rx": 10,
+      "ry": 3.2,
+      "ramp": [
+       "#7a8088",
+       "#b8c0c8",
+       "#e8f0f8"
+      ]
+     },
+     {
+      "op": "px",
+      "color": "#ffffff",
+      "at": [
+       [
+        19,
+        32
+       ],
+       [
+        27,
+        32
+       ]
+      ]
+     },
+     {
+      "op": "px",
+      "color": "#9ae8ff",
+      "at": [
+       [
+        24,
+        35
+       ],
+       [
+        23,
+        35
+       ]
+      ]
+     }
+    ]
+   },
+   "ivo": {
+    "tone": "undead",
+    "kit": {
+     "skin": [
+      "#7e7870",
+      "#9e978e",
+      "#c9c2b8"
+     ],
+     "head": {
+      "rx": 9.5
+     },
+     "body": {
+      "ramp": [
+       "#3a3836",
+       "#5a5650",
+       "#7a766e"
+      ],
+      "style": "narrow"
+     },
+     "collar": {
+      "style": "scarf",
+      "ramp": [
+       "#6a1a1a",
+       "#a02424",
+       "#c03a32"
+      ]
+     },
+     "hair": {
+      "style": "short",
+      "ramp": [
+       "#120e10",
+       "#1a1416",
+       "#2a2224"
+      ]
+     },
+     "eyes": {
+      "style": "blank"
+     },
+     "brows": {
+      "style": "flat"
+     },
+     "mouth": "flat"
+    },
+    "shapes": [
+     {
+      "op": "px",
+      "color": "#6a645c",
+      "at": [
+       [
+        18,
+        24
+       ],
+       [
+        19,
+        24
+       ],
+       [
+        20,
+        24
+       ],
+       [
+        27,
+        24
+       ],
+       [
+        28,
+        24
+       ],
+       [
+        29,
+        24
+       ]
+      ]
+     }
+    ]
+   },
+   "posadera": {
+    "tone": "neutral",
+    "kit": {
+     "skin": [
+      "#a8704e",
+      "#d8a57d",
+      "#f0c8a2"
+     ],
+     "body": {
+      "ramp": [
+       "#3a3228",
+       "#5a4a3a",
+       "#7a6650"
+      ]
+     },
+     "collar": {
+      "style": "apron",
+      "ramp": [
+       "#9a9282",
+       "#d0c8b8",
+       "#f0e8dc"
+      ]
+     },
+     "hair": {
+      "style": "headscarf",
+      "ramp": [
+       "#5a2a2a",
+       "#8a3a34",
+       "#a8544a"
+      ]
+     },
+     "eyes": {
+      "style": "narrow",
+      "iris": "#5a4a3a"
+     },
+     "brows": {
+      "color": "#6a5a50"
+     },
+     "mouth": "smirk",
+     "marks": [
+      "wrinkles"
+     ]
+    },
+    "shapes": [
+     {
+      "op": "px",
+      "color": "#b8b4ac",
+      "at": [
+       [
+        14,
+        22
+       ],
+       [
+        14,
+        23
+       ],
+       [
+        33,
+        22
+       ]
+      ]
+     },
+     {
+      "op": "poly",
+      "points": [
+       [
+        34,
+        38
+       ],
+       [
+        42,
+        38
+       ],
+       [
+        43,
+        47
+       ],
+       [
+        33,
+        47
+       ]
+      ],
+      "ramp": [
+       "#6a3a24",
+       "#9a5a34",
+       "#c07a48"
+      ]
+     },
+     {
+      "op": "poly",
+      "points": [
+       [
+        42,
+        40
+       ],
+       [
+        46,
+        41
+       ],
+       [
+        45,
+        45
+       ],
+       [
+        42,
+        45
+       ]
+      ],
+      "ramp": [
+       "#6a3a24",
+       "#9a5a34",
+       "#c07a48"
+      ]
+     },
+     {
+      "op": "line",
+      "points": [
+       [
+        34,
+        39
+       ],
+       [
+        42,
+        39
+       ]
+      ],
+      "color": "#3a1a14"
+     }
+    ]
    }
   },
   "variants": {

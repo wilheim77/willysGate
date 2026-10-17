@@ -11,6 +11,7 @@ import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
 import { type Rgb, hexToRgb, mix } from './color.ts';
 import { drawText, textWidth } from './font.ts';
 import { type Shape, paintBust } from './portrait-painter.ts';
+import { type Kit, kitShapes } from './bust-kit.ts';
 
 interface PortraitSpec {
   size: number;
@@ -27,10 +28,19 @@ interface PortraitSpec {
   /** Hand-designed busts that replace the generated ones (bigger, with real faces). */
   hand?: {
     size: number;
-    busts: Record<string, { tone: string; shapes: Shape[]; also?: string[] }>;
+    /** A bust is its shapes, or a kit (bust-kit.ts) with extra shapes drawn under it and over it; `size` overrides hand.size. */
+    busts: Record<string, Bust>;
     /** Alternatives to compare (not wired): sprite id -> named variants, previewed next to the chosen bust. */
-    variants?: Record<string, Record<string, { tone: string; shapes: Shape[] }>>;
+    variants?: Record<string, Record<string, Bust>>;
   };
+}
+
+interface Bust { tone: string; shapes?: Shape[]; kit?: Kit; under?: Shape[]; also?: string[]; size?: number }
+
+/** The bust's full shape list: under, kit body and face, then the extra shapes. */
+function bustShapes(b: Bust): Shape[] {
+  const k = b.kit ? kitShapes(b.kit) : { back: [], front: [] };
+  return [...(b.under ?? []), ...k.back, ...k.front, ...(b.shapes ?? [])];
 }
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
@@ -151,23 +161,25 @@ const handIds: string[] = [];
 if (hand) {
   const H = hand.size;
   const busts = Object.entries(hand.busts);
-  const handSheet = blank(busts.length * H, H);
+  const sizes = busts.map(([, b]) => b.size ?? H);
+  const xs = sizes.map((_, i) => sizes.slice(0, i).reduce((a, n) => a + n, 0));
+  const handSheet = blank(sizes.reduce((a, n) => a + n, 0), Math.max(...sizes));
   const handUrl = `assets/${preset}/portraits-hand.png`;
   busts.forEach(([id, b], i) => {
-    const cell = backdrop(spec.tones[b.tone]!, H);
-    blit(cell, paintBust(b.shapes, H), 0, 0);
-    frame(cell);
-    blit(handSheet, cell, i * H, 0);
-    for (const target of [id, ...(b.also ?? [])]) entries[target] = { url: handUrl, x: i * H, y: 0, w: H, h: H };
+    const n = sizes[i]!;
+    blit(handSheet, paintCell(b.tone, bustShapes(b), n), xs[i]!, 0);
+    for (const target of [id, ...(b.also ?? [])]) entries[target] = { url: handUrl, x: xs[i]!, y: 0, w: n, h: n };
     handIds.push(id);
   });
   writePng(join(gameDir, 'public', 'assets', preset, 'portraits-hand.png'), handSheet);
-  const big = blank(busts.length * (H * 3 + 12) + 12, H * 3 + 30);
+  const M = Math.max(...sizes) * 3, perRow = 6, rowsN = Math.ceil(busts.length / perRow);
+  const big = blank(Math.min(busts.length, perRow) * (M + 12) + 12, rowsN * (M + 30));
   for (let i = 0; i < big.data.length; i += 4) [big.data[i], big.data[i + 1], big.data[i + 2], big.data[i + 3]] = [20, 18, 22, 255];
   busts.forEach(([id], i) => {
-    blit(big, scaleUp(crop(handSheet, i * H, 0, H, H), 3), 12 + i * (H * 3 + 12), 8);
+    const n = sizes[i]!, x = 12 + (i % perRow) * (M + 12), y = 8 + Math.floor(i / perRow) * (M + 30);
+    blit(big, scaleUp(crop(handSheet, xs[i]!, 0, n, n), 3), x, y);
     const label = id.replace(/^patrocinador-/, '');
-    drawText(big, label, 12 + i * (H * 3 + 12), H * 3 + 14, [200, 196, 186], textWidth(label, 2) <= H * 3 + 8 ? 2 : 1);
+    drawText(big, label, x, y + n * 3 + 6, [200, 196, 186], textWidth(label, 2) <= M + 8 ? 2 : 1);
   });
   writePng(join(root, 'docs', 'art-previews', `${preset}-portraits-hand.png`), big);
 
@@ -175,8 +187,8 @@ if (hand) {
   for (const [id, variants] of Object.entries(hand.variants ?? {})) {
     const list: [string, Image][] = [];
     const chosen = hand.busts[id];
-    if (chosen) list.push([`${id} (en uso)`, paintCell(chosen.tone, chosen.shapes, H)]);
-    for (const [name, v] of Object.entries(variants)) list.push([name, paintCell(v.tone, v.shapes, H)]);
+    if (chosen) list.push([`${id} (en uso)`, paintCell(chosen.tone, bustShapes(chosen), H)]);
+    for (const [name, v] of Object.entries(variants)) list.push([name, paintCell(v.tone, bustShapes(v), H)]);
     const K = 4, cw = H * K + 16;
     const sheetV = blank(list.length * cw + 16, H * K + H + 28);
     for (let i = 0; i < sheetV.data.length; i += 4) [sheetV.data[i], sheetV.data[i + 1], sheetV.data[i + 2], sheetV.data[i + 3]] = [20, 18, 22, 255];
