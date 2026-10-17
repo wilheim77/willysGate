@@ -5,6 +5,7 @@ import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
 import './style.css';
+import { mountAudioControls } from './audio/AudioControls';
 import { setupAudio } from './audio/setupAudio';
 import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
@@ -22,7 +23,8 @@ const startMap = new URLSearchParams(location.search).get('mapa') ?? undefined;
 const store = new GameStore(engine, game.newGame(engine, randomSeed(), startMap ? { start: startMap } : undefined));
 const hud = new Hud(store, game);
 hud.startOptions = startMap ? { start: startMap } : undefined;
-setupAudio(store, game);
+const audio = setupAudio(store, game);
+mountAudioControls(document.querySelector('.hud-top nav')!, audio);
 const combatHud = new CombatHud(game);
 const controller = new GameController(store, game, combatHud);
 
