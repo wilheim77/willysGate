@@ -42,6 +42,9 @@ describe('dialogue walker (QA playthrough harness)', () => {
         type Frame = { state: GameState; steps: number; path: number[] };
         const stack: Frame[] = [{ state: start.state, steps: 0, path: [] }];
         let visited = 0;
+        // Conversations loop on purpose (ask, come back to the menu): a state already explored
+        // (same node, same flags, same items) adds nothing, so each is walked once.
+        const explored = new Set<string>();
 
         while (stack.length) {
           visited++;
@@ -54,6 +57,9 @@ describe('dialogue walker (QA playthrough harness)', () => {
 
           const d = dialogueOf(frame.state);
           if (!d) continue; // Leaf: conversation already ended, nothing left on this branch.
+          const key = `${d.nodeId}|${JSON.stringify(frame.state.flags)}|${JSON.stringify(frame.state.systems.inventory ?? {})}|${JSON.stringify(Object.values(frame.state.entities).map((e) => [e.id, e.controllerId, e.factionId]))}`;
+          if (explored.has(key)) continue;
+          explored.add(key);
 
           const node = tree.nodes[d.nodeId];
           expect(node, `${repro()}: conversation points at missing node "${d.nodeId}"`).toBeDefined();
