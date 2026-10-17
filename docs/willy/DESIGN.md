@@ -29,7 +29,7 @@
 ```
 Pantalla de inicio → Prólogo (saltable) → Planta 1 (tutorial + cásting)
   → [Planta N: explorar · combatir · cajas · patrocinadores · reloj]
-  → Camerino (comprar, vender, descansar, guardar) → Planta N+1 … → Fausto Brillante
+  → Camerino (comprar, vender, descansar, guardar) → Planta N+1 … → el Presentador (jefe final)
 ```
 
 - **Una partida = una temporada**: 5 plantas y un final. Duración objetivo: **3-4 horas** la primera vez (35-50 min por planta).
@@ -172,7 +172,7 @@ Datos: `content/willy/data/audience.json`.
 - **Baja** (en %) con lo aburrido: esperar, turnos sin efecto, repetir la misma acción 3 veces seguidas, huir, y 30 s de reloj sin nada interesante fuera de combate.
 - **Novedad:** lo primero de cada tipo en la partida vale ×2; repetir lo mismo en 5 turnos baja a ×0,7, ×0,5, ×0,3.
 - **Escala por planta** (×1, ×4, ×12, ×35, ×100) y **mínimo por planta**: nunca baja de ahí.
-- **Nunca castiga**: no quita vida ni objetos. Da **cajas en hitos** (5 mil → bronce … 50 M → legendaria), activa a los patrocinadores (cada uno tiene una audiencia mínima para fijarse en ti), paga la **prima de fin de planta** (caja según la audiencia) y, en la Planta 5, decide los votos del público contra Fausto.
+- **Nunca castiga**: no quita vida ni objetos. Da **cajas en hitos** (5 mil → bronce … 50 M → legendaria), activa a los patrocinadores (cada uno tiene una audiencia mínima para fijarse en ti), paga la **prima de fin de planta** (caja según la audiencia) y, en la Planta 5, decide los votos del público contra el Presentador y, en la Gran final, cada punto de espectáculo le vacía el **Share** (su medidor de inmortalidad).
 
 ## 7. Patrocinadores
 
@@ -308,6 +308,7 @@ Datos: `content/willy/narrator/*.json` (**376 líneas** en 59 bancos). Motor de 
 ```
 
 - **Variables** `{enemigo}`, `{objeto}`, `{logro}`, `{patrocinador}`, `{dano}`, `{espectadores}`… con **filtros** de concordancia: `:el` (el/la/los/las según género y número), `:un`, `:del`, `:al`, `:o` (terminación o/a), `:Mayus`. Cada entidad u objeto declara su `genero` (`m`/`f`) en los datos.
+- **Variables globales** del reparto, sacadas de `content/willy/data/cast.json`: `{presentador}`, `{presentadorCorto}`, `{presentadorApodo}`. Disponibles en todos los bancos, logros, nombres de jefes y escenas. Así el nombre del Presentador existe en **un solo sitio** (ver `STORY.md` → «El antagonista»).
 - **Selección:** de las líneas cuyo `si` se cumple, se quedan **las más específicas** (más claves en `si`); se descartan las usadas en las últimas `memoria` frases del banco; se elige con el RNG del Narrador (peso opcional). Si todas se han usado, se vacía la memoria salvo la última.
 - **Ritmo:** `probabilidad` de hablar; `enfriamientoTurnos`; **una frase a la vez**: si llegan varias, gana la `prioridad` mayor y el resto se descarta (salvo las de prioridad 5, que se encolan). Nunca más de una frase cada 2,5 s.
 - **Determinismo:** la selección usa un RNG propio del Narrador guardado en el estado (no el del combate), así que el texto no altera las tiradas.

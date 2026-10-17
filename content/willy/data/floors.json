@@ -321,18 +321,198 @@
       },
       "jefe": {
         "id": "jefe-presentador",
-        "nombre": "Fausto Brillante",
+        "nombre": "{presentador}",
+        "nombreDe": "cast.json → presentador.nombre",
         "genero": "m",
-        "vida": 200, "def": 16, "ataque": 8, "dano": "2d8+2", "movimiento": 5,
+        "vida": 220,
+        "def": 16,
+        "ataque": 8,
+        "dano": "2d8+2",
+        "movimiento": 5,
         "tamano": "normal",
-        "fases": [
-          { "hasta": 100, "comportamiento": "Decorado «Concurso de preguntas»: plataformas de altura que suben y bajan; Fausto lanza tarjetas afiladas desde arriba." },
-          { "hasta": 66, "comportamiento": "Decorado «Programa de cocina»: fogones (fuego) y piletas (agua); invoca a dos figurantes cada 2 rondas." },
-          { "hasta": 33, "comportamiento": "Decorado «Gran final»: el público vota cada ronda (según tu audiencia) entre ayudarte (curación o foco a tu favor) o ayudarle a él. Los focos caen." }
+        "descripcion": "El presentador de ¡Mazmorreros! desde la Temporada 1, hace once mil años. Vampiro alienígena: no bebe sangre, bebe audiencia. Cada punto de share le quita un día de encima, y lleva milenios en máximos. Traje impecable, sonrisa impecable, la misma cara en todas las temporadas.",
+        "arena": {
+          "mapa": "fixed/p5-plato-principal.json",
+          "texto": "El plató principal: tres atriles de concursante, un panel de preguntas gigante, gradas con público en directo, focos móviles colgados de una parrilla y trampillas de escenario. El decorado cambia en cada fase.",
+          "elementos": [
+            "atriles (altura 1)",
+            "baldosas de respuesta de colores (trampillas)",
+            "focos móviles (Planta 5)",
+            "parrilla de focos que se puede derribar",
+            "gradas (no transitables)"
+          ]
+        },
+        "medidorShare": {
+          "id": "share",
+          "nombre": "Share",
+          "inicial": 50,
+          "max": 100,
+          "texto": "Su barra de audiencia propia, visible bajo su vida. Sube cuando Willy aburre (pierde audiencia, espera, recibe golpes) y baja con cada cosa espectacular que hace Willy (cada evento que le da audiencia, × 1 punto por cada 1 % de audiencia ganada).",
+          "efecto": "Al empezar su turno se cura share ÷ 10 de vida."
+        },
+        "pasivas": [
+          {
+            "id": "inmortal",
+            "nombre": "Inmortal",
+            "texto": "Mientras su Share esté por encima de 0, no puede bajar de 1 de vida. Para derrotarlo hay que dejarlo sin audiencia y sin vida a la vez."
+          },
+          {
+            "id": "alergia-a-los-focos",
+            "nombre": "Alergia a los focos",
+            "texto": "Como buen vampiro, la luz directa le sienta fatal: bajo un foco recibe un 50 % más de daño y no se cura."
+          },
+          {
+            "id": "sin-reflejo",
+            "nombre": "Sin reflejo",
+            "texto": "Las cámaras-dron no le graban: nunca da audiencia a nadie que no sea él."
+          }
         ],
-        "debilidad": "Cuanta más audiencia tengas, más votos a tu favor en la fase final.",
+        "fases": [
+          {
+            "hasta": 100,
+            "nombre": "Ronda de preguntas",
+            "comportamiento": "Desde su atril (altura 1) lanza tarjetas de pregunta afiladas (alcance 5, 1d8+2, Mareado). Cada 2 rondas formula una pregunta en el panel: tres baldosas de colores se iluminan; al final de la ronda, las de respuestas falsas se abren como trampillas (caída de 1 nivel). Acertar (estar en la baldosa buena) da un foco a favor durante 1 ronda."
+          },
+          {
+            "hasta": 66,
+            "nombre": "Pausa publicitaria",
+            "comportamiento": "Se apagan las luces de la sala (oscuridad salvo los focos). Se convierte en una nube de murciélagos con micrófono: solo se le puede dañar bajo un foco. «Mordisco de share»: cuerpo a cuerpo, 2d6 y absorbe el 5 % de la audiencia de Willy (que pasa a su Share). Cada 2 rondas aparecen dos azafatos (figurantes con bandeja)."
+          },
+          {
+            "hasta": 33,
+            "nombre": "Gran final",
+            "comportamiento": "Vuelven las luces. El público vota cada ronda según la audiencia de Willy: a favor de Willy (un foco fijo sobre el presentador, o curación de 5) o a favor del presentador (+10 de Share). Se puede derribar la parrilla de focos sobre él (2d6 y Aturdido). Si su vida llega a 1 con Share > 0, se queda «en antena» y sigue: hay que vaciar el Share con espectáculo."
+          }
+        ],
+        "preguntas": [
+          {
+            "texto": "¿Qué lleva Willy siempre a cuestas?",
+            "correcta": "Una bombona",
+            "falsas": [
+              "Una hipoteca",
+              "Un loro"
+            ]
+          },
+          {
+            "texto": "¿Dónde se esconde el Centollo?",
+            "correcta": "En la lonja",
+            "falsas": [
+              "En el Hipermercado",
+              "En su casa, viendo la tele"
+            ]
+          },
+          {
+            "texto": "¿Cuántas plantas tiene la mazmorra?",
+            "correcta": "Cinco",
+            "falsas": [
+              "Once mil",
+              "Depende del día"
+            ]
+          },
+          {
+            "texto": "¿Qué hace el 5G?",
+            "correcta": "Nada",
+            "falsas": [
+              "Controla mentes",
+              "Todo"
+            ]
+          },
+          {
+            "texto": "¿Cuántos años tengo?",
+            "correcta": "Los mismos de siempre",
+            "falsas": [
+              "Once mil y pico",
+              "No se pregunta"
+            ]
+          },
+          {
+            "texto": "¿Qué pasa si el reloj llega a cero?",
+            "correcta": "La planta se derrumba",
+            "falsas": [
+              "Hay prórroga",
+              "Se pide la hora"
+            ]
+          },
+          {
+            "texto": "¿Qué patrocinador odia que apagues fuegos?",
+            "correcta": "Butanos Hermanos Pérez",
+            "falsas": [
+              "Seguros La Prudente",
+              "Glorp Ecosoluciones"
+            ]
+          },
+          {
+            "texto": "¿Con cebolla o sin cebolla?",
+            "correcta": "Con cebolla",
+            "falsas": [
+              "Sin cebolla",
+              "Depende"
+            ]
+          }
+        ],
+        "frases": [
+          {
+            "id": "pr-01",
+            "al": "inicioCombate",
+            "texto": "Buenas tardes. O buenas noches. O buen milenio: yo ya hace tiempo que no llevo la cuenta."
+          },
+          {
+            "id": "pr-02",
+            "al": "inicioCombate",
+            "texto": "Bienvenido a la gran final. La he presentado once mil veces. Siempre me emociona. Un poco menos cada vez."
+          },
+          {
+            "id": "pr-03",
+            "al": "pregunta",
+            "texto": "Atento a la pregunta. Tienes una ronda. Y las trampillas, todo el tiempo del mundo."
+          },
+          {
+            "id": "pr-04",
+            "al": "pregunta",
+            "texto": "Pregunta fácil. Yo la presenté por primera vez cuando los dinosaurios. Se la sabían todos menos los dinosaurios."
+          },
+          {
+            "id": "pr-05",
+            "al": "aciertoWilly",
+            "texto": "¡Respuesta correcta! Qué alegría. No para mí, pero qué alegría."
+          },
+          {
+            "id": "pr-06",
+            "al": "falloWilly",
+            "texto": "Oh. Lo siento. Bueno, no lo siento: es el formato."
+          },
+          {
+            "id": "pr-07",
+            "al": "cambioFase",
+            "texto": "Y ahora, unos anuncios. Quédense con nosotros. Literalmente: las puertas están cerradas."
+          },
+          {
+            "id": "pr-08",
+            "al": "mordisco",
+            "texto": "Hmm. Share fresco. Me quita cien años de encima. No es que se notaran."
+          },
+          {
+            "id": "pr-09",
+            "al": "bajoFoco",
+            "texto": "¡Ese foco! ¿Quién ha subido la luz? ¿Iluminación? ¡ILUMINACIÓN!"
+          },
+          {
+            "id": "pr-10",
+            "al": "vidaUno",
+            "texto": "No puedo morir mientras alguien me esté viendo. Y siempre hay alguien viéndome. Siempre."
+          },
+          {
+            "id": "pr-11",
+            "al": "derrotado",
+            "texto": "Vaya. Una derrota. Es la primera en once mil años. Qué sensación más… nueva. Creo que me ha salido una cana."
+          }
+        ],
+        "debilidad": "Focos (daño +50 % y no se cura) y espectáculo: cada cosa vistosa de Willy le vacía el Share. Una partida con mucha audiencia lo deja indefenso en la Gran final.",
         "xp": 400,
-        "etiquetas": []
+        "etiquetas": [
+          "no-muerto",
+          "alienigena"
+        ]
       },
       "escena": "El despacho de Xelda."
     }

@@ -23,7 +23,7 @@ Las reglas son tres:
 2. **Da espectáculo.** El público premia lo creativo y lo arriesgado; los patrocinadores mandan regalos a quien les gusta.
 3. **Sobrevive.**
 
-Al fondo de la Planta 5 espera el presentador, **Fausto Brillante**. Quien llega hasta él gana la temporada. Lo que eso significa exactamente no lo sabe nadie, y Canal Abismo no tiene prisa por aclararlo.
+Al fondo de la Planta 5 espera el presentador, **Jordi Hurtado, el Inmortal**. Quien llega hasta él gana la temporada. Lo que eso significa exactamente no lo sabe nadie, y Canal Abismo no tiene prisa por aclararlo.
 
 ## 2. Personajes
 
@@ -66,8 +66,19 @@ Seis marcas o personajes galácticos que siguen el programa y premian a quien le
 
 Los gustos chocan entre sí a propósito: Butanos Pérez y Glorp no pueden estar contentos a la vez, y La Prudente odia lo que adora la Colmena.
 
-### El antagonista
-**Fausto Brillante**, el presentador de *¡Mazmorreros!*. Dentadura perfecta, traje de lentejuelas y una sonrisa que no le llega a los ojos (tiene seis). No odia a los concursantes: los necesita. Es el jefe de la Planta 5 y el último combate, en directo y con público.
+### El antagonista: el Presentador
+
+**Jordi Hurtado, el Inmortal**, presentador de *¡Mazmorreros!* desde la Temporada 1, hace once mil años. Homenaje cariñoso y absurdo al meme de que nunca envejece: aquí la explicación es de ciencia ficción.
+
+> **Nombre en un solo sitio.** El nombre visible del presentador vive únicamente en `content/willy/data/cast.json` (`presentador.nombre`, `corto`, `apodo`). Todos los textos del juego usan las variables `{presentador}`, `{presentadorCorto}` y `{presentadorApodo}`. Si algún día hay que cambiarlo, se edita ese fichero y nada más. En estos documentos se le llama «el Presentador».
+>
+> **Límites del homenaje:** la broma es la premisa absurda (un vampiro alienígena que se alimenta de audiencia). Nada sobre la persona real, su vida privada ni acusaciones de ningún tipo. Es un personaje de ficción que se ríe del meme, con cariño.
+
+- **Qué es:** un vampiro alienígena. No bebe sangre: **bebe audiencia**. Cada punto de share le quita un día de encima, y lleva once mil años en máximos de audiencia. Por eso tiene la misma cara en la primera emisión que en la última.
+- **Cómo es:** traje impecable, voz serena, educadísimo, con una paciencia infinita (literalmente). Presenta con oficio y cariño por el formato. No odia a los concursantes: los necesita, porque son lo que mira el público.
+- **Su debilidad:** como buen vampiro, los **focos** directos le sientan fatal. Y, sobre todo, **perder audiencia**: si nadie le mira, envejece.
+- **El Narrador y él:** llevan juntos desde siempre. El Narrador se queja de él, pero en el fondo es su único amigo en cuarenta temporadas.
+- Es el jefe de la Planta 5 y el último combate, en directo y con público. Fases, arena y frases en `floors.json` → planta 5 → `jefe`.
 
 ## 3. Las cinco plantas
 
@@ -79,7 +90,7 @@ Cada planta tiene un bioma, enemigos propios, una **mecánica característica** 
 | 2 | **Hipermercado Eterno**: pasillos sin fin, escaleras mecánicas, rebajas permanentes. | **Cintas y carritos**: las cintas mueven a quien las pisa; los carritos se empujan y atropellan | **Doña Rebeca, Encargada de Rebajas** |
 | 3 | **La Verbena Sin Fin**: fiestas de pueblo eternas, de noche, con farolillos. | **Fuego y pólvora**: hogueras, petardos y fuegos artificiales que caen del cielo | **El Gigantón y sus Cabezudos** |
 | 4 | **Balneario Glaciar**: termas, saunas y piscinas heladas. | **Frío y vapor**: el agua se congela o se evapora; el vapor tapa la vista | **La Socorrista Abisal** |
-| 5 | **El Plató**: los bastidores del propio concurso. | **Focos y cámaras**: bajo un foco el público se vuelve loco, pero todos te ven | **Fausto Brillante** |
+| 5 | **El Plató**: los bastidores del propio concurso. | **Focos y cámaras**: bajo un foco el público se vuelve loco, pero todos te ven | **El Presentador** (`cast.json`) |
 
 ### Planta 1: Castro Sumergido (tutorial disfrazado)
 Willy despierta en una copia exacta de su calle, pero bajo tierra y con agua por los tobillos. Es el sitio que mejor conoce y el más seguro para aprender. Enemigos: **gaviotas de lonja**, **ratas portuarias**, **cangrejos con casco** y **bocartes andantes**. El jefe, el Centollo, vive en la lonja y solo se le puede dañar cuando la marea baja y queda varado.
@@ -102,23 +113,26 @@ Un balneario de lujo que se ha congelado a medias. Enemigos: **patitos de goma g
 **Escena fija:** la sauna, donde Paco ha abierto una sucursal del bar «por si acaso».
 
 ### Planta 5: El Plató
-Los bastidores del concurso: cables, focos, decorados de cartón piedra y regidores con auriculares. Enemigos: **regidores**, **cámaras-dron**, **técnicos de sonido** y **figurantes**. Fausto Brillante pelea en el plató principal, con el público en directo, cambiando de decorado cada pocas rondas.
+Los bastidores del concurso: cables, focos, decorados de cartón piedra y regidores con auriculares. Enemigos: **regidores**, **cámaras-dron**, **técnicos de sonido** y **figurantes**. El Presentador pelea en el plató principal, con el público en directo, en tres fases:
+1. **Ronda de preguntas:** desde su atril lanza tarjetas afiladas y hace preguntas en un panel gigante; las baldosas de las respuestas falsas se abren como trampillas.
+2. **Pausa publicitaria:** se apagan las luces y se convierte en una nube de murciélagos con micrófono que solo es vulnerable bajo los focos; su «mordisco de share» le roba audiencia a Willy.
+3. **Gran final:** el público vota cada ronda según la audiencia de Willy. Mientras le quede **Share**, es inmortal: no baja de 1 de vida. Para vencerle hay que dejarle sin vida **y** sin audiencia, a base de espectáculo.
 
 **Escena fija:** el despacho de Xelda, donde se descubre qué pasa con los ganadores de las temporadas anteriores.
 
 ## 4. Desenlace (aprobado: los tres finales)
 
-Al derrotar a Fausto, el público vota. Xelda revela que los ganadores de otras temporadas se convierten en **presentadores** del concurso en el siguiente planeta: así llegó Fausto aquí. Después, el jugador **elige**:
+Al derrotar al Presentador, el público vota. Xelda revela lo que vio en su despacho: los ganadores de las temporadas anteriores se convirtieron en **copresentadores** del Presentador, en otros planetas… y él les ha sobrevivido a todos, porque la audiencia siempre acaba volviendo a él. Ahora le ofrece el puesto a Willy. Después, el jugador **elige**:
 
-- **Final A, «Nuevo presentador»:** Willy acepta el puesto. Final cínico, con el Narrador encantado de tener por fin un compañero de cabina.
-- **Final B, «Vuelta a casa»:** Willy se niega y vuelve con los suyos al Camerino. Final amable, con el Narrador fingiendo que no se emociona.
-- **Final C, secreto, «Letra pequeña»:** aparece como tercera opción solo si se cumplen **las tres** condiciones al derrotar a Fausto:
+- **Final A, «Nuevo presentador»:** Willy acepta. El Presentador le ofrece «un traguito de share para que no se te arrugue la cara». Final cínico, con el Narrador encantado de tener por fin un compañero de cabina y Willy con bigote eterno.
+- **Final B, «Vuelta a casa»:** Willy se niega y vuelve con los suyos al Camerino. El Presentador lo acepta con elegancia: «Ya volverás. Todos vuelven». Final amable, con el Narrador fingiendo que no se emociona.
+- **Final C, secreto, «Letra pequeña»:** aparece como tercera opción solo si se cumplen **las tres** condiciones al derrotar al Presentador:
   1. audiencia de **50 millones** o más;
   2. **3 patrocinadores o más «a favor»** (o «fan») a la vez;
   3. haber hablado con Xelda en su despacho de la Planta 5 (escena fija) y haber leído el contrato del concurso.
-  Willy compra la cadena con lo ganado y cancela el programa. «En catorce galaxias nadie había leído la letra pequeña. Un butanero de Castro, sí.»
+  Willy compra la cadena con lo ganado y cancela el programa. Sin audiencia, el Presentador, por primera vez en once mil años, envejece un día; le sale una cana, la mira con curiosidad y se va, muy digno, a jubilarse a un planeta playa. «En catorce galaxias nadie había leído la letra pequeña. Un butanero de Castro, sí.»
 
-Si no se cumplen, la opción C no se muestra (tampoco tachada: es secreta). Hay un logro oculto por cada final, con pista. Los tres terminan con un gancho a la **Temporada 2**.
+Si no se cumplen, la opción C no se muestra (tampoco tachada: es secreta). Hay un logro oculto por cada final, con pista. Los tres terminan con un gancho a la **Temporada 2**: tras los créditos, en un planeta lejano se enciende una tele y ahí está el Presentador, con la misma cara, diciendo «Buenas tardes». Es inmortal: siempre vuelve.
 
 En modo **Sin repetición**, el final elegido se registra en el perfil con una marca especial («en directo»).
 

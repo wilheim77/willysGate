@@ -169,7 +169,7 @@
         { "id": "ws-02", "texto": "Eliminado. Esta vez no hay Camerino al que volver. Fue bonito mientras duró. Duró planta {planta}. Es más de lo que llega mucha gente." },
         { "id": "ws-03", "texto": "Fin de la emisión. El público aplaude de pie. Lo digo en serio: no es un aplauso de compromiso. Esos los distingo." },
         { "id": "ws-04", "texto": "Eliminado por {enemigo:un}. En directo, sin red, sin repetición. Se acabó. Producción ya está preparando el especial «Lo mejor de Willy». Va a ser cortito.", "si": { "enemigo": { "existe": true } } },
-        { "id": "ws-05", "texto": "Se acabó en el Plató, a un paso de Fausto. Eso no es perder. Eso es dejar al público con ganas. Que es lo más difícil de este oficio.", "si": { "planta": 5 } }
+        { "id": "ws-05", "texto": "Se acabó en el Plató, a un paso de {presentadorCorto}. Eso no es perder. Eso es dejar al público con ganas. Que es lo más difícil de este oficio.", "si": { "planta": 5 } }
       ]
     },
     {
@@ -187,7 +187,8 @@
         { "id": "je-2a", "texto": "Desde lo alto de las cajas registradoras, la mujer que nunca ha devuelto un ticket: ¡Doña Rebeca, Encargada de Rebajas!", "si": { "planta": 2 } },
         { "id": "je-3a", "texto": "Cuatro metros de cartón piedra, un señor sudando dentro y tres cabezudos con ganas de bronca: ¡el Gigantón!", "si": { "planta": 3 } },
         { "id": "je-4a", "texto": "En su silla, con su silbato y con más tentáculos que pacientes: ¡la Socorrista Abisal! Nadie se baña después de comer en su piscina. Nadie vuelve a bañarse.", "si": { "planta": 4 } },
-        { "id": "je-5a", "texto": "Y ahora sí. Dientes perfectos, traje de lentejuelas, seis ojos y ni una arruga: el presentador de ¡Mazmorreros!, ¡FAUSTO BRILLANTE! Yo me callo. Por una vez.", "si": { "planta": 5 } }
+        { "id": "je-5a", "texto": "Y ahora sí. Lleva presentando este programa desde la Temporada 1, hace once mil años, y no tiene ni una arruga. Señoras, señores y entidades: ¡{presentador}! Yo me callo. Por una vez.", "si": { "planta": 5 } },
+        { "id": "je-5b", "texto": "Mírale. La misma cara que en la primera emisión. Los científicos de catorce galaxias lo han estudiado. Conclusión: «ni idea». Con todos ustedes: ¡{presentador}!", "si": { "planta": 5, "visita": { "min": 2 } } }
       ]
     },
     {
@@ -197,7 +198,69 @@
         { "id": "jd-2", "texto": "Doña Rebeca, liquidada. Todo debe desaparecer. Y ha desaparecido. Pasen por caja.", "si": { "planta": 2 } },
         { "id": "jd-3", "texto": "¡Ha caído el Gigantón! El señor que iba dentro sale, se seca el sudor y pide un bocadillo. Se lo ha ganado. Y tú, una caja de oro.", "si": { "planta": 3 } },
         { "id": "jd-4", "texto": "La Socorrista Abisal ya no rescatará a nadie. Silbato confiscado. Piscina, por fin, abierta al público.", "si": { "planta": 4 } },
-        { "id": "jd-5", "texto": "Fausto Brillante... ha caído. Catorce galaxias en silencio. Luego, el aplauso más largo de la historia de la cadena. Yo no aplaudo. Tengo las manos ocupadas. Secándome los ojos. De alergia.", "si": { "planta": 5 } }
+        { "id": "jd-5", "texto": "{presentador}... ha caído. Catorce galaxias en silencio. Luego, el aplauso más largo de la historia de la cadena. Yo no aplaudo. Tengo las manos ocupadas. Secándome los ojos. De alergia.", "si": { "planta": 5 } }
+      ]
+    },
+    {
+      "id": "presentador",
+      "evento": "bossPhase",
+      "donde": {
+        "jefe": "jefe-presentador"
+      },
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 0,
+      "comentario": "Comentarios del Narrador sobre el jefe final. Las frases propias del presentador están en floors.json → jefe.frases. El nombre sale siempre de cast.json.",
+      "lineas": [
+        {
+          "id": "pz-01",
+          "texto": "Ronda de preguntas. Ojo con las baldosas: las que no son la respuesta se abren. {presentadorCorto} lleva milenios haciendo esto y nunca se ha caído nadie de su lado.",
+          "si": {
+            "fase": 1
+          }
+        },
+        {
+          "id": "pz-02",
+          "texto": "Pausa publicitaria. Se apagan las luces y {presentadorCorto} se convierte en murciélagos. Murciélagos con micrófono. Busca los focos: la luz directa le sienta fatal.",
+          "si": {
+            "fase": 2
+          }
+        },
+        {
+          "id": "pz-03",
+          "texto": "¡Gran final! El público vota. Cuanta más audiencia tengas, más votos a tu favor. Y recuerda: mientras le quede share, no se puede morir. Dale espectáculo hasta dejarle sin espectadores.",
+          "si": {
+            "fase": 3
+          }
+        },
+        {
+          "id": "pz-04",
+          "texto": "Se ha comido un trozo de tu audiencia. Así es como se mantiene tan joven. No es cremas: es share.",
+          "si": {
+            "evento": "mordisco"
+          }
+        },
+        {
+          "id": "pz-05",
+          "texto": "Bajo el foco. Le humea el traje. Llevo once mil años queriendo ver esto.",
+          "si": {
+            "evento": "bajoFoco"
+          }
+        },
+        {
+          "id": "pz-06",
+          "texto": "Uno de vida y sigue sonriendo. Mientras alguien le mire, no se apaga. Hay que dejarle sin público. Haz algo tan bestia que hasta su audiencia se pase a la tuya.",
+          "si": {
+            "evento": "vidaUno"
+          }
+        },
+        {
+          "id": "pz-07",
+          "texto": "Share a cero. Por primera vez en once mil años, nadie le está mirando a él. Le tiembla la sonrisa. Ahora sí.",
+          "si": {
+            "evento": "shareCero"
+          }
+        }
       ]
     }
   ]

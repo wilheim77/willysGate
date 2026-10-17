@@ -229,6 +229,8 @@ export function narrate(state: GameState, events: GameEvent[], banks: NarratorBa
 // Template: "{enemigo:el:Mayus} ha caído" with
 type TemplateValue = string | number | { text: string; gender: 'm' | 'f'; plural?: boolean };
 // Filters: el, un, del, al, o (o/a ending), Mayus. Unknown variable → dev error in tests, '…' at runtime.
+// Global variables: the game passes a fixed map (e.g. Willy's cast.json → {presentador}, {presentadorCorto})
+// merged under the per-event ones, so a character's display name lives in one data field.
 ```
 
 **Selección:** líneas cuyo `si` se cumple → quedarse con las de más claves en `si` → quitar las usadas en las últimas `memoria` → elegir por peso. Tests: no repite dentro de la memoria, la más específica gana, concordancia de género correcta en las cuatro combinaciones.
