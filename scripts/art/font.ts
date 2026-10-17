@@ -14,7 +14,7 @@ const GLYPHS: Record<string, number[]> = {
   5: [7, 4, 6, 1, 6], 6: [3, 4, 7, 5, 7], 7: [7, 1, 2, 2, 2], 8: [7, 5, 7, 5, 7], 9: [7, 5, 7, 1, 6],
   ' ': [0, 0, 0, 0, 0], _: [0, 0, 0, 0, 7], '-': [0, 0, 7, 0, 0], '.': [0, 0, 0, 0, 2], ',': [0, 0, 0, 2, 4],
   ':': [0, 2, 0, 2, 0], '(': [1, 2, 2, 2, 1], ')': [4, 2, 2, 2, 4], '/': [1, 1, 2, 4, 4], x: [0, 5, 2, 5, 0],
-  '!': [2, 2, 2, 0, 2], '?': [6, 1, 2, 0, 2], "'": [2, 2, 0, 0, 0], '%': [5, 1, 2, 4, 5], '+': [0, 2, 7, 2, 0],
+  '!': [2, 2, 2, 0, 2], '¡': [2, 0, 2, 2, 2], '¿': [2, 0, 2, 4, 3], '?': [6, 1, 2, 0, 2], "'": [2, 2, 0, 0, 0], '%': [5, 1, 2, 4, 5], '+': [0, 2, 7, 2, 0],
 };
 
 const FOLD: Record<string, string> = { Á: 'A', É: 'E', Í: 'I', Ó: 'O', Ú: 'U', Ü: 'U' };
@@ -28,7 +28,7 @@ export function textWidth(text: string, scale = 1): number {
 export function drawText(img: Image, text: string, x: number, y: number, rgb: Rgb, scale = 1): void {
   let cx = x;
   for (const raw of text) {
-    const up = raw === 'x' ? 'x' : raw.toUpperCase();
+    const up = raw === '×' ? 'x' : raw.toUpperCase();
     const g = GLYPHS[FOLD[up] ?? up] ?? GLYPHS['?']!;
     for (let row = 0; row < 5; row++) {
       for (let col = 0; col < 3; col++) {

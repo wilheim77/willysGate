@@ -1,0 +1,351 @@
+{
+  "$comment": "Intro cinematic of Intereses (DRAFT, pending approval: docs/intros/INTERESES.md). Drawing ops are documented in scripts/art/build-cinematics.ts. Build with `npm run art` (writes intro.json and the PNG panels).",
+  "size": [320, 180],
+  "palette": {
+    "black": "#0b0a0d", "night0": "#0f0d13", "night1": "#1a1620", "night2": "#2a2430", "night3": "#3a3240",
+    "dusk1": "#3b2f3a", "dusk2": "#5a4048", "dusk3": "#7a5048", "dusk4": "#9a6a50",
+    "hill0": "#161316", "hill1": "#221d20", "hill2": "#2e2729", "hill3": "#3d3335",
+    "stone0": "#2e2627", "stone1": "#483b3a", "stone2": "#775c55", "stone3": "#aa8d7a", "stone4": "#d3bfa9",
+    "out": "#222222", "wood0": "#2c1d1b", "wood1": "#4a2e27", "wood2": "#64402f", "wood3": "#7d5536",
+    "parch0": "#6e5a44", "parch1": "#a8936e", "parch2": "#c9b48f", "parch3": "#ddcba6", "ink": "#2a2020",
+    "wax0": "#4e1a1e", "wax1": "#7a2424", "wax2": "#9e3a2a",
+    "flame0": "#c56025", "flame1": "#ee8e2e", "flame2": "#facb3e", "flame3": "#fdf7ed",
+    "coin0": "#6e5426", "coin1": "#a8873a", "coin2": "#d8b85a",
+    "river0": "#3e434a", "river1": "#5d6670", "silver": "#c9d1d6", "window": "#e8a85a", "glow": "#ffb060"
+  },
+  "atlases": {
+    "x72": { "png": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png", "list": "0x72-dungeontileset-ii/tile_list_v1.7" },
+    "extra": { "png": "generated/intereses-0x72-extra.png", "list": "generated/intereses-0x72-extra.txt" },
+    "na_floor": { "png": "ninja-adventure/TilesetFloor.png", "grid": 16 }
+  },
+  "ascii": {
+    "candle": {
+      "legend": { "o": "flame0", "y": "flame1", "Y": "flame2", "w": "flame3", "a": "stone4", "b": "stone3", "c": "stone2", "k": "out" },
+      "rows": [
+        "..y..",
+        ".yYy.",
+        ".yww.",
+        ".oYo.",
+        "..k..",
+        "aaaab",
+        "aaabc",
+        "aaabc",
+        "aabbc",
+        "aabbc",
+        "aabbc",
+        "abbcc",
+        "abbcc"
+      ]
+    },
+    "coins": {
+      "legend": { "c": "coin1", "C": "coin2", "k": "coin0" },
+      "rows": [
+        ".ccccccc.",
+        "cCCCCCCCc",
+        ".kkkkkkk.",
+        "cCCCCCCCc",
+        ".kkkkkkk.",
+        "cCCCCCCCc",
+        ".kkkkkkk.",
+        "cCCCCCCCc",
+        ".kkkkkkk."
+      ]
+    },
+    "coin": {
+      "legend": { "c": "coin1", "C": "coin2", "k": "coin0" },
+      "rows": [".ccccc.", "cCCCCCc", ".kkkkk."]
+    },
+    "baron": {
+      "legend": { "k": "black" },
+      "rows": [
+        "..kk...",
+        ".kkkk..",
+        ".kkkk..",
+        "..kk...",
+        ".kkkkkk",
+        "kkkkk.k",
+        "kkkkk..",
+        "kkkkk.."
+      ]
+    },
+    "crow": {
+      "legend": { "k": "black" },
+      "rows": ["k...k", ".k.k.", "..k.."]
+    }
+  },
+  "panels": [
+    {
+      "id": "p01-libro",
+      "lines": ["En el Ducado todo tiene precio. Lo que no tiene precio, tiene intereses."],
+      "durationMs": 7000,
+      "effect": "fade",
+      "draw": [
+        { "op": "gradient", "colors": ["black", "night1", "night2"], "y": 0, "h": 110 },
+        { "op": "rect", "x": 0, "y": 100, "w": 320, "h": 80, "color": "wood1" },
+        { "op": "rect", "x": 0, "y": 100, "w": 320, "h": 2, "color": "wood2" },
+        { "op": "noise", "seed": 4, "color": "wood0", "density": 0.12, "x": 0, "y": 102, "w": 320, "h": 78 },
+        { "op": "poly", "points": [[70, 112], [158, 104], [160, 160], [64, 166]], "color": "parch1" },
+        { "op": "poly", "points": [[162, 104], [250, 112], [256, 166], [160, 160]], "color": "parch2" },
+        { "op": "line", "x0": 160, "y0": 104, "x1": 160, "y1": 160, "color": "parch0" },
+        { "op": "line", "x0": 80, "y0": 120, "x1": 150, "y1": 114, "color": "ink" },
+        { "op": "line", "x0": 80, "y0": 128, "x1": 140, "y1": 123, "color": "ink" },
+        { "op": "line", "x0": 79, "y0": 136, "x1": 150, "y1": 130, "color": "ink" },
+        { "op": "line", "x0": 78, "y0": 144, "x1": 128, "y1": 140, "color": "ink" },
+        { "op": "line", "x0": 170, "y0": 116, "x1": 240, "y1": 121, "color": "ink" },
+        { "op": "line", "x0": 170, "y0": 124, "x1": 236, "y1": 129, "color": "ink" },
+        { "op": "line", "x0": 170, "y0": 132, "x1": 244, "y1": 138, "color": "wax1" },
+        { "op": "line", "x0": 170, "y0": 140, "x1": 222, "y1": 144, "color": "ink" },
+        { "op": "line", "x0": 238, "y0": 150, "x1": 280, "y1": 96, "color": "parch3" },
+        { "op": "line", "x0": 240, "y0": 150, "x1": 282, "y1": 97, "color": "parch1" },
+        { "op": "sprite", "ascii": "coins", "x": 32, "y": 152, "scale": 2, "anchor": "bottom" },
+        { "op": "sprite", "ascii": "coins", "x": 46, "y": 162, "scale": 2, "anchor": "bottom" },
+        { "op": "sprite", "ascii": "coin", "x": 276, "y": 162, "scale": 2, "anchor": "bottom" },
+        { "op": "sprite", "ascii": "candle", "x": 290, "y": 118, "scale": 3, "anchor": "bottom" },
+        { "op": "glow", "cx": 290, "cy": 84, "r": 120, "ry": 90, "color": "glow", "strength": 0.35 },
+        { "op": "vignette", "from": 0.45, "alpha": 0.85 }
+      ]
+    },
+    {
+      "id": "p02-valcarcel",
+      "lines": [
+        "La Casa Valcárcel es la banca más respetada del Ducado.",
+        "Es respetada porque nadie que le debiera dinero ha vivido lo bastante para hablar mal de ella."
+      ],
+      "durationMs": 9000,
+      "effect": "pan",
+      "effectParams": { "from": [0, 60], "to": [0, 0] },
+      "size": [320, 240],
+      "draw": [
+        { "op": "gradient", "colors": ["black", "night1", "night2", "night3"], "y": 0, "h": 240 },
+        { "op": "stars", "seed": 9, "count": 40, "colors": ["stone2", "stone3"], "y0": 0, "y1": 70 },
+        { "op": "tiles", "atlas": "x72", "sprite": "wall_mid", "x": 56, "y": 84, "w": 208, "h": 112 },
+        { "op": "shade", "x": 56, "y": 84, "w": 208, "h": 112, "color": "black", "alpha": 0.35 },
+        { "op": "poly", "points": [[44, 84], [160, 40], [276, 84]], "color": "stone1" },
+        { "op": "poly", "points": [[60, 80], [160, 48], [260, 80]], "color": "stone0" },
+        { "op": "rect", "x": 44, "y": 84, "w": 232, "h": 10, "color": "stone2" },
+        { "op": "rect", "x": 44, "y": 84, "w": 232, "h": 2, "color": "stone3" },
+        { "op": "text", "text": "CASA VALCÁRCEL", "x": 160, "y": 87, "color": "stone0", "align": "center" },
+        { "op": "ellipse", "cx": 160, "cy": 68, "rx": 8, "ry": 8, "color": "coin1" },
+        { "op": "ellipse", "cx": 160, "cy": 68, "rx": 5, "ry": 5, "color": "coin0" },
+        { "op": "sprite", "atlas": "x72", "sprite": "column", "x": 64, "y": 94, "scale": 2 },
+        { "op": "sprite", "atlas": "x72", "sprite": "column", "x": 108, "y": 94, "scale": 2 },
+        { "op": "sprite", "atlas": "x72", "sprite": "column", "x": 180, "y": 94, "scale": 2 },
+        { "op": "sprite", "atlas": "x72", "sprite": "column", "x": 224, "y": 94, "scale": 2 },
+        { "op": "rect", "x": 146, "y": 132, "w": 28, "h": 58, "color": "black" },
+        { "op": "glow", "cx": 160, "cy": 176, "r": 26, "ry": 30, "color": "glow", "strength": 0.45 },
+        { "op": "sprite", "atlas": "x72", "sprite": "wall_banner_red", "x": 96, "y": 104, "scale": 2, "map": { "#da4e38": "wax1", "#8f4029": "wax0", "#62232f": "wax0" } },
+        { "op": "sprite", "atlas": "x72", "sprite": "wall_banner_red", "x": 196, "y": 104, "scale": 2, "map": { "#da4e38": "wax1", "#8f4029": "wax0", "#62232f": "wax0" } },
+        { "op": "rect", "x": 36, "y": 190, "w": 248, "h": 6, "color": "stone2" },
+        { "op": "rect", "x": 28, "y": 196, "w": 264, "h": 6, "color": "stone1" },
+        { "op": "rect", "x": 20, "y": 202, "w": 280, "h": 6, "color": "stone0" },
+        { "op": "rect", "x": 0, "y": 208, "w": 320, "h": 32, "color": "hill1" },
+        { "op": "sprite", "manifest": "0x72", "id": "guardia_baron_sargento", "x": 132, "y": 192, "scale": 2, "anchor": "bottom" },
+        { "op": "sprite", "manifest": "0x72", "id": "guardia_baron_sargento", "x": 188, "y": 192, "scale": 2, "anchor": "bottom", "flip": true },
+        { "op": "vignette", "from": 0.5, "alpha": 0.8 }
+      ]
+    },
+    {
+      "id": "p03-valle",
+      "lines": ["Hondonegra. Un valle, una mina de plata y un río gris del que nadie bebe dos veces."],
+      "durationMs": 7000,
+      "effect": "pan",
+      "effectParams": { "from": [0, 0], "to": [80, 0] },
+      "size": [400, 180],
+      "draw": [
+        { "op": "gradient", "colors": ["night2", "dusk1", "dusk2", "dusk3", "dusk4"], "y": 0, "h": 110 },
+        { "op": "ellipse", "cx": 300, "cy": 96, "rx": 14, "ry": 14, "color": "dusk4" },
+        { "op": "mountains", "seed": 31, "y": 92, "amp": 40, "step": 40, "color": "dusk1", "rough": 1 },
+        { "op": "mountains", "seed": 7, "y": 120, "amp": 34, "step": 30, "color": "hill2", "rough": 2, "edge": "hill3" },
+        { "op": "poly", "points": [[150, 132], [205, 86], [262, 132]], "color": "hill0" },
+        { "op": "noise", "seed": 12, "color": "hill2", "density": 0.08, "x": 160, "y": 90, "w": 100, "h": 42 },
+        { "op": "line", "x0": 222, "y0": 70, "x1": 214, "y1": 112, "color": "hill0", "width": 2 },
+        { "op": "line", "x0": 222, "y0": 70, "x1": 232, "y1": 112, "color": "hill0", "width": 2 },
+        { "op": "line", "x0": 216, "y0": 92, "x1": 230, "y1": 92, "color": "hill0" },
+        { "op": "ellipse", "cx": 223, "cy": 70, "rx": 4, "ry": 4, "color": "hill0" },
+        { "op": "line", "x0": 223, "y0": 70, "x1": 205, "y1": 86, "color": "hill0" },
+        { "op": "mountains", "seed": 19, "y": 140, "amp": 10, "step": 50, "color": "hill1" },
+        { "op": "skyline", "seed": 5, "y": 146, "x0": 40, "x1": 330, "minW": 7, "maxW": 14, "minH": 6, "maxH": 12, "color": "hill0", "windows": "window", "lit": 0.25, "gap": 2 },
+        { "op": "rect", "x": 0, "y": 146, "w": 400, "h": 34, "color": "hill0" },
+        { "op": "poly", "points": [[0, 160], [400, 150], [400, 162], [0, 174]], "color": "river0" },
+        { "op": "poly", "points": [[0, 162], [400, 152], [400, 156], [0, 166]], "color": "river1", "dither": 0.5 },
+        { "op": "vignette", "from": 0.6, "alpha": 0.6 }
+      ]
+    },
+    {
+      "id": "p04-pueblo",
+      "lines": ["La mina lleva ocho meses cerrada. El pueblo se muere despacio y en orden, como se muere todo lo pobre."],
+      "durationMs": 8000,
+      "effect": "flicker",
+      "draw": [
+        { "op": "gradient", "colors": ["black", "night1", "night2", "night3"], "y": 0, "h": 150 },
+        { "op": "stars", "seed": 3, "count": 30, "colors": ["stone2", "stone3"], "y0": 0, "y1": 80 },
+        { "op": "ellipse", "cx": 252, "cy": 40, "rx": 11, "ry": 11, "color": "parch2" },
+        { "op": "ellipse", "cx": 248, "cy": 37, "rx": 3, "ry": 2, "color": "parch1" },
+        { "op": "glow", "cx": 252, "cy": 40, "r": 40, "color": "night3", "strength": 0.5 },
+        { "op": "rect", "x": 74, "y": 52, "w": 24, "h": 100, "color": "hill0" },
+        { "op": "poly", "points": [[70, 52], [86, 36], [102, 52]], "color": "hill0" },
+        { "op": "rect", "x": 82, "y": 66, "w": 4, "h": 6, "color": "window" },
+        { "op": "line", "x0": 98, "y0": 60, "x1": 130, "y1": 60, "color": "hill0", "width": 1 },
+        { "op": "line", "x0": 98, "y0": 61, "x1": 130, "y1": 61, "color": "hill0" },
+        { "op": "line", "x0": 126, "y0": 61, "x1": 126, "y1": 74, "color": "stone1" },
+        { "op": "ellipse", "cx": 126, "cy": 77, "rx": 2, "ry": 3, "color": "hill0" },
+        { "op": "line", "x0": 98, "y0": 68, "x1": 106, "y1": 60, "color": "hill0" },
+        { "op": "sprite", "ascii": "crow", "x": 140, "y": 44 },
+        { "op": "sprite", "ascii": "crow", "x": 152, "y": 50 },
+        { "op": "sprite", "ascii": "crow", "x": 112, "y": 56 },
+        { "op": "skyline", "seed": 21, "y": 150, "x0": 0, "x1": 320, "minW": 14, "maxW": 26, "minH": 14, "maxH": 30, "color": "hill1", "windows": "window", "lit": 0.3, "gap": 1 },
+        { "op": "skyline", "seed": 22, "y": 162, "x0": -10, "x1": 330, "minW": 18, "maxW": 34, "minH": 10, "maxH": 22, "color": "hill0", "windows": "window", "lit": 0.15, "gap": 0 },
+        { "op": "rect", "x": 0, "y": 160, "w": 320, "h": 20, "color": "black" },
+        { "op": "rain", "seed": 2, "count": 160, "color": "night3", "len": 4, "alpha": 0.5 },
+        { "op": "vignette", "from": 0.5, "alpha": 0.8 }
+      ]
+    },
+    {
+      "id": "p05-abadia",
+      "lines": ["El barón Ulric Mazo vive en la abadía vieja. Es culto, cobarde y escribe una poesía espantosa."],
+      "durationMs": 8000,
+      "effect": "zoom",
+      "effectParams": { "from": 1, "to": 1.25, "centre": [196, 92] },
+      "draw": [
+        { "op": "gradient", "colors": ["black", "night1", "night2"], "y": 0, "h": 180 },
+        { "op": "stars", "seed": 15, "count": 25, "colors": ["stone2"], "y0": 0, "y1": 60 },
+        { "op": "mountains", "seed": 44, "y": 150, "amp": 30, "step": 60, "color": "hill1" },
+        { "op": "poly", "points": [[60, 180], [130, 128], [260, 122], [320, 150], [320, 180]], "color": "hill0" },
+        { "op": "rect", "x": 120, "y": 86, "w": 120, "h": 44, "color": "stone0" },
+        { "op": "poly", "points": [[114, 88], [180, 62], [246, 88]], "color": "hill0" },
+        { "op": "rect", "x": 216, "y": 38, "w": 22, "h": 92, "color": "stone0" },
+        { "op": "poly", "points": [[212, 40], [227, 14], [242, 40]], "color": "hill0" },
+        { "op": "rect", "x": 222, "y": 50, "w": 10, "h": 12, "color": "black" },
+        { "op": "rect", "x": 136, "y": 98, "w": 6, "h": 12, "color": "black" },
+        { "op": "rect", "x": 156, "y": 98, "w": 6, "h": 12, "color": "black" },
+        { "op": "rect", "x": 176, "y": 96, "w": 12, "h": 16, "color": "window" },
+        { "op": "sprite", "ascii": "baron", "x": 178, "y": 100 },
+        { "op": "rect", "x": 181, "y": 96, "w": 1, "h": 16, "color": "stone0" },
+        { "op": "rect", "x": 176, "y": 103, "w": 12, "h": 1, "color": "stone0" },
+        { "op": "glow", "cx": 182, "cy": 104, "r": 26, "color": "glow", "strength": 0.3 },
+        { "op": "rect", "x": 200, "y": 98, "w": 6, "h": 12, "color": "black" },
+        { "op": "noise", "seed": 8, "color": "hill1", "density": 0.1, "x": 120, "y": 86, "w": 120, "h": 44 },
+        { "op": "vignette", "from": 0.45, "alpha": 0.8 }
+      ]
+    },
+    {
+      "id": "p06-pagare",
+      "lines": [
+        "También debe cuatro mil coronas a la Casa Valcárcel.",
+        "Más intereses. Los intereses son lo único del valle que todavía trabaja."
+      ],
+      "durationMs": 8000,
+      "effect": "shake",
+      "effectParams": { "atMs": 6500, "intensity": 1 },
+      "draw": [
+        { "op": "rect", "x": 0, "y": 0, "w": 320, "h": 180, "color": "wood0" },
+        { "op": "poly", "points": [[44, 14], [282, 8], [290, 172], [36, 176]], "color": "parch2" },
+        { "op": "noise", "seed": 6, "color": "parch1", "density": 0.18, "x": 36, "y": 8, "w": 256, "h": 168 },
+        { "op": "noise", "seed": 7, "color": "parch3", "density": 0.05, "x": 36, "y": 8, "w": 256, "h": 168 },
+        { "op": "text", "text": "PAGARÉ", "x": 162, "y": 24, "scale": 3, "color": "ink", "align": "center" },
+        { "op": "line", "x0": 60, "y0": 46, "x1": 264, "y1": 44, "color": "parch0" },
+        { "op": "text", "text": "EL BARÓN ULRIC MAZO", "x": 62, "y": 56, "scale": 2, "color": "ink" },
+        { "op": "text", "text": "DEBE A CASA VALCÁRCEL", "x": 62, "y": 70, "scale": 2, "color": "ink" },
+        { "op": "text", "text": "4.000 CORONAS", "x": 62, "y": 90, "scale": 4, "color": "ink" },
+        { "op": "text", "text": "+ INTERESES", "x": 62, "y": 122, "scale": 2, "color": "wax1" },
+        { "op": "text", "text": "1.312,40...", "x": 62, "y": 136, "scale": 3, "color": "wax1" },
+        { "op": "ellipse", "cx": 246, "cy": 140, "rx": 18, "ry": 16, "color": "wax0" },
+        { "op": "ellipse", "cx": 245, "cy": 139, "rx": 15, "ry": 13, "color": "wax1" },
+        { "op": "ellipse", "cx": 245, "cy": 139, "rx": 8, "ry": 8, "color": "wax0" },
+        { "op": "text", "text": "V", "x": 242, "y": 133, "scale": 2, "color": "wax2" },
+        { "op": "vignette", "from": 0.5, "alpha": 0.7 }
+      ]
+    },
+    {
+      "id": "p07-camino",
+      "lines": [
+        "Tú cobras a comisión. Si cobras, te quedas el diez por ciento.",
+        "Si no cobras, te quedas el viaje."
+      ],
+      "durationMs": 8000,
+      "effect": "pan",
+      "effectParams": { "from": [0, 0], "to": [80, 0] },
+      "size": [400, 180],
+      "draw": [
+        { "op": "gradient", "colors": ["night1", "night2", "dusk1", "dusk2"], "y": 0, "h": 120 },
+        { "op": "mountains", "seed": 51, "y": 92, "amp": 36, "step": 50, "color": "dusk1" },
+        { "op": "mountains", "seed": 52, "y": 118, "amp": 26, "step": 36, "color": "hill2", "edge": "hill3" },
+        { "op": "mountains", "seed": 53, "y": 140, "amp": 14, "step": 44, "color": "hill1" },
+        { "op": "poly", "points": [[0, 150], [400, 136], [400, 180], [0, 180]], "color": "hill0" },
+        { "op": "poly", "points": [[0, 160], [400, 142], [400, 150], [0, 172]], "color": "stone1" },
+        { "op": "noise", "seed": 3, "color": "stone0", "density": 0.25, "x": 0, "y": 142, "w": 400, "h": 30 },
+        { "op": "line", "x0": 320, "y0": 120, "x1": 320, "y1": 146, "color": "hill0", "width": 2 },
+        { "op": "line", "x0": 312, "y0": 124, "x1": 330, "y1": 124, "color": "hill0" },
+        { "op": "sprite", "manifest": "0x72", "id": "cobrador", "anim": "move", "frame": 1, "x": 214, "y": 158, "scale": 2, "anchor": "bottom" },
+        { "op": "sprite", "manifest": "0x72", "id": "dorotea", "anim": "move", "frame": 2, "x": 176, "y": 160, "scale": 2, "anchor": "bottom" },
+        { "op": "vignette", "from": 0.6, "alpha": 0.6 }
+      ]
+    },
+    {
+      "id": "p08-dorotea",
+      "lines": [
+        "Dorotea Vane, contable del banco, viene a comprobar que la plata llegue entera.",
+        "Apunta todas las deudas. También las morales."
+      ],
+      "durationMs": 8000,
+      "draw": [
+        { "op": "gradient", "colors": ["black", "night1", "wood0"], "y": 0, "h": 180 },
+        { "op": "glow", "cx": 70, "cy": 80, "r": 110, "ry": 100, "color": "glow", "strength": 0.25 },
+        { "op": "sprite", "ascii": "candle", "x": 70, "y": 150, "scale": 3, "anchor": "bottom" },
+        { "op": "rect", "x": 0, "y": 150, "w": 320, "h": 30, "color": "wood1" },
+        { "op": "rect", "x": 0, "y": 150, "w": 320, "h": 2, "color": "wood2" },
+        { "op": "sprite", "manifest": "0x72", "id": "dorotea", "x": 176, "y": 172, "scale": 5, "anchor": "bottom" },
+        { "op": "poly", "points": [[214, 150], [262, 140], [270, 166], [222, 176]], "color": "parch2" },
+        { "op": "line", "x0": 242, "y0": 145, "x1": 248, "y1": 171, "color": "parch0" },
+        { "op": "vignette", "from": 0.4, "alpha": 0.85 }
+      ]
+    },
+    {
+      "id": "p09-mina",
+      "lines": ["Nadie en Hondonegra habla de la mina. Eso debería preocuparte más que el barón."],
+      "durationMs": 7000,
+      "effect": "fade",
+      "effectParams": { "pulse": [160, 104] },
+      "draw": [
+        { "op": "rect", "x": 0, "y": 0, "w": 320, "h": 180, "color": "hill1" },
+        { "op": "noise", "seed": 1, "color": "hill2", "density": 0.2 },
+        { "op": "noise", "seed": 2, "color": "hill0", "density": 0.15 },
+        { "op": "poly", "points": [[104, 180], [110, 60], [210, 60], [216, 180]], "color": "black" },
+        { "op": "glow", "cx": 160, "cy": 106, "r": 10, "ry": 7, "color": "silver", "strength": 0.4 },
+        { "op": "rect", "x": 159, "y": 106, "w": 1, "h": 1, "color": "silver" },
+        { "op": "rect", "x": 163, "y": 104, "w": 1, "h": 1, "color": "stone3" },
+        { "op": "rect", "x": 156, "y": 108, "w": 1, "h": 1, "color": "stone3" },
+        { "op": "rect", "x": 98, "y": 52, "w": 14, "h": 128, "color": "wood2" },
+        { "op": "rect", "x": 98, "y": 52, "w": 3, "h": 128, "color": "wood3" },
+        { "op": "rect", "x": 208, "y": 52, "w": 14, "h": 128, "color": "wood2" },
+        { "op": "rect", "x": 208, "y": 52, "w": 3, "h": 128, "color": "wood3" },
+        { "op": "rect", "x": 90, "y": 44, "w": 140, "h": 12, "color": "wood2" },
+        { "op": "rect", "x": 90, "y": 44, "w": 140, "h": 3, "color": "wood3" },
+        { "op": "rect", "x": 90, "y": 55, "w": 140, "h": 1, "color": "wood0" },
+        { "op": "line", "x0": 126, "y0": 172, "x1": 194, "y1": 172, "color": "wood0" },
+        { "op": "line", "x0": 138, "y0": 150, "x1": 182, "y1": 150, "color": "wood0" },
+        { "op": "line", "x0": 146, "y0": 134, "x1": 174, "y1": 134, "color": "wood0" },
+        { "op": "line", "x0": 151, "y0": 124, "x1": 169, "y1": 124, "color": "wood0" },
+        { "op": "line", "x0": 130, "y0": 180, "x1": 155, "y1": 116, "color": "stone1" },
+        { "op": "line", "x0": 190, "y0": 180, "x1": 165, "y1": 116, "color": "stone1" },
+        { "op": "sprite", "atlas": "extra", "sprite": "torch_wall_f1", "x": 72, "y": 70, "scale": 2 },
+        { "op": "glow", "cx": 88, "cy": 78, "r": 50, "color": "glow", "strength": 0.3 },
+        { "op": "vignette", "from": 0.45, "alpha": 0.85 }
+      ]
+    },
+    {
+      "id": "p10-titulo",
+      "lines": ["Todo se paga. Casi nunca lo paga quien firmó."],
+      "durationMs": 6000,
+      "effect": "fade",
+      "draw": [
+        { "op": "rect", "x": 0, "y": 0, "w": 320, "h": 180, "color": "black" },
+        { "op": "glow", "cx": 160, "cy": 80, "r": 150, "ry": 60, "color": "night2", "strength": 0.6 },
+        { "op": "text", "text": "INTERESES", "x": 160, "y": 58, "scale": 6, "color": "parch2", "align": "center", "shadow": "wax0" },
+        { "op": "line", "x0": 80, "y0": 96, "x1": 240, "y1": 96, "color": "parch0" },
+        { "op": "text", "text": "ACTO I: HONDONEGRA", "x": 160, "y": 104, "scale": 2, "color": "parch1", "align": "center" },
+        { "op": "sprite", "ascii": "coin", "x": 160, "y": 140, "scale": 2, "anchor": "bottom" }
+      ]
+    }
+  ]
+}
