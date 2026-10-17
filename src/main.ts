@@ -5,6 +5,7 @@ import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
 import './style.css';
+import { setupAudio } from './audio/setupAudio';
 import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { DialogueBox } from './ui/dialogueBox';
@@ -19,6 +20,7 @@ applyTheme(game.theme);
 const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {} });
 const store = new GameStore(engine, game.newGame(engine, randomSeed()));
 const hud = new Hud(store, game);
+setupAudio(store, game);
 const combatHud = new CombatHud(game);
 const controller = new GameController(store, game, combatHud);
 

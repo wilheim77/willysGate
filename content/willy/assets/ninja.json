@@ -86,6 +86,85 @@
         28
       ],
       "face": 29
+    },
+    "plato": {
+      "tileset": "terrain",
+      "frames": [
+        30,
+        31
+      ],
+      "face": 32
+    },
+    "baldosa-roja": {
+      "tileset": "terrain",
+      "frames": [
+        33
+      ],
+      "face": 34
+    },
+    "baldosa-roja-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        35
+      ],
+      "face": 36
+    },
+    "baldosa-azul": {
+      "tileset": "terrain",
+      "frames": [
+        37
+      ],
+      "face": 38
+    },
+    "baldosa-azul-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        39
+      ],
+      "face": 40
+    },
+    "baldosa-verde": {
+      "tileset": "terrain",
+      "frames": [
+        41
+      ],
+      "face": 42
+    },
+    "baldosa-verde-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        43
+      ],
+      "face": 44
+    },
+    "baldosa-amarilla": {
+      "tileset": "terrain",
+      "frames": [
+        45
+      ],
+      "face": 46
+    },
+    "baldosa-amarilla-encendida": {
+      "tileset": "terrain",
+      "frames": [
+        47
+      ],
+      "face": 48
+    },
+    "trampilla-abierta": {
+      "tileset": "terrain",
+      "frames": [
+        49
+      ],
+      "face": 50
+    },
+    "gradas": {
+      "tileset": "terrain",
+      "frames": [
+        51,
+        52
+      ],
+      "face": 53
     }
   },
   "sprites": {
@@ -1331,7 +1410,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 755,
+            "y": 847,
             "w": 16,
             "h": 20
           }
@@ -1339,7 +1418,7 @@
         "broken": [
           {
             "x": 16,
-            "y": 755,
+            "y": 847,
             "w": 16,
             "h": 20
           }
@@ -1354,7 +1433,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 775,
+            "y": 867,
             "w": 16,
             "h": 20
           }
@@ -1362,7 +1441,7 @@
         "broken": [
           {
             "x": 16,
-            "y": 775,
+            "y": 867,
             "w": 16,
             "h": 20
           }
@@ -1377,7 +1456,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 795,
+            "y": 887,
             "w": 16,
             "h": 16
           }
@@ -1542,6 +1621,1769 @@
             "y": 540,
             "w": 16,
             "h": 18
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-semigaviota--gaviota-patiamarilla": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 0,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 0,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 0,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 0,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 0,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-semigaviota": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 26,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 26,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 26,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 26,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 26,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 26,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-semigaviota--gaviota-reidora": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 52,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 52,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 52,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 52,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 52,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 52,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-semigaviota--gaviota-sombria": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 78,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 78,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 78,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 78,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 78,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 78,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-semigaviota--gaviota-de-puerto-sucia": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 104,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 104,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 104,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 104,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 104,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 104,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-semigaviota--gaviota-albina": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 130,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 130,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 130,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 130,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 130,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 130,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-gnomo-de-jardin--gorro-rojo-clasico": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 156,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 156,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 156,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 156,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 156,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 156,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-gnomo-de-jardin": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 178,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 178,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 178,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 178,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 178,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 178,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-gnomo-de-jardin--gorro-azul-desvaido": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 200,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 200,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 200,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 200,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 200,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 200,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-gnomo-de-jardin--pintura-descascarillada": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 222,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 222,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 222,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 222,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 222,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 222,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-gnomo-de-jardin--musgo": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 244,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 244,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 244,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 244,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 244,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 244,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-gnomo-de-jardin--dorado-de-chalé": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 266,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 266,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 266,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 266,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 266,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 266,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-orco-de-oficina--verde-oliva": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 288,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 288,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 288,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 288,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 288,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 288,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-orco-de-oficina": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 314,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 314,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 314,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 314,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 314,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 314,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-orco-de-oficina--verde-fluor": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 340,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 340,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 340,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 340,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 340,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 340,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-orco-de-oficina--gris-ojeras": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 366,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 366,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 366,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 366,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 366,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 366,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-orco-de-oficina--moreno-de-terraza": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 392,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 392,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 392,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 392,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 392,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 392,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-orco-de-oficina--verde-pálido-de-fluorescente": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 418,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 418,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 418,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 418,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 418,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 418,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-fantasma-en-practicas--sabana-blanca": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 444,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 444,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 444,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 444,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 444,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 444,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-fantasma-en-practicas": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 466,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 466,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 466,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 466,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 466,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 466,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-fantasma-en-practicas--azul-niebla": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 488,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 488,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 488,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 488,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 488,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 488,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-fantasma-en-practicas--verde-ectoplasma": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 510,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 510,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 510,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 510,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 510,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 510,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-fantasma-en-practicas--lila-cursi": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 532,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 532,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 532,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 532,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 532,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 532,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-fantasma-en-practicas--gris-polvo": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 554,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 554,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 554,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 554,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 554,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 554,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-minotauro-vegano--negro-zaino": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 576,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 24,
+            "y": 576,
+            "w": 24,
+            "h": 36
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 576,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 72,
+            "y": 576,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 96,
+            "y": 576,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 120,
+            "y": 576,
+            "w": 24,
+            "h": 36
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-minotauro-vegano": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 612,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 24,
+            "y": 612,
+            "w": 24,
+            "h": 36
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 612,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 72,
+            "y": 612,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 96,
+            "y": 612,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 120,
+            "y": 612,
+            "w": 24,
+            "h": 36
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-minotauro-vegano--castaño": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 648,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 24,
+            "y": 648,
+            "w": 24,
+            "h": 36
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 648,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 72,
+            "y": 648,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 96,
+            "y": 648,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 120,
+            "y": 648,
+            "w": 24,
+            "h": 36
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-minotauro-vegano--berrendo": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 684,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 24,
+            "y": 684,
+            "w": 24,
+            "h": 36
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 684,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 72,
+            "y": 684,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 96,
+            "y": 684,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 120,
+            "y": 684,
+            "w": 24,
+            "h": 36
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-minotauro-vegano--cárdeno": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 720,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 24,
+            "y": 720,
+            "w": 24,
+            "h": 36
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 720,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 72,
+            "y": 720,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 96,
+            "y": 720,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 120,
+            "y": 720,
+            "w": 24,
+            "h": 36
+          }
+        ]
+      }
+    },
+    "rival-cuerpo-minotauro-vegano--jabonero": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 756,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 24,
+            "y": 756,
+            "w": 24,
+            "h": 36
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 756,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 72,
+            "y": 756,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 96,
+            "y": 756,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 120,
+            "y": 756,
+            "w": 24,
+            "h": 36
+          }
+        ]
+      }
+    },
+    "rival-vanesa": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 792,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 792,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 792,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 792,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 792,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 792,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-ceferino": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 818,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 818,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 818,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 818,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 818,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 818,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-gorka": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 840,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 16,
+            "y": 840,
+            "w": 16,
+            "h": 26
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 840,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 48,
+            "y": 840,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 64,
+            "y": 840,
+            "w": 16,
+            "h": 26
+          },
+          {
+            "x": 80,
+            "y": 840,
+            "w": 16,
+            "h": 26
+          }
+        ]
+      }
+    },
+    "rival-mariluz": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 866,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 866,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 866,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 866,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 866,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 866,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "rival-asterio": {
+      "kind": "frames",
+      "url": "assets/ninja/rivals.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 888,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 24,
+            "y": 888,
+            "w": 24,
+            "h": 36
+          }
+        ],
+        "move": [
+          {
+            "x": 48,
+            "y": 888,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 72,
+            "y": 888,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 96,
+            "y": 888,
+            "w": 24,
+            "h": 36
+          },
+          {
+            "x": 120,
+            "y": 888,
+            "w": 24,
+            "h": 36
+          }
+        ]
+      }
+    },
+    "jefe-presentador": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 16,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 32,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 48,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 80,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 96,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          },
+          {
+            "x": 112,
+            "y": 558,
+            "w": 16,
+            "h": 30
+          }
+        ]
+      }
+    },
+    "jefe-presentador-murcielagos": {
+      "kind": "frames",
+      "url": "assets/ninja/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 32,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 64,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 96,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          }
+        ],
+        "move": [
+          {
+            "x": 128,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 160,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 192,
+            "y": 903,
+            "w": 32,
+            "h": 24
+          },
+          {
+            "x": 224,
+            "y": 903,
+            "w": 32,
+            "h": 24
           }
         ]
       }
@@ -2208,13 +4050,106 @@
       "loop": false,
       "anchor": "centre",
       "light": "#ffb060"
+    },
+    "atril-rojo": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 579,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 16,
+          "y": 579,
+          "w": 16,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "atril-azul": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 599,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 16,
+          "y": 599,
+          "w": 16,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "atril-verde": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 619,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 16,
+          "y": 619,
+          "w": 16,
+          "h": 20
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "panel-de-preguntas": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        },
+        {
+          "x": 48,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        },
+        {
+          "x": 96,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        },
+        {
+          "x": 144,
+          "y": 639,
+          "w": 48,
+          "h": 32
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "wall",
+      "light": "#b45cff"
     }
   },
   "ui": {
     "carta-bronce": {
       "url": "assets/ninja/extra.png",
       "x": 0,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -2222,7 +4157,7 @@
     "carta-plata": {
       "url": "assets/ninja/extra.png",
       "x": 24,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -2230,7 +4165,7 @@
     "carta-oro": {
       "url": "assets/ninja/extra.png",
       "x": 48,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -2238,7 +4173,7 @@
     "carta-legendaria": {
       "url": "assets/ninja/extra.png",
       "x": 72,
-      "y": 811,
+      "y": 927,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -2246,140 +4181,140 @@
     "icono-audiencia": {
       "url": "assets/ninja/extra.png",
       "x": 96,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-reloj": {
       "url": "assets/ninja/extra.png",
       "x": 108,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-ardiendo": {
       "url": "assets/ninja/extra.png",
       "x": 120,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-empapado": {
       "url": "assets/ninja/extra.png",
       "x": 132,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-congelado": {
       "url": "assets/ninja/extra.png",
       "x": 144,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-electrocutado": {
       "url": "assets/ninja/extra.png",
       "x": 156,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-envenenado": {
       "url": "assets/ninja/extra.png",
       "x": 168,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-tumbado": {
       "url": "assets/ninja/extra.png",
       "x": 180,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-aturdido": {
       "url": "assets/ninja/extra.png",
       "x": 192,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-asustado": {
       "url": "assets/ninja/extra.png",
       "x": 204,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-cegado": {
       "url": "assets/ninja/extra.png",
       "x": 216,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-enredado": {
       "url": "assets/ninja/extra.png",
       "x": 228,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-bailando": {
       "url": "assets/ninja/extra.png",
       "x": 240,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-mareado": {
       "url": "assets/ninja/extra.png",
       "x": 252,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-escondido": {
       "url": "assets/ninja/extra.png",
       "x": 264,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-animado": {
       "url": "assets/ninja/extra.png",
       "x": 276,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-dormido": {
       "url": "assets/ninja/extra.png",
       "x": 288,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-petrificado": {
       "url": "assets/ninja/extra.png",
       "x": 300,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-compulsado": {
       "url": "assets/ninja/extra.png",
       "x": 312,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     },
     "icono-afortunado": {
       "url": "assets/ninja/extra.png",
       "x": 324,
-      "y": 811,
+      "y": 927,
       "w": 12,
       "h": 12
     }
@@ -2390,25 +4325,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 579,
+          "y": 671,
           "w": 16,
           "h": 16
         }
@@ -2421,7 +4356,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 595,
+          "y": 687,
           "w": 16,
           "h": 16
         }
@@ -2434,25 +4369,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 611,
+          "y": 703,
           "w": 16,
           "h": 16
         }
@@ -2465,7 +4400,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 627,
+          "y": 719,
           "w": 16,
           "h": 16
         }
@@ -2478,25 +4413,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 643,
+          "y": 735,
           "w": 16,
           "h": 16
         }
@@ -2509,25 +4444,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 659,
+          "y": 751,
           "w": 16,
           "h": 16
         }
@@ -2540,25 +4475,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 675,
+          "y": 767,
           "w": 16,
           "h": 16
         }
@@ -2571,7 +4506,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 691,
+          "y": 783,
           "w": 16,
           "h": 16
         }
@@ -2584,7 +4519,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 707,
+          "y": 799,
           "w": 16,
           "h": 16
         }
@@ -2597,7 +4532,7 @@
       "frames": [
         {
           "x": 0,
-          "y": 723,
+          "y": 815,
           "w": 16,
           "h": 16
         }
@@ -2610,25 +4545,25 @@
       "frames": [
         {
           "x": 0,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         },
         {
           "x": 16,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         },
         {
           "x": 32,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         },
         {
           "x": 48,
-          "y": 739,
+          "y": 831,
           "w": 16,
           "h": 16
         }
@@ -2785,6 +4720,90 @@
       "w": 32,
       "h": 32
     },
+    "rival-cuerpo-semigaviota": {
+      "url": "assets/ninja/portraits.png",
+      "x": 160,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "rival-cuerpo-gnomo-de-jardin": {
+      "url": "assets/ninja/portraits.png",
+      "x": 192,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "rival-cuerpo-orco-de-oficina": {
+      "url": "assets/ninja/portraits.png",
+      "x": 224,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "rival-cuerpo-fantasma-en-practicas": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "rival-cuerpo-minotauro-vegano": {
+      "url": "assets/ninja/portraits.png",
+      "x": 32,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "rival-vanesa": {
+      "url": "assets/ninja/portraits.png",
+      "x": 64,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "rival-ceferino": {
+      "url": "assets/ninja/portraits.png",
+      "x": 96,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "rival-gorka": {
+      "url": "assets/ninja/portraits.png",
+      "x": 128,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "rival-mariluz": {
+      "url": "assets/ninja/portraits.png",
+      "x": 160,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "rival-asterio": {
+      "url": "assets/ninja/portraits.png",
+      "x": 192,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-presentador": {
+      "url": "assets/ninja/portraits.png",
+      "x": 224,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "jefe-presentador-murcielagos": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
     "patrocinador-butanos-perez": {
       "url": "assets/ninja/portraits-hand.png",
       "x": 0,
@@ -2826,6 +4845,815 @@
       "y": 0,
       "w": 32,
       "h": 32
+    }
+  },
+  "rivals": {
+    "bodies": {
+      "semigaviota": {
+        "sprite": "rival-cuerpo-semigaviota",
+        "palettes": {
+          "gaviota-patiamarilla": "rival-cuerpo-semigaviota--gaviota-patiamarilla",
+          "gaviota-reidora": "rival-cuerpo-semigaviota--gaviota-reidora",
+          "gaviota-sombria": "rival-cuerpo-semigaviota--gaviota-sombria",
+          "gaviota-de-puerto-sucia": "rival-cuerpo-semigaviota--gaviota-de-puerto-sucia",
+          "gaviota-albina": "rival-cuerpo-semigaviota--gaviota-albina"
+        },
+        "anchors": {
+          "idle": [
+            {
+              "cabeza": [
+                6,
+                4
+              ],
+              "cara": [
+                6,
+                7
+              ],
+              "mano": [
+                12,
+                15
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                5
+              ],
+              "cara": [
+                6,
+                8
+              ],
+              "mano": [
+                12,
+                16
+              ]
+            }
+          ],
+          "move": [
+            {
+              "cabeza": [
+                6,
+                4
+              ],
+              "cara": [
+                6,
+                7
+              ],
+              "mano": [
+                12,
+                15
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                5
+              ],
+              "cara": [
+                6,
+                8
+              ],
+              "mano": [
+                12,
+                16
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                4
+              ],
+              "cara": [
+                6,
+                7
+              ],
+              "mano": [
+                12,
+                15
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                5
+              ],
+              "cara": [
+                6,
+                8
+              ],
+              "mano": [
+                12,
+                16
+              ]
+            }
+          ]
+        }
+      },
+      "gnomo-de-jardin": {
+        "sprite": "rival-cuerpo-gnomo-de-jardin",
+        "palettes": {
+          "gorro-rojo-clasico": "rival-cuerpo-gnomo-de-jardin--gorro-rojo-clasico",
+          "gorro-azul-desvaido": "rival-cuerpo-gnomo-de-jardin--gorro-azul-desvaido",
+          "pintura-descascarillada": "rival-cuerpo-gnomo-de-jardin--pintura-descascarillada",
+          "musgo": "rival-cuerpo-gnomo-de-jardin--musgo",
+          "dorado-de-chalé": "rival-cuerpo-gnomo-de-jardin--dorado-de-chalé"
+        },
+        "anchors": {
+          "idle": [
+            {
+              "cabeza": [
+                7,
+                4
+              ],
+              "cara": [
+                6,
+                11
+              ],
+              "mano": [
+                2,
+                16
+              ]
+            },
+            {
+              "cabeza": [
+                7,
+                4
+              ],
+              "cara": [
+                6,
+                11
+              ],
+              "mano": [
+                2,
+                16
+              ]
+            }
+          ],
+          "move": [
+            {
+              "cabeza": [
+                7,
+                4
+              ],
+              "cara": [
+                6,
+                11
+              ],
+              "mano": [
+                2,
+                16
+              ]
+            },
+            {
+              "cabeza": [
+                8,
+                4
+              ],
+              "cara": [
+                7,
+                11
+              ],
+              "mano": [
+                3,
+                16
+              ]
+            },
+            {
+              "cabeza": [
+                7,
+                4
+              ],
+              "cara": [
+                6,
+                11
+              ],
+              "mano": [
+                2,
+                16
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                4
+              ],
+              "cara": [
+                5,
+                11
+              ],
+              "mano": [
+                1,
+                16
+              ]
+            }
+          ]
+        }
+      },
+      "orco-de-oficina": {
+        "sprite": "rival-cuerpo-orco-de-oficina",
+        "palettes": {
+          "verde-oliva": "rival-cuerpo-orco-de-oficina--verde-oliva",
+          "verde-fluor": "rival-cuerpo-orco-de-oficina--verde-fluor",
+          "gris-ojeras": "rival-cuerpo-orco-de-oficina--gris-ojeras",
+          "moreno-de-terraza": "rival-cuerpo-orco-de-oficina--moreno-de-terraza",
+          "verde-pálido-de-fluorescente": "rival-cuerpo-orco-de-oficina--verde-pálido-de-fluorescente"
+        },
+        "anchors": {
+          "idle": [
+            {
+              "cabeza": [
+                6,
+                6
+              ],
+              "cara": [
+                6,
+                9
+              ],
+              "mano": [
+                12,
+                17
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                7
+              ],
+              "cara": [
+                6,
+                10
+              ],
+              "mano": [
+                12,
+                18
+              ]
+            }
+          ],
+          "move": [
+            {
+              "cabeza": [
+                6,
+                6
+              ],
+              "cara": [
+                6,
+                9
+              ],
+              "mano": [
+                12,
+                17
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                7
+              ],
+              "cara": [
+                6,
+                10
+              ],
+              "mano": [
+                12,
+                18
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                6
+              ],
+              "cara": [
+                6,
+                9
+              ],
+              "mano": [
+                12,
+                17
+              ]
+            },
+            {
+              "cabeza": [
+                6,
+                7
+              ],
+              "cara": [
+                6,
+                10
+              ],
+              "mano": [
+                12,
+                18
+              ]
+            }
+          ]
+        }
+      },
+      "fantasma-en-practicas": {
+        "sprite": "rival-cuerpo-fantasma-en-practicas",
+        "palettes": {
+          "sabana-blanca": "rival-cuerpo-fantasma-en-practicas--sabana-blanca",
+          "azul-niebla": "rival-cuerpo-fantasma-en-practicas--azul-niebla",
+          "verde-ectoplasma": "rival-cuerpo-fantasma-en-practicas--verde-ectoplasma",
+          "lila-cursi": "rival-cuerpo-fantasma-en-practicas--lila-cursi",
+          "gris-polvo": "rival-cuerpo-fantasma-en-practicas--gris-polvo"
+        },
+        "anchors": {
+          "idle": [
+            {
+              "cabeza": [
+                7,
+                4
+              ],
+              "cara": [
+                7,
+                7
+              ],
+              "mano": [
+                14,
+                12
+              ]
+            },
+            {
+              "cabeza": [
+                7,
+                3
+              ],
+              "cara": [
+                7,
+                6
+              ],
+              "mano": [
+                14,
+                11
+              ]
+            }
+          ],
+          "move": [
+            {
+              "cabeza": [
+                7,
+                4
+              ],
+              "cara": [
+                7,
+                7
+              ],
+              "mano": [
+                14,
+                12
+              ]
+            },
+            {
+              "cabeza": [
+                7,
+                3
+              ],
+              "cara": [
+                7,
+                6
+              ],
+              "mano": [
+                14,
+                11
+              ]
+            },
+            {
+              "cabeza": [
+                7,
+                4
+              ],
+              "cara": [
+                7,
+                7
+              ],
+              "mano": [
+                14,
+                12
+              ]
+            },
+            {
+              "cabeza": [
+                7,
+                3
+              ],
+              "cara": [
+                7,
+                6
+              ],
+              "mano": [
+                14,
+                11
+              ]
+            }
+          ]
+        }
+      },
+      "minotauro-vegano": {
+        "sprite": "rival-cuerpo-minotauro-vegano",
+        "palettes": {
+          "negro-zaino": "rival-cuerpo-minotauro-vegano--negro-zaino",
+          "castaño": "rival-cuerpo-minotauro-vegano--castaño",
+          "berrendo": "rival-cuerpo-minotauro-vegano--berrendo",
+          "cárdeno": "rival-cuerpo-minotauro-vegano--cárdeno",
+          "jabonero": "rival-cuerpo-minotauro-vegano--jabonero"
+        },
+        "anchors": {
+          "idle": [
+            {
+              "cabeza": [
+                12,
+                8
+              ],
+              "cara": [
+                12,
+                10
+              ],
+              "mano": [
+                21,
+                24
+              ]
+            },
+            {
+              "cabeza": [
+                12,
+                9
+              ],
+              "cara": [
+                12,
+                11
+              ],
+              "mano": [
+                21,
+                25
+              ]
+            }
+          ],
+          "move": [
+            {
+              "cabeza": [
+                12,
+                8
+              ],
+              "cara": [
+                12,
+                10
+              ],
+              "mano": [
+                21,
+                24
+              ]
+            },
+            {
+              "cabeza": [
+                12,
+                9
+              ],
+              "cara": [
+                12,
+                11
+              ],
+              "mano": [
+                21,
+                25
+              ]
+            },
+            {
+              "cabeza": [
+                12,
+                8
+              ],
+              "cara": [
+                12,
+                10
+              ],
+              "mano": [
+                21,
+                24
+              ]
+            },
+            {
+              "cabeza": [
+                12,
+                9
+              ],
+              "cara": [
+                12,
+                11
+              ],
+              "mano": [
+                21,
+                25
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "accessories": {
+      "cabeza": {
+        "gorra": {
+          "url": "assets/ninja/rivals.png",
+          "x": 0,
+          "y": 924,
+          "w": 9,
+          "h": 3,
+          "pivot": [
+            4,
+            2
+          ]
+        },
+        "boina": {
+          "url": "assets/ninja/rivals.png",
+          "x": 10,
+          "y": 924,
+          "w": 8,
+          "h": 4,
+          "pivot": [
+            4,
+            3
+          ]
+        },
+        "casco-de-moto": {
+          "url": "assets/ninja/rivals.png",
+          "x": 19,
+          "y": 924,
+          "w": 10,
+          "h": 8,
+          "pivot": [
+            5,
+            1
+          ]
+        },
+        "sombrero-de-paja": {
+          "url": "assets/ninja/rivals.png",
+          "x": 30,
+          "y": 924,
+          "w": 12,
+          "h": 5,
+          "pivot": [
+            6,
+            3
+          ]
+        },
+        "pañuelo": {
+          "url": "assets/ninja/rivals.png",
+          "x": 43,
+          "y": 924,
+          "w": 9,
+          "h": 4,
+          "pivot": [
+            4,
+            0
+          ]
+        },
+        "corona-de-carton": {
+          "url": "assets/ninja/rivals.png",
+          "x": 53,
+          "y": 924,
+          "w": 8,
+          "h": 4,
+          "pivot": [
+            4,
+            3
+          ]
+        },
+        "gorro-de-lana": {
+          "url": "assets/ninja/rivals.png",
+          "x": 62,
+          "y": 924,
+          "w": 8,
+          "h": 6,
+          "pivot": [
+            4,
+            5
+          ]
+        },
+        "visera": {
+          "url": "assets/ninja/rivals.png",
+          "x": 71,
+          "y": 924,
+          "w": 10,
+          "h": 3,
+          "pivot": [
+            4,
+            -1
+          ]
+        },
+        "tupé": {
+          "url": "assets/ninja/rivals.png",
+          "x": 82,
+          "y": 924,
+          "w": 8,
+          "h": 5,
+          "pivot": [
+            3,
+            4
+          ]
+        },
+        "auriculares": {
+          "url": "assets/ninja/rivals.png",
+          "x": 91,
+          "y": 924,
+          "w": 10,
+          "h": 6,
+          "pivot": [
+            5,
+            1
+          ]
+        },
+        "flor": {
+          "url": "assets/ninja/rivals.png",
+          "x": 102,
+          "y": 924,
+          "w": 7,
+          "h": 6,
+          "pivot": [
+            3,
+            5
+          ]
+        }
+      },
+      "cara": {
+        "gafas-de-sol": {
+          "url": "assets/ninja/rivals.png",
+          "x": 110,
+          "y": 924,
+          "w": 9,
+          "h": 3,
+          "pivot": [
+            4,
+            1
+          ]
+        },
+        "monóculo": {
+          "url": "assets/ninja/rivals.png",
+          "x": 120,
+          "y": 924,
+          "w": 3,
+          "h": 4,
+          "pivot": [
+            -1,
+            1
+          ]
+        },
+        "bigote-postizo": {
+          "url": "assets/ninja/rivals.png",
+          "x": 124,
+          "y": 924,
+          "w": 7,
+          "h": 3,
+          "pivot": [
+            3,
+            -2
+          ]
+        },
+        "parche": {
+          "url": "assets/ninja/rivals.png",
+          "x": 132,
+          "y": 924,
+          "w": 9,
+          "h": 3,
+          "pivot": [
+            4,
+            0
+          ]
+        },
+        "mascarilla": {
+          "url": "assets/ninja/rivals.png",
+          "x": 142,
+          "y": 924,
+          "w": 7,
+          "h": 4,
+          "pivot": [
+            3,
+            -2
+          ]
+        },
+        "pintura-de-guerra": {
+          "url": "assets/ninja/rivals.png",
+          "x": 150,
+          "y": 924,
+          "w": 7,
+          "h": 2,
+          "pivot": [
+            3,
+            -1
+          ]
+        },
+        "gafas-de-pasta": {
+          "url": "assets/ninja/rivals.png",
+          "x": 158,
+          "y": 924,
+          "w": 9,
+          "h": 3,
+          "pivot": [
+            4,
+            1
+          ]
+        }
+      },
+      "mano": {
+        "paraguas": {
+          "url": "assets/ninja/rivals.png",
+          "x": 168,
+          "y": 924,
+          "w": 9,
+          "h": 8,
+          "pivot": [
+            4,
+            7
+          ]
+        },
+        "maletín": {
+          "url": "assets/ninja/rivals.png",
+          "x": 178,
+          "y": 924,
+          "w": 6,
+          "h": 6,
+          "pivot": [
+            3,
+            1
+          ]
+        },
+        "palo-de-escoba": {
+          "url": "assets/ninja/rivals.png",
+          "x": 185,
+          "y": 924,
+          "w": 3,
+          "h": 10,
+          "pivot": [
+            1,
+            4
+          ]
+        },
+        "sartén": {
+          "url": "assets/ninja/rivals.png",
+          "x": 189,
+          "y": 924,
+          "w": 11,
+          "h": 5,
+          "pivot": [
+            8,
+            2
+          ]
+        },
+        "megáfono": {
+          "url": "assets/ninja/rivals.png",
+          "x": 201,
+          "y": 924,
+          "w": 6,
+          "h": 7,
+          "pivot": [
+            1,
+            3
+          ]
+        },
+        "raqueta": {
+          "url": "assets/ninja/rivals.png",
+          "x": 208,
+          "y": 924,
+          "w": 5,
+          "h": 7,
+          "pivot": [
+            2,
+            6
+          ]
+        },
+        "bolsa-de-pipas": {
+          "url": "assets/ninja/rivals.png",
+          "x": 214,
+          "y": 924,
+          "w": 5,
+          "h": 5,
+          "pivot": [
+            2,
+            2
+          ]
+        },
+        "cuchara-de-madera": {
+          "url": "assets/ninja/rivals.png",
+          "x": 220,
+          "y": 924,
+          "w": 4,
+          "h": 8,
+          "pivot": [
+            1,
+            6
+          ]
+        },
+        "abanico": {
+          "url": "assets/ninja/rivals.png",
+          "x": 225,
+          "y": 924,
+          "w": 7,
+          "h": 4,
+          "pivot": [
+            3,
+            3
+          ]
+        }
+      }
     }
   }
 }

@@ -1983,6 +1983,232 @@
      ]
     ]
    }
+  },
+  "jefe-presentador": {
+   "note": "El Presentador (jefe final): pelo engominado con sienes canas, piel algo pálida, sonrisa con colmillos discretos, un brillo rojo en los ojos, traje impecable con corbata granate y micrófono",
+   "size": [
+    16,
+    30
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "H": "#2a2228",
+    "G": "#c8c8d0",
+    "s": "#ecdcd8",
+    "S": "#c8b4b4",
+    "e": "#1e1c24",
+    "R": "#ff3040",
+    "W": "#ffffff",
+    "J": "#34344a",
+    "j": "#222234",
+    "X": "#8e1f3a",
+    "Y": "#e0c060",
+    "h": "#ecdcd8",
+    "K": "#141018",
+    "M": "#c0c6ce"
+   },
+   "parts": {
+    "body": [
+     "....kkkkkk......",
+     "...kHHHHHHk.....",
+     "..kHHHHHHHGk....",
+     "..kHssssssGk....",
+     "..kHseesseRk....",
+     "...kssssSssk....",
+     "...ksWkkkWsk....",
+     "...kSssssssk....",
+     "....kSSSSSk.....",
+     "..kkkJWWWJkkk...",
+     ".kJJJJWXWJJJJk..",
+     "kJJjJJWXWJJjJJk.",
+     "kJjJJJWXWJJJjJk.",
+     "kJjJJJJXJJJJjJk.",
+     "khJJJJJJJJJJJhk.",
+     ".kkJJJJYJJJJkk..",
+     "..kJJJJJJJJJk...",
+     "..kjjjjjjjjjk..."
+    ],
+    "mic": [
+     "kk",
+     "kM",
+     ".k",
+     ".k"
+    ],
+    "legs_stand": [
+     "..kJJJJkJJJJk...",
+     "..kJJJJkJJJJk...",
+     "..kjJJJkjJJJk...",
+     "..kjjjjkjjjjk...",
+     "..kKKKKkKKKKk...",
+     "..kkkkkkkkkkkk.."
+    ],
+    "legs_a": [
+     "..kJJJJkkJJJk...",
+     ".kJJJJk..kJJJk..",
+     ".kjJJk....kjJJk.",
+     ".kjjjk....kjjjk.",
+     "kKKKKk....kKKKKk",
+     "kkkkkk....kkkkkk"
+    ],
+    "legs_b": [
+     "...kJJJkJJJJk...",
+     "...kJJJkJJJk....",
+     "...kjJJkjJJk....",
+     "...kjjjkjjjk....",
+     "...kKKKkKKKKk...",
+     "...kkkkkkkkkkk.."
+    ],
+    "legs_c": [
+     "..kJJJkkJJJJk...",
+     ".kJJJk..kJJJJk..",
+     "kjJJk....kjJJk..",
+     "kjjjk....kjjjk..",
+     "kKKKKk...kKKKKk.",
+     "kkkkkk...kkkkkk."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       6
+      ],
+      [
+       "mic",
+       13,
+       17
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       24
+      ],
+      [
+       "body",
+       0,
+       7
+      ],
+      [
+       "mic",
+       13,
+       18
+      ]
+     ]
+    ]
+   }
   }
  }
 }

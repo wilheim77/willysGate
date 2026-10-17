@@ -59,8 +59,12 @@ export interface ParsedMap {
   map: GridMap;
   spawns: Record<string, Vec2>;
   lighting: LightingState;
-  /** Rectangles from every object layer other than spawns/lights. */
+  /** Rectangles from every object layer other than spawns/lights (points count as 1×1). */
   zones: MapZone[];
+  /** Objects of the "markers" layer (R14): a shorthand for zonesOf(..., 'markers'), with `type`. */
+  markers: (MapZone & { type: string })[];
+  /** Custom properties of the map itself (roles, weight, minFloor...). */
+  properties: Record<string, string | number | boolean>;
 }
 
 export function inZone(zone: MapZone, p: Vec2): boolean {
@@ -128,14 +132,15 @@ export function parseTiledMap(id: string, json: TiledMapJson): ParsedMap {
   for (const layer of json.layers) {
     if (layer.type !== 'objectgroup' || layer.name === 'spawns' || layer.name === 'lights') continue;
     for (const o of layer.objects ?? []) {
-      if (!o.width || !o.height) continue;
+      // Points (no size) cover the tile they sit on.
+      const point = !o.width || !o.height;
       zones.push({
         name: o.name,
         layer: layer.name,
         x: Math.floor(o.x / unitX),
         y: Math.floor(o.y / unitY),
-        width: Math.round(o.width / unitX),
-        height: Math.round(o.height / unitY),
+        width: point ? 1 : Math.max(1, Math.round(o.width! / unitX)),
+        height: point ? 1 : Math.max(1, Math.round(o.height! / unitY)),
         properties: propsOf(o.properties) as MapZone['properties'],
       });
     }
@@ -146,6 +151,8 @@ export function parseTiledMap(id: string, json: TiledMapJson): ParsedMap {
     spawns,
     lighting: { ambient: typeof ambient === 'number' ? ambient : 1, lights },
     zones,
+    markers: zones.filter((z) => z.layer === 'markers').map((z) => ({ ...z, type: String(z.properties.type ?? (json.layers.find((l) => l.name === 'markers')?.objects?.find((o) => o.name === z.name) as { type?: string } | undefined)?.type ?? '') })),
+    properties: propsOf(json.properties) as Record<string, string | number | boolean>,
   };
 }
 

@@ -276,3 +276,32 @@ Vista previa: [`art-previews/ninja-props.png`](art-previews/ninja-props.png).
 - Retratos generados (32×32) de Willy en todas sus clases, los PNJ, los enemigos y las invocaciones: [`art-previews/ninja-portraits.png`](art-previews/ninja-portraits.png).
 - Iconos de 12×12 (`ui`, `icono-<id>`): `audiencia`, `reloj` y uno por estado de `RULESET.md` → Condiciones (`ardiendo`, `empapado`, `congelado`, `electrocutado`, `envenenado`, `tumbado`, `aturdido`, `asustado`, `cegado`, `enredado`, `bailando`, `mareado`, `escondido`, `animado`, `dormido`, `petrificado`, `compulsado`, `afortunado`).
 - Tipografía: Press Start 2P (títulos) y VT323 (texto) son fuentes OFL de Google Fonts; las carga el cliente, no hacen falta en el pipeline de arte.
+
+## P3: mazmorreros rivales modulares (`rivals.json`, `scripts/art/build-rivals.ts`)
+
+Vista previa (paletas por raza, legendarios y combinaciones al azar): [`art-previews/willy-rivals.png`](art-previews/willy-rivals.png).
+
+- **Cuerpos base** (`sprites`, `idle` 2 y `move` 4): `rival-cuerpo-semigaviota` (16×26), `rival-cuerpo-gnomo-de-jardin` (16×22, cerámico: no respira, se bambolea al andar), `rival-cuerpo-orco-de-oficina` (16×26, camisa blanca), `rival-cuerpo-fantasma-en-practicas` (16×22, **translúcido**, flota, con la placa verde de «L» de prácticas) y `rival-cuerpo-minotauro-vegano` (24×36, dos casillas de alto, delantal verde). Una sola silueta por raza.
+- **Paletas**: cada cuerpo ya recoloreado con sus 5 paletas de `rival-generator.json` como sprite propio: `rival-cuerpo-<raza>--<paleta>` (p. ej. `rival-cuerpo-semigaviota--gaviota-reidora`, `rival-cuerpo-minotauro-vegano--berrendo`). El id sin paleta es la primera.
+- **Accesorios** (`rivals.accessories.<ranura>.<id>`: `{ url, x, y, w, h, pivot }`): los 11 de cabeza, 7 de cara y 9 de mano de `rival-generator.json`, exagerados para leerse a 16 px.
+- **Anclajes** (`rivals.bodies.<raza>.anchors.<anim>[frame]` → `{ cabeza, cara, mano }` en píxeles del frame): ya siguen el balanceo del cuerpo. El cliente dibuja el accesorio con su `pivot` sobre el anclaje y voltea los dos si el rival mira a la izquierda. `rivals.bodies.<raza>.palettes` da el `spriteId` de cada paleta.
+- **Legendarios** (`sprites`, compuestos): `rival-vanesa` (gaviota patiamarilla, gafas de sol, bolsa de pipas, carmín), `rival-ceferino` (gorro rojo clásico, monóculo y caña de pescar), `rival-gorka` (verde oliva, corbata roja, gafas de pasta, maletín), `rival-mariluz` (sábana blanca, flor, abanico y colorete) y `rival-asterio` (castaño, aro en la nariz y zanahoria).
+
+**Petición al render:** componer rivales = sprite de cuerpo con paleta + hasta 3 accesorios en sus anclajes (mismo frame, misma profundidad +1). Para los accesorios de mano conviene dibujarlos detrás del cuerpo cuando mira a la izquierda (mano de atrás), o aceptar que siempre queden delante.
+
+## P3: el Presentador y su plató (Planta 5)
+
+Vista previa: [`art-previews/willy-plato.png`](art-previews/willy-plato.png).
+
+| Id | Tipo | Aspecto |
+|---|---|---|
+| `jefe-presentador` | sprite (16×30, idle 4, move 4) | Pelo engominado con sienes canas, piel algo pálida, sonrisa con colmillos discretos, **un único brillo rojo en un ojo**, traje impecable con corbata granate y micrófono. Caricatura amable, sin parecido con nadie |
+| `jefe-presentador-murcielagos` | sprite (32×24, 4 frames) | Fase 2, «Pausa publicitaria»: nube de ocho murciélagos con micrófonos diminutos |
+| `atril-rojo`, `atril-azul`, `atril-verde` | props (16×20, `floor`) | Atriles de concursante; frame 0 apagado, frame 1 con el pulsador encendido |
+| `panel-de-preguntas` | prop (48×32, `wall`) | Panel con la pregunta y respuestas A/B/C; frame 0 sin respuesta, frames 1-3 iluminan A, B o C |
+| `plato` | terreno | Suelo negro brillante del plató con marcas de cinta |
+| `baldosa-<color>` y `baldosa-<color>-encendida` | terreno (`roja`, `azul`, `verde`, `amarilla`) | Baldosas de respuesta: apagadas (tramadas) y encendidas; el cambio es un `setTile` |
+| `trampilla-abierta` | terreno | Trampilla de escenario abierta (la caída de 1 nivel) |
+| `gradas` | terreno | Gradas vistas desde arriba con el público (no transitables) |
+
+Los focos, su cono, la parrilla de focos y las cámaras-dron ya estaban en P2.

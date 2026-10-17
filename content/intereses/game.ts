@@ -1,4 +1,4 @@
-import { type Entity, type TiledMapJson, type Trap, parseTiledMap, withLighting, withTraps, withZones } from '../../engine';
+import { type Entity, type GameState, type TiledMapJson, type Trap, parseTiledMap, withLighting, withTraps, withZones } from '../../engine';
 import { DND5E_CREATION, SURFACES, buildProtagonist, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
@@ -117,7 +117,9 @@ export const game: GameDefinition = {
       tiles: map.tiles.map((t, i) => (i === 11 * map.width + 10 ? { ...wall } : i === 11 * map.width + 9 ? { ...wall, terrain: 'door_closed' } : t)),
     };
     map.tiles = closed.tiles;
-    const state = withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...usables, ...props] }), painted).state, traps);
+    // Named arrival points, so travelling back to this map knows where to put the party.
+    const withSpawns = (st: GameState): GameState => ({ ...st, systems: { ...st.systems, spawns: spawns as never } });
+    const state = withSpawns(withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...usables, ...props] }), painted).state, traps));
     // The collector carries a lantern: the only light that goes everywhere with the party.
     return withZones(
       withLighting(state, {

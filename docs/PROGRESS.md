@@ -100,7 +100,9 @@
 - [x] Objetos con nombre y descripción (`items.json`) y «Mochila del grupo» en la ficha.
 - [ ] `flags.json` con marcas críticas + tests (marca crítica alcanzable sin tiradas, marcas leídas y nunca escritas, PNJ esenciales).
 - [ ] Escena «El camino»: Dorotea, reclutamiento de Garrán, mineros hambrientos evitables hablando.
-- [ ] Peticiones de Willy al motor: cambio de mapa (R10), causa en eventos (R11), semillas derivadas (R12), marcadores (R14).
+- [x] R10 cambio de mapa (`engine/world.ts`): varios mapas en una partida; el que se deja queda guardado tal cual (cadáveres, puertas abiertas), el nuevo se construye la primera vez con `EngineContent.maps`. Comando `travel` desde zonas `exits` (propiedades `to`, `spawn`) y efecto de diálogo `travel`. El grupo viaja junto y se lleva la linterna.
+- [x] R12 `deriveSeed`, R14 capa `markers` (y puntos de Tiled como zonas 1×1, propiedades del mapa), R19 efecto `modifyStat`.
+- [ ] Peticiones de Willy al motor: causa en eventos (R11), invocaciones (R13), salto (R15), generador (R16), choques (R17), vacío (R18), `modifyStat` (R19), `blocksSight`/`onRoundEnd` (R20).
 
 ## Planificado para más adelante
 
