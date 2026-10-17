@@ -926,6 +926,92 @@ function torch(frame: number): Image {
   return img;
 }
 
+/** Small flame (3 frames) for candles and lamps: 3x4 at (x, y) top-left. */
+function smallFlame(img: Image, x: number, y: number, frame: number): void {
+  const f = [['.Y.', 'yYy', 'oyo', '.r.'], ['Y..', 'yY.', 'oyo', '.r.'], ['..Y', '.Yy', 'oyo', '.r.']][frame % 3]!;
+  ascii(img, x, y, f, { Y: 'f5', y: 'f4', o: 'f3', r: 'f2' });
+}
+
+/** Cluster of tallow candles on the floor (chapel, crypt): three heights, wax drips. */
+function candles(frame: number): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 6, [
+    '................',
+    '.....##.........',
+    '....#WW#..##....',
+    '....#Ww#.#WW#...',
+    '..##.Ww#.#Ww#...',
+    '.#WW#Ww#.#Ww#...',
+    '.#Ww#Ww#.#Ww#...',
+    '.#Ww#WwW##Wwd#..',
+    '.#WwddwddWWwdd#.',
+    '..#dddddddddd#..',
+  ], { '#': 'out', W: 's3', w: 'd3', d: 'd2' });
+  smallFlame(img, 5, 3, frame);
+  smallFlame(img, 10, 4, frame + 1);
+  smallFlame(img, 1, 7, frame + 2);
+  return img;
+}
+
+/** Oil lamp (candil) hanging from an iron wall bracket. */
+function oilLamp(frame: number): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 2, [
+    '..#iiiiii#......',
+    '..#I#...#i#.....',
+    '.........#i#....',
+    '..........#i#...',
+    '.........#iI#...',
+    '..........#.....',
+    '..........#.....',
+    '........#WWW#...',
+    '.......#WggwW#..',
+    '........#WWW#...',
+    '.........###....',
+  ], { '#': 'out', i: 'i1', I: 'i2', W: 'gr1', w: 'gr3', g: 'gr2' });
+  smallFlame(img, 9, 5, frame);
+  return img;
+}
+
+/** Iron lantern with horn panes standing on the ground (or a crate). */
+function lantern(frame: number): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 2, [
+    '......####......',
+    '.....#i..i#.....',
+    '.....######.....',
+    '....#IiiiiI#....',
+    '....#iHHHHi#....',
+    '....#iHhhHi#....',
+    '....#iHhhHi#....',
+    '....#iHHHHi#....',
+    '....#IiiiiI#....',
+    '.....#dddd#.....',
+    '......####......',
+  ], { '#': 'out', i: 'i1', I: 'i2', d: 'i0', H: frame === 1 ? 'f3' : 'f2', h: frame === 2 ? 'f4' : 'f5' });
+  return img;
+}
+
+/** Wall lever on a stone plate: bigger and brighter than 0x72's so it reads as usable. 0 up, 1 middle, 2 down. */
+function leverArt(pos: 0 | 1 | 2): Image {
+  const img = blank(T, T);
+  ascii(img, 0, 9, [
+    '...##########...',
+    '..#SsssssssSS#..',
+    '..#sd######dS#..',
+    '..#sssssssssS#..',
+    '..#dddddddddd#..',
+    '...##########...',
+  ], { '#': 'out', S: 's3', s: 's2', d: 's1' });
+  const handle = [
+    ['.#RR#...........', '#RrRR#..........', '#RRR#...........', '.#I#............', '..#I#...........', '...#I#..........', '....#I#.........', '.....#I#........', '......##........'],
+    ['.......#RR#.....', '......#RrRR#....', '......#RRR#.....', '.......#I#......', '.......#I#......', '.......#I#......', '.......#I#......', '.......#I#......', '.......##.......'],
+    ['...........#RR#.', '..........#RrRR#', '...........#RRR#', '............#I#.', '...........#I#..', '..........#I#...', '.........#I#....', '........#I#.....', '........##......'],
+  ][pos]!;
+  ascii(img, pos === 0 ? 2 : pos === 2 ? -2 : 0, 2, handle, { '#': 'out', R: 'b3', r: 'f4', I: 'i2' });
+  return img;
+}
+
 /** Standing iron brazier with glowing coals and a 4-frame flame. */
 function brazier(frame: number): Image {
   const img = blank(T, T);
@@ -1124,6 +1210,9 @@ type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps: number; loop: boolean; light?: string }> = {
   torch_wall: { frames: [0, 1, 2, 3].map(torch), note: 'Antorcha de pared', anchor: 'wall', fps: 8, loop: true, light: '#ffb060' },
   brazier: { frames: [0, 1, 2, 3].map(brazier), note: 'Brasero de hierro', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
+  candles: { frames: [0, 1, 2].map(candles), note: 'Velas en el suelo (capilla, cripta)', anchor: 'floor', fps: 6, loop: true, light: '#ffc070' },
+  oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado de una escarpia', anchor: 'wall', fps: 6, loop: true, light: '#ffb050' },
+  lantern: { frames: [0, 1, 2].map(lantern), note: 'Farol de hierro en el suelo', anchor: 'floor', fps: 5, loop: true, light: '#ffb050' },
   blood_1: { frames: [bloodSplat(1)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
   blood_2: { frames: [bloodSplat(7)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
   blood_3: { frames: [bloodSplat(13)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
@@ -1188,6 +1277,7 @@ const objects: Record<string, Record<string, Image[]>> = {
   mine_wagon_ore: { idle: [mineWagon('ore')], broken: [mineWagon('broken')] },
   powder_keg: { idle: [powderKeg(false)], broken: [powderKeg(true)] },
   resonator: { idle: [0, 1, 2, 3].map((f) => resonator(f)), broken: [resonator('broken')] },
+  lever: { idle: [leverArt(0)], up: [leverArt(0)], down: [leverArt(2)], pull: [leverArt(0), leverArt(1), leverArt(2)] },
 };
 
 // Sheet: one row per group of frames; each row as tall as its tallest frame.

@@ -332,25 +332,6 @@
         }
       ]
     },
-    "lever": {
-      "base": "lever",
-      "note": "Palanca de 0x72: arriba (lever_left) y abajo (lever_right)",
-      "frames": {
-        "idle": [
-          "lever_left"
-        ],
-        "up": [
-          "lever_left"
-        ],
-        "down": [
-          "lever_right"
-        ],
-        "pull": [
-          "lever_left",
-          "lever_right"
-        ]
-      }
-    },
     "mazo": {
       "base": "elf_m",
       "note": "El barón Ulric Mazo: culto y cobarde; jubón de terciopelo morado con ribete dorado, pelo castaño claro, aro de oro y pluma de poeta",
