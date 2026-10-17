@@ -5,8 +5,8 @@
 ## Fuentes y herramientas
 
 - **Fuentes:** `scripts/maps/src/<n>-<id>.mjs` pinta cada mapa con rectángulos o ASCII (`scripts/maps/paint.mjs`) y declara los spawns, luces, superficies, trampas, encuentros, salidas y zonas. `node scripts/maps/build.mjs [id]` escribe `content/intereses/maps/<id>.json` (Tiled, tileset incrustado). Mientras un mapa tenga fuente, se edita la fuente: si lo retocas en Tiled, borra la fuente para que no se sobrescriba.
-- **Tileset lógico:** `scripts/maps/tileset.mjs` contiene 28 tiles: piedra, tierra, escoria, tablones y bóveda de h0 a h3, andamio de h1 a h3, raíles (`rails`, `rails_v`) en h0, muro, puerta cerrada y puerta abierta. Los 11 primeros coinciden con `test.json`. `npm run gen:logic-tiles` regenera `terrain-logic.png`.
-- **Vista previa:** `node scripts/maps/dump.mjs [id]`. A la izquierda va el terreno con los marcadores y a la derecha las alturas (`#` = no transitable). Terreno: `.` piedra, `,` tierra, `;` escoria, `=` tablones, `H` andamio, `-`/`|` raíles, `v` bóveda, `#` muro, `+`/`/` puerta cerrada/abierta. Marcadores: `@` héroe, letras = spawns (listados debajo), `o` barril de aceite o de pólvora, `u` barril, `x` caja, vagoneta o carro, `c` cofre, `l` palanca, `d` puerta usable, `r` resonador, `O` pozo, `T` horca, `t` tapiz, `f` mecha, `k` restos, `p` polea, `i` inscripción, `*` luz, `^` trampa, `E` salida, `%` aceite, `w` agua y `&` escombros.
+- **Tileset lógico:** `scripts/maps/tileset.mjs` contiene 56 tiles: los interiores (piedra, tierra, escoria, tablones y bóveda de h0 a h3, andamio de h1 a h3, raíles en h0, muro y puertas) y los exteriores (`scrub`, `rock`, `cobble` y `slag_heap` de h0 a h3, `road`, `road_v` y `mud` en h0-h1, `river`, `riverbank`, `fence` en h1, y `house`, `house_plain` y `stone_wall` como muros). Cada fuente pinta primero con los caracteres básicos y luego aplica `retile` para poner el arte exterior. Los 11 primeros coinciden con `test.json`. `npm run gen:logic-tiles` regenera `terrain-logic.png`.
+- **Vista previa:** `node scripts/maps/dump.mjs [id]`. A la izquierda va el terreno con los marcadores y a la derecha las alturas (`#` = no transitable). Terreno: `.` piedra, `,` tierra, `;` escoria, `=` tablones, `H` andamio, `-`/`|` raíles, `v` bóveda, `s` matorral, `k` roca, `c` adoquín, `S` escoria de escombrera, `R`/`I` camino, `m` barro, `~` río, `b` orilla, `f` valla, `h`/`g` casa, `W` muro de piedra, `#` muro, `+`/`/` puerta cerrada/abierta. Marcadores: `@` héroe, letras = spawns (listados debajo), `o` barril de aceite o de pólvora, `u` barril, `x` caja, vagoneta o carro, `c` cofre, `l` palanca, `d` puerta usable, `r` resonador, `O` pozo, `T` horca, `t` tapiz, `f` mecha, `k` restos, `p` polea, `i` inscripción, `*` luz, `^` trampa, `E` salida, `%` aceite, `w` agua y `&` escombros.
 - **Test:** `tests/content/maps.test.ts` comprueba:
   - que los spawns estén en casillas transitables y que no haya dos en la misma;
   - que con el movimiento de 5e (un nivel por paso) se llegue desde la entrada a todas las criaturas y al lado de todos los objetos;
@@ -15,7 +15,11 @@
   - que las superficies existan;
   - que los participantes de cada encuentro tengan spawn;
   - que cada salida apunte a un mapa y un spawn que existen, desde una casilla alcanzable, y que a cada mapa se pueda llegar por alguna salida;
-  - que de cada derrumbe se pueda volver a la entrada.
+  - que de cada derrumbe se pueda volver a la entrada;
+  - que los diálogos y hablantes de las escenas existan y nadie esencial esté en un `fight`;
+  - que las marcas de `requiresFlag`/`unlessFlag` estén en `flags.json` (o sean `TODO:`);
+  - que las salidas hacia delante en la historia lleven su marca (`STORY_GATES`);
+  - y una sonda: si se tapia una escena `gate`, sus salidas protegidas (`protects`) quedan fuera de alcance.
 
   Las puertas `door_closed` cuentan como transitables solo si tienen encima un spawn `door-*`.
 
@@ -41,28 +45,28 @@
 
 ### `camino`
 
-**P · El camino.** El último tramo del camino al valle, al atardecer. El grupo empieza al oeste con Dorotea, y el camino va elevado (h1). Al sur está la cuneta (h0) donde espera Garrán. Al este, los mineros hambrientos (ids de `cast.json`) cortan el paso junto a un carro volcado: cajas, un barril de aceite y aceite derramado. Hay una hoguera (`campfire`). Un vigía sube a un peñasco de escoria (h3); quien lo empuje por su cara sur lo hace caer 2 niveles. Para el tutorial hay un charco en el camino, una caja que hace de primera cobertura y un cepo de furtivo fácil (detección 10). La zona `scenes` abre `camino_mineros` antes de llegar a ellos, así que el combate se puede evitar hablando. La salida este lleva a la plaza.
+**P · El camino.** El último tramo del camino al valle, al atardecer. El grupo empieza al oeste con Dorotea, y el camino va elevado (h1). Al sur está la cuneta (h0) donde espera Garrán. Al este, los mineros hambrientos (ids de `cast.json`) cortan el paso junto a un carro volcado: cajas, un barril de aceite y aceite derramado. Hay una hoguera (`campfire`). Un vigía sube a un peñasco de escoria (h3); quien lo empuje por su cara sur lo hace caer 2 niveles. Para el tutorial hay un charco en el camino, una caja que hace de primera cobertura y un cepo de furtivo fácil (detección 10). Dos franjas `scenes` de lado a lado del mapa (`gate`) hacen inevitables a Garrán (`camino_garran`) y a los mineros (`camino_mineros`); el combate se puede evitar hablando. La salida este lleva a la plaza y exige `prologo_mineros_resuelto`.
 
 ```
 == camino: El camino (32x18, ambient 0.6)
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   33333333333333333333333333333333
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   33333322222233333333332222222333
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   33322221111122222322222111111223
-,,,,,,,,,,,,,,,,,,,;;;;;,,,,,,,,   32211111111111111112333211111112
-,,,,,,,,,,,,,,,^,,,;;G;;,,,,,,,,   32111111111111111112333211111112
-,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,,,   32111111111111111112333211111112
-,,,,,,,,,,,,,,,,,,;;;;;;,,,,,,,,   32111111111111111112333211111112
-,,,,,,,x,,,,,,,,,,,,,,,,,,,,,,,,   32111111111111111111111111111112
-,,,,,,,,,,,,,.ww...............E   21111111111111111111111111111111
-...@..........ww....D........A.E   11111111111111111111111111111111
-..B..........,,,,,,,,,F,,,,,,,,,   11111111111111111111111111111111
-,,,,,,,,,,,,,,,,,,,,,,,xxo,I,,,,   11111000000001111111111111111111
-,,,,,,,,,C,,,,,,,,,,,,,,,%%,,,,,   11111000000001111111111111111111
-,,,,,,,,,,,,,,,,,,,,,,,,,*,,,,,,   21111111111111111111111111111111
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   22111111111111111111111111111122
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   32222222222222222222222222222223
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   33333333333333333333333333333333
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   33333333333333333333333333333333
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333322222233333333332222222333
+kkkkkkkssssskkkkkkkkkkksssssskkk   33322221111122222322222111111223
+kkksssssssssssssssskkkkksssssssk   32211111111111111112333211111112
+kksssssssssssss^ssskkGkksssssssk   32111111111111111112333211111112
+kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
+kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
+kksssssxsssssssssssssssssssssssk   32111111111111111111111111111112
+kssssssssssssRwwRRRRRRRRRRRRRRRE   21111111111111111111111111111111
+RRR@RRRRRRRRRRwwRRRRDRRRRRRRRARE   11111111111111111111111111111111
+RRBRRRRRRRRRRsssssssssFsssssssss   11111111111111111111111111111111
+sssssmmmmmmmmssssssssssxxosIssss   11111000000001111111111111111111
+sssssmmmmCmmmssssssssssss%%sssss   11111000000001111111111111111111
+kssssssssssssssssssssssss*ssssss   21111111111111111111111111111111
+kksssssssssssssssssssssssssssskk   22111111111111111111111111111122
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   32222222222222222222222222222223
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
 ^ cepo-furtivo (15,4) {"marker":"trap_beartrap","detect":10,"save":"dex","dc":11,"damage":"1d6","type":"piercing","condition":"restrained","disarmCheck":"sleight_of_hand","disarmDc":10}
 E a-hondonegra (31,8) -> plaza:entry-camino
 @ hero (3,9)
@@ -80,32 +84,32 @@ scenes mineros-cortan-el-paso (16,0 2x18) {"dialogue":"camino_mineros","speaker"
 
 ### `plaza`
 
-**1 · La plaza.** La Torre del Cepo con el cadalso, una plataforma h2 con escalones a ambos lados: allí están Anselmo, Cirilo y tres fanáticos de la Santa Pala, y la zona `juicio-anselmo` (tras `plaza_llegada`). El suelo es de barro, con un pozo y la horca como props. Junto al Pico Roto esperan Nella, Odda y un minero; al pie del camino de la abadía, dos guardias. Hay una terraza de mercado (h1) con cajas, aceite de lámpara junto al cadalso y un abrevadero. Cuatro salidas: el camino (oeste), la abadía (norte, cuesta arriba hasta h3), las calles (este) y el Escorial (sur).
+**1 · La plaza.** La Torre del Cepo con el cadalso, una plataforma h2 con escalones a ambos lados: allí están Anselmo, Cirilo y tres fanáticos de la Santa Pala, y la zona `juicio-anselmo` (tras `plaza_llegada`). El suelo es de barro, con un pozo y la horca como props. Junto al Pico Roto esperan Nella, Odda y un minero; al pie del camino de la abadía, dos guardias. Hay una terraza de mercado (h1) con cajas, aceite de lámpara junto al cadalso y un abrevadero. Cuatro salidas: el camino (oeste), la abadía (norte, con `audiencia_concedida`), las calles (este, con `juicio_resuelto`) y el Escorial (sur, con `audiencia_hecha`). El juicio no puede acabar en pelea contra Cirilo (es esencial).
 
 ```
 == plaza: La plaza de Hondonegra (30x22, ambient 0.5)
-######################EEEE####   ######################3333####
-######################....####   ######################2222####
-######################.B..####   ######################2222####
-######################.*..####   ######################1111####
-#,,,,,,,####,,,,,,,,,,.P..####   #0000000####00000000001111####
-#,,,,,,,####,,,,,,,,,,,,,Q####   #0000000####00000000000000####
-#,,,,,,==TF==G=,,,,,,,,,,,####   #0000001222222100000000000####
-#,,,,,,========,,,,,,,,,,,####   #0000001222222100000000000####
-#,,,,,K*,,,,,,,o,,,,,,,,,,,,,E   #00000000000000000000000000000
-#.....,,I,,,,J*,,,,,,,,,,,,C,E   #11111000000000000000000000000
-#.xx..,,,,,,,,,,,,,,,,,,,,,,,E   #11111000000000000000000000000
-#.u...,,,,,,,,,,,,,,,,,,,#####   #111110000000000000000000#####
-#.....,,,,,,,,,,,O,,,,,L,*####   #111110000000000000000000#####
-#,,,,,,,,,,,,,,,,,,u,,,,M#####   #000000000000000000000000#####
-E,,,,,,,,,,,,,,,www,,,N,,#####   0000000000000000000000000#####
-E,A,,,,,,,,,,,,,,,,,,,,,,/####   00000000000000000000000000####
-E,,,,,,,,,,,,,,,,,,,x,,,O#####   0000000000000000000000000#####
-#,,,,,,,,,,,,,,,,,,,,,,,,#####   #000000000000000000000000#####
-#,,,,,,,,,,,,,,,,,,,,,,,,#####   #000000000000000000000000#####
-############,D,###############   ############000###############
-############,,,###############   ############000###############
-############EEE###############   ############000###############
+ghghghghghghghghghghghEEEEghgh   ######################3333####
+hghghghghghghghghghghgcccchghg   ######################2222####
+ghghghghghghghghghghghcBccghgh   ######################2222####
+hghghghgWWWWhghghghghgc*cchghg   ######################1111####
+gRRRRRRRWWWWRRRRRRRRRRcPccghgh   #0000000####00000000001111####
+hRRRRRRRWWWWRRRRRRRRRRRRRQhghg   #0000000####00000000000000####
+gRRRRRR==TF==G=RRRRRRRRRRRghgh   #0000001222222100000000000####
+hRRRRRR========RRRRRRRRRRRhghg   #0000001222222100000000000####
+gRRRRRK*RRRRRRRoRRRRRRRRRRRRRE   #00000000000000000000000000000
+hcccccRRIRRRRJ*RRRRRRRRRRRRCRE   #11111000000000000000000000000
+gcxxccRRRRRRRRRRRRRRRRRRRRRRRE   #11111000000000000000000000000
+hcucccRRRRRRRRRRRRRRRRRRRghghg   #111110000000000000000000#####
+gcccccRRRRRRRRRRRORRRRRLR*ghgh   #111110000000000000000000#####
+hRRRRRRRRRRRRRRRRRRuRRRRMghghg   #000000000000000000000000#####
+ERRRRRRRRRRRRRRRwwwRRRNRRhghgh   0000000000000000000000000#####
+ERARRRRRRRRRRRRRRRRRRRRRR/hghg   00000000000000000000000000####
+ERRRRRRRRRRRRRRRRRRRxRRROhghgh   0000000000000000000000000#####
+hRRRRRRRRRRRRRRRRRRRRRRRRghghg   #000000000000000000000000#####
+gRRRRRRRRRRRRRRRRRRRRRRRRhghgh   #000000000000000000000000#####
+hghghghghghgIDIghghghghghghghg   ############000###############
+ghghghghghghIIIhghghghghghghgh   ############000###############
+hghghghghghgEEEghghghghghghghg   ############000###############
 E a-abadia (22,0) -> abadia:entry-plaza
 E a-calles (29,8) -> calles:entry-plaza
 E a-escorial (12,21) -> escorial:entry-plaza
@@ -135,28 +139,28 @@ scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo
 
 ```
 == abadia: La abadía vieja (28x22, ambient 0.35)
-############################   ############################
-#o....#=t=====B=======t#..E#   #00000#0000011111100000#000#
-#o....#=========C======#...#   #00000#0000011111100000#000#
-#.....#================#.K.#   #00000#0000000000000000#000#
-#.....#=D============F=#.*.#   #00000#0000000000000000#000#
-#.....#================#...#   #00000#0000000000000000#000#
-#.....#===*========*===#...#   #00000#0000000000000000#000#
-#....x#================#...#   #00000#0000000000000000#000#
-###/##########//#########d##   ###0##########00############
-#......*............*......#   #00000000000000000000000000#
-#..........................#   #00000000000000000000000000#
-#....,,,,,,,,,,,,,,,,,,....#   #00000000000000000000000000#
-#....,,,,x,,,,,,,,u,,,,....#   #00000000000000000000000000#
-#....,,,,,,,,,,,,,,,,,,....#   #00000000000000000000000000#
-#..........................#   #00000000000000000000000000#
-#.===G=======..=======I===.#   #12222222222200222222222221#
-#############//#############   #############00#############
-,,,,,,,,,,,,*,,*,,,,,,,,,,,,   0000000000000000000000000000
-,,,,,,,,,,,x,,,J,x,,,,,,,,,,   0000000000000000000000000000
-#,,,,,,,,,,,,A,,,,,,,,,,,,,#   #00000000000000000000000000#
-##,,,,,,,,,,,,,,,,,,,,,,,,##   ##000000000000000000000000##
-###########EEEEEE###########   ###########000000###########
+W##########################W   ############################
+Wo....#=t=====B=======t#..EW   #00000#0000011111100000#000#
+Wo....#=========C======#...W   #00000#0000011111100000#000#
+W.....#================#.K.W   #00000#0000000000000000#000#
+W.....#=D============F=#.*.W   #00000#0000000000000000#000#
+W.....#================#...W   #00000#0000000000000000#000#
+W.....#===*========*===#...W   #00000#0000000000000000#000#
+W....x#================#...W   #00000#0000000000000000#000#
+W##/##########//#########d#W   ###0##########00############
+W......*............*......W   #00000000000000000000000000#
+W..........................W   #00000000000000000000000000#
+W....ssssssssssssssssss....W   #00000000000000000000000000#
+W....ssssxssssssssussss....W   #00000000000000000000000000#
+W....ssssssssssssssssss....W   #00000000000000000000000000#
+W..........................W   #00000000000000000000000000#
+W.===G=======..=======I===.W   #12222222222200222222222221#
+WWWWWWWWWWWWW//WWWWWWWWWWWWW   #############00#############
+RRRRRRRRRRRR*RR*RRRRRRRRRRRR   0000000000000000000000000000
+RRRRRRRRRRRxRRRJRxRRRRRRRRRR   0000000000000000000000000000
+WRRRRRRRRRRRRARRRRRRRRRRRRRW   #00000000000000000000000000#
+WWRRRRRRRRRRRRRRRRRRRRRRRRWW   ##000000000000000000000000##
+WWWWWWWWWWWEEEEEEWWWWWWWWWWW   ###########000000###########
 E a-plaza (11,21) -> plaza:entry-abadia
 E escalera-cripta (26,1) -> mina:entry-cripta
 A entry-plaza (13,19)
@@ -174,34 +178,34 @@ scenes audiencia (12,4 4x3) {"dialogue":"audiencia_abadia","speaker":"mazo","onc
 
 ### `calles`
 
-**3 · Hilos sueltos.** La calle mayor. Al norte, la capilla de la Santa Pala, excavada en una bocamina (nave en h2, sermón de Cirilo), y la casa de las viudas. Al sur, la casa de empeños de Lisandro. El libro de cuentas está en `chest-libro_cuentas`, en la trastienda, y se llega por **dos puertas distintas** (`door-trastienda` desde la tienda y `door-patio_lisandro` desde el patio), con un dardo envenenado en el suelo (detección 14, Juego de manos CD 13). Al este corre el Lloro (agua) y sigue el camino del Escorial. Hay un muelle de carga (h1) y faroles.
+**3 · Hilos sueltos.** La calle mayor. Al norte, la capilla de la Santa Pala, excavada en una bocamina (nave en h2, sermón de Cirilo), y la casa de las viudas. Benita y Casilda lavan en el Lloro (río con orillas). Al sur, la casa de empeños de Lisandro. El libro de cuentas está en `chest-libro_cuentas`, en la trastienda, y se llega por **dos puertas distintas** (`door-trastienda` desde la tienda y `door-patio_lisandro` desde el patio), con un dardo envenenado en el suelo (detección 14, Juego de manos CD 13). Al este corre el Lloro (agua) y sigue el camino del Escorial. Hay un muelle de carga (h1) y faroles.
 
 ```
 == calles: Calles de Hondonegra (34x24, ambient 0.45)
-##################################   ##################################
-###########.*....*.###############   ###########22222222###############
-###########...C....###=====*=#####   ###########22222222###0000000#####
-###########.D....F.###=======#####   ###########22222222###0000000#####
-###########........###=======#####   ###########22222222###0000000#####
-##############..######=======#####   ##############22######0000000#####
-##############..######==J====#####   ##############11######0000000#####
-##############..######=======#####   ##############00######0000000#####
-##############..#########/########   ##############00#########0########
-E.....*.............*.......*....E   0000000000000000000000000000000000
-E.A..............................E   0000000000000000000000000000000000
-E..........x...................B.E   0000000000000000000000000000000000
-E..................x...u.........E   0000000000000000000000000000000000
-,,,,,,,,,,,,,,,,===========,,ww,,,   0000000000000000111111111110000000
-,,,#####/#####,,###########,,ww,,,   000#####0#####00###########0000000
-,,,#=========#,,###########,,ww,,,   000#000000000#00###########0000000
-,,,#===K==*==#,,###########,Gww,,,   000#000000000#00###########0000000
-,,,#=========#,,###########,,ww,,,   000#000000000#00###########0000000
-,,,#####d#####,,###########,,wwI,,   000###########00###########0000000
-,,,#======^==#,,###########,,ww,,,   000#000000000#00###########0000000
-,,,#=======c=#,,,,,,,,,,,,,,,ww,,,   000#000000000#00000000000000000000
-,,,##d########,,,o,,xx,,,,,,,ww,,,   000###########00000000000000000000
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ww,,,   0000000000000000000000000000000000
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ww,,,   0000000000000000000000000000000000
+ghghghghgWWWWWWWWWWWWhghghghghghgh   ##################################
+hghghghghWW.*....*.WWghghghghghghg   ###########22222222###############
+ghghghghgWW...C....WWh=====*=hghgh   ###########22222222###0000000#####
+hghghghghWW.D....F.WWg=======ghghg   ###########22222222###0000000#####
+ghghghghgWW........WWh=======hghgh   ###########22222222###0000000#####
+hghghghghWWWWW..WWWWWg=======ghghg   ##############22######0000000#####
+ghghghghgWWWWW..WWWWWh==J====hghgh   ##############11######0000000#####
+hghghghghWWWWW..WWWWWg=======ghghg   ##############00######0000000#####
+ghghghghgWWWWW..WWWWWhghg/ghghghgh   ##############00#########0########
+Eccccc*ccccccccccccc*ccccccc*ccccE   0000000000000000000000000000000000
+EcAccccccccccccccccccccccccccccccE   0000000000000000000000000000000000
+EccccccccccxcccccccccccccccccccBcE   0000000000000000000000000000000000
+EccccccccccccccccccxcccucccccccccE   0000000000000000000000000000000000
+ssssssssssssssss===========sbwwbss   0000000000000000111111111110000000
+sssWWWWW/WWWWWssgggggggggggsbwwbss   000#####0#####00###########0000000
+sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
+sssW===K==*==WssgggggggggggsGwwbss   000#000000000#00###########0000000
+sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
+sssWWWWWdWWWWWssgggggggggggsbwwIss   000###########00###########0000000
+sssW======^==Wssgggggggggggsbwwbss   000#000000000#00###########0000000
+sssW=======c=Wssssssssssssssbwwbss   000#000000000#00000000000000000000
+sssWWdWWWWWWWWsssossxxssssssbwwbss   000###########00000000000000000000
+ssssssssssssssssssssssssssssbwwbss   0000000000000000000000000000000000
+ssssssssssssssssssssssssssssbwwbss   0000000000000000000000000000000000
 ^ dardo-trastienda (10,19) {"marker":"trap_dart","detect":14,"save":"con","dc":13,"damage":"2d4","type":"poison","condition":"poisoned","turns":3,"disarmCheck":"sleight_of_hand","disarmDc":13}
 E a-plaza (0,9) -> plaza:entry-calles
 E a-escorial (33,9) -> escorial:entry-calles
@@ -220,36 +224,36 @@ scenes sermon (13,5 4x3) {"dialogue":"sermon_cirilo","speaker":"cirilo","once":t
 
 ### `escorial`
 
-**4 · El Escorial y el Pozo del Ahorcado.** Dos escombreras que suben hasta h3. En la A, un carro de aceite (`oil_cart` y dos barriles) descansa en una cornisa h3 sobre un hombro h1, con aceite pintado hasta el camino: si estallan los barriles, arde el camino. Si empujas a alguien desde la cornisa, cae 2 niveles. El campamento sinpaga tiene una choza, una plataforma de tablones (h1) y un andamio de vigía (h2). Hay dos trampas: un cordel que derrama aceite y un cepo. La zona de encuentro cubre el camino y el campamento; **la ladera norte de la escombrera A llega al pozo sin entrar en ella**, así que el combate se puede evitar. En el Pozo del Ahorcado está el primer Callado (`callado-1`). La bocamina principal está atrancada (`door-bocamina`).
+**4 · El Escorial y el Pozo del Ahorcado.** Dos escombreras que suben hasta h3. En la A, un carro de aceite (`oil_cart` y dos barriles) descansa en una cornisa h3 sobre un hombro h1, con aceite pintado hasta el camino: si estallan los barriles, arde el camino. Si empujas a alguien desde la cornisa, cae 2 niveles. El campamento sinpaga tiene una choza, una plataforma de tablones (h1) y un andamio de vigía (h2). Hay dos trampas: un cordel que derrama aceite y un cepo. Al entrar desde el pueblo, una franja de lado a lado abre la parlamentación con el jefe (`sinpaga_jefe`, hablante `sinpaga_enmascarado-1`); si acaba a golpes, pelea toda la facción. Las dos bajadas a la mina (pozo y bocamina) exigen `d1_resuelto`. En el Pozo del Ahorcado está el primer Callado (`callado-1`). La bocamina principal está atrancada (`door-bocamina`).
 
 ```
 == escorial: El Escorial (36x26, ambient 0.6)
-;;;EEE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   333000333333333333333333333333333333
-;;;,,,;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   300000000000000000000000000000000003
-;;;,A,;;;&&;;;;;;;;;;;;;;;;;;;;;;;;;   300000000111111111100000000000000003
-;;;,,,;;;&&;;;;;;;;;;;;;;;;;;;;;;;;;   300000000122222222100000000000000003
-;;;,,,;;;&&;;;;;;;;;;;;;;;;;;;###;;;   300000000122333322100000000000###003
-;;;,,,;;;;;;;F;;;;;;;;;;;;;;;;#O#;;;   300000000122333322100000000000#0#003
-;;;,,,;;;;;;;;;;;;;;;;;;;;;;;;*E;;;;   300000000122333322100000000000000003
-;;;,,,;;;;;;;;;;;;;;;;;;;;;;;;;,;;;;   300000000122333322100000000000000003
-;;;,,,;;;;;;xoo;;;;;;;;;;;;;;;;C;;;;   300000000122333322100000000000000003
-;;;,,,;;;;;;%%%%;;;;;;;;;;;;;;;M;;;;   300000000111111111100000000000000003
-;;;,,,;;;;;;%%%%;;;;;;;;;;;;;;;,;;;;   300000000000000000000000000000000003
-E,,,,,,^,,,,%%%%,,,,,,,,,,,,,,,,,;;;   000000000000000000000000000000000003
-E,B,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,;;;   000000000000000000000000000000000003
-E,,,,,,,,,,,,,,,,,,,,,^,,,,,,,,,,;;;   000000000000000000000000000000000003
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;,;;;   300000000000000000000000000000000003
-;;;;;;;;;,,,,,,,====,,;;;;;;;&&;,;;;   300000000000000011110001111111100003
-;;;;;;;;;,###,,,==K=,,;;;;;;;&&;D;;;   3000000000###00011210001222222100003
-;;;;;;;;;,###,,,====,x;;;;;;;&&*,;;;   3000000000###00011110001233332100003
-;;;;www;;,###,,,,,,,,,;;;;G;;;##d##;   3000000000###00000000001233332#####3
-;;;;www;;,,,,,,L,,,,,,;;;;;;;;##.##;   300000000000000000000001233332##0##3
-;;;;www;;,,,I,,,,,,,J,;;;;;;;;##.##;   300000000000000000000001233332##0##3
-;;;;;;;;;u,,,,*,,,,,,,;;;;;;;;##E##;   300000000000000000000001222222##0##3
-;;;;;;;;;,,,,,,,,,,,,,;;;;;;;;#####;   300000000000000000000001111111#####3
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;#####;   300000000000000000000000000000#####3
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;#####;   300000000000000000000000000000#####3
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   333333333333333333333333333333333333
+kkkEEEkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   333000333333333333333333333333333333
+kSSIIISSSSSSSSSSSSSSSSSSSSSSSSSSSSSk   300000000000000000000000000000000003
+kSSIAISSS&&SSSSSSSSSSSSSSSSSSSSSSSSk   300000000111111111100000000000000003
+kSSIIISSS&&SSSSSSSSSSSSSSSSSSSSSSSSk   300000000122222222100000000000000003
+kSSIIISSS&&SSSSSSSSSSSSSSSSSSSWWWSSk   300000000122333322100000000000###003
+kSSIIISSSSSSSFSSSSSSSSSSSSSSSSWOWSSk   300000000122333322100000000000#0#003
+kSSIIISSSSSSSSSSSSSSSSSSSSSSSS*ESSSk   300000000122333322100000000000000003
+kSSIIISSSSSSSSSSSSSSSSSSSSSSSSSISSSk   300000000122333322100000000000000003
+kSSIIISSSSSSxooSSSSSSSSSSSSSSSSCSSSk   300000000122333322100000000000000003
+kSSIIISSSSSS%%%%SSSSSSSSSSSSSSSMSSSk   300000000111111111100000000000000003
+kSSIIISSSSSS%%%%SSSSSSSSSSSSSSSISSSk   300000000000000000000000000000000003
+ERRRRRR^RRRR%%%%RRRRRRRRRRRRRRRRRSSk   000000000000000000000000000000000003
+ERBRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRSSk   000000000000000000000000000000000003
+ERRRRRRRRRRRRRRRRRRRRR^RRRRRRRRRRSSk   000000000000000000000000000000000003
+kSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSISSk   300000000000000000000000000000000003
+kSSSSSSSSmmmmmmm====mmSSSSSSS&&SISSk   300000000000000011110001111111100003
+kSSSSSSSSmgggmmm==K=mmSSSSSSS&&SDSSk   3000000000###00011210001222222100003
+kSSSSSSSSmgggmmm====mxSSSSSSS&&*ISSk   3000000000###00011110001233332100003
+kSSSwwwSSmgggmmmmmmmmmSSSSGSSSWWdWWk   3000000000###00000000001233332#####3
+kSSSwwwSSmmmmmmLmmmmmmSSSSSSSSWW.WWk   300000000000000000000001233332##0##3
+kSSSwwwSSmmmImmmmmmmJmSSSSSSSSWW.WWk   300000000000000000000001233332##0##3
+kSSSSSSSSummmm*mmmmmmmSSSSSSSSWWEWWk   300000000000000000000001222222##0##3
+kSSSSSSSSmmmmmmmmmmmmmSSSSSSSSWWWWWk   300000000000000000000001111111#####3
+kSSSSSSSSSSSSSSSSSSSSSSSSSSSSSWWWWWk   300000000000000000000000000000#####3
+kSSSSSSSSSSSSSSSSSSSSSSSSSSSSSWWWWWk   300000000000000000000000000000#####3
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   333333333333333333333333333333333333
 ^ cuerda-aceite (7,11) {"marker":"trap_tripwire","detect":13,"surface":"oil","disarmCheck":"sleight_of_hand","disarmDc":12}
 ^ cepo-sinpaga (22,13) {"marker":"trap_beartrap","detect":12,"save":"dex","dc":13,"damage":"2d6","type":"piercing","condition":"restrained","disarmCheck":"sleight_of_hand","disarmDc":12}
 E a-plaza (3,0) -> plaza:entry-escorial

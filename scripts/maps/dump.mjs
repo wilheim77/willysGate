@@ -8,7 +8,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const DIR = join(import.meta.dirname, '..', '..', 'content', 'intereses', 'maps');
-const CHAR = { stone: '.', dirt: ',', slag: ';', planks: '=', scaffold: 'H', wall: '#', door_closed: '+', door_open: '/', rails: '-', rails_v: '|', vault: 'v' };
+const CHAR = { stone: '.', dirt: ',', slag: ';', planks: '=', scaffold: 'H', wall: '#', door_closed: '+', door_open: '/', rails: '-', rails_v: '|', vault: 'v', scrub: 's', rock: 'k', cobble: 'c', slag_heap: 'S', road: 'R', road_v: 'I', mud: 'm', river: '~', riverbank: 'b', fence: 'f', house: 'h', house_plain: 'g', stone_wall: 'W' };
 const SURFACE = { oil: '%', grease: '%', water: 'w', rubble: '&', fire: 'f', ice: 'i', blood: 'b' };
 const PROP = { barrel_oil: 'o', barrel: 'u', crate: 'x', chest: 'c', lever: 'l', door: 'd', powder_keg: 'o', mine_wagon: 'x', mine_wagon_ore: 'x', resonator: 'r', oil_cart: 'x', well: 'O', campfire: '*', gallows: 'T', tapestry: 't', tapestry_crossbow: 't', fuse_charges: 'f', remains_forty: 'k', pulley: 'p', inscription: 'i' };
 

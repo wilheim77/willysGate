@@ -54,6 +54,12 @@ export class Canvas {
     return this;
   }
 
+  /** Re-terrain every cell: fn(terrainChar, height, x, y) returns a new char (or the same). */
+  retile(fn) {
+    for (let y = 0; y < this.height; y++) for (let x = 0; x < this.width; x++) this.t[y][x] = fn(this.t[y][x], this.h[y][x], x, y);
+    return this;
+  }
+
   source() {
     return { terrain: this.t.map((r) => r.join('')), height: this.h.map((r) => r.join('')) };
   }

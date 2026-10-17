@@ -29,6 +29,17 @@ c.rect(30, 4, 3, 2, '#').put(31, 5, '.', 0).rect(31, 6, 1, 5, ',', 0); // the we
 // The main adit, cut into the rock in the south-east corner and barred with planks.
 c.rect(30, 18, 5, 7, '#');
 c.rect(32, 14, 1, 4, ',', 0).put(32, 18, '+').rect(32, 19, 1, 3, '.', 0);
+// Exterior art: slag heaps, rock on the rim, roads, a muddy camp and pond, the shack, the well.
+c.retile((t, h, x, y) => {
+  if (x === 0 || y === 0 || x === 35 || y === 25) if (t === ';') return 'k';
+  if (t === ';') return h === 0 && x >= 4 && x <= 6 && y >= 18 && y <= 20 ? 'm' : 'S';
+  if (t === ',') {
+    if (x >= 9 && x <= 21 && y >= 15 && y <= 22) return 'm'; // the camp
+    return y >= 11 && y <= 13 ? 'R' : 'I';
+  }
+  if (t === '#') return y >= 16 && y <= 18 && x >= 10 && x <= 12 ? 'g' : 'W';
+  return t;
+});
 
 export default {
   id: 'escorial',

@@ -38,6 +38,8 @@ const ROWS = [
 ];
 
 const c = new Canvas(32, 18).stamp(0, 0, ROWS, L);
+// Exterior art: the road, scrub, mud in the ditch, rock for the heights and the outcrop.
+c.retile((t, h) => (t === '.' ? 'R' : t === ';' ? 'k' : t === ',' ? (h === 0 ? 'm' : h >= 2 ? 'k' : 's') : t));
 
 export default {
   id: 'camino',

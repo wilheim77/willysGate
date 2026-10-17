@@ -21,6 +21,19 @@ const BASE_RGB = {
   rails: [70, 62, 56],
   rails_v: [70, 62, 56],
   vault: [60, 66, 80],
+  scrub: [66, 72, 48],
+  rock: [84, 80, 76],
+  cobble: [80, 78, 84],
+  slag_heap: [50, 46, 48],
+  road: [88, 72, 54],
+  road_v: [88, 72, 54],
+  mud: [58, 50, 40],
+  river: [70, 80, 86],
+  riverbank: [62, 60, 52],
+  fence: [96, 74, 50],
+  house: [52, 56, 66],
+  house_plain: [52, 56, 66],
+  stone_wall: [72, 70, 70],
 };
 const TILES = LOGIC_TILES.map((t) => {
   const lift = t.walkable === false ? 0 : t.height * 15;
