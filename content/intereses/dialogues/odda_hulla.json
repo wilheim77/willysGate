@@ -87,7 +87,7 @@
           "when": {
             "all": [
               {
-                "flag": "garran_reclutado"
+                "inParty": "garran"
               },
               {
                 "notFlag": "odda_conoce_garran"
@@ -107,7 +107,7 @@
           "when": {
             "all": [
               {
-                "flag": "garran_reclutado"
+                "inParty": "garran"
               },
               {
                 "notFlag": "odda_conoce_garran"
@@ -192,7 +192,7 @@
           "when": {
             "all": [
               {
-                "flag": "garran_reclutado"
+                "inParty": "garran"
               },
               {
                 "notFlag": "odda_conoce_garran"

@@ -1,0 +1,115 @@
+{
+  "$comment": "Scene 3. Remedios, innkeeper of El Pico Roto. Free rumours (Sinpaga) and, for a drink, the first Callado and the Well.",
+  "id": "posadera_pico_roto",
+  "start": "barra",
+  "nodes": {
+    "barra": {
+      "speaker": "posadera",
+      "text": "Bienvenidos al Pico Roto. Vino agrio, camas con historia y rumores gratis. El vino no.",
+      "choices": [
+        {
+          "id": "rumores",
+          "text": "¿Qué se cuenta por aquí?",
+          "once": true,
+          "next": "rumores"
+        },
+        {
+          "text": "[2 coronas] Un vino. Y lo que se cuente con el vino.",
+          "when": {
+            "all": [
+              {
+                "item": "coronas",
+                "atLeast": 2
+              },
+              {
+                "notFlag": "posadera_vino"
+              }
+            ]
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -2
+            },
+            {
+              "type": "setFlag",
+              "flag": "posadera_vino",
+              "value": true
+            }
+          ],
+          "next": "vino"
+        },
+        {
+          "id": "nombre",
+          "text": "¿Cómo se llama usted?",
+          "once": true,
+          "next": "nombre"
+        },
+        {
+          "id": "semiorco",
+          "text": "[Rumor del semiorco] ¿Por qué me mira así la gente?",
+          "once": true,
+          "when": {
+            "flag": "rumor_semiorco"
+          },
+          "next": "semiorco"
+        },
+        {
+          "text": "Nada, gracias."
+        }
+      ]
+    },
+    "nombre": {
+      "speaker": "posadera",
+      "text": "Remedios. Como los que no tengo. Llevo esta posada desde que había mineros que bebían. Ahora hay mineros que miran el vino.",
+      "next": "barra"
+    },
+    "rumores": {
+      "speaker": "posadera",
+      "text": "Que los Sinpaga se han hecho fuertes en el Escorial y no dejan pasar ni a las cabras. Que la Cuadrilla se reúne de noche en el lavadero. Y que el barón ha escrito un poema nuevo. Esto último es el peor.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_sinpaga",
+          "value": true
+        }
+      ],
+      "next": "barra"
+    },
+    "vino": {
+      "speaker": "posadera",
+      "text": "Ahí va. Y ahí va lo otro: hace una semana vino uno que no habló. Ni buenas noches ni nada. Pagó con una virutilla de plata sin acuñar y se fue.",
+      "next": "vino_2"
+    },
+    "vino_2": {
+      "speaker": "posadera",
+      "text": "Tenía las uñas negras de mina y los ojos como de no estar. Subió por el camino de la escombrera, hacia el Pozo del Ahorcado. Yo no le seguí. Una tiene posada, no curiosidad.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "pista_callado",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pista_pozo",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pista_plata_nueva",
+          "value": true
+        }
+      ],
+      "next": "barra"
+    },
+    "semiorco": {
+      "speaker": "posadera",
+      "text": "Corre por el pueblo que hay un semiorco que se come a la gente. No le dé importancia: aquí se come lo que hay. Pero yo que usted pediría la sopa sin preguntar de qué es.",
+      "next": "barra"
+    }
+  }
+}
