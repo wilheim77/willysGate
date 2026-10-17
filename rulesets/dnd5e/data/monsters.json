@@ -1,10 +1,196 @@
 {
   "$comment": "SRD 5.1 stat blocks (simplified to what the tactical game uses). speed in tiles; prof = proficiency bonus by CR; weapons reference weapons.json; multiattack = attacks per Attack action. Tags: resist:/immune:/vuln:<damage type>, type:<undead|humanoid>.",
-  "bandit": { "label": "Bandido", "abilities": { "str": 11, "dex": 12, "con": 12, "int": 10, "wis": 10, "cha": 10 }, "ac": 12, "hp": 11, "speed": 6, "prof": 2, "weapons": ["scimitar", "light_crossbow"], "multiattack": 1, "tags": ["type:humanoid"], "xp": 25 },
-  "thug": { "label": "Matón", "abilities": { "str": 15, "dex": 11, "con": 14, "int": 10, "wis": 10, "cha": 11 }, "ac": 11, "hp": 32, "speed": 6, "prof": 2, "weapons": ["mace", "light_crossbow"], "multiattack": 2, "tags": ["type:humanoid", "pack_tactics"], "xp": 100 },
-  "bandit_captain": { "label": "Capitán bandido", "abilities": { "str": 15, "dex": 16, "con": 14, "int": 14, "wis": 11, "cha": 14 }, "ac": 15, "hp": 65, "speed": 6, "prof": 2, "weapons": ["scimitar", "dagger"], "multiattack": 3, "tags": ["type:humanoid"], "xp": 450 },
-  "guard": { "label": "Guardia", "abilities": { "str": 13, "dex": 12, "con": 12, "int": 10, "wis": 11, "cha": 10 }, "ac": 16, "hp": 11, "speed": 6, "prof": 2, "weapons": ["longsword"], "multiattack": 1, "tags": ["type:humanoid"], "xp": 25 },
-  "skeleton": { "label": "Esqueleto", "abilities": { "str": 10, "dex": 14, "con": 15, "int": 6, "wis": 8, "cha": 5 }, "ac": 13, "hp": 13, "speed": 6, "prof": 2, "weapons": ["shortsword", "shortbow"], "multiattack": 1, "tags": ["type:undead", "vuln:bludgeoning", "immune:poison"], "xp": 50 },
-  "zombie": { "label": "Zombi", "abilities": { "str": 13, "dex": 6, "con": 16, "int": 3, "wis": 6, "cha": 5 }, "ac": 8, "hp": 22, "speed": 4, "prof": 2, "weapons": ["slam"], "multiattack": 1, "tags": ["type:undead", "immune:poison", "undead_fortitude"], "xp": 50 },
-  "orc": { "label": "Orco", "abilities": { "str": 16, "dex": 12, "con": 16, "int": 7, "wis": 11, "cha": 10 }, "ac": 13, "hp": 15, "speed": 6, "prof": 2, "weapons": ["greataxe"], "multiattack": 1, "tags": ["type:humanoid"], "xp": 100 }
+  "bandit": {
+    "label": "Bandido",
+    "abilities": {
+      "str": 11,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "wis": 10,
+      "cha": 10
+    },
+    "ac": 12,
+    "hp": 11,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "scimitar",
+      "light_crossbow"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 25
+  },
+  "thug": {
+    "label": "Matón",
+    "abilities": {
+      "str": 15,
+      "dex": 11,
+      "con": 14,
+      "int": 10,
+      "wis": 10,
+      "cha": 11
+    },
+    "ac": 11,
+    "hp": 32,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "mace",
+      "light_crossbow"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:humanoid",
+      "pack_tactics"
+    ],
+    "xp": 100
+  },
+  "bandit_captain": {
+    "label": "Capitán bandido",
+    "abilities": {
+      "str": 15,
+      "dex": 16,
+      "con": 14,
+      "int": 14,
+      "wis": 11,
+      "cha": 14
+    },
+    "ac": 15,
+    "hp": 65,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "scimitar",
+      "dagger"
+    ],
+    "multiattack": 3,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 450
+  },
+  "guard": {
+    "label": "Guardia",
+    "abilities": {
+      "str": 13,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "wis": 11,
+      "cha": 10
+    },
+    "ac": 16,
+    "hp": 11,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "longsword"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 25
+  },
+  "skeleton": {
+    "label": "Esqueleto",
+    "abilities": {
+      "str": 10,
+      "dex": 14,
+      "con": 15,
+      "int": 6,
+      "wis": 8,
+      "cha": 5
+    },
+    "ac": 13,
+    "hp": 13,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "shortsword",
+      "shortbow"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:undead",
+      "vuln:bludgeoning",
+      "immune:poison"
+    ],
+    "xp": 50
+  },
+  "zombie": {
+    "label": "Zombi",
+    "abilities": {
+      "str": 13,
+      "dex": 6,
+      "con": 16,
+      "int": 3,
+      "wis": 6,
+      "cha": 5
+    },
+    "ac": 8,
+    "hp": 22,
+    "speed": 4,
+    "prof": 2,
+    "weapons": [
+      "slam"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:undead",
+      "immune:poison",
+      "undead_fortitude"
+    ],
+    "xp": 50
+  },
+  "orc": {
+    "label": "Orco",
+    "abilities": {
+      "str": 16,
+      "dex": 12,
+      "con": 16,
+      "int": 7,
+      "wis": 11,
+      "cha": 10
+    },
+    "ac": 13,
+    "hp": 15,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "greataxe"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 100
+  },
+  "commoner": {
+    "label": "Plebeyo",
+    "abilities": {
+      "str": 10,
+      "dex": 10,
+      "con": 10,
+      "int": 10,
+      "wis": 10,
+      "cha": 10
+    },
+    "ac": 10,
+    "hp": 4,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "unarmed"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 10
+  }
 }

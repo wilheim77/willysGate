@@ -1,4 +1,4 @@
-import type { CreationChoices, CreationSpec, DialogueTree, Engine, GameState, Ruleset } from '../../engine';
+import type { CreationChoices, CreationSpec, DialogueTree, Engine, GameState, MapBuilder, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
 
@@ -65,5 +65,10 @@ export interface GameDefinition {
   dialogues?: Record<string, DialogueTree>;
   /** Music states and sfx, and which engine events trigger them (content/<game>/assets/audio.json). */
   audio?: AudioManifest;
-  newGame(engine: Engine, seed: number): GameState;
+  /** The game's maps, by id, built the first time the party travels there. */
+  maps?: Record<string, MapBuilder>;
+  /** A conversation that opens as soon as the protagonist is created. */
+  opening?: { dialogue: string; partner?: string };
+  /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
+  newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

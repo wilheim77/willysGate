@@ -1,0 +1,102 @@
+{
+  "$comment": "Generic creatures spawned as <template>-<n> on the act's maps. monsterId from rulesets/dnd5e/data/monsters.json; spriteId from assets/0x72.json; faction groups who fights whom; noncombatant until a scene or dialogue changes it.",
+  "sinpaga_enmascarado": {
+    "name": "Sinpaga",
+    "monsterId": "bandit",
+    "spriteId": "sinpaga_enmascarado",
+    "faction": "sinpaga"
+  },
+  "sinpaga_cuchillero": {
+    "name": "Sinpaga",
+    "monsterId": "bandit",
+    "spriteId": "sinpaga_cuchillero",
+    "faction": "sinpaga"
+  },
+  "sinpaga_bruto": {
+    "name": "Matón de los Sinpaga",
+    "monsterId": "thug",
+    "spriteId": "sinpaga_bruto",
+    "faction": "sinpaga"
+  },
+  "callado": {
+    "name": "Callado",
+    "monsterId": "zombie",
+    "spriteId": "callado",
+    "faction": "callados"
+  },
+  "callado_palido": {
+    "name": "Callado pálido",
+    "monsterId": "zombie",
+    "spriteId": "callado_palido",
+    "faction": "callados"
+  },
+  "esqueleto_minero": {
+    "name": "Minero muerto",
+    "monsterId": "skeleton",
+    "spriteId": "esqueleto_minero",
+    "faction": "callados"
+  },
+  "guardia_baron": {
+    "name": "Guardia del barón",
+    "monsterId": "guard",
+    "spriteId": "guardia_baron",
+    "faction": "abadia",
+    "noncombatant": true
+  },
+  "guardia_baron_sargento": {
+    "name": "Sargento de la guardia",
+    "monsterId": "guard",
+    "spriteId": "guardia_baron_sargento",
+    "faction": "abadia",
+    "noncombatant": true
+  },
+  "fanatico_pala": {
+    "name": "Fanático de la Santa Pala",
+    "monsterId": "bandit",
+    "spriteId": "fanatico_pala",
+    "faction": "fanaticos",
+    "noncombatant": true
+  },
+  "fiel_pala": {
+    "name": "Fiel de la Santa Pala",
+    "monsterId": "commoner",
+    "spriteId": "fiel_pala",
+    "faction": "santa_pala",
+    "noncombatant": true
+  },
+  "minero_cuadrilla": {
+    "name": "Minero de la Cuadrilla",
+    "monsterId": "bandit",
+    "spriteId": "minero_cuadrilla",
+    "faction": "cuadrilla",
+    "noncombatant": true
+  },
+  "viuda": {
+    "name": "Viuda",
+    "monsterId": "commoner",
+    "spriteId": "viuda",
+    "faction": "pueblo",
+    "noncombatant": true
+  },
+  "aldeano": {
+    "name": "Vecino",
+    "monsterId": "commoner",
+    "spriteId": "aldeano",
+    "faction": "pueblo",
+    "noncombatant": true
+  },
+  "aldeana": {
+    "name": "Vecina",
+    "monsterId": "commoner",
+    "spriteId": "aldeana",
+    "faction": "pueblo",
+    "noncombatant": true
+  },
+  "aldeano_viejo": {
+    "name": "Viejo del pueblo",
+    "monsterId": "commoner",
+    "spriteId": "aldeano_viejo",
+    "faction": "pueblo",
+    "noncombatant": true
+  }
+}
