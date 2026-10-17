@@ -93,6 +93,33 @@
       ],
       "face": 35,
       "rim": 36
+    },
+    "rails": {
+      "tileset": "terrain",
+      "frames": [
+        37,
+        38
+      ],
+      "face": 39,
+      "rim": 40
+    },
+    "rails_v": {
+      "tileset": "terrain",
+      "frames": [
+        41
+      ],
+      "face": 42,
+      "rim": 43
+    },
+    "vault": {
+      "tileset": "terrain",
+      "frames": [
+        44,
+        45,
+        46
+      ],
+      "face": 47,
+      "rim": 48
     }
   },
   "sprites": {
@@ -1448,7 +1475,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 540,
+            "y": 636,
             "w": 16,
             "h": 20
           }
@@ -1456,7 +1483,7 @@
         "broken": [
           {
             "x": 16,
-            "y": 540,
+            "y": 636,
             "w": 16,
             "h": 20
           }
@@ -1471,7 +1498,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 560,
+            "y": 656,
             "w": 16,
             "h": 20
           }
@@ -1479,7 +1506,7 @@
         "broken": [
           {
             "x": 16,
-            "y": 560,
+            "y": 656,
             "w": 16,
             "h": 20
           }
@@ -1494,7 +1521,7 @@
         "idle": [
           {
             "x": 0,
-            "y": 580,
+            "y": 676,
             "w": 16,
             "h": 24
           }
@@ -1502,7 +1529,7 @@
         "broken": [
           {
             "x": 16,
-            "y": 580,
+            "y": 676,
             "w": 16,
             "h": 20
           }
@@ -2459,6 +2486,183 @@
           }
         ]
       }
+    },
+    "mine_wagon": {
+      "kind": "frames",
+      "url": "assets/0x72/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 700,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 700,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "mine_wagon_ore": {
+      "kind": "frames",
+      "url": "assets/0x72/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 716,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 716,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "powder_keg": {
+      "kind": "frames",
+      "url": "assets/0x72/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 732,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 732,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "resonator": {
+      "kind": "frames",
+      "url": "assets/0x72/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 748,
+            "w": 16,
+            "h": 24
+          },
+          {
+            "x": 16,
+            "y": 748,
+            "w": 16,
+            "h": 24
+          },
+          {
+            "x": 32,
+            "y": 748,
+            "w": 16,
+            "h": 24
+          },
+          {
+            "x": 48,
+            "y": 748,
+            "w": 16,
+            "h": 24
+          }
+        ],
+        "broken": [
+          {
+            "x": 64,
+            "y": 748,
+            "w": 16,
+            "h": 24
+          }
+        ]
+      }
+    },
+    "ivo": {
+      "kind": "frames",
+      "url": "assets/0x72/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 16,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 32,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 48,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          }
+        ],
+        "move": [
+          {
+            "x": 64,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 80,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 96,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          },
+          {
+            "x": 112,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          }
+        ],
+        "hit": [
+          {
+            "x": 128,
+            "y": 740,
+            "w": 16,
+            "h": 28
+          }
+        ]
+      }
     }
   },
   "props": {
@@ -2933,10 +3137,8 @@
       "fps": 0,
       "loop": false,
       "anchor": "floor"
-    }
-  },
-  "surfaces": {
-    "oil": {
+    },
+    "trap_rotten_plank": {
       "url": "assets/0x72/extra.png",
       "frames": [
         {
@@ -2947,9 +3149,10 @@
         }
       ],
       "fps": 0,
-      "loop": false
+      "loop": false,
+      "anchor": "floor"
     },
-    "grease": {
+    "fuse_charges": {
       "url": "assets/0x72/extra.png",
       "frames": [
         {
@@ -2960,84 +3163,38 @@
         }
       ],
       "fps": 0,
-      "loop": false
+      "loop": false,
+      "anchor": "floor"
     },
-    "fire": {
+    "remains_forty": {
       "url": "assets/0x72/extra.png",
       "frames": [
         {
           "x": 0,
           "y": 444,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 16,
-          "y": 444,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 32,
-          "y": 444,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 48,
-          "y": 444,
-          "w": 16,
-          "h": 16
-        }
-      ],
-      "fps": 8,
-      "loop": true
-    },
-    "water": {
-      "url": "assets/0x72/extra.png",
-      "frames": [
-        {
-          "x": 0,
-          "y": 460,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 16,
-          "y": 460,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 32,
-          "y": 460,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 48,
-          "y": 460,
-          "w": 16,
-          "h": 16
-        }
-      ],
-      "fps": 5,
-      "loop": true
-    },
-    "ice": {
-      "url": "assets/0x72/extra.png",
-      "frames": [
-        {
-          "x": 0,
-          "y": 476,
           "w": 16,
           "h": 16
         }
       ],
       "fps": 0,
-      "loop": false
+      "loop": false,
+      "anchor": "floor"
     },
-    "electrified": {
+    "pulley": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 460,
+          "w": 16,
+          "h": 32
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "wall"
+    },
+    "inscription": {
       "url": "assets/0x72/extra.png",
       "frames": [
         {
@@ -3045,30 +3202,16 @@
           "y": 492,
           "w": 16,
           "h": 16
-        },
-        {
-          "x": 16,
-          "y": 492,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 32,
-          "y": 492,
-          "w": 16,
-          "h": 16
-        },
-        {
-          "x": 48,
-          "y": 492,
-          "w": 16,
-          "h": 16
         }
       ],
-      "fps": 12,
-      "loop": true
-    },
-    "blood": {
+      "fps": 0,
+      "loop": false,
+      "anchor": "wall",
+      "light": "#8ab0e8"
+    }
+  },
+  "surfaces": {
+    "oil": {
       "url": "assets/0x72/extra.png",
       "frames": [
         {
@@ -3081,12 +3224,144 @@
       "fps": 0,
       "loop": false
     },
-    "rubble": {
+    "grease": {
       "url": "assets/0x72/extra.png",
       "frames": [
         {
           "x": 0,
           "y": 524,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "fire": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 540,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 540,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 540,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 540,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 8,
+      "loop": true
+    },
+    "water": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 556,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 556,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 556,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 556,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 5,
+      "loop": true
+    },
+    "ice": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 572,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "electrified": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 588,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 588,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 588,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 588,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 12,
+      "loop": true
+    },
+    "blood": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 604,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "rubble": {
+      "url": "assets/0x72/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 620,
           "w": 16,
           "h": 16
         }
@@ -3344,6 +3619,41 @@
     "viuda": {
       "url": "assets/0x72/portraits.png",
       "x": 32,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "mine_wagon": {
+      "url": "assets/0x72/portraits.png",
+      "x": 64,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "mine_wagon_ore": {
+      "url": "assets/0x72/portraits.png",
+      "x": 96,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "powder_keg": {
+      "url": "assets/0x72/portraits.png",
+      "x": 128,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "resonator": {
+      "url": "assets/0x72/portraits.png",
+      "x": 160,
+      "y": 128,
+      "w": 32,
+      "h": 32
+    },
+    "ivo": {
+      "url": "assets/0x72/portraits.png",
+      "x": 192,
       "y": 128,
       "w": 32,
       "h": 32
