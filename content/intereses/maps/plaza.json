@@ -51,7 +51,7 @@
 6,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,
 6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,
 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,
-4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,
+4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,22,6,6,6,6,
 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,
 6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,
 6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,
@@ -228,6 +228,18 @@
     },
     {
      "id": 14,
+     "name": "posadera",
+     "type": "",
+     "point": true,
+     "x": 784,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 15,
      "name": "guardia_abadia",
      "type": "",
      "point": true,
@@ -239,7 +251,7 @@
      "visible": true
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "guardia_baron-1",
      "type": "",
      "point": true,
@@ -251,7 +263,7 @@
      "visible": true
     },
     {
-     "id": 16,
+     "id": 17,
      "name": "crate-1",
      "type": "",
      "point": true,
@@ -263,7 +275,7 @@
      "visible": true
     },
     {
-     "id": 17,
+     "id": 18,
      "name": "crate-2",
      "type": "",
      "point": true,
@@ -275,7 +287,7 @@
      "visible": true
     },
     {
-     "id": 18,
+     "id": 19,
      "name": "barrel-1",
      "type": "",
      "point": true,
@@ -287,7 +299,7 @@
      "visible": true
     },
     {
-     "id": 19,
+     "id": 20,
      "name": "barrel_oil-1",
      "type": "",
      "point": true,
@@ -299,7 +311,7 @@
      "visible": true
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "well-1",
      "type": "",
      "point": true,
@@ -311,7 +323,7 @@
      "visible": true
     },
     {
-     "id": 21,
+     "id": 22,
      "name": "barrel-2",
      "type": "",
      "point": true,
@@ -323,7 +335,7 @@
      "visible": true
     },
     {
-     "id": 22,
+     "id": 23,
      "name": "crate-3",
      "type": "",
      "point": true,
@@ -347,7 +359,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 23,
+     "id": 24,
      "name": "brasero-cadalso-1",
      "type": "",
      "point": true,
@@ -386,7 +398,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 25,
      "name": "brasero-cadalso-2",
      "type": "",
      "point": true,
@@ -425,7 +437,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 26,
      "name": "antorcha-pico-roto",
      "type": "",
      "point": true,
@@ -464,7 +476,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 27,
      "name": "antorcha-abadia",
      "type": "",
      "point": true,
@@ -526,7 +538,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 28,
      "name": "abrevadero",
      "type": "",
      "x": 512,
@@ -567,7 +579,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 29,
      "name": "a-abadia",
      "type": "",
      "x": 704,
@@ -595,7 +607,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 30,
      "name": "a-calles",
      "type": "",
      "x": 928,
@@ -618,7 +630,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 31,
      "name": "a-escorial",
      "type": "",
      "x": 384,
@@ -641,7 +653,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 32,
      "name": "a-camino",
      "type": "",
      "x": 0,
@@ -676,36 +688,13 @@
    "y": 0,
    "objects": [
     {
-     "id": 32,
-     "name": "llegada",
-     "type": "",
-     "x": 0,
-     "y": 416,
-     "width": 128,
-     "height": 160,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "dialogue",
-       "type": "string",
-       "value": "plaza_llegada"
-      },
-      {
-       "name": "once",
-       "type": "bool",
-       "value": true
-      }
-     ]
-    },
-    {
      "id": 33,
      "name": "juicio-anselmo",
      "type": "",
-     "x": 160,
+     "x": 0,
      "y": 256,
-     "width": 352,
-     "height": 128,
+     "width": 512,
+     "height": 352,
      "rotation": 0,
      "visible": true,
      "properties": [
@@ -723,11 +712,6 @@
        "name": "once",
        "type": "bool",
        "value": true
-      },
-      {
-       "name": "requiresFlag",
-       "type": "string",
-       "value": "llegada_hondonegra"
       },
       {
        "name": "fight",

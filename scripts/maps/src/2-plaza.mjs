@@ -45,6 +45,7 @@ const ROWS = [
 
 const c = new Canvas(30, 22).stamp(0, 0, ROWS.map((r) => r.padEnd(30, '#')), L);
 c.rect(17, 12, 2, 2, ',', 0); // around the well (a prop)
+c.put(25, 15, '/', 0); // the door of El Pico Roto
 
 export default {
   id: 'plaza',
@@ -67,6 +68,7 @@ export default {
     nella: [23, 12],
     odda: [24, 13],
     'minero_cuadrilla-1': [22, 14],
+    posadera: [24, 16], // at the door of El Pico Roto
     // The abbey's guards at the foot of the road (guardia_abadia lets the party up).
     guardia_abadia: [23, 4],
     'guardia_baron-1': [25, 5],
@@ -94,11 +96,11 @@ export default {
   ],
   zones: {
     scenes: [
-      { name: 'llegada', rect: [0, 13, 4, 5], props: { dialogue: 'plaza_llegada', once: true } },
       {
         name: 'juicio-anselmo',
-        rect: [5, 8, 11, 4],
-        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, requiresFlag: 'llegada_hondonegra', fight: 'fanatico_1,fanatico_2,fanatico_3,cirilo' },
+        // Opens as soon as the party walks into the square from the road (west half).
+        rect: [0, 8, 16, 11],
+        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, fight: 'fanatico_1,fanatico_2,fanatico_3,cirilo' },
       },
     ],
   },

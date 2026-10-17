@@ -40,9 +40,9 @@ export default {
     cirilo: [14, 2],
     'fiel_pala-1': [12, 3],
     'fiel_pala-2': [17, 3],
-    // The widows (names pending in cast.json).
-    'viuda-1': [23, 3],
-    'viuda-2': [27, 4],
+    // The widows: Benita and Casilda (cast.json) and one more.
+    benita: [23, 3],
+    casilda: [27, 4],
     'viuda-3': [24, 6],
     // The pawnshop.
     lisandro: [7, 16],
