@@ -82,6 +82,37 @@ controller.onTrapReached = (trap, candidates) => {
   );
 };
 
+// Levelling up: the narration and what each companion makes of it.
+controller.onLevelUp = (level) => {
+  const lines = game.levels?.texts?.[String(level)];
+  if (!lines) return;
+  const party = Object.values(store.state.entities).filter((e) => e.controllerId === game.playerId);
+  const said = party.filter((e) => lines[e.id]).map((e) => `${e.name}: «${lines[e.id]}»`);
+  dialogue.ask(`${game.texts.combat?.levelUp ?? 'Subís a nivel'} ${level}. ${lines.narration ?? ''}\n\n${said.join('\n')}`, [], game.texts.combat?.ok ?? 'Vale');
+};
+
+// The Narrador (Willy): a line on screen for the moments that deserve one.
+if (game.narrate) {
+  const box = document.createElement('div');
+  box.id = 'narrator';
+  box.hidden = true;
+  document.body.append(box);
+  let timer = 0;
+  store.subscribe((change, state) => {
+    if (change.kind !== 'events') return;
+    for (const e of change.events) {
+      const line = game.narrate!(e, state);
+      if (!line) continue;
+      box.textContent = line;
+      box.hidden = false;
+      clearTimeout(timer);
+      timer = window.setTimeout(() => (box.hidden = true), 3500 + line.length * 40);
+      break;
+    }
+  });
+  box.addEventListener('click', () => (box.hidden = true));
+}
+
 const creation = new CreationScreen(store, game);
 hud.onNewGame = () => creation.open();
 // The title screen first; a new game goes on to character creation.

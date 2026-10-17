@@ -33,3 +33,18 @@ describe('5e character creation (point buy)', () => {
     expect(hero.stats.multiattack).toBeUndefined();
   });
 });
+
+describe('levelling up (Phase 5)', () => {
+  it('rebuilds the character at the new level, keeping story tags, wounds and abilities', async () => {
+    const { levelUpCharacter } = await import('../../rulesets/dnd5e');
+    const hero = buildProtagonist({ name: 'x', race: 'elf', class: 'wizard', abilities: points.recommended({ class: 'wizard' }) }, { ...base, extraTags: ['dialogue:x', 'essential'] });
+    const hurt = { ...hero, resources: { ...hero.resources, hp: { current: hero.resources.hp!.max - 5, max: hero.resources.hp!.max } } };
+    const up = levelUpCharacter(hurt, 5);
+    expect(up.stats.level).toBe(5);
+    expect(up.stats.int).toBe(hero.stats.int);
+    expect(up.tags).toEqual(expect.arrayContaining(['dialogue:x', 'essential', 'race:elf', 'class:wizard', 'spell:fireball']));
+    expect(up.resources.hp!.max).toBeGreaterThan(hero.resources.hp!.max);
+    expect(up.resources.hp!.max - up.resources.hp!.current).toBe(5);
+    expect(up.resources.spell_slot_3).toBeDefined();
+  });
+});

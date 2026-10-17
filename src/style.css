@@ -434,3 +434,13 @@ canvas.portrait { image-rendering: pixelated; display: block; }
 #title .buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 #title .buttons button { min-width: 180px; min-height: 52px; font-size: 24px; }
 #title .buttons .confirm { background: #5a3a22; border-color: #e8c070; }
+#dialogue .line p { white-space: pre-line; }
+
+/* --- Narrator line --- */
+#narrator[hidden] { display: none; }
+#narrator {
+  position: fixed; left: 50%; transform: translateX(-50%); top: calc(var(--top-h, 48px) + 64px); z-index: 4;
+  width: min(560px, calc(100vw - 24px)); padding: 8px 12px; background: rgba(20, 12, 30, 0.92);
+  border: 2px solid #e8c070; box-shadow: 3px 3px 0 #000; color: #f3e6c8; font-size: 19px; line-height: 1.2; cursor: pointer;
+}
+#narrator::before { content: '🎙 '; }
