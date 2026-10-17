@@ -1,0 +1,42 @@
+{
+  "$comment": "Pantalla «Cómo se juega», accesible siempre desde la pantalla de inicio y el menú de pausa. Borrador pendiente de aprobación. Cada página cabe en un móvil sin desplazar.",
+  "version": 1,
+  "paginas": [
+    {
+      "titulo": "De qué va esto",
+      "texto": "Se ha acabado el mundo y lo están retransmitiendo. Eres Willy, butanero de Castro, y estás en la Planta 1 de una mazmorra de cinco. Baja hasta el fondo, da espectáculo y no te mueras."
+    },
+    {
+      "titulo": "Moverse",
+      "texto": "Toca una casilla para ir hasta ella. Arrastra para mover la cámara; pellizca (o usa la rueda) para acercarla. Toca cualquier cosa para saber qué es."
+    },
+    {
+      "titulo": "Combatir",
+      "texto": "El combate va por turnos. En el tuyo tienes movimiento y 2 acciones. Toca a un enemigo: verás tu % de acierto y el daño. Vuelve a tocar para atacar. Pensar es gratis: tómate tu tiempo."
+    },
+    {
+      "titulo": "Usar el escenario",
+      "texto": "Empuja enemigos a fosos, contra muros o unos contra otros. Prende el aceite, electrifica el agua, congélala. Atacar desde arriba da ventaja. Es lo más eficaz y lo que más gusta al público."
+    },
+    {
+      "titulo": "El reloj",
+      "texto": "Cada planta tiene un reloj. Solo corre cuando haces cosas (andar o pelear). Si llega a cero, la planta se derrumba y caes a la siguiente con menos vida. Busca las escaleras de bajada."
+    },
+    {
+      "titulo": "Audiencia y patrocinadores",
+      "texto": "Lo espectacular sube la audiencia; lo aburrido la baja. La audiencia da cajas y atrae a los patrocinadores, que mandan regalos si haces lo que les gusta. Nunca te hace daño."
+    },
+    {
+      "titulo": "Cajas y logros",
+      "texto": "Las cajas de botín (bronce, plata, oro y legendaria) se ganan jugando; nunca se compran. Los logros premian cosas listas y, sobre todo, tontas. Se guardan en este navegador."
+    },
+    {
+      "titulo": "El Camerino",
+      "texto": "Entre planta y planta: compra y vende con Maripuri, descansa con Paco y guarda la partida con Xelda. Si te eliminan, vuelves al último Camerino guardado."
+    },
+    {
+      "titulo": "¿Perdido?",
+      "texto": "En el menú de pausa tienes el glosario con todo explicado. Los consejos del Narrador se pueden apagar en Opciones. Y si algo no se entiende, pulsa «Enviar comentario»: nos ayuda mucho."
+    }
+  ]
+}
