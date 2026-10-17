@@ -3652,6 +3652,1434 @@
      ]
     ]
    }
+  },
+  "companero-jonatan": {
+   "extends": "willy",
+   "note": "Jonatan, el aprendiz de butanero: gorra del revés, mono de la empresa y carretilla con un camping gas",
+   "legend": {
+    "C": "#3a6ab0",
+    "c": "#5a8ad0",
+    "w": "#3a6ab0",
+    "m": "#a05040",
+    "Q": "#3a4a7a",
+    "q": "#2a3458",
+    "R": "#3a4a7a",
+    "r": "#2a3458",
+    "B": "#4a8ad8",
+    "N": "#2a4a8a",
+    "T": "#40a050",
+    "U": "#2a7a3a"
+   },
+   "parts": {
+    "jon_body": [
+     ".....kkkkkkk....",
+     "....kCcCCCCCk...",
+     "...kCCCCCCCCk...",
+     ".kkkkkkkkkkkk...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "barrow": [
+     "k........",
+     ".kk......",
+     "..kkkkkkk",
+     "..kTBBBTk",
+     "..kUNBNUk",
+     "...kUUUk.",
+     "....kkk..",
+     "...kgggk.",
+     "...kgkgk.",
+     "....kkk.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       4
+      ],
+      [
+       "barrow",
+       9,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       4
+      ],
+      [
+       "barrow",
+       9,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       5
+      ],
+      [
+       "barrow",
+       9,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       5
+      ],
+      [
+       "barrow",
+       9,
+       18
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       4
+      ],
+      [
+       "barrow",
+       9,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       5
+      ],
+      [
+       "barrow",
+       9,
+       19
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       4
+      ],
+      [
+       "barrow",
+       9,
+       18
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "jon_body",
+       0,
+       5
+      ],
+      [
+       "barrow",
+       9,
+       19
+      ]
+     ]
+    ]
+   }
+  },
+  "companero-kevin": {
+   "extends": "willy",
+   "note": "Kevin, el cámara: sudadera con capucha, cascos al cuello, móvil vertical en estabilizador y foco LED",
+   "legend": {
+    "C": "#5a3a24",
+    "c": "#7a5236",
+    "O": "#5a5e66",
+    "o": "#3a3e46",
+    "w": "#5a5e66",
+    "L": "#ff4fa0",
+    "l": "#ff4fa0",
+    "Q": "#2a2a40",
+    "q": "#1a1a2a",
+    "R": "#2a2a40",
+    "r": "#1a1a2a",
+    "b": "#f4f4f4",
+    "m": "#a05040",
+    "D": "#2e2e36",
+    "P": "#80d8ff"
+   },
+   "parts": {
+    "kev_body": [
+     "....kkkkkkk.....",
+     "...kCcCCcCCk....",
+     "..kCCCcCCCCCk...",
+     "...kCCCCCCCck...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "..kDkSSSSSkDk...",
+     "..kkoooooookk...",
+     ".kwOoOwwwOoOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOOLLOOOwwk.",
+     "kwwOOOOLLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "gimbal": [
+     "kkk",
+     "kPk",
+     "kPk",
+     "kPk",
+     "kkk",
+     ".k.",
+     "kgk",
+     ".k."
+    ],
+    "led": [
+     "kkk",
+     "kWk",
+     "kkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "kev_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "gimbal",
+     13,
+     7,
+     "kev_body"
+    ],
+    [
+     "led",
+     -1,
+     13,
+     "kev_body"
+    ]
+   ]
+  },
+  "companero-loli": {
+   "extends": "willy",
+   "note": "Loli, la cantante de orquesta: permanente cardada, vestido de lentejuelas y micro con cable en espiral",
+   "legend": {
+    "C": "#a04a2a",
+    "c": "#c86a3a",
+    "m": "#d02040",
+    "O": "#c03898",
+    "o": "#ff80d0",
+    "w": "#e8b088",
+    "L": "#ffe04f",
+    "l": "#ff80d0",
+    "P": "#c03898",
+    "p": "#8a2070",
+    "R": "#e8b088",
+    "b": "#ffe04f",
+    "G": "#ffe04f"
+   },
+   "parts": {
+    "loli_body": [
+     "...kkkkkkkk.....",
+     "..kCCcCCcCCk....",
+     ".kCCcCCCCcCCk...",
+     ".kCCCCCCCCCCk...",
+     ".kCksssssskCk...",
+     ".kCksesssesCk...",
+     ".kCkSssssSkCk...",
+     "..kGsssssskk....",
+     "...kSsmmsSk.....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOoOOoOOoOwk..",
+     "kwwOOoOOOoOOwwk.",
+     "kwwOoOOoOOoOwwk.",
+     "kwwOOOoOOOoOwwk.",
+     "kwwOoOOOoOOOwwk.",
+     "khhOOOoOOoOOhhk.",
+     ".kkOoOOOOOoOkk..",
+     "..kOOOoOOOOOk..."
+    ],
+    "mic": [
+     "kk",
+     "kg",
+     ".k",
+     "k.",
+     ".k",
+     "k.",
+     ".k"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "loli_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "mic",
+     13,
+     14,
+     "loli_body"
+    ]
+   ]
+  },
+  "companero-rosario": {
+   "extends": "willy",
+   "note": "Doña Rosario, la clienta: bajita, permanente gris, abrigo negro, collar de perlas y un bolso enorme",
+   "legend": {
+    "C": "#a8a8b2",
+    "c": "#d8d8e0",
+    "m": "#a05050",
+    "O": "#1e1c24",
+    "o": "#3a3440",
+    "w": "#2e2a34",
+    "L": "#f4f4f0",
+    "l": "#f4f4f0",
+    "P": "#2e2a34",
+    "p": "#1e1c24",
+    "R": "#c8a890",
+    "b": "#1e1c24",
+    "G": "#3a3a44",
+    "E": "#5a3a24"
+   },
+   "parts": {
+    "ros_body": [
+     "....kkkkkkk.....",
+     "...kCcCcCcCk....",
+     "..kCcCcCcCcCk...",
+     "..kCCcCcCcCCk...",
+     "..kCsssssssCk...",
+     "..kCsesssesk....",
+     "...kSsssssSk....",
+     "...kSssssssk....",
+     "...kSsmmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwLLLLLwkk...",
+     ".kwOOwLLLwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOoOOOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOoOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOoOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "handbag": [
+     "..kkk..",
+     ".k...k.",
+     "kkkkkkk",
+     "kEEEEEk",
+     "kEYEEEk",
+     "kEEEEEk",
+     "kkkkkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       7
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       7
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       7
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       6
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "ros_body",
+       0,
+       7
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "handbag",
+     11,
+     14,
+     "ros_body"
+    ]
+   ]
+  },
+  "companero-plata": {
+   "extends": "willy",
+   "note": "Plata, la estatua humana: plateada de arriba abajo, bombín, pose congelada y un sombrero para monedas a sus pies",
+   "legend": {
+    "C": "#5a6068",
+    "c": "#7a808a",
+    "s": "#c8ccd4",
+    "S": "#9aa0a8",
+    "e": "#3a3e46",
+    "m": "#7a808a",
+    "h": "#c8ccd4",
+    "w": "#b0b6be",
+    "O": "#b0b6be",
+    "o": "#8a9098",
+    "L": "#d8dce4",
+    "l": "#8a9098",
+    "Q": "#9aa0a8",
+    "q": "#7a808a",
+    "R": "#9aa0a8",
+    "r": "#7a808a",
+    "b": "#5a6068"
+   },
+   "parts": {
+    "plata_body": [
+     "....kkkkkk......",
+     "...kCCcCCCk.....",
+     "...kCCCCCCk.....",
+     ".kkkkkkkkkkkk...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOk...",
+     "kwwOOOLLlOOOk...",
+     "kwwOOOLlLOOOk...",
+     "kwwOOOOOOOOOk...",
+     "khhOOOOOOOOOk...",
+     ".kkOOOOOOOOOk...",
+     "..kOOOOOOOOOk..."
+    ],
+    "arm_up": [
+     ".kk",
+     "khk",
+     "kwk",
+     "kwk",
+     "kwk",
+     "kwk",
+     "kwk",
+     "kk."
+    ],
+    "coin_hat": [
+     "..kkkk..",
+     ".kCCCCk.",
+     "kkkkkkkk",
+     ".kYkYk.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "coin_hat",
+       8,
+       26
+      ],
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "plata_body",
+       0,
+       4
+      ],
+      [
+       "arm_up",
+       12,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "plata_body",
+       0,
+       4
+      ],
+      [
+       "arm_up",
+       12,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "plata_body",
+       0,
+       4
+      ],
+      [
+       "arm_up",
+       12,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "plata_body",
+       0,
+       4
+      ],
+      [
+       "arm_up",
+       12,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "plata_body",
+       0,
+       4
+      ],
+      [
+       "arm_up",
+       12,
+       5
+      ]
+     ]
+    ]
+   }
+  },
+  "companero-iker": {
+   "extends": "willy",
+   "note": "Iker, el becario: camisa que le queda grande, corbata torcida, acreditación, gafas, grapadora industrial y termo de café",
+   "legend": {
+    "C": "#4a3020",
+    "c": "#6a4a30",
+    "m": "#a05040",
+    "O": "#f0f0f4",
+    "o": "#c8c8d4",
+    "w": "#f0f0f4",
+    "L": "#3a6ab0",
+    "l": "#ffffff",
+    "Q": "#4a4a52",
+    "q": "#34343a",
+    "R": "#4a4a52",
+    "r": "#34343a",
+    "G": "#5a5a66",
+    "V": "#2a8a4a",
+    "v": "#1a6a3a",
+    "D": "#c02030"
+   },
+   "parts": {
+    "iker_body": [
+     "....kkkkkkk.....",
+     "...kCcCCcCCk....",
+     "..kCCcCCCcCk....",
+     "...kCCCCCCCk....",
+     "...ksssssssk....",
+     "...kGeGsGeGk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwLLLwwkk...",
+     ".kwOOwLDwLOOwk..",
+     "kwwOOOOLDLOOwwk.",
+     "kwwOOOOODLOOwwk.",
+     "kwwOOOOODOOOwwk.",
+     "kwwOOOOlllOOwwk.",
+     "khhOOOOlLlOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "stapler": [
+     "kkkk.",
+     "kDDDk",
+     "kggggk",
+     "kkkkk."
+    ],
+    "thermos": [
+     ".kk.",
+     "kVVk",
+     "kvVk",
+     "kVVk",
+     "kvVk",
+     "kkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "iker_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "stapler",
+     12,
+     15,
+     "iker_body"
+    ],
+    [
+     "thermos",
+     -1,
+     13,
+     "iker_body"
+    ]
+   ]
+  },
+  "companero-neptuno": {
+   "note": "Neptuno, el perro de rescate: terranova negro enorme con chaleco salvavidas naranja",
+   "size": [
+    16,
+    22
+   ],
+   "legend": {
+    "k": "#0e0c12",
+    "D": "#2a2834",
+    "d": "#3e3c4a",
+    "e": "#f4f4f0",
+    "N": "#5a5a66",
+    "O": "#ff7a1a",
+    "W": "#f4f4f4",
+    "T": "#ff6a8a"
+   },
+   "parts": {
+    "head": [
+     "........kkkkk...",
+     ".......kDDDDDk..",
+     "......kDdDDDDDk.",
+     "......kDDeDDDDDk",
+     ".....kkDDDDDDNNk",
+     ".....kDkDDDDkkk.",
+     ".....kDkkDDDk...",
+     "......k..kTk...."
+    ],
+    "torso": [
+     ".kk.............",
+     "kDDk.kkkkkkkk...",
+     "kDdkkDDDDDDDDk..",
+     ".kDDOOOOOOWOODk.",
+     ".kDOOOOOOOWOODk.",
+     ".kDOOOOOOOWOODk.",
+     ".kDDOOOOOOWODDk.",
+     ".kDDDDDDDDDDDDk.",
+     "..kDDDDDDDDDDk.."
+    ],
+    "legs_stand": [
+     ".kDDk.....kDDk..",
+     ".kDDk.....kDDk..",
+     ".kddk.....kddk..",
+     ".kkkk.....kkkk.."
+    ],
+    "legs_a": [
+     "kDDk.......kDDk.",
+     "kDDk.......kDDk.",
+     "kddk.......kddk.",
+     "kkkk.......kkkk."
+    ],
+    "legs_b": [
+     "..kDDk...kDDk...",
+     "..kDDk...kDDk...",
+     "..kddk...kddk...",
+     "..kkkk...kkkk..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       9
+      ],
+      [
+       "head",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       9
+      ],
+      [
+       "head",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       10
+      ],
+      [
+       "head",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       10
+      ],
+      [
+       "head",
+       0,
+       3
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       9
+      ],
+      [
+       "head",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       10
+      ],
+      [
+       "head",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       9
+      ],
+      [
+       "head",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       18
+      ],
+      [
+       "torso",
+       0,
+       10
+      ],
+      [
+       "head",
+       0,
+       3
+      ]
+     ]
+    ]
+   }
+  },
+  "companero-tornillo": {
+   "note": "Tornillo, el autómata de la cadena de montaje: hojalata redondeada, una antena, soplete por mano y un tornillo que le falta",
+   "size": [
+    16,
+    22
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "M": "#c0c6ce",
+    "m": "#8a9098",
+    "n": "#e8ecf0",
+    "E": "#4fe8ff",
+    "g": "#5a5e66",
+    "X": "#ff4040",
+    "Y": "#ffe04f",
+    "B": "#4fe8ff",
+    "H": "#ffffff",
+    "o": "#3a3e46"
+   },
+   "parts": {
+    "body": [
+     "....kkkkkkk.....",
+     "...kMnnnnnMk....",
+     "..kMnMMMMMMMk...",
+     "..kMkkkkkkkMk...",
+     "..kMkEkkkEkMk...",
+     "..kMkkEEEkkMk...",
+     "..kMkkkkkkkMk...",
+     "..kMMMMMMMMMk...",
+     "...kkkkkkkkk....",
+     "..kMMMMMMMMMkk..",
+     ".kmkMMYMMMoMkgk.",
+     ".kmkMMMMMMMMkgk.",
+     ".kmkMMMMYMMMkk..",
+     "..kkMMMMMMMMk...",
+     "...kkkkkkkkk...."
+    ],
+    "antenna": [
+     "X",
+     "k",
+     "k"
+    ],
+    "torch_a": [
+     "kgk.",
+     "kgkB",
+     ".kHB"
+    ],
+    "torch_b": [
+     "kgk.",
+     "kgkH",
+     ".kBB"
+    ],
+    "legs_a": [
+     "...kmk..kmk.....",
+     "...kmk..kmk.....",
+     "..kkkk.kkkk....."
+    ],
+    "legs_b": [
+     "....kmk.kmk.....",
+     "...kmk...kmk....",
+     "..kkkk...kkkk..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "antenna",
+       7,
+       1
+      ],
+      [
+       "torch_a",
+       12,
+       13
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "antenna",
+       7,
+       1
+      ],
+      [
+       "torch_b",
+       12,
+       13
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "antenna",
+       7,
+       1
+      ],
+      [
+       "torch_a",
+       12,
+       13
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       5
+      ],
+      [
+       "antenna",
+       7,
+       2
+      ],
+      [
+       "torch_b",
+       12,
+       14
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "antenna",
+       7,
+       1
+      ],
+      [
+       "torch_a",
+       12,
+       13
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       19
+      ],
+      [
+       "body",
+       0,
+       5
+      ],
+      [
+       "antenna",
+       7,
+       2
+      ],
+      [
+       "torch_b",
+       12,
+       14
+      ]
+     ]
+    ]
+   }
   }
  }
 }
