@@ -10,6 +10,8 @@ export * from './effects';
 export * from './lighting';
 export * from './los';
 export * from './surfaces';
+export * from './inventory';
+export * from './dialogue';
 export * from './checks';
 export * from './save';
 export * from './tiled';

@@ -1,3 +1,4 @@
+import type { EngineContent } from './dialogue';
 import type { Ruleset } from './ruleset';
 import type { ControllerId, Entity, GameState } from './state';
 
@@ -48,6 +49,8 @@ export type CommandResult =
 
 export interface CommandContext {
   ruleset: Ruleset;
+  /** Game content the engine looks up by id (dialogue trees...). */
+  content?: EngineContent;
 }
 
 // `any` lets each handler narrow to its own command type; applyCommand routes by `type`.
