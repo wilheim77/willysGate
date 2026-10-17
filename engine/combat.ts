@@ -283,9 +283,17 @@ function decrementConditions(state: GameState, entityId: string): GameState {
 
 // --- Handlers -------------------------------------------------------------------
 
-export const startCombat: CommandHandler<StartCombatCommand> = (state, cmd, { ruleset }) => {
+export const startCombat: CommandHandler<StartCombatCommand> = (initial, cmd, { ruleset }) => {
+  let state = initial;
   if (cmd.issuer !== SYSTEM_ISSUER) return fail('not_your_entity', 'Only the system starts combat');
   const participants = cmd.participants.filter((id) => state.entities[id]);
+  // Whoever is pulled into a fight stops being a bystander.
+  const entities = { ...state.entities };
+  for (const id of participants) {
+    const e = entities[id]!;
+    if (e.tags.includes(NONCOMBATANT_TAG)) entities[id] = { ...e, tags: e.tags.filter((t) => t !== NONCOMBATANT_TAG) };
+  }
+  state = { ...state, entities };
   const factions = new Set(participants.map((id) => state.entities[id]!.factionId));
   if (factions.size < 2) return fail('invalid_target', 'Combat needs at least two factions');
 

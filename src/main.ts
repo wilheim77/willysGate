@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine } from '../engine';
+import { type CheckResult, createEngine, evaluateCondition } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -15,6 +15,7 @@ import { CreationScreen } from './ui/creationScreen';
 import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
+import { setupTutorial } from './ui/tutorialToasts';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
 document.title = game.title;
@@ -28,6 +29,7 @@ hud.startOptions = startMap ? { start: startMap } : undefined;
 const audio = setupAudio(store, game);
 mountAudioControls(document.querySelector('.hud-top nav')!, audio);
 attachUiSfx(audio);
+setupTutorial(store, game);
 const combatHud = new CombatHud(game);
 const controller = new GameController(store, game, combatHud);
 
@@ -79,6 +81,58 @@ controller.onTrapReached = (trap, candidates) => {
     }),
   );
 };
+
+// Levelling up: the narration and what each companion makes of it.
+controller.onLevelUp = (level) => {
+  const lines = game.levels?.texts?.[String(level)];
+  if (!lines) return;
+  const party = Object.values(store.state.entities).filter((e) => e.controllerId === game.playerId);
+  const said = party.filter((e) => lines[e.id]).map((e) => `${e.name}: «${lines[e.id]}»`);
+  dialogue.ask(`${game.texts.combat?.levelUp ?? 'Subís a nivel'} ${level}. ${lines.narration ?? ''}\n\n${said.join('\n')}`, [], game.texts.combat?.ok ?? 'Vale');
+};
+
+// The Narrador (Willy): a line on screen for the moments that deserve one.
+if (game.narrate) {
+  const box = document.createElement('div');
+  box.id = 'narrator';
+  box.hidden = true;
+  document.body.append(box);
+  let timer = 0;
+  store.subscribe((change, state) => {
+    if (change.kind !== 'events') return;
+    for (const e of change.events) {
+      const line = game.narrate!(e, state);
+      if (!line) continue;
+      box.textContent = line;
+      box.hidden = false;
+      clearTimeout(timer);
+      timer = window.setTimeout(() => (box.hidden = true), 3500 + line.length * 40);
+      break;
+    }
+  });
+  box.addEventListener('click', () => (box.hidden = true));
+}
+
+// The journal: what to do now. A 📜 button shows it; a change of objective is announced.
+if (game.objectives?.length) {
+  const current = () => {
+    const leader = store.state.entities[game.leaderId];
+    if (!leader) return '';
+    return game.objectives!.find((o: { when?: Parameters<typeof evaluateCondition>[3]; text: string }) => !o.when || evaluateCondition(store.engine.ruleset, store.state, leader.id, o.when))?.text ?? '';
+  };
+  const button = document.createElement('button');
+  button.textContent = '📜';
+  button.title = game.texts.combat?.journal ?? 'Diario';
+  button.setAttribute('aria-label', button.title);
+  button.addEventListener('click', () => dialogue.ask(current(), [], game.texts.combat?.ok ?? 'Vale'));
+  document.querySelector('.hud-top nav')!.prepend(button);
+  let last = current();
+  store.subscribe(() => {
+    const now = current();
+    if (now && now !== last) hud.say(`📜 ${now}`);
+    last = now;
+  });
+}
 
 const creation = new CreationScreen(store, game);
 hud.onNewGame = () => creation.open();

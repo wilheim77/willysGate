@@ -1,6 +1,7 @@
-import type { CreationChoices, CreationSpec, DialogueTree, DialogueWhen, Engine, GameState, MapBuilder, Ruleset } from '../../engine';
+import type { CreationChoices, CreationSpec, DialogueTree, DialogueWhen, Entity, GameEvent, Engine, GameState, MapBuilder, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
+import type { TutorialStep } from '../ui/tutorialToasts';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
 export interface UiTexts {
@@ -73,8 +74,16 @@ export interface GameDefinition {
   maps?: Record<string, MapBuilder>;
   /** Conversations the game opens by itself, once, when their condition holds (out of combat, idle). */
   triggers?: { id: string; when: DialogueWhen; dialogue: string; partner?: string; map?: string }[];
+  /** Story-driven levelling: the party reaches each level when its condition holds. */
+  levels?: { rules: { level: number; when: DialogueWhen }[]; levelUp(entity: Entity, level: number): Entity; texts?: Record<string, Record<string, string>> };
+  /** The journal: the first objective whose condition holds is shown as the current goal. */
+  objectives?: { when?: DialogueWhen; text: string }[];
+  /** A narrator's line for an engine event, if any (Willy's Narrador). Cosmetic. */
+  narrate?(event: GameEvent, state: GameState): string | null;
   /** A conversation that opens as soon as the protagonist is created. */
   opening?: { dialogue: string; partner?: string };
+  /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
+  tutorial?: TutorialStep[];
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

@@ -23,7 +23,24 @@ const maps: Record<string, ParsedMap> = Object.fromEntries(
 
 const content = join(import.meta.dirname, '..', '..', 'content', 'intereses');
 const FLAGS = JSON.parse(readFileSync(join(content, 'flags.json'), 'utf8')) as Record<string, unknown>;
-const CAST = JSON.parse(readFileSync(join(content, 'cast.json'), 'utf8')) as Record<string, { essential?: boolean }>;
+const CAST = JSON.parse(readFileSync(join(content, 'cast.json'), 'utf8')) as Record<string, { essential?: boolean; faction?: string }>;
+const TEMPLATES = JSON.parse(readFileSync(join(content, 'templates.json'), 'utf8')) as Record<string, { faction?: string }>;
+/** The faction a spawn fights for: its own `faction` property, else its cast entry, else its template. */
+function factionOf(parsed: ParsedMap, name: string): string | undefined {
+  const own = parsed.spawnProperties?.[name]?.faction;
+  if (own) return String(own);
+  if (CAST[name]) return CAST[name]!.faction;
+  const dash = name.lastIndexOf('-');
+  return TEMPLATES[dash > 0 ? name.slice(0, dash) : name]?.faction;
+}
+/** Is a spawn present when exactly these flags are set? (requiresFlag / unlessFlag / requiresAnyFlag) */
+function presentWith(parsed: ParsedMap, name: string, flags: Set<string>): boolean {
+  const p = parsed.spawnProperties?.[name] ?? {};
+  if (p.requiresFlag && !flags.has(String(p.requiresFlag))) return false;
+  if (p.unlessFlag && flags.has(String(p.unlessFlag))) return false;
+  if (p.requiresAnyFlag && !String(p.requiresAnyFlag).split(',').some((f) => flags.has(f.trim()))) return false;
+  return true;
+}
 const DIALOGUES = new Set(
   readdirSync(join(content, 'dialogues'))
     .filter((f) => f.endsWith('.json'))
@@ -42,7 +59,7 @@ const STORY_GATES: Record<string, Record<string, string>> = {
   plaza: { 'a-abadia': 'audiencia_concedida', 'a-calles': 'juicio_resuelto', 'a-escorial': 'audiencia_hecha' },
   calles: { 'a-escorial': 'audiencia_hecha' },
   escorial: { 'pozo-del-ahorcado': 'd1_resuelto', bocamina: 'd1_resuelto' },
-  abadia: { 'escalera-cripta': 'llave_cripta' },
+  abadia: { 'escalera-cripta': 'cripta_abierta' },
 };
 
 const RULES = dnd5e.movement;
@@ -171,6 +188,29 @@ describe('Intereses maps', () => {
         }
       });
 
+      it('never starts a scene speaker\'s fight from an encounters zone (the scene must run first)', () => {
+        const speakers = parsed.zones.filter((z) => z.layer === 'scenes').map((z) => String(z.properties.speaker ?? '')).filter((s) => parsed.spawns[s]);
+        for (const e of parsed.zones.filter((z) => z.layer === 'encounters')) {
+          const ids = String(e.properties.participants ?? '').split(',');
+          for (const s of speakers) {
+            expect(ids.includes(s), `${e.name} fights scene speaker ${s}`).toBe(false);
+            expect(inZone(e, parsed.spawns[s]!), `${e.name} covers scene speaker ${s}`).toBe(false);
+          }
+          for (const key of ['setFlag', 'winFlag']) if (e.properties[key] !== undefined) expect(String(e.properties[key]) in FLAGS, `${e.name}.${key}`).toBe(true);
+        }
+      });
+
+      it('gives every encounter, with its flags set, someone hostile to the party (no stalemates)', () => {
+        if (id === 'test') return; // the legacy arena builds its foes in code
+        for (const e of parsed.zones.filter((z) => z.layer === 'encounters')) {
+          const flags = new Set([e.properties.requiresFlag].filter(Boolean).map(String));
+          const present = String(e.properties.participants ?? '').split(',').filter((id) => parsed.spawns[id] && presentWith(parsed, id, flags));
+          const hostile = present.filter((id) => factionOf(parsed, id) !== 'party');
+          expect(hostile.length, `${e.name}: nobody hostile among ${present.join(',')}`).toBeGreaterThan(0);
+          for (const id of present) expect(factionOf(parsed, id), `${e.name}: ${id} has no faction`).toBeDefined();
+        }
+      });
+
       it('gates only on flags that exist', () => {
         for (const z of parsed.zones)
           for (const key of ['requiresFlag', 'unlessFlag']) {
@@ -235,6 +275,14 @@ describe('Intereses maps', () => {
       });
     });
   }
+
+  it('wires the act-critical scenes to their dialogues', () => {
+    const scene = (map: string, name: string) => maps[map]?.zones.find((z) => z.layer === 'scenes' && z.name === name)?.properties;
+    expect(scene('boveda', 'brea-habla')?.dialogue).toBe('boveda_brea');
+    expect(scene('mina', 'galeria-sellada')?.dialogue).toBe('galeria_sellada');
+    expect(maps.boveda?.zones.some((z) => z.layer === 'encounters'), 'the Bóveda fight starts from boveda_brea, not a zone').toBe(false);
+    for (const name of ['d1-asalto', 'd1-defensa']) expect(maps.abadia?.zones.find((z) => z.layer === 'encounters' && z.name === name)?.properties.setFlag).toBe('d1_asalto_terminado');
+  });
 
   it('ships no placeholders: no TODO: anywhere, spawn conditions on real flags', () => {
     for (const f of readdirSync(dir).filter((f) => f.endsWith('.json'))) {

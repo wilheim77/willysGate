@@ -17,6 +17,7 @@ import { type Rgb } from './color.ts';
 import { type Rect, readSpriteList } from './sprite-list.ts';
 import { FLAMES, FLAME_LEGEND, type Key, T, ascii, get, rect, rgb, rng, set } from './pixel.ts';
 import * as env from './environment-art.ts';
+import * as fx from './spell-fx.ts';
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -1130,6 +1131,25 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   fx_dust: { frames: [0, 1, 2, 3, 4].map(dustPuff), note: 'Polvareda (pasos, caídas)', anchor: 'floor', fps: 12, loop: false },
   fx_explosion: { frames: env.explosion(), note: 'Explosión (32x32, centrada)', anchor: 'centre', fps: 14, loop: false, light: '#ffb060' },
   fx_steam: { frames: env.steam(), note: 'Vapor (agua y fuego)', anchor: 'floor', fps: 10, loop: false },
+  // Spell VFX (spell-fx.ts). Projectiles point right; see docs/ART_CATALOG.md for how each is played.
+  fx_firebolt: { frames: [0, 1, 2, 3].map((f) => fx.bolt(fx.FIRE, f)), note: 'Proyectil de rayo de fuego', anchor: 'centre', fps: 16, loop: true, light: '#ffb060' },
+  fx_firebolt_impact: { frames: fx.burst(fx.FIRE, 16, 6, 700, { sparks: 5, smoke: true }), note: 'Impacto de fuego', anchor: 'centre', fps: 16, loop: false, light: '#ffb060' },
+  fx_ray_of_frost: { frames: [0, 1, 2].map(fx.frostBeam), note: 'Tramo de rayo de escarcha (se repite en horizontal)', anchor: 'centre', fps: 12, loop: true, light: '#a0d8ff' },
+  fx_frost_impact: { frames: fx.frostImpact(), note: 'Impacto de escarcha', anchor: 'centre', fps: 14, loop: false, light: '#a0d8ff' },
+  fx_shocking_grasp: { frames: [0, 1, 2, 3, 4].map(fx.shock), note: 'Chispazo de agarre electrizante', anchor: 'centre', fps: 18, loop: false, light: '#a0e8ff' },
+  fx_magic_missile: { frames: [0, 1, 2].map(fx.dart), note: 'Dardo de proyectil mágico', anchor: 'centre', fps: 14, loop: true, light: '#b080ff' },
+  fx_magic_missile_impact: { frames: fx.burst(fx.ARCANE, 16, 4, 710, { sparks: 4 }), note: 'Impacto de dardo', anchor: 'centre', fps: 16, loop: false, light: '#b080ff' },
+  fx_burning_hands: { frames: [0, 1, 2, 3, 4, 5].map((f) => fx.flameTile(f)), note: 'Llamarada por casilla del cono', anchor: 'floor', fps: 14, loop: false, light: '#ffb060' },
+  fx_thunderwave: { frames: fx.ring(fx.FROST, 48, 6, { ripple: true }), note: 'Onda atronadora (48x48, 3x3 casillas)', anchor: 'centre', fps: 16, loop: false, light: '#c4dce6' },
+  fx_fireball_bead: { frames: [0, 1, 2, 3].map((f) => fx.bolt(fx.FIRE, f, { head: 1.8, len: 6 })), note: 'Cuenta de bola de fuego (vuela)', anchor: 'centre', fps: 16, loop: true, light: '#ffb060' },
+  fx_fireball: { frames: fx.burst(fx.FIRE, 64, 7, 720, { sparks: 14, smoke: true }), note: 'Estallido de bola de fuego (64x64)', anchor: 'centre', fps: 14, loop: false, light: '#ffb060' },
+  fx_guiding_bolt: { frames: [0, 1, 2, 3].map((f) => fx.bolt(fx.RADIANT, f, { head: 3, len: 11 })), note: 'Proyectil de saeta guía', anchor: 'centre', fps: 16, loop: true, light: '#fff0b0' },
+  fx_guiding_bolt_impact: { frames: fx.burst(fx.RADIANT, 16, 6, 730, { sparks: 6 }), note: 'Impacto radiante', anchor: 'centre', fps: 14, loop: false, light: '#fff0b0' },
+  fx_sacred_flame: { frames: [0, 1, 2, 3, 4, 5].map(fx.sacredFlame), note: 'Llama sagrada (16x32, cae sobre el objetivo)', anchor: 'floor', fps: 12, loop: false, light: '#fff0b0' },
+  fx_healing: { frames: [0, 1, 2, 3, 4, 5].map(fx.healing), note: 'Curación (16x24)', anchor: 'floor', fps: 10, loop: false, light: '#a0ffb0' },
+  fx_bless: { frames: [0, 1, 2, 3].map(fx.bless), note: 'Bendición (aura en bucle mientras dura)', anchor: 'floor', fps: 6, loop: true },
+  fx_turn_undead: { frames: fx.ring(fx.RADIANT, 64, 6, { spokes: 12 }), note: 'Expulsar muertos vivientes (64x64)', anchor: 'centre', fps: 12, loop: false, light: '#fff0b0' },
+  fx_holy_symbol: { frames: [0, 1, 2, 3, 4, 5].map(fx.holySymbol), note: 'Destello del símbolo sagrado (sobre el lanzador)', anchor: 'centre', fps: 12, loop: false, light: '#fff0b0' },
   trap_armed: { frames: [3, 3, 3, 2].map((f) => trapFrame(atlas, list, f)), note: 'Trampa visible armada (pinchos fuera)', anchor: 'floor', fps: 4, loop: true },
   trap_disarmed: { frames: [trapFrame(atlas, list, 0, true)], note: 'Trampa desarmada (pinchos retraídos, apagada)', anchor: 'floor', fps: 0, loop: false },
   tapestry: { frames: [tapestry(false)], note: 'Tapiz con el escudo de los Mazo', anchor: 'wall', fps: 0, loop: false },

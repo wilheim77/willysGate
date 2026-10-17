@@ -92,7 +92,7 @@ describe('Willy: procedural floors', () => {
       expect(down.state.map).toEqual(expected.setup.map);
       expect(down.state.systems.rivals).toEqual(expected.rival ? [expected.rival] : []);
     }
-  }, 30_000);
+  });
 
   it('a rival you made a pact with may come back on a later floor, and the new ones never repeat', () => {
     let back = 0;

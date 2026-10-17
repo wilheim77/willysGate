@@ -17,5 +17,33 @@
     "dorotea": "Si muere ahí abajo, al menos morirá con el expediente al día.",
     "garran": "Ahora sí. Ahora bajo a por Ivo.",
     "anselmo": "Estoy listo. Es mentira, pero lo digo con mucho aplomo. Eso también es un don."
-  }
+  },
+  "$rules": "levels: the party reaches each level when its condition holds (STORY §7).",
+  "levels": [
+    {
+      "level": 4,
+      "when": {
+        "all": [
+          {
+            "flag": "pista_plata_nueva"
+          },
+          {
+            "flag": "pista_pozo"
+          }
+        ]
+      }
+    },
+    {
+      "level": 5,
+      "when": {
+        "flag": "d1_resuelto"
+      }
+    },
+    {
+      "level": 6,
+      "when": {
+        "flag": "d2_resuelta"
+      }
+    }
+  ]
 }

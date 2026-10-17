@@ -52,3 +52,13 @@ describe('Intereses story triggers', () => {
     }
   });
 });
+
+describe('Intereses journal', () => {
+  it('objectives only name flags that exist, and the last one is unconditional', async () => {
+    const { objectives } = (await import('../../content/intereses/objectives.json')).default as { objectives: { when?: unknown; text: string }[] };
+    const flags = (await import('../../content/intereses/flags.json')).default as Record<string, unknown>;
+    const named = JSON.stringify(objectives).match(/"flag":"(\w+)"/g)?.map((m) => m.slice(8, -1)) ?? [];
+    for (const f of named) expect(flags[f] ?? (f === 'epilogo_visto' ? true : undefined), f).toBeDefined();
+    expect(objectives.at(-1)!.when).toBeUndefined();
+  });
+});

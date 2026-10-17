@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 10,
- "nextobjectid": 30,
+ "nextobjectid": 29,
  "properties": [
   {
    "name": "name",
@@ -508,26 +508,7 @@
    "visible": true,
    "x": 0,
    "y": 0,
-   "objects": [
-    {
-     "id": 24,
-     "name": "brea",
-     "type": "",
-     "x": 256,
-     "y": 32,
-     "width": 576,
-     "height": 672,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "participants",
-       "type": "string",
-       "value": "absalon,ivo,callado-9,callado-10,callado-11,callado_palido-3"
-      }
-     ]
-    }
-   ]
+   "objects": []
   },
   {
    "id": 5,
@@ -540,7 +521,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 25,
+     "id": 24,
      "name": "escombros-sima",
      "type": "",
      "x": 256,
@@ -581,7 +562,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 26,
+     "id": 25,
      "name": "a-mina",
      "type": "",
      "x": 0,
@@ -616,7 +597,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 26,
      "name": "brea-habla",
      "type": "",
      "x": 96,
@@ -656,7 +637,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 27,
      "name": "derrumbe",
      "type": "",
      "x": 416,
@@ -684,7 +665,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 28,
      "name": "derrumbe-borde",
      "type": "",
      "x": 576,

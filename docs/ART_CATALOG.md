@@ -404,3 +404,32 @@ Las luces del plató ya existían en P2: `foco-movil`, `cono-de-luz` y `parrilla
 | *Willy* | `content/willy/public/assets/title/title.png` | Plató de Canal Abismo: estallido rojo con «WILLY» y cinta «EL MAZMORRERO», «Un concurso de Canal Abismo», focos, confeti, cámaras-dron, Willy con la bombona en el escenario y el público. Mosca del canal y «En directo» en las esquinas. |
 
 Las dos son de 320×180 y se escalan a múltiplos enteros con vecino más cercano. El logotipo y la figura central caben en los 180 px del centro, así que un recorte `cover` en vertical sigue funcionando. Se generan con `node scripts/art/build-cinematics.ts <juego> title` desde `content/<juego>/cinematics/title.spec.json` (mismas operaciones que la intro, más `text` con `font: "big"`, `bold`, `outline` y `highlight`). Vistas previas: [`art-previews/intereses-title.png`](art-previews/intereses-title.png) y [`art-previews/willy-title.png`](art-previews/willy-title.png). **Petición al cliente:** cargarlas en la pantalla de título; no llevan colour grade.
+
+# Efectos de conjuros y habilidades (*Intereses*, `props` de `assets/0x72/extra.png`)
+
+Dibujados por `scripts/art/spell-fx.ts` con rampas de la paleta de 0x72 (fuego, escarcha, rayo, arcano, radiante y curación). Vista previa con todos los frames: [`art-previews/0x72-spell-fx.png`](art-previews/0x72-spell-fx.png). Los proyectiles miran a la derecha: el cliente los gira según el ángulo de la trayectoria.
+
+| Conjuro | Ids | Cómo se reproduce |
+|---|---|---|
+| Rayo de fuego | `fx_firebolt`, `fx_firebolt_impact` | Proyectil en bucle del lanzador al objetivo (unas 12 casillas/s); al llegar, el impacto una vez en el objetivo. |
+| Rayo de escarcha | `fx_ray_of_frost`, `fx_frost_impact` | Rayo: repetir el tramo de 16 px a lo largo de la línea lanzador→objetivo (girado), en bucle durante ~0,4 s; luego el impacto en el objetivo. |
+| Agarre electrizante | `fx_shocking_grasp` | Una vez sobre el objetivo, a la vez que el ataque cuerpo a cuerpo. |
+| Proyectil mágico | `fx_magic_missile`, `fx_magic_missile_impact` | Un dardo por proyectil, lanzados con ~80 ms de desfase y una curva leve si se quiere; impacto al llegar cada uno. |
+| Manos ardientes | `fx_burning_hands` | Una llamarada por casilla afectada del cono, con un retardo de ~40 ms por casilla de distancia al lanzador. |
+| Onda atronadora | `fx_thunderwave` | Una vez, centrada en el lanzador (48×48 cubre el cubo de 3×3); temblor de cámara corto. |
+| Bola de fuego | `fx_fireball_bead`, `fx_fireball`, `fx_burning_hands` | La cuenta vuela al punto elegido; allí, el estallido de 64×64 (escalar ×2 para el radio de 20 pies) y, si se quiere, `fx_burning_hands` en cada casilla afectada. |
+| Saeta guía | `fx_guiding_bolt`, `fx_guiding_bolt_impact` | Proyectil del lanzador al objetivo e impacto; el brillo que deja en el objetivo puede ser `fx_bless` teñido o la `light` del impacto. |
+| Llama sagrada | `fx_sacred_flame` | Una vez en la casilla del objetivo (16×32, los pies abajo): cae del cielo, no hay proyectil. |
+| Curar heridas / Palabra curativa | `fx_healing` | Una vez en cada objetivo curado (16×24, los pies abajo). |
+| Bendición | `fx_bless` | En bucle sobre cada objetivo mientras dure la condición (halo sobre la cabeza). |
+| Expulsar muertos vivientes | `fx_holy_symbol`, `fx_turn_undead` | El destello sobre el lanzador y a la vez el anillo de 64×64 centrado en él (escalar al radio de 30 pies si hace falta). |
+
+# Animaciones de acción (*Intereses*, `actions.json`)
+
+`cobrador`, `garran`, `dorotea`, `anselmo`, `sinpaga_cuchillero`, `sinpaga_enmascarado`, `sinpaga_bruto`, `callado`, `esqueleto_minero` y `absalon` (y los alias `bandit` y `thug`) tienen, además de `idle`, `move` y `hit`, tres animaciones nuevas en `sprites.<id>.animations`:
+
+- `attack` (4 frames, ~10 fps, sin bucle): preparación, golpe con estela del arma (`slash`, tajo en arco; `thrust`, estocada; `blunt`, golpe de arriba abajo con polvo), seguimiento y vuelta a la postura.
+- `cast` (4 frames, ~8 fps, sin bucle): brillo en la mano, el brillo crece y tiñe el borde del cuerpo con el color del conjuro, y se suelta. Lanzar el efecto del conjuro en el frame 3.
+- `hurt` (2 frames, ~12 fps, sin bucle): destello blanco y retroceso con tinte rojo.
+
+Se derivan del frame `idle` de cada personaje con `scripts/art/build-action-anims.ts`, así que conservan el estilo de 0x72. Todos los frames de estos sprites pasan a `assets/0x72/actors.png`. Los frames nuevos son más anchos (relleno simétrico de 4 px, 8 px en los de 32), así que el pivote de los pies no se mueve. Vista previa: [`art-previews/0x72-actions.png`](art-previews/0x72-actions.png). **Petición al cliente:** reproducir `attack`, `cast` y `hurt` cuando lleguen los eventos correspondientes y volver a `idle`.

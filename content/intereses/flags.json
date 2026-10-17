@@ -558,7 +558,7 @@
   },
   "odda_muerta": {
     "critical": false,
-    "description": "Odda Hulla murió en el tumulto de la tregua."
+    "description": "Odda Hulla murió: en el tumulto de la tregua o defendiendo tú la abadía."
   },
   "tregua_d1": {
     "critical": false,
@@ -605,6 +605,11 @@
     "critical": false,
     "description": "Tienes la llave de la cripta (abre la escalera de la cripta a la mina).",
     "readBy": "mapa: salida escalera-cripta"
+  },
+  "d1_abadia_final_visto": {
+    "critical": false,
+    "description": "Ya ha empezado la escena tras la defensa de la abadía (cierra su disparador).",
+    "readBy": "triggers.json"
   },
   "nella_presa": {
     "critical": false,

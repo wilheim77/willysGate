@@ -76,3 +76,38 @@ export function buildProtagonist(
 }
 
 export type { CreationChoices };
+
+/** Tags createCharacter derives from class, race and level; everything else is the story's and is kept. */
+const DERIVED_TAG = /^(pc|class:|race:|armor:|shield$|subclass:|feature:|weapon:|prof:|expert:|spell:)/;
+
+/**
+ * The same character at a new level: rebuilt from its class and race with its base
+ * abilities, keeping its story tags, conditions, wounds and position.
+ */
+export function levelUpCharacter(e: Entity, level: number): Entity {
+  const classId = e.tags.find((t) => t.startsWith('class:'))?.slice(6);
+  const raceId = e.tags.find((t) => t.startsWith('race:'))?.slice(5);
+  if (!classId || !raceId || !RACES[raceId] || !CLASSES[classId]) return e;
+  const bonus = RACES[raceId]!.abilityBonus;
+  const abilities = Object.fromEntries(ABILITIES.map((a) => [a, (e.stats[a] ?? 10) - (bonus[a] ?? 0)])) as Record<Ability, number>;
+  const weapons = e.tags.filter((t) => t.startsWith('weapon:')).map((t) => t.slice(7));
+  const rebuilt = createCharacter({
+    id: e.id,
+    name: e.name,
+    controllerId: e.controllerId,
+    factionId: e.factionId,
+    position: e.position,
+    spriteId: e.spriteId,
+    classId,
+    raceId,
+    level,
+    abilities,
+    ...(weapons.length ? { weapons } : {}),
+    extraTags: e.tags.filter((t) => !DERIVED_TAG.test(t)),
+  });
+  // Wounds stay wounds; the new hit points are on top.
+  const oldHp = e.resources.hp;
+  const hp = rebuilt.resources.hp!;
+  if (oldHp) hp.current = Math.max(1, Math.min(hp.max, hp.max - (oldHp.max - oldHp.current)));
+  return { ...rebuilt, conditions: e.conditions };
+}

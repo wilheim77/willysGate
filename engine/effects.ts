@@ -51,6 +51,8 @@ export type Effect =
    * counts as a fall of the extra levels; landing on traps and surfaces works as for pushes.
    */
   | { type: 'jump'; entityId: string; to: Vec2; safeDown?: number }
+  /** Swap an entity for a rebuilt version of itself (levelling up a 5e character). Same id. */
+  | { type: 'replaceEntity'; entity: Entity }
   /** Raise or lower a stat (levelling up, a curse): stats are the ruleset's numbers. */
   | { type: 'modifyStat'; entityId: string; stat: string; delta: number }
   | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
@@ -419,6 +421,12 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         }
         next = { ...next, entities: rest, turn, systems: { ...next.systems, summons: summons as never } };
         events.push({ type: 'entityDespawned', entityId: effect.entityId });
+        break;
+      }
+      case 'replaceEntity': {
+        if (!next.entities[effect.entity.id]) throw new Error(`replaceEntity: unknown entity "${effect.entity.id}"`);
+        next = { ...next, entities: { ...next.entities, [effect.entity.id]: effect.entity } };
+        events.push({ type: 'entityChanged', entityId: effect.entity.id, spriteId: effect.entity.spriteId });
         break;
       }
       case 'modifyStat': {
