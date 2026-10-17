@@ -125,29 +125,13 @@ describe('act travel: every exit, from a fresh game', () => {
     expect(allowed.ok, allowed.ok ? '' : `travel should succeed once the flag is set: ${JSON.stringify((allowed as { error: unknown }).error)}`).toBe(true);
   });
 
-  it('abadia\'s crypt exit to mina is gated on "TODO:llave_cripta", a flag nothing in the content ever sets', () => {
-    // Not a bug: the "TODO:" prefix is the content author's own marker that this gate isn't
-    // finished (no dialogue grants llave_cripta yet). Documented here so it's obvious the
-    // moment that changes (this test starts failing, and should be updated to use the real
-    // flag name instead of "TODO:llave_cripta").
+  it('abadia\'s crypt exit to mina stays closed until the crypt door is opened (cripta_abierta)', () => {
     const state = buildActWorld(engine, 1, 'abadia');
     const cryptExit = exitsOf(state).find((z) => z.properties.to === 'mina')!;
-    expect(cryptExit.properties.requiresFlag).toBe('TODO:llave_cripta');
-    const noTreeSetsIt = Object.values(engine.content.dialogues).every((tree) =>
-      Object.values(tree.nodes).every(
-        (node) =>
-          (node.effects ?? []).every((e) => !(e.type === 'setFlag' && e.flag === 'TODO:llave_cripta')) &&
-          (node.choices ?? []).every((c) => (c.effects ?? []).every((e) => !(e.type === 'setFlag' && e.flag === 'TODO:llave_cripta'))),
-      ),
-    );
-    expect(noTreeSetsIt, 'a dialogue now sets TODO:llave_cripta - update this test to use the real flag name').toBe(true);
-
+    expect(cryptExit.properties.requiresFlag).toBe('cripta_abierta');
     const standing: GameState = { ...state, entities: { ...state.entities, hero: { ...state.entities.hero!, position: { x: cryptExit.x, y: cryptExit.y } } } };
-    const result = engine.apply(standing, { type: 'travel', issuer: 'player:1', entityId: 'hero', mapId: 'mina', spawn: String(cryptExit.properties.spawn) } as BaseCommand & {
-      entityId: string;
-      mapId: string;
-      spawn: string;
-    });
-    expect(result.ok, 'the crypt should stay closed until something sets its (placeholder) flag').toBe(false);
+    const cmd = { type: 'travel', issuer: 'player:1', entityId: 'hero', mapId: 'mina', spawn: String(cryptExit.properties.spawn) } as BaseCommand;
+    expect(engine.apply(standing, cmd).ok).toBe(false);
+    expect(engine.apply({ ...standing, flags: { ...standing.flags, cripta_abierta: true } }, cmd).ok).toBe(true);
   });
 });
