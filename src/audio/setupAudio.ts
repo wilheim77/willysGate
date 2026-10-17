@@ -37,12 +37,27 @@ export function setupAudio(store: GameStore, game: GameDefinition): AudioManager
       // ambience bed and re-resolves the current music state's per-map override.
       if (event.type === 'mapChanged') manager.setMap((event as unknown as { to: string }).to);
     }
-    // A combat/exploration switch may also need to happen even if the game's manifest
-    // doesn't wire a `music` field onto combatStarted/combatEnded directly.
-    if (change.events.some((e) => e.type === 'combatStarted' || e.type === 'combatEnded')) syncMusicToTurnMode();
+    if (change.events.some((e) => e.type === 'combatStarted')) syncMusicToTurnMode();
+    // combatEnded: play the victory/defeat stinger (manifest.outcomeMusic), then let it
+    // fall back to the exploration/combat sync itself once the stinger finishes —
+    // calling syncMusicToTurnMode() right away (as for combatStarted) would cut it off.
+    const ended = change.events.find((e) => e.type === 'combatEnded') as unknown as Record<string, unknown> | undefined;
+    if (ended && manifest.outcomeMusic) {
+      const rule = manifest.outcomeMusic;
+      const value = String(ended[rule.field] ?? '');
+      const key = rule.map[value] ?? rule.fallback;
+      if (key && manifest.music[key]) manager.setMusic(key, store.state.turn.mode === 'combat' ? 'combat' : 'exploration');
+      else syncMusicToTurnMode();
+    } else if (ended) {
+      syncMusicToTurnMode();
+    }
   });
 
   manager.setMap(store.state.map.id);
-  syncMusicToTurnMode();
+  // Character creation covers the map before the player presses "Nueva"/"Partida
+  // rápida" (src/ui/creationScreen.ts), which calls store.load(...) and fires the
+  // first 'reset' — so start on the title cue and let that reset move to exploration.
+  if (manifest.music.title) manager.setMusic('title');
+  else syncMusicToTurnMode();
   return manager;
 }

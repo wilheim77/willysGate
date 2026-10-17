@@ -1,4 +1,4 @@
-import type { AudioManifest, AudioVolumeState, MusicDef } from './types';
+import type { AudioManifest, AudioVolumeState, EventRule, MusicDef } from './types';
 
 const STORAGE_KEY = 'willysgate.audio';
 const DEFAULT_VOLUMES: AudioVolumeState = { master: 0.8, music: 0.7, sfx: 1, muted: false };
@@ -65,8 +65,12 @@ class CrossfadeBus {
     this.activeElement.volume = v;
   }
 
-  /** Crossfades to `def` (or to silence if null). No-op if `token` is already current. */
-  switch(token: string | null, def: MusicDef | undefined, volume: number): void {
+  /**
+   * Crossfades to `def` (or to silence if null). No-op if `token` is already current.
+   * For a non-looping `def` (a stinger), `onEnded` fires once playback finishes — e.g.
+   * to fall back to the ongoing exploration/combat track afterwards.
+   */
+  switch(token: string | null, def: MusicDef | undefined, volume: number, onEnded?: () => void): void {
     if (token === this.token) return;
     this.token = token;
     const outgoing = this.activeElement;
@@ -80,6 +84,7 @@ class CrossfadeBus {
     incoming.loop = def.loop ?? true;
     incoming.currentTime = 0;
     incoming.volume = 0;
+    if (!incoming.loop && onEnded) incoming.addEventListener('ended', onEnded, { once: true });
     incoming.play().catch(() => {
       // Blocked play(): the track just won't start; nothing else depends on it.
     });
@@ -215,9 +220,14 @@ export class AudioManager {
     this.applyMusic(); // the map may override the currently playing state's track
   }
 
-  /** Switches the music state (exploration/combat/victory/...), honouring the current
-   * map's override if the manifest has one. Queues until unlocked if called early. */
-  setMusic(state: string | null): void {
+  /**
+   * Switches the music state (exploration/combat/victory/...), honouring the current
+   * map's override if the manifest has one. Queues until unlocked if called early.
+   * `thenState`: for a one-shot stinger (its `MusicDef.loop` is false), switch to this
+   * state once it finishes playing — e.g. a victory jingle falling back to exploration.
+   */
+  setMusic(state: string | null, thenState?: string | null): void {
+    this.musicThenState = thenState ?? null;
     if (state === this.musicState) return;
     this.musicState = state;
     this.applyMusic();
@@ -226,6 +236,8 @@ export class AudioManager {
   stopMusic(): void {
     this.setMusic(null);
   }
+
+  private musicThenState: string | null = null;
 
   private currentMusicDef(): MusicDef | undefined {
     return this.resolveMusicDef(this.musicState);
@@ -240,7 +252,8 @@ export class AudioManager {
   private applyMusic(): void {
     if (!this.unlocked) return;
     const def = this.currentMusicDef();
-    this.music.switch(`${this.musicState ?? ''}@${this.mapId ?? ''}`, def, this.effectiveMusicVolume(def?.volume ?? 1));
+    const thenState = this.musicThenState;
+    this.music.switch(`${this.musicState ?? ''}@${this.mapId ?? ''}`, def, this.effectiveMusicVolume(def?.volume ?? 1), thenState !== null ? () => this.setMusic(thenState) : undefined);
   }
 
   private currentAmbienceDef(): MusicDef | undefined {
@@ -254,20 +267,53 @@ export class AudioManager {
   }
 
   /**
-   * Looks up `events[eventType]` in the manifest and acts on it: plays one or more sfx
-   * (directly, or picked by a field of the event), and/or switches music state. `event`
-   * is the raw engine event object; field lookups are plain property reads, so this
-   * stays game-agnostic.
+   * Looks up `events[eventType]` in the manifest (one rule, or several — all run) and
+   * acts on it: plays one or more sfx (directly, picked by a field of the event, or by
+   * a field of every item in an array field), and/or switches music state. `event` is
+   * the raw engine event object; field lookups are plain property reads (dotted paths
+   * supported), so this stays game-agnostic.
    */
   handleEvent(eventType: string, event: Record<string, unknown>): void {
-    const rule = this.manifest.events[eventType];
-    if (!rule) return;
-    let sfxId: string | string[] | undefined = rule.sfx;
-    if (!sfxId && rule.field && rule.map) {
-      const value = String(event[rule.field] ?? '');
-      sfxId = rule.map[value] ?? rule.fallback;
+    const rules = this.manifest.events[eventType];
+    if (!rules) return;
+    const sfxIds = new Set<string>();
+    for (const rule of Array.isArray(rules) ? rules : [rules]) {
+      for (const id of this.resolveSfx(rule, event)) sfxIds.add(id);
+      if (rule.music) this.setMusic(rule.music);
     }
-    if (sfxId) for (const id of Array.isArray(sfxId) ? sfxId : [sfxId]) this.playSfx(id);
-    if (rule.music) this.setMusic(rule.music);
+    for (const id of sfxIds) this.playSfx(id);
   }
+
+  private resolveSfx(rule: EventRule, event: Record<string, unknown>): string[] {
+    if (rule.sfx) return Array.isArray(rule.sfx) ? rule.sfx : [rule.sfx];
+    if (rule.arrayField && rule.map) {
+      const items = event[rule.arrayField];
+      if (!Array.isArray(items)) return [];
+      const ids = new Set<string>();
+      for (const item of items) {
+        const value = String(getPath(item, rule.itemField ?? rule.field ?? '') ?? '');
+        for (const id of asList(rule.map[value] ?? rule.fallback)) ids.add(id);
+      }
+      return [...ids];
+    }
+    if (rule.field && rule.map) {
+      const value = String(getPath(event, rule.field) ?? '');
+      return asList(rule.map[value] ?? rule.fallback);
+    }
+    return [];
+  }
+}
+
+function asList(v: string | string[] | undefined): string[] {
+  return v ? (Array.isArray(v) ? v : [v]) : [];
+}
+
+/** Reads a (possibly dotted, e.g. "result.success") path off a plain object. */
+function getPath(obj: unknown, path: string): unknown {
+  let cur = obj;
+  for (const key of path.split('.')) {
+    if (cur == null || typeof cur !== 'object') return undefined;
+    cur = (cur as Record<string, unknown>)[key];
+  }
+  return cur;
 }

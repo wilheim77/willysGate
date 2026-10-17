@@ -53,7 +53,7 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'hero',
-  audio: audio as AudioManifest,
+  audio: audio as unknown as AudioManifest,
   items: Object.fromEntries(Object.entries(items).filter(([k]) => !k.startsWith('$'))) as Record<string, { label: string; text?: string }>,
   creation: {
     spec: DND5E_CREATION,
