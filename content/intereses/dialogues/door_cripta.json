@@ -1,5 +1,5 @@
 {
-  "$comment": "Spawn door-cripta in the abbey crypt. Opens with the baron's key (after defending the abbey). Optional route; the Pozo always works.",
+  "$comment": "Spawn door-cripta in the abbey crypt. Opens with the baron's key (only given after defending the abbey) or, after D1, by picking the lock. The crypt exit requires cripta_abierta, so there is no way into the mine before D1. Optional route; the Pozo always works.",
   "id": "door_cripta",
   "start": "puerta",
   "nodes": {
@@ -19,6 +19,10 @@
           "id": "ganzua",
           "text": "Forzar la cerradura.",
           "once": true,
+          "when": {
+            "flag": "d1_resuelto"
+          },
+          "lockedHint": "[Ahora no: media abadía te está mirando]",
           "check": {
             "check": "sleight_of_hand",
             "dc": 17,
