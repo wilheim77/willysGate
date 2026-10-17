@@ -297,6 +297,29 @@ canvas.portrait { image-rendering: pixelated; display: block; }
 #preview-sheet .buttons button { flex: 1 1 0; max-width: 180px; }
 #preview-sheet .confirm { background: #5a3a22; border-color: var(--gold); color: #f0dcb0; }
 
+/* --- Audio controls (volume/mute popover in the top HUD) --- */
+.audio-controls { position: relative; flex: none; }
+.audio-toggle { min-width: var(--touch); font-size: var(--fs-m); line-height: 1; }
+.audio-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--panel);
+  border: 2px solid var(--iron);
+  border-top-color: var(--iron-light);
+  border-left-color: var(--iron-light);
+  box-shadow: 2px 2px 0 var(--shadow);
+  padding: 10px;
+  min-width: 160px;
+  z-index: 10;
+}
+.audio-slider { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: var(--fs-s); }
+.audio-slider input[type='range'] { flex: 1 1 auto; min-width: 0; accent-color: var(--accent); }
+.audio-mute { display: flex; align-items: center; gap: 6px; font-size: var(--fs-s); }
+
 /* --- Phones --- */
 @media (max-width: 560px) {
   :root { --top-h: 44px; --strip-h: 48px; }
