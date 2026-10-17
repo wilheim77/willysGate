@@ -23,6 +23,17 @@
     "baldosa-amarilla": { "top": ["baldosa_amarilla"], "face": "plato_muro_cara" },
     "baldosa-amarilla-encendida": { "top": ["baldosa_amarilla_luz"], "face": "plato_muro_cara" },
     "trampilla-abierta": { "top": ["trampilla_abierta"], "face": "plato_muro_cara" },
-    "gradas": { "top": ["gradas_1", "gradas_2"], "face": "plato_muro_cara" }
+    "gradas": { "top": ["gradas_1", "gradas_2"], "face": "plato_muro_cara" },
+    "hiper": { "top": ["hiper_suelo_1", "hiper_suelo_2", "hiper_suelo_1"], "face": "estanteria_cara" },
+    "hiper-oferta": { "top": ["hiper_oferta"], "face": "estanteria_cara" },
+    "estanteria": { "top": ["estanteria_techo_1", "estanteria_techo_2"], "face": "estanteria_cara" },
+    "cinta": { "top": ["cinta_1", "cinta_2"], "face": "estanteria_cara" },
+    "verbena": { "top": ["verbena_suelo_1", "verbena_suelo_2", "verbena_suelo_3"], "face": "fachada_encalada" },
+    "escenario": { "top": ["escenario_1", "escenario_2"], "face": "escenario_cara" },
+    "muro-verbena": { "top": ["tejado_banderines_1", "tejado_banderines_2"], "face": "fachada_encalada" },
+    "azulejo": { "top": ["azulejo_1", "azulejo_2"], "face": "balneario_pared" },
+    "piscina": { "top": ["piscina_1", "piscina_2"], "face": "balneario_pared" },
+    "hielo-balneario": { "top": ["hielo_1", "hielo_2"], "face": "balneario_pared" },
+    "muro-balneario": { "top": ["nieve_techo_1", "nieve_techo_2"], "face": "balneario_pared" }
   }
 }

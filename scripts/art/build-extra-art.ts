@@ -599,6 +599,243 @@ function rottenPlank(): Image {
   return img;
 }
 
+// --- Exteriors: the road, Hondonegra and the Escorial (dry, cold, overcast) ---------------------
+
+const EXT = {
+  grass: ['#1e1c18', '#2e2c22', '#3e3a2a', '#524a32', '#6a5e3e'] as const,
+  earth: ['#241e1a', '#33291f', '#433528', '#544433', '#685440'] as const,
+  mud: ['#14110f', '#1e1915', '#2a221c', '#352b23'] as const,
+  rock: ['#1c1a1c', '#2c2a2c', '#3e3a3a', '#524c4a', '#6a6260'] as const,
+  river: ['#1a2024', '#26302f', '#34403e', '#4a5654', '#6e7a76'] as const,
+};
+const hex = (s: string) => s as unknown as Key;
+
+/** Dry scrub: dead olive-brown grass over earth, a few low tufts (kept low-contrast so it tiles quietly). */
+function scrub(seed: number): Image {
+  const r = rng(seed);
+  const n = valueNoiseLocal(seed, 4);
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const v = n(x, y);
+    set(img, x, y, rgb(hex(v > 0.6 ? EXT.grass[3] : v > 0.35 ? EXT.grass[2] : EXT.earth[2])));
+  }
+  for (let i = 0; i < 5; i++) {
+    const x = 1 + Math.floor(r() * 14), y = 2 + Math.floor(r() * 12);
+    set(img, x, y, rgb(hex(EXT.grass[4])));
+    set(img, x - 1, y + 1, rgb(hex(EXT.grass[3])));
+    set(img, x + 1, y + 1, rgb(hex(EXT.grass[3])));
+    set(img, x, y + 1, rgb(hex(EXT.grass[1])));
+  }
+  if (r() < 0.5) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(hex(EXT.rock[3])));
+  return img;
+}
+
+/** Packed dirt road with two wheel ruts (horizontal, or vertical) and loose stones. */
+function road(seed: number, vertical: boolean): Image {
+  const r = rng(seed);
+  const n = valueNoiseLocal(seed, 4);
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const v = n(x, y);
+    set(img, x, y, rgb(hex(v > 0.66 ? EXT.earth[4] : v > 0.4 ? EXT.earth[3] : EXT.earth[2])));
+  }
+  for (const o of [4, 11]) for (let i = 0; i < T; i++) {
+    const [x, y] = vertical ? [o + (r() < 0.15 ? 1 : 0), i] : [i, o + (r() < 0.15 ? 1 : 0)];
+    set(img, x, y, rgb(hex(EXT.earth[1])));
+  }
+  for (let i = 0; i < 5; i++) {
+    const x = Math.floor(r() * T), y = Math.floor(r() * T);
+    set(img, x, y, rgb(hex(EXT.rock[3])));
+    set(img, x + 1, y + 1, rgb(hex(EXT.earth[0])));
+  }
+  return img;
+}
+
+/** Ditch mud: dark wet earth with standing water that catches the light. */
+function mud(seed: number): Image {
+  const r = rng(seed);
+  const n = valueNoiseLocal(seed, 4);
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const v = n(x, y);
+    set(img, x, y, rgb(hex(v > 0.7 ? EXT.river[2] : v > 0.45 ? EXT.mud[3] : v > 0.25 ? EXT.mud[2] : EXT.mud[1])));
+  }
+  for (let i = 0; i < 4; i++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(hex(EXT.river[4])));
+  return img;
+}
+
+/** Rocky outcrop seen from above: fractured grey-brown rock with lichen. */
+function rockTop(seed: number): Image {
+  const r = rng(seed);
+  const n = valueNoiseLocal(seed, 5);
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const v = n(x, y);
+    set(img, x, y, rgb(hex(v > 0.68 ? EXT.rock[4] : v > 0.45 ? EXT.rock[3] : EXT.rock[2])));
+  }
+  for (let c = 0; c < 2; c++) {
+    let x = Math.floor(r() * T), y = 0;
+    while (y < T) (set(img, x, y, rgb(hex(EXT.rock[0]))), (x = (x + Math.round(r() * 2 - 1) + T) % T), (y += 1));
+  }
+  for (let i = 0; i < 3; i++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(hex('#5a6040')));
+  return img;
+}
+
+/** Worn cobbles of the village square, grey, with dark joints and mud in the cracks. */
+function cobbles(seed: number): Image {
+  const r = rng(seed);
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb(hex(EXT.mud[2])));
+  for (let row = 0; row < 4; row++) {
+    const y0 = row * 4;
+    let x = row % 2 ? -2 : 0;
+    while (x < T) {
+      const w = 3 + Math.floor(r() * 2);
+      const k = r() < 0.5 ? EXT.rock[3] : EXT.rock[2];
+      for (let yy = y0; yy < y0 + 3; yy++) for (let xx = x; xx < x + w; xx++) set(img, (xx + T) % T, yy, rgb(hex(k)));
+      set(img, (x + T) % T, y0, rgb(hex(EXT.rock[4])));
+      set(img, (x + w - 1 + T) % T, y0 + 2, rgb(hex(EXT.rock[1])));
+      x += w + 1;
+    }
+  }
+  return img;
+}
+
+/** Roof seen from above: dark slate shingles in staggered rows, ridge at the top. */
+function slateRoof(seed: number): Image {
+  const r = rng(seed);
+  const img = blank(T, T);
+  const shades = ['#2a2c34', '#30323a', '#363840', '#2e2a2a', '#3a3632'];
+  for (let row = 0; row < 6; row++) {
+    const y0 = row * 3 - 1;
+    let x = (row % 2) * 2 - 2;
+    while (x < T) {
+      const w = 3 + Math.floor(r() * 2);
+      const k = shades[Math.floor(r() * shades.length)]!;
+      for (let yy = y0; yy < y0 + 3; yy++) for (let xx = x; xx < x + w; xx++) if (xx >= 0 && xx < T && yy >= 0 && yy < T) set(img, xx, yy, rgb(hex(k)));
+      for (let yy = y0; yy < y0 + 3; yy++) if (x + w - 1 >= 0 && yy >= 0) set(img, x + w - 1, yy, rgb(hex('#1a1a20')));
+      if (r() < 0.2) set(img, Math.max(0, x + 1), Math.max(0, y0 + 1), rgb(hex('#4a5034')));
+      x += w;
+    }
+    if (y0 + 2 < T) for (let xx = 0; xx < T; xx++) if (r() < 0.7) set(img, xx, y0 + 2, rgb(hex('#1a1a20')));
+  }
+  rect(img, 0, T - 2, T, 1, rgb(hex('#1a1a20')));
+  rect(img, 0, T - 1, T, 1, rgb(hex(EXT.rock[2])));
+  return img;
+}
+
+/** Half-timbered house face: grey-ochre plaster between dark posts and a brace, a small shuttered window. */
+function timberFace(window: boolean): Image {
+  const r = rng(window ? 71 : 72);
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb(hex('#6e6452')));
+  for (let i = 0; i < 20; i++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(hex(r() < 0.5 ? '#5e5544' : '#7e7462')));
+  const beam = rgb(hex('#2c1e18'));
+  rect(img, 0, 0, T, 1, beam);
+  rect(img, 0, 0, 1, T, beam);
+  rect(img, 15, 0, 1, T, beam);
+  rect(img, 0, 12, T, 1, beam);
+  if (window) {
+    rect(img, 6, 4, 5, 5, beam);
+    rect(img, 7, 5, 3, 3, rgb(hex('#14100e')));
+    set(img, 7, 5, rgb(hex('#b08848')));
+    rect(img, 5, 4, 1, 5, rgb(hex('#3e2c22')));
+    rect(img, 11, 4, 1, 5, rgb(hex('#3e2c22')));
+    rect(img, 6, 9, 5, 1, rgb(hex('#4a3a2e')));
+  } else {
+    for (let i = 0; i < 11; i++) set(img, 2 + i, 1 + i, beam);
+  }
+  return img;
+}
+
+/** Rough stone masonry face (village walls, the abbey's outer walls). */
+function masonryFace(): Image {
+  const img = blank(T, T);
+  const r = rng(61);
+  rect(img, 0, 0, T, T, rgb(hex(EXT.mud[3])));
+  for (let row = 0; row < 4; row++) {
+    let x = row % 2 ? -3 : 0;
+    while (x < T) {
+      const w = 4 + Math.floor(r() * 3);
+      const k = r() < 0.5 ? EXT.rock[3] : EXT.rock[2];
+      for (let yy = row * 4; yy < row * 4 + 3; yy++) for (let xx = x; xx < x + w - 1; xx++) set(img, (xx + T) % T, yy, rgb(hex(k)));
+      set(img, (x + T) % T, row * 4, rgb(hex(EXT.rock[4])));
+      x += w;
+    }
+  }
+  rect(img, 0, 0, T, 1, rgb(hex(EXT.rock[4])));
+  return img;
+}
+
+/** Wooden fence seen from above: two rails and three posts across the tile over scrub. */
+function fenceTop(ground: Image): Image {
+  const img = blank(T, T);
+  blit(img, ground, 0, 0);
+  rect(img, 0, 6, T, 1, rgb('w2'));
+  rect(img, 0, 9, T, 1, rgb('w1'));
+  for (const x of [1, 7, 13]) ascii(img, x, 5, ['kk', 'WW', 'Ww', 'Ww', 'ww', 'kk'], { k: 'out', W: 'w3', w: 'w1' });
+  return img;
+}
+
+/** Fence face: grey weathered planks with a dark gap between them. */
+function fenceFace(): Image {
+  const img = blank(T, T);
+  rect(img, 0, 0, T, T, rgb('void'));
+  for (let x = 0; x < T; x += 4) (rect(img, x, 1, 3, T - 1, rgb(hex('#5a5048'))), rect(img, x, 1, 1, T - 1, rgb(hex('#746a5e'))));
+  rect(img, 0, 4, T, 1, rgb('w1'));
+  rect(img, 0, 11, T, 1, rgb('w1'));
+  return img;
+}
+
+/** The river Lloro: grey water clouded by the silver tailings, slow ripples. */
+function river(seed: number, frame: number): Image {
+  const n = valueNoiseLocal(seed, 6);
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const v = n(x + frame, y);
+    set(img, x, y, rgb(hex(v > 0.7 ? EXT.river[3] : v > 0.42 ? EXT.river[2] : EXT.river[1])));
+    if ((x + y * 3 + frame * 2) % 13 === 0 && v > 0.45) set(img, x, y, rgb(hex(EXT.river[4])));
+  }
+  return img;
+}
+
+/** River bank: mud with the water lapping along the north edge. */
+function riverBank(seed: number): Image {
+  const img = mud(seed);
+  const r = rng(seed + 5);
+  for (let x = 0; x < T; x++) {
+    const h = 3 + Math.floor(r() * 2);
+    for (let y = 0; y < h; y++) set(img, x, y, rgb(hex(y === h - 1 ? EXT.river[4] : EXT.river[2])));
+  }
+  return img;
+}
+
+/** Slag heap ground: granular dark cinders with rusty and silvery glints. */
+function slagHeap(seed: number): Image {
+  const r = rng(seed);
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const v = r();
+    set(img, x, y, rgb(hex(v > 0.85 ? '#4a4240' : v > 0.5 ? '#2e2a2a' : v > 0.2 ? '#262222' : '#1a1818')));
+  }
+  for (let i = 0; i < 5; i++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(hex(r() < 0.5 ? '#6a4030' : '#8a90a0')));
+  return img;
+}
+
+/** Tileable smooth value noise (local copy so this file only depends on pixel.ts helpers). */
+function valueNoiseLocal(seed: number, cell: number): (x: number, y: number) => number {
+  const nCells = Math.round(T / cell);
+  const r = rng(seed * 7 + 3);
+  const grid = Array.from({ length: nCells * nCells }, () => r());
+  const g = (i: number, j: number) => grid[(((j % nCells) + nCells) % nCells) * nCells + (((i % nCells) + nCells) % nCells)]!;
+  return (x, y) => {
+    const fx = x / cell, fy = y / cell, i = Math.floor(fx), j = Math.floor(fy);
+    const tx = fx - i, ty = fy - j, sx = tx * tx * (3 - 2 * tx), sy = ty * ty * (3 - 2 * ty);
+    const a = g(i, j) + (g(i + 1, j) - g(i, j)) * sx, b = g(i, j + 1) + (g(i + 1, j + 1) - g(i, j + 1)) * sx;
+    return a + (b - a) * sy;
+  };
+}
+
 /** Dark outline around everything opaque (props drawn without one). */
 function outlined(img: Image): Image {
   const out = blank(img.width, img.height);
@@ -758,6 +995,8 @@ function dustPuff(frame: number): Image {
 const atlas = readPng(join(root, 'art-src', '0x72-dungeontileset-ii', '0x72_DungeonTilesetII_v1.7.png'));
 const list = readSpriteList(join(root, 'art-src', '0x72-dungeontileset-ii', 'tile_list_v1.7'));
 const ninjaRelief = readPng(join(root, 'art-src', 'ninja-adventure', 'TilesetRelief.png'));
+
+const scrubTile = scrub(231);
 const wallMid = crop(atlas, list.wall_mid!.x, list.wall_mid!.y, T, T);
 const crate0x72 = crop(atlas, list.crate!.x, list.crate!.y, list.crate!.w, list.crate!.h);
 
@@ -788,6 +1027,38 @@ const tiles: [string, Image][] = [
   ['vault_2', vaultFloor(12)],
   ['vault_3', vaultFloor(13)],
   ['vault_face', vaultFace()],
+  // Exteriors
+  ['scrub_1', scrubTile],
+  ['scrub_2', scrub(232)],
+  ['scrub_3', scrub(233)],
+  ['scrub_4', scrub(234)],
+  ['road_1', road(201, false)],
+  ['road_2', road(202, false)],
+  ['road_v_1', road(203, true)],
+  ['road_v_2', road(204, true)],
+  ['mud_1', mud(205)],
+  ['mud_2', mud(206)],
+  ['rock_1', rockTop(207)],
+  ['rock_2', rockTop(208)],
+  ['rock_face', withLip(rampRecolour(crop(ninjaRelief, 5 * T, 6 * T, T, T), ['ink', 'out', 'cap', 's0', 'i0']), ['i0', 's0', 's1'])],
+  ['earth_face', withLip(rampRecolour(crop(ninjaRelief, 5 * T, 6 * T, T, T), ['ink', 'out', 'w0', 'w1', 's0']), ['w1', 's0', 'd0'])],
+  ['cobble_1', cobbles(211)],
+  ['cobble_2', cobbles(212)],
+  ['cobble_3', cobbles(213)],
+  ['roof_1', slateRoof(214)],
+  ['roof_2', slateRoof(215)],
+  ['timber_face', timberFace(false)],
+  ['timber_face_window', timberFace(true)],
+  ['masonry_face', masonryFace()],
+  ['fence_top', fenceTop(scrubTile)],
+  ['fence_face', fenceFace()],
+  ['river_1', river(221, 0)],
+  ['river_2', river(222, 2)],
+  ['riverbank_1', riverBank(223)],
+  ['riverbank_2', riverBank(224)],
+  ['slag_heap_1', slagHeap(225)],
+  ['slag_heap_2', slagHeap(226)],
+  ['slag_heap_3', slagHeap(227)],
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps: number; loop: boolean; light?: string }> = {

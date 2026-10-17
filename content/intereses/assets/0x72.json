@@ -120,6 +120,121 @@
       ],
       "face": 47,
       "rim": 48
+    },
+    "scrub": {
+      "tileset": "terrain",
+      "frames": [
+        49,
+        50,
+        51,
+        52
+      ],
+      "face": 53,
+      "rim": 54
+    },
+    "road": {
+      "tileset": "terrain",
+      "frames": [
+        55,
+        56
+      ],
+      "face": 57,
+      "rim": 58
+    },
+    "road_v": {
+      "tileset": "terrain",
+      "frames": [
+        59,
+        60
+      ],
+      "face": 61,
+      "rim": 62
+    },
+    "mud": {
+      "tileset": "terrain",
+      "frames": [
+        63,
+        64
+      ],
+      "face": 65,
+      "rim": 66
+    },
+    "rock": {
+      "tileset": "terrain",
+      "frames": [
+        67,
+        68
+      ],
+      "face": 69,
+      "rim": 70
+    },
+    "cobble": {
+      "tileset": "terrain",
+      "frames": [
+        71,
+        72,
+        73
+      ],
+      "face": 74,
+      "rim": 75
+    },
+    "house": {
+      "tileset": "terrain",
+      "frames": [
+        76,
+        77
+      ],
+      "face": 78
+    },
+    "house_plain": {
+      "tileset": "terrain",
+      "frames": [
+        79,
+        80
+      ],
+      "face": 81
+    },
+    "stone_wall": {
+      "tileset": "terrain",
+      "frames": [
+        82,
+        83
+      ],
+      "face": 84
+    },
+    "fence": {
+      "tileset": "terrain",
+      "frames": [
+        85
+      ],
+      "face": 86
+    },
+    "river": {
+      "tileset": "terrain",
+      "frames": [
+        87,
+        88
+      ],
+      "face": 89
+    },
+    "riverbank": {
+      "tileset": "terrain",
+      "frames": [
+        90,
+        91
+      ],
+      "face": 92,
+      "rim": 93
+    },
+    "slag_heap": {
+      "tileset": "terrain",
+      "frames": [
+        94,
+        95,
+        96
+      ],
+      "face": 97,
+      "rim": 98
     }
   },
   "sprites": {

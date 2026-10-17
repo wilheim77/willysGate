@@ -165,6 +165,95 @@
         52
       ],
       "face": 53
+    },
+    "hiper": {
+      "tileset": "terrain",
+      "frames": [
+        54,
+        55,
+        56
+      ],
+      "face": 57
+    },
+    "hiper-oferta": {
+      "tileset": "terrain",
+      "frames": [
+        58
+      ],
+      "face": 59
+    },
+    "estanteria": {
+      "tileset": "terrain",
+      "frames": [
+        60,
+        61
+      ],
+      "face": 62
+    },
+    "cinta": {
+      "tileset": "terrain",
+      "frames": [
+        63,
+        64
+      ],
+      "face": 65
+    },
+    "verbena": {
+      "tileset": "terrain",
+      "frames": [
+        66,
+        67,
+        68
+      ],
+      "face": 69
+    },
+    "escenario": {
+      "tileset": "terrain",
+      "frames": [
+        70,
+        71
+      ],
+      "face": 72
+    },
+    "muro-verbena": {
+      "tileset": "terrain",
+      "frames": [
+        73,
+        74
+      ],
+      "face": 75
+    },
+    "azulejo": {
+      "tileset": "terrain",
+      "frames": [
+        76,
+        77
+      ],
+      "face": 78
+    },
+    "piscina": {
+      "tileset": "terrain",
+      "frames": [
+        79,
+        80
+      ],
+      "face": 81
+    },
+    "hielo-balneario": {
+      "tileset": "terrain",
+      "frames": [
+        82,
+        83
+      ],
+      "face": 84
+    },
+    "muro-balneario": {
+      "tileset": "terrain",
+      "frames": [
+        85,
+        86
+      ],
+      "face": 87
     }
   },
   "sprites": {
