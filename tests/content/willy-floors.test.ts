@@ -200,3 +200,13 @@ describe('Willy: procedural rivals', () => {
     expect(b.stats.ataque).toBe(a.stats.ataque! + 2);
   });
 });
+
+describe('Willy: floor mechanics on the generated floors', () => {
+  it('floor 1 has a tide in the boss room; floor 2 has conveyor belts', () => {
+    const f1 = generateFloor(3, 1).setup;
+    expect(zonesOf({ systems: f1.systems } as unknown as GameState, 'marea').length).toBeGreaterThan(0);
+    let belts = 0;
+    for (let seed = 1; seed <= 10; seed++) belts += zonesOf({ systems: generateFloor(seed, 2).setup.systems } as unknown as GameState, 'cintas').length;
+    expect(belts).toBeGreaterThan(0);
+  });
+});

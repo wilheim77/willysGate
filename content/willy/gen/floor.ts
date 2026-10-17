@@ -304,7 +304,11 @@ export function usableSides(biome: Biome, rows: string[]): Side[] {
   return sides;
 }
 
-const flipRows = (rows: string[]) => rows.map((r) => [...r].reverse().join(''));
+const MIRROR: Record<string, string> = { '>': '<', '<': '>' };
+const flipRows = (rows: string[]) => rows.map((r) => [...r].reverse().map((c) => MIRROR[c] ?? c).join(''));
+
+/** Conveyor belts: the character gives the direction (a flipped room mirrors it). */
+const BELT_DIRS: Record<string, Vec2> = { '>': { x: 1, y: 0 }, '<': { x: -1, y: 0 }, '^': { x: 0, y: -1 }, v: { x: 0, y: 1 } };
 const flipSide = (s: Side): Side => (s === 'E' ? 'W' : s === 'W' ? 'E' : s);
 
 function pickChunk(g: Gen, biome: Biome, floor: number, role: Role, needed: Side[], usedIds: Set<string>): { chunk: RoomChunk; flipped: boolean } | undefined {
@@ -347,6 +351,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
   const rooms: RoomInfo[] = [];
   const markers: { ch: string; at: Vec2; room: number }[] = [];
   const surfaces: Record<string, { type: string }> = {};
+  const belts: { at: Vec2; dir: Vec2 }[] = [];
 
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]!;
@@ -365,6 +370,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
         const def = isMarker ? floorDef : biome.terreno[c] ?? floorDef;
         setTile(ox + x, oy + y, { terrain: def.terrain, height: base + (def.height ?? 0), walkable: def.walkable ?? true });
         if (def.surface) surfaces[key({ x: ox + x, y: oy + y })] = { type: def.surface };
+        if (def.terrain === 'cinta') belts.push({ at: { x: ox + x, y: oy + y }, dir: BELT_DIRS[c] ?? BELT_DIRS['>']! });
         if (isMarker) markers.push({ ch: c, at: { x: ox + x, y: oy + y }, room: i });
       }),
     );
@@ -400,6 +406,14 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
   populated.foesByRoom.forEach((ids, i) => {
     if (ids.length) zones.push(roomZone(i, `sala-${i}`, 'encounters', { participants: ids.join(',') }));
   });
+  // Floor mechanics the ruleset runs at the end of each round (onRoundEnd): belts and tides.
+  belts.forEach((b, k) => zones.push(zone(`cinta-${k}`, 'cintas', b.at.x, b.at.y, 1, 1, { dx: b.dir.x, dy: b.dir.y })));
+  const tide = (spec.mecanica.reglas as { marea?: { soloEnRoles: string[]; cicloRondas: number; alturaInundada: number; arrastre: number } }).marea;
+  if (tide) {
+    rooms.forEach((r, i) => {
+      if (tide.soloEnRoles.includes(r.role)) zones.push(roomZone(i, `marea-${i}`, 'marea', { ciclo: tide.cicloRondas, altura: r.height + tide.alturaInundada, arrastre: tide.arrastre }));
+    });
+  }
   const stairs = populated.stairs;
   // Down the stairs: the Camerino between this floor and the next (maps.ts).
   zones.push(zone('escalera', 'exits', stairs.x, stairs.y, 1, 1, { to: `camerino-${n}`, spawn: 'llegada' }));

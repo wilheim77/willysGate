@@ -362,10 +362,10 @@ Las 9 clases están completas, con invocaciones y barreras (`summons.ts`, sobre 
 - **Invocaciones y barreras (R13):** `spawnEntity`/`despawnEntity`.
 - **Fin de turno e inicio de combate (R20):** «Siesta en la silla» (Socorrista) y «Silencio absoluto» (Mimo).
 - **Saltos y rebotes (R15):** Gran salto, Alley-oop, Mate del concurso y Escalera imaginaria usan `jumpTargets` y el efecto `jump` (la caída de más pasa por `onFall`); el ruleset añade el techo bajo, el estado «salto» y el evento `saltoCompleto` (con `cruzaVacio`, para logros y Narrador). Pase picado rebota con `traceProjectile`.
+- **Mecánicas de planta (R20, `onRoundEnd`):** las cintas (zonas `cintas` con `dx`/`dy`) llevan 1 casilla a quien esté encima al acabar la ronda, como un empujón (también a fosos y fuego); la marea (zonas `marea` con `ciclo`, `altura` y `arrastre`) avisa una ronda antes, inunda las casillas bajas, empapa y arrastra 1 casilla hacia el sur. Los jefes no se mueven por ellas.
 - **Trampas:** `noticeTrap` (8 + SUE contra la detección de la trampa, sin dado) y `triggerTrap` (salvación de AGI contra su DIF: si la pasas, mitad de daño y sin efecto; si no, daño entero y enredado 2 turnos o tumbado).
 
 ### Lo que sigue esperando al motor
 
-- **Fin de ronda (R20):** cintas transportadoras y mareas.
 
 Tests: `tests/rulesets/willy-core.test.ts`, `willy-classes.test.ts`, `willy-classes2.test.ts`, `willy-summons.test.ts` y `willy-review.test.ts` (este recorre todas las habilidades de todas las clases en los niveles 1, 3, 6 y 9) (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).
