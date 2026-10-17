@@ -6,13 +6,16 @@ import {
   type Ruleset,
   type SurfaceDef,
   type SurfaceReaction,
+  type Trap,
   type Vec2,
   OBJECT_TAG,
   OBSTACLE_TAG,
   gridDistance,
   hasCondition,
 } from '../../engine';
-import { rollDice, sum } from './dice';
+import { parseDice, rollDice, sum } from './dice';
+import { profBonus } from './character';
+import type { Ability } from './abilities';
 import { Resolver, dealDamage, destructionHooks, rollSave, standing } from './resolve';
 
 /**
@@ -96,15 +99,21 @@ export function onFall(ruleset: Ruleset, state: GameState, id: string, levels: n
 
 export interface PropSpec {
   id: string;
-  kind: 'barrel_oil' | 'barrel' | 'crate';
+  kind: 'barrel_oil' | 'barrel' | 'crate' | 'chest' | 'door' | 'lever';
   position: Vec2;
   spriteId?: string;
+  name?: string;
+  /** Extra tags, e.g. 'dialogue:<id>' to make it usable. */
+  extraTags?: string[];
 }
 
 const PROP_STATS: Record<PropSpec['kind'], { name: string; hp: number; ac: number; tags: string[] }> = {
   barrel_oil: { name: 'Barril de aceite', hp: 1, ac: 10, tags: ['explosive_oil'] },
   barrel: { name: 'Barril', hp: 10, ac: 10, tags: [] },
   crate: { name: 'Caja', hp: 12, ac: 11, tags: [] },
+  chest: { name: 'Cofre', hp: 15, ac: 12, tags: [] },
+  door: { name: 'Puerta', hp: 18, ac: 15, tags: [] },
+  lever: { name: 'Palanca', hp: 10, ac: 14, tags: [] },
 };
 
 /** Inanimate scenery: attackable, gives cover, never takes turns. */
@@ -112,7 +121,7 @@ export function createProp(spec: PropSpec): Entity {
   const p = PROP_STATS[spec.kind];
   return {
     id: spec.id,
-    name: p.name,
+    name: spec.name ?? p.name,
     controllerId: 'none',
     factionId: 'scenery',
     position: spec.position,
@@ -120,7 +129,7 @@ export function createProp(spec: PropSpec): Entity {
     stats: { str: 10, dex: 1, con: 10, int: 1, wis: 1, cha: 1, level: 1, speed: 0, ac: p.ac },
     resources: { hp: { current: p.hp, max: p.hp } },
     conditions: [],
-    tags: [OBJECT_TAG, OBSTACLE_TAG, 'immune:poison', 'immune:psychic', ...p.tags],
+    tags: [OBJECT_TAG, ...(spec.kind === 'lever' ? [] : [OBSTACLE_TAG]), 'immune:poison', 'immune:psychic', ...p.tags, ...(spec.extraTags ?? [])],
   };
 }
 
@@ -147,3 +156,40 @@ export function explodeBarrel(r: Resolver, id: string): void {
 destructionHooks.push((r, id) => {
   if (r.entity(id).tags.includes('explosive_oil')) explodeBarrel(r, id);
 });
+
+// --- Traps ---------------------------------------------------------------------------
+
+/** Passive Perception: 10 + WIS + proficiency (keen senses count). Notices a trap if it beats `detect`. */
+export function passivePerception(e: Entity): number {
+  const wis = Math.floor(((e.stats.wis ?? 10) - 10) / 2);
+  const prof = e.tags.includes('prof:perception') ? profBonus(e) * (e.tags.includes('expert:perception') ? 2 : 1) : 0;
+  return 10 + wis + prof;
+}
+
+export function noticeTrap(state: GameState, id: string, trap: Trap): boolean {
+  const e = state.entities[id];
+  return !!e && standing(e) && passivePerception(e) >= Number(trap.params.detect ?? 99);
+}
+
+/** A trap goes off: a save (if any) halves or avoids the damage; may leave a condition. */
+export function triggerTrap(ruleset: Ruleset, state: GameState, id: string, trap: Trap, rng: RngCursor): ActionOutcome {
+  const r = new Resolver(ruleset, state, rng);
+  const p = trap.params;
+  const saveAbility = p.save ? (String(p.save) as Ability) : null;
+  const saved = saveAbility ? rollSave(r, id, saveAbility, Number(p.dc ?? 12)) : false;
+  if (p.damage) {
+    const dice = parseDice(String(p.damage));
+    const total = sum(rollDice(rng, dice.count, dice.sides)) + dice.bonus;
+    const amount = saved ? (p.half ? Math.floor(total / 2) : 0) : total;
+    if (amount > 0) dealDamage(r, id, amount, String(p.type ?? 'piercing'));
+  }
+  if (p.condition && !saved && standing(r.entity(id))) {
+    r.apply({ type: 'applyCondition', entityId: id, condition: String(p.condition), remainingTurns: Number(p.turns ?? 1) });
+  }
+  if (p.surface) {
+    const tiles = trap.tiles;
+    r.apply({ type: 'spawnSurface', tiles, surface: String(p.surface) });
+    if (p.element) r.apply({ type: 'applyElement', tiles, element: String(p.element) });
+  }
+  return r.outcome();
+}

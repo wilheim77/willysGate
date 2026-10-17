@@ -42,6 +42,14 @@
       "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "planks_face" },
       "rim": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "rim_wood" }
     },
+    "door_closed": {
+      "top": [{ "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_closed_top" }],
+      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_closed_face" }
+    },
+    "door_open": {
+      "top": [{ "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_open_top" }],
+      "face": { "atlas": "generated/intereses-0x72-extra.png", "sprite": "door_open_face" }
+    },
     "scaffold": {
       "top": [
         { "atlas": "generated/intereses-0x72-extra.png", "sprite": "scaffold_1" },

@@ -1,0 +1,17 @@
+{
+  "$comment": "Terrain for Willy (ninja preset): tiles drawn by scripts/art/build-willy-art.ts (names from its .txt list). Floor 1 is Castro Sumergido; the Camerino is the safe zone. Build with `npm run art`.",
+  "atlas": "generated/willy-ninja-extra.png",
+  "tileList": "generated/willy-ninja-extra.txt",
+  "tileSize": 16,
+  "terrain": {
+    "piedra-mojada": { "top": ["piedra_mojada_1", "piedra_mojada_2", "piedra_mojada_3"], "face": "muelle_cara" },
+    "agua": { "top": ["agua_1", "agua_2"], "face": "muelle_cara" },
+    "muelle": { "top": ["muelle_1", "muelle_1", "muelle_2"], "face": "muelle_cara" },
+    "soportal": { "top": ["soportal_1", "soportal_2"], "face": "soportal_cara" },
+    "lonja": { "top": ["lonja_1", "lonja_1", "lonja_1", "lonja_2"], "face": "fachada" },
+    "muro-castro": { "top": ["tejado_1", "tejado_2"], "face": "fachada_ventana" },
+    "moqueta": { "top": ["moqueta_1", "moqueta_2"], "face": "plato_muro_cara" },
+    "tarima": { "top": ["tarima_1", "tarima_2"], "face": "plato_muro_cara" },
+    "muro-plato": { "top": ["plato_muro_techo"], "face": "plato_muro_neon" }
+  }
+}

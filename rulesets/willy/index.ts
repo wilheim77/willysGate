@@ -21,7 +21,7 @@ import './more-classes';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, onFall, onSurface } from './environment';
-import { Resolver, type WillyEvent, canAct, chanceD20, dealDamage, heal, pushEntity, standing } from './resolve';
+import { Resolver, type WillyEvent, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, standing } from './resolve';
 import { describeEntity } from './sheet';
 
 /**
@@ -281,12 +281,15 @@ export const willy: Ruleset = {
   surfaceReactions: SURFACE_REACTIONS,
   onSurface: (state, id, surface, trigger, rng) => onSurface(willy, state, id, surface, trigger, rng),
   onFall: (state, id, levels, rng) => onFall(willy, state, id, levels, rng),
+  onCollision: (state, id, hit, push, rng) => onCollision(willy, state, id, hit, push, rng),
+  onVoid: (state, id, rng) => onVoid(willy, state, id, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
 };
 
 export { ATTRS, ATTR_LABELS, createCreature, createWilly, defence, skillLevel, type CreatureSpec, type WillySpec } from './character';
 export { CLASSES } from './data';
 export { WILLY_CREATION, buildWilly, defaultCreation } from './creation';
+export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
 export { HANDLERS, areaTiles } from './actions';
 export type { AttackRolledEvent, DamageDealtEvent, WillyEvent } from './resolve';

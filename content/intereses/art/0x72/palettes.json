@@ -15,42 +15,6 @@
     "thug": "sinpaga_enmascarado"
   },
   "variants": {
-    "cobrador": {
-      "base": "doc",
-      "note": "Protagonista: cobrador encapuchado, capa gris pizarra, bufanda oscura subida hasta la nariz, correa de latón y farol encendido",
-      "map": {
-        "#314152": "#4c5668",
-        "#417089": "#b08a48",
-        "#483b3a": "#2e3440",
-        "#aa8d7a": "#3a3a44",
-        "#d3bfa9": "#55555f"
-      },
-      "rules": [
-        {
-          "from": "#222222",
-          "to": "#363d4b",
-          "interior": true
-        }
-      ],
-      "decals": [
-        {
-          "rows": [
-            ".k.",
-            "kYk",
-            "kyk",
-            ".k."
-          ],
-          "legend": {
-            "k": "#222222",
-            "Y": "#facb3e",
-            "y": "#ee8e2e"
-          },
-          "x": 0,
-          "y": -8,
-          "from": "bottom"
-        }
-      ]
-    },
     "dorotea": {
       "base": "elf_f",
       "note": "Dorotea Vane: contable del banco, pelo negro con lazo azul tinta, vestido granate y su libro de cuentas",
@@ -281,6 +245,109 @@
         "#72d6ce": "#7d8c7c",
         "#417089": "#46534a",
         "#fdf7ed": "#cfd6c4"
+      }
+    },
+    "chest": {
+      "base": "chest_full",
+      "note": "Cofre de 0x72: cerrado (idle), abriéndose, abierto con botín y vacío",
+      "frames": {
+        "idle": [
+          "chest_full_open_anim_f0"
+        ],
+        "opening": [
+          "chest_full_open_anim_f0",
+          "chest_full_open_anim_f1",
+          "chest_full_open_anim_f2"
+        ],
+        "open": [
+          "chest_full_open_anim_f2"
+        ],
+        "empty": [
+          "chest_empty_open_anim_f2"
+        ]
+      }
+    },
+    "chest_trapped": {
+      "base": "chest_full",
+      "note": "Cofre con trampa: igual que el cofre, con una aguja verdosa en la cerradura y un hilo tenso al pie (solo cerrado)",
+      "frames": {
+        "idle": [
+          "chest_full_open_anim_f0"
+        ],
+        "opening": [
+          "chest_full_open_anim_f0",
+          "chest_full_open_anim_f1",
+          "chest_full_open_anim_f2"
+        ],
+        "open": [
+          "chest_full_open_anim_f2"
+        ],
+        "empty": [
+          "chest_empty_open_anim_f2"
+        ]
+      },
+      "decals": [
+        {
+          "rows": [
+            "g"
+          ],
+          "legend": {
+            "g": "#97da3f"
+          },
+          "x": 8,
+          "y": 8,
+          "from": "top",
+          "anims": [
+            "idle"
+          ]
+        },
+        {
+          "rows": [
+            "wwwww"
+          ],
+          "legend": {
+            "w": "#d3dce4"
+          },
+          "x": 2,
+          "y": 0,
+          "from": "bottom",
+          "anims": [
+            "idle"
+          ]
+        },
+        {
+          "rows": [
+            "k"
+          ],
+          "legend": {
+            "k": "#62232f"
+          },
+          "x": 13,
+          "y": -6,
+          "from": "bottom",
+          "anims": [
+            "idle"
+          ]
+        }
+      ]
+    },
+    "lever": {
+      "base": "lever",
+      "note": "Palanca de 0x72: arriba (lever_left) y abajo (lever_right)",
+      "frames": {
+        "idle": [
+          "lever_left"
+        ],
+        "up": [
+          "lever_left"
+        ],
+        "down": [
+          "lever_right"
+        ],
+        "pull": [
+          "lever_left",
+          "lever_right"
+        ]
       }
     }
   }

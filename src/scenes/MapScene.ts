@@ -17,6 +17,7 @@ import {
   lightPosition,
   lightingOf,
   surfacesOf,
+  trapsOf,
   tileAt,
 } from '../../engine';
 import { DEFAULT_FX, Juice, tween } from '../fx/juice';
@@ -52,6 +53,10 @@ export interface MapSceneTexts {
   defeat: string;
   fell?: string;
   slipped?: string;
+  trapSpotted?: string;
+  trapTriggered?: string;
+  trapDisarmed?: string;
+  trapDisarmFailed?: string;
 }
 
 const STEP_MS = 160;
@@ -246,6 +251,8 @@ export class MapScene extends Phaser.Scene {
     }
 
     for (const entity of Object.values(state.entities)) {
+      // Invisible interactables (a door is drawn by its tile; the entity only holds the script).
+      if (entity.spriteId === 'none') continue;
       const art = this.manifest.sprites[entity.spriteId];
       if (!art) {
         this.addPlaceholderEntity(entity.id, entity.spriteId, entity.position, map);
@@ -454,6 +461,29 @@ export class MapScene extends Phaser.Scene {
         this.applyFate(String(e.entityId), state, true);
         return;
       }
+      case 'mapChanged': {
+        // A new place: rebuild everything and look at the party.
+        this.buildWorld(state);
+        this.focusOn(this.hooks.controlledEntityId());
+        return;
+      }
+      case 'entityChanged':
+      case 'tileChanged': {
+        // A chest opens, a door swings, a lever flips: rebuild the world from state.
+        this.buildWorld(state);
+        return;
+      }
+      case 'trapSpotted':
+      case 'trapTriggered':
+      case 'trapDisarmed':
+      case 'trapDisarmFailed': {
+        this.drawSurfaces(state);
+        const who = this.centreOf(String(e.entityId));
+        const label = { trapSpotted: this.texts.trapSpotted, trapTriggered: this.texts.trapTriggered, trapDisarmed: this.texts.trapDisarmed, trapDisarmFailed: this.texts.trapDisarmFailed }[e.type];
+        if (who && label) await this.juice.floatText(who.x, who.y, label, e.type === 'trapDisarmed' ? '#b8e09a' : '#e0a090');
+        if (e.type === 'trapTriggered') this.juice.shake(1.2);
+        return;
+      }
       case 'surfaceChanged': {
         // Fire meeting water: a puff of steam where the puddle was.
         for (const change of (e.changes as { tile: Vec2; from: string | null; to: string | null }[]) ?? []) {
@@ -617,6 +647,29 @@ export class MapScene extends Phaser.Scene {
         this.tweens.add({ targets: patch, alpha: { from: 0.35, to: 0.75 }, duration: 160 + ((x + y) % 4) * 40, yoyo: true, repeat: -1 });
       }
       this.surfaceObjects.push(patch);
+    }
+    // Known traps: a red frame with spikes while armed, greyed once disarmed or sprung.
+    for (const trap of trapsOf(state)) {
+      if (trap.hidden) continue;
+      for (const t of trap.tiles) {
+        const h = tileAt(state.map, t)?.height ?? 0;
+        const c = this.grid.tileCentre(t.x, t.y, h);
+        const propId = trap.armed ? 'trap_armed' : 'trap_disarmed';
+        const prop = this.manifest.props?.[propId];
+        if (prop) {
+          const sprite = this.add.sprite(c.x, c.y + T / 2, imageKey(prop.url)).setOrigin(0.5, 1).setDepth(this.grid.depth(t.y, h, 1.6));
+          sprite.play(`prop:${propId}`);
+          this.surfaceObjects.push(sprite);
+          continue;
+        }
+        const g = this.add.graphics().setDepth(this.grid.depth(t.y, h, 1.6));
+        const color = trap.armed ? 0xd0402a : 0x6a6266;
+        const s = T * 0.36;
+        g.lineStyle(1, color, trap.armed ? 0.95 : 0.6).strokeRect(c.x - s, c.y - s, s * 2, s * 2);
+        for (let i = -1; i <= 1; i++) g.fillStyle(color, trap.armed ? 0.9 : 0.5).fillTriangle(c.x + i * s * 0.6 - 2, c.y + s * 0.4, c.x + i * s * 0.6 + 2, c.y + s * 0.4, c.x + i * s * 0.6, c.y - s * 0.4);
+        if (trap.armed) this.tweens.add({ targets: g, alpha: { from: 0.55, to: 1 }, duration: 600, yoyo: true, repeat: -1 });
+        this.surfaceObjects.push(g);
+      }
     }
   }
 
@@ -865,7 +918,9 @@ export class MapScene extends Phaser.Scene {
     const id = this.spriteIdOf(entityId);
     const facing = this.facing.get(entityId)!;
     if (art.kind === 'frames') {
-      sprite.play(`${id}:idle`, true);
+      // Objects show their state through a "pose:<animation>" tag (pose:open, pose:down...).
+      const pose = this.store.state.entities[entityId]?.tags.find((t) => t.startsWith('pose:'))?.slice(5);
+      sprite.play(pose && art.animations[pose] ? `${id}:${pose}` : `${id}:idle`, true);
       return;
     }
     if (art.animations.idle) {

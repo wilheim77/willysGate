@@ -8,6 +8,7 @@ import {
 } from './command-types';
 import { type Effect, type EffectEvent, type EntityFellEvent, type EntityPushedEvent, applyEffects } from './effects';
 import { ageSurfaces, surfaceAt } from './surfaces';
+import { trapsOf, withTraps } from './traps';
 import { type Vec2, gridDistance } from './grid';
 import { RngCursor } from './rng';
 import { type ActionOutcome, type ActionTarget, type Ruleset, targetIds } from './ruleset';
@@ -60,7 +61,11 @@ export interface ActionPerformedEvent extends GameEvent {
 // --- Helpers ------------------------------------------------------------------
 
 /** Different factions fight each other. Finer relations (neutral, allied factions) can come later. */
+/** Bystanders (an old miner on the road): nobody's enemy until something changes that. */
+export const NONCOMBATANT_TAG = 'noncombatant';
+
 export function isHostile(a: Entity, b: Entity): boolean {
+  if (a.tags.includes(NONCOMBATANT_TAG) || b.tags.includes(NONCOMBATANT_TAG)) return false;
   return a.factionId !== b.factionId;
 }
 
@@ -95,10 +100,21 @@ export function applyOutcome(
         const ev = e as EntityFellEvent;
         follow.push(ruleset.onFall(next, ev.entityId, ev.levels, rng));
       }
-      if (e.type === 'entityPushed' && ruleset.onSurface) {
+      if (e.type === 'entityPushed' || e.type === 'entityTeleported') {
         const ev = e as EntityPushedEvent;
+        // Shoved or blinked onto an armed trap: it goes off.
+        const trap = trapsOf(next).find((t) => t.armed && t.tiles.some((p) => p.x === ev.to.x && p.y === ev.to.y));
+        if (trap && next.entities[ev.entityId]) {
+          next = withTraps(next, trapsOf(next).map((t) => (t.id === trap.id ? { ...t, armed: false, hidden: false } : t)));
+          events.push({ type: 'trapTriggered', trapId: trap.id, entityId: ev.entityId } as GameEvent);
+          if (ruleset.triggerTrap) follow.push(ruleset.triggerTrap(next, ev.entityId, trap, rng));
+        }
         const surface = surfaceAt(next, ev.to);
-        if (surface && next.entities[ev.entityId]) follow.push(ruleset.onSurface(next, ev.entityId, surface.type, 'enter', rng));
+        if (e.type === 'entityPushed' && ruleset.onSurface && surface && next.entities[ev.entityId]) follow.push(ruleset.onSurface(next, ev.entityId, surface.type, 'enter', rng));
+        if (e.type === 'entityPushed' && ev.into === 'void' && ruleset.onVoid && next.entities[ev.entityId]) follow.push(ruleset.onVoid(next, ev.entityId, rng));
+        if (e.type === 'entityPushed' && ev.collidedWith && ruleset.onCollision && next.entities[ev.entityId]) {
+          follow.push(ruleset.onCollision(next, ev.entityId, ev.collidedWith, { dx: ev.direction?.dx ?? 0, dy: ev.direction?.dy ?? 0, remaining: ev.remaining ?? 0 }, rng));
+        }
       }
     }
     pending = [];
@@ -233,8 +249,12 @@ export const startCombat: CommandHandler<StartCombatCommand> = (state, cmd, { ru
   for (const id of participants) initiative[id] = ruleset.rollInitiative(state, id, rng);
   const order = [...participants].sort((a, b) => initiative[b]! - initiative[a]! || a.localeCompare(b));
 
+  // A fight cuts any conversation short.
+  const talking = state.systems.dialogue as { treeId?: string } | undefined;
+  const { dialogue: _dropped, ...systems } = state.systems;
   const started: GameState = {
     ...state,
+    systems,
     rng: rng.state,
     turn: { mode: 'combat', round: 1, activeEntityId: null, order, initiative, movementUsed: 0 },
   };
@@ -242,7 +262,11 @@ export const startCombat: CommandHandler<StartCombatCommand> = (state, cmd, { ru
   return {
     ok: true,
     state: { ...first.state, rng: rng.state },
-    events: [{ type: 'combatStarted', order, initiative } as CombatStartedEvent, ...first.events],
+    events: [
+      ...(talking ? [{ type: 'dialogueEnded', treeId: talking.treeId ?? '' } as GameEvent] : []),
+      { type: 'combatStarted', order, initiative } as CombatStartedEvent,
+      ...first.events,
+    ],
   };
 };
 

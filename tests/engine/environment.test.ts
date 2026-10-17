@@ -62,7 +62,7 @@ describe('push and falls', () => {
     const s = engine.newGame({ seed: 1, map: asciiMap(['....#']), entities: [hunter('a', 0, 0)] });
     const r = engine.applyEffects(s, [{ type: 'push', entityId: 'a', dx: 1, dy: 0, distance: 6 }]);
     expect(r.state.entities.a!.position).toEqual({ x: 3, y: 0 });
-    expect(r.events).toContainEqual({ type: 'entityPushed', entityId: 'a', from: { x: 0, y: 0 }, to: { x: 3, y: 0 }, collidedWith: { wall: true } });
+    expect(r.events).toContainEqual(expect.objectContaining({ type: 'entityPushed', entityId: 'a', from: { x: 0, y: 0 }, to: { x: 3, y: 0 }, collidedWith: { wall: true }, remaining: 3 }));
   });
 
   it('reports a fall when pushed off a ledge, and the ruleset deals the damage', () => {
@@ -70,6 +70,23 @@ describe('push and falls', () => {
     const r = applyOutcome(toyRuleset, s, { effects: [{ type: 'push', entityId: 'a', dx: 1, dy: 0, distance: 1 }], events: [] }, new RngCursor(s.rng));
     expect(r.events).toContainEqual({ type: 'entityFell', entityId: 'a', levels: 3 });
     expect(r.state.entities.a!.resources.blood!.current).toBe(3);
+  });
+
+  it('a shove over the edge goes into the void and the ruleset decides (R18), collisions reach the ruleset (R17)', () => {
+    const seen: string[] = [];
+    const rules = {
+      ...toyRuleset,
+      onVoid: (_s: GameState, id: string) => (seen.push(`void:${id}`), { effects: [], events: [] }),
+      onCollision: (_s: GameState, id: string, hit: { entityId?: string; wall?: boolean }, push: { remaining: number }) => (seen.push(`hit:${id}:${hit.entityId ?? 'wall'}:${push.remaining}`), { effects: [], events: [] }),
+    };
+    const map = asciiMap(['....']);
+    map.tiles[3] = { terrain: 'void', height: 0, walkable: false };
+    const s = engine.newGame({ seed: 1, map, entities: [hunter('a', 1, 0)] });
+    const r = applyOutcome(rules, s, { effects: [{ type: 'push', entityId: 'a', dx: 1, dy: 0, distance: 4 }], events: [] }, new RngCursor(s.rng));
+    expect(r.events).toContainEqual(expect.objectContaining({ type: 'entityPushed', to: { x: 3, y: 0 }, into: 'void' }));
+    const s2 = engine.newGame({ seed: 1, map: asciiMap(['....']), entities: [hunter('a', 0, 0), hunter('b', 2, 0)] });
+    applyOutcome(rules, s2, { effects: [{ type: 'push', entityId: 'a', dx: 1, dy: 0, distance: 3 }], events: [] }, new RngCursor(s2.rng));
+    expect(seen).toEqual(['void:a', 'hit:a:b:2']);
   });
 
   it('cannot be pushed up a ledge', () => {

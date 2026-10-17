@@ -9,7 +9,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
 import { type Rgb, hexToRgb, mix } from './color.ts';
-import { drawText } from './font.ts';
+import { drawText, textWidth } from './font.ts';
 import { type Shape, paintBust } from './portrait-painter.ts';
 
 interface PortraitSpec {
@@ -20,6 +20,8 @@ interface PortraitSpec {
   defaultTone: string;
   /** Sprites to leave out (objects, placeholders). */
   skip: string[];
+  /** Regular expression of sprite ids to leave out (e.g. palette variants). */
+  skipPattern?: string;
   /** Per-sprite overrides: backdrop tone, integer scale, extra rows of headroom, horizontal nudge. */
   sprites: Record<string, { tone?: string; scale?: number; headroom?: number; dx?: number; label?: string }>;
   /** Hand-designed busts that replace the generated ones (bigger, with real faces). */
@@ -96,7 +98,7 @@ function frame(img: Image, S = img.width): void {
 }
 
 const ids = Object.entries(manifest.sprites as Record<string, { kind: string; url: string; animations: Record<string, { x: number; y: number; w: number; h: number }[]> }>)
-  .filter(([id, s]) => s.kind === 'frames' && !spec.skip.includes(id));
+  .filter(([id, s]) => s.kind === 'frames' && !spec.skip.includes(id) && !(spec.skipPattern && new RegExp(spec.skipPattern).test(id)));
 // Aliases share art: render each distinct frame once.
 const seen = new Map<string, number>();
 const cells: Image[] = [];
@@ -164,7 +166,8 @@ if (hand) {
   for (let i = 0; i < big.data.length; i += 4) [big.data[i], big.data[i + 1], big.data[i + 2], big.data[i + 3]] = [20, 18, 22, 255];
   busts.forEach(([id], i) => {
     blit(big, scaleUp(crop(handSheet, i * H, 0, H, H), 3), 12 + i * (H * 3 + 12), 8);
-    drawText(big, id, 12 + i * (H * 3 + 12), H * 3 + 14, [200, 196, 186], 2);
+    const label = id.replace(/^patrocinador-/, '');
+    drawText(big, label, 12 + i * (H * 3 + 12), H * 3 + 14, [200, 196, 186], textWidth(label, 2) <= H * 3 + 8 ? 2 : 1);
   });
   writePng(join(root, 'docs', 'art-previews', `${preset}-portraits-hand.png`), big);
 

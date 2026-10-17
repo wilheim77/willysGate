@@ -1,4 +1,4 @@
-import { type Entity, type TiledMapJson, parseTiledMap, withLighting, withZones } from '../../engine';
+import { type Entity, type GameState, type TiledMapJson, type Trap, parseTiledMap, withLighting, withTraps, withZones } from '../../engine';
 import { DND5E_CREATION, SURFACES, buildProtagonist, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
@@ -6,8 +6,12 @@ import art0x72 from './assets/0x72.json';
 import artLpc from './assets/lpc.json';
 import testMap from './maps/test.json';
 import meta from './meta.json';
+import items from './items.json';
 import texts from './texts/ui.json';
 import viejoMinero from './dialogues/viejo_minero.json';
+import cofrePrueba from './dialogues/cofre_prueba.json';
+import puertaAlmacen from './dialogues/puerta_almacen.json';
+import palancaAlmacen from './dialogues/palanca_almacen.json';
 import type { DialogueTree } from '../../engine';
 
 const PLAYER = 'player:1';
@@ -36,6 +40,7 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'hero',
+  items: Object.fromEntries(Object.entries(items).filter(([k]) => !k.startsWith('$'))) as Record<string, { label: string; text?: string }>,
   creation: {
     spec: DND5E_CREATION,
     defaults: defaultCreation,
@@ -46,7 +51,7 @@ export const game: GameDefinition = {
       return { ...state, entities: { ...state.entities, hero: built } };
     },
   },
-  dialogues: Object.fromEntries([viejoMinero].map((d) => [d.id, d as unknown as DialogueTree])),
+  dialogues: Object.fromEntries([viejoMinero, cofrePrueba, puertaAlmacen, palancaAlmacen].map((d) => [d.id, d as unknown as DialogueTree])),
   newGame(engine, seed) {
     const { map, spawns, lighting, zones } = parseTiledMap('test', testMap as TiledMapJson);
     const at = (name: string) => spawns[name] ?? { x: 1, y: 1 };
@@ -65,7 +70,14 @@ export const game: GameDefinition = {
     ];
     // Phase 4 test: someone to talk to on the way in.
     const npcs: Entity[] = [
-      createMonster({ id: 'viejo', name: 'Viejo minero', monsterId: 'bandit', controllerId: AI, factionId: 'neutral', position: { x: 5, y: 4 }, spriteId: 'minero_cuadrilla', extraTags: ['dialogue:viejo_minero'] }),
+      createMonster({ id: 'viejo', name: 'Viejo minero', monsterId: 'bandit', controllerId: AI, factionId: 'neutral', position: { x: 5, y: 4 }, spriteId: 'minero_cuadrilla', extraTags: ['dialogue:viejo_minero', 'noncombatant'] }),
+    ];
+    // Phase 4 test: a storeroom behind a barred door, a lever outside, a trapped chest inside.
+    const usables: Entity[] = [
+      // The door is drawn by its tile (door_closed / door_open); the entity only holds the script.
+      createProp({ id: 'puerta-1', kind: 'door', position: { x: 9, y: 11 }, spriteId: 'none', name: 'Puerta del almacén', extraTags: ['dialogue:puerta_almacen'] }),
+      createProp({ id: 'palanca-1', kind: 'lever', position: { x: 13, y: 11 }, spriteId: 'lever', extraTags: ['dialogue:palanca_almacen', 'pose:up'] }),
+      createProp({ id: 'cofre-1', kind: 'chest', position: { x: 10, y: 13 }, spriteId: 'chest_trapped', extraTags: ['dialogue:cofre_prueba'] }),
     ];
     // Scenery from spawn names: "barrel_oil-1", "crate-2"...
     const props: Entity[] = Object.entries(spawns)
@@ -81,7 +93,30 @@ export const game: GameDefinition = {
         surface: String(z.properties.surface),
         tiles: Array.from({ length: z.width * z.height }, (_, i) => ({ x: z.x + (i % z.width), y: z.y + Math.floor(i / z.width) })),
       }));
-    const state = engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...props] }), painted).state;
+    // Traps from the "traps" layer: hidden until noticed; disarmed with a check.
+    const traps: Trap[] = zones
+      .filter((z) => z.layer === 'traps')
+      .map((z) => {
+        const { disarmCheck, disarmDc, ...params } = z.properties;
+        return {
+          id: z.name,
+          tiles: Array.from({ length: z.width * z.height }, (_, i) => ({ x: z.x + (i % z.width), y: z.y + Math.floor(i / z.width) })),
+          hidden: true,
+          armed: true,
+          params,
+          ...(disarmCheck ? { disarm: { check: String(disarmCheck), dc: Number(disarmDc ?? 12), triggerOnFailBy: 5 } } : {}),
+        };
+      });
+    // The storeroom doorway: one tile walled up, the other barred by the door.
+    const wall = map.tiles[11 * map.width + 8]!;
+    const closed = {
+      ...map,
+      tiles: map.tiles.map((t, i) => (i === 11 * map.width + 10 ? { ...wall } : i === 11 * map.width + 9 ? { ...wall, terrain: 'door_closed' } : t)),
+    };
+    map.tiles = closed.tiles;
+    // Named arrival points, so travelling back to this map knows where to put the party.
+    const withSpawns = (st: GameState): GameState => ({ ...st, systems: { ...st.systems, spawns: spawns as never } });
+    const state = withSpawns(withTraps(engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...usables, ...props] }), painted).state, traps));
     // The collector carries a lantern: the only light that goes everywhere with the party.
     return withZones(
       withLighting(state, {

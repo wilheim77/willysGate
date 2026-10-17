@@ -91,6 +91,7 @@ export interface WillyEvent extends GameEvent {
     | 'jumped'
     | 'collided'
     | 'fueraDePlano'
+    | 'strike'
     | 'exploded';
   [key: string]: unknown;
 }
@@ -315,8 +316,6 @@ export function countUse(r: Resolver, entityId: string, abilityId: string): void
 
 // --- Pushes, collisions, the void --------------------------------------------------------------
 
-const VOID_TERRAINS = new Set(['void', 'vacio', 'foso', 'agujero']);
-
 /** Immune to forced movement: the Funcionario's Plaza en propiedad, anchors... */
 export function unmovable(e: Entity): boolean {
   return hasTrait(e, 'plaza-en-propiedad') || hasTag(e, 'inmune:empuje');
@@ -344,7 +343,9 @@ export function pushEntity(r: Resolver, targetId: string, from: Vec2, distance: 
   const steps = Math.abs(distance);
   const sim = simulatePush(r.ruleset, r.state, targetId, dx, dy, steps);
   const moved = gridDistance(target.position, sim.to);
-  if (moved > 0) r.apply({ type: 'push', entityId: targetId, dx, dy, distance: steps });
+  // Who pushed, for the collision and void hooks (they run after this action, in the engine).
+  if (sourceId) r.apply({ type: 'setFlag', flag: pushedByFlag(targetId), value: sourceId });
+  if (moved > 0 || sim.collidedWith || sim.intoVoid) r.apply({ type: 'push', entityId: targetId, dx, dy, distance: steps });
   // A petrified enemy that gets pushed shatters (the Tasador's Pieza de museo).
   if (moved > 0 && hasCondition(target, 'petrificado') && !isBoss(target)) {
     r.emit({ type: 'collided', entityId: targetId, with: 'roto' } as WillyEvent);
@@ -352,26 +353,75 @@ export function pushEntity(r: Resolver, targetId: string, from: Vec2, distance: 
     dealDamage(r, targetId, r.entity(targetId).resources.vida?.current ?? 999, 'golpe', sourceId, 'roto');
     return { moved };
   }
+  if (sim.intoVoid) return { moved, collided: 'void' };
   if (!sim.collidedWith) return { moved };
-  const beyond = { x: sim.to.x + dx, y: sim.to.y + dy };
-  const tile = tileAt(r.state.map, beyond);
-  if (sim.collidedWith.wall && tile && VOID_TERRAINS.has(tile.terrain)) {
-    r.emit({ type: 'fueraDePlano', entityId: targetId } as WillyEvent);
-    const t = r.entity(targetId);
-    if (isBoss(t)) dealDamage(r, targetId, Math.ceil((t.resources.vida?.max ?? 0) * 0.2), 'golpe', sourceId, 'fueraDePlano');
-    else dealDamage(r, targetId, t.resources.vida?.current ?? 999, 'golpe', sourceId, 'fueraDePlano');
-    return { moved, collided: 'void' };
+  return { moved, collided: sim.collidedWith.wall ? 'wall' : 'entity' };
+}
+
+export const pushedByFlag = (id: string) => `willy:empujadoPor:${id}`;
+
+function pusherOf(state: GameState, id: string): string | undefined {
+  const v = state.flags[pushedByFlag(id)];
+  return typeof v === 'string' ? v : undefined;
+}
+
+/**
+ * R17: shoved into something. A wall hurts 1d6; another creature, 1d4 each, and if the push
+ * had distance left the other one goes flying too («¡Strike!»), unless it is bigger or anchored.
+ */
+export function onCollision(ruleset: Ruleset, state: GameState, id: string, hit: { entityId?: string; wall?: boolean }, push: { dx: number; dy: number; remaining: number }, rng: RngCursor) {
+  const r = new Resolver(ruleset, state, rng);
+  const e = state.entities[id];
+  if (!e || !standing(e)) return r.outcome();
+  const source = pusherOf(state, id);
+  if (hit.wall || !hit.entityId) {
+    r.emit({ type: 'collided', entityId: id, with: 'muro' } as WillyEvent);
+    dealDamage(r, id, rollDice(rng, { count: 1, sides: 6, bonus: 0 }), 'golpe', source, 'choque');
+    return r.outcome();
   }
-  if (sim.collidedWith.wall) {
-    r.emit({ type: 'collided', entityId: targetId, with: 'muro' } as WillyEvent);
-    dealDamage(r, targetId, rollDice(r.rng, { count: 1, sides: 6, bonus: 0 }), 'golpe', sourceId, 'choque');
-    return { moved, collided: 'wall' };
+  const other = hit.entityId;
+  r.emit({ type: 'collided', entityId: id, with: 'entidad', otherId: other } as WillyEvent);
+  dealDamage(r, id, rollDice(rng, { count: 1, sides: 4, bonus: 0 }), 'golpe', source, 'choque');
+  dealDamage(r, other, rollDice(rng, { count: 1, sides: 4, bonus: 0 }), 'golpe', source, 'choque');
+  const o = r.entity(other);
+  if (push.remaining > 0 && standing(o) && !unmovable(o) && !isBoss(o) && (push.dx || push.dy)) {
+    r.emit({ type: 'strike', entityId: id, otherId: other } as WillyEvent);
+    if (source) r.apply({ type: 'setFlag', flag: pushedByFlag(other), value: source });
+    r.apply({ type: 'push', entityId: other, dx: push.dx, dy: push.dy, distance: push.remaining });
   }
-  const other = sim.collidedWith.entityId!;
-  r.emit({ type: 'collided', entityId: targetId, with: 'entidad', otherId: other } as WillyEvent);
-  dealDamage(r, targetId, rollDice(r.rng, { count: 1, sides: 4, bonus: 0 }), 'golpe', sourceId, 'choque');
-  dealDamage(r, other, rollDice(r.rng, { count: 1, sides: 4, bonus: 0 }), 'golpe', sourceId, 'choque');
-  return { moved, collided: 'entity' };
+  return r.outcome();
+}
+
+/** R18: shoved into the void. Normal enemies are out ("fuera de plano"); bosses hang on, lose 20 % and climb back. */
+export function onVoid(ruleset: Ruleset, state: GameState, id: string, rng: RngCursor) {
+  const r = new Resolver(ruleset, state, rng);
+  const e = state.entities[id];
+  if (!e || !standing(e)) return r.outcome();
+  const source = pusherOf(state, id);
+  r.emit({ type: 'fueraDePlano', entityId: id } as WillyEvent);
+  if (!isBoss(e)) {
+    dealDamage(r, id, e.resources.vida?.current ?? 999, 'golpe', source, 'fueraDePlano');
+    return r.outcome();
+  }
+  dealDamage(r, id, Math.ceil((e.resources.vida?.max ?? 0) * 0.2), 'golpe', source, 'fueraDePlano');
+  const back = nearestFreeTile(r.state, e);
+  if (back) r.apply({ type: 'setPosition', entityId: id, position: back });
+  return r.outcome();
+}
+
+function nearestFreeTile(state: GameState, e: Entity): Vec2 | null {
+  for (let radius = 1; radius <= 3; radius++) {
+    for (let dy = -radius; dy <= radius; dy++) {
+      for (let dx = -radius; dx <= radius; dx++) {
+        const p = { x: e.position.x + dx, y: e.position.y + dy };
+        const t = tileAt(state.map, p);
+        if (!t?.walkable) continue;
+        if (Object.values(state.entities).some((o) => o.id !== e.id && standing(o) && o.position.x === p.x && o.position.y === p.y)) continue;
+        return p;
+      }
+    }
+  }
+  return null;
 }
 
 /** Falling: 1 level is free; then 1d6 per level beyond the first, and you land prone. */

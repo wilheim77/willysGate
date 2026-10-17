@@ -1,4 +1,4 @@
-import type { GameState, Ruleset } from '../../engine';
+import { type GameState, type Ruleset, inventoriesOf } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { GameDefinition } from '../game/definition';
 import { portrait } from './portraits';
@@ -48,6 +48,23 @@ export class CharacterSheet {
     const scrollTop = this.openId === id ? (this.root.querySelector('.body')?.scrollTop ?? 0) : 0;
     this.openId = id;
     const sheet = this.ruleset.describeEntity?.(state, id) ?? { sections: [] };
+    // The party's shared bag (and the character's own), shown on any party member's sheet.
+    if (e.controllerId === this.game.playerId) {
+      const bags = inventoriesOf(state);
+      const entries = [...Object.entries(bags.party ?? {}), ...Object.entries(bags[id] ?? {})];
+      sheet.sections = [
+        ...sheet.sections,
+        {
+          title: this.game.texts.combat?.inventory ?? 'Mochila del grupo',
+          items: entries.length
+            ? entries.map(([item, n]) => {
+                const def = this.game.items?.[item];
+                return { label: `${def?.label ?? item}${n > 1 ? ` ×${n}` : ''}`, ...(def?.text ? { text: def.text } : {}) };
+              })
+            : [{ label: this.game.texts.combat?.emptyBag ?? 'Nada. Ni una corona.' }],
+        },
+      ];
+    }
     const glossary = this.ruleset.glossary;
 
     const panel = document.createElement('div');

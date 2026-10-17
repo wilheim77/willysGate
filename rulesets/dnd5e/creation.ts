@@ -63,7 +63,9 @@ export function buildProtagonist(
   choices: CreationChoices,
   base: { id: string; controllerId: string; factionId: string; position: Vec2; spriteId: string; level: number; extraTags?: string[] },
 ): Entity {
-  const abilities = choices.abilities as Record<Ability, number>;
+  // Exactly the six abilities: missing ones default to the minimum, extra keys are ignored.
+  const given = (choices.abilities ?? {}) as Record<string, number>;
+  const abilities = Object.fromEntries(ABILITIES.map((a) => [a, Number.isFinite(given[a]) ? given[a]! : POINTS.min])) as Record<Ability, number>;
   const spent = pointsSpent(POINTS, abilities);
   if (spent === null || spent > POINTS.budget) throw new Error(`dnd5e: invalid point buy (${spent})`);
   const raceId = String(choices.race);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyEffects, createEngine, performCheck } from '../../engine';
+import { applyEffects, createEngine, deriveSeed, performCheck } from '../../engine';
 import { asciiMap, deepFreeze, makeEntity } from '../fixtures/helpers';
 import { toyRuleset } from '../fixtures/toyRuleset';
 
@@ -52,5 +52,20 @@ describe('checks', () => {
     expect(next.rng).not.toEqual(state.rng);
     // Same state, same roll: checks are reproducible.
     expect(performCheck(toyRuleset, state, { actorId: 'h', check: 'resist', target: 9 }).result).toEqual(result);
+  });
+});
+
+describe('modifyStat and deriveSeed (R19, R12)', () => {
+  it('changes a ruleset stat and refuses unknown ones', () => {
+    const s = createEngine(toyRuleset, 'test').newGame({ seed: 1, map: asciiMap(['..']), entities: [makeEntity({ id: 'a', stats: { will: 2 } })] });
+    const r = applyEffects(toyRuleset, s, [{ type: 'modifyStat', entityId: 'a', stat: 'will', delta: 1 }]);
+    expect(r.state.entities.a!.stats.will).toBe(3);
+    expect(() => applyEffects(toyRuleset, s, [{ type: 'modifyStat', entityId: 'a', stat: 'luck', delta: 1 }])).toThrow();
+  });
+
+  it('derived seeds are stable and independent per purpose', () => {
+    expect(deriveSeed(42, 'floor', 3)).toBe(deriveSeed(42, 'floor', 3));
+    expect(deriveSeed(42, 'floor', 3)).not.toBe(deriveSeed(42, 'floor', 4));
+    expect(deriveSeed(42, 'loot')).not.toBe(deriveSeed(43, 'loot'));
   });
 });

@@ -58,6 +58,8 @@ export interface GameDefinition {
     defaults(): CreationChoices;
     apply(engine: Engine, state: GameState, choices: CreationChoices): GameState;
   };
+  /** Names and flavour of inventory items, by id (content/<game>/items.json). */
+  items?: Record<string, { label: string; text?: string }>;
   /** Conversations and interactable scripts, by id (content/<game>/dialogues/*.json). */
   dialogues?: Record<string, DialogueTree>;
   newGame(engine: Engine, seed: number): GameState;

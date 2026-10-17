@@ -10,9 +10,17 @@ import { type Image, blank, blit, crop, writePng } from './png.ts';
 import { hexToRgb } from './color.ts';
 import { drawText } from './font.ts';
 
-type Layer = [string, number, number];
+/** [part, dx, dy] or [part, dx, dy, anchor]: with an anchor, the offset is relative to that part's layer in the frame (so accessories bob with the body). */
+type Layer = [string, number, number] | [string, number, number, string];
 interface HandSprite {
   note?: string;
+  /** Inherit everything from another sprite, then override legend/parts/animations and add layers. */
+  extends?: string;
+  /** Layers drawn under / over every frame (accessories), e.g. [["bottle", 0, 6]]. */
+  under?: Layer[];
+  over?: Layer[];
+  /** Only for previews/tests: not written to the manifest. */
+  template?: boolean;
   size: [number, number];
   scale?: number;
   legend: Record<string, string>;
@@ -43,12 +51,49 @@ function paint(img: Image, rows: string[], legend: Record<string, string>, dx: n
   }));
 }
 
+/** Resolves 'extends' chains into complete sprites. */
+function resolve(id: string, seen: string[] = []): HandSprite {
+  const s = spec.sprites[id];
+  if (!s) throw new Error(`unknown hand sprite "${id}"`);
+  if (!s.extends) return s;
+  if (seen.includes(id)) throw new Error(`extends loop: ${[...seen, id].join(' -> ')}`);
+  const b = resolve(s.extends, [...seen, id]);
+  const under = [...(b.under ?? []), ...(s.under ?? [])];
+  const over = [...(b.over ?? []), ...(s.over ?? [])];
+  return {
+    ...b,
+    ...s,
+    template: s.template,
+    legend: { ...b.legend, ...(s.legend ?? {}) },
+    parts: { ...b.parts, ...(s.parts ?? {}) },
+    animations: s.animations ?? b.animations,
+    size: s.size ?? b.size,
+    under,
+    over,
+  };
+}
+for (const id of Object.keys(spec.sprites)) spec.sprites[id] = resolve(id);
+for (const [id, s] of Object.entries(spec.sprites)) {
+  if (!s.under?.length && !s.over?.length) continue;
+  const place = (layers: Layer[], extra: Layer[]): Layer[] =>
+    extra.map(([part, dx, dy, anchor]) => {
+      if (!anchor) return [part, dx, dy] as Layer;
+      const base = layers.find((l) => l[0] === anchor || l[0].startsWith(`${anchor}_`));
+      return [part, dx + (base?.[1] ?? 0), dy + (base?.[2] ?? 0)] as Layer;
+    });
+  s.animations = Object.fromEntries(Object.entries(s.animations).map(([a, list]) => [a, list.map((layers) => [...place(layers, s.under ?? []), ...layers, ...place(layers, s.over ?? [])])]));
+  s.under = [];
+  s.over = [];
+  void id;
+}
+for (const id of Object.keys(spec.sprites)) if (spec.sprites[id]!.template) delete spec.sprites[id];
+
 const frames: { id: string; anim: string; img: Image }[] = [];
 for (const [id, s] of Object.entries(spec.sprites)) {
   for (const [anim, list] of Object.entries(s.animations)) {
     for (const layers of list) {
       const img = blank(s.size[0], s.size[1]);
-      for (const [part, dx, dy] of layers) {
+      for (const [part, dx, dy] of layers as Layer[]) {
         const rows = s.parts[part];
         if (!rows) throw new Error(`${id}: unknown part "${part}"`);
         paint(img, rows, s.legend, dx, dy, `${id}.${part}`);
@@ -104,4 +149,4 @@ for (const id of ids) {
   py += h * K;
 }
 mkdirSync(join(root, 'docs', 'art-previews'), { recursive: true });
-writePng(join(root, 'docs', 'art-previews', `${preset}-hand.png`), preview);
+writePng(join(root, "docs", "art-previews", `${game}-${preset}-hand.png`), preview);

@@ -5,7 +5,8 @@ import { gridDistance } from './grid';
 import { itemCount } from './inventory';
 import { RngCursor } from './rng';
 import type { CheckResult, Ruleset } from './ruleset';
-import type { FlagValue, GameState, JsonValue } from './state';
+import { type MapBuilder, changeMap } from './world';
+import { type FlagValue, type GameState, type JsonValue, OBJECT_TAG } from './state';
 
 /**
  * Branching conversations as data (content/<game>/dialogues/*.json). The engine walks the
@@ -43,6 +44,8 @@ export interface DialogueChoice {
   next?: string;
   /** Disappears once picked (questions you can ask only once). */
   once?: boolean;
+  /** Stable id for "once" bookkeeping, so reordering choices doesn't break saved games. */
+  id?: string;
 }
 
 export type DialogueWhen =
@@ -57,7 +60,9 @@ export type DialogueWhen =
 export type DialogueEffect =
   | Effect
   /** Start a fight with everyone of these factions on the map. */
-  | { type: 'startCombat'; factions: string[] };
+  | { type: 'startCombat'; factions: string[] }
+  /** The party leaves for another map (a cart ride, a cave-in, "follow me"). */
+  | { type: 'travel'; mapId: string; spawn: string };
 
 export interface DialogueEvent extends GameEvent {
   type: 'dialogueStarted' | 'dialogueNode' | 'dialogueChoice' | 'dialogueEnded';
@@ -78,6 +83,8 @@ export interface DialogueCheckEvent extends GameEvent {
 /** Content the engine looks up by id while running commands. */
 export interface EngineContent {
   dialogues: Record<string, DialogueTree>;
+  /** Builders for the game's maps, by id, used the first time the party travels there. */
+  maps?: Record<string, MapBuilder>;
 }
 
 export const EMPTY_CONTENT: EngineContent = { dialogues: {} };
@@ -154,8 +161,9 @@ export function dialogueChoices(ruleset: Ruleset, state: GameState, tree: Dialog
   if (!d) return [];
   const node = tree.nodes[d.nodeId];
   return (node?.choices ?? []).flatMap((c, index): ChoiceView[] => {
-    if (c.once && d.taken.includes(`${tree.id}/${d.nodeId}/${index}`)) return [];
-    const available = !c.when || evaluateCondition(ruleset, state, d.actorId, c.when);
+    if (c.once && d.taken.includes(`${tree.id}/${d.nodeId}/${c.id ?? index}`)) return [];
+    const roller = c.check ? (c.check.actor ?? d.actorId) : d.actorId;
+    const available = (!c.when || evaluateCondition(ruleset, state, d.actorId, c.when)) && !!state.entities[roller];
     if (!available && !c.lockedHint) return [];
     return [
       {
@@ -179,8 +187,8 @@ function enterNode(
   events: GameEvent[],
   rng: RngCursor,
 ): CommandResult {
-  const tree = content.dialogues[d.treeId]!;
-  if (!nodeId) {
+  const tree = content.dialogues[d.treeId];
+  if (!nodeId || !tree) {
     events.push({ type: 'dialogueEnded', treeId: d.treeId } as DialogueEvent);
     return { ok: true, state: withDialogue(state, null), events };
   }
@@ -188,7 +196,7 @@ function enterNode(
   if (!node) return fail('invalid_target', `Dialogue ${d.treeId} has no node "${nodeId}"`);
   let next = withDialogue(state, { ...d, nodeId });
   events.push({ type: 'dialogueNode', treeId: d.treeId, nodeId } as DialogueEvent);
-  const applied = applyDialogueEffects(ruleset, next, node.effects ?? [], rng);
+  const applied = applyDialogueEffects(ruleset, next, node.effects ?? [], rng, content);
   if (!applied.ok) return applied;
   next = applied.state;
   events.push(...applied.events);
@@ -200,12 +208,23 @@ function enterNode(
   return { ok: true, state: next, events };
 }
 
-function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor): CommandResult {
-  const plain = effects.filter((e): e is Effect => e.type !== 'startCombat');
+function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor, content: EngineContent): CommandResult {
+  const plain = effects.filter((e): e is Effect => e.type !== 'startCombat' && e.type !== 'travel');
   const applied = applyEffects(ruleset, state, plain);
   let next = applied.state;
   const events: GameEvent[] = [...applied.events];
   for (const e of effects) {
+    if (e.type === 'travel') {
+      const t = e as { mapId: string; spawn: string };
+      const d = dialogueOf(next);
+      const issuer = d ? next.entities[d.actorId]?.controllerId : undefined;
+      const party = Object.values(next.entities).filter((x) => issuer && x.controllerId === issuer).map((x) => x.id);
+      const r = changeMap(next, content.maps ?? {}, t.mapId, t.spawn, party);
+      if (!r.ok) return r;
+      next = r.state;
+      events.push(...r.events);
+      continue;
+    }
     if (e.type !== 'startCombat') continue;
     const factions = (e as { factions: string[] }).factions;
     const leaderSide = Object.values(next.entities).find((x) => x.controllerId.startsWith('player'))?.factionId;
@@ -221,21 +240,24 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
   return { ok: true, state: next, events };
 }
 
+/** Scripts (the game itself) open conversations directly; players go through `interact`. */
 export const startDialogue: CommandHandler<StartDialogueCommand> = (state, cmd, { ruleset, content = EMPTY_CONTENT }) => {
-    if (state.turn.mode === 'combat') return fail('cannot_act', 'No conversations in combat');
-    if (dialogueOf(state)) return fail('cannot_act', 'Already in a conversation');
-    const tree = content.dialogues[cmd.treeId];
-    if (!tree) return fail('invalid_target', `No dialogue "${cmd.treeId}"`);
-    if (cmd.issuer !== SYSTEM_ISSUER) {
-      const actor = requireControlled(state, cmd.issuer, cmd.actorId);
-      if (!actor.ok) return actor;
-    }
-    const d: DialogueState = { treeId: tree.id, nodeId: tree.start, actorId: cmd.actorId, ...(cmd.partnerId ? { partnerId: cmd.partnerId } : {}), taken: carriedOver(state, tree.id) };
-    const rng = new RngCursor(state.rng);
-    const events: GameEvent[] = [{ type: 'dialogueStarted', treeId: tree.id, actorId: cmd.actorId, partnerId: cmd.partnerId } as DialogueEvent];
-    const r = enterNode(ruleset, content, state, d, tree.start, events, rng);
-    return r.ok ? { ...r, state: { ...r.state, rng: rng.state } } : r;
+  if (cmd.issuer !== SYSTEM_ISSUER) return fail('not_your_entity', 'Only the game starts dialogues directly');
+  return openDialogue(ruleset, content, state, cmd.treeId, cmd.actorId, cmd.partnerId);
 };
+
+function openDialogue(ruleset: Ruleset, content: EngineContent, state: GameState, treeId: string, actorId: string, partnerId?: string): CommandResult {
+  if (state.turn.mode === 'combat') return fail('cannot_act', 'No conversations in combat');
+  if (dialogueOf(state)) return fail('cannot_act', 'Already in a conversation');
+  const tree = content.dialogues[treeId];
+  if (!tree) return fail('invalid_target', `No dialogue "${treeId}"`);
+  if (!state.entities[actorId]) return fail('unknown_entity', `No entity "${actorId}"`);
+  const d: DialogueState = { treeId: tree.id, nodeId: tree.start, actorId, ...(partnerId ? { partnerId } : {}), taken: carriedOver(state, tree.id) };
+  const rng = new RngCursor(state.rng);
+  const events: GameEvent[] = [{ type: 'dialogueStarted', treeId: tree.id, actorId, partnerId } as DialogueEvent];
+  const r = enterNode(ruleset, content, state, d, tree.start, events, rng);
+  return r.ok ? { ...r, state: { ...r.state, rng: rng.state } } : r;
+}
 
 /** "once" choices stay taken across visits: they are remembered as flags. */
 function carriedOver(state: GameState, treeId: string): string[] {
@@ -248,8 +270,10 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
     const d = dialogueOf(state);
     if (!d) return fail('cannot_act', 'No conversation in progress');
     if (cmd.issuer !== SYSTEM_ISSUER && state.entities[d.actorId]?.controllerId !== cmd.issuer) return fail('not_your_entity', 'Not your conversation');
-    const tree = content.dialogues[d.treeId]!;
-    const node = tree.nodes[d.nodeId]!;
+    const tree = content.dialogues[d.treeId];
+    const node = tree?.nodes[d.nodeId];
+    // A save from an older version may point at a conversation that no longer exists.
+    if (!tree || !node) return { ok: true, state: withDialogue(state, null), events: [{ type: 'dialogueEnded', treeId: d.treeId } as DialogueEvent] };
     const rng = new RngCursor(state.rng);
     const events: GameEvent[] = [];
 
@@ -268,7 +292,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
     let next = state;
     let taken = d.taken;
     if (choice.once) {
-      const key = `${tree.id}/${d.nodeId}/${cmd.index}`;
+      const key = `${tree.id}/${d.nodeId}/${choice.id ?? cmd.index}`;
       taken = [...taken, key];
       next = { ...next, flags: { ...next.flags, [`taken:${key}`]: true } };
     }
@@ -281,7 +305,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
       events.push({ type: 'dialogueCheck', actorId, result: lastCheck } as DialogueCheckEvent);
       target = lastCheck.success ? choice.check.success : choice.check.failure;
     }
-    const applied = applyDialogueEffects(ruleset, { ...next, rng: rng.state }, choice.effects ?? [], rng);
+    const applied = applyDialogueEffects(ruleset, { ...next, rng: rng.state }, choice.effects ?? [], rng, content);
     if (!applied.ok) return applied;
     next = applied.state;
     events.push(...applied.events);
@@ -305,5 +329,22 @@ export const interact: CommandHandler<InteractCommand> = (state, cmd, ctx) => {
     if (gridDistance(actor.entity.position, target.position) > INTERACT_RANGE) return fail('out_of_range', 'Too far to interact');
     const treeId = target.tags.find((t) => t.startsWith('dialogue:'))?.slice('dialogue:'.length);
     if (!treeId) return fail('invalid_target', `${target.id} has nothing to say`);
-    return startDialogue(state, { type: 'startDialogue', issuer: cmd.issuer, treeId, actorId: cmd.entityId, partnerId: target.id } as StartDialogueCommand, ctx);
+    if (!ctx.ruleset.canAct(actor.entity)) return fail('cannot_act', `${cmd.entityId} cannot act`);
+    // The dead don't talk; objects (chests, levers) have no pulse to check.
+    if (!target.tags.includes(OBJECT_TAG) && !ctx.ruleset.isStanding(target)) return fail('invalid_target', `${target.id} cannot talk`);
+    return openDialogue(ctx.ruleset, ctx.content ?? EMPTY_CONTENT, state, treeId, cmd.entityId, target.id);
+};
+
+/** Leaves a conversation (the panel's escape hatch, or a script). */
+export interface EndDialogueCommand extends BaseCommand {
+  type: 'endDialogue';
+}
+
+export const endDialogue: CommandHandler<EndDialogueCommand> = (state, cmd) => {
+  const d = dialogueOf(state);
+  if (!d) return fail('cannot_act', 'No conversation in progress');
+  // If the speaker no longer exists (an old save), anyone may close it rather than stay stuck.
+  const speaker = state.entities[d.actorId];
+  if (cmd.issuer !== SYSTEM_ISSUER && speaker && speaker.controllerId !== cmd.issuer) return fail('not_your_entity', 'Not your conversation');
+  return { ok: true, state: withDialogue(state, null), events: [{ type: 'dialogueEnded', treeId: d.treeId } as DialogueEvent] };
 };
