@@ -10,6 +10,7 @@ import testMap from './maps/test.json';
 import meta from './meta.json';
 import items from './items.json';
 import triggers from './triggers.json';
+import tutorial from './tutorial.json';
 import texts from './texts/ui.json';
 import viejoMinero from './dialogues/viejo_minero.json';
 import cofrePrueba from './dialogues/cofre_prueba.json';
@@ -72,6 +73,7 @@ export const game: GameDefinition = {
   // The act opens on the road: Dorotea talks first.
   opening: { dialogue: 'camino_dorotea', partner: 'dorotea' },
   triggers: triggers.triggers as NonNullable<GameDefinition['triggers']>,
+  tutorial: tutorial.steps as NonNullable<GameDefinition['tutorial']>,
   newGame(engine, seed, options) {
     if (options?.start === 'test') return testGame(engine, seed);
     const start = options?.start && ACT_MAPS[options.start] ? options.start : START_MAP;
