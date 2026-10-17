@@ -1,0 +1,11 @@
+{
+  "$comment": "Nombres visibles de personajes que pueden necesitar cambiarse en un solo sitio. Todos los textos del juego (Narrador, logros, jefes, escenas) usan las variables {presentador}, {presentadorCorto} y {presentadorApodo}; nunca el nombre escrito a mano. Para cambiar el nombre del presentador basta con editar este fichero. Ver docs/willy/STORY.md → «El antagonista».",
+  "version": 1,
+  "presentador": {
+    "nombre": "Jordi Hurtado, el Inmortal",
+    "corto": "Jordi",
+    "apodo": "el Inmortal",
+    "genero": "m",
+    "nota": "Homenaje cariñoso y absurdo al meme de que nunca envejece. La broma es la premisa de ciencia ficción (un vampiro alienígena que se alimenta de audiencia); nada sobre la persona real ni su vida privada."
+  }
+}

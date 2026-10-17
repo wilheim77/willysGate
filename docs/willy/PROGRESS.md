@@ -20,13 +20,13 @@
 | 6 razas y 9 clases, incluidas las especiales Ingeniero, Funcionario y Jugador de basket (57 habilidades y mazo de ventajas) | `content/willy/data/races.json`, `classes.json` |
 | 93 objetos (27 iniciales de clase, 66 de botín, avisos y cosméticos) | `content/willy/data/items.json` |
 | Cajas, tablas de botín, piedad, cofres, botín de enemigos y mercado | `content/willy/data/loot-tables.json` |
-| 124 logros (23 ocultos) con frase del Narrador y recompensa | `content/willy/data/achievements.json` |
+| 128 logros (23 ocultos) con frase del Narrador y recompensa | `content/willy/data/achievements.json` |
 | 6 patrocinadores con gustos, regalos y mensajes | `content/willy/data/sponsors.json` |
 | Reglas de audiencia | `content/willy/data/audience.json` |
 | 5 plantas (bioma, mecánica, reloj, generación, enemigos, jefe) y el Camerino | `content/willy/data/floors.json` |
 | Tutorial integrado de la Planta 1 (28 pasos) | `content/willy/tutorial.json` |
 | Glosario y «Cómo se juega» | `content/willy/texts/` |
-| Narrador: 376 frases en 59 bancos | `content/willy/narrator/` |
+| Narrador: 383 frases en 61 bancos | `content/willy/narrator/` |
 | Metadatos para la portada | `content/willy/meta.json` |
 
 ## Decisiones del usuario (2026-10-17)
@@ -54,7 +54,9 @@ W0 **aprobada** con estos cambios, ya aplicados en los documentos y los datos:
 
 | 12 | Corrección del 5G | **No es secreto:** se ve como «5G» desde el principio para tentar al jugador. El chiste del Narrador sale solo en el primer uso; los siguientes usos a 5G no hacen nada y casi siempre en silencio (banco mínimo `redG5Repetido`, sin repeticiones). Se quita la mecánica «??? (sin estrenar)»; se mantienen los nombres por nivel. El logro «¿Y esto qué hace?» deja de ser oculto | `classes.json`, `miscelanea.json`, `achievements.json`, `RULESET.md`, `STORY.md` |
 
-**Cifras tras los cambios:** 6 razas, 9 clases (57 habilidades), 93 objetos, 124 logros (23 ocultos), 376 frases del Narrador en 59 bancos.
+| 13 | Jefe final | El Presentador pasa a ser **«Jordi Hurtado, el Inmortal»**: vampiro alienígena que se alimenta de audiencia y por eso no envejece (homenaje cariñoso y absurdo al meme; nada sobre la persona real). Combate en 3 fases (Ronda de preguntas con trampillas, Pausa publicitaria a oscuras vulnerable solo a focos, Gran final con votación), medidor **Share** que lo hace inmortal mientras tenga audiencia, 8 preguntas en datos, 11 frases propias, finales y gancho de Temporada 2 reescritos. **El nombre está en un único campo:** `content/willy/data/cast.json`; todos los textos usan `{presentador}` | `cast.json`, `floors.json` (jefe), banco `presentador` y líneas `je-5a/5b`, `jd-5`, `ws-05`, 4 logros nuevos (uno oculto) y 3 frases de logros, `STORY.md`, `DESIGN.md`, R5 (variables globales) |
+
+**Cifras tras los cambios:** 6 razas, 9 clases (57 habilidades), 93 objetos, 128 logros (23 ocultos), 383 frases del Narrador en 61 bancos.
 
 ## Pendiente
 
