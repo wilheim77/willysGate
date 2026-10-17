@@ -56,7 +56,7 @@ export class CharacterSheet {
     panel.setAttribute('aria-label', e.name);
 
     const head = document.createElement('header');
-    head.append(portrait(this.manifest, e.spriteId, 64));
+    head.append(portrait(this.manifest, e.spriteId, 96));
     const titles = document.createElement('div');
     const name = document.createElement('h2');
     name.textContent = e.name;
@@ -160,7 +160,7 @@ export class PartyBar {
           const bar = document.createElement('span');
           bar.className = 'hp';
           bar.append(hp);
-          button.append(portrait(this.manifest, e.spriteId, 44), bar);
+          button.append(portrait(this.manifest, e.spriteId, 48), bar);
           button.addEventListener('click', () => this.onPick(e.id));
           m = { button, hp };
           this.members.set(e.id, m);

@@ -80,7 +80,9 @@ export function portrait(manifest: AssetManifest, spriteId: string, size = 44): 
       }
       const ctx = canvas.getContext('2d')!;
       ctx.imageSmoothingEnabled = false;
-      const scale = Math.max(1, Math.floor(size / Math.max(crop.w, crop.h)));
+      // Whole-pixel enlargement; shrink to fit only when the portrait is bigger than the slot.
+      const side = Math.max(crop.w, crop.h);
+      const scale = size >= side ? Math.floor(size / side) : size / side;
       const w = crop.w * scale;
       const h = crop.h * scale;
       ctx.drawImage(frame, crop.x, crop.y, crop.w, crop.h, Math.round((size - w) / 2), Math.round((size - h) / 2), w, h);
