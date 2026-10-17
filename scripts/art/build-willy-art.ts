@@ -1,15 +1,19 @@
 // Draws Willy el mazmorrero's environment art in its own bright palette: Castro Sumergido
-// (floor 1) and the Camerino tiles, Camerino furniture as props, and rarity card frames.
+// (floor 1) and the Camerino tiles, Camerino furniture, rarity card frames, and (P2, from
+// willy-show-art.ts) stage props, surfaces, objects, effects and HUD icons.
 //   node scripts/art/build-willy-art.ts [game=willy] [preset=ninja]
 // Output:
 //   art-src/generated/<game>-<preset>-extra.png + .txt (tiles by name, read by tiles.json);
-//   content/<game>/public/assets/<preset>/extra.png and the manifest's 'props' and 'ui'.
+//   content/<game>/public/assets/<preset>/extra.png and the manifest's 'props', 'surfaces', 'ui'
+//   and object 'sprites' (barril, barril-explosivo, carrito).
 // Deterministic (seeded RNG).
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, writePng } from './png.ts';
 import { type Rgb, hexToRgb, mix } from './color.ts';
 import { bayer, rng, valueNoise } from './pixel.ts';
+import * as env from './environment-art.ts';
+import * as show from './willy-show-art.ts';
 
 const [game = 'willy', preset = 'ninja'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -382,19 +386,60 @@ const tiles: [string, Image][] = [
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; fps: number; loop: boolean; anchor: Anchor; light?: string }> = {
+  // Camerino furniture
   'espejo-bombillas': { frames: [mirror(true), mirror(false)], fps: 2, loop: true, anchor: 'wall', light: '#fff0c0' },
   'mostrador-maripuri': { frames: [counterShop()], fps: 0, loop: false, anchor: 'floor' },
   'barra-paco': { frames: [barCounter()], fps: 0, loop: false, anchor: 'floor' },
   'mesa-xelda': { frames: [productionDesk()], fps: 0, loop: false, anchor: 'floor', light: '#4fe8ff' },
   'ascensor-servicio': { frames: [lift(false), lift(true)], fps: 0, loop: false, anchor: 'wall' },
+  // Stage props (every floor)
+  'foco-movil': { frames: [0, 1, 2, 1].map(show.spotlight), fps: 2, loop: true, anchor: 'floor', light: '#fff4c8' },
+  'cono-de-luz': { frames: [show.lightCone()], fps: 0, loop: false, anchor: 'floor' },
+  'camara-dron': { frames: [0, 1].map(show.cameraDrone), fps: 10, loop: true, anchor: 'centre', light: '#ff3030' },
+  'cartel-en-directo': { frames: [show.liveSign(true), show.liveSign(false)], fps: 1, loop: true, anchor: 'wall', light: '#ff3030' },
+  'parrilla-de-focos': { frames: [0, 1, 2].map(show.lightingRig), fps: 3, loop: true, anchor: 'wall', light: '#ffffff' },
+  // Effects
+  'fx-arco-voltaico': { frames: [0, 1, 2, 3].map(show.voltaicArc), fps: 16, loop: true, anchor: 'centre', light: '#4fe8ff' },
+  ...Object.fromEntries([5, 6, 7, 8, 9, 10].map((g) => {
+    const n = g === 5 ? 3 : g === 10 ? 8 : 5;
+    return [`fx-onda-${g}g`, { frames: Array.from({ length: n }, (_, f) => show.gWave(g, f, n)), fps: g === 5 ? 4 : 12, loop: false, anchor: 'centre' as Anchor, ...(g >= 8 ? { light: '#4fe8ff' } : {}) }];
+  })),
+  'fx-impreso-volador': { frames: [0, 1, 2, 3].map(show.flyingForm), fps: 10, loop: true, anchor: 'centre' },
+  'fx-balon-estela': { frames: [0, 1, 2, 3].map(show.ballTrail), fps: 14, loop: true, anchor: 'centre' },
+  'fx-confeti': { frames: [0, 1, 2, 3, 4].map(show.confetti), fps: 12, loop: false, anchor: 'centre' },
+  'fx-vapor': { frames: env.steam(), fps: 10, loop: false, anchor: 'floor' },
+  'fx-explosion': { frames: env.explosion(), fps: 14, loop: false, anchor: 'centre', light: '#ffb060' },
+};
+/** Surface overlays (manifest 'surfaces'), with the ids of Willy's ruleset (RULESET.md → Superficies). */
+const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {
+  agua: { frames: env.water(), fps: 5, loop: true },
+  aceite: { frames: env.oil(), fps: 0, loop: false },
+  fuego: { frames: env.fire(), fps: 8, loop: true },
+  hielo: { frames: env.ice(), fps: 0, loop: false },
+  vapor: { frames: [0, 1, 2, 3].map(show.steamCloud), fps: 4, loop: true },
+  toxico: { frames: [0, 1, 2, 3].map(show.toxic), fps: 6, loop: true },
+  electrificada: { frames: env.electrified(), fps: 12, loop: true },
+  canicas: { frames: [show.marbles()], fps: 0, loop: false },
+  red: { frames: [show.net()], fps: 0, loop: false },
+  expedientes: { frames: [show.expedientes(null)], fps: 0, loop: false },
+  'expedientes-ardiendo': { frames: [0, 1, 2, 3].map((f) => show.expedientes(f)), fps: 8, loop: true },
+};
+/** Objects (manifest 'sprites', kind 'frames'): idle (+ broken). */
+const objects: Record<string, Record<string, Image[]>> = {
+  barril: { idle: [env.barrel()], broken: [env.barrelBroken()] },
+  'barril-explosivo': { idle: [env.barrelOil()], broken: [env.barrelOilBroken()] },
+  carrito: { idle: [show.cart()] },
 };
 const ui: Record<string, Image> = {
   'carta-bronce': cardFrame('bronce'), 'carta-plata': cardFrame('plata'), 'carta-oro': cardFrame('oro'), 'carta-legendaria': cardFrame('legendaria'),
+  ...Object.fromEntries(show.hudIcons().map(([id, img]) => [`icono-${id}`, img])),
 };
 
-// Sheet: tiles row (named for build-tiles), then one row per prop, then the UI row.
+// Sheet: tiles row (named for build-tiles), then one row per prop / surface / object, then the UI row.
 const rows: { name: string; frames: Image[] }[] = [
   ...Object.entries(props).map(([name, p]) => ({ name, frames: p.frames })),
+  ...Object.entries(surfaces).map(([name, sf]) => ({ name: `surface_${name}`, frames: sf.frames })),
+  ...Object.entries(objects).map(([name, o]) => ({ name: `object_${name}`, frames: Object.values(o).flat() })),
   { name: 'ui', frames: Object.values(ui) },
 ];
 const width = Math.max(tiles.length * T, ...rows.map((r) => r.frames.reduce((w, f) => w + f.width, 0)));
@@ -429,8 +474,14 @@ const url = `assets/${preset}/extra.png`;
 const manifestPath = join(gameDir, 'assets', `${preset}.json`);
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 manifest.props = Object.fromEntries(Object.entries(props).map(([id, p]) => [id, { url, frames: layout.get(id)!, fps: p.fps, loop: p.loop, anchor: p.anchor, ...(p.light ? { light: p.light } : {}) }]));
+manifest.surfaces = Object.fromEntries(Object.entries(surfaces).map(([id, sf]) => [id, { url, frames: layout.get(`surface_${id}`)!, fps: sf.fps, loop: sf.loop }]));
+for (const [id, o] of Object.entries(objects)) {
+  const rects = layout.get(`object_${id}`)!;
+  let i = 0;
+  const animations = Object.fromEntries(Object.entries(o).map(([a, imgs]) => [a, imgs.map(() => rects[i++]!)]));
+  manifest.sprites[id] = { kind: 'frames', url, facing: 'right', animations };
+}
 const uiRects = layout.get('ui')!;
-manifest.ui = Object.fromEntries(Object.keys(ui).map((id, i) => [id, { url, ...uiRects[i]!, slice: 8 }]));
+manifest.ui = Object.fromEntries(Object.keys(ui).map((id, i) => [id, { url, ...uiRects[i]!, ...(id.startsWith('carta-') ? { slice: 8 } : {}) }]));
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-console.log(`${game} ${preset} art: ${tiles.length} tiles, ${Object.keys(props).length} props, ${Object.keys(ui).length} ui frames -> art-src/generated/${base}.png`);
-
+console.log(`${game} ${preset} art: ${tiles.length} tiles, ${Object.keys(props).length} props, ${Object.keys(surfaces).length} surfaces, ${Object.keys(objects).length} objects, ${Object.keys(ui).length} ui -> art-src/generated/${base}.png`);

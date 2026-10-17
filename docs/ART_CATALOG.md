@@ -229,3 +229,36 @@ Vista previa: [`art-previews/ninja-props.png`](art-previews/ninja-props.png).
 ## Marcos de carta por rareza (`ui` del manifiesto)
 
 `{ url, x, y, w: 24, h: 24, slice: 8 }`: marco *9-slice* (esquinas de 8 px) para `carta-bronce`, `carta-plata`, `carta-oro` y `carta-legendaria`, con los colores de `rarezas`. **Petición al render:** dibujarlos con `border-image` (CSS) o *nine-slice* escalado entero.
+
+## P2: invocaciones, utilería del plató, superficies, efectos y HUD
+
+**Invocaciones** (`sprites`, dibujadas a mano en `hand-sprites.json`):
+
+| Id | Aspecto |
+|---|---|
+| `automata-repetidor` | Cubo de chapa con patas, pantalla de ojos cian y antena con luz verde que parpadea (16×16; idle 2, move 4) |
+| `antena-repetidora` | Mástil de celosía de 16×32 con emisores cian y piloto rojo (idle 2) |
+| `chencho-el-base` | Bajito, cinta roja, camiseta de tirantes blanca y verde del Brazomar (16×22) |
+| `fan-entusiasta` | Fan de la Influencer: alienígena peludo morado con mano de espuma que da saltitos. **Id propuesto**: los datos solo dicen «un fan»; usar este `spriteId` en la invocación |
+
+**Objetos** (`sprites`, con `idle` y `broken` donde aplica): `barril`, `barril-explosivo` (el mismo arte que el barril de aceite de *Intereses*) y `carrito`.
+
+**Utilería del plató** (`props`):
+
+| Id | Notas |
+|---|---|
+| `foco-movil` | Foco sobre pie que barre izquierda-centro-derecha (16×20, 4 frames), luz `#fff4c8` |
+| `cono-de-luz` | Cono translúcido de 32×48 para dibujar bajo el foco (mejor en modo aditivo) |
+| `camara-dron` | Cámara-dron con rotores animados y piloto rojo (16×12) |
+| `cartel-en-directo` | Caja de luz roja «EN DIRECTO» (43×11), encendida/apagada |
+| `parrilla-de-focos` | Truss de 48×10 con tres focos de colores que se alternan |
+
+**Superficies** (`surfaces`, ids de `RULESET.md` → Superficies): `agua`, `aceite`, `fuego`, `hielo`, `electrificada` (las mismas que *Intereses*), `vapor` (nube que tapa la vista), `toxico` (con burbujas), `canicas`, `red`, `expedientes` y `expedientes-ardiendo`. Vista previa: [`art-previews/ninja-surfaces.png`](art-previews/ninja-surfaces.png).
+
+**Efectos** (`props`, ancla `centre`): `fx-arco-voltaico` (32×16), `fx-onda-5g` (un anillito triste que se desinfla y unos puntos suspensivos) hasta `fx-onda-10g` (64×64: anillos de colores, destello y rayos; **el render puede escalarlo a toda la pantalla**), `fx-impreso-volador`, `fx-balon-estela`, `fx-confeti` (la despedida del fan), `fx-vapor` y `fx-explosion`.
+
+**HUD** (`ui` y `portraits`):
+- Retratos de los 6 patrocinadores a 32×32, pintados: `patrocinador-butanos-perez` (tres nubes de gas naranja con bigote), `patrocinador-la-prudente` (asteroide blindado con escudo azul), `patrocinador-vortax` (emperador lila aburrido, corona y cuello granate), `patrocinador-clementina` (cocinera rosa con gorro, varios brazos, cuchara y sartén), `patrocinador-colmena` (racimo de abejas), `patrocinador-glorp` (gota verde con gafas de pasta y hoja). Vista previa: [`art-previews/ninja-portraits-hand.png`](art-previews/ninja-portraits-hand.png).
+- Retratos generados (32×32) de Willy en todas sus clases, los PNJ, los enemigos y las invocaciones: [`art-previews/ninja-portraits.png`](art-previews/ninja-portraits.png).
+- Iconos de 12×12 (`ui`, `icono-<id>`): `audiencia`, `reloj` y uno por estado de `RULESET.md` → Condiciones (`ardiendo`, `empapado`, `congelado`, `electrocutado`, `envenenado`, `tumbado`, `aturdido`, `asustado`, `cegado`, `enredado`, `bailando`, `mareado`, `escondido`, `animado`, `dormido`, `petrificado`, `compulsado`, `afortunado`).
+- Tipografía: Press Start 2P (títulos) y VT323 (texto) son fuentes OFL de Google Fonts; las carga el cliente, no hacen falta en el pipeline de arte.

@@ -1322,6 +1322,229 @@
           }
         ]
       }
+    },
+    "barril": {
+      "kind": "frames",
+      "url": "assets/ninja/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 755,
+            "w": 16,
+            "h": 20
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 755,
+            "w": 16,
+            "h": 20
+          }
+        ]
+      }
+    },
+    "barril-explosivo": {
+      "kind": "frames",
+      "url": "assets/ninja/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 775,
+            "w": 16,
+            "h": 20
+          }
+        ],
+        "broken": [
+          {
+            "x": 16,
+            "y": 775,
+            "w": 16,
+            "h": 20
+          }
+        ]
+      }
+    },
+    "carrito": {
+      "kind": "frames",
+      "url": "assets/ninja/extra.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 795,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "automata-repetidor": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 470,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 16,
+            "y": 470,
+            "w": 16,
+            "h": 16
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 470,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 48,
+            "y": 470,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 64,
+            "y": 470,
+            "w": 16,
+            "h": 16
+          },
+          {
+            "x": 80,
+            "y": 470,
+            "w": 16,
+            "h": 16
+          }
+        ]
+      }
+    },
+    "antena-repetidora": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 486,
+            "w": 16,
+            "h": 32
+          },
+          {
+            "x": 16,
+            "y": 486,
+            "w": 16,
+            "h": 32
+          }
+        ]
+      }
+    },
+    "chencho-el-base": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 518,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 16,
+            "y": 518,
+            "w": 16,
+            "h": 22
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 518,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 48,
+            "y": 518,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 64,
+            "y": 518,
+            "w": 16,
+            "h": 22
+          },
+          {
+            "x": 80,
+            "y": 518,
+            "w": 16,
+            "h": 22
+          }
+        ]
+      }
+    },
+    "fan-entusiasta": {
+      "kind": "frames",
+      "url": "assets/ninja/characters.png",
+      "facing": "right",
+      "animations": {
+        "idle": [
+          {
+            "x": 0,
+            "y": 540,
+            "w": 16,
+            "h": 18
+          },
+          {
+            "x": 16,
+            "y": 540,
+            "w": 16,
+            "h": 18
+          }
+        ],
+        "move": [
+          {
+            "x": 32,
+            "y": 540,
+            "w": 16,
+            "h": 18
+          },
+          {
+            "x": 48,
+            "y": 540,
+            "w": 16,
+            "h": 18
+          },
+          {
+            "x": 64,
+            "y": 540,
+            "w": 16,
+            "h": 18
+          },
+          {
+            "x": 80,
+            "y": 540,
+            "w": 16,
+            "h": 18
+          }
+        ]
+      }
     }
   },
   "props": {
@@ -1408,13 +1631,590 @@
       "fps": 0,
       "loop": false,
       "anchor": "wall"
+    },
+    "foco-movil": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 126,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 16,
+          "y": 126,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 32,
+          "y": 126,
+          "w": 16,
+          "h": 20
+        },
+        {
+          "x": 48,
+          "y": 126,
+          "w": 16,
+          "h": 20
+        }
+      ],
+      "fps": 2,
+      "loop": true,
+      "anchor": "floor",
+      "light": "#fff4c8"
+    },
+    "cono-de-luz": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 146,
+          "w": 32,
+          "h": 48
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "camara-dron": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 194,
+          "w": 16,
+          "h": 12
+        },
+        {
+          "x": 16,
+          "y": 194,
+          "w": 16,
+          "h": 12
+        }
+      ],
+      "fps": 10,
+      "loop": true,
+      "anchor": "centre",
+      "light": "#ff3030"
+    },
+    "cartel-en-directo": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 206,
+          "w": 49,
+          "h": 11
+        },
+        {
+          "x": 49,
+          "y": 206,
+          "w": 49,
+          "h": 11
+        }
+      ],
+      "fps": 1,
+      "loop": true,
+      "anchor": "wall",
+      "light": "#ff3030"
+    },
+    "parrilla-de-focos": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 217,
+          "w": 48,
+          "h": 10
+        },
+        {
+          "x": 48,
+          "y": 217,
+          "w": 48,
+          "h": 10
+        },
+        {
+          "x": 96,
+          "y": 217,
+          "w": 48,
+          "h": 10
+        }
+      ],
+      "fps": 3,
+      "loop": true,
+      "anchor": "wall",
+      "light": "#ffffff"
+    },
+    "fx-arco-voltaico": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 227,
+          "w": 32,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 227,
+          "w": 32,
+          "h": 16
+        },
+        {
+          "x": 64,
+          "y": 227,
+          "w": 32,
+          "h": 16
+        },
+        {
+          "x": 96,
+          "y": 227,
+          "w": 32,
+          "h": 16
+        }
+      ],
+      "fps": 16,
+      "loop": true,
+      "anchor": "centre",
+      "light": "#4fe8ff"
+    },
+    "fx-onda-5g": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 243,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 243,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 243,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 4,
+      "loop": false,
+      "anchor": "centre"
+    },
+    "fx-onda-6g": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 259,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 32,
+          "y": 259,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 64,
+          "y": 259,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 96,
+          "y": 259,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 128,
+          "y": 259,
+          "w": 32,
+          "h": 32
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "anchor": "centre"
+    },
+    "fx-onda-7g": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 291,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 32,
+          "y": 291,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 64,
+          "y": 291,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 96,
+          "y": 291,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 128,
+          "y": 291,
+          "w": 32,
+          "h": 32
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "anchor": "centre"
+    },
+    "fx-onda-8g": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 323,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 48,
+          "y": 323,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 96,
+          "y": 323,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 144,
+          "y": 323,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 192,
+          "y": 323,
+          "w": 48,
+          "h": 48
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "anchor": "centre",
+      "light": "#4fe8ff"
+    },
+    "fx-onda-9g": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 371,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 48,
+          "y": 371,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 96,
+          "y": 371,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 144,
+          "y": 371,
+          "w": 48,
+          "h": 48
+        },
+        {
+          "x": 192,
+          "y": 371,
+          "w": 48,
+          "h": 48
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "anchor": "centre",
+      "light": "#4fe8ff"
+    },
+    "fx-onda-10g": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "x": 64,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "x": 128,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "x": 192,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "x": 256,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "x": 320,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "x": 384,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "x": 448,
+          "y": 419,
+          "w": 64,
+          "h": 64
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "anchor": "centre",
+      "light": "#4fe8ff"
+    },
+    "fx-impreso-volador": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 483,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 483,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 483,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 483,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 10,
+      "loop": true,
+      "anchor": "centre"
+    },
+    "fx-balon-estela": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 499,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 499,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 499,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 499,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 14,
+      "loop": true,
+      "anchor": "centre"
+    },
+    "fx-confeti": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 515,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 515,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 515,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 515,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 64,
+          "y": 515,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "anchor": "centre"
+    },
+    "fx-vapor": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 531,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 531,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 531,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 531,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 64,
+          "y": 531,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 10,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "fx-explosion": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 547,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 32,
+          "y": 547,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 64,
+          "y": 547,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 96,
+          "y": 547,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 128,
+          "y": 547,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 160,
+          "y": 547,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 192,
+          "y": 547,
+          "w": 32,
+          "h": 32
+        }
+      ],
+      "fps": 14,
+      "loop": false,
+      "anchor": "centre",
+      "light": "#ffb060"
     }
   },
   "ui": {
     "carta-bronce": {
       "url": "assets/ninja/extra.png",
       "x": 0,
-      "y": 126,
+      "y": 811,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -1422,7 +2222,7 @@
     "carta-plata": {
       "url": "assets/ninja/extra.png",
       "x": 24,
-      "y": 126,
+      "y": 811,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -1430,7 +2230,7 @@
     "carta-oro": {
       "url": "assets/ninja/extra.png",
       "x": 48,
-      "y": 126,
+      "y": 811,
       "w": 24,
       "h": 24,
       "slice": 8
@@ -1438,10 +2238,594 @@
     "carta-legendaria": {
       "url": "assets/ninja/extra.png",
       "x": 72,
-      "y": 126,
+      "y": 811,
       "w": 24,
       "h": 24,
       "slice": 8
+    },
+    "icono-audiencia": {
+      "url": "assets/ninja/extra.png",
+      "x": 96,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-reloj": {
+      "url": "assets/ninja/extra.png",
+      "x": 108,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-ardiendo": {
+      "url": "assets/ninja/extra.png",
+      "x": 120,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-empapado": {
+      "url": "assets/ninja/extra.png",
+      "x": 132,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-congelado": {
+      "url": "assets/ninja/extra.png",
+      "x": 144,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-electrocutado": {
+      "url": "assets/ninja/extra.png",
+      "x": 156,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-envenenado": {
+      "url": "assets/ninja/extra.png",
+      "x": 168,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-tumbado": {
+      "url": "assets/ninja/extra.png",
+      "x": 180,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-aturdido": {
+      "url": "assets/ninja/extra.png",
+      "x": 192,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-asustado": {
+      "url": "assets/ninja/extra.png",
+      "x": 204,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-cegado": {
+      "url": "assets/ninja/extra.png",
+      "x": 216,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-enredado": {
+      "url": "assets/ninja/extra.png",
+      "x": 228,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-bailando": {
+      "url": "assets/ninja/extra.png",
+      "x": 240,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-mareado": {
+      "url": "assets/ninja/extra.png",
+      "x": 252,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-escondido": {
+      "url": "assets/ninja/extra.png",
+      "x": 264,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-animado": {
+      "url": "assets/ninja/extra.png",
+      "x": 276,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-dormido": {
+      "url": "assets/ninja/extra.png",
+      "x": 288,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-petrificado": {
+      "url": "assets/ninja/extra.png",
+      "x": 300,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-compulsado": {
+      "url": "assets/ninja/extra.png",
+      "x": 312,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    },
+    "icono-afortunado": {
+      "url": "assets/ninja/extra.png",
+      "x": 324,
+      "y": 811,
+      "w": 12,
+      "h": 12
+    }
+  },
+  "surfaces": {
+    "agua": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 579,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 579,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 579,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 579,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 5,
+      "loop": true
+    },
+    "aceite": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 595,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "fuego": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 611,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 611,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 611,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 611,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 8,
+      "loop": true
+    },
+    "hielo": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 627,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "vapor": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 643,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 643,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 643,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 643,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 4,
+      "loop": true
+    },
+    "toxico": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 659,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 659,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 659,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 659,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 6,
+      "loop": true
+    },
+    "electrificada": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 675,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 675,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 675,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 675,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 12,
+      "loop": true
+    },
+    "canicas": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 691,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "red": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 707,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "expedientes": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 723,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 0,
+      "loop": false
+    },
+    "expedientes-ardiendo": {
+      "url": "assets/ninja/extra.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 739,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 16,
+          "y": 739,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 32,
+          "y": 739,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "x": 48,
+          "y": 739,
+          "w": 16,
+          "h": 16
+        }
+      ],
+      "fps": 8,
+      "loop": true
+    }
+  },
+  "portraits": {
+    "willy-butanero": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-influencer": {
+      "url": "assets/ninja/portraits.png",
+      "x": 32,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-bardo-de-verbena": {
+      "url": "assets/ninja/portraits.png",
+      "x": 64,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-socorrista": {
+      "url": "assets/ninja/portraits.png",
+      "x": 96,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-tasador": {
+      "url": "assets/ninja/portraits.png",
+      "x": 128,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-mimo": {
+      "url": "assets/ninja/portraits.png",
+      "x": 160,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-ingeniero": {
+      "url": "assets/ninja/portraits.png",
+      "x": 192,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-funcionario": {
+      "url": "assets/ninja/portraits.png",
+      "x": 224,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "willy-jugador-de-basket": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "paco": {
+      "url": "assets/ninja/portraits.png",
+      "x": 32,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "koldo": {
+      "url": "assets/ninja/portraits.png",
+      "x": 64,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "maripuri": {
+      "url": "assets/ninja/portraits.png",
+      "x": 96,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "xelda": {
+      "url": "assets/ninja/portraits.png",
+      "x": 128,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "gaviota-de-lonja": {
+      "url": "assets/ninja/portraits.png",
+      "x": 160,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "rata-portuaria": {
+      "url": "assets/ninja/portraits.png",
+      "x": 192,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "cangrejo-con-casco": {
+      "url": "assets/ninja/portraits.png",
+      "x": 224,
+      "y": 32,
+      "w": 32,
+      "h": 32
+    },
+    "bocarte-andante": {
+      "url": "assets/ninja/portraits.png",
+      "x": 0,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "mimico": {
+      "url": "assets/ninja/portraits.png",
+      "x": 32,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "automata-repetidor": {
+      "url": "assets/ninja/portraits.png",
+      "x": 64,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "chencho-el-base": {
+      "url": "assets/ninja/portraits.png",
+      "x": 96,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "fan-entusiasta": {
+      "url": "assets/ninja/portraits.png",
+      "x": 128,
+      "y": 64,
+      "w": 32,
+      "h": 32
+    },
+    "patrocinador-butanos-perez": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 0,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "patrocinador-la-prudente": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 32,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "patrocinador-vortax": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 64,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "patrocinador-clementina": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 96,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "patrocinador-colmena": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 128,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    "patrocinador-glorp": {
+      "url": "assets/ninja/portraits-hand.png",
+      "x": 160,
+      "y": 0,
+      "w": 32,
+      "h": 32
     }
   }
 }

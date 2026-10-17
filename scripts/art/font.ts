@@ -18,7 +18,7 @@ const GLYPHS: Record<string, number[]> = {
 };
 
 // Letters that need 5 columns to stay readable (MSB = left column of 5).
-const WIDE: Record<string, number[]> = { M: [17, 27, 21, 17, 17], W: [17, 17, 21, 21, 10] };
+const WIDE: Record<string, number[]> = { M: [17, 27, 21, 17, 17], W: [17, 17, 21, 21, 10], N: [17, 25, 21, 19, 17] };
 
 const FOLD: Record<string, string> = { Á: 'A', É: 'E', Í: 'I', Ó: 'O', Ú: 'U', Ü: 'U' };
 
