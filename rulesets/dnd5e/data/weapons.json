@@ -1,0 +1,18 @@
+{
+  "$comment": "SRD 5.1 weapons used in the game. Range in tiles (1 tile = 5 ft). 'finesse' lets the wielder use DEX; 'ranged' uses DEX. 'natural' weapons belong to creatures (slam, bite, claws).",
+  "unarmed": { "label": "Puñetazo", "damage": "1", "type": "bludgeoning", "properties": ["natural"], "range": 1 },
+  "dagger": { "label": "Daga", "damage": "1d4", "type": "piercing", "properties": ["finesse", "light"], "range": 1 },
+  "shortsword": { "label": "Espada corta", "damage": "1d6", "type": "piercing", "properties": ["finesse", "light"], "range": 1 },
+  "scimitar": { "label": "Cimitarra", "damage": "1d6", "type": "slashing", "properties": ["finesse", "light"], "range": 1 },
+  "rapier": { "label": "Estoque", "damage": "1d8", "type": "piercing", "properties": ["finesse"], "range": 1 },
+  "longsword": { "label": "Espada larga", "damage": "1d8", "type": "slashing", "properties": ["versatile"], "range": 1 },
+  "mace": { "label": "Maza", "damage": "1d6", "type": "bludgeoning", "properties": [], "range": 1 },
+  "warhammer": { "label": "Martillo de guerra", "damage": "1d8", "type": "bludgeoning", "properties": [], "range": 1 },
+  "greataxe": { "label": "Gran hacha", "damage": "1d12", "type": "slashing", "properties": ["heavy", "two-handed"], "range": 1 },
+  "maul": { "label": "Mazo", "damage": "2d6", "type": "bludgeoning", "properties": ["heavy", "two-handed"], "range": 1 },
+  "pick": { "label": "Pico de minero", "damage": "1d8", "type": "piercing", "properties": [], "range": 1 },
+  "quarterstaff": { "label": "Bastón", "damage": "1d6", "type": "bludgeoning", "properties": ["versatile"], "range": 1 },
+  "shortbow": { "label": "Arco corto", "damage": "1d6", "type": "piercing", "properties": ["ranged", "two-handed"], "range": 16 },
+  "light_crossbow": { "label": "Ballesta ligera", "damage": "1d8", "type": "piercing", "properties": ["ranged", "two-handed"], "range": 16 },
+  "slam": { "label": "Golpe", "damage": "1d6", "type": "bludgeoning", "properties": ["natural"], "range": 1 }
+}

@@ -1,5 +1,6 @@
-import type { GameEvent } from './commands';
+import type { GameEvent } from './command-types';
 import type { Ruleset } from './ruleset';
+import type { Vec2 } from './grid';
 import type { AppliedCondition, Entity, FlagValue, GameState } from './state';
 
 /**
@@ -12,7 +13,11 @@ export type Effect =
   | { type: 'modifyResource'; entityId: string; resource: string; delta: number }
   | { type: 'applyCondition'; entityId: string; condition: string; sourceId?: string; remainingTurns?: number }
   | { type: 'removeCondition'; entityId: string; condition: string }
-  | { type: 'setFlag'; flag: string; value: FlagValue };
+  | { type: 'setFlag'; flag: string; value: FlagValue }
+  /** Raise or lower a pool's maximum (e.g. a spell granting extra hit points). Current moves with it. */
+  | { type: 'modifyResourceMax'; entityId: string; resource: string; delta: number }
+  /** Instant relocation (teleport); walking always goes through the move command. */
+  | { type: 'setPosition'; entityId: string; position: Vec2 };
 
 export interface ResourceChangedEvent extends GameEvent {
   type: 'resourceChanged';
@@ -34,7 +39,14 @@ export interface FlagChangedEvent extends GameEvent {
   value: FlagValue;
 }
 
-export type EffectEvent = ResourceChangedEvent | ConditionChangedEvent | FlagChangedEvent;
+export interface EntityTeleportedEvent extends GameEvent {
+  type: 'entityTeleported';
+  entityId: string;
+  from: Vec2;
+  to: Vec2;
+}
+
+export type EffectEvent = ResourceChangedEvent | ConditionChangedEvent | FlagChangedEvent | EntityTeleportedEvent;
 
 /**
  * Applies effects in order. Unknown entities/resources/conditions are content or
@@ -83,6 +95,24 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
           if (!e.conditions.some((c) => c.id === effect.condition)) return e;
           events.push({ type: 'conditionRemoved', entityId: e.id, condition: effect.condition });
           return { ...e, conditions: e.conditions.filter((c) => c.id !== effect.condition) };
+        });
+        break;
+      }
+      case 'modifyResourceMax': {
+        if (!ruleset.resources[effect.resource]) throw new Error(`Unknown resource "${effect.resource}" in ruleset ${ruleset.id}`);
+        updateEntity(effect.entityId, (e) => {
+          const pool = e.resources[effect.resource] ?? { current: 0, max: 0 };
+          const max = Math.max(0, pool.max + effect.delta);
+          const current = Math.max(0, Math.min(max, pool.current + effect.delta));
+          events.push({ type: 'resourceChanged', entityId: e.id, resource: effect.resource, from: pool.current, to: current });
+          return { ...e, resources: { ...e.resources, [effect.resource]: { current, max } } };
+        });
+        break;
+      }
+      case 'setPosition': {
+        updateEntity(effect.entityId, (e) => {
+          events.push({ type: 'entityTeleported', entityId: e.id, from: { ...e.position }, to: { ...effect.position } });
+          return { ...e, position: { ...effect.position } };
         });
         break;
       }

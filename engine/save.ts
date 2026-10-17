@@ -11,7 +11,15 @@ type Migration = (raw: Record<string, unknown>) => Record<string, unknown>;
  * Engine migrations from schema version N to N+1, applied in order on load.
  * Example: migrations[1] = (raw) => ({ ...raw, schemaVersion: 2, newField: default })
  */
-const migrations: Record<number, Migration> = {};
+const migrations: Record<number, Migration> = {
+  // v2: combat turn order and per-game settings.
+  1: (raw) => ({
+    ...raw,
+    schemaVersion: 2,
+    turn: { order: [], initiative: {}, movementUsed: 0, ...(raw.turn as object) },
+    settings: { difficulty: 'normal' },
+  }),
+};
 
 export function serializeState(state: GameState): string {
   return JSON.stringify(state);
@@ -88,6 +96,7 @@ function validate(d: Record<string, unknown>): void {
     }
   }
   if (!isRecord(d.flags)) bad('flags');
-  if (!isRecord(d.turn)) bad('turno');
+  if (!isRecord(d.turn) || !Array.isArray(d.turn.order)) bad('turno');
+  if (!isRecord(d.settings)) bad('ajustes');
   if (!isRecord(d.systems)) bad('sistemas');
 }

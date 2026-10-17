@@ -4,7 +4,8 @@
 
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
 - **Fase 1, Esqueleto técnico:** **completada y aprobada** (2026-10-17). Arte: 0x72 como base y Ninja Adventure para exteriores. LPC se queda como preset alternativo.
-- **Fase 2, Combate:** plan propuesto y pendiente del visto bueno.
+- **Fase 2, Combate:** **en curso** (plan aprobado el 2026-10-17). Progresión del acto: de nivel 3 a 6.
+- **Willy el mazmorrero:** un subagente trabaja en paralelo en la rama `willy` (diseño de la Fase 0, logros, cajas de botín y generación procedural). Solo toca `docs/willy/` y `content/willy/`.
 
 ## Hecho
 
@@ -49,10 +50,18 @@
   - Fase 6: partículas de ambiente, postprocesado por escena, viñeta, CRT y ajuste de calidad.
 - **Introducción y onboarding** (Fase 6): ver `DESIGN.md` → «Introducción y onboarding». El guion del prólogo está pendiente como anexo en `STORY.md`.
 
+## Decisiones de la Fase 2 (aprobadas el 2026-10-17)
+
+- **A 0 PG:** los personajes del grupo quedan inconscientes y se desangran en 3 turnos si nadie los cura o estabiliza, con el contador visible. Los enemigos mueren directamente.
+- **Turnos:** iniciativa individual de 5e.
+- **«Caída»** en la Fase 2 es caer a 0 PG. El daño por caer desde una altura llega con los empujones (Fase 3).
+- **Grupo:** el jugador controla a todos los compañeros en combate.
+- **Niveles:** se empieza a nivel 3 y se termina a nivel 5-6. Las clases tienen datos del 1 al 6, solo con contenido del SRD 5.1. La subida de nivel interactiva llega en la Fase 5.
+
 ## Decisiones abiertas
 
 - ¿Un cuarto compañero **mago** opcional? Por ahora no.
 
 ## Siguiente paso
 
-Aprobar el plan de la Fase 2 (combate) y empezar a implementarlo.
+Implementar la Fase 2: turnos y combate en el motor, reglas de ataque y clases en dnd5e, IA, interfaz de combate y encuentro de prueba.

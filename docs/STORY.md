@@ -11,6 +11,8 @@
 
 ## 1. Situación inicial
 
+> **Progresión:** el protagonista y los compañeros empiezan a **nivel 3**: son profesionales con oficio, no aprendices. Suben a 4 tras investigar el pueblo, a 5 tras la noche de las antorchas y a 6 antes del jefe.
+
 Trabajas como cobrador a comisión para la **Casa Valcárcel**, la banca más respetada del Ducado. Es respetada porque nadie que le debiera dinero ha vivido lo suficiente para hablar mal de ella. El encargo es cobrar al barón **Ulric Mazo**, señor de Hondonegra, 4.000 coronas más intereses. Si cobras, te quedas el 10 %. Si no cobras, te quedas el viaje.
 
 Tu pasado depende de la clase que elijas:
@@ -150,10 +152,10 @@ Es humano y tiene unos cincuenta años. Empezó de niño cargando cestos en esa 
 | **P** | **El camino** (15') | Creación de personaje, presentación de Dorotea, reclutamiento de Garrán. | Mineros hambrientos (tutorial, se puede evitar hablando) |
 | **1** | **Llegada a Hondonegra** (15') | La plaza y la presentación de las facciones. El juicio de Fray Anselmo. Primer roce entre los Hulla y un protagonista elfo. | Fanáticos de la Santa Pala (opcional) |
 | **2** | **Audiencia en la abadía** (15') | El barón no puede pagar. Primeras pistas sobre Brea. *(Ver el diálogo de ejemplo.)* | — |
-| **3** | **Hilos sueltos** (30') | Investigación libre: el libro de cuentas de Lisandro (cofre con trampa), las viudas, el sermón de Cirilo. Pista clave: aparece plata nueva en un pueblo cuya mina está cerrada. **Subes a nivel 2.** | — |
+| **3** | **Hilos sueltos** (30') | Investigación libre: el libro de cuentas de Lisandro (cofre con trampa), las viudas, el sermón de Cirilo. Pista clave: aparece plata nueva en un pueblo cuya mina está cerrada. **Subes a nivel 4.** | — |
 | **4** | **El Escorial y el Pozo del Ahorcado** (25') | Los **Sinpaga** (mineros convertidos en bandidos) controlan las escombreras. Encuentras el acceso de contrabando y ves al primer Callado. | Los Sinpaga: carro de aceite y altura de las escombreras |
-| **D1** | **La noche de las antorchas** (15') | La Cuadrilla asalta la abadía. **Subes a nivel 3.** | Según lo que elijas |
-| **5** | **La mina** (30') | Andamios y vagonetas en las galerías altas. Después, la Galería Sellada: los restos de los cuarenta, la mecha y el secreto de Garrán (D2). **Subes a nivel 4.** | Callados en los andamios; emboscada en la Galería Sellada |
+| **D1** | **La noche de las antorchas** (15') | La Cuadrilla asalta la abadía. **Subes a nivel 5.** | Según lo que elijas |
+| **5** | **La mina** (30') | Andamios y vagonetas en las galerías altas. Después, la Galería Sellada: los restos de los cuarenta, la mecha y el secreto de Garrán (D2). **Subes a nivel 6** antes de la Bóveda. | Callados en los andamios; emboscada en la Galería Sellada |
 | **6** | **La Bóveda** (20') | Combate contra Brea. Si el protagonista es **elfo** o **enano**, puede descubrir con **[Historia] CD 13** el origen real de la enemistad entre las dos razas (sección 2). Después viene D3. | Jefe |
 | **7** | **El cobro** (15') | Vuelves a la superficie con la escritura de embargo encima de la mesa. D4 y epílogo. | Posible combate contra Dorotea |
 
@@ -285,5 +287,6 @@ Una secuencia de viñetas sobre el destino del barón, Nella, Odda, Hilda, Ciril
 
 ## Registro de cambios
 
+- 2026-10-17: la progresión pasa a ser de **nivel 3 a 6** (antes, de 1 a 4).
 - 2026-10-16: se añade como anexo pendiente el guion del prólogo cinemático (onboarding, Fase 6).
 - 2026-10-16: historia aprobada. Se añade **Elfo** como raza jugable, con la enemistad entre elfos y enanos integrada en la trama (clan Hulla, Lisandro elfo y el origen en la Bóveda).

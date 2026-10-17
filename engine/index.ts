@@ -4,6 +4,8 @@ export * from './pathfinding';
 export * from './state';
 export * from './ruleset';
 export * from './commands';
+export * from './combat';
+export * from './ai';
 export * from './effects';
 export * from './lighting';
 export * from './checks';

@@ -169,3 +169,30 @@ class MinHeap {
     return top;
   }
 }
+
+/**
+ * Every tile reachable within `maxCost`, with its cheapest cost (Dijkstra). Used by AI and
+ * by the UI to show movement range.
+ */
+export function reachableTiles(map: GridMap, from: Vec2, maxCost: number, options: Omit<PathOptions, 'maxCost'> = {}): Map<string, { pos: Vec2; cost: number }> {
+  const out = new Map<string, { pos: Vec2; cost: number }>([[posKey(from), { pos: from, cost: 0 }]]);
+  const frontier: { pos: Vec2; cost: number }[] = [{ pos: from, cost: 0 }];
+  while (frontier.length > 0) {
+    frontier.sort((a, b) => a.cost - b.cost || a.pos.y - b.pos.y || a.pos.x - b.pos.x);
+    const current = frontier.shift()!;
+    if (current.cost > (out.get(posKey(current.pos))?.cost ?? Infinity)) continue;
+    for (const d of DIRECTIONS) {
+      const next = { x: current.pos.x + d.x, y: current.pos.y + d.y };
+      const step = stepCost(map, current.pos, next, options.rules, options.blocked);
+      if (step === null) continue;
+      const cost = current.cost + step;
+      if (cost > maxCost) continue;
+      const key = posKey(next);
+      if (cost < (out.get(key)?.cost ?? Infinity)) {
+        out.set(key, { pos: next, cost });
+        frontier.push({ pos: next, cost });
+      }
+    }
+  }
+  return out;
+}

@@ -1,0 +1,100 @@
+{
+  "$comment": "SRD 5.1 classes (one subclass each), levels 1-6. Features are ids interpreted by the ruleset; 'resources' give per-level maxima; spell slots per character level. ASI levels just list 'asi' (applied by level-up, Phase 5).",
+  "fighter": {
+    "label": "Guerrero",
+    "subclass": { "id": "champion", "label": "Campeón", "level": 3 },
+    "hitDie": 10,
+    "saves": ["str", "con"],
+    "skills": ["athletics", "intimidation"],
+    "armor": "chain_mail",
+    "shield": true,
+    "weapons": ["longsword", "light_crossbow"],
+    "features": {
+      "1": ["fighting_style_defense", "second_wind"],
+      "2": ["action_surge"],
+      "3": ["improved_critical"],
+      "4": ["asi"],
+      "5": ["extra_attack"],
+      "6": ["asi"]
+    },
+    "resources": { "second_wind": { "1": 1 }, "action_surge": { "2": 1 } }
+  },
+  "rogue": {
+    "label": "Pícaro",
+    "subclass": { "id": "thief", "label": "Ladrón", "level": 3 },
+    "hitDie": 8,
+    "saves": ["dex", "int"],
+    "skills": ["stealth", "sleight_of_hand", "perception", "deception"],
+    "expertise": { "1": ["stealth", "sleight_of_hand"], "6": ["perception", "deception"] },
+    "armor": "leather",
+    "shield": false,
+    "weapons": ["shortsword", "shortbow"],
+    "features": {
+      "1": ["sneak_attack", "expertise"],
+      "2": ["cunning_action"],
+      "3": ["fast_hands", "second_story_work"],
+      "4": ["asi"],
+      "5": ["uncanny_dodge"],
+      "6": ["expertise", "asi"]
+    },
+    "resources": {}
+  },
+  "wizard": {
+    "label": "Mago",
+    "subclass": { "id": "evocation", "label": "Escuela de Evocación", "level": 2 },
+    "hitDie": 6,
+    "saves": ["int", "wis"],
+    "skills": ["arcana", "history"],
+    "armor": "none",
+    "shield": false,
+    "weapons": ["quarterstaff"],
+    "spellcasting": {
+      "ability": "int",
+      "cantrips": { "1": 3, "4": 4 },
+      "defaultSpells": {
+        "1": ["fire_bolt", "ray_of_frost", "shocking_grasp", "magic_missile", "shield", "burning_hands", "mage_armor"],
+        "3": ["scorching_ray", "misty_step", "hold_person"],
+        "5": ["fireball", "lightning_bolt"],
+        "6": ["shatter"]
+      }
+    },
+    "features": {
+      "1": ["arcane_recovery"],
+      "2": ["sculpt_spells"],
+      "4": ["asi"],
+      "6": ["potent_cantrip"]
+    },
+    "resources": {}
+  },
+  "cleric": {
+    "label": "Clérigo",
+    "subclass": { "id": "life", "label": "Dominio de la Vida", "level": 1 },
+    "hitDie": 8,
+    "saves": ["wis", "cha"],
+    "skills": ["medicine", "religion"],
+    "armor": "scale_mail",
+    "shield": true,
+    "weapons": ["mace"],
+    "spellcasting": {
+      "ability": "wis",
+      "cantrips": { "1": 3, "4": 4 },
+      "defaultSpells": {
+        "1": ["sacred_flame", "spare_the_dying", "guidance", "cure_wounds", "healing_word", "bless", "guiding_bolt", "inflict_wounds", "shield_of_faith"],
+        "3": ["aid", "lesser_restoration", "hold_person"],
+        "5": ["spirit_guardians", "revivify", "mass_healing_word"]
+      }
+    },
+    "features": {
+      "1": ["disciple_of_life"],
+      "2": ["channel_divinity", "turn_undead", "preserve_life"],
+      "4": ["asi"],
+      "5": ["destroy_undead"],
+      "6": ["blessed_healer"]
+    },
+    "resources": { "channel_divinity": { "2": 1, "6": 2 } }
+  },
+  "spellSlots": {
+    "$comment": "Full casters (wizard, cleric): slots by character level, [1st, 2nd, 3rd].",
+    "1": [2], "2": [3], "3": [4, 2], "4": [4, 3], "5": [4, 3, 2], "6": [4, 3, 3]
+  }
+}
