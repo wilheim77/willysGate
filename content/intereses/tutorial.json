@@ -1,0 +1,20 @@
+{
+  "$comment": "Integrated tutorial (DESIGN, Introducción y onboarding). Each step shows once per game (flag tutorial:<id>). trigger: { event: <engine event type> } fires on that event (optionally with match: fields the event must have), or { when: DialogueWhen } fires the first time it holds while idle. text: short, in the game's voice. Order is the order they are expected to appear.",
+  "steps": [
+    { "id": "move", "trigger": { "event": "mapChanged" }, "text": "Toca el suelo para andar. El grupo te sigue. Gratis, de momento." },
+    { "id": "talk", "trigger": { "event": "dialogueStarted" }, "text": "Las conversaciones se eligen. Las opciones con corchetes piden una tirada o algo que tienes o eres." },
+    { "id": "dialogue_check", "trigger": { "event": "dialogueCheck" }, "text": "Un d20 más tus modificadores contra la CD. Si fallas, pierdes algo: dinero, tiempo, reputación. Nunca la historia." },
+    { "id": "combat", "trigger": { "event": "combatStarted" }, "text": "Combate. Cada uno actúa por turnos según la iniciativa. Toca a un aliado en la barra para ver su ficha." },
+    { "id": "attack", "trigger": { "event": "turnStarted" }, "text": "En tu turno: muévete y usa tu acción. Toca a un enemigo para ver tu probabilidad antes de atacar. Aquí todo se sabe antes de pagarlo." },
+    { "id": "bonus_action", "trigger": { "event": "actionPerformed" }, "text": "Además de la acción tienes una acción adicional por turno, si algo tuyo la usa. Desaprovecharla es regalar dinero." },
+    { "id": "advantage", "trigger": { "event": "attackRolled", "match": { "mode": "advantage" } }, "text": "Ventaja: tiras dos dados y te quedas el mejor. Desventaja, lo contrario. La vida es así de sencilla y así de injusta." },
+    { "id": "height", "trigger": { "event": "entityMoved", "match": { "highGround": true } }, "text": "Desde arriba se ataca mejor y te dan peor. Busca altura. Y cuidado con el borde: caerse también cobra." },
+    { "id": "shove", "trigger": { "event": "entityPushed" }, "text": "Empujar es una acción. Sirve para tirar a alguien por un barranco, al fuego o al agua. Barato y eficaz." },
+    { "id": "surfaces", "trigger": { "event": "surfaceChanged" }, "text": "Aceite, agua, fuego. El aceite arde, el agua conduce el rayo y el fuego no pregunta de quién es nadie." },
+    { "id": "explosion", "trigger": { "event": "exploded" }, "text": "Los barriles explotan. Úsalos tú antes de que los usen contigo." },
+    { "id": "downed", "trigger": { "event": "downed" }, "text": "Un compañero a cero cae inconsciente y se desangra en tres turnos. Cúralo o estabilízalo, o apúntalo como pérdida." },
+    { "id": "trap", "trigger": { "event": "trapSpotted" }, "text": "Una trampa. Ahora que la ves, el grupo la rodea. Puedes intentar desactivarla; si fallas por mucho, salta." },
+    { "id": "items", "trigger": { "event": "itemsChanged" }, "text": "Lo que recoges va a la mochila del grupo. Está en la ficha. Dorotea lleva la cuenta, por supuesto." },
+    { "id": "sheet", "trigger": { "when": { "flag": "garran_reclutado" } }, "text": "Toca un retrato para ver la ficha: vida, defensas, armas y conjuros. Las cifras con «?» se explican solas." }
+  ]
+}

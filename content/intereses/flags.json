@@ -460,6 +460,12 @@
     "description": "D1: defendiste la abadía.",
     "readBy": "mapa: encuentro de la Cuadrilla; escena d1_abadia_final"
   },
+  "d1_asalto_terminado": {
+    "critical": false,
+    "description": "Ha terminado el combate de la abadía en D1 (unirse o defender). Dispara d1_horca o d1_abadia_final.",
+    "setBy": "script: al acabar el encuentro de D1 en la abadía",
+    "readBy": "triggers.json"
+  },
   "d1_mediar": {
     "critical": false,
     "description": "D1: intentaste mediar."
