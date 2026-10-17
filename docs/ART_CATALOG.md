@@ -91,6 +91,25 @@ Añadidos en la Fase 3:
 | `fx_explosion` | 7 frames de **32×32**, 14 fps, `anchor: centre`, `light: #ffb060` | Destello, bola de fuego, anillo de humo con brasas y humo que se disipa |
 | `fx_steam` | 5, 10 fps | Vapor cuando el agua toca el fuego |
 
+## PNJ de Hondonegra y atrezo del pueblo (para `mapas` y `guion`)
+
+Recolores de 0x72 con detalle propio (`palettes.json`). Vista previa: [`art-previews/0x72-npcs-hondonegra.png`](art-previews/0x72-npcs-hondonegra.png).
+
+| Id | Base | Aspecto |
+|---|---|---|
+| `mazo` | `elf_m` | El barón Ulric Mazo: jubón morado con aro de oro y pluma de poeta |
+| `hilda` | `elf_f` | Hilda Cardo, la senescal: moño gris, vestido gris verdoso, manojo de llaves |
+| `cirilo` | `wizzard_m` | Cirilo Hondo, capellán de la Santa Pala: capucha y sotana pardas, barba gris, pala |
+| `fanatico_pala` | `wizzard_f` | Fanático de la Santa Pala: capucha de arpillera ocre y pala |
+| `nella` | `elf_f` | Nella Yesca: luto negro y pañuelo rojo de la Cuadrilla |
+| `odda` | `dwarf_f` | Odda Hulla: trenzas cobrizas, ropa de mina, martillo |
+| `lisandro` | `elf_m` | Lisandro Fuss, el prestamista elfo: levita verde oscuro, botones y bolsa de oro |
+| `aldeano`, `aldeana`, `aldeano_viejo` | `elf_m`, `elf_f`, `wizzard_m` | Vecinos de Hondonegra con ropa gastada |
+
+Ya existían: `absalon` (Brea), `callado`, `callado_palido`, `minero_cuadrilla`, `guardia_baron`, `guardia_baron_sargento`, los compañeros y los Sinpaga.
+
+**Atrezo** (`props`): `tapestry` (tapiz con el escudo de los Mazo, `wall`, 16×24), `tapestry_crossbow` (el mismo con la punta de la ballesta asomando: la pista para la frase de Garrán) y `gallows` (horca de la Torre del Cepo, `floor`, 16×32).
+
 ## Objetos interactivos (Fase 4)
 
 Vista previa: [`art-previews/0x72-interactables.png`](art-previews/0x72-interactables.png).
