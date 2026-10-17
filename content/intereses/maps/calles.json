@@ -1,0 +1,1102 @@
+{
+ "compressionlevel": -1,
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "width": 34,
+ "height": 24,
+ "tilewidth": 32,
+ "tileheight": 32,
+ "infinite": false,
+ "nextlayerid": 9,
+ "nextobjectid": 30,
+ "properties": [
+  {
+   "name": "name",
+   "type": "string",
+   "value": "Calles de Hondonegra"
+  },
+  {
+   "name": "ambientLight",
+   "type": "float",
+   "value": 0.45
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "ground",
+   "type": "tilelayer",
+   "width": 34,
+   "height": 24,
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,3,3,3,3,3,3,3,3,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,3,3,3,3,3,3,3,3,6,6,6,15,15,15,15,15,15,15,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,3,3,3,3,3,3,3,3,6,6,6,15,15,15,15,15,15,15,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,3,3,3,3,3,3,3,3,6,6,6,15,15,15,15,15,15,15,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,3,3,6,6,6,6,6,6,15,15,15,15,15,15,15,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,2,2,6,6,6,6,6,6,15,15,15,15,15,15,15,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,6,6,6,6,6,6,15,15,15,15,15,15,15,6,6,6,6,6,
+6,6,6,6,6,6,6,6,6,6,6,6,6,6,1,1,6,6,6,6,6,6,6,6,6,22,6,6,6,6,6,6,6,6,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,7,7,7,7,7,7,7,7,7,7,7,4,4,4,4,4,4,4,
+4,4,4,6,6,6,6,6,22,6,6,6,6,6,4,4,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,
+4,4,4,6,15,15,15,15,15,15,15,15,15,6,4,4,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,
+4,4,4,6,15,15,15,15,15,15,15,15,15,6,4,4,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,
+4,4,4,6,15,15,15,15,15,15,15,15,15,6,4,4,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,
+4,4,4,6,6,6,6,6,21,6,6,6,6,6,4,4,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,
+4,4,4,6,15,15,15,15,15,15,15,15,15,6,4,4,6,6,6,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,
+4,4,4,6,15,15,15,15,15,15,15,15,15,6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+4,4,4,6,6,21,6,6,6,6,6,6,6,6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+]
+  },
+  {
+   "id": 2,
+   "name": "spawns",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 1,
+     "name": "entry-plaza",
+     "type": "",
+     "point": true,
+     "x": 80,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 2,
+     "name": "entry-escorial",
+     "type": "",
+     "point": true,
+     "x": 1008,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 3,
+     "name": "cirilo",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 4,
+     "name": "fiel_pala-1",
+     "type": "",
+     "point": true,
+     "x": 400,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 5,
+     "name": "fiel_pala-2",
+     "type": "",
+     "point": true,
+     "x": 560,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 6,
+     "name": "viuda-1",
+     "type": "",
+     "point": true,
+     "x": 752,
+     "y": 112,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 7,
+     "name": "viuda-2",
+     "type": "",
+     "point": true,
+     "x": 880,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 8,
+     "name": "viuda-3",
+     "type": "",
+     "point": true,
+     "x": 784,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 9,
+     "name": "lisandro",
+     "type": "",
+     "point": true,
+     "x": 240,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 10,
+     "name": "door-trastienda",
+     "type": "",
+     "point": true,
+     "x": 272,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 11,
+     "name": "door-patio_lisandro",
+     "type": "",
+     "point": true,
+     "x": 176,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 12,
+     "name": "chest-libro_cuentas",
+     "type": "",
+     "point": true,
+     "x": 368,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 13,
+     "name": "crate-1",
+     "type": "",
+     "point": true,
+     "x": 368,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 14,
+     "name": "crate-2",
+     "type": "",
+     "point": true,
+     "x": 624,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 15,
+     "name": "barrel-1",
+     "type": "",
+     "point": true,
+     "x": 752,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 16,
+     "name": "barrel_oil-1",
+     "type": "",
+     "point": true,
+     "x": 560,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 17,
+     "name": "crate-3",
+     "type": "",
+     "point": true,
+     "x": 656,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 18,
+     "name": "crate-4",
+     "type": "",
+     "point": true,
+     "x": 688,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "lights",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 19,
+     "name": "farol-1",
+     "type": "",
+     "point": true,
+     "x": 208,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "intensity",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.1
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "torch_wall"
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "farol-2",
+     "type": "",
+     "point": true,
+     "x": 656,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "intensity",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.1
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "torch_wall"
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "farol-3",
+     "type": "",
+     "point": true,
+     "x": 912,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "intensity",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.1
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "torch_wall"
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "name": "velas-capilla-1",
+     "type": "",
+     "point": true,
+     "x": 400,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.8
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffd090"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.2
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "velas-capilla-2",
+     "type": "",
+     "point": true,
+     "x": 560,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.8
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffd090"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.2
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "candil-viudas",
+     "type": "",
+     "point": true,
+     "x": 880,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.7
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.15
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "lampara-empenos",
+     "type": "",
+     "point": true,
+     "x": 336,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffd090"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.08
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "encounters",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": []
+  },
+  {
+   "id": 5,
+   "name": "surfaces",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 26,
+     "name": "el-lloro",
+     "type": "",
+     "x": 928,
+     "y": 416,
+     "width": 64,
+     "height": 352,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "water"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "traps",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 27,
+     "name": "dardo-trastienda",
+     "type": "",
+     "x": 320,
+     "y": 608,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "detect",
+       "type": "int",
+       "value": 14
+      },
+      {
+       "name": "save",
+       "type": "string",
+       "value": "con"
+      },
+      {
+       "name": "dc",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "damage",
+       "type": "string",
+       "value": "2d4"
+      },
+      {
+       "name": "type",
+       "type": "string",
+       "value": "poison"
+      },
+      {
+       "name": "condition",
+       "type": "string",
+       "value": "poisoned"
+      },
+      {
+       "name": "turns",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "disarmCheck",
+       "type": "string",
+       "value": "sleight_of_hand"
+      },
+      {
+       "name": "disarmDc",
+       "type": "int",
+       "value": 13
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "name": "exits",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 28,
+     "name": "a-plaza",
+     "type": "",
+     "x": 0,
+     "y": 288,
+     "width": 32,
+     "height": 128,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "plaza"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-calles"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "scenes",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 29,
+     "name": "sermon",
+     "type": "",
+     "x": 416,
+     "y": 160,
+     "width": 128,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "TODO:sermon_cirilo"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "cirilo"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "name": "terrain-logic",
+   "tilewidth": 32,
+   "tileheight": 32,
+   "tilecount": 22,
+   "columns": 22,
+   "image": "terrain-logic.png",
+   "imagewidth": 704,
+   "imageheight": 32,
+   "margin": 0,
+   "spacing": 0,
+   "tiles": [
+    {
+     "id": 0,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 1,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_closed"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_open"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
