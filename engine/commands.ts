@@ -3,7 +3,7 @@ import { type BaseCommand, type CommandHandler, type GameEvent, fail, requireCon
 import { type Vec2, inBounds, posKey } from './grid';
 import { type PathResult, findPath } from './pathfinding';
 import { surfaceAt } from './surfaces';
-import { applyEffects } from './effects';
+import { type Effect, applyEffects } from './effects';
 import { disarmTrap, trapsAfterStep, trapsOf } from './traps';
 import { travel } from './world';
 import { type EngineContent, chooseOption, dialogueOf, endDialogue, interact, startDialogue } from './dialogue';
@@ -182,7 +182,20 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
   return { ok: true, state: ended.state, events: [...events, ...ended.events] };
 };
 
-export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act, startDialogue, chooseOption, interact, endDialogue, disarmTrap, travel };
+/** The game itself changing the world (a level-up, a scripted event). System issuer only. */
+interface ScriptCommand extends BaseCommand {
+  type: 'script';
+  effects: Effect[];
+}
+
+const script: CommandHandler<ScriptCommand> = (state, cmd, { ruleset }) => {
+  if (cmd.issuer !== 'system') return fail('not_your_entity', 'Only the game runs scripts');
+  const rng = new RngCursor(state.rng);
+  const r = applyOutcome(ruleset, state, { effects: cmd.effects, events: [] }, rng);
+  return { ok: true, state: { ...r.state, rng: rng.state }, events: r.events };
+};
+
+export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move, startCombat, endTurn, act, startDialogue, chooseOption, interact, endDialogue, disarmTrap, travel, script };
 
 /** Validates a command against the state and returns the new state plus events. Pure: never mutates `state`. */
 export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCommand, content?: EngineContent): ReturnType<CommandHandler> {

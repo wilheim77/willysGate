@@ -343,6 +343,6 @@ export { areaTiles, DAMAGE_LABELS } from './actions';
 export { createProp, passivePerception, SURFACES, type PropSpec } from './environment';
 export { coverBetween } from './cover';
 export { FEATURES } from './sheet';
-export { DND5E_CREATION, POINT_COST, buildProtagonist, defaultCreation } from './creation';
+export { DND5E_CREATION, POINT_COST, buildProtagonist, defaultCreation, levelUpCharacter } from './creation';
 export type { AttackRolledEvent, DamageDealtEvent, FateEvent, HealedEvent, SaveRolledEvent } from './resolve';
 export type { Ability } from './abilities';
