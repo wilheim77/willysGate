@@ -24,7 +24,7 @@ import { setDnd5eRef } from './ref';
 import { profBonus } from './character';
 import { SPELLS } from './data';
 import { parseDice, rollDice, sum } from './dice';
-import { Resolver, canReact, dealDamage, die, heal, resolveAttack, rollSave, spellDc, standing } from './resolve';
+import { Resolver, canReact, chanceToSucceed, dealDamage, die, heal, resolveAttack, rollSave, spellDc, standing } from './resolve';
 import { d20Check, resolveRollMode } from '../common/d20';
 import { ABILITIES, ABILITY_LABELS, type Ability, SKILLS, abilityModifier, proficiencyBonus } from './abilities';
 
@@ -159,6 +159,20 @@ function resolveCheck(state: GameState, req: CheckRequest, rng: Parameters<Rules
   return result;
 }
 
+/** The odds of resolveCheck, without rolling (Guidance counts as its average). */
+function describeCheck(state: GameState, req: CheckRequest): { label: string; chance: number } {
+  const actor = state.entities[req.actorId]!;
+  const { label, ability, proficiencyTag } = parseCheck(req.check);
+  const situational = req.situational ?? [];
+  const isSave = req.check.startsWith('save:');
+  const advantage = situational.some((t) => ADVANTAGE_TAGS.has(t));
+  const disadvantage = situational.some((t) => DISADVANTAGE_TAGS.has(t)) || (!isSave && hasCondition(actor, 'poisoned'));
+  let bonus = abilityModifier(stat(actor, ability, 10));
+  if (proficiencyTag && hasTag(actor, proficiencyTag)) bonus += profBonus(actor) * (hasTag(actor, proficiencyTag.replace('prof:', 'expert:')) ? 2 : 1);
+  if (!isSave && hasCondition(actor, 'guided_check')) bonus += 2.5;
+  return { label, chance: chanceToSucceed(bonus, req.target, resolveRollMode(advantage, disadvantage)) };
+}
+
 function difficulty(state: GameState, entityId: string, source: string): number {
   const e = state.entities[entityId];
   if (!e) throw new Error(`dnd5e: unknown entity "${entityId}"`);
@@ -249,6 +263,7 @@ export const dnd5e: Ruleset = {
     return Math.max(0, speed - standUp - (hasCondition(e, 'slowed') ? 2 : 0));
   },
   resolveCheck,
+  describeCheck,
   difficulty,
   dialogueConditions: {
     class: (s, id, p) => tagValue(s.entities[id]!, 'class') === p.is,
@@ -326,5 +341,6 @@ export { areaTiles, DAMAGE_LABELS } from './actions';
 export { createProp, SURFACES, type PropSpec } from './environment';
 export { coverBetween } from './cover';
 export { FEATURES } from './sheet';
+export { DND5E_CREATION, POINT_COST, buildProtagonist, defaultCreation } from './creation';
 export type { AttackRolledEvent, DamageDealtEvent, FateEvent, HealedEvent, SaveRolledEvent } from './resolve';
 export type { Ability } from './abilities';

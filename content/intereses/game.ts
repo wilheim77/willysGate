@@ -1,5 +1,5 @@
 import { type Entity, type TiledMapJson, parseTiledMap, withLighting, withZones } from '../../engine';
-import { SURFACES, createCharacter, createMonster, createProp, dnd5e } from '../../rulesets/dnd5e';
+import { DND5E_CREATION, SURFACES, buildProtagonist, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import art0x72 from './assets/0x72.json';
@@ -7,6 +7,8 @@ import artLpc from './assets/lpc.json';
 import testMap from './maps/test.json';
 import meta from './meta.json';
 import texts from './texts/ui.json';
+import viejoMinero from './dialogues/viejo_minero.json';
+import type { DialogueTree } from '../../engine';
 
 const PLAYER = 'player:1';
 const AI = 'ai';
@@ -34,6 +36,17 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'hero',
+  creation: {
+    spec: DND5E_CREATION,
+    defaults: defaultCreation,
+    // The protagonist replaces the placeholder hero in place: same spot, look and level.
+    apply(_engine, state, choices) {
+      const hero = state.entities.hero!;
+      const built = buildProtagonist(choices, { id: hero.id, controllerId: hero.controllerId, factionId: hero.factionId, position: hero.position, spriteId: hero.spriteId, level: 3 });
+      return { ...state, entities: { ...state.entities, hero: built } };
+    },
+  },
+  dialogues: Object.fromEntries([viejoMinero].map((d) => [d.id, d as unknown as DialogueTree])),
   newGame(engine, seed) {
     const { map, spawns, lighting, zones } = parseTiledMap('test', testMap as TiledMapJson);
     const at = (name: string) => spawns[name] ?? { x: 1, y: 1 };
@@ -50,6 +63,10 @@ export const game: GameDefinition = {
       createMonster({ id: 'thug', name: 'Matón de los Sinpaga', monsterId: 'thug', controllerId: AI, factionId: 'sinpaga', position: at('thug'), spriteId: 'sinpaga_bruto' }),
       createMonster({ id: 'skeleton', name: 'Minero muerto', monsterId: 'skeleton', controllerId: AI, factionId: 'sinpaga', position: at('skeleton'), spriteId: 'esqueleto_minero' }),
     ];
+    // Phase 4 test: someone to talk to on the way in.
+    const npcs: Entity[] = [
+      createMonster({ id: 'viejo', name: 'Viejo minero', monsterId: 'bandit', controllerId: AI, factionId: 'neutral', position: { x: 5, y: 4 }, spriteId: 'minero_cuadrilla', extraTags: ['dialogue:viejo_minero'] }),
+    ];
     // Scenery from spawn names: "barrel_oil-1", "crate-2"...
     const props: Entity[] = Object.entries(spawns)
       .map(([name, position]) => ({ name, position, kind: name.split('-')[0] }))
@@ -64,7 +81,7 @@ export const game: GameDefinition = {
         surface: String(z.properties.surface),
         tiles: Array.from({ length: z.width * z.height }, (_, i) => ({ x: z.x + (i % z.width), y: z.y + Math.floor(i / z.width) })),
       }));
-    const state = engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...props] }), painted).state;
+    const state = engine.applyEffects(engine.newGame({ seed, map, entities: [...party, ...enemies, ...npcs, ...props] }), painted).state;
     // The collector carries a lantern: the only light that goes everywhere with the party.
     return withZones(
       withLighting(state, {

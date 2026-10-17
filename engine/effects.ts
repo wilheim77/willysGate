@@ -1,6 +1,7 @@
+import { itemCount, withItems } from './inventory';
 import type { GameEvent } from './command-types';
 import type { Ruleset } from './ruleset';
-import type { Vec2 } from './grid';
+import type { Tile, Vec2 } from './grid';
 import type { AppliedCondition, Entity, FlagValue, GameState } from './state';
 import { inBounds, posKey, tileAt } from './grid';
 import { makeSurface, surfaceable, surfacesOf, withSurfaces } from './surfaces';
@@ -25,7 +26,13 @@ export type Effect =
   | { type: 'spawnSurface'; tiles: Vec2[]; surface: string; turns?: number }
   /** An element touches tiles (fire, cold, lightning, water): surfaces react per the ruleset. */
   | { type: 'applyElement'; tiles: Vec2[]; element: string }
-  | { type: 'clearSurface'; tiles: Vec2[] };
+  | { type: 'clearSurface'; tiles: Vec2[] }
+  /** Items into (or, with a negative count, out of) an owner's inventory: an entity id or 'party'. */
+  | { type: 'giveItem'; owner: string; item: string; count: number }
+  /** Hand an entity to another controller and side (a companion joins, a guard turns hostile). */
+  | { type: 'setController'; entityId: string; controllerId: string; factionId?: string }
+  /** Change a map tile (a door opens, a bridge collapses). Omitted fields stay as they are. */
+  | { type: 'setTile'; position: Vec2; walkable?: boolean; terrain?: string; height?: number };
 
 export interface ResourceChangedEvent extends GameEvent {
   type: 'resourceChanged';
@@ -76,7 +83,31 @@ export interface SurfaceChangedEvent extends GameEvent {
   changes: { tile: Vec2; from: string | null; to: string | null }[];
 }
 
+export interface ItemsChangedEvent extends GameEvent {
+  type: 'itemsChanged';
+  owner: string;
+  item: string;
+  from: number;
+  to: number;
+}
+
+export interface ControllerChangedEvent extends GameEvent {
+  type: 'controllerChanged';
+  entityId: string;
+  controllerId: string;
+  factionId: string;
+}
+
+export interface TileChangedEvent extends GameEvent {
+  type: 'tileChanged';
+  position: Vec2;
+  tile: Tile;
+}
+
 export type EffectEvent =
+  | ItemsChangedEvent
+  | ControllerChangedEvent
+  | TileChangedEvent
   | ResourceChangedEvent
   | ConditionChangedEvent
   | FlagChangedEvent
@@ -220,6 +251,38 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         }
         next = withSurfaces(next, layer);
         if (changes.length) events.push({ type: 'surfaceChanged', changes });
+        break;
+      }
+      case 'giveItem': {
+        const before = itemCount(next, effect.owner, effect.item);
+        next = withItems(next, effect.owner, effect.item, effect.count);
+        const after = itemCount(next, effect.owner, effect.item);
+        if (after !== before) events.push({ type: 'itemsChanged', owner: effect.owner, item: effect.item, from: before, to: after } as ItemsChangedEvent);
+        break;
+      }
+      case 'setController': {
+        const e = next.entities[effect.entityId];
+        if (!e) break;
+        const updated = { ...e, controllerId: effect.controllerId, factionId: effect.factionId ?? e.factionId };
+        next = { ...next, entities: { ...next.entities, [e.id]: updated } };
+        events.push({ type: 'controllerChanged', entityId: e.id, controllerId: updated.controllerId, factionId: updated.factionId } as ControllerChangedEvent);
+        break;
+      }
+      case 'setTile': {
+        const { x, y } = effect.position;
+        const index = y * next.map.width + x;
+        const tile = next.map.tiles[index];
+        if (!tile) break;
+        const changed = {
+          ...tile,
+          ...(effect.walkable !== undefined ? { walkable: effect.walkable } : {}),
+          ...(effect.terrain !== undefined ? { terrain: effect.terrain } : {}),
+          ...(effect.height !== undefined ? { height: effect.height } : {}),
+        };
+        const tiles = [...next.map.tiles];
+        tiles[index] = changed;
+        next = { ...next, map: { ...next.map, tiles } };
+        events.push({ type: 'tileChanged', position: { x, y }, tile: changed });
         break;
       }
       case 'setFlag': {

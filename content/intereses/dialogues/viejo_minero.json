@@ -1,0 +1,55 @@
+{
+  "$comment": "Test conversation for Phase 4: conditions, visible checks, once-only questions, items, flags and a fight.",
+  "id": "viejo_minero",
+  "start": "saludo",
+  "nodes": {
+    "saludo": {
+      "speaker": "viejo",
+      "text": "¿Del banco? Se os huele desde la cuneta. A tinta y a cuerda.",
+      "choices": [
+        { "text": "¿Qué pasó en la mina?", "once": true, "next": "mina" },
+        { "text": "Busco al barón Mazo.", "once": true, "next": "baron" },
+        { "text": "Seguro que sabes algo más. Habla.", "when": { "notFlag": "viejo_hablo" }, "check": { "check": "persuasion", "dc": 13, "success": "secreto", "failure": "cerrado" } },
+        { "text": "Mi gente no olvida las minas, viejo. Ni a los que se quedan dentro.", "when": { "rule": "race", "params": { "is": "elf" } }, "lockedHint": "[Elfo]", "next": "elfo" },
+        { "text": "Toma, para pan.", "when": { "all": [{ "notFlag": "viejo_pagado" }] }, "effects": [{ "type": "setFlag", "flag": "viejo_pagado", "value": true }], "next": "pan" },
+        { "text": "Apártate.", "next": "adios" }
+      ]
+    },
+    "mina": {
+      "speaker": "viejo",
+      "text": "Se hundió la galería con cuarenta dentro. Dicen que fue el grisú. El grisú no cobra, señor. Los que cobran fueron otros.",
+      "next": "saludo"
+    },
+    "baron": {
+      "speaker": "viejo",
+      "text": "En la abadía, rezando para que Dios le preste. Dios tampoco tiene liquidez este año.",
+      "next": "saludo"
+    },
+    "secreto": {
+      "speaker": "viejo",
+      "text": "Por las noches suben carros por el camino viejo. Cargados. De una mina cerrada. Haced las cuentas, que para eso os pagan.",
+      "effects": [{ "type": "setFlag", "flag": "viejo_hablo", "value": true }, { "type": "setFlag", "flag": "pista_carros", "value": true }],
+      "next": "saludo"
+    },
+    "cerrado": {
+      "speaker": "viejo",
+      "text": "Sé que tengo hambre y que tú no eres pan. Hala.",
+      "effects": [{ "type": "setFlag", "flag": "viejo_hablo", "value": true }],
+      "next": "saludo"
+    },
+    "elfo": {
+      "speaker": "viejo",
+      "text": "Un orejas largas hablando de minas. Lo que me faltaba por oír. Los enanos tenían razón con vosotros: siempre llegáis cuando ya ha muerto alguien.",
+      "next": "saludo"
+    },
+    "pan": {
+      "speaker": "viejo",
+      "text": "Una moneda del banco. Qué ironía más cara. Toma esto a cambio, a mí ya no me abre nada.",
+      "effects": [{ "type": "giveItem", "owner": "party", "item": "llave_herrumbrosa", "count": 1 }],
+      "next": "saludo"
+    },
+    "adios": {
+      "text": "El viejo escupe a un lado del camino. No a ti. Casi."
+    }
+  }
+}

@@ -1,0 +1,56 @@
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe, expect, it } from 'vitest';
+import { type DialogueTree, type DialogueWhen, createEngine } from '../../engine';
+import { createCharacter, dnd5e } from '../../rulesets/dnd5e';
+import { asciiMap } from '../fixtures/helpers';
+
+/** Every dialogue of every 5e game must be walkable: links resolve, rules and checks exist. */
+const contentDir = join(import.meta.dirname, '..', '..', 'content');
+const games = ['intereses'];
+
+describe('dialogue content', () => {
+  const engine = createEngine(dnd5e, 'test');
+  const hero = createCharacter({ id: 'hero', name: 'hero', controllerId: 'player:1', factionId: 'party', position: { x: 0, y: 0 }, spriteId: 'hero', classId: 'fighter', raceId: 'human', level: 3, abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 } });
+  const state = engine.newGame({ seed: 1, map: asciiMap(['.']), entities: [hero] });
+  const rules = (c: DialogueWhen): string[] =>
+    'all' in c ? c.all.flatMap(rules) : 'any' in c ? c.any.flatMap(rules) : 'not' in c ? rules(c.not) : 'rule' in c ? [c.rule] : [];
+
+  for (const gameId of games) {
+    const dir = join(contentDir, gameId, 'dialogues');
+    for (const file of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
+      const tree = JSON.parse(readFileSync(join(dir, file), 'utf8')) as DialogueTree;
+      it(`${gameId}/${file} is consistent`, () => {
+        expect(`${tree.id}.json`).toBe(file);
+        expect(tree.nodes[tree.start]).toBeDefined();
+        for (const [id, node] of Object.entries(tree.nodes)) {
+          const links = [node.next, ...(node.choices ?? []).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
+          for (const l of links) expect(tree.nodes[l], `${id} -> ${l}`).toBeDefined();
+          // No softlocks: a node with choices always offers one with no condition and no roll.
+          if (node.choices?.length) {
+            expect(node.choices.some((c) => !c.when && !c.check), `${id}: needs an always-available choice without a check`).toBe(true);
+          }
+          for (const c of node.choices ?? []) {
+            for (const r of c.when ? rules(c.when) : []) expect(dnd5e.dialogueConditions[r], `${id}: rule ${r}`).toBeDefined();
+            if (c.check) expect(() => dnd5e.describeCheck!(state, { actorId: 'hero', check: c.check!.check, target: c.check!.dc }), `${id}: check ${c.check.check}`).not.toThrow();
+          }
+        }
+        // Every node can reach the end of the conversation.
+        const ends = new Set(Object.entries(tree.nodes).filter(([, n]) => (!n.choices?.length && !n.next) || n.choices?.some((c) => !c.next && !c.check)).map(([k]) => k));
+        let grew = true;
+        while (grew) {
+          grew = false;
+          for (const [k, n] of Object.entries(tree.nodes)) {
+            if (ends.has(k)) continue;
+            const outs = [n.next, ...(n.choices ?? []).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);
+            if (outs.some((o) => ends.has(o))) {
+              ends.add(k);
+              grew = true;
+            }
+          }
+        }
+        for (const k of Object.keys(tree.nodes)) expect(ends.has(k), `${k} can never reach an end`).toBe(true);
+      });
+    }
+  }
+});

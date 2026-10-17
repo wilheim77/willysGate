@@ -83,6 +83,18 @@
 - [x] Tests: 205.
 - [x] Prueba del usuario en el móvil: **Fase 3 aprobada** (2026-10-17). Cambio pedido: el barril de aceite explota con el primer punto de daño.
 
+### Fase 4 (en curso)
+- [x] Motor de diálogos (`engine/dialogue.ts`): árboles como datos, condiciones (marcas, objetos, reglas del ruleset, all/any/not), tiradas visibles a través del ruleset, opciones de una sola vez, efectos (marcas, objetos, reclutar con `setController`, abrir puertas con `setTile`, empezar combate). `interact` para hablar con o usar algo adyacente (`dialogue:<id>`).
+- [x] Inventario genérico (`engine/inventory.ts`, por dueño o `party`).
+- [x] 5e: `describeCheck` (nombre y probabilidad de una prueba antes de tirar).
+- [x] Cliente: ventana de diálogo con retrato, opciones «[Persuasión] CD 13 · 40 %», opciones bloqueadas con pista («[Elfo]») y el d20 en pantalla tras cada tirada. Tocar a alguien con quien se puede hablar te acerca y abre la conversación.
+- [x] Prueba de contenido: enlaces válidos, reglas y pruebas existentes, **sin bloqueos** (cada nodo con opciones tiene una sin condición ni tirada, y todo nodo puede llegar al final).
+- [x] PNJ de prueba: el viejo minero en el mapa de prueba.
+- [x] Creación de personaje con compra de puntos: pasos como datos (`engine/creation.ts`), 5e los rellena (nombre, raza, clase, 27 puntos de 8 a 15, «Recomendado» por clase, bonos de raza visibles), pantalla al empezar y tras «Nueva», con «Partida rápida».
+- [ ] Interactuables y trampas (cofres, palancas, puertas; trampas con Percepción y desactivar).
+- [ ] Escena «El camino»: Dorotea, reclutamiento de Garrán, mineros hambrientos evitables hablando.
+- [ ] Peticiones de Willy al motor: cambio de mapa (R10), causa en eventos (R11), semillas derivadas (R12), marcadores (R14).
+
 ## Planificado para más adelante
 
 - **Efectos y ambiente** (2026-10-17): ver `DESIGN.md` → «Efectos y ambiente».

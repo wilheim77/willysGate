@@ -1,5 +1,6 @@
 import { type BaseCommand, type CommandResult, ENGINE_COMMANDS, applyCommand } from './commands';
 import { performCheck } from './checks';
+import { EMPTY_CONTENT, type EngineContent } from './dialogue';
 import { type Effect, applyEffects } from './effects';
 import type { CheckRequest, Ruleset } from './ruleset';
 import { deserializeState, serializeState } from './save';
@@ -9,6 +10,8 @@ import { type GameState, type NewGameOptions, createGameState } from './state';
 export interface Engine {
   readonly ruleset: Ruleset;
   readonly gameId: string;
+  /** Content looked up by id while running commands (dialogue trees...). */
+  readonly content: EngineContent;
   newGame(options: Omit<NewGameOptions, 'gameId' | 'ruleset'>): GameState;
   apply(state: GameState, command: BaseCommand): CommandResult;
   check(state: GameState, request: CheckRequest): ReturnType<typeof performCheck>;
@@ -17,7 +20,7 @@ export interface Engine {
   deserialize(json: string): GameState;
 }
 
-export function createEngine(ruleset: Ruleset, gameId: string): Engine {
+export function createEngine(ruleset: Ruleset, gameId: string, content: EngineContent = EMPTY_CONTENT): Engine {
   for (const name of Object.keys(ruleset.commands)) {
     if (name in ENGINE_COMMANDS) throw new Error(`Ruleset ${ruleset.id} redefines engine command "${name}"`);
   }
@@ -25,7 +28,8 @@ export function createEngine(ruleset: Ruleset, gameId: string): Engine {
     ruleset,
     gameId,
     newGame: (options) => createGameState({ ...options, gameId, ruleset }),
-    apply: (state, command) => applyCommand(ruleset, state, command),
+    content,
+    apply: (state, command) => applyCommand(ruleset, state, command, content),
     check: (state, request) => performCheck(ruleset, state, request),
     applyEffects: (state, effects) => applyEffects(ruleset, state, effects),
     serialize: serializeState,

@@ -1,0 +1,29 @@
+import { describe, expect, it } from 'vitest';
+import { type CreationStep, pointsSpent } from '../../engine';
+import { DND5E_CREATION, buildProtagonist, defaultCreation } from '../../rulesets/dnd5e';
+
+const points = DND5E_CREATION.steps.find((s) => s.kind === 'points') as Extract<CreationStep, { kind: 'points' }>;
+const base = { id: 'hero', controllerId: 'player:1', factionId: 'party', position: { x: 0, y: 0 }, spriteId: 'cobrador', level: 3 };
+
+describe('5e character creation (point buy)', () => {
+  it('every class has a recommended spread that spends exactly 27 points', () => {
+    for (const cls of ['fighter', 'rogue', 'wizard', 'cleric']) {
+      expect(pointsSpent(points, points.recommended({ class: cls }))).toBe(27);
+    }
+  });
+
+  it('rejects scores outside 8–15 and overspending', () => {
+    expect(pointsSpent(points, { str: 16, dex: 8, con: 8, int: 8, wis: 8, cha: 8 })).toBeNull();
+    const greedy = { str: 15, dex: 15, con: 15, int: 8, wis: 8, cha: 8 };
+    expect(pointsSpent(points, greedy)).toBe(27);
+    expect(() => buildProtagonist({ ...defaultCreation(), abilities: { ...greedy, int: 10 } }, base)).toThrow();
+  });
+
+  it('builds the protagonist with racial bonuses and the chosen class', () => {
+    const elf = buildProtagonist({ name: '  Aelis  ', race: 'elf', class: 'rogue', abilities: points.recommended({ class: 'rogue' }) }, base);
+    expect(elf.name).toBe('Aelis');
+    expect(elf.tags).toEqual(expect.arrayContaining(['race:elf', 'class:rogue', 'feature:darkvision']));
+    expect(elf.stats.dex).toBe(17);
+    expect(points.bonuses!({ race: 'elf' })).toEqual({ dex: 2, int: 1 });
+  });
+});
