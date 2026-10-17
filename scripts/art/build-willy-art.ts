@@ -433,6 +433,13 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'atril-azul': { frames: [show.podium('#3a8fd9', false), show.podium('#3a8fd9', true)], fps: 0, loop: false, anchor: 'floor' },
   'atril-verde': { frames: [show.podium('#40c060', false), show.podium('#40c060', true)], fps: 0, loop: false, anchor: 'floor' },
   'panel-de-preguntas': { frames: [0, 1, 2, 3].map(show.questionBoard), fps: 0, loop: false, anchor: 'wall', light: '#b45cff' },
+  // Biome props (decor drawn by the client, not entities)
+  farolillo: { frames: [show.paperLantern(0), show.paperLantern(1)], fps: 2, loop: true, anchor: 'wall', light: '#ffb040' },
+  banderines: { frames: [show.bunting()], fps: 0, loop: false, anchor: 'wall' },
+  'escalera-piscina': { frames: [show.poolLadder()], fps: 0, loop: false, anchor: 'floor' },
+  'puerta-sauna': { frames: [0, 1].map(show.saunaDoor), fps: 3, loop: true, anchor: 'wall' },
+  cables: { frames: [show.cables()], fps: 0, loop: false, anchor: 'floor' },
+  claqueta: { frames: [show.clapperboard()], fps: 0, loop: false, anchor: 'floor' },
 };
 /** Surface overlays (manifest 'surfaces'), with the ids of Willy's ruleset (RULESET.md → Superficies). */
 const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> = {
@@ -454,6 +461,18 @@ const objects: Record<string, Record<string, Image[]>> = {
   'barril-explosivo': { idle: [env.barrelOil()], broken: [env.barrelOilBroken()] },
   carrito: { idle: [show.cart()] },
   'jefe-presentador-murcielagos': { idle: [0, 1, 2, 3].map(show.batSwarm), move: [0, 1, 2, 3].map(show.batSwarm) },
+  // Biome props as objects (they stand on a tile and can be pushed or broken)
+  'estanteria-hiper': { idle: [show.shelfUnit(false)], broken: [show.shelfUnit(true)] },
+  'caja-registradora': { idle: [show.checkout()] },
+  'cesta-ofertas': { idle: [show.bargainBin()] },
+  'altavoz-verbena': { idle: [show.speaker()] },
+  'caseta-feria': { idle: [show.fairStall()] },
+  tumbona: { idle: [show.lounger()] },
+  flotador: { idle: [show.swimRing()] },
+  sombrilla: { idle: [show.parasol()] },
+  'camara-estudio': { idle: [show.studioCamera(true), show.studioCamera(false)] },
+  'monitor-escenario': { idle: [show.floorMonitor()] },
+  'silla-director': { idle: [show.directorChair()] },
 };
 const ui: Record<string, Image> = {
   'carta-bronce': cardFrame('bronce'), 'carta-plata': cardFrame('plata'), 'carta-oro': cardFrame('oro'), 'carta-legendaria': cardFrame('legendaria'),
