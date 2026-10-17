@@ -137,8 +137,8 @@
      "name": "benita",
      "type": "",
      "point": true,
-     "x": 752,
-     "y": 112,
+     "x": 912,
+     "y": 528,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -149,8 +149,8 @@
      "name": "casilda",
      "type": "",
      "point": true,
-     "x": 880,
-     "y": 144,
+     "x": 1008,
+     "y": 592,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -724,6 +724,11 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-calles"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "audiencia_hecha"
       }
      ]
     }
@@ -753,7 +758,7 @@
       {
        "name": "dialogue",
        "type": "string",
-       "value": "TODO:sermon_cirilo"
+       "value": "sermon_cirilo"
       },
       {
        "name": "speaker",

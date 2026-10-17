@@ -10,7 +10,7 @@
  "tilewidth": 32,
  "tileheight": 32,
  "infinite": false,
- "nextlayerid": 8,
+ "nextlayerid": 9,
  "nextobjectid": 34,
  "properties": [
   {
@@ -437,26 +437,7 @@
    "visible": true,
    "x": 0,
    "y": 0,
-   "objects": [
-    {
-     "id": 23,
-     "name": "sinpaga",
-     "type": "",
-     "x": 256,
-     "y": 288,
-     "width": 672,
-     "height": 480,
-     "rotation": 0,
-     "visible": true,
-     "properties": [
-      {
-       "name": "participants",
-       "type": "string",
-       "value": "sinpaga_enmascarado-1,sinpaga_enmascarado-2,sinpaga_cuchillero-1,sinpaga_cuchillero-2,sinpaga_cuchillero-3,sinpaga_bruto-1"
-      }
-     ]
-    }
-   ]
+   "objects": []
   },
   {
    "id": 5,
@@ -469,7 +450,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 24,
+     "id": 23,
      "name": "aceite-carro",
      "type": "",
      "x": 384,
@@ -487,7 +468,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 24,
      "name": "balsa-escoria",
      "type": "",
      "x": 128,
@@ -505,7 +486,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 25,
      "name": "escombros-ladera-a",
      "type": "",
      "x": 288,
@@ -523,7 +504,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 26,
      "name": "escombros-ladera-b",
      "type": "",
      "x": 928,
@@ -553,7 +534,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 27,
      "name": "cuerda-aceite",
      "type": "",
      "x": 224,
@@ -591,7 +572,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 28,
      "name": "cepo-sinpaga",
      "type": "",
      "x": 704,
@@ -661,7 +642,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 30,
+     "id": 29,
      "name": "a-plaza",
      "type": "",
      "x": 96,
@@ -684,7 +665,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 30,
      "name": "a-calles",
      "type": "",
      "x": 0,
@@ -707,7 +688,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 31,
      "name": "pozo-del-ahorcado",
      "type": "",
      "x": 992,
@@ -726,11 +707,16 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-pozo"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_resuelto"
       }
      ]
     },
     {
-     "id": 33,
+     "id": 32,
      "name": "bocamina",
      "type": "",
      "x": 1024,
@@ -749,6 +735,61 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-bocamina"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "d1_resuelto"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "scenes",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 33,
+     "name": "sinpaga-jefe",
+     "type": "",
+     "x": 32,
+     "y": 32,
+     "width": 224,
+     "height": 768,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "sinpaga_jefe"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "sinpaga_enmascarado-1"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "gate",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "protects",
+       "type": "string",
+       "value": "pozo-del-ahorcado,bocamina"
       }
      ]
     }

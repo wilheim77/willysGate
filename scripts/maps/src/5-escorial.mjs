@@ -84,17 +84,18 @@ export default {
       props: { marker: 'trap_beartrap', detect: 12, save: 'dex', dc: 13, damage: '2d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 12 },
     },
   ],
-  encounters: [
-    {
-      name: 'sinpaga',
-      rect: [8, 9, 21, 15],
-      participants: ['sinpaga_enmascarado-1', 'sinpaga_enmascarado-2', 'sinpaga_cuchillero-1', 'sinpaga_cuchillero-2', 'sinpaga_cuchillero-3', 'sinpaga_bruto-1'],
-    },
-  ],
+  // The Sinpaga chief talks first (sinpaga_jefe); the fight, if any, is by faction. The band
+  // covers both ways in from the town (plaza and streets), wall to wall.
+  zones: {
+    scenes: [
+      { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },
+    ],
+  },
   exits: [
     { name: 'a-plaza', rect: [3, 0, 3, 1], to: 'plaza', spawn: 'entry-escorial' },
     { name: 'a-calles', rect: [0, 11, 1, 3], to: 'calles', spawn: 'entry-escorial' },
-    { name: 'pozo-del-ahorcado', rect: [31, 6, 1, 1], to: 'mina', spawn: 'entry-pozo' },
-    { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina' },
+    // The mine comes after the night of the torches (D1).
+    { name: 'pozo-del-ahorcado', rect: [31, 6, 1, 1], to: 'mina', spawn: 'entry-pozo', props: { requiresFlag: 'd1_resuelto' } },
+    { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina', props: { requiresFlag: 'd1_resuelto' } },
   ],
 };

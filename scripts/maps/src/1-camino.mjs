@@ -73,11 +73,13 @@ export default {
       props: { marker: 'trap_beartrap', detect: 10, save: 'dex', dc: 11, damage: '1d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 10 },
     },
   ],
-  exits: [{ name: 'a-hondonegra', rect: [31, 8, 1, 2], to: 'plaza', spawn: 'entry-camino' }],
+  exits: [{ name: 'a-hondonegra', rect: [31, 8, 1, 2], to: 'plaza', spawn: 'entry-camino', props: { requiresFlag: 'prologo_mineros_resuelto' } }],
   zones: {
     // Proposed layer (docs/ENGINE_REQUESTS_INTERESES.md, I1): entering opens the dialogue once.
     scenes: [
-      { name: 'mineros-cortan-el-paso', rect: [16, 7, 2, 5], props: { dialogue: 'camino_mineros', speaker: 'minero_cabecilla', once: true, fight: 'minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3' } },
+      // Both bands run wall to wall (gate: true): nobody walks past Garrán or the miners.
+      { name: 'garran-en-la-cuneta', rect: [6, 0, 1, 18], props: { dialogue: 'camino_garran', speaker: 'garran', once: true, gate: true, protects: 'a-hondonegra' } },
+      { name: 'mineros-cortan-el-paso', rect: [16, 0, 2, 18], props: { dialogue: 'camino_mineros', speaker: 'minero_cabecilla', once: true, gate: true, protects: 'a-hondonegra', fight: 'minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3' } },
     ],
   },
 };

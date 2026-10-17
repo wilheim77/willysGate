@@ -74,7 +74,8 @@ F minero_hambriento_1 (22,10)
 G minero_hambriento_2 (21,4)
 I minero_hambriento_3 (27,11)
 props: crate-1, crate-2, barrel_oil-1, crate-3, campfire-1
-scenes mineros-cortan-el-paso (16,7 2x5) {"dialogue":"camino_mineros","speaker":"minero_cabecilla","once":true,"fight":"minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3"}
+scenes garran-en-la-cuneta (6,0 1x18) {"dialogue":"camino_garran","speaker":"garran","once":true,"gate":true,"protects":"a-hondonegra"}
+scenes mineros-cortan-el-paso (16,0 2x18) {"dialogue":"camino_mineros","speaker":"minero_cabecilla","once":true,"gate":true,"protects":"a-hondonegra","fight":"minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3"}
 ```
 
 ### `plaza`
@@ -89,8 +90,8 @@ scenes mineros-cortan-el-paso (16,7 2x5) {"dialogue":"camino_mineros","speaker":
 ######################.*..####   ######################1111####
 #,,,,,,,####,,,,,,,,,,.P..####   #0000000####00000000001111####
 #,,,,,,,####,,,,,,,,,,,,,Q####   #0000000####00000000000000####
-#,,,,,,==TF====,,,,,,,,,,,####   #0000001222222100000000000####
-#,,,,,,=====G==,,,,,,,,,,,####   #0000001222222100000000000####
+#,,,,,,==TF==G=,,,,,,,,,,,####   #0000001222222100000000000####
+#,,,,,,========,,,,,,,,,,,####   #0000001222222100000000000####
 #,,,,,K*,,,,,,,o,,,,,,,,,,,,,E   #00000000000000000000000000000
 #.....,,I,,,,J*,,,,,,,,,,,,C,E   #11111000000000000000000000000
 #.xx..,,,,,,,,,,,,,,,,,,,,,,,E   #11111000000000000000000000000
@@ -114,7 +115,7 @@ B entry-abadia (23,2)
 C entry-calles (27,9)
 D entry-escorial (13,19)
 F anselmo (10,6)
-G cirilo (12,7)
+G cirilo (13,6)
 I fanatico_pala-1 (8,9)
 J fanatico_pala-2 (13,9)
 K fanatico_pala-3 (6,8)
@@ -125,7 +126,7 @@ O posadera (24,16)
 P guardia_abadia (23,4)
 Q guardia_baron-1 (25,5)
 props: gallows-1, crate-1, crate-2, barrel-1, barrel_oil-1, well-1, barrel-2, crate-3
-scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"fight":"fanatico_pala-1,fanatico_pala-2,fanatico_pala-3,cirilo"}
+scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"gate":true,"protects":"a-calles,a-escorial,a-abadia","fight":"fanatico_pala-1,fanatico_pala-2,fanatico_pala-3"}
 ```
 
 ### `abadia`
@@ -180,8 +181,8 @@ scenes audiencia (12,4 4x3) {"dialogue":"audiencia_abadia","speaker":"mazo","onc
 ##################################   ##################################
 ###########.*....*.###############   ###########22222222###############
 ###########...C....###=====*=#####   ###########22222222###0000000#####
-###########.D....F.###=G=====#####   ###########22222222###0000000#####
-###########........###=====I=#####   ###########22222222###0000000#####
+###########.D....F.###=======#####   ###########22222222###0000000#####
+###########........###=======#####   ###########22222222###0000000#####
 ##############..######=======#####   ##############22######0000000#####
 ##############..######==J====#####   ##############11######0000000#####
 ##############..######=======#####   ##############00######0000000#####
@@ -193,9 +194,9 @@ E..................x...u.........E   0000000000000000000000000000000000
 ,,,,,,,,,,,,,,,,===========,,ww,,,   0000000000000000111111111110000000
 ,,,#####/#####,,###########,,ww,,,   000#####0#####00###########0000000
 ,,,#=========#,,###########,,ww,,,   000#000000000#00###########0000000
-,,,#===K==*==#,,###########,,ww,,,   000#000000000#00###########0000000
+,,,#===K==*==#,,###########,Gww,,,   000#000000000#00###########0000000
 ,,,#=========#,,###########,,ww,,,   000#000000000#00###########0000000
-,,,#####d#####,,###########,,ww,,,   000###########00###########0000000
+,,,#####d#####,,###########,,wwI,,   000###########00###########0000000
 ,,,#======^==#,,###########,,ww,,,   000#000000000#00###########0000000
 ,,,#=======c=#,,,,,,,,,,,,,,,ww,,,   000#000000000#00000000000000000000
 ,,,##d########,,,o,,xx,,,,,,,ww,,,   000###########00000000000000000000
@@ -209,12 +210,12 @@ B entry-escorial (31,11)
 C cirilo (14,2)
 D fiel_pala-1 (12,3)
 F fiel_pala-2 (17,3)
-G benita (23,3)
-I casilda (27,4)
+G benita (28,16)
+I casilda (31,18)
 J viuda-3 (24,6)
 K lisandro (7,16)
 props: door-trastienda, door-patio_lisandro, chest-libro_cuentas, crate-1, crate-2, barrel-1, barrel_oil-1, crate-3, crate-4
-scenes sermon (13,5 4x3) {"dialogue":"TODO:sermon_cirilo","speaker":"cirilo","once":true}
+scenes sermon (13,5 4x3) {"dialogue":"sermon_cirilo","speaker":"cirilo","once":true}
 ```
 
 ### `escorial`
@@ -267,7 +268,7 @@ K sinpaga_cuchillero-3 (18,16)
 L sinpaga_bruto-1 (15,19)
 M callado-1 (31,9)
 props: barrel_oil-1, barrel_oil-2, oil_cart-1, crate-3, barrel-1, campfire-1, door-bocamina, well-1
-encounter sinpaga: sinpaga_enmascarado-1,sinpaga_enmascarado-2,sinpaga_cuchillero-1,sinpaga_cuchillero-2,sinpaga_cuchillero-3,sinpaga_bruto-1
+scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enmascarado-1","once":true,"gate":true,"protects":"pozo-del-ahorcado,bocamina"}
 ```
 
 ### `mina`

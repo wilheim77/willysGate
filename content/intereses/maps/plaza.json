@@ -135,8 +135,8 @@
      "name": "cirilo",
      "type": "",
      "point": true,
-     "x": 400,
-     "y": 240,
+     "x": 432,
+     "y": 208,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -626,6 +626,11 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-plaza"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "juicio_resuelto"
       }
      ]
     },
@@ -649,6 +654,11 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-plaza"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "audiencia_hecha"
       }
      ]
     },
@@ -714,9 +724,19 @@
        "value": true
       },
       {
+       "name": "gate",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "protects",
+       "type": "string",
+       "value": "a-calles,a-escorial,a-abadia"
+      },
+      {
        "name": "fight",
        "type": "string",
-       "value": "fanatico_pala-1,fanatico_pala-2,fanatico_pala-3,cirilo"
+       "value": "fanatico_pala-1,fanatico_pala-2,fanatico_pala-3"
       }
      ]
     }

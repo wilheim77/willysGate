@@ -59,7 +59,7 @@ export default {
     'entry-escorial': [13, 19],
     // The trial (scene 1).
     anselmo: [10, 6],
-    cirilo: [12, 7],
+    cirilo: [13, 6], // on the platform, away from the fanatics below
     'fanatico_pala-1': [8, 9],
     'fanatico_pala-2': [13, 9],
     'fanatico_pala-3': [6, 8],
@@ -90,8 +90,8 @@ export default {
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
   exits: [
     { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_concedida' } },
-    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza' },
-    { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza' },
+    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto' } },
+    { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_hecha' } },
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],
   zones: {
@@ -100,7 +100,7 @@ export default {
         name: 'juicio-anselmo',
         // Opens as soon as the party walks into the square from the road (west half).
         rect: [0, 8, 16, 11],
-        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, fight: 'fanatico_pala-1,fanatico_pala-2,fanatico_pala-3,cirilo' },
+        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, gate: true, protects: 'a-calles,a-escorial,a-abadia', fight: 'fanatico_pala-1,fanatico_pala-2,fanatico_pala-3' },
       },
     ],
   },

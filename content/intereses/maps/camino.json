@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 20,
+ "nextobjectid": 21,
  "properties": [
   {
    "name": "name",
@@ -434,6 +434,11 @@
        "name": "spawn",
        "type": "string",
        "value": "entry-camino"
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "prologo_mineros_resuelto"
       }
      ]
     }
@@ -451,12 +456,50 @@
    "objects": [
     {
      "id": 19,
+     "name": "garran-en-la-cuneta",
+     "type": "",
+     "x": 192,
+     "y": 0,
+     "width": 32,
+     "height": 576,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "dialogue",
+       "type": "string",
+       "value": "camino_garran"
+      },
+      {
+       "name": "speaker",
+       "type": "string",
+       "value": "garran"
+      },
+      {
+       "name": "once",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "gate",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "protects",
+       "type": "string",
+       "value": "a-hondonegra"
+      }
+     ]
+    },
+    {
+     "id": 20,
      "name": "mineros-cortan-el-paso",
      "type": "",
      "x": 512,
-     "y": 224,
+     "y": 0,
      "width": 64,
-     "height": 160,
+     "height": 576,
      "rotation": 0,
      "visible": true,
      "properties": [
@@ -474,6 +517,16 @@
        "name": "once",
        "type": "bool",
        "value": true
+      },
+      {
+       "name": "gate",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "protects",
+       "type": "string",
+       "value": "a-hondonegra"
       },
       {
        "name": "fight",
