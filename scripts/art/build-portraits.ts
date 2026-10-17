@@ -23,7 +23,12 @@ interface PortraitSpec {
   /** Per-sprite overrides: backdrop tone, integer scale, extra rows of headroom, horizontal nudge. */
   sprites: Record<string, { tone?: string; scale?: number; headroom?: number; dx?: number; label?: string }>;
   /** Hand-designed busts that replace the generated ones (bigger, with real faces). */
-  hand?: { size: number; busts: Record<string, { tone: string; shapes: Shape[]; also?: string[] }> };
+  hand?: {
+    size: number;
+    busts: Record<string, { tone: string; shapes: Shape[]; also?: string[] }>;
+    /** Alternatives to compare (not wired): sprite id -> named variants, previewed next to the chosen bust. */
+    variants?: Record<string, Record<string, { tone: string; shapes: Shape[] }>>;
+  };
 }
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
@@ -162,6 +167,30 @@ if (hand) {
     drawText(big, id, 12 + i * (H * 3 + 12), H * 3 + 14, [200, 196, 186], 2);
   });
   writePng(join(root, 'docs', 'art-previews', `${preset}-portraits-hand.png`), big);
+
+  // Variant sheets: docs/art-previews/<preset>-<id>-variants.png (chosen bust first), at 4x.
+  for (const [id, variants] of Object.entries(hand.variants ?? {})) {
+    const list: [string, Image][] = [];
+    const chosen = hand.busts[id];
+    if (chosen) list.push([`${id} (en uso)`, paintCell(chosen.tone, chosen.shapes, H)]);
+    for (const [name, v] of Object.entries(variants)) list.push([name, paintCell(v.tone, v.shapes, H)]);
+    const K = 4, cw = H * K + 16;
+    const sheetV = blank(list.length * cw + 16, H * K + H + 28);
+    for (let i = 0; i < sheetV.data.length; i += 4) [sheetV.data[i], sheetV.data[i + 1], sheetV.data[i + 2], sheetV.data[i + 3]] = [20, 18, 22, 255];
+    list.forEach(([name, cell], i) => {
+      blit(sheetV, scaleUp(cell, K), 16 + i * cw, 8);
+      blit(sheetV, cell, 16 + i * cw, H * K + 18);
+      drawText(sheetV, name, 16 + i * cw + H + 6, H * K + 34, [200, 196, 186], 2);
+    });
+    writePng(join(root, 'docs', 'art-previews', `${preset}-${id}-variants.png`), sheetV);
+  }
+}
+
+function paintCell(tone: string, shapes: Shape[], H: number): Image {
+  const cell = backdrop(spec.tones[tone]!, H);
+  blit(cell, paintBust(shapes, H), 0, 0);
+  frame(cell);
+  return cell;
 }
 manifest.portraits = entries;
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');

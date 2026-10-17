@@ -21,7 +21,7 @@ Todos son `kind: 'frames'`, miran a la derecha y tienen `idle` (4) y `move` (4);
 
 | Id | Base 0x72 | Tamaño | Qué es |
 |---|---|---|---|
-| `cobrador` | `doc` | 16×23 | Protagonista: cobrador encapuchado, capa gris pizarra, correa de latón, máscara de cuero y **farol encendido** en la mano de atrás |
+| `cobrador` | `doc` | 16×23 | Protagonista: cobrador encapuchado, capa gris pizarra, bufanda oscura subida hasta la nariz, correa de latón y **farol encendido** en la mano de atrás |
 | `dorotea` | `elf_f` | 16×28, hit | Dorotea Vane: pelo negro, lazo azul tinta, vestido granate y **su libro de cuentas** («Le apunto») |
 | `garran` | **dibujado a mano** (`hand-sprites.json`) | 16×28, idle 4, run 4, hit 1 | Garrán Tizón: semiorco grande de hombros anchos, moño, colmillos, chaleco de cuero y **pico de minero** en la mano de atrás |
 | `anselmo` | `dwarf_f` | 16×28, hit | Fray Anselmo: mediano con hábito pardo de capucha, cordón claro y **crucifijo de latón** |
@@ -52,6 +52,8 @@ Todos son `kind: 'frames'`, miran a la derecha y tienen `idle` (4) y `move` (4);
 **Lectura a primera vista:** cada miembro del grupo tiene un color y un detalle propio (pizarra y farol; verde oliva y pico; granate y libro; pardo y crucifijo). Los Sinpaga comparten el rojo sucio de la banda. Comparativa en [`art-previews/0x72-party-before-after.png`](art-previews/0x72-party-before-after.png).
 
 ## Retratos (`portraits` del manifiesto)
+
+**Variantes del Cobrador** para elegir: [`art-previews/0x72-cobrador-variants.png`](art-previews/0x72-cobrador-variants.png) (a: bufanda, en uso; b: cuello alto; c: media máscara bajada y farol). Se cambian en `hand.variants` de `portraits.json`.
 
 **Grupo (48×48, pintados):** `cobrador`, `garran`, `dorotea` y `anselmo` tienen bustos de 48×48 con cara propia (`hand` en `portraits.json`, pintados con formas y rampas de luz por `scripts/art/portrait-painter.ts`) en `assets/0x72/portraits-hand.png`. Vista previa: [`art-previews/0x72-portraits-hand.png`](art-previews/0x72-portraits-hand.png). **El resto (32×32)** se genera desde el sprite. El HUD debe usar escala entera según `w`/`h` de cada entrada: 48 a 1× en la barra del grupo y a 2× (96) en la ficha.
 

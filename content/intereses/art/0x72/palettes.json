@@ -17,13 +17,13 @@
   "variants": {
     "cobrador": {
       "base": "doc",
-      "note": "Protagonista: cobrador encapuchado, capa gris pizarra, correa de latón, máscara de cuero y farol encendido",
+      "note": "Protagonista: cobrador encapuchado, capa gris pizarra, bufanda oscura subida hasta la nariz, correa de latón y farol encendido",
       "map": {
         "#314152": "#4c5668",
         "#417089": "#b08a48",
         "#483b3a": "#2e3440",
-        "#aa8d7a": "#7a5e48",
-        "#d3bfa9": "#a8896a"
+        "#aa8d7a": "#3a3a44",
+        "#d3bfa9": "#55555f"
       },
       "rules": [
         {
