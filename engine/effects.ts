@@ -385,13 +385,19 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         if (next.entities[e.id]) throw new Error(`spawnEntity: "${e.id}" already exists`);
         const at = e.position;
         const taken = Object.values(next.entities).some((o) => o.position.x === at.x && o.position.y === at.y && ruleset.isStanding(o) && !o.tags.includes('object'));
-        if (!tileAt(next.map, at)?.walkable || taken) break;
+        if (!tileAt(next.map, at)?.walkable || taken) {
+          events.push({ type: 'entitySpawnFailed', entityId: e.id, position: { ...at } } as never);
+          break;
+        }
         next = { ...next, entities: { ...next.entities, [e.id]: e } };
         if (next.turn.mode === 'combat') {
           const order = [...next.turn.order];
           const after = effect.ownerId ? order.indexOf(effect.ownerId) : -1;
           order.splice(after >= 0 ? after + 1 : order.length, 0, e.id);
-          next = { ...next, turn: { ...next.turn, order } };
+          // It acts right after its owner: same initiative, a hair lower.
+          const owner = effect.ownerId ? next.turn.initiative[effect.ownerId] : undefined;
+          const initiative = { ...next.turn.initiative, [e.id]: owner !== undefined ? owner - 0.001 : 0 };
+          next = { ...next, turn: { ...next.turn, order, initiative } };
         }
         if (effect.rounds !== undefined) {
           const summons = { ...((next.systems.summons as unknown as Record<string, { ownerId?: string; roundsLeft: number }>) ?? {}) };

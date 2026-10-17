@@ -1,0 +1,21 @@
+{
+  "$comment": "Any ordinary door without its own script: closed, not locked. $partner is the door itself.",
+  "id": "door_default",
+  "start": "puerta",
+  "nodes": {
+    "puerta": {
+      "text": "Una puerta de madera gruesa. Cerrada, pero no con llave: aquí hasta los cerrojos cuestan dinero.",
+      "choices": [
+        { "id": "abrir", "text": "Abrirla.", "next": "abierta" },
+        { "id": "dejar", "text": "Dejarla como está." }
+      ]
+    },
+    "abierta": {
+      "text": "Las bisagras se quejan. La puerta cede.",
+      "effects": [
+        { "type": "setTile", "position": "$partner", "walkable": true, "terrain": "door_open", "height": 0 },
+        { "type": "setEntity", "entityId": "$partner", "removeTags": ["dialogue:door_default", "obstacle"] }
+      ]
+    }
+  }
+}

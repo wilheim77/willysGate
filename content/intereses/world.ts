@@ -55,6 +55,8 @@ interface CastEntry {
   noncombatant?: boolean;
   essential?: boolean;
   dialogue?: string | null;
+  /** A different conversation on a given map (Cirilo at the trial vs. in his chapel). */
+  dialogueByMap?: Record<string, string>;
 }
 interface Template {
   name: string;
@@ -81,8 +83,9 @@ export function companion(id: string, name: string, position: Vec2, controllerId
   return createCharacter({ id, name, controllerId, factionId, position, spriteId: id, classId: c.classId, raceId: c.raceId, level: 3, abilities: { ...c.abilities }, extraTags });
 }
 
-function castEntity(id: string, c: CastEntry, position: Vec2, dialogues: Record<string, DialogueTree>): Entity {
-  const tags = [...(c.dialogue && dialogues[c.dialogue] ? [`dialogue:${c.dialogue}`] : []), ...(c.noncombatant ? ['noncombatant'] : []), ...(c.essential ? ['essential'] : [])];
+function castEntity(id: string, c: CastEntry, position: Vec2, dialogues: Record<string, DialogueTree>, mapId: string): Entity {
+  const script = c.dialogueByMap?.[mapId] ?? c.dialogue;
+  const tags = [...(script && dialogues[script] ? [`dialogue:${script}`] : []), ...(c.noncombatant ? ['noncombatant'] : []), ...(c.essential ? ['essential'] : [])];
   if (COMPANIONS[id]) return companion(id, c.name, position, AI, c.faction, tags);
   return createMonster({ id, name: c.name, monsterId: c.monsterId === 'companion' ? 'commoner' : c.monsterId, controllerId: AI, factionId: c.faction, position, spriteId: knownSprites.has(c.spriteId) || !knownSprites.has(id) ? c.spriteId : id, extraTags: tags });
 }
@@ -123,7 +126,7 @@ export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>)
     if (name.startsWith('entry-') || name.startsWith('todo-') || PARTY_SPAWNS.has(name)) continue;
     const cast = CAST[name];
     if (cast) {
-      entities.push(castEntity(name, cast, position, dialogues));
+      entities.push(castEntity(name, cast, position, dialogues, mapId));
       continue;
     }
     const dash = name.lastIndexOf('-');
@@ -145,7 +148,9 @@ export function buildMap(mapId: string, dialogues: Record<string, DialogueTree>)
     const usable = name.split('-')[0]!;
     if (USABLE_KINDS.has(usable)) {
       const script = `${usable}_${name.slice(usable.length + 1).replace(/-/g, '_')}`;
-      const tags = dialogues[script] ? [`dialogue:${script}`] : [];
+      // Doors nobody wrote a script for still open (door_default).
+      const tree = dialogues[script] ? script : usable === 'door' && dialogues.door_default ? 'door_default' : null;
+      const tags = tree ? [`dialogue:${tree}`] : [];
       const sprite = usable === 'door' ? 'none' : usable === 'lever' ? 'lever' : 'chest';
       entities.push(createProp({ id: name, kind: usable as 'chest' | 'door' | 'lever', position, spriteId: sprite, extraTags: usable === 'lever' ? [...tags, 'pose:up'] : tags }));
       continue;
