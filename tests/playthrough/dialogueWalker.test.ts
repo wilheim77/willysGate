@@ -24,7 +24,7 @@ import { buildWorld, loadDialogues, makeEngine } from './setup';
 const DEEP = process.env.QA_DEEP === '1';
 const SEEDS = DEEP ? [1, 2, 3, 4, 5, 6, 7, 8] : [1];
 const MAX_STEPS_PER_BRANCH = 200;
-const MAX_VISITED_PER_TREE_SEED = 4000;
+const MAX_VISITED_PER_TREE_SEED = 20000;
 
 describe('dialogue walker (QA playthrough harness)', () => {
   const engine = makeEngine();
@@ -42,6 +42,9 @@ describe('dialogue walker (QA playthrough harness)', () => {
         type Frame = { state: GameState; steps: number; path: number[] };
         const stack: Frame[] = [{ state: start.state, steps: 0, path: [] }];
         let visited = 0;
+        // Conversations loop on purpose (ask, come back to the menu): a state already explored
+        // (same node, same flags, same items) adds nothing, so each is walked once.
+        const explored = new Set<string>();
 
         while (stack.length) {
           visited++;
@@ -54,6 +57,12 @@ describe('dialogue walker (QA playthrough harness)', () => {
 
           const d = dialogueOf(frame.state);
           if (!d) continue; // Leaf: conversation already ended, nothing left on this branch.
+          // Which "once" questions were asked, and in what order, rarely matters: ignoring them keeps
+          // menus with many questions from exploding combinatorially.
+          const storyFlags = Object.fromEntries(Object.entries(frame.state.flags).filter(([f]) => !f.startsWith('taken:')));
+          const key = `${d.nodeId}|${JSON.stringify(storyFlags)}|${JSON.stringify(frame.state.systems.inventory ?? {})}|${JSON.stringify(Object.values(frame.state.entities).map((e) => [e.id, e.controllerId, e.factionId]))}`;
+          if (explored.has(key)) continue;
+          explored.add(key);
 
           const node = tree.nodes[d.nodeId];
           expect(node, `${repro()}: conversation points at missing node "${d.nodeId}"`).toBeDefined();

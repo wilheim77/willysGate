@@ -1,0 +1,110 @@
+{
+  "$comment": "Talking to Garrán once he has joined.",
+  "id": "garran",
+  "start": "hola",
+  "nodes": {
+    "hola": {
+      "speaker": "garran",
+      "text": "¿Qué?",
+      "choices": [
+        {
+          "id": "mina",
+          "text": "¿Qué hacías en la mina?",
+          "once": true,
+          "next": "mina"
+        },
+        {
+          "id": "porque_fuiste",
+          "text": "¿Por qué te fuiste de Hondonegra?",
+          "once": true,
+          "next": "fuiste"
+        },
+        {
+          "id": "ivo",
+          "text": "Háblame de Ivo.",
+          "once": true,
+          "when": {
+            "flag": "garran_busca_ivo"
+          },
+          "next": "ivo"
+        },
+        {
+          "id": "mentira",
+          "text": "(Observarle mientras habla de su marcha.)",
+          "once": true,
+          "when": {
+            "flag": "garran_hablo_marcha"
+          },
+          "check": {
+            "check": "insight",
+            "dc": 14,
+            "success": "oculta",
+            "failure": "no_oculta"
+          }
+        },
+        {
+          "text": "Nada. Sigue andando."
+        }
+      ]
+    },
+    "mina": {
+      "speaker": "garran",
+      "text": "Cargas. Pólvora, mecha, barrenos. Alguien tiene que hacer agujeros para que otros se hagan ricos dentro.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_era_barrenero",
+          "value": true
+        }
+      ],
+      "next": "hola"
+    },
+    "fuiste": {
+      "speaker": "garran",
+      "text": "Me ofrecieron trabajo fuera. Pagaban.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_hablo_marcha",
+          "value": true
+        }
+      ],
+      "next": "fuiste_2"
+    },
+    "fuiste_2": {
+      "speaker": "hero",
+      "text": "¿Cuándo fue eso?",
+      "next": "fuiste_3"
+    },
+    "fuiste_3": {
+      "speaker": "garran",
+      "text": "Hace ocho meses. Una noche. No me acuerdo del día.",
+      "next": "hola"
+    },
+    "oculta": {
+      "text": "Se acuerda del día. Se acuerda de la hora. Lo dice mirando al suelo, como si en el suelo hubiera algo que pudiera oírle.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_oculta_algo",
+          "value": true
+        }
+      ],
+      "next": "hola"
+    },
+    "no_oculta": {
+      "text": "Garrán te devuelve la mirada sin pestañear. Es una cara difícil de leer: casi todo lo que pone en ella es cansancio.",
+      "next": "hola"
+    },
+    "ivo": {
+      "speaker": "garran",
+      "text": "Más listo que yo. Más guapo, que no cuesta. Leía. Mi madre decía que era la mitad buena. Nunca dijo de qué era yo la mitad.",
+      "next": "hola"
+    },
+    "ivo_cuarenta": {
+      "speaker": "garran",
+      "text": "No lo sientas. No lo sabemos todavía. Hasta que no lo vea, Ivo está en la mina trabajando. Así de sencillo.",
+      "next": "hola"
+    }
+  }
+}

@@ -1,0 +1,261 @@
+{
+  "$comment": "Prologue. Garrán sits in the ditch (entity garran, noncombatant, controller ai). Recruiting needs no roll.",
+  "id": "camino_garran",
+  "start": "cuneta",
+  "nodes": {
+    "cuneta": {
+      "text": "En la cuneta hay un semiorco sentado sobre una piedra. Es grande, de los que se ven antes de verse. Va descalzo y tiene una bota en cada mano. Ninguna de las dos parece suya. Tampoco parecen ser de la misma persona.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "garran",
+      "text": "¿Qué?",
+      "choices": [
+        {
+          "id": "botas",
+          "text": "Bonitas botas.",
+          "once": true,
+          "next": "botas"
+        },
+        {
+          "id": "quien",
+          "text": "¿Quién eres?",
+          "once": true,
+          "next": "quien"
+        },
+        {
+          "id": "adonde",
+          "text": "¿Adónde vas?",
+          "once": true,
+          "next": "adonde"
+        },
+        {
+          "id": "semiorco",
+          "text": "[Semiorco] Vaya. Ya somos dos.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "half_orc"
+            }
+          },
+          "next": "semiorco"
+        },
+        {
+          "id": "elfo",
+          "text": "[Elfo] ¿Hay sitio en esa piedra?",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "next": "elfo"
+        },
+        {
+          "id": "enano",
+          "text": "[Enano] Tienes manos de minero.",
+          "once": true,
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "dwarf"
+            }
+          },
+          "next": "enano"
+        },
+        {
+          "text": "Vamos a Hondonegra. Camina con nosotros.",
+          "next": "unete_gratis"
+        },
+        {
+          "text": "Busco a alguien que sepa pegar. Hay paga.",
+          "next": "unete_paga"
+        },
+        {
+          "text": "Ponte las botas y apártate del camino.",
+          "next": "adios"
+        }
+      ]
+    },
+    "botas": {
+      "speaker": "garran",
+      "text": "No son mías.",
+      "next": "botas_2"
+    },
+    "botas_2": {
+      "speaker": "hero",
+      "text": "Eso ya lo veo.",
+      "next": "botas_3"
+    },
+    "botas_3": {
+      "speaker": "garran",
+      "text": "La izquierda era de un muerto. La derecha, de uno que estaba dormido. Ya vendrá a reclamarla. O no. Depende de lo que tarde en despertarse.",
+      "next": "botas_4"
+    },
+    "botas_4": {
+      "speaker": "dorotea",
+      "text": "Un semiorco descalzo con botas ajenas. Le apunto.",
+      "next": "hub"
+    },
+    "quien": {
+      "speaker": "garran",
+      "text": "Garrán. Tizón, de apellido. Fui minero, luego fui soldado. Ahora soy esto.",
+      "next": "quien_2"
+    },
+    "quien_2": {
+      "speaker": "hero",
+      "text": "¿Y qué es esto?",
+      "next": "quien_3"
+    },
+    "quien_3": {
+      "speaker": "garran",
+      "text": "Alguien sentado en una piedra. Es un oficio tranquilo. Lo pagan mal.",
+      "next": "hub"
+    },
+    "adonde": {
+      "speaker": "garran",
+      "text": "A Hondonegra. Nací allí. Tengo un hermano. Medio hermano. Ivo. «La mitad buena», decía mi madre.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "garran_busca_ivo",
+          "value": true
+        }
+      ],
+      "next": "adonde_2"
+    },
+    "adonde_2": {
+      "speaker": "garran",
+      "text": "Hace un año que no sé de él. Ocho meses que no sabe nadie de nadie en ese valle. Y yo voy despacio.",
+      "next": "adonde_3"
+    },
+    "adonde_3": {
+      "speaker": "hero",
+      "text": "¿Por qué despacio?",
+      "next": "adonde_4"
+    },
+    "adonde_4": {
+      "speaker": "garran",
+      "text": "Porque cuando llegue tendré que preguntar.",
+      "next": "hub"
+    },
+    "semiorco": {
+      "speaker": "garran",
+      "text": "Dos. En el pueblo nos cobrarán la cerveza al doble y las palizas nos las regalarán. Hondonegra es así de generosa.",
+      "next": "hub"
+    },
+    "elfo": {
+      "speaker": "garran",
+      "text": "No. Un elfo camino de un pueblo de enanos. Vas a hacer muchos amigos.",
+      "next": "elfo_2"
+    },
+    "elfo_2": {
+      "speaker": "hero",
+      "text": "Tú tampoco pareces tener muchos.",
+      "next": "elfo_3"
+    },
+    "elfo_3": {
+      "speaker": "garran",
+      "text": "Los tuve. Por eso me fui.",
+      "next": "hub"
+    },
+    "enano": {
+      "speaker": "garran",
+      "text": "Tenía. Ahora tengo manos de soldado, que son iguales pero cobran menos. A ti en Hondonegra te abrirán la mina. A mí me abrieron la puerta. Para que saliera.",
+      "next": "hub"
+    },
+    "unete_gratis": {
+      "speaker": "garran",
+      "text": "Bien. Voy al mismo sitio. Pero no me llames amigo. Los amigos piden cosas.",
+      "next": "recluta"
+    },
+    "unete_paga": {
+      "speaker": "garran",
+      "text": "¿Cuánto?",
+      "next": "unete_paga_2"
+    },
+    "unete_paga_2": {
+      "speaker": "dorotea",
+      "text": "La Casa no ha presupuestado escolta.",
+      "next": "unete_paga_3"
+    },
+    "unete_paga_3": {
+      "speaker": "garran",
+      "text": "Entonces sí que la necesitáis.",
+      "choices": [
+        {
+          "text": "Te pago de mi comisión. Cuando la cobre.",
+          "next": "paga_comision"
+        },
+        {
+          "text": "[10 coronas] Diez por adelantado.",
+          "when": {
+            "item": "coronas",
+            "atLeast": 10
+          },
+          "lockedHint": "[Faltan coronas]",
+          "effects": [
+            {
+              "type": "giveItem",
+              "owner": "party",
+              "item": "coronas",
+              "count": -10
+            },
+            {
+              "type": "setFlag",
+              "flag": "garran_pagado",
+              "value": true
+            }
+          ],
+          "next": "paga_ya"
+        },
+        {
+          "text": "Pensándolo mejor, nada.",
+          "next": "hub"
+        }
+      ]
+    },
+    "paga_comision": {
+      "speaker": "garran",
+      "text": "Una promesa de cobrador. La guardaré con las botas: tampoco son mías.",
+      "next": "recluta"
+    },
+    "paga_ya": {
+      "speaker": "dorotea",
+      "text": "Diez coronas a un desconocido descalzo. Le apunto. A usted, no a él.",
+      "next": "recluta"
+    },
+    "recluta": {
+      "text": "Garrán se pone las botas. La izquierda le aprieta. No dice nada: es de los que no dicen nada cuando algo aprieta.",
+      "effects": [
+        {
+          "type": "setController",
+          "entityId": "garran",
+          "controllerId": "player:1",
+          "factionId": "party"
+        },
+        {
+          "type": "setEntity",
+          "entityId": "garran",
+          "removeTags": [
+            "dialogue:camino_garran",
+            "noncombatant"
+          ],
+          "addTags": [
+            "dialogue:garran"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flag": "garran_reclutado",
+          "value": true
+        }
+      ]
+    },
+    "adios": {
+      "text": "Garrán se encoge de hombros. Sigue mirando las botas, como si fueran a decirle algo que todavía no está preparado para oír."
+    }
+  }
+}

@@ -1,0 +1,1040 @@
+{
+ "compressionlevel": -1,
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "width": 36,
+ "height": 26,
+ "tilewidth": 32,
+ "tileheight": 32,
+ "infinite": false,
+ "nextlayerid": 8,
+ "nextobjectid": 30,
+ "properties": [
+  {
+   "name": "name",
+   "type": "string",
+   "value": "El Escorial"
+  },
+  {
+   "name": "ambientLight",
+   "type": "float",
+   "value": 0.6
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "ground",
+   "type": "tilelayer",
+   "width": 36,
+   "height": 26,
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+13,13,13,4,4,4,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,
+13,5,5,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,13,
+13,5,5,4,4,4,5,5,5,8,8,8,8,8,8,8,8,8,8,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,13,
+13,5,5,4,4,4,5,5,5,8,9,9,9,9,9,9,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,13,
+13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,6,6,6,5,5,13,
+13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,6,1,6,5,5,13,
+13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
+13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
+13,5,5,4,4,4,5,5,5,8,9,9,13,13,13,13,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
+13,5,5,4,4,4,5,5,5,8,8,8,8,8,8,8,8,8,8,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
+13,5,5,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,5,13,
+4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,13,
+4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,13,
+4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,13,
+13,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,13,
+13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,7,7,7,7,4,4,5,8,8,8,8,8,8,8,8,5,4,5,5,13,
+13,5,5,5,5,5,5,5,5,4,6,6,6,4,4,4,7,7,19,7,4,4,5,8,9,9,9,9,9,9,8,5,4,5,5,13,
+13,5,5,5,5,5,5,5,5,4,6,6,6,4,4,4,7,7,7,7,4,4,5,8,9,13,13,13,13,9,8,5,4,5,5,13,
+13,5,5,5,5,5,5,5,5,4,6,6,6,4,4,4,4,4,4,4,4,4,5,8,9,13,13,13,13,9,6,6,21,6,6,13,
+13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,9,13,13,13,13,9,6,6,1,6,6,13,
+13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,9,13,13,13,13,9,6,6,1,6,6,13,
+13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,9,9,9,9,9,9,6,6,1,6,6,13,
+13,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,5,8,8,8,8,8,8,8,6,6,6,6,6,13,
+13,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,13,
+13,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,13,
+13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13
+]
+  },
+  {
+   "id": 2,
+   "name": "spawns",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 1,
+     "name": "entry-plaza",
+     "type": "",
+     "point": true,
+     "x": 144,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 2,
+     "name": "entry-calles",
+     "type": "",
+     "point": true,
+     "x": 80,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 3,
+     "name": "entry-pozo",
+     "type": "",
+     "point": true,
+     "x": 1008,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 4,
+     "name": "entry-bocamina",
+     "type": "",
+     "point": true,
+     "x": 1040,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 5,
+     "name": "sinpaga_enmascarado-1",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 6,
+     "name": "sinpaga_enmascarado-2",
+     "type": "",
+     "point": true,
+     "x": 848,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 7,
+     "name": "sinpaga_cuchillero-1",
+     "type": "",
+     "point": true,
+     "x": 400,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 8,
+     "name": "sinpaga_cuchillero-2",
+     "type": "",
+     "point": true,
+     "x": 656,
+     "y": 656,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 9,
+     "name": "sinpaga_cuchillero-3",
+     "type": "",
+     "point": true,
+     "x": 592,
+     "y": 528,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 10,
+     "name": "sinpaga_bruto-1",
+     "type": "",
+     "point": true,
+     "x": 496,
+     "y": 624,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 11,
+     "name": "callado-1",
+     "type": "",
+     "point": true,
+     "x": 1008,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 12,
+     "name": "barrel_oil-1",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 13,
+     "name": "barrel_oil-2",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 14,
+     "name": "crate-1",
+     "type": "",
+     "point": true,
+     "x": 400,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 15,
+     "name": "crate-3",
+     "type": "",
+     "point": true,
+     "x": 688,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 16,
+     "name": "barrel-1",
+     "type": "",
+     "point": true,
+     "x": 304,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 17,
+     "name": "door-bocamina",
+     "type": "",
+     "point": true,
+     "x": 1040,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "lights",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 18,
+     "name": "hoguera-sinpaga",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 5
+      },
+      {
+       "name": "intensity",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ff9a4a"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.2
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "brazier"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "farol-pozo",
+     "type": "",
+     "point": true,
+     "x": 976,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.15
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "torch_wall"
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "name": "antorcha-bocamina",
+     "type": "",
+     "point": true,
+     "x": 1008,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "intensity",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.15
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "torch_wall"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "encounters",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 21,
+     "name": "sinpaga",
+     "type": "",
+     "x": 256,
+     "y": 288,
+     "width": 672,
+     "height": 480,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "participants",
+       "type": "string",
+       "value": "sinpaga_enmascarado-1,sinpaga_enmascarado-2,sinpaga_cuchillero-1,sinpaga_cuchillero-2,sinpaga_cuchillero-3,sinpaga_bruto-1"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "surfaces",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 22,
+     "name": "aceite-carro",
+     "type": "",
+     "x": 384,
+     "y": 288,
+     "width": 128,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "oil"
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "balsa-escoria",
+     "type": "",
+     "x": 128,
+     "y": 576,
+     "width": 96,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "water"
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "escombros-ladera-a",
+     "type": "",
+     "x": 288,
+     "y": 64,
+     "width": 64,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "rubble"
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "escombros-ladera-b",
+     "type": "",
+     "x": 928,
+     "y": 480,
+     "width": 64,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "rubble"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "traps",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 26,
+     "name": "cuerda-aceite",
+     "type": "",
+     "x": 224,
+     "y": 352,
+     "width": 32,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "detect",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "oil"
+      },
+      {
+       "name": "disarmCheck",
+       "type": "string",
+       "value": "sleight_of_hand"
+      },
+      {
+       "name": "disarmDc",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "cepo-sinpaga",
+     "type": "",
+     "x": 704,
+     "y": 416,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "detect",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "save",
+       "type": "string",
+       "value": "dex"
+      },
+      {
+       "name": "dc",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "damage",
+       "type": "string",
+       "value": "2d6"
+      },
+      {
+       "name": "type",
+       "type": "string",
+       "value": "piercing"
+      },
+      {
+       "name": "condition",
+       "type": "string",
+       "value": "restrained"
+      },
+      {
+       "name": "disarmCheck",
+       "type": "string",
+       "value": "sleight_of_hand"
+      },
+      {
+       "name": "disarmDc",
+       "type": "int",
+       "value": 12
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "name": "exits",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 28,
+     "name": "a-plaza",
+     "type": "",
+     "x": 96,
+     "y": 0,
+     "width": 96,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "plaza"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-escorial"
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "name": "a-calles",
+     "type": "",
+     "x": 0,
+     "y": 352,
+     "width": 32,
+     "height": 96,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "calles"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-escorial"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "name": "terrain-logic",
+   "tilewidth": 32,
+   "tileheight": 32,
+   "tilecount": 22,
+   "columns": 22,
+   "image": "terrain-logic.png",
+   "imagewidth": 704,
+   "imageheight": 32,
+   "margin": 0,
+   "spacing": 0,
+   "tiles": [
+    {
+     "id": 0,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 1,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_closed"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_open"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
