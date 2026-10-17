@@ -1,0 +1,426 @@
+{
+  "$comment": "D1. Opened by a script or scene zone in the plaza once acceso_contrabando is set (speaker nella). Joining or defending sets d1_cuadrilla / d1_abadia and travels to the abbey, where the map's conditional encounters start the fight (guards or the Cuadrilla). Mediating and doing nothing resolve here. Every route sets d1_resuelto without a roll.",
+  "id": "noche_antorchas",
+  "start": "llamada",
+  "nodes": {
+    "llamada": {
+      "text": "Anochece en Hondonegra. En la plaza alguien ha encendido una antorcha, y luego otra, y luego treinta. Los mineros sin mina tienen picos, palas, horcas y algo que no tenían esta mañana: una fecha.",
+      "next": "nella_1"
+    },
+    "nella_1": {
+      "speaker": "nella",
+      "text": "Esta noche subimos a la abadía. Vamos a sacar al barón de su sala y a colgarlo de la Torre del Cepo, que es para lo que se construyó. Luego la mina será del pueblo.",
+      "next": "nella_2"
+    },
+    "nella_2": {
+      "speaker": "nella",
+      "text": "Tú has bajado al Escorial y has visto el Pozo. Sabes lo mismo que nosotros, y algo más. Así que elige, cobrador: con nosotros, contra nosotros o fuera de nuestro camino.",
+      "next": [
+        {
+          "when": {
+            "inParty": "dorotea"
+          },
+          "next": "dorotea"
+        },
+        {
+          "next": "hub"
+        }
+      ]
+    },
+    "dorotea": {
+      "speaker": "dorotea",
+      "text": "Le recuerdo que la Casa necesita al barón vivo para firmar. O muerto y sin heredero. No necesita nada intermedio.",
+      "next": "hub"
+    },
+    "hub": {
+      "speaker": "nella",
+      "text": "¿Y bien?",
+      "choices": [
+        {
+          "id": "pregunta_sello",
+          "text": "¿Y qué pasa con la deuda si el barón muere?",
+          "once": true,
+          "next": "sello"
+        },
+        {
+          "id": "pregunta_brea",
+          "text": "El culpable es Brea, no el barón.",
+          "once": true,
+          "next": "brea"
+        },
+        {
+          "text": "Contad conmigo. Subimos con vosotros.",
+          "next": "unirse"
+        },
+        {
+          "text": "No voy a dejar que asaltéis la abadía.",
+          "next": "defender"
+        },
+        {
+          "text": "Esperad. Dejadme hablar con los dos lados antes de que corra la sangre.",
+          "next": "mediar"
+        },
+        {
+          "text": "Haced lo que tengáis que hacer. Yo me quedo en la posada.",
+          "next": "nada"
+        },
+        {
+          "text": "Dame un momento para pensarlo."
+        }
+      ]
+    },
+    "sello": {
+      "speaker": "nella",
+      "text": "Que la cobre al diablo. Los muertos no pagan, cobrador. Lo sabemos aquí mejor que en ningún sitio: llevamos ocho meses cobrando a los nuestros en lágrimas.",
+      "next": "hub"
+    },
+    "brea": {
+      "speaker": "nella",
+      "text": "Brea bajó a los nuestros. El barón firmó que se quedaran dentro. Uno empujó y el otro cerró la puerta. A Brea no lo encontramos. Al barón sí.",
+      "next": "hub"
+    },
+    "unirse": {
+      "speaker": "nella",
+      "text": "Bien. Odda, dale una antorcha. Y que no se queme, que el banco luego lo cobra.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_cuadrilla",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "rule": "race",
+            "params": {
+              "is": "elf"
+            }
+          },
+          "next": "elfo"
+        },
+        {
+          "next": "unirse_2"
+        }
+      ]
+    },
+    "elfo": {
+      "speaker": "odda",
+      "text": "Un momento. ¿El elfo con nosotros? Los Hulla no subimos esa cuesta con un orejas largas a la espalda.",
+      "choices": [
+        {
+          "id": "convencer",
+          "text": "Esta noche el bosque no le importa a nadie. Esta noche sólo importan cuarenta hombres.",
+          "once": true,
+          "check": {
+            "check": "persuasion",
+            "dc": 15,
+            "success": "elfo_ok",
+            "failure": "elfo_mal",
+            "situational": [
+              "disadvantage"
+            ]
+          }
+        },
+        {
+          "id": "garran",
+          "text": "[Garrán] (Mirar a Garrán.)",
+          "once": true,
+          "when": {
+            "inParty": "garran"
+          },
+          "next": "elfo_garran"
+        },
+        {
+          "text": "Pues subid delante. Así no tendréis que mirarme.",
+          "next": "elfo_mal"
+        }
+      ]
+    },
+    "elfo_ok": {
+      "speaker": "odda",
+      "text": "…Cuarenta hombres. Está bien. Por los cuarenta subo hasta con un elfo. Pero que no se ponga a mi espalda.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hulla_luchan",
+          "value": true
+        }
+      ],
+      "next": "unirse_2"
+    },
+    "elfo_mal": {
+      "speaker": "odda",
+      "text": "Los Hulla se quedan en la plaza. Que el elfo se pegue con la guardia; nosotros miramos. Llevamos trescientos años mirando, sabemos hacerlo.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hulla_no_luchan",
+          "value": true
+        }
+      ],
+      "next": "unirse_2"
+    },
+    "elfo_garran": {
+      "speaker": "garran",
+      "text": "Odda. Ivo está ahí abajo. Bartolo también. Si queréis colgar a alguien, subid. Si queréis discutir de bosques, quedaos.",
+      "next": "elfo_garran_2"
+    },
+    "elfo_garran_2": {
+      "speaker": "odda",
+      "text": "…Hijo de puta. Subimos. Pero el elfo no se pone a mi espalda.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "hulla_luchan",
+          "value": true
+        }
+      ],
+      "next": "unirse_2"
+    },
+    "unirse_2": {
+      "text": "La Cuadrilla sube la cuesta de la abadía con las antorchas en alto. Desde las almenas, alguien grita algo sobre la ley. Nadie le hace caso. Esta noche, la ley va cuesta arriba.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "abadia_hostil",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "ruta_bocamina",
+          "value": true
+        },
+        {
+          "type": "travel",
+          "mapId": "abadia",
+          "spawn": "entry-plaza"
+        }
+      ]
+    },
+    "defender": {
+      "speaker": "nella",
+      "text": "Entonces ponte con ellos. Así sabremos a quién colgar después.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_abadia",
+          "value": true
+        }
+      ],
+      "next": "defender_2"
+    },
+    "defender_2": {
+      "text": "Subes a la abadía por el camino de atrás, antes que las antorchas. Hilda Cardo te abre el portillo sin preguntar. Lleva la ballesta cargada y la cara de alguien que ya ha echado la cuenta de cuántos van a morir.",
+      "next": "defender_3"
+    },
+    "defender_3": {
+      "speaker": "hilda",
+      "text": "El banco defendiendo a su deudor. Qué conmovedor. A las almenas, cobrador. Y no apunte a las mujeres, que el pueblo no lo perdona; apunte a los que llevan pico.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pueblo_hostil",
+          "value": true
+        },
+        {
+          "type": "travel",
+          "mapId": "abadia",
+          "spawn": "entry-plaza"
+        }
+      ]
+    },
+    "mediar": {
+      "text": "Te plantas entre las antorchas y el portón de la abadía. Arriba, en la muralla, Hilda Cardo apunta con una ballesta. Abajo, treinta mineros con fuego. En medio, tú y tu voz.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_mediar",
+          "value": true
+        }
+      ],
+      "next": "mediar_hub"
+    },
+    "mediar_hub": {
+      "speaker": "nella",
+      "text": "Habla, cobrador. Tienes lo que tarde en apagarse esta antorcha.",
+      "choices": [
+        {
+          "text": "[Libro de Lisandro] (Leer en voz alta las cuentas de Brea y del banco.)",
+          "when": {
+            "item": "libro_cuentas_lisandro",
+            "atLeast": 1
+          },
+          "check": {
+            "check": "persuasion",
+            "dc": 12,
+            "success": "tregua",
+            "failure": "mediacion_fallida"
+          }
+        },
+        {
+          "text": "El que os robó a los cuarenta no está en esa abadía. Está bajo vuestros pies, sacando plata por el Pozo.",
+          "check": {
+            "check": "persuasion",
+            "dc": 16,
+            "success": "tregua",
+            "failure": "mediacion_fallida"
+          }
+        },
+        {
+          "text": "Dejarlo. Que decidan ellos.",
+          "next": "nada"
+        }
+      ]
+    },
+    "tregua": {
+      "speaker": "nella",
+      "text": "…Brea. Siempre Brea. Y el elfo cobrando y el banco contando. Muy bien. Que el barón baje. Que lo diga delante de todos: que firmó, que sabía, que los dejó dentro.",
+      "next": "tregua_2"
+    },
+    "tregua_2": {
+      "speaker": "mazo",
+      "text": "Yo… firmé. Brea me dijo que no había nada que hacer, y firmé. Sabía que no era verdad. No quise saberlo. Eso también se firma.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "baron_confeso_publico",
+          "value": true
+        }
+      ],
+      "next": "tregua_3"
+    },
+    "tregua_3": {
+      "text": "Se hace un silencio que dura lo que tarda una antorcha en chisporrotear. Entonces, desde la capilla, llega la voz de Cirilo, y detrás de ella vienen los fieles de la Santa Pala con sus palas afiladas.",
+      "next": "tregua_4"
+    },
+    "tregua_4": {
+      "speaker": "cirilo",
+      "text": "¡Ha confesado! ¡La tierra exige sangre por sangre! ¡No hay tregua con quien hirió a la tierra!",
+      "next": "tregua_5"
+    },
+    "tregua_5": {
+      "text": "La tregua dura lo que tarda un fanático en lanzar la primera piedra. Cuando se apaga el tumulto, Odda Hulla está en el suelo, con la cabeza abierta, delante del barón. Se había puesto en medio. Nadie sabe si para protegerle o para ser la primera en cogerle.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "odda_muerta",
+          "value": true
+        }
+      ],
+      "next": "tregua_6"
+    },
+    "tregua_6": {
+      "speaker": "nella",
+      "text": "Odda… Se acabó. Por esta noche se acabó. El barón vive. Brea paga. Y tú, cobrador, nos llevas hasta él. Por la bocamina, con los picos de todos.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "tregua_d1",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "ruta_bocamina",
+          "value": true
+        }
+      ]
+    },
+    "mediacion_fallida": {
+      "text": "Nadie te escucha. Desde la muralla vuela un virote; desde abajo, una piedra. En un momento eres el enemigo de los dos lados, que es lo único en lo que se ponen de acuerdo.",
+      "next": "fallida_2"
+    },
+    "fallida_2": {
+      "text": "Cuando sale el sol, la abadía tiene el portón quemado y el barón está colgando de la Torre del Cepo. Hilda Cardo ha desaparecido, y con ella el sello. Los mineros te escupen al pasar. La guardia, lo que queda de ella, también.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "mediacion_fallida",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "baron_muerto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "hilda_huyo_sello",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "abadia_hostil",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "pueblo_hostil",
+          "value": true
+        }
+      ]
+    },
+    "nada": {
+      "text": "Te vas a la posada. Desde la ventana del Pico Roto ves subir las antorchas cuesta arriba, como una procesión al revés. Remedios te sirve vino sin que lo pidas y sin cobrártelo. Es lo más parecido a un reproche que sabe hacer.",
+      "next": "nada_2"
+    },
+    "nada_2": {
+      "text": "Por la mañana, el barón Ulric Mazo cuelga de la Torre del Cepo. Le han dejado un papel en el bolsillo; alguien dice que es su último poema. Hilda Cardo ha desaparecido, y con ella el sello. Nadie te debe nada. Nadie te ayuda tampoco.",
+      "effects": [
+        {
+          "type": "setFlag",
+          "flag": "d1_resuelto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "d1_nada",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "baron_muerto",
+          "value": true
+        },
+        {
+          "type": "setFlag",
+          "flag": "hilda_huyo_sello",
+          "value": true
+        }
+      ],
+      "next": [
+        {
+          "when": {
+            "inParty": "dorotea"
+          },
+          "next": "nada_3"
+        },
+        {}
+      ]
+    },
+    "nada_3": {
+      "speaker": "dorotea",
+      "text": "Un deudor muerto, sin heredero y sin sello. Le apunto, cobrador. Todavía no sé en qué columna."
+    }
+  }
+}

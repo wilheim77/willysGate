@@ -1,5 +1,16 @@
 {
   "$comment": "Entities the dialogues talk to or change, for the map designer. Ids are fixed: dialogues reference them (setEntity/setController/startCombat). 'dialogue' is the tree to tag on the entity (dialogue:<id>); null when a script opens it or it only appears as a speaker. noncombatant: tag it until a dialogue starts a fight. essential: the story needs it alive. 'commoner' means a plain non-fighter. spriteId exists in assets/0x72.json. Generic creatures are not here: the maps spawn them as <template>-<n> from templates.json (dialogues use those spawn ids, e.g. fanatico_pala-1). Interactables are spawns <kind>-<x> with dialogue <kind>_<x>. Party members hero and dorotea are created by game.ts.",
+  "dorotea": {
+    "name": "Dorotea",
+    "monsterId": "companion",
+    "spriteId": "dorotea",
+    "faction": "party",
+    "noncombatant": false,
+    "essential": true,
+    "dialogue": "dorotea",
+    "scene": "P-7",
+    "note": "In the party from the start (game.ts creates her: rogue, human). Her dialogue is the companion chat \"dorotea\". In D4 she can leave (faction valcarcel) or fight the party."
+  },
   "garran": {
     "name": "Garrán",
     "monsterId": "companion",
@@ -172,5 +183,27 @@
     "dialogue": "guardia_abadia",
     "scene": "1",
     "note": "Named guard at the abbey gate in the plaza (rename spawn guardia_baron-1 to guardia_abadia). Lets the party in once juicio_resuelto is set: audiencia_concedida + travel to abadia/entry-plaza."
+  },
+  "absalon": {
+    "name": "Absalón Brea",
+    "monsterId": "bandit_captain",
+    "spriteId": "absalon",
+    "faction": "callados",
+    "noncombatant": false,
+    "essential": true,
+    "dialogue": null,
+    "scene": "6",
+    "note": "The boss. The Vault scene zone opens boveda_brea (speaker absalon); he fights with the Callados (faction callados)."
+  },
+  "ivo": {
+    "name": "Ivo",
+    "monsterId": "thug",
+    "spriteId": "callado",
+    "faction": "callados",
+    "noncombatant": false,
+    "essential": false,
+    "dialogue": null,
+    "scene": "6",
+    "note": "Garrán's half-brother, a Callado at Brea's side. Speaks in boveda_brea and boveda_collera."
   }
 }
