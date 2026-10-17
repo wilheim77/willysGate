@@ -52,6 +52,7 @@ export default {
   ...c.source(),
   spawns: {
     'entry-camino': [2, 15],
+    'entry-abadia': [23, 2],
     // The trial (scene 1).
     anselmo: [10, 6],
     cirilo: [12, 7],
@@ -80,7 +81,10 @@ export default {
     { name: 'antorcha-abadia', at: [23, 3], radius: 4, color: '#ffb050', flicker: 0.12, prop: 'torch_wall' },
   ],
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
-  exits: [{ name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' }],
+  exits: [
+    { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza' },
+    { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
+  ],
   zones: {
     scenes: [
       {
