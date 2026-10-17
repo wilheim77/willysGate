@@ -720,10 +720,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 56,
-   "columns": 56,
+   "tilecount": 59,
+   "columns": 59,
    "image": "terrain-logic.png",
-   "imagewidth": 1792,
+   "imagewidth": 1888,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1524,6 +1524,51 @@
       {
        "name": "terrain",
        "type": "string",
+       "value": "riverbank_s"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_e"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_w"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
        "value": "fence"
       },
       {
@@ -1534,7 +1579,7 @@
      ]
     },
     {
-     "id": 53,
+     "id": 56,
      "properties": [
       {
        "name": "terrain",
@@ -1554,7 +1599,7 @@
      ]
     },
     {
-     "id": 54,
+     "id": 57,
      "properties": [
       {
        "name": "terrain",
@@ -1574,7 +1619,7 @@
      ]
     },
     {
-     "id": 55,
+     "id": 58,
      "properties": [
       {
        "name": "terrain",
