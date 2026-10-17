@@ -165,7 +165,7 @@
   "posadera": {
     "name": "Remedios",
     "monsterId": "commoner",
-    "spriteId": "aldeana",
+    "spriteId": "posadera",
     "faction": "pueblo",
     "noncombatant": true,
     "essential": false,

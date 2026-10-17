@@ -12,6 +12,7 @@ import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { DialogueBox } from './ui/dialogueBox';
 import { CreationScreen } from './ui/creationScreen';
+import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
 
@@ -81,7 +82,8 @@ controller.onTrapReached = (trap, candidates) => {
 
 const creation = new CreationScreen(store, game);
 hud.onNewGame = () => creation.open();
-creation.open();
+// The title screen first; a new game goes on to character creation.
+new TitleScreen(store, game, () => creation.open()).open();
 
 const combat = game.texts.combat ?? {};
 const scene = new MapScene(
