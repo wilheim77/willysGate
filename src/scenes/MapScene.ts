@@ -447,9 +447,17 @@ export class MapScene extends Phaser.Scene {
         this.applyFate(String(e.entityId), state, true);
         return;
       }
-      case 'surfaceChanged':
+      case 'surfaceChanged': {
+        // Fire meeting water: a puff of steam where the puddle was.
+        for (const change of (e.changes as { tile: Vec2; from: string | null; to: string | null }[]) ?? []) {
+          if (change.from === 'water' && change.to === null) {
+            const c = this.grid.tileCentre(change.tile.x, change.tile.y, tileAt(state.map, change.tile)?.height ?? 0);
+            this.playProp('fx_steam', c.x, c.y, 1_900_000);
+          }
+        }
         this.drawSurfaces(state);
         return;
+      }
       case 'entityPushed': {
         const s = sprite(e.entityId);
         const to = e.to as Vec2;
@@ -515,9 +523,15 @@ export class MapScene extends Phaser.Scene {
     const dead = hasCondition(e, 'dead');
     const down = hasCondition(e, 'downed');
     if (e.tags.includes('object')) {
-      // Scenery breaks rather than lying down.
-      s.setVisible(!dead);
+      // Scenery breaks rather than lying down: debris if the art has it, gone otherwise.
+      const art = this.manifest.sprites[e.spriteId];
       this.shadows.get(id)?.setVisible(false);
+      if (dead && art?.kind === 'frames' && art.animations.broken) {
+        s.stop().setFrame(`${e.spriteId}:broken-0`).setVisible(true);
+        s.setDepth(this.grid.depth(e.position.y, tileAt(state.map, e.position)?.height ?? 0, 1.8));
+      } else {
+        s.setVisible(!dead);
+      }
       return;
     }
     const angle = dead || down ? 90 : 0;
@@ -583,7 +597,9 @@ export class MapScene extends Phaser.Scene {
       const art = this.manifest.surfaces?.[surface.type];
       if (art) {
         const sprite = this.add.sprite(c.x, c.y, imageKey(art.url)).setDepth(depth);
-        sprite.play({ key: `surface:${surface.type}`, startFrame: (x * 7 + y * 3) % art.frames.length });
+        const hash = variantHash(x, y);
+        if (art.frames.length > 1 && art.fps > 0) sprite.play({ key: `surface:${surface.type}`, startFrame: hash % art.frames.length });
+        else sprite.setFrame(`surface:${surface.type}-0`).setFlip((hash & 1) === 1, (hash & 2) === 2);
         this.surfaceObjects.push(sprite);
         continue;
       }
