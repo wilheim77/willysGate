@@ -57,11 +57,17 @@ export default {
     // The audience (scene 2).
     mazo: [14, 1],
     hilda: [16, 2],
-    'guardia_baron-1': [8, 4],
-    'guardia_baron-2': [21, 4],
-    'guardia_baron-3': [5, 15], // wall-walk
-    'guardia_baron-4': [22, 15],
-    'guardia_baron_sargento-1': [15, 18],
+    // The abbey's guards, by day and when the party storms the abbey with the Cuadrilla (D1, join).
+    // When the party defends it (d1_abadia) they are replaced by guardia_baron-5..8, on the party's side.
+    'guardia_baron-1': { at: [8, 4], unlessFlag: 'd1_abadia' },
+    'guardia_baron-2': { at: [21, 4], unlessFlag: 'd1_abadia' },
+    'guardia_baron-3': { at: [5, 15], unlessFlag: 'd1_abadia' }, // wall-walk
+    'guardia_baron-4': { at: [22, 15], unlessFlag: 'd1_abadia' },
+    'guardia_baron_sargento-1': { at: [13, 14], unlessFlag: 'd1_abadia' },
+    'guardia_baron-5': { at: [6, 15], requiresFlag: 'd1_abadia', faction: 'party' },
+    'guardia_baron-6': { at: [21, 15], requiresFlag: 'd1_abadia', faction: 'party' },
+    'guardia_baron-7': { at: [11, 13], requiresFlag: 'd1_abadia', faction: 'party' },
+    'guardia_baron-8': { at: [16, 13], requiresFlag: 'd1_abadia', faction: 'party' },
     'tapestry_crossbow-1': [22, 1], // the sixth crossbow behind the tapestry (scene 2, Garrán's line)
     'tapestry-1': [8, 1],
     // Crypt (D1, defend: the baron's key).
@@ -75,15 +81,21 @@ export default {
     'barrel-1': [18, 12],
     'crate-3': [11, 18],
     'crate-4': [17, 18],
-    // D1, the night of the torches: the Cuadrilla at the gate (only that night). With the party
-    // (d1_cuadrilla) they storm it; against it (d1_abadia) they are the enemy, Odda leading.
-    // The Hulla stay out of the assault if hulla_no_luchan.
-    'minero_cuadrilla-1': { at: [8, 19], requiresAnyFlag: 'd1_cuadrilla,d1_abadia' },
-    'minero_cuadrilla-2': { at: [19, 19], requiresAnyFlag: 'd1_cuadrilla,d1_abadia' },
-    'minero_cuadrilla-3': { at: [14, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia' },
-    'hulla-1': { at: [10, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia', unlessFlag: 'hulla_no_luchan' },
-    'hulla-2': { at: [17, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia', unlessFlag: 'hulla_no_luchan' },
-    odda_noche: { at: [13, 20], requiresFlag: 'd1_abadia' },
+    // D1, the night of the torches: the Cuadrilla at the gate (only that night).
+    // Joining them (d1_cuadrilla): they storm the abbey on the party's side; the Hulla stay out if
+    // hulla_no_luchan.
+    'minero_cuadrilla-1': { at: [8, 19], requiresFlag: 'd1_cuadrilla', faction: 'party' },
+    'minero_cuadrilla-2': { at: [19, 19], requiresFlag: 'd1_cuadrilla', faction: 'party' },
+    'minero_cuadrilla-3': { at: [14, 20], requiresFlag: 'd1_cuadrilla', faction: 'party' },
+    'hulla-1': { at: [10, 20], requiresFlag: 'd1_cuadrilla', unlessFlag: 'hulla_no_luchan', faction: 'party' },
+    'hulla-2': { at: [17, 20], requiresFlag: 'd1_cuadrilla', unlessFlag: 'hulla_no_luchan', faction: 'party' },
+    // Defending the abbey (d1_abadia): the same people at the gate, against the party, Odda leading.
+    'minero_cuadrilla-4': { at: [7, 18], requiresFlag: 'd1_abadia' },
+    'minero_cuadrilla-5': { at: [20, 18], requiresFlag: 'd1_abadia' },
+    'minero_cuadrilla-6': { at: [12, 20], requiresFlag: 'd1_abadia' },
+    'hulla-3': { at: [9, 20], requiresFlag: 'd1_abadia' },
+    'hulla-4': { at: [18, 19], requiresFlag: 'd1_abadia' },
+    odda_noche: { at: [15, 19], requiresFlag: 'd1_abadia' },
   },
   lights: [
     { name: 'brasero-sala-1', at: [10, 6], radius: 5, color: '#ffb060', flicker: 0.12, prop: 'brazier' },
@@ -109,7 +121,7 @@ export default {
     {
       name: 'd1-defensa',
       rect: [0, 9, 28, 13],
-      participants: ['odda_noche', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
+      participants: ['odda_noche', 'minero_cuadrilla-4', 'minero_cuadrilla-5', 'minero_cuadrilla-6', 'hulla-3', 'hulla-4', 'guardia_baron-5', 'guardia_baron-6', 'guardia_baron-7', 'guardia_baron-8'],
       props: { requiresFlag: 'd1_abadia', setFlag: 'd1_asalto_terminado' },
     },
   ],
