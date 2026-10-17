@@ -43,7 +43,7 @@ Las fuentes originales están en `art-src/<pack>/`, cada una con su `SOURCE.md`.
 
 ## Audio
 
-Catálogo de fuentes candidatas y su selección en `docs/AUDIO.md`. Todos los ficheros se recortaron/convirtieron a OGG y se normalizó el volumen con `ffmpeg`; ningún fichero se usa sin modificar salvo que se indique. Ficheros finales en `content/<juego>/public/assets/audio/{music,sfx}/`, manifiestos en `content/<juego>/assets/audio.json`.
+Catálogo de fuentes candidatas y su selección en `docs/AUDIO.md`. Todos los ficheros se recortaron/convirtieron a OGG y se normalizó el volumen con `ffmpeg`; ningún fichero se usa sin modificar salvo que se indique. Ficheros finales en `content/<juego>/public/assets/audio/{music,sfx,ambience}/`, manifiestos en `content/<juego>/assets/audio.json`.
 
 | Fichero final | Juego(s) | Fuente | Autor | Licencia | URL |
 |---|---|---|---|---|---|
@@ -71,5 +71,15 @@ Catálogo de fuentes candidatas y su selección en `docs/AUDIO.md`. Todos los fi
 | `sfx/gameshow_buzzer.ogg` | willy | Wrong Buzzer | KevinVG207 | CC0 1.0 | https://freesound.org/people/KevinVG207/sounds/331912/ |
 | `sfx/gulls.ogg` | willy | seagull.wav | speakingmusic | CC0 1.0 | https://freesound.org/people/speakingmusic/sounds/586831/ |
 | `sfx/sea.ogg` | willy | Ocean Waves.wav | Noted451 | CC0 1.0 | https://freesound.org/people/Noted451/sounds/531015/ |
+| `ambience/camino.ogg` (mezcla) | intereses | Wind1 + Crow caw | Luke.RUSTLTD; zeroisnotnull | CC0 1.0 | https://opengameart.org/content/wind1 ; https://opengameart.org/content/crow-caw |
+| `ambience/plaza.ogg`, `ambience/calles.ogg` (mezcla con `dog_barking_mono`) | intereses | Crowd Shouting/Speaking Ambience | StarNinjas | CC0 1.0 | https://opengameart.org/content/crowd-shoutingspeaking-ambience |
+| `ambience/calles.ogg` (capa de perro, mezcla) | intereses | Dog barking mono | HaelDB (sonidos de Brandon Morris) | **OGA-BY 3.0** | https://opengameart.org/content/dog-barking-mono |
+| `ambience/abadia.ogg` (recorte distinto de `music/tension.ogg`) | intereses | Dark Cavern Ambient | Paul Wortmann | CC0 1.0 | https://opengameart.org/content/dark-cavern-ambient |
+| `ambience/mina.ogg` (recorte distinto de `music/exploration.ogg`) | intereses | Loopable Dungeon Ambience | JaggedStone | CC0 1.0 | https://opengameart.org/content/loopable-dungeon-ambience |
+| `ambience/escorial.ogg` (mezcla con `impactMining_001/003`) | intereses | Wind1; Impact Sounds (`impactMining`) | Luke.RUSTLTD; Kenney | CC0 1.0 | https://opengameart.org/content/wind1 ; https://kenney.nl/assets/impact-sounds |
+| `ambience/boveda.ogg` | intereses | Dark Ambience Loop | qubodup (Iwan Gabovitch) | **CC-BY 3.0** | https://opengameart.org/content/dark-ambience-loop |
+| `music/boveda/combat.ogg` | intereses | Hard Boss Battle 1 | MintoDog | CC0 1.0 | https://opengameart.org/content/hard-boss-battle-1 |
+| `ambience/camerino.ogg` | willy | Ambience Pack 1 -- Sci Fi Horror (`Infestation in the Control Room`) | Joth | CC0 1.0 | https://opengameart.org/content/ambience-pack-1-sci-fi-horror |
+| `ambience/planta-1.ogg` (mezcla) | willy | Ocean Waves.wav + seagull.wav (reutilizados de `sfx/sea.ogg`/`sfx/gulls.ogg`) | Noted451; speakingmusic | CC0 1.0 | https://freesound.org/people/Noted451/sounds/531015/ ; https://freesound.org/people/speakingmusic/sounds/586831/ |
 
-**Única atribución obligatoria:** `sfx/bow_shot.ogg` (Ogrebane, "Battle Sound Effects", CC-BY 3.0: https://creativecommons.org/licenses/by/3.0/). El resto de audio es CC0 1.0 (sin condiciones), pero se atribuye igualmente aquí por buena práctica.
+**Atribución obligatoria:** `sfx/bow_shot.ogg` (Ogrebane, "Battle Sound Effects", CC-BY 3.0), `ambience/boveda.ogg` (qubodup / Iwan Gabovitch, "Dark Ambience Loop", CC-BY 3.0: https://creativecommons.org/licenses/by/3.0/) y la capa de perro de `ambience/calles.ogg` (HaelDB, "Dog barking mono", OGA-BY 3.0: http://opengameart.org/content/oga-by-30-faq). El resto de audio es CC0 1.0 (sin condiciones), pero se atribuye igualmente aquí por buena práctica.

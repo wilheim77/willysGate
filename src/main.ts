@@ -7,6 +7,7 @@ import { MapScene } from './scenes/MapScene';
 import './style.css';
 import { mountAudioControls } from './audio/AudioControls';
 import { setupAudio } from './audio/setupAudio';
+import { attachUiSfx } from './audio/uiSfx';
 import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { DialogueBox } from './ui/dialogueBox';
@@ -25,6 +26,7 @@ const hud = new Hud(store, game);
 hud.startOptions = startMap ? { start: startMap } : undefined;
 const audio = setupAudio(store, game);
 mountAudioControls(document.querySelector('.hud-top nav')!, audio);
+attachUiSfx(audio);
 const combatHud = new CombatHud(game);
 const controller = new GameController(store, game, combatHud);
 
