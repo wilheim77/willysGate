@@ -21,7 +21,7 @@ const maps: Record<string, ParsedMap> = Object.fromEntries(
 );
 
 const RULES = dnd5e.movement;
-const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest'];
+const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', 'resonador'];
 const PROPS = [...OBSTACLE_PROPS, 'lever', 'door'];
 const kindOf = (name: string): string => name.split('-')[0]!;
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -103,6 +103,22 @@ describe('Intereses maps', () => {
           expect(typeof p.disarmDc, `${trap.name}.disarmDc`).toBe('number');
           for (const t of zoneTiles(trap)) expect(tileAt(map, t)?.walkable, `${trap.name} on a wall`).toBe(true);
         }
+      });
+
+      it('leaves a way out of every collapse (layer "collapse": the floor sinks to `height`)', () => {
+        const collapse = parsed.zones.filter((z) => z.layer === 'collapse');
+        if (collapse.length === 0) return;
+        const sunk = { ...map, tiles: map.tiles.map((t) => ({ ...t })) };
+        for (const z of collapse) {
+          expect(typeof z.properties.height, `${z.name}.height`).toBe('number');
+          for (const p of zoneTiles(z)) sunk.tiles[p.y * map.width + p.x]!.height = Number(z.properties.height);
+        }
+        const after = reachableTiles(sunk, origin(parsed), Infinity, { rules: RULES, blocked });
+        for (const z of collapse) for (const p of zoneTiles(z)) {
+          const back = reachableTiles(sunk, p, Infinity, { rules: RULES, blocked });
+          expect(back.has(posKey(origin(parsed))), `stuck in ${z.name} at ${p.x},${p.y}`).toBe(true);
+        }
+        expect(after.size).toBeGreaterThan(0);
       });
 
       it('paints only known surfaces', () => {

@@ -120,6 +120,15 @@
   },
   "aldeano_viejo": {
    "tone": "neutral"
+  },
+  "fiel_pala": {
+   "tone": "neutral"
+  },
+  "viuda": {
+   "tone": "neutral"
+  },
+  "ivo": {
+   "tone": "undead"
   }
  },
  "hand": {
