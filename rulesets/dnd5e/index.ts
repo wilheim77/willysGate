@@ -282,7 +282,7 @@ export const dnd5e: Ruleset = {
   canAct: (e) => standing(e) && !['paralyzed', 'stunned', 'unconscious', 'incapacitated', 'turned'].some((c) => hasCondition(e, c)),
   isStanding: (e) => standing(e) && isAlive(e),
   // A fallen companion still lies there; only the dead and smashed scenery free the tile.
-  occupiesTile: (e) => !hasCondition(e, 'dead') && (e.tags.includes('object') ? standing(e) : true),
+  occupiesTile: (e) => !hasCondition(e, 'dead') && (e.tags.includes('object') ? standing(e) && e.tags.includes('obstacle') : true),
   onTurnStart: (state, id, rng) => onTurnStart(dnd5e, state, id, rng),
   listActions,
   previewAction,

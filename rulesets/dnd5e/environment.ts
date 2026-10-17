@@ -99,15 +99,21 @@ export function onFall(ruleset: Ruleset, state: GameState, id: string, levels: n
 
 export interface PropSpec {
   id: string;
-  kind: 'barrel_oil' | 'barrel' | 'crate';
+  kind: 'barrel_oil' | 'barrel' | 'crate' | 'chest' | 'door' | 'lever';
   position: Vec2;
   spriteId?: string;
+  name?: string;
+  /** Extra tags, e.g. 'dialogue:<id>' to make it usable. */
+  extraTags?: string[];
 }
 
 const PROP_STATS: Record<PropSpec['kind'], { name: string; hp: number; ac: number; tags: string[] }> = {
   barrel_oil: { name: 'Barril de aceite', hp: 1, ac: 10, tags: ['explosive_oil'] },
   barrel: { name: 'Barril', hp: 10, ac: 10, tags: [] },
   crate: { name: 'Caja', hp: 12, ac: 11, tags: [] },
+  chest: { name: 'Cofre', hp: 15, ac: 12, tags: [] },
+  door: { name: 'Puerta', hp: 18, ac: 15, tags: [] },
+  lever: { name: 'Palanca', hp: 10, ac: 14, tags: [] },
 };
 
 /** Inanimate scenery: attackable, gives cover, never takes turns. */
@@ -115,7 +121,7 @@ export function createProp(spec: PropSpec): Entity {
   const p = PROP_STATS[spec.kind];
   return {
     id: spec.id,
-    name: p.name,
+    name: spec.name ?? p.name,
     controllerId: 'none',
     factionId: 'scenery',
     position: spec.position,
@@ -123,7 +129,7 @@ export function createProp(spec: PropSpec): Entity {
     stats: { str: 10, dex: 1, con: 10, int: 1, wis: 1, cha: 1, level: 1, speed: 0, ac: p.ac },
     resources: { hp: { current: p.hp, max: p.hp } },
     conditions: [],
-    tags: [OBJECT_TAG, OBSTACLE_TAG, 'immune:poison', 'immune:psychic', ...p.tags],
+    tags: [OBJECT_TAG, ...(spec.kind === 'lever' ? [] : [OBSTACLE_TAG]), 'immune:poison', 'immune:psychic', ...p.tags, ...(spec.extraTags ?? [])],
   };
 }
 

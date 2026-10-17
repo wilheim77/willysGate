@@ -32,7 +32,9 @@ export type Effect =
   /** Hand an entity to another controller and side (a companion joins, a guard turns hostile). */
   | { type: 'setController'; entityId: string; controllerId: string; factionId?: string }
   /** Change a map tile (a door opens, a bridge collapses). Omitted fields stay as they are. */
-  | { type: 'setTile'; position: Vec2; walkable?: boolean; terrain?: string; height?: number };
+  | { type: 'setTile'; position: Vec2; walkable?: boolean; terrain?: string; height?: number }
+  /** Change how a thing looks or what it is (a chest opens, a lever flips): sprite, name and tags. */
+  | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
 
 export interface ResourceChangedEvent extends GameEvent {
   type: 'resourceChanged';
@@ -104,7 +106,14 @@ export interface TileChangedEvent extends GameEvent {
   tile: Tile;
 }
 
+export interface EntityChangedEvent extends GameEvent {
+  type: 'entityChanged';
+  entityId: string;
+  spriteId: string;
+}
+
 export type EffectEvent =
+  | EntityChangedEvent
   | ItemsChangedEvent
   | ControllerChangedEvent
   | TileChangedEvent
@@ -284,6 +293,16 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         tiles[index] = changed;
         next = { ...next, map: { ...next.map, tiles } };
         events.push({ type: 'tileChanged', position: { x, y }, tile: changed });
+        break;
+      }
+      case 'setEntity': {
+        updateEntity(effect.entityId, (e) => {
+          const removed = new Set(effect.removeTags ?? []);
+          const tags = [...new Set([...e.tags.filter((t) => !removed.has(t)), ...(effect.addTags ?? [])])];
+          const changed = { ...e, tags, ...(effect.spriteId ? { spriteId: effect.spriteId } : {}), ...(effect.name ? { name: effect.name } : {}) };
+          events.push({ type: 'entityChanged', entityId: e.id, spriteId: changed.spriteId });
+          return changed;
+        });
         break;
       }
       case 'setFlag': {

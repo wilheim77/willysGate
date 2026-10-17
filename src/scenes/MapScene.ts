@@ -459,6 +459,12 @@ export class MapScene extends Phaser.Scene {
         this.applyFate(String(e.entityId), state, true);
         return;
       }
+      case 'entityChanged':
+      case 'tileChanged': {
+        // A chest opens, a door swings, a lever flips: rebuild the world from state.
+        this.buildWorld(state);
+        return;
+      }
       case 'trapSpotted':
       case 'trapTriggered':
       case 'trapDisarmed':

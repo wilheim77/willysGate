@@ -18,10 +18,18 @@ describe('dialogue content', () => {
 
   for (const gameId of games) {
     const dir = join(contentDir, gameId, 'dialogues');
+    const items = JSON.parse(readFileSync(join(contentDir, gameId, 'items.json'), 'utf8')) as Record<string, unknown>;
+    const itemsIn = (x: unknown): string[] => {
+      if (!x || typeof x !== 'object') return [];
+      const o = x as Record<string, unknown>;
+      const own = typeof o.item === 'string' ? [o.item] : [];
+      return [...own, ...Object.values(o).flatMap(itemsIn)];
+    };
     for (const file of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
       const tree = JSON.parse(readFileSync(join(dir, file), 'utf8')) as DialogueTree;
       it(`${gameId}/${file} is consistent`, () => {
         expect(`${tree.id}.json`).toBe(file);
+        for (const item of itemsIn(tree.nodes)) expect(items[item], `item "${item}" missing from items.json`).toBeDefined();
         expect(tree.nodes[tree.start]).toBeDefined();
         for (const [id, node] of Object.entries(tree.nodes)) {
           const links = [node.next, ...(node.choices ?? []).flatMap((c) => [c.next, c.check?.success, c.check?.failure])].filter((x): x is string => !!x);

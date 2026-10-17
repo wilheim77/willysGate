@@ -95,7 +95,8 @@
 - [x] Fuera de combate, los estados con duración se pasan al volver a moverse.
 - [x] Revisión 2 aplicada: no se habla con muertos; `startDialogue` solo para guiones; cualquier combate cierra la conversación; `endDialogue` y cierre automático si una partida guardada apunta a un diálogo que ya no existe; opciones «una vez» con `id` estable; etiqueta `noncombatant` (nadie es hostil a un transeúnte); `setController`/`setTile` validan; tests de contenido más estrictos.
 - [x] Reglas de trama adoptadas: ninguna información crítica tras una sola tirada; fallar cuesta dinero, tiempo o reputación, nunca la puerta. El viejo minero ya da la pista también si le pagas.
-- [ ] Interactuables (cofres, palancas, puertas) como diálogos sobre objetos.
+- [x] Interactuables como diálogos sobre objetos: cofre con aguja envenenada (verla con Investigación, abrir con Juego de manos o con la llave del viejo, sin tirada), puerta atrancada (Atletismo) y palanca que la abre sin tirada. Nuevo efecto `setEntity` (cambiar sprite, nombre y etiquetas). Los objetos solo ocupan casilla si son obstáculo.
+- [x] Objetos con nombre y descripción (`items.json`) y «Mochila del grupo» en la ficha.
 - [ ] `flags.json` con marcas críticas + tests (marca crítica alcanzable sin tiradas, marcas leídas y nunca escritas, PNJ esenciales).
 - [ ] Escena «El camino»: Dorotea, reclutamiento de Garrán, mineros hambrientos evitables hablando.
 - [ ] Peticiones de Willy al motor: cambio de mapa (R10), causa en eventos (R11), semillas derivadas (R12), marcadores (R14).
