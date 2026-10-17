@@ -1,6 +1,6 @@
 {
-  "$comment": "Scene 3. Trapped chest in Lisandro's back room (object entity cofre_lisandro, sprite chest_trapped). Gives the ledger (key evidence for D1 mediation and D4). Smashing it needs no roll but Lisandro finds out.",
-  "id": "cofre_lisandro",
+  "$comment": "Scene 3. Trapped chest in Lisandro's back room (map spawn chest-libro_cuentas, sprite chest_trapped). Gives the ledger (key evidence for D1 mediation and D4). Smashing it needs no roll but Lisandro finds out.",
+  "id": "chest_libro_cuentas",
   "start": "cofre",
   "nodes": {
     "cofre": {
@@ -102,9 +102,9 @@
       "effects": [
         {
           "type": "setEntity",
-          "entityId": "cofre_lisandro",
+          "entityId": "chest-libro_cuentas",
           "removeTags": [
-            "dialogue:cofre_lisandro"
+            "dialogue:chest_libro_cuentas"
           ],
           "addTags": [
             "pose:open"

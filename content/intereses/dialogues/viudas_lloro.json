@@ -1,5 +1,5 @@
 {
-  "$comment": "Scene 3. Two widows washing clothes in the river (entities viuda_benita, viuda_casilda; tag either with dialogue:viudas_lloro). New silver and the Hanged Man's Well, both without a roll. Casilda is Ivo's widow.",
+  "$comment": "Scene 3. Two widows washing clothes in the river (named spawns benita and casilda, instead of viuda-1/viuda-2; tag either with dialogue:viudas_lloro). New silver and the Hanged Man's Well, both without a roll. Casilda is Ivo's widow.",
   "id": "viudas_lloro",
   "start": "orilla",
   "nodes": {
@@ -8,12 +8,12 @@
       "next": "benita"
     },
     "benita": {
-      "speaker": "viuda_benita",
+      "speaker": "benita",
       "text": "¿Vienen del banco? Pues lo único que nos queda para cobrar es la colada. Sírvanse.",
       "next": "hub"
     },
     "hub": {
-      "speaker": "viuda_casilda",
+      "speaker": "casilda",
       "text": "¿Qué queréis?",
       "choices": [
         {
@@ -39,7 +39,7 @@
           "text": "[Garrán] (Casilda se ha quedado mirando a Garrán.)",
           "once": true,
           "when": {
-            "flag": "garran_reclutado"
+            "inParty": "garran"
           },
           "next": "garran"
         },
@@ -78,7 +78,7 @@
       ]
     },
     "maridos": {
-      "speaker": "viuda_benita",
+      "speaker": "benita",
       "text": "Mi Anselmo, que no se parece en nada a su fraile, y el Ivo de Casilda. Y treinta y ocho más. Brea dijo que fue el grisú. Ni los dejó subir. Una se acostumbra a no tener marido. A no tener tumba, no.",
       "effects": [
         {
@@ -95,12 +95,12 @@
       "next": "hub"
     },
     "lisandro": {
-      "speaker": "viuda_casilda",
+      "speaker": "casilda",
       "text": "Vendiendo lo que queda. Le empeñé la alianza al elfo. Me la pagó con plata. Plata nueva, que brillaba como recién nacida; ni un arañazo.",
       "next": "lisandro_2"
     },
     "lisandro_2": {
-      "speaker": "viuda_benita",
+      "speaker": "benita",
       "text": "Y dime tú de dónde sale plata nueva en un pueblo que tiene la mina cerrada desde hace ocho meses. Del cielo no. El cielo aquí no da ni lluvia limpia.",
       "effects": [
         {
@@ -112,7 +112,7 @@
       "next": "hub"
     },
     "noche": {
-      "speaker": "viuda_casilda",
+      "speaker": "casilda",
       "text": "Por el Pozo del Ahorcado sale luz algunas noches. Y está cegado desde que yo era niña. Mi hija dice que, si pegas la oreja a la escombrera, se oye cantar algo. Dice que son ellos.",
       "effects": [
         {
@@ -129,7 +129,7 @@
       "next": "noche_2"
     },
     "noche_2": {
-      "speaker": "viuda_benita",
+      "speaker": "benita",
       "text": "Tu hija dice muchas cosas. Pero yo también he visto la luz. Y los Sinpaga no dejan acercarse a nadie al Escorial. Algo guardan.",
       "effects": [
         {
@@ -141,7 +141,7 @@
       "next": "hub"
     },
     "garran": {
-      "speaker": "viuda_casilda",
+      "speaker": "casilda",
       "text": "¿Garrán? ¿Garrán Tizón?",
       "next": "garran_2"
     },
@@ -151,7 +151,7 @@
       "next": "garran_3"
     },
     "garran_3": {
-      "speaker": "viuda_casilda",
+      "speaker": "casilda",
       "text": "Ivo bajó con ellos. Con los cuarenta. Tú te fuiste esa misma noche. Con prisa, dicen.",
       "effects": [
         {
@@ -167,7 +167,7 @@
       "next": "garran_5"
     },
     "garran_5": {
-      "speaker": "viuda_casilda",
+      "speaker": "casilda",
       "text": "Él te esperaba, ¿sabes? Decía que volverías. Que siempre volvías cuando se acababa el dinero.",
       "next": "hub"
     },
@@ -177,7 +177,7 @@
       "next": "limosna_2"
     },
     "limosna_2": {
-      "speaker": "viuda_benita",
+      "speaker": "benita",
       "text": "Gracias. No te vamos a rezar, que estamos desentrenadas. Pero no lo olvidamos.",
       "next": "hub"
     }

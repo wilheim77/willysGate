@@ -1,5 +1,5 @@
 {
-  "$comment": "Entities the dialogues talk to or change, for the map designer. Ids are fixed: dialogues reference them (setEntity/setController/startCombat). 'dialogue' is the tree to tag on the entity (dialogue:<id>); null when a script opens it or it only appears as a speaker. noncombatant: tag it until a dialogue starts a fight. essential: the story needs it alive. 'commoner' means a plain non-fighter. spriteId is a suggestion; ids not yet in assets/0x72.json need art (TODO-ART). Party members hero and dorotea are created by game.ts.",
+  "$comment": "Entities the dialogues talk to or change, for the map designer. Ids are fixed: dialogues reference them (setEntity/setController/startCombat). 'dialogue' is the tree to tag on the entity (dialogue:<id>); null when a script opens it or it only appears as a speaker. noncombatant: tag it until a dialogue starts a fight. essential: the story needs it alive. 'commoner' means a plain non-fighter. spriteId exists in assets/0x72.json. Generic creatures are not here: the maps spawn them as <template>-<n> from templates.json (dialogues use those spawn ids, e.g. fanatico_pala-1). Interactables are spawns <kind>-<x> with dialogue <kind>_<x>. Party members hero and dorotea are created by game.ts.",
   "garran": {
     "name": "Garrán",
     "monsterId": "companion",
@@ -66,7 +66,7 @@
   "cirilo": {
     "name": "Cirilo Hondo",
     "monsterId": "commoner",
-    "spriteId": "cirilo_hondo",
+    "spriteId": "cirilo",
     "faction": "santa_pala",
     "noncombatant": true,
     "essential": true,
@@ -74,41 +74,10 @@
     "scene": "1, 3",
     "note": "Chaplain of the Santa Pala. In the square for the trial (same tree as Anselmo); afterwards his dialogue becomes \"cirilo\". In scene 3 he is at the chapel of the Santa Pala."
   },
-  "fanatico_1": {
-    "name": "Fanático de la Pala",
-    "monsterId": "bandit",
-    "spriteId": "fanatico_pala",
-    "faction": "fanaticos",
-    "noncombatant": true,
-    "essential": false,
-    "dialogue": null,
-    "scene": "1",
-    "note": "Guards the gallows. Fights only if the party cuts the rope."
-  },
-  "fanatico_2": {
-    "name": "Fanático de la Pala",
-    "monsterId": "bandit",
-    "spriteId": "fanatico_pala",
-    "faction": "fanaticos",
-    "noncombatant": true,
-    "essential": false,
-    "dialogue": null,
-    "scene": "1"
-  },
-  "fanatico_3": {
-    "name": "Fanático de la Pala",
-    "monsterId": "thug",
-    "spriteId": "fanatico_pala",
-    "faction": "fanaticos",
-    "noncombatant": true,
-    "essential": false,
-    "dialogue": null,
-    "scene": "1"
-  },
   "nella": {
     "name": "Nella Yesca",
     "monsterId": "commoner",
-    "spriteId": "nella_yesca",
+    "spriteId": "nella",
     "faction": "cuadrilla",
     "noncombatant": true,
     "essential": true,
@@ -119,7 +88,7 @@
   "odda": {
     "name": "Odda Hulla",
     "monsterId": "thug",
-    "spriteId": "odda_hulla",
+    "spriteId": "odda",
     "faction": "cuadrilla",
     "noncombatant": true,
     "essential": false,
@@ -130,7 +99,7 @@
   "mazo": {
     "name": "Barón Ulric Mazo",
     "monsterId": "commoner",
-    "spriteId": "baron_mazo",
+    "spriteId": "mazo",
     "faction": "abadia",
     "noncombatant": true,
     "essential": true,
@@ -141,7 +110,7 @@
   "hilda": {
     "name": "Hilda Cardo",
     "monsterId": "guard",
-    "spriteId": "hilda_cardo",
+    "spriteId": "hilda",
     "faction": "abadia",
     "noncombatant": true,
     "essential": true,
@@ -152,7 +121,7 @@
   "lisandro": {
     "name": "Lisandro Fuss",
     "monsterId": "commoner",
-    "spriteId": "lisandro_fuss",
+    "spriteId": "lisandro",
     "faction": "valcarcel",
     "noncombatant": true,
     "essential": true,
@@ -160,15 +129,7 @@
     "scene": "3",
     "note": "Elf pawnbroker behind his counter."
   },
-  "cofre_lisandro": {
-    "name": "Cofre de Lisandro",
-    "prop": "chest",
-    "spriteId": "chest_trapped",
-    "dialogue": "cofre_lisandro",
-    "scene": "3",
-    "note": "Object (createProp chest) in the back room of the pawnshop. The dialogue opens it (pose:open) and drops its tag."
-  },
-  "viuda_benita": {
+  "benita": {
     "name": "Benita",
     "monsterId": "commoner",
     "spriteId": "viuda",
@@ -177,9 +138,9 @@
     "essential": false,
     "dialogue": "viudas_lloro",
     "scene": "3",
-    "note": "Washing clothes at the river Lloro, next to Casilda. Tag one or both with dialogue:viudas_lloro."
+    "note": "Named widow washing clothes at the river Lloro (calles: rename spawn viuda-1 to benita)."
   },
-  "viuda_casilda": {
+  "casilda": {
     "name": "Casilda",
     "monsterId": "commoner",
     "spriteId": "viuda",
@@ -188,20 +149,12 @@
     "essential": false,
     "dialogue": "viudas_lloro",
     "scene": "3",
-    "note": "Ivo's widow (Garrán's sister-in-law)."
-  },
-  "pulpito_santa_pala": {
-    "name": "Púlpito de la Santa Pala",
-    "prop": "object",
-    "spriteId": "none",
-    "dialogue": "sermon_cirilo",
-    "scene": "3",
-    "note": "Object in the chapel next to Cirilo; interacting means listening to the sermon. A script may open sermon_cirilo instead when the party enters the chapel."
+    "note": "Ivo's widow, Garrán's sister-in-law (calles: rename spawn viuda-2 to casilda)."
   },
   "posadera": {
     "name": "Remedios",
     "monsterId": "commoner",
-    "spriteId": "posadera",
+    "spriteId": "aldeana",
     "faction": "pueblo",
     "noncombatant": true,
     "essential": false,
@@ -218,6 +171,6 @@
     "essential": false,
     "dialogue": "guardia_abadia",
     "scene": "1",
-    "note": "At the abbey gate. Lets the party in once juicio_resuelto is set (audiencia_concedida)."
+    "note": "Named guard at the abbey gate in the plaza (rename spawn guardia_baron-1 to guardia_abadia). Lets the party in once juicio_resuelto is set: audiencia_concedida + travel to abadia/entry-plaza."
   }
 }
