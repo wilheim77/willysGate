@@ -20,6 +20,14 @@ export function hashSeed(text: string): number {
   return h >>> 0;
 }
 
+/**
+ * An independent seed for one purpose (a floor's layout, the narrator, a loot box), so
+ * generating one thing never shifts the dice of another: deriveSeed(run, 'floor', 3).
+ */
+export function deriveSeed(seed: number, ...keys: (string | number)[]): number {
+  return hashSeed(`${seed >>> 0}|${keys.map(String).join('|')}`);
+}
+
 export function seedRng(seed: number): RngState {
   // splitmix32 expands one seed into four well-mixed state words.
   let s = seed >>> 0;

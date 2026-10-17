@@ -286,6 +286,7 @@ export class GameController {
     const { turn } = this.state;
     if (turn.mode !== 'combat') {
       if (this.checkEncounters()) return;
+      if (this.checkExits()) return;
       if (this.pendingInteract) {
         const id = this.pendingInteract;
         this.pendingInteract = null;
@@ -324,6 +325,19 @@ export class GameController {
   }
 
   /** Starts combat when the leader walks into an encounter zone with enemies still standing. */
+  /** The leader stepped onto an exit: the whole party travels to the next map. */
+  private checkExits(): boolean {
+    const leader = this.state.entities[this.game.leaderId];
+    if (!leader || dialogueOf(this.state)) return false;
+    const exit = zonesOf(this.state, 'exits').find((z) => inZone(z, leader.position) && z.properties.to && z.properties.spawn);
+    if (!exit) return false;
+    this.trail = [];
+    this.leaderMoved = false;
+    const r = this.store.dispatch({ type: 'travel', issuer: this.game.playerId, entityId: leader.id, mapId: String(exit.properties.to), spawn: String(exit.properties.spawn) } as never);
+    if (!r.ok) this.report(r);
+    return r.ok;
+  }
+
   private checkEncounters(): boolean {
     const leader = this.state.entities[this.game.leaderId];
     if (!leader) return false;

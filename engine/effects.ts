@@ -34,6 +34,8 @@ export type Effect =
   /** Change a map tile (a door opens, a bridge collapses). Omitted fields stay as they are. */
   | { type: 'setTile'; position: Vec2; walkable?: boolean; terrain?: string; height?: number }
   /** Change how a thing looks or what it is (a chest opens, a lever flips): sprite, name and tags. */
+  /** Raise or lower a stat (levelling up, a curse): stats are the ruleset's numbers. */
+  | { type: 'modifyStat'; entityId: string; stat: string; delta: number }
   | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
 
 export interface ResourceChangedEvent extends GameEvent {
@@ -112,7 +114,16 @@ export interface EntityChangedEvent extends GameEvent {
   spriteId: string;
 }
 
+export interface StatChangedEvent extends GameEvent {
+  type: 'statChanged';
+  entityId: string;
+  stat: string;
+  from: number;
+  to: number;
+}
+
 export type EffectEvent =
+  | StatChangedEvent
   | EntityChangedEvent
   | ItemsChangedEvent
   | ControllerChangedEvent
@@ -293,6 +304,15 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
         tiles[index] = changed;
         next = { ...next, map: { ...next.map, tiles } };
         events.push({ type: 'tileChanged', position: { x, y }, tile: changed });
+        break;
+      }
+      case 'modifyStat': {
+        if (!ruleset.stats[effect.stat]) throw new Error(`Unknown stat "${effect.stat}" in ruleset ${ruleset.id}`);
+        updateEntity(effect.entityId, (e) => {
+          const from = e.stats[effect.stat] ?? 0;
+          events.push({ type: 'statChanged', entityId: e.id, stat: effect.stat, from, to: from + effect.delta });
+          return { ...e, stats: { ...e.stats, [effect.stat]: from + effect.delta } };
+        });
         break;
       }
       case 'setEntity': {
