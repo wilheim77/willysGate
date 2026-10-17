@@ -18,6 +18,7 @@ import {
   isHostile,
   stat,
   tagValue,
+  targetIds,
 } from '../../engine';
 import { ABILITY_LABELS, type Ability } from './abilities';
 import { castingAbility, hasFeature, mod, profBonus, tagValues } from './character';
@@ -43,6 +44,7 @@ import {
   spellAttackBonus,
   spellDc,
   standing,
+  isCreature,
 } from './resolve';
 
 /**
@@ -183,12 +185,12 @@ function weaponAttackSpec(state: GameState, attacker: Entity, weaponId: string, 
 /** Sneak Attack: once per turn, finesse or ranged weapon, with advantage or an ally next to the target. */
 function sneakApplies(state: GameState, attacker: Entity, weaponId: string, target: Entity): boolean {
   const weapon = WEAPONS[weaponId]!;
-  if (!hasFeature(attacker, 'sneak_attack') || (attacker.resources.sneak_attack?.current ?? 0) < 1) return false;
+  if (!hasFeature(attacker, 'sneak_attack') || (attacker.resources.sneak_attack?.current ?? 0) < 1 || !isCreature(target)) return false;
   if (!weapon.properties.includes('finesse') && !weapon.properties.includes('ranged')) return false;
   const { mode } = attackMode(state, attacker, target, !weapon.properties.includes('ranged'));
   if (mode === 'disadvantage') return false;
   if (mode === 'advantage') return true;
-  return Object.values(state.entities).some((e) => e.id !== attacker.id && !isHostile(e, attacker) && standing(e) && gridDistance(e.position, target.position) === 1);
+  return Object.values(state.entities).some((e) => e.id !== attacker.id && isCreature(e) && !isHostile(e, attacker) && standing(e) && gridDistance(e.position, target.position) === 1);
 }
 
 // --- Spells -------------------------------------------------------------------------
@@ -243,7 +245,8 @@ function areaVictims(state: GameState, caster: Entity, spell: SpellData, target:
   const sculpt = hasFeature(caster, 'sculpt_spells');
   return Object.values(state.entities).filter((e) => {
     if (!standing(e) || !tiles.has(`${e.position.x},${e.position.y}`)) return false;
-    if (spell.area!.shape !== 'sphere' && e.id === caster.id) return false;
+    // Cones, lines and self-centred bursts (Thunderwave) spare the caster.
+    if ((spell.area!.shape !== 'sphere' || spell.range === 0) && e.id === caster.id) return false;
     // Evocation wizards carve safe pockets for their friends.
     if (sculpt && !isHostile(caster, e)) return false;
     return true;
@@ -263,7 +266,7 @@ function spellTargets(state: GameState, caster: Entity, spell: SpellData, target
   if (!spell.maxTargets || spell.maxTargets <= 1) return [chosen];
   const missing = (e: Entity) => (e.resources.hp ? e.resources.hp.max - e.resources.hp.current : 0);
   const others = Object.values(state.entities)
-    .filter((e) => e.id !== chosen.id && standing(e) && !isHostile(e, caster) && gridDistance(e.position, caster.position) <= spell.range)
+    .filter((e) => e.id !== chosen.id && isCreature(e) && standing(e) && !isHostile(e, caster) && gridDistance(e.position, caster.position) <= spell.range)
     .sort((a, b) => missing(b) - missing(a) || a.id.localeCompare(b.id));
   return [chosen, ...others].slice(0, spell.maxTargets);
 }
@@ -321,7 +324,8 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   if (kind === 'spell') {
     const spell = SPELLS[id]!;
     const ability = castingAbility(e) ?? 'int';
-    if (spell.requiresTag && targetEntity && !hasTag(targetEntity, spell.requiresTag)) return { valid: false, reason: 'Este conjuro no afecta a esa criatura.' };
+    const chosen = targetIds(target).map((t) => state.entities[t]).filter((t): t is Entity => !!t);
+    if (spell.requiresTag && chosen.some((t) => !hasTag(t, spell.requiresTag!))) return { valid: false, reason: 'Este conjuro no afecta a esa criatura.' };
     if (spell.special === 'revivify') {
       return targetEntity && hasCondition(targetEntity, 'dead') ? { valid: true, chance: 1 } : { valid: false, reason: 'Solo sirve con un aliado muerto.' };
     }
@@ -334,7 +338,8 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
     }
     if (spell.target === 'creature' && (!targetEntity || (!standing(targetEntity) && !spell.heal))) return { valid: false, reason: 'Objetivo no válido.' };
     const aimAt = target.tile ?? targetEntity?.position;
-    if (aimAt && spell.range > 1 && !hasLineOfSight(state, e.position, aimAt)) return { valid: false, reason: 'No lo ves: hay algo en medio.' };
+    const sightLines = target.tile ? [target.tile] : chosen.length ? chosen.map((t) => t.position) : aimAt ? [aimAt] : [];
+    if (spell.range > 1 && sightLines.some((p) => !hasLineOfSight(state, e.position, p))) return { valid: false, reason: 'No lo ves: hay algo en medio.' };
 
     const victims = spellTargets(state, e, spell, target);
     const shots = dartTargets(spell, target);
@@ -358,7 +363,7 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
       const dmg = spellDamage(e, spell);
       let expected = 0;
       let chance = 0;
-      for (const v of victims) {
+      for (const v of victims.filter(isCreature)) {
         const fail = 1 - chanceToSucceed(saveBonus(v, spell.save.ability) + (hasCondition(v, 'blessed') ? 2.5 : 0), dc, saveMode(v, spell.save.ability));
         chance = Math.max(chance, fail);
         if (dmg) {
@@ -369,7 +374,7 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
         }
       }
       const affectedTiles = spell.area ? areaTiles(state, e, spell, target.tile ?? targetEntity?.position ?? e.position) : undefined;
-      if (spell.area && victims.filter((v) => isHostile(e, v)).length === 0) {
+      if (spell.area && victims.filter((v) => isCreature(v) && isHostile(e, v)).length === 0) {
         return { valid: true, chance: 0, expectedDamage: 0, breakdown: [{ label: 'No alcanza a ningún enemigo' }], ...(affectedTiles ? { affectedTiles } : {}) };
       }
       return {
@@ -380,8 +385,8 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
         breakdown: [
           { label: `CD ${dc} (${ABILITY_LABELS[spell.save.ability]})`, term: 'dc' },
           { label: 'Probabilidad de que falle la salvación', value: pct(chance), term: 'saving_throw' },
-          ...(spell.area ? [{ label: `Afecta a ${victims.length} criatura(s)` }] : []),
-          ...(spell.push ? victims.filter((v) => isHostile(e, v)).flatMap((v) => describePush(state, v, e.position, spell.push!).lines.map((l) => ({ ...l, label: `${v.name}: ${l.label}` }))) : []),
+          ...(spell.area ? [{ label: `Afecta a ${victims.filter(isCreature).length} criatura(s)` }] : []),
+          ...(spell.push ? victims.filter((v) => isCreature(v) && isHostile(e, v)).flatMap((v) => describePush(state, v, e.position, spell.push!).lines.map((l) => ({ ...l, label: `${v.name}: ${l.label}` }))) : []),
         ],
       };
     }

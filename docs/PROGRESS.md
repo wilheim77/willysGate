@@ -66,7 +66,20 @@
 - [x] Los ataques contra objetos (barriles, cajas) impactan siempre, sin crítico; la vista previa y el registro lo indican.
 - [x] Fichas de personaje: retratos del grupo siempre en pantalla; tocar un retrato o una ficha de iniciativa abre la ficha (combate, características, habilidades, recursos, armas, conjuros, rasgos, defensas, estados), con «?» del glosario. El ruleset la rellena con `describeEntity` (genérico en el motor).
 - [x] Registro de combate plegable (una línea / panel con desplazamiento); se recuerda la elección.
-- [x] Tests: 195.
+- [x] Revisión del subagente revisor (Fable) aplicada:
+  - el fuego se apaga aunque el último de la iniciativa esté muerto;
+  - Onda atronadora ya no daña al lanzador;
+  - cajas y barriles no cuentan como enemigos pegados ni para el ataque furtivo;
+  - un objeto destruido no da cobertura;
+  - los conjuros con varios objetivos exigen ver a todos;
+  - un compañero caído ocupa su casilla (`Ruleset.occupiesTile`);
+  - los caídos sufren fuego y explosiones (se desangran antes);
+  - levantarse del suelo cuesta la mitad del movimiento y resbalar detiene el paso;
+  - el camino evita el fuego si le llega el movimiento (`movePath`, también en la vista previa) y marca en naranja las casillas peligrosas;
+  - el alcance pintado cuenta el coste de los escombros;
+  - las superficies pintadas en el mapa duran y dan luz como las demás;
+  - los barriles dentro del fuego arden y acaban explotando.
+- [x] Tests: 204.
 - [ ] Prueba del usuario en el móvil.
 
 ## Planificado para más adelante

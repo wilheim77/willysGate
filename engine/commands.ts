@@ -1,11 +1,11 @@
 import { act, applyOutcome, checkCombatEnd, endTurn, inCombat, isAdjacent, isHostile, startCombat } from './combat';
 import { type BaseCommand, type CommandHandler, type GameEvent, fail, requireControlled } from './command-types';
 import { type Vec2, inBounds, posKey } from './grid';
-import { findPath } from './pathfinding';
+import { type PathResult, findPath } from './pathfinding';
 import { surfaceAt } from './surfaces';
 import { RngCursor } from './rng';
 import type { Ruleset } from './ruleset';
-import type { GameState } from './state';
+import type { Entity, GameState } from './state';
 
 export * from './command-types';
 
@@ -24,10 +24,15 @@ export interface EntityMovedEvent extends GameEvent {
 }
 
 /** Tiles other creatures stand on (only those the ruleset still counts as standing block the way). */
+/** Whether an entity takes up its tile (see Ruleset.occupiesTile). */
+export function occupies(ruleset: Ruleset, e: Entity): boolean {
+  return ruleset.occupiesTile ? ruleset.occupiesTile(e) : ruleset.isStanding(e);
+}
+
 export function blockedTiles(ruleset: Ruleset, state: GameState, exceptId: string): Set<string> {
   return new Set(
     Object.values(state.entities)
-      .filter((e) => e.id !== exceptId && ruleset.isStanding(e))
+      .filter((e) => e.id !== exceptId && occupies(ruleset, e))
       .map((e) => posKey(e.position)),
   );
 }
@@ -39,6 +44,25 @@ export function surfaceCost(ruleset: Ruleset, state: GameState): (p: Vec2) => nu
     const s = surfaceAt(state, p);
     return s ? (defs[s.type]?.extraMoveCost ?? 0) : 0;
   };
+}
+
+/** How much a mover would rather not step on a tile (fire, electrified water...). */
+export function surfaceHazard(ruleset: Ruleset, state: GameState): (p: Vec2) => number {
+  const defs = ruleset.surfaces ?? {};
+  return (p) => {
+    const s = surfaceAt(state, p);
+    return s ? (defs[s.type]?.hazard ?? 0) : 0;
+  };
+}
+
+/**
+ * The path a move command takes: the cheapest one that steers around hazards when it
+ * can afford to, otherwise simply the cheapest. Clients use it to draw the same path.
+ */
+export function movePath(ruleset: Ruleset, state: GameState, moverId: string, to: Vec2, budget = Infinity): PathResult | null {
+  const mover = state.entities[moverId]!;
+  const base = { blocked: blockedTiles(ruleset, state, moverId), rules: ruleset.movement, extraCost: surfaceCost(ruleset, state) };
+  return findPath(state.map, mover.position, to, { ...base, maxCost: budget, avoid: surfaceHazard(ruleset, state) }) ?? findPath(state.map, mover.position, to, base);
 }
 
 const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
@@ -53,11 +77,8 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     if (!ruleset.canAct(entity)) return fail('cannot_act', `${entity.id} cannot act`);
   }
 
-  const result = findPath(state.map, entity.position, cmd.to, {
-    blocked: blockedTiles(ruleset, state, entity.id),
-    rules: ruleset.movement,
-    extraCost: surfaceCost(ruleset, state),
-  });
+  const budget = fighting ? ruleset.movementBudget(entity, state) - state.turn.movementUsed : Infinity;
+  const result = movePath(ruleset, state, entity.id, cmd.to, budget);
   if (!result) return fail('no_path', 'No path to destination');
   if (fighting) {
     const left = ruleset.movementBudget(entity, state) - state.turn.movementUsed;
@@ -112,11 +133,14 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
       events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
       from = step;
       segment = [];
+      const before = new Set(next.entities[entity.id]!.conditions.map((c) => c.id));
       const r = applyOutcome(ruleset, next, ruleset.onSurface(next, entity.id, surface.type, 'enter', rng), rng);
       next = r.state;
       events.push(...r.events);
       const after = next.entities[entity.id];
-      if (!after || !ruleset.isStanding(after) || !ruleset.canAct(after) || (after.position.x !== step.x || after.position.y !== step.y)) {
+      // A new condition (slipped and fell, stunned...) ends the walk where it happened.
+      const struck = !!after && after.conditions.some((c) => !before.has(c.id));
+      if (!after || struck || !ruleset.isStanding(after) || !ruleset.canAct(after) || (after.position.x !== step.x || after.position.y !== step.y)) {
         prev = after?.position ?? step;
         break;
       }

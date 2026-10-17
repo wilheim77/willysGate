@@ -12,6 +12,7 @@ import {
   nextAiCommand,
   posKey,
   reachableTiles,
+  surfaceCost,
   blockedTiles,
   zonesOf,
 } from '../../engine';
@@ -341,7 +342,7 @@ export class GameController {
       return;
     }
     const left = ruleset.movementBudget(actor, state) - turn.movementUsed;
-    const tiles = left > 0 ? [...reachableTiles(state.map, actor.position, left, { rules: ruleset.movement, blocked: blockedTiles(ruleset, state, active) }).values()].map((t) => t.pos) : [];
+    const tiles = left > 0 ? [...reachableTiles(state.map, actor.position, left, { rules: ruleset.movement, blocked: blockedTiles(ruleset, state, active), extraCost: surfaceCost(ruleset, state) }).values()].map((t) => t.pos) : [];
     this.scene.setOverlays(tiles, []);
   }
 }

@@ -113,15 +113,20 @@ export function attackMode(state: GameState, attacker: Entity, target: Entity, m
   if (hasCondition(target, 'prone')) (melee ? adv : dis).push('objetivo derribado');
   if (hasCondition(target, 'dodging')) dis.push('el objetivo esquiva');
   if (['poisoned', 'frightened', 'blinded', 'prone'].some((c) => hasCondition(attacker, c))) dis.push('atacante afectado');
-  if (!melee && Object.values(state.entities).some((e) => isHostile(e, attacker) && standing(e) && gridDistance(e.position, attacker.position) === 1)) {
+  if (!melee && Object.values(state.entities).some((e) => isCreature(e) && isHostile(e, attacker) && standing(e) && gridDistance(e.position, attacker.position) === 1)) {
     dis.push('enemigo pegado');
   }
-  if (hasTag(attacker, 'pack_tactics') && Object.values(state.entities).some((e) => e.id !== attacker.id && !isHostile(e, attacker) && standing(e) && gridDistance(e.position, target.position) === 1)) {
+  if (hasTag(attacker, 'pack_tactics') && Object.values(state.entities).some((e) => e.id !== attacker.id && isCreature(e) && !isHostile(e, attacker) && standing(e) && gridDistance(e.position, target.position) === 1)) {
     adv.push('tácticas de manada');
   }
   const mode = resolveRollMode(adv.length > 0, dis.length > 0);
   const reasons = mode === 'advantage' ? adv : mode === 'disadvantage' ? dis : [];
   return { mode, reasons };
+}
+
+/** A living thing rather than scenery (barrels and crates are not threats or allies). */
+export function isCreature(e: Entity): boolean {
+  return !e.tags.includes(OBJECT_TAG);
 }
 
 export function standing(e: Entity): boolean {

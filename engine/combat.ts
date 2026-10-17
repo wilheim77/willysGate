@@ -174,22 +174,42 @@ function beginTurn(ruleset: Ruleset, state: GameState, entityId: string, rng: Rn
     if (ended.events.length) return { state: ended.state, events: [...events, ...ended.events] };
     const current = next.entities[id];
     if (current && ruleset.canAct(current)) return { state: next, events };
-    const advanced = advanceOrder(next);
+    const advanced = advanceOrder(ruleset, next, rng);
     next = advanced.state;
+    events.push(...advanced.events);
     id = advanced.nextId;
   }
   return { state: next, events };
 }
 
-/** Moves the turn pointer to the next participant, increasing the round when it wraps. */
-function advanceOrder(state: GameState): { state: GameState; nextId: string } {
+/**
+ * Moves the turn pointer to the next participant. When it wraps, a new round starts:
+ * timed surfaces burn down, and things outside the turn order that sit on a surface
+ * (barrels in burning oil) suffer it once per round.
+ */
+function advanceOrder(ruleset: Ruleset, state: GameState, rng: RngCursor): { state: GameState; nextId: string; events: GameEvent[] } {
   const { order, activeEntityId, round } = state.turn;
   const index = order.indexOf(activeEntityId ?? '');
   const nextIndex = (index + 1) % order.length;
-  return {
-    state: { ...state, turn: { ...state.turn, round: nextIndex === 0 ? round + 1 : round } },
-    nextId: order[nextIndex]!,
-  };
+  let next: GameState = state;
+  const events: GameEvent[] = [];
+  if (nextIndex === 0) {
+    next = { ...state, turn: { ...state.turn, round: round + 1 } };
+    const aged = ageSurfaces(next, ruleset.surfaces);
+    next = aged.state;
+    if (aged.changed.length) events.push({ type: 'surfaceChanged', changes: aged.changed } as GameEvent);
+    if (ruleset.onSurface) {
+      for (const e of Object.values(next.entities)) {
+        if (order.includes(e.id)) continue;
+        const on = surfaceAt(next, e.position);
+        if (!on || !next.entities[e.id]) continue;
+        const r = applyOutcome(ruleset, next, ruleset.onSurface(next, e.id, on.type, 'turnStart', rng), rng);
+        next = r.state;
+        events.push(...r.events);
+      }
+    }
+  }
+  return { state: next, nextId: order[nextIndex]!, events };
 }
 
 /** Counts down timed conditions at the end of the entity's own turn. */
@@ -239,17 +259,10 @@ export const endTurn: CommandHandler<EndTurnCommand> = (state, cmd, { ruleset })
     .map((c) => ({ type: 'removeCondition', entityId: cmd.entityId, condition: c.id }));
   const expired = applyEffects(ruleset, ticked, expiredEffects);
 
-  let advanced = advanceOrder(expired.state);
-  const surfaceEvents: GameEvent[] = [];
-  if (advanced.state.turn.round > expired.state.turn.round) {
-    // A new round: timed surfaces (fire) burn down.
-    const aged = ageSurfaces(advanced.state, ruleset.surfaces);
-    advanced = { ...advanced, state: aged.state };
-    if (aged.changed.length) surfaceEvents.push({ type: 'surfaceChanged', changes: aged.changed } as GameEvent);
-  }
-  const rng = new RngCursor(advanced.state.rng);
+  const rng = new RngCursor(expired.state.rng);
+  const advanced = advanceOrder(ruleset, expired.state, rng);
   const begun = beginTurn(ruleset, advanced.state, advanced.nextId, rng);
-  return { ok: true, state: { ...begun.state, rng: rng.state }, events: [...expired.events, ...surfaceEvents, ...begun.events] };
+  return { ok: true, state: { ...begun.state, rng: rng.state }, events: [...expired.events, ...advanced.events, ...begun.events] };
 };
 
 export const act: CommandHandler<ActCommand> = (state, cmd, { ruleset }) => {

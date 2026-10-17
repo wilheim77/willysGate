@@ -46,6 +46,11 @@ export interface Ruleset {
   canAct(entity: Entity): boolean;
   /** Still counts for its side: a combat ends when one side has nobody standing. */
   isStanding(entity: Entity): boolean;
+  /**
+   * Takes up its tile: nobody may stop or be pushed there. Defaults to isStanding; a ruleset
+   * can make the fallen block too (only corpses and wreckage are left behind).
+   */
+  occupiesTile?(entity: Entity): boolean;
   /** Ruleset bookkeeping at the start of an entity's turn (bleeding out, ongoing damage...). */
   onTurnStart?(state: GameState, entityId: string, rng: RngCursor): ActionOutcome;
 

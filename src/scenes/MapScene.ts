@@ -9,6 +9,9 @@ import {
   type Vec2,
   blockedTiles,
   findPath,
+  movePath,
+  surfaceCost,
+  surfaceHazard,
   hasCondition,
   isEvent,
   lightPosition,
@@ -997,9 +1000,11 @@ export class MapScene extends Phaser.Scene {
     const mover = state.entities[this.hooks.controlledEntityId()];
     if (!mover) return;
     const ruleset = this.store.engine.ruleset;
-    const result = findPath(state.map, mover.position, target, { blocked: blockedTiles(ruleset, state, mover.id), rules: ruleset.movement });
-    // In combat, steps beyond this turn's movement are drawn red.
+    // In combat, steps beyond this turn's movement are drawn red; dangerous ones orange.
     const left = state.turn.mode === 'combat' ? ruleset.movementBudget(mover, state) - state.turn.movementUsed : Infinity;
+    const result = movePath(ruleset, state, mover.id, target, left);
+    const extra = surfaceCost(ruleset, state);
+    const hazard = surfaceHazard(ruleset, state);
     const T = this.grid.tile;
     const mark = (p: Vec2, color: number, alpha: number, inset: number) => {
       const c = this.grid.tileCentre(p.x, p.y, tileAt(state.map, p)!.height);
@@ -1013,9 +1018,9 @@ export class MapScene extends Phaser.Scene {
     let prev = mover.position;
     result.path.forEach((p, i) => {
       const last = i === result.path.length - 1;
-      cost += 1 + Math.max(0, (tileAt(state.map, p)?.height ?? 0) - (tileAt(state.map, prev)?.height ?? 0)) * ruleset.movement.climbCost;
+      cost += 1 + Math.max(0, (tileAt(state.map, p)?.height ?? 0) - (tileAt(state.map, prev)?.height ?? 0)) * ruleset.movement.climbCost + extra(p);
       prev = p;
-      mark(p, cost > left ? 0x8a2a1e : 0xc8b27a, last ? 0.5 : 0.3, last ? 2 : 11);
+      mark(p, cost > left ? 0x8a2a1e : hazard(p) > 0 ? 0xe07a2a : 0xc8b27a, last ? 0.5 : 0.3, last ? 2 : 11);
     });
   }
 }

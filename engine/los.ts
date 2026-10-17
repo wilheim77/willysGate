@@ -55,8 +55,9 @@ export function obstructionsBetween(state: GameState, a: Vec2, b: Vec2, options:
     const t = tileAt(state.map, p);
     if (!t || t.terrain === 'void') continue;
     if (!t.walkable && t.height >= eye || t.height - eye >= BLOCKING_RISE) out.push({ tile: p, kind: 'terrain' });
-    const blocker = obstacles.find((e) => samePos(e.position, p) && !samePos(e.position, a) && !samePos(e.position, b));
-    if (blocker) out.push({ tile: p, kind: 'entity', entityId: blocker.id });
+    for (const blocker of obstacles) {
+      if (samePos(blocker.position, p) && !samePos(blocker.position, a) && !samePos(blocker.position, b)) out.push({ tile: p, kind: 'entity', entityId: blocker.id });
+    }
   }
   return out;
 }

@@ -10,6 +10,7 @@ import {
   OBJECT_TAG,
   OBSTACLE_TAG,
   gridDistance,
+  hasCondition,
 } from '../../engine';
 import { rollDice, sum } from './dice';
 import { Resolver, dealDamage, destructionHooks, rollSave, standing } from './resolve';
@@ -52,9 +53,11 @@ export const SURFACE_REACTIONS: SurfaceReaction[] = [
 export function onSurface(ruleset: Ruleset, state: GameState, id: string, surface: string, trigger: 'enter' | 'turnStart', rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
   const e = state.entities[id];
-  if (!e || !standing(e) || e.tags.includes(OBJECT_TAG)) {
-    // Barrels caught in fire burn too.
-    if (e && e.tags.includes(OBJECT_TAG) && surface === 'fire' && trigger === 'turnStart') dealDamage(r, id, sum(rollDice(rng, 1, 6)), 'fire');
+  // The fallen still burn: damage to someone at 0 makes them bleed out faster.
+  if (!e || hasCondition(e, 'dead')) return r.outcome();
+  if (e.tags.includes(OBJECT_TAG)) {
+    // Barrels and crates caught in fire burn, once per round.
+    if (surface === 'fire' && trigger === 'turnStart') dealDamage(r, id, sum(rollDice(rng, 1, 6)), 'fire');
     return r.outcome();
   }
   switch (surface) {
@@ -63,13 +66,13 @@ export function onSurface(ruleset: Ruleset, state: GameState, id: string, surfac
       break;
     case 'electrified':
       dealDamage(r, id, sum(rollDice(rng, 1, 6)), 'lightning');
-      r.apply({ type: 'applyCondition', entityId: id, condition: 'no_reactions', remainingTurns: 1 });
+      if (standing(r.entity(id))) r.apply({ type: 'applyCondition', entityId: id, condition: 'no_reactions', remainingTurns: 1 });
       break;
     case 'ice':
     case 'grease':
     case 'blood':
       // Slipping only happens as you step in; standing still on it is safe.
-      if (trigger === 'enter' && !rollSave(r, id, 'dex', surface === 'blood' ? 8 : 10)) {
+      if (trigger === 'enter' && standing(e) && !rollSave(r, id, 'dex', surface === 'blood' ? 8 : 10)) {
         r.apply({ type: 'applyCondition', entityId: id, condition: 'prone', remainingTurns: 1 });
         r.emit({ type: 'slipped', entityId: id, surface } as never);
       }
@@ -133,8 +136,9 @@ export function explodeBarrel(r: Resolver, id: string): void {
   r.emit({ type: 'exploded', entityId: id, at: centre } as never);
   const damage = sum(rollDice(r.rng, 3, 6));
   for (const e of Object.values(r.state.entities)) {
-    if (e.id === id || !standing(e) || gridDistance(e.position, centre) > 1) continue;
-    const saved = e.tags.includes(OBJECT_TAG) ? false : rollSave(r, e.id, 'dex', 12);
+    if (e.id === id || hasCondition(e, 'dead') || gridDistance(e.position, centre) > 1) continue;
+    // Objects and the unconscious can't dodge.
+    const saved = e.tags.includes(OBJECT_TAG) || !standing(e) ? false : rollSave(r, e.id, 'dex', 12);
     dealDamage(r, e.id, saved ? Math.floor(damage / 2) : damage, 'fire');
   }
   r.apply({ type: 'spawnSurface', tiles, surface: 'oil' }, { type: 'applyElement', tiles, element: 'fire' });

@@ -9,7 +9,6 @@ import { makeSurface, surfaceable, surfacesOf, withSurfaces } from './surfaces';
  * Generic state changes produced by rules (a hit, a spell, a dialogue outcome).
  * The ruleset decides *what* happens (e.g. 7 fire damage after resistance becomes
  * modifyResource on the hit-point pool); the engine applies it and emits events.
- * Planned: push, spawnSurface (Phase 3).
  */
 export type Effect =
   | { type: 'modifyResource'; entityId: string; resource: string; delta: number }
@@ -256,7 +255,7 @@ export function simulatePush(
     if (!inBounds(state.map, step) || !there || !there.walkable || there.height - here.height > ruleset.movement.maxStep) {
       return { to: pos, dropped, collidedWith: { wall: true } };
     }
-    const blocker = Object.values(state.entities).find((o) => o.id !== e.id && o.position.x === step.x && o.position.y === step.y && ruleset.isStanding(o));
+    const blocker = Object.values(state.entities).find((o) => o.id !== e.id && o.position.x === step.x && o.position.y === step.y && (ruleset.occupiesTile ? ruleset.occupiesTile(o) : ruleset.isStanding(o)));
     if (blocker) return { to: pos, dropped, collidedWith: { entityId: blocker.id } };
     const drop = here.height - there.height;
     if (drop > ruleset.movement.maxStep) dropped += drop;

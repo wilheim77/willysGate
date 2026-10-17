@@ -242,8 +242,11 @@ export const dnd5e: Ruleset = {
   movement: { maxStep: 1, climbCost: 1 },
   movementBudget: (e) => {
     if (['restrained', 'paralyzed', 'stunned', 'downed', 'dead'].some((c) => hasCondition(e, c))) return 0;
-    const speed = stat(e, 'speed', 6) * (hasCondition(e, 'dashing') ? 2 : 1);
-    return Math.max(0, speed - (hasCondition(e, 'slowed') ? 2 : 0));
+    const base = stat(e, 'speed', 6);
+    const speed = base * (hasCondition(e, 'dashing') ? 2 : 1);
+    // Getting up from prone costs half your speed.
+    const standUp = hasCondition(e, 'prone') ? Math.ceil(base / 2) : 0;
+    return Math.max(0, speed - standUp - (hasCondition(e, 'slowed') ? 2 : 0));
   },
   resolveCheck,
   difficulty,
@@ -263,6 +266,8 @@ export const dnd5e: Ruleset = {
   // Turned undead cower (simplified: they lose their turns until something hurts them).
   canAct: (e) => standing(e) && !['paralyzed', 'stunned', 'unconscious', 'incapacitated', 'turned'].some((c) => hasCondition(e, c)),
   isStanding: (e) => standing(e) && isAlive(e),
+  // A fallen companion still lies there; only the dead and smashed scenery free the tile.
+  occupiesTile: (e) => !hasCondition(e, 'dead') && (e.tags.includes('object') ? standing(e) : true),
   onTurnStart: (state, id, rng) => onTurnStart(dnd5e, state, id, rng),
   listActions,
   previewAction,

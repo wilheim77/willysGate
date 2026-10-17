@@ -18,6 +18,8 @@ export interface PathOptions {
   maxCost?: number;
   /** Extra cost to enter a tile (difficult terrain from surfaces, etc.). */
   extraCost?: (p: Vec2) => number;
+  /** Preference only: makes a tile look worse to the search (fire) without costing movement. */
+  avoid?: (p: Vec2) => number;
 }
 
 export interface PathResult {
@@ -76,7 +78,9 @@ export function findPath(map: GridMap, from: Vec2, to: Vec2, options: PathOption
   const index = (p: Vec2): number => p.y * map.width + p.x;
   const heuristic = (p: Vec2): number => Math.max(Math.abs(p.x - to.x), Math.abs(p.y - to.y));
 
+  // gScore ranks paths (cost plus avoidance); spent is the movement they really cost.
   const gScore = new Map<number, number>([[index(from), 0]]);
+  const spent = new Map<number, number>([[index(from), 0]]);
   const cameFrom = new Map<number, number>();
   const closed = new Set<number>();
   const open = new MinHeap();
@@ -96,7 +100,7 @@ export function findPath(map: GridMap, from: Vec2, to: Vec2, options: PathOption
         path.push({ x: i % map.width, y: Math.floor(i / map.width) });
         i = cameFrom.get(i);
       }
-      return { path: path.reverse(), cost: gScore.get(ci)! };
+      return { path: path.reverse(), cost: spent.get(ci)! };
     }
 
     const g = gScore.get(ci)!;
@@ -105,10 +109,12 @@ export function findPath(map: GridMap, from: Vec2, to: Vec2, options: PathOption
       const cost = stepCost(map, current.pos, next, options.rules, options.blocked);
       if (cost === null) continue;
       const ni = index(next);
-      const tentative = g + cost + (options.extraCost?.(next) ?? 0);
-      if (tentative > maxCost || closed.has(ni)) continue;
+      const real = spent.get(ci)! + cost + (options.extraCost?.(next) ?? 0);
+      const tentative = g + cost + (options.extraCost?.(next) ?? 0) + (options.avoid?.(next) ?? 0);
+      if (real > maxCost || closed.has(ni)) continue;
       if (tentative < (gScore.get(ni) ?? Infinity)) {
         gScore.set(ni, tentative);
+        spent.set(ni, real);
         cameFrom.set(ni, ci);
         const h = heuristic(next);
         open.push({ pos: next, f: tentative + h, h, order: order++ });
