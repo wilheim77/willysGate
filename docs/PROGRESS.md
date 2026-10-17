@@ -91,7 +91,13 @@
 - [x] Prueba de contenido: enlaces válidos, reglas y pruebas existentes, **sin bloqueos** (cada nodo con opciones tiene una sin condición ni tirada, y todo nodo puede llegar al final).
 - [x] PNJ de prueba: el viejo minero en el mapa de prueba.
 - [x] Creación de personaje con compra de puntos: pasos como datos (`engine/creation.ts`), 5e los rellena (nombre, raza, clase, 27 puntos de 8 a 15, «Recomendado» por clase, bonos de raza visibles), pantalla al empezar y tras «Nueva», con «Partida rápida».
-- [ ] Interactuables y trampas (cofres, palancas, puertas; trampas con Percepción y desactivar).
+- [x] Trampas (`engine/traps.ts`): ocultas hasta que alguien las nota (5e: Percepción pasiva al pasar a 2 casillas), saltan al pisarlas (5e: salvación, daño, estado), los caminos evitan las conocidas; desactivar con prueba (fallar por 5 o más la dispara). En el cliente: marca roja, tocarla acerca al grupo y pregunta quién lo intenta con su probabilidad; el d20 se ve. Trampa de prueba «cepo» en el mapa de prueba.
+- [x] Fuera de combate, los estados con duración se pasan al volver a moverse.
+- [x] Revisión 2 aplicada: no se habla con muertos; `startDialogue` solo para guiones; cualquier combate cierra la conversación; `endDialogue` y cierre automático si una partida guardada apunta a un diálogo que ya no existe; opciones «una vez» con `id` estable; etiqueta `noncombatant` (nadie es hostil a un transeúnte); `setController`/`setTile` validan; tests de contenido más estrictos.
+- [x] Reglas de trama adoptadas: ninguna información crítica tras una sola tirada; fallar cuesta dinero, tiempo o reputación, nunca la puerta. El viejo minero ya da la pista también si le pagas.
+- [x] Interactuables como diálogos sobre objetos: cofre con aguja envenenada (verla con Investigación, abrir con Juego de manos o con la llave del viejo, sin tirada), puerta atrancada (Atletismo) y palanca que la abre sin tirada. Nuevo efecto `setEntity` (cambiar sprite, nombre y etiquetas). Los objetos solo ocupan casilla si son obstáculo.
+- [x] Objetos con nombre y descripción (`items.json`) y «Mochila del grupo» en la ficha.
+- [ ] `flags.json` con marcas críticas + tests (marca crítica alcanzable sin tiradas, marcas leídas y nunca escritas, PNJ esenciales).
 - [ ] Escena «El camino»: Dorotea, reclutamiento de Garrán, mineros hambrientos evitables hablando.
 - [ ] Peticiones de Willy al motor: cambio de mapa (R10), causa en eventos (R11), semillas derivadas (R12), marcadores (R14).
 

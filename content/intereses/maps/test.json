@@ -10,7 +10,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 6,
- "nextobjectid": 70,
+ "nextobjectid": 71,
  "properties": [
   {
    "name": "name",
@@ -898,6 +898,71 @@
        "name": "surface",
        "type": "string",
        "value": "rubble"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "traps",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "objects": [
+    {
+     "id": 70,
+     "name": "cepo",
+     "type": "",
+     "x": 224,
+     "y": 160,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "detect",
+       "type": "int",
+       "value": 12
+      },
+      {
+       "name": "save",
+       "type": "string",
+       "value": "dex"
+      },
+      {
+       "name": "dc",
+       "type": "int",
+       "value": 13
+      },
+      {
+       "name": "damage",
+       "type": "string",
+       "value": "2d6"
+      },
+      {
+       "name": "type",
+       "type": "string",
+       "value": "piercing"
+      },
+      {
+       "name": "condition",
+       "type": "string",
+       "value": "restrained"
+      },
+      {
+       "name": "disarmCheck",
+       "type": "string",
+       "value": "sleight_of_hand"
+      },
+      {
+       "name": "disarmDc",
+       "type": "int",
+       "value": 12
       }
      ]
     }

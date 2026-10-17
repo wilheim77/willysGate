@@ -127,4 +127,20 @@ describe('dialogue', () => {
     const fighting = pick(talk(world()), 5);
     expect(engine.apply(fighting, { type: 'interact', issuer: 'player:1', entityId: 'hero', targetId: 'guard' } as BaseCommand).ok).toBe(false);
   });
+
+  it('fixes from review 2: no talking to the dead, scripts only for startDialogue, fights and lost trees close conversations', () => {
+    const dead = { ...world(), entities: { ...world().entities, guard: { ...world().entities.guard!, resources: { ...world().entities.guard!.resources, blood: { current: 0, max: 6 } } } } };
+    expect(engine.apply(dead, { type: 'interact', issuer: 'player:1', entityId: 'hero', targetId: 'guard' } as BaseCommand).ok).toBe(false);
+    expect(engine.apply(world(), { type: 'startDialogue', issuer: 'player:1', treeId: 'gate', actorId: 'hero' } as BaseCommand).ok).toBe(false);
+    expect(engine.apply(world(), { type: 'startDialogue', issuer: 'system', treeId: 'gate', actorId: 'hero' } as BaseCommand).ok).toBe(true);
+    // An encounter starting elsewhere ends the conversation.
+    const talking = talk(world());
+    const fight = engine.apply(talking, { type: 'startCombat', issuer: 'system', participants: ['hero', 'guard'] } as BaseCommand);
+    expect(fight.ok && dialogueOf(fight.state)).toBeNull();
+    // A saved conversation whose tree no longer exists can be closed.
+    const lost = { ...talking, systems: { ...talking.systems, dialogue: { ...(talking.systems.dialogue as object), treeId: 'gone' } } };
+    expect(engine.apply(lost, { type: 'endDialogue', issuer: 'player:1' } as BaseCommand).ok).toBe(true);
+    const picked = engine.apply(lost, { type: 'chooseOption', issuer: 'player:1', index: 0 } as BaseCommand);
+    expect(picked.ok && dialogueOf(picked.state)).toBeNull();
+  });
 });

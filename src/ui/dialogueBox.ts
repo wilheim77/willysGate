@@ -14,6 +14,8 @@ export class DialogueBox {
   private root = document.querySelector<HTMLElement>('#dialogue')!;
   /** The last roll, shown above the next line until the conversation moves on again. */
   private lastRoll: { actor: string; result: CheckResult } | null = null;
+  /** A client-side question (disarm this trap? who?) shown in the same panel. */
+  private question: { text: string; options: { label: string; onPick: () => void }[]; closeLabel?: string } | null = null;
 
   constructor(
     private store: GameStore,
@@ -32,31 +34,60 @@ export class DialogueBox {
     }
   }
 
+  /** Asks something outside any conversation tree; a "Dejarlo" option is always added. */
+  ask(text: string, options: { label: string; onPick: () => void }[], closeLabel?: string): void {
+    this.question = { text, options, ...(closeLabel ? { closeLabel } : {}) };
+    this.render(this.store.state);
+  }
+
   render(state: GameState): void {
+    if (this.question) {
+      const q = this.question;
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      if (this.lastRoll) panel.append(this.rollLine(this.lastRoll));
+      const line = document.createElement('div');
+      line.className = 'line narration';
+      const p = document.createElement('p');
+      p.textContent = q.text;
+      line.append(p);
+      const list = document.createElement('div');
+      list.className = 'choices';
+      const close = () => {
+        this.question = null;
+        this.render(this.store.state);
+      };
+      q.options.forEach((o, i) =>
+        list.append(
+          this.button(`${i + 1}. ${o.label}`, true, () => {
+            close();
+            o.onPick();
+          }),
+        ),
+      );
+      list.append(this.button(q.closeLabel ?? `${q.options.length + 1}. ${this.t('leaveIt', 'Dejarlo')}`, true, () => {
+        this.lastRoll = null;
+        close();
+      }));
+      panel.append(line, list);
+      this.root.replaceChildren(panel);
+      this.root.hidden = false;
+      return;
+    }
     const d = dialogueOf(state);
     const tree = d && this.game.dialogues?.[d.treeId];
     const node = tree && tree.nodes[d.nodeId];
     if (!d || !tree || !node) {
       this.root.hidden = true;
-      this.lastRoll = null;
+      // A saved conversation this version doesn't have: close it rather than freeze the party.
+      if (d) queueMicrotask(() => this.store.dispatch({ type: 'endDialogue', issuer: this.game.playerId } as never));
       return;
     }
     const ruleset = this.store.engine.ruleset;
     const panel = document.createElement('div');
     panel.className = 'panel';
 
-    if (this.lastRoll) {
-      const roll = document.createElement('div');
-      const r = this.lastRoll.result;
-      roll.className = `roll ${r.success ? 'success' : 'failure'}`;
-      const die = document.createElement('span');
-      die.className = 'die';
-      die.textContent = String(r.dice[0]?.kept[0] ?? r.dice[0]?.rolls[0] ?? '');
-      const text = document.createElement('span');
-      text.textContent = `${this.lastRoll.actor}: ${formatRoll(r)} · ${r.success ? this.t('checkSuccess', 'Éxito') : this.t('checkFailure', 'Fallo')}`;
-      roll.append(die, text);
-      panel.append(roll);
-    }
+    if (this.lastRoll) panel.append(this.rollLine(this.lastRoll));
 
     const speaker = node.speaker ? state.entities[node.speaker] : undefined;
     const line = document.createElement('div');
@@ -91,6 +122,25 @@ export class DialogueBox {
     panel.append(list);
     this.root.replaceChildren(panel);
     this.root.hidden = false;
+  }
+
+  private rollLine(last: { actor: string; result: CheckResult }): HTMLElement {
+    const roll = document.createElement('div');
+    const r = last.result;
+    roll.className = `roll ${r.success ? 'success' : 'failure'}`;
+    const die = document.createElement('span');
+    die.className = 'die';
+    die.textContent = String(r.dice[0]?.kept[0] ?? r.dice[0]?.rolls[0] ?? '');
+    const text = document.createElement('span');
+    text.textContent = `${last.actor}: ${formatRoll(r)} · ${r.success ? this.t('checkSuccess', 'Éxito') : this.t('checkFailure', 'Fallo')}`;
+    roll.append(die, text);
+    return roll;
+  }
+
+  /** Shows a roll that happened outside a conversation (disarming a trap) until dismissed. */
+  showRoll(actor: string, result: CheckResult, text: string): void {
+    this.lastRoll = { actor, result };
+    this.ask(text, [], this.t('ok', 'Vale'));
   }
 
   private button(label: string, enabled: boolean, onClick: () => void, extra = ''): HTMLButtonElement {
