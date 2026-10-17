@@ -72,6 +72,8 @@ export default {
     { name: 'candil-repisa', at: [22, 5], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
     { name: 'candil-pasarela', at: [29, 15], radius: 3.5, color: '#ffb050', flicker: 0.15 },
     { name: 'brillo-plata', at: [35, 14], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.6 },
+    { name: 'candil-tunel-cripta', at: [15, 25], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7 },
+    { name: 'candil-brecha', at: [30, 15], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.7 },
     { name: 'vela-cripta', at: [3, 26], radius: 2.5, color: '#ffd090', flicker: 0.2, intensity: 0.7 },
   ],
   surfaces: [

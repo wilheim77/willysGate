@@ -56,7 +56,7 @@ kkksssssssssssssssskkkkksssssssk   32211111111111111112333211111112
 kksssssssssssss^ssskkGkksssssssk   32111111111111111112333211111112
 kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
 kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
-kksssssxsssssssssssssssssssssssk   32111111111111111111111111111112
+kffffffxsfffffsssssssssssffffffk   31111111111111111111111111111112
 kssssssssssssRwwRRRRRRRRRRRRRRRE   21111111111111111111111111111111
 RRR@RRRRRRRRRRwwRRRRDRRRRRRRRARE   11111111111111111111111111111111
 RRBRRRRRRRRRRsssssssssFsssssssss   11111111111111111111111111111111
@@ -97,10 +97,10 @@ hRRRRRRRWWWWRRRRRRRRRRRRRQhghg   #0000000####00000000000000####
 gRRRRRR==TF==G=RRRRRRRRRRRghgh   #0000001222222100000000000####
 hRRRRRR========RRRRRRRRRRRhghg   #0000001222222100000000000####
 gRRRRRK*RRRRRRRoRRRRRRRRRRRRRE   #00000000000000000000000000000
-hcccccRRIRRRRJ*RRRRRRRRRRRRCRE   #11111000000000000000000000000
+hccc*cRRIRRRRJ*RRRRRRRRRRRRCRE   #11111000000000000000000000000
 gcxxccRRRRRRRRRRRRRRRRRRRRRRRE   #11111000000000000000000000000
 hcucccRRRRRRRRRRRRRRRRRRRghghg   #111110000000000000000000#####
-gcccccRRRRRRRRRRRORRRRRLR*ghgh   #111110000000000000000000#####
+gcccccRRRRRRRRRRROR*RRRLR*ghgh   #111110000000000000000000#####
 hRRRRRRRRRRRRRRRRRRuRRRRMghghg   #000000000000000000000000#####
 ERRRRRRRRRRRRRRRwwwRRRNRRhghgh   0000000000000000000000000#####
 ERARRRRRRRRRRRRRRRRRRRRRR/hghg   00000000000000000000000000####
@@ -210,12 +210,12 @@ ssssssssssssssss===========sbwwbss   0000000000000000111111111110000000
 sssWWWWW/WWWWWssgggggggggggsbwwbss   000#####0#####00###########0000000
 sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
 sssW===K==*==WssgggggggggggsGwwbss   000#000000000#00###########0000000
-sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
+sssW=========Wssgggggggggggsbw*bss   000#000000000#00###########0000000
 sssWWWWWdWWWWWssgggggggggggsbwwIss   000###########00###########0000000
 sssW======^==Wssgggggggggggsbwwbss   000#000000000#00###########0000000
 sssW=======c=Wssssssssssssssbwwbss   000#000000000#00000000000000000000
 sssWWdWWWWWWWWsssossxxssssssbwwbss   000###########00000000000000000000
-ssssssssssssssssssssssssssssbwwbss   0000000000000000000000000000000000
+ssssss*sssssssfffffssffffffsbwwbss   0000000000000011111001111110000000
 ssssssssssssssssssssssssssssbwwbss   0000000000000000000000000000000000
 ^ dardo-trastienda (10,19) {"marker":"trap_dart","detect":14,"save":"con","dc":13,"damage":"2d4","type":"poison","condition":"poisoned","turns":3,"disarmCheck":"sleight_of_hand","disarmDc":13}
 E a-plaza (0,9) -> plaza:entry-calles
@@ -308,7 +308,7 @@ scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enm
 ##############..H*...........HG#.......#   ##############00100000000000022#0000000#
 E.A.*..................o.......&.......E   0000000000000000000000000000000000000000
 E-------x----------x------x----&-u-*.D.E   0000000000000000000000000000000000000000
-E............................*.&.......E   0000000000000000000000000000000000000000
+E............................**&.......E   0000000000000000000000000000000000000000
 ##############...........#...HH#..k.&&.#   ##############00000000000#00022#0000000#
 ##############...........#...HH#....&&.#   ##############00000000000#00022#0000000#
 ##############......wwww.....HH#.......#   ##############00000000000000022#0000000#
@@ -318,7 +318,7 @@ E............................*.&.......E   0000000000000000000000000000000000000
 ###############..#######################   ###############00#######################
 ###############..#######################   ###############00#######################
 ###############L.#######################   ###############00#######################
-###############..#######################   ###############00#######################
+###############*.#######################   ###############00#######################
 E..*.....^...K...#######################   00000000000000000#######################
 E.C..............#######################   00000000000000000#######################
 E.....##################################   000000##################################

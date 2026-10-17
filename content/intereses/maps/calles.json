@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 31,
+ "nextobjectid": 33,
  "properties": [
   {
    "name": "name",
@@ -58,7 +58,7 @@
 29,29,29,59,15,15,15,15,15,15,15,15,15,59,29,29,58,58,58,58,58,58,58,58,58,58,58,29,54,51,51,55,29,29,
 29,29,29,59,15,15,15,15,15,15,15,15,15,59,29,29,29,29,29,29,29,29,29,29,29,29,29,29,54,51,51,55,29,29,
 29,29,29,59,59,21,59,59,59,59,59,59,59,59,29,29,29,29,29,29,29,29,29,29,29,29,29,29,54,51,51,55,29,29,
-29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,54,51,51,55,29,29,
+29,29,29,29,29,29,29,29,29,29,29,29,29,29,56,56,56,56,56,29,29,56,56,56,56,56,56,29,54,51,51,55,29,29,
 29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,54,51,51,55,29,29
 ]
   },
@@ -521,6 +521,74 @@
     },
     {
      "id": 25,
+     "name": "candil-patio",
+     "type": "",
+     "point": true,
+     "x": 208,
+     "y": 720,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.7
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "candil-lloro",
+     "type": "",
+     "point": true,
+     "x": 976,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.7
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      }
+     ]
+    },
+    {
+     "id": 27,
      "name": "lampara-empenos",
      "type": "",
      "point": true,
@@ -577,7 +645,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 26,
+     "id": 28,
      "name": "el-lloro",
      "type": "",
      "x": 928,
@@ -607,7 +675,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 29,
      "name": "dardo-trastienda",
      "type": "",
      "x": 320,
@@ -682,7 +750,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 30,
      "name": "a-plaza",
      "type": "",
      "x": 0,
@@ -705,7 +773,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 31,
      "name": "a-escorial",
      "type": "",
      "x": 1056,
@@ -745,7 +813,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 30,
+     "id": 32,
      "name": "sermon",
      "type": "",
      "x": 416,
