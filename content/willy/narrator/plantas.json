@@ -462,9 +462,10 @@
         },
         {
           "id": "rg-02",
-          "texto": "Otro concursante. {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. No sé por qué te lo cuento. Producción me lo ha pasado en una tarjeta.",
+          "texto": "Otra concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
           "si": {
-            "primeraVez": true
+            "primeraVez": true,
+            "rival.genero": "f"
           }
         },
         {
@@ -483,7 +484,7 @@
         },
         {
           "id": "rg-05",
-          "texto": "Se acerca {rival:un} con muy mala cara. {rivalRaza:Mayus}, para más señas. Y {rivalMania}. Hay gente para todo.",
+          "texto": "Se acerca {rivalNombre} con muy mala cara. {rivalRaza:Mayus}, para más señas, y {rivalMania}. Hay gente para todo.",
           "si": {
             "primeraVez": true,
             "comportamiento": "agresivo"
@@ -553,6 +554,42 @@
           "texto": "{rivalNombre} vuelve, y no viene de tu lado. Pactar con alguien que silba cuando habla tenía sus riesgos.",
           "si": {
             "traicion": true
+          }
+        },
+        {
+          "id": "rg-02m",
+          "texto": "Otro concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
+          "si": {
+            "primeraVez": true,
+            "rival.genero": "m"
+          }
+        },
+        {
+          "id": "rg-12",
+          "texto": "{rivalNombre} {rivalApellido}. Antes del apocalipsis, {rivalOficio} en {rivalLugar}. Después del apocalipsis, lo mismo, pero con más gritos.",
+          "si": {
+            "primeraVez": true
+          }
+        },
+        {
+          "id": "rg-13",
+          "texto": "Una {rivalRaza} te corta el paso. Producción dice que es legal. Producción dice muchas cosas.",
+          "si": {
+            "primeraVez": true,
+            "rival.raza": {
+              "en": [
+                "semigaviota",
+                "fantasma-en-practicas"
+              ]
+            },
+            "rival.genero": "f"
+          }
+        },
+        {
+          "id": "rg-14",
+          "texto": "{rivalNombre} ha cambiado su rol de rival a aliad{rival:o}. En la sala de guionistas se oye un «¿y ahora qué hacemos?».",
+          "si": {
+            "evento": "pacto"
           }
         }
       ],

@@ -1,5 +1,5 @@
 {
-  "$comment": "Generador de mazmorreros rivales. Borrador; algoritmo en docs/willy/DESIGN.md → «Mazmorreros rivales procedurales». Todo el azar sale de deriveSeed(semillaPartida, 'rival', planta, ranura) (ENGINE_REQUESTS R12 y R16); nunca Math.random. Los textos usan las variables {rival}, {rivalNombre}, {rivalApodo}, {rivalLugar}, {rivalOficio}, {rivalMania}, {rivalRaza} y el género del rival para los filtros :el/:un/:o.",
+  "$comment": "Generador de mazmorreros rivales. Borrador; algoritmo en docs/willy/DESIGN.md → «Mazmorreros rivales procedurales». Todo el azar sale de deriveSeed(semillaPartida, 'rival', planta, ranura) (ENGINE_REQUESTS R12 y R16); nunca Math.random. Los textos usan las variables {rival}, {rivalNombre}, {rivalApodo}, {rivalLugar}, {rivalOficio}, {rivalMania}, {rivalRaza} y el género del rival para los filtros :el/:un/:o. {rivalRaza} usa razas[].enFrase según el género (minúscula, para mitad de frase); con :Mayus, en mayúscula.",
   "version": 1,
   "reglas": {
     "probabilidadSalaRival": {
@@ -23,7 +23,9 @@
     "unicidadEntrePartidas": "No se repite ningún nombre+apellido de los últimos 40 rivales vistos en este navegador (perfil → rivalesRecientes, copiado al GameState al empezar la partida para que la generación sea reproducible). Los legendarios no se repiten en dos partidas seguidas.",
     "reintentos": "Si una combinación choca con las reglas de unicidad, se vuelve a tirar solo el campo que choca, con deriveSeed(..., 'reintento', n), hasta 30 veces.",
     "escalado": "vida = vidaBase × (1 + 0,35 × (planta − 1)); ataque y DEF + ⌊(planta − 1) ÷ 2⌋; daño: el dado del kit sube un escalón cada dos plantas (1d6 → 1d8 → 1d10).",
-    "genero": "Cada rival tira género (m/f). Oficio, apodo, personalidad y frases usan la forma de su género (nombreF/cortoF, adjetivos f, {o} → o/a)."
+    "genero": "Cada rival tira género (m/f). Oficio, apodo, personalidad y frases usan la forma de su género (nombreF/cortoF, adjetivos f, {o} → o/a).",
+    "variablesFrases": "{rivalNombre}, {rivalApellido}, {rivalApodo}, {rivalLugar}, {rivalOficio} (forma del género), {rivalRaza} (enFrase del género), {rivalMania}, {coletilla} (una de su personalidad, distinta en cada frase) y {o} (o/a según el género).",
+    "coherencia": "Ninguna plantilla pone {coletilla} detrás de una conjunción ni la pasa a minúscula: las coletillas pueden empezar por «¡» o «¿»."
   },
   "razas": [
     {
@@ -81,7 +83,11 @@
         "gaviota-de-puerto-sucia",
         "gaviota-albina"
       ],
-      "peso": 1
+      "peso": 1,
+      "enFrase": {
+        "m": "semigaviota",
+        "f": "semigaviota"
+      }
     },
     {
       "id": "gnomo-de-jardin",
@@ -135,7 +141,11 @@
         "musgo",
         "dorado-de-chalé"
       ],
-      "peso": 1
+      "peso": 1,
+      "enFrase": {
+        "m": "gnomo de jardín",
+        "f": "gnoma de jardín"
+      }
     },
     {
       "id": "orco-de-oficina",
@@ -185,7 +195,11 @@
         "moreno-de-terraza",
         "verde-pálido-de-fluorescente"
       ],
-      "peso": 1
+      "peso": 1,
+      "enFrase": {
+        "m": "orco de oficina",
+        "f": "orca de oficina"
+      }
     },
     {
       "id": "fantasma-en-practicas",
@@ -237,7 +251,11 @@
         "lila-cursi",
         "gris-polvo"
       ],
-      "peso": 1
+      "peso": 1,
+      "enFrase": {
+        "m": "fantasma en prácticas",
+        "f": "fantasma en prácticas"
+      }
     },
     {
       "id": "minotauro-vegano",
@@ -291,7 +309,11 @@
         "cárdeno",
         "jabonero"
       ],
-      "peso": 1
+      "peso": 1,
+      "enFrase": {
+        "m": "minotauro vegano",
+        "f": "minotaura vegana"
+      }
     }
   ],
   "nombres": {
@@ -614,9 +636,9 @@
     },
     {
       "id": "influencer-local",
-      "nombre": "influencer de su pueblo",
+      "nombre": "influencer de pueblo",
       "corto": "Influencer",
-      "nombreF": "influencer de su pueblo",
+      "nombreF": "influencer de pueblo",
       "cortoF": "Influencer"
     },
     {
@@ -1074,42 +1096,58 @@
     "presentacion": [
       "Soy {rivalNombre}, {rivalApodo}. {coletilla}",
       "{rivalNombre}, de {rivalLugar}. {rivalOficio:Mayus} de profesión. {coletilla}",
-      "A ver, que me presento: {rival}. Y {coletilla:min}",
-      "¿Tú eres el butanero? Yo soy {rivalNombre}. {coletilla}"
+      "¿Tú eres el butanero? Yo soy {rivalNombre}. {coletilla}",
+      "Me llaman {rivalApodo}. No preguntes por qué. Bueno, pregunta: me encanta contarlo. {coletilla}",
+      "{rivalNombre} {rivalApellido}, {rivalRaza} y {rivalOficio}. Encantad{o}. Bueno, encantad{o} no, pero educad{o} sí."
     ],
     "amenaza": [
       "Esta sala es mía. {coletilla}",
       "En {rivalLugar} me temían. Aquí, también. {coletilla}",
-      "No es nada personal. Bueno, un poco sí. {coletilla}"
+      "No es nada personal. Bueno, un poco sí. {coletilla}",
+      "Yo era {rivalOficio}. Sé hacer daño de formas que tú no imaginas. {coletilla}",
+      "Mira, Willy: el presentador me ha mirado dos veces hoy. Dos. No voy a perder ahora."
     ],
     "pacto": [
       "Vale, trato hecho. Te debo una. {coletilla}",
       "Me caes bien. No se lo digas a nadie. {coletilla}",
-      "Pacto. Si nos volvemos a ver, voy contigo. {coletilla}"
+      "Pacto. Si nos volvemos a ver, voy contigo. {coletilla}",
+      "Trato hecho. Pero que conste que lo he propuesto yo. Bueno, tú. Bueno, da igual.",
+      "Pactamos. Si alguien pregunta, yo te he ganado y tú me has dejado ir por pena."
     ],
     "derrota": [
       "Me voy del concurso. Dile a {rivalLugar} que lo intenté.",
       "Eliminad{o}. Bueno. Siempre me quedará mi trabajo de {rivalOficio}. Ah, no, que se acabó el mundo.",
-      "Has ganado tú. Esta vez. No habrá otra, pero esta vez."
+      "Has ganado tú. Esta vez. No habrá otra, pero esta vez.",
+      "Me voy. Saluda a {rivalLugar} de mi parte si alguna vez vuelve a existir.",
+      "Bien jugado. Te dejo mi apodo, que a mí ya no me hace falta. Bueno, no, me lo quedo."
     ],
     "huida": [
       "¡Esto no es huir, es una retirada estratégica! {coletilla}",
       "Me llevo esto, que está muy solo. ¡Adiós!",
-      "Nos veremos en otra planta. {coletilla}"
+      "Nos veremos en otra planta. {coletilla}",
+      "¡Me acabo de acordar de que me he dejado el gas abierto! ¡Adiós!",
+      "Esto no ha terminado. Esto es un «continuará». {coletilla}"
     ],
     "vueltaPacto": [
       "¡Willy! Te dije que volvería. Vengo a ayudar. {coletilla}",
       "Un pacto es un pacto. Aquí me tienes.",
-      "Lo prometido es deuda, y yo soy de {rivalLugar}: pago mis deudas."
+      "Lo prometido es deuda, y yo soy de {rivalLugar}: pago mis deudas.",
+      "Willy, he vuelto. Traigo ganas y un bocadillo. El bocadillo es mío.",
+      "Dijimos que si nos volvíamos a ver, iba contigo. Aquí estoy. Que no se diga que {rivalApodo} no cumple."
     ],
     "vueltaHuida": [
       "¿Te acuerdas de mí? Yo de ti sí. {coletilla}",
       "La última vez me fui. Esta vez, te vas tú.",
-      "He vuelto, y más fuerte. He estado entrenando. Bueno, comiendo."
+      "He vuelto, y más fuerte. He estado entrenando. Bueno, comiendo.",
+      "Me llevé el botín, me lo gasté en la tienda de Maripuri y vuelvo a por más.",
+      "Otra vez tú. Llevo dos plantas practicando esta frase. {coletilla}"
     ],
     "traicion": [
       "Lo siento, Willy. El pacto tenía letra pequeña. {coletilla}",
-      "¡Sorpresa! Nunca te fíes de alguien de {rivalLugar}. Bueno, de mí."
+      "¡Sorpresa! Nunca te fíes de alguien de {rivalLugar}. Bueno, de mí.",
+      "Willy, de verdad que lo siento. Bueno, un poco. Bueno, nada. {coletilla}",
+      "Un pacto con alguien que se apoda {rivalApodo}. ¿Qué esperabas?",
+      "Me han ofrecido un patrocinio por traicionarte. Era eso o pagar el alquiler del Camerino."
     ]
   }
 }
