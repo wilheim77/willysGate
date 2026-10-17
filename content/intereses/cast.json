@@ -107,6 +107,17 @@
     "scene": "1",
     "note": "Dwarf, Nella's right hand. Fights in D1 depending on the choice."
   },
+  "odda_noche": {
+    "name": "Odda Hulla",
+    "monsterId": "thug",
+    "spriteId": "odda",
+    "faction": "cuadrilla",
+    "noncombatant": true,
+    "essential": false,
+    "dialogue": "odda_hulla",
+    "scene": "D1",
+    "note": "Odda at the abbey gate on the night of the torches (D1, defend: d1_abadia). Same character as odda; a separate id because entity ids are unique per world. Added by the map agent; the writer may refine it."
+  },
   "mazo": {
     "name": "Barón Ulric Mazo",
     "monsterId": "commoner",

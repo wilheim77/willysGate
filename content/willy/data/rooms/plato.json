@@ -1,10 +1,7 @@
 {
   "$comment": "Room chunks for «El Plató» (15x13 cells, generator: content/willy/gen/floor.ts). Written by the map agent. Marker chars: e enemy, c chest, t trap, b barrel, B gas barrel, l light, P arrival, J boss, X stairs down.",
   "bioma": "plato",
-  "celda": {
-    "ancho": 15,
-    "alto": 13
-  },
+  "version": 1,
   "terreno": {
     ".": {
       "terrain": "plato"
@@ -61,14 +58,14 @@
       "detect": 13,
       "dif": 13,
       "dano": "1d6",
-      "efecto": "caida"
+      "efecto": "tumbado"
     },
     "cable-pelado": {
       "nombre": "Cable pelado",
       "detect": 12,
       "dif": 13,
       "dano": "2d6",
-      "efecto": "electrificada"
+      "efecto": "electrocutado"
     }
   },
   "salas": [

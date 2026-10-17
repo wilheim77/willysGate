@@ -83,7 +83,7 @@ export default {
     'minero_cuadrilla-3': { at: [14, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia' },
     'hulla-1': { at: [10, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia', unlessFlag: 'hulla_no_luchan' },
     'hulla-2': { at: [17, 20], requiresAnyFlag: 'd1_cuadrilla,d1_abadia', unlessFlag: 'hulla_no_luchan' },
-    odda: { at: [13, 20], requiresFlag: 'd1_abadia' },
+    odda_noche: { at: [13, 20], requiresFlag: 'd1_abadia' },
   },
   lights: [
     { name: 'brasero-sala-1', at: [10, 6], radius: 5, color: '#ffb060', flicker: 0.12, prop: 'brazier' },
@@ -104,13 +104,13 @@ export default {
       name: 'd1-asalto',
       rect: [0, 9, 28, 13],
       participants: ['guardia_baron-1', 'guardia_baron-2', 'guardia_baron-3', 'guardia_baron-4', 'guardia_baron_sargento-1', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
-      props: { requiresFlag: 'd1_cuadrilla' },
+      props: { requiresFlag: 'd1_cuadrilla', setFlag: 'd1_asalto_terminado' },
     },
     {
       name: 'd1-defensa',
       rect: [0, 9, 28, 13],
-      participants: ['odda', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
-      props: { requiresFlag: 'd1_abadia' },
+      participants: ['odda_noche', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
+      props: { requiresFlag: 'd1_abadia', setFlag: 'd1_asalto_terminado' },
     },
   ],
   zones: {
