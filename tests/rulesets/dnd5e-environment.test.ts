@@ -188,6 +188,14 @@ describe('review fixes (Phase 3)', () => {
     expect(dnd5e.previewAction(s, 'd', ranged.id, { entityId: 'b' }).breakdown!.some((l) => l.label === 'Desventaja')).toBe(false);
   });
 
+  it('an oil barrel bursts with the first point of damage', () => {
+    const barrel = createProp({ id: 'barrel', kind: 'barrel_oil', position: { x: 2, y: 0 } });
+    let s = fight([pc('g', 'fighter', 3, 0, 0), monster('b', 'thug', 5, 0), barrel], ['......'], 'g');
+    s = engine.applyEffects(s, [{ type: 'spawnSurface', tiles: [{ x: 2, y: 0 }], surface: 'fire' }]).state;
+    const r = dnd5e.onSurface!(s, 'barrel', 'fire', 'turnStart', new RngCursor(s.rng));
+    expect(r.events.some((e) => e.type === 'exploded')).toBe(true);
+  });
+
   it('a smashed crate gives no cover', () => {
     const crate = createProp({ id: 'crate', kind: 'crate', position: { x: 2, y: 0 } });
     let s = fight([pc('g', 'fighter', 3, 0, 0), monster('b', 'thug', 4, 0), crate], ['.....'], 'g');

@@ -5,7 +5,8 @@
 - **Fase 0, Historia:** completada y aprobada (2026-10-16).
 - **Fase 1, Esqueleto técnico:** **completada y aprobada** (2026-10-17). Arte: 0x72 como base y Ninja Adventure para exteriores. LPC se queda como preset alternativo.
 - **Fase 2, Combate:** **completada** y probada por el usuario en el móvil (2026-10-17). Progresión del acto: de nivel 3 a 6.
-- **Fase 3, Entorno táctico:** **implementada**, pendiente de que el usuario la pruebe.
+- **Fase 3, Entorno táctico:** **aprobada** (2026-10-17).
+- **Fase 4, Exploración, diálogos y grupo:** **en curso**. Decisiones (2026-10-17): creación por compra de puntos (con botón «recomendado»); la aprobación de los compañeros se muestra con reacciones («Garrán aprueba») y los números en la ficha. Retrato del Cobrador: variante A (bufanda).
 - **Willy el mazmorrero:** un subagente trabaja en paralelo en la rama `willy` (diseño de la Fase 0, logros, cajas de botín y generación procedural). Solo toca `docs/willy/` y `content/willy/`.
 
 ## Hecho
@@ -79,8 +80,8 @@
   - el alcance pintado cuenta el coste de los escombros;
   - las superficies pintadas en el mapa duran y dan luz como las demás;
   - los barriles dentro del fuego arden y acaban explotando.
-- [x] Tests: 204.
-- [ ] Prueba del usuario en el móvil.
+- [x] Tests: 205.
+- [x] Prueba del usuario en el móvil: **Fase 3 aprobada** (2026-10-17). Cambio pedido: el barril de aceite explota con el primer punto de daño.
 
 ## Planificado para más adelante
 

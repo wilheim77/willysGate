@@ -87,7 +87,10 @@ export function describeEntity(state: GameState, id: string, labels: { resources
       }),
     });
   }
-  if (isObject) return { ...(subtitle ? { subtitle } : {}), sections };
+  if (isObject) {
+    if (hasTag(e, 'explosive_oil')) sections.push({ title: 'Peligro', items: [{ label: 'Explosivo', text: 'Revienta con el primer golpe: fuego alrededor y aceite ardiendo.' }] });
+    return { ...(subtitle ? { subtitle } : {}), sections };
+  }
 
   sections.push({
     title: 'Características',
