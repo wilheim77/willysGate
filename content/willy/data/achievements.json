@@ -560,9 +560,8 @@
       "narrador": "Temporada ganada por el Ingeniero. Cobertura en las cinco plantas, un presentador frito y ni una teoría de la conspiración confirmada. Bueno, una: la de que eras un crack.",
       "recompensas": [{ "tipo": "cosmetico", "item": "chaleco-de-operadora" }, { "tipo": "caja", "nivel": "oro" }] },
 
-    { "id": "y-esto-que-hace", "nombre": "¿Y esto qué hace?", "categoria": "ingeniero", "oculto": true,
-      "pista": "Esa habilidad con interrogaciones no se va a estrenar sola.",
-      "descripcion": "Usa por primera vez la habilidad secreta del Ingeniero.",
+    { "id": "y-esto-que-hace", "nombre": "¿Y esto qué hace?", "categoria": "ingeniero", "oculto": false,
+      "descripcion": "Usa el 5G por primera vez.",
       "condicion": { "contar": { "evento": "skillUsed", "donde": { "habilidad": "red-g" } }, "min": 1, "ambito": "siempre" },
       "narrador": "Has estrenado el 5G. No ha hecho nada. Nada de nada. Catorce galaxias llevaban años esperando este momento para poder decir «¿veis?». Ya lo han dicho.",
       "recompensas": [{ "tipo": "caja", "nivel": "bronce" }] },

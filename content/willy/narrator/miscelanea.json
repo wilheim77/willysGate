@@ -3,179 +3,744 @@
   "version": 1,
   "bancos": [
     {
-      "id": "inactividad", "evento": "playerIdle", "probabilidad": 1, "prioridad": 1, "memoria": 10,
+      "id": "inactividad",
+      "evento": "playerIdle",
+      "probabilidad": 1,
+      "prioridad": 1,
+      "memoria": 10,
       "lineas": [
-        { "id": "in-01", "texto": "¿Hola? ¿Sigues ahí? El público está empezando a mirar el móvil.", "si": { "segundos": { "min": 45, "max": 89 } } },
-        { "id": "in-02", "texto": "Willy se ha quedado mirando a la pared. Es una pared bonita, la verdad. Pero no da audiencia.", "si": { "segundos": { "min": 45, "max": 89 } } },
-        { "id": "in-03", "texto": "Tranquilo, el reloj no corre mientras piensas. Pero yo sí envejezco. Mucho.", "si": { "segundos": { "min": 45, "max": 89 } } },
-        { "id": "in-04", "texto": "Si te has ido a por un bocadillo, tráeme uno.", "si": { "segundos": { "min": 90 } } },
-        { "id": "in-05", "texto": "Voy a aprovechar para leer los anuncios. «Butanos Hermanos Pérez: calor de hogar en catorce galaxias.» Ya está. Ya los he leído.", "si": { "segundos": { "min": 90 } } },
-        { "id": "in-06", "texto": "En la Temporada 22 un concursante se quedó quieto tres días. Ganó el premio a la mejor estatua. No te lo recomiendo.", "si": { "segundos": { "min": 120 } } },
-        { "id": "in-07", "texto": "Le toca a Willy. Sigue tocándole. Le tocará siempre, hasta que haga algo.", "si": { "enCombate": true } },
-        { "id": "in-08", "texto": "Los monstruos están esperando su turno con una educación admirable. Yo no la tendría.", "si": { "enCombate": true } }
+        {
+          "id": "in-01",
+          "texto": "¿Hola? ¿Sigues ahí? El público está empezando a mirar el móvil.",
+          "si": {
+            "segundos": {
+              "min": 45,
+              "max": 89
+            }
+          }
+        },
+        {
+          "id": "in-02",
+          "texto": "Willy se ha quedado mirando a la pared. Es una pared bonita, la verdad. Pero no da audiencia.",
+          "si": {
+            "segundos": {
+              "min": 45,
+              "max": 89
+            }
+          }
+        },
+        {
+          "id": "in-03",
+          "texto": "Tranquilo, el reloj no corre mientras piensas. Pero yo sí envejezco. Mucho.",
+          "si": {
+            "segundos": {
+              "min": 45,
+              "max": 89
+            }
+          }
+        },
+        {
+          "id": "in-04",
+          "texto": "Si te has ido a por un bocadillo, tráeme uno.",
+          "si": {
+            "segundos": {
+              "min": 90
+            }
+          }
+        },
+        {
+          "id": "in-05",
+          "texto": "Voy a aprovechar para leer los anuncios. «Butanos Hermanos Pérez: calor de hogar en catorce galaxias.» Ya está. Ya los he leído.",
+          "si": {
+            "segundos": {
+              "min": 90
+            }
+          }
+        },
+        {
+          "id": "in-06",
+          "texto": "En la Temporada 22 un concursante se quedó quieto tres días. Ganó el premio a la mejor estatua. No te lo recomiendo.",
+          "si": {
+            "segundos": {
+              "min": 120
+            }
+          }
+        },
+        {
+          "id": "in-07",
+          "texto": "Le toca a Willy. Sigue tocándole. Le tocará siempre, hasta que haga algo.",
+          "si": {
+            "enCombate": true
+          }
+        },
+        {
+          "id": "in-08",
+          "texto": "Los monstruos están esperando su turno con una educación admirable. Yo no la tendría.",
+          "si": {
+            "enCombate": true
+          }
+        }
       ]
     },
     {
-      "id": "esperar", "evento": "turnEnded", "donde": { "entityId": "willy", "esperar": true }, "probabilidad": 0.6, "prioridad": 1, "memoria": 8,
+      "id": "esperar",
+      "evento": "turnEnded",
+      "donde": {
+        "entityId": "willy",
+        "esperar": true
+      },
+      "probabilidad": 0.6,
+      "prioridad": 1,
+      "memoria": 8,
       "lineas": [
-        { "id": "es-01", "texto": "Willy espera. Profundo. Estratégico. Aburridísimo." },
-        { "id": "es-02", "texto": "No hacer nada también es una decisión. Una mala, pero una decisión." },
-        { "id": "es-03", "texto": "Turno pasado. El público ha bostezado al unísono. Ha sonado como una ballena." },
-        { "id": "es-04", "texto": "Esperando. Lord Vórtax ha empezado a tamborilear con los dedos. Tiene cuarenta dedos. Se oye mucho." }
+        {
+          "id": "es-01",
+          "texto": "Willy espera. Profundo. Estratégico. Aburridísimo."
+        },
+        {
+          "id": "es-02",
+          "texto": "No hacer nada también es una decisión. Una mala, pero una decisión."
+        },
+        {
+          "id": "es-03",
+          "texto": "Turno pasado. El público ha bostezado al unísono. Ha sonado como una ballena."
+        },
+        {
+          "id": "es-04",
+          "texto": "Esperando. Lord Vórtax ha empezado a tamborilear con los dedos. Tiene cuarenta dedos. Se oye mucho."
+        }
       ]
     },
     {
-      "id": "mochila", "evento": "inventoryOpened", "probabilidad": 0.25, "prioridad": 1, "memoria": 10,
+      "id": "mochila",
+      "evento": "inventoryOpened",
+      "probabilidad": 0.25,
+      "prioridad": 1,
+      "memoria": 10,
       "lineas": [
-        { "id": "mo-01", "texto": "La mochila de Willy: un bocadillo, una bombona, cosas que ha encontrado y una esperanza tímida." },
-        { "id": "mo-02", "texto": "Mirando el inventario. Tómate tu tiempo, que aquí dentro no corre el reloj. Fuera tampoco, pero más." },
-        { "id": "mo-03", "texto": "Si buscas algo útil, está al fondo. Siempre está al fondo." },
-        { "id": "mo-04", "texto": "Mochila llena. Habrá que decidir qué se queda. Como en las mudanzas, pero con monstruos.", "si": { "llena": true } },
-        { "id": "mo-05", "texto": "Mochila vacía. Bonito minimalismo. Poco práctico, pero bonito.", "si": { "vacia": true } }
+        {
+          "id": "mo-01",
+          "texto": "La mochila de Willy: un bocadillo, una bombona, cosas que ha encontrado y una esperanza tímida."
+        },
+        {
+          "id": "mo-02",
+          "texto": "Mirando el inventario. Tómate tu tiempo, que aquí dentro no corre el reloj. Fuera tampoco, pero más."
+        },
+        {
+          "id": "mo-03",
+          "texto": "Si buscas algo útil, está al fondo. Siempre está al fondo."
+        },
+        {
+          "id": "mo-04",
+          "texto": "Mochila llena. Habrá que decidir qué se queda. Como en las mudanzas, pero con monstruos.",
+          "si": {
+            "llena": true
+          }
+        },
+        {
+          "id": "mo-05",
+          "texto": "Mochila vacía. Bonito minimalismo. Poco práctico, pero bonito.",
+          "si": {
+            "vacia": true
+          }
+        }
       ]
     },
     {
-      "id": "comer", "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "comida" }, "actor.id": "willy" }, "probabilidad": 0.6, "prioridad": 2, "memoria": 8,
+      "id": "comer",
+      "evento": "itemUsed",
+      "donde": {
+        "item.etiquetas": {
+          "tiene": "comida"
+        },
+        "actor.id": "willy"
+      },
+      "probabilidad": 0.6,
+      "prioridad": 2,
+      "memoria": 8,
       "lineas": [
-        { "id": "co-01", "texto": "Willy come {objeto:el}. Mamá Clementina, desde su estudio, asiente con los seis brazos." },
-        { "id": "co-02", "texto": "Merienda táctica. Los monstruos miran con envidia." },
-        { "id": "co-03", "texto": "{objeto:el:Mayus}. Cura el cuerpo y, en Castro, también el alma." },
-        { "id": "co-04", "texto": "El bocadillo de mamá. Se lo ha comido con lágrimas en los ojos. O es el chorizo, que pica.", "si": { "objeto": "bocadillo-de-chorizo" } },
-        { "id": "co-05", "texto": "Comiendo en mitad del combate. Esto es tener las prioridades claras.", "si": { "enCombate": true } },
-        { "id": "co-06", "texto": "Kalimotxo en horario laboral. No lo digas en el Camerino.", "si": { "objeto": "botella-de-kalimotxo" } }
+        {
+          "id": "co-01",
+          "texto": "Willy come {objeto:el}. Mamá Clementina, desde su estudio, asiente con los seis brazos."
+        },
+        {
+          "id": "co-02",
+          "texto": "Merienda táctica. Los monstruos miran con envidia."
+        },
+        {
+          "id": "co-03",
+          "texto": "{objeto:el:Mayus}. Cura el cuerpo y, en Castro, también el alma."
+        },
+        {
+          "id": "co-04",
+          "texto": "El bocadillo de mamá. Se lo ha comido con lágrimas en los ojos. O es el chorizo, que pica.",
+          "si": {
+            "objeto": "bocadillo-de-chorizo"
+          }
+        },
+        {
+          "id": "co-05",
+          "texto": "Comiendo en mitad del combate. Esto es tener las prioridades claras.",
+          "si": {
+            "enCombate": true
+          }
+        },
+        {
+          "id": "co-06",
+          "texto": "Kalimotxo en horario laboral. No lo digas en el Camerino.",
+          "si": {
+            "objeto": "botella-de-kalimotxo"
+          }
+        }
       ]
     },
     {
-      "id": "vender", "evento": "itemSold", "probabilidad": 0.5, "prioridad": 1, "memoria": 8,
+      "id": "vender",
+      "evento": "itemSold",
+      "probabilidad": 0.5,
+      "prioridad": 1,
+      "memoria": 8,
       "lineas": [
-        { "id": "ve-01", "texto": "Vendido. Maripuri le da la vuelta en su mano tres veces antes de pagarte. Desconfía de todo el mundo, incluso de ella misma." },
-        { "id": "ve-02", "texto": "{fichas} fichas por {objeto:el}. Maripuri lo revenderá por el triple. Es el mercado." },
-        { "id": "ve-03", "texto": "Una venta. Maripuri apunta algo en una libreta. No es la venta. Es un cotilleo sobre ti." }
+        {
+          "id": "ve-01",
+          "texto": "Vendido. Maripuri le da la vuelta en su mano tres veces antes de pagarte. Desconfía de todo el mundo, incluso de ella misma."
+        },
+        {
+          "id": "ve-02",
+          "texto": "{fichas} fichas por {objeto:el}. Maripuri lo revenderá por el triple. Es el mercado."
+        },
+        {
+          "id": "ve-03",
+          "texto": "Una venta. Maripuri apunta algo en una libreta. No es la venta. Es un cotilleo sobre ti."
+        }
       ]
     },
     {
-      "id": "audienciaSube", "evento": "audienceChanged", "donde": { "delta": { "min": 1 }, "deltaPct": { "min": 15 } }, "probabilidad": 0.5, "prioridad": 2, "memoria": 10, "enfriamientoTurnos": 2,
+      "id": "audienciaSube",
+      "evento": "audienceChanged",
+      "donde": {
+        "delta": {
+          "min": 1
+        },
+        "deltaPct": {
+          "min": 15
+        }
+      },
+      "probabilidad": 0.5,
+      "prioridad": 2,
+      "memoria": 10,
+      "enfriamientoTurnos": 2,
       "lineas": [
-        { "id": "as-01", "texto": "La audiencia sube. {espectadores} pares de ojos. Y algunos impares." },
-        { "id": "as-02", "texto": "¡Eso ha gustado! Se nota en el contador. Y en mi nómina, espero." },
-        { "id": "as-03", "texto": "Más espectadores. El público quiere más. El público siempre quiere más. Es su único defecto. Bueno, tiene muchos." },
-        { "id": "as-04", "texto": "{espectadores}. Esto ya no lo ve solo tu madre. Bueno, tu madre seguramente también." }
+        {
+          "id": "as-01",
+          "texto": "La audiencia sube. {espectadores} pares de ojos. Y algunos impares."
+        },
+        {
+          "id": "as-02",
+          "texto": "¡Eso ha gustado! Se nota en el contador. Y en mi nómina, espero."
+        },
+        {
+          "id": "as-03",
+          "texto": "Más espectadores. El público quiere más. El público siempre quiere más. Es su único defecto. Bueno, tiene muchos."
+        },
+        {
+          "id": "as-04",
+          "texto": "{espectadores}. Esto ya no lo ve solo tu madre. Bueno, tu madre seguramente también."
+        }
       ]
     },
     {
-      "id": "audienciaBaja", "evento": "audienceChanged", "donde": { "delta": { "max": -1 } }, "probabilidad": 0.35, "prioridad": 2, "memoria": 10, "enfriamientoTurnos": 3,
+      "id": "audienciaBaja",
+      "evento": "audienceChanged",
+      "donde": {
+        "delta": {
+          "max": -1
+        }
+      },
+      "probabilidad": 0.35,
+      "prioridad": 2,
+      "memoria": 10,
+      "enfriamientoTurnos": 3,
       "lineas": [
-        { "id": "ab-01", "texto": "La audiencia baja. Hay gente cambiando de canal. En el otro echan un documental sobre musgo. Y está ganando." },
-        { "id": "ab-02", "texto": "Se aburren. Haz algo. Lo que sea. Tírate por un precipicio, aunque sea un poco." },
-        { "id": "ab-03", "texto": "Monotonía detectada. Repetir lo mismo funciona, pero no da audiencia. Como en el matrimonio.", "si": { "causa": "monotonia" } },
-        { "id": "ab-04", "texto": "Un turno sin hacer nada. El público lo ha notado. El público lo nota todo.", "si": { "causa": "esperar" } },
-        { "id": "ab-05", "texto": "Huir. Legal, sensato y nada televisivo.", "si": { "causa": "huida" } }
+        {
+          "id": "ab-01",
+          "texto": "La audiencia baja. Hay gente cambiando de canal. En el otro echan un documental sobre musgo. Y está ganando."
+        },
+        {
+          "id": "ab-02",
+          "texto": "Se aburren. Haz algo. Lo que sea. Tírate por un precipicio, aunque sea un poco."
+        },
+        {
+          "id": "ab-03",
+          "texto": "Monotonía detectada. Repetir lo mismo funciona, pero no da audiencia. Como en el matrimonio.",
+          "si": {
+            "causa": "monotonia"
+          }
+        },
+        {
+          "id": "ab-04",
+          "texto": "Un turno sin hacer nada. El público lo ha notado. El público lo nota todo.",
+          "si": {
+            "causa": "esperar"
+          }
+        },
+        {
+          "id": "ab-05",
+          "texto": "Huir. Legal, sensato y nada televisivo.",
+          "si": {
+            "causa": "huida"
+          }
+        }
       ]
     },
     {
-      "id": "audienciaHito", "evento": "audienceMilestone", "probabilidad": 1, "prioridad": 4, "memoria": 0,
+      "id": "audienciaHito",
+      "evento": "audienceMilestone",
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 0,
       "lineas": [
-        { "id": "ah-01", "texto": "¡Cinco mil espectadores! Como un pueblo entero. Como Castro un martes de invierno.", "si": { "espectadores": 5000 } },
-        { "id": "ah-02", "texto": "Veinticinco mil. Ya te ven más que a la televisión local. Y emiten más anuncios en tu programa.", "si": { "espectadores": 25000 } },
-        { "id": "ah-03", "texto": "¡Cien mil! Producción ha mandado una caja de plata y una nota: «Sigue así». Es lo más cariñoso que ha escrito Producción.", "si": { "espectadores": 100000 } },
-        { "id": "ah-04", "texto": "Medio millón. Hay gente haciéndose camisetas con tu cara. Tu cara no ha dado permiso.", "si": { "espectadores": 500000 } },
-        { "id": "ah-05", "texto": "¡Dos millones! Ahora eres oficialmente un fenómeno. Un fenómeno en mono naranja.", "si": { "espectadores": 2000000 } },
-        { "id": "ah-06", "texto": "Diez millones. En el planeta de Lord Vórtax han declarado festivo. No por ti, era su cumpleaños. Pero un poco por ti.", "si": { "espectadores": 10000000 } },
-        { "id": "ah-07", "texto": "Cincuenta millones. Caja legendaria. No tengo palabras. Bueno, tengo estas. Pero no muchas más.", "si": { "espectadores": 50000000 } }
+        {
+          "id": "ah-01",
+          "texto": "¡Cinco mil espectadores! Como un pueblo entero. Como Castro un martes de invierno.",
+          "si": {
+            "espectadores": 5000
+          }
+        },
+        {
+          "id": "ah-02",
+          "texto": "Veinticinco mil. Ya te ven más que a la televisión local. Y emiten más anuncios en tu programa.",
+          "si": {
+            "espectadores": 25000
+          }
+        },
+        {
+          "id": "ah-03",
+          "texto": "¡Cien mil! Producción ha mandado una caja de plata y una nota: «Sigue así». Es lo más cariñoso que ha escrito Producción.",
+          "si": {
+            "espectadores": 100000
+          }
+        },
+        {
+          "id": "ah-04",
+          "texto": "Medio millón. Hay gente haciéndose camisetas con tu cara. Tu cara no ha dado permiso.",
+          "si": {
+            "espectadores": 500000
+          }
+        },
+        {
+          "id": "ah-05",
+          "texto": "¡Dos millones! Ahora eres oficialmente un fenómeno. Un fenómeno en mono naranja.",
+          "si": {
+            "espectadores": 2000000
+          }
+        },
+        {
+          "id": "ah-06",
+          "texto": "Diez millones. En el planeta de Lord Vórtax han declarado festivo. No por ti, era su cumpleaños. Pero un poco por ti.",
+          "si": {
+            "espectadores": 10000000
+          }
+        },
+        {
+          "id": "ah-07",
+          "texto": "Cincuenta millones. Caja legendaria. No tengo palabras. Bueno, tengo estas. Pero no muchas más.",
+          "si": {
+            "espectadores": 50000000
+          }
+        }
       ]
     },
     {
-      "id": "hacerElGanso", "evento": "showOff", "probabilidad": 0.8, "prioridad": 2, "memoria": 12,
+      "id": "hacerElGanso",
+      "evento": "showOff",
+      "probabilidad": 0.8,
+      "prioridad": 2,
+      "memoria": 12,
       "lineas": [
-        { "id": "hg-01", "texto": "Willy hace el ganso. No sé qué es eso exactamente, pero al público le encanta." },
-        { "id": "hg-02", "texto": "Un bailecito. En mitad de una mazmorra. Delante de monstruos. La dignidad se ha quedado en Castro." },
-        { "id": "hg-03", "texto": "Pose de culturista. Con mono de butanero. Es arte. Es arte terrible, pero es arte." },
-        { "id": "hg-04", "texto": "Ha saludado a cámara. A la cámara equivocada, pero ha saludado." },
-        { "id": "hg-05", "texto": "Otra vez haciendo el ganso. Cada vez hace menos gracia. Como los chistes de Koldo.", "si": { "repeticion": { "min": 2 } } },
-        { "id": "hg-06", "texto": "Ha hecho el ganso al lado de un monstruo. Valiente. O inconsciente. O las dos.", "si": { "adyacenteAEnemigo": true } }
+        {
+          "id": "hg-01",
+          "texto": "Willy hace el ganso. No sé qué es eso exactamente, pero al público le encanta."
+        },
+        {
+          "id": "hg-02",
+          "texto": "Un bailecito. En mitad de una mazmorra. Delante de monstruos. La dignidad se ha quedado en Castro."
+        },
+        {
+          "id": "hg-03",
+          "texto": "Pose de culturista. Con mono de butanero. Es arte. Es arte terrible, pero es arte."
+        },
+        {
+          "id": "hg-04",
+          "texto": "Ha saludado a cámara. A la cámara equivocada, pero ha saludado."
+        },
+        {
+          "id": "hg-05",
+          "texto": "Otra vez haciendo el ganso. Cada vez hace menos gracia. Como los chistes de Koldo.",
+          "si": {
+            "repeticion": {
+              "min": 2
+            }
+          }
+        },
+        {
+          "id": "hg-06",
+          "texto": "Ha hecho el ganso al lado de un monstruo. Valiente. O inconsciente. O las dos.",
+          "si": {
+            "adyacenteAEnemigo": true
+          }
+        }
       ]
     },
     {
-      "id": "subirNivel", "evento": "levelUp", "probabilidad": 1, "prioridad": 4, "memoria": 8,
+      "id": "subirNivel",
+      "evento": "levelUp",
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 8,
       "lineas": [
-        { "id": "sn-01", "texto": "¡Nivel {nivel}! Los números suben. Es lo más bonito que hay en este universo y en los vecinos." },
-        { "id": "sn-02", "texto": "Subida de nivel. Más vida, más puntos, más todo. Menos miedo, eso no." },
-        { "id": "sn-03", "texto": "Nivel {nivel}. Si tu madre te viera... bueno, te está viendo. Está muy orgullosa. Y preocupada." },
-        { "id": "sn-04", "texto": "Nivel {nivel}. El orco tiene que rellenar el formulario. Treinta segundos de reloj. Burocracia galáctica.", "si": { "raza": "orco-de-oficina" } },
-        { "id": "sn-05", "texto": "Nivel {nivel}. Ya eres más fuerte que el presentador de la Temporada 9. Que era una seta, pero cuenta.", "si": { "nivel": { "min": 8 } } }
+        {
+          "id": "sn-01",
+          "texto": "¡Nivel {nivel}! Los números suben. Es lo más bonito que hay en este universo y en los vecinos."
+        },
+        {
+          "id": "sn-02",
+          "texto": "Subida de nivel. Más vida, más puntos, más todo. Menos miedo, eso no."
+        },
+        {
+          "id": "sn-03",
+          "texto": "Nivel {nivel}. Si tu madre te viera... bueno, te está viendo. Está muy orgullosa. Y preocupada."
+        },
+        {
+          "id": "sn-04",
+          "texto": "Nivel {nivel}. El orco tiene que rellenar el formulario. Treinta segundos de reloj. Burocracia galáctica.",
+          "si": {
+            "raza": "orco-de-oficina"
+          }
+        },
+        {
+          "id": "sn-05",
+          "texto": "Nivel {nivel}. Ya eres más fuerte que el presentador de la Temporada 9. Que era una seta, pero cuenta.",
+          "si": {
+            "nivel": {
+              "min": 8
+            }
+          }
+        }
       ]
     },
     {
-      "id": "habilidadSube", "evento": "skillLevelUp", "probabilidad": 1, "prioridad": 3, "memoria": 8,
+      "id": "habilidadSube",
+      "evento": "skillLevelUp",
+      "probabilidad": 1,
+      "prioridad": 3,
+      "memoria": 8,
       "lineas": [
-        { "id": "hs-01", "texto": "¡{habilidad} sube a nivel {nivel}! La práctica hace al maestro. Y al concursante." },
-        { "id": "hs-02", "texto": "{habilidad}, nivel {nivel}. Tanto usarla, al final aprendes. Como con la cafetera de Paco." },
-        { "id": "hs-03", "texto": "{habilidad} a nivel 3: ahora hace algo nuevo. Míralo en la ficha. Te va a gustar. Al público, más.", "si": { "nivel": 3 } },
-        { "id": "hs-04", "texto": "¡MAESTRÍA en {habilidad}! Nivel cinco. Cuarenta y cinco usos. En cualquier otro trabajo esto se llama rutina. Aquí, gloria.", "si": { "nivel": 5 } }
+        {
+          "id": "hs-01",
+          "texto": "¡{habilidad} sube a nivel {nivel}! La práctica hace al maestro. Y al concursante."
+        },
+        {
+          "id": "hs-02",
+          "texto": "{habilidad}, nivel {nivel}. Tanto usarla, al final aprendes. Como con la cafetera de Paco."
+        },
+        {
+          "id": "hs-03",
+          "texto": "{habilidad} a nivel 3: ahora hace algo nuevo. Míralo en la ficha. Te va a gustar. Al público, más.",
+          "si": {
+            "nivel": 3
+          }
+        },
+        {
+          "id": "hs-04",
+          "texto": "¡MAESTRÍA en {habilidad}! Nivel cinco. Cuarenta y cinco usos. En cualquier otro trabajo esto se llama rutina. Aquí, gloria.",
+          "si": {
+            "nivel": 5
+          }
+        }
       ]
     },
     {
-      "id": "patrocinadorComentario", "evento": "sponsorMessage", "probabilidad": 0.5, "prioridad": 2, "memoria": 8, "despuesDe": "mensajePatrocinador",
+      "id": "patrocinadorComentario",
+      "evento": "sponsorMessage",
+      "probabilidad": 0.5,
+      "prioridad": 2,
+      "memoria": 8,
+      "despuesDe": "mensajePatrocinador",
       "lineas": [
-        { "id": "pc-01", "texto": "{patrocinador} te escribe. Yo no leería mucho entre líneas. Entre líneas hay contratos." },
-        { "id": "pc-02", "texto": "Un patrocinador contento es un patrocinador generoso. Un patrocinador triste es un mensaje pasivo-agresivo.", "si": { "tipo": "aviso" } },
-        { "id": "pc-03", "texto": "{patrocinador} se ha ido. No llores. Bueno, llora un poco, que da audiencia.", "si": { "tipo": "retirada" } },
-        { "id": "pc-04", "texto": "Y {patrocinador} vuelve. Esto es como las telenovelas: nadie se va del todo.", "si": { "tipo": "vuelta" } },
-        { "id": "pc-05", "texto": "Mira el retrato de {patrocinador}: ahí pone qué le gusta. Hacerle caso es opcional. Ignorarle también. Las dos cosas tienen consecuencias.", "si": { "primeraVez": true } }
+        {
+          "id": "pc-01",
+          "texto": "{patrocinador} te escribe. Yo no leería mucho entre líneas. Entre líneas hay contratos."
+        },
+        {
+          "id": "pc-02",
+          "texto": "Un patrocinador contento es un patrocinador generoso. Un patrocinador triste es un mensaje pasivo-agresivo.",
+          "si": {
+            "tipo": "aviso"
+          }
+        },
+        {
+          "id": "pc-03",
+          "texto": "{patrocinador} se ha ido. No llores. Bueno, llora un poco, que da audiencia.",
+          "si": {
+            "tipo": "retirada"
+          }
+        },
+        {
+          "id": "pc-04",
+          "texto": "Y {patrocinador} vuelve. Esto es como las telenovelas: nadie se va del todo.",
+          "si": {
+            "tipo": "vuelta"
+          }
+        },
+        {
+          "id": "pc-05",
+          "texto": "Mira el retrato de {patrocinador}: ahí pone qué le gusta. Hacerle caso es opcional. Ignorarle también. Las dos cosas tienen consecuencias.",
+          "si": {
+            "primeraVez": true
+          }
+        }
       ]
     },
     {
-      "id": "casting", "evento": "characterCreated", "probabilidad": 1, "prioridad": 4, "memoria": 0,
+      "id": "casting",
+      "evento": "characterCreated",
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 0,
       "lineas": [
-        { "id": "cs-01", "texto": "Ya está. Willy es oficialmente {raza:un} {clase}. Su madre lo va a flipar." },
-        { "id": "cs-02", "texto": "{raza:Mayus} y {clase}. Lo que es Willy de verdad. Original. Sin aditivos. Como el bonito del norte.", "si": { "raza": "castreno", "clase": "butanero" } },
-        { "id": "cs-03", "texto": "Un minotauro vegano influencer. Producción acaba de cancelar las vacaciones de todo el equipo de marketing.", "si": { "raza": "minotauro-vegano", "clase": "influencer" } },
-        { "id": "cs-04", "texto": "Un fantasma socorrista. Rescata a la gente del agua y luego les da un susto de muerte. Perfecto.", "si": { "raza": "fantasma-en-practicas", "clase": "socorrista" } },
-        { "id": "cs-05", "texto": "Un gnomo de jardín mimo. Silencioso, quieto e inquietante. Ya era así antes, pero ahora cobra.", "si": { "raza": "gnomo-de-jardin", "clase": "mimo" } },
-        { "id": "cs-06", "texto": "Una semigaviota tasadora. Roba cosas y luego te dice cuánto valen. Es el sueño de cualquier gaviota.", "si": { "raza": "semigaviota", "clase": "tasador" } },
-        { "id": "cs-07", "texto": "Un orco de oficina bardo de verbena. Pasodobles y hojas de cálculo. Que Dios nos pille confesados.", "si": { "raza": "orco-de-oficina", "clase": "bardo-de-verbena" } },
-        { "id": "cs-08", "texto": "{raza:Mayus} e ingeniero. Tiene una habilidad que pone «??? (sin estrenar)». Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.", "si": { "clase": "ingeniero" } },
-        { "id": "cs-09", "texto": "Un fantasma ingeniero. Invisible e inalámbrico. Los foros conspiranoicos van a arder. Él solo quería arreglar el router.", "si": { "raza": "fantasma-en-practicas", "clase": "ingeniero" } },
-        { "id": "cs-10", "texto": "Funcionario. El único concursante que ha llegado con su propio sello. Producción le ha pedido que no selle el decorado.", "si": { "clase": "funcionario" } },
-        { "id": "cs-11", "texto": "Un gnomo de jardín funcionario. Inmóvil, imperturbable y con plaza. Nadie lo va a mover de ahí. Nadie.", "si": { "raza": "gnomo-de-jardin", "clase": "funcionario" } },
-        { "id": "cs-12", "texto": "Jugador de basket. Dos metros cuatro. La mazmorra tiene techos de dos metros. Ya me estoy riendo y aún no ha pasado nada.", "si": { "clase": "jugador-de-basket" } },
-        { "id": "cs-13", "texto": "Un gnomo de jardín jugador de basket. Cuarenta centímetros de altura y un mate en el corazón. Producción ha pedido una escalera.", "si": { "raza": "gnomo-de-jardin", "clase": "jugador-de-basket" } }
+        {
+          "id": "cs-01",
+          "texto": "Ya está. Willy es oficialmente {raza:un} {clase}. Su madre lo va a flipar."
+        },
+        {
+          "id": "cs-02",
+          "texto": "{raza:Mayus} y {clase}. Lo que es Willy de verdad. Original. Sin aditivos. Como el bonito del norte.",
+          "si": {
+            "raza": "castreno",
+            "clase": "butanero"
+          }
+        },
+        {
+          "id": "cs-03",
+          "texto": "Un minotauro vegano influencer. Producción acaba de cancelar las vacaciones de todo el equipo de marketing.",
+          "si": {
+            "raza": "minotauro-vegano",
+            "clase": "influencer"
+          }
+        },
+        {
+          "id": "cs-04",
+          "texto": "Un fantasma socorrista. Rescata a la gente del agua y luego les da un susto de muerte. Perfecto.",
+          "si": {
+            "raza": "fantasma-en-practicas",
+            "clase": "socorrista"
+          }
+        },
+        {
+          "id": "cs-05",
+          "texto": "Un gnomo de jardín mimo. Silencioso, quieto e inquietante. Ya era así antes, pero ahora cobra.",
+          "si": {
+            "raza": "gnomo-de-jardin",
+            "clase": "mimo"
+          }
+        },
+        {
+          "id": "cs-06",
+          "texto": "Una semigaviota tasadora. Roba cosas y luego te dice cuánto valen. Es el sueño de cualquier gaviota.",
+          "si": {
+            "raza": "semigaviota",
+            "clase": "tasador"
+          }
+        },
+        {
+          "id": "cs-07",
+          "texto": "Un orco de oficina bardo de verbena. Pasodobles y hojas de cálculo. Que Dios nos pille confesados.",
+          "si": {
+            "raza": "orco-de-oficina",
+            "clase": "bardo-de-verbena"
+          }
+        },
+        {
+          "id": "cs-08",
+          "texto": "{raza:Mayus} e ingeniero. Tiene una habilidad que se llama 5G y que, según su propia ficha, no hace nada. Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.",
+          "si": {
+            "clase": "ingeniero"
+          }
+        },
+        {
+          "id": "cs-09",
+          "texto": "Un fantasma ingeniero. Invisible e inalámbrico. Los foros conspiranoicos van a arder. Él solo quería arreglar el router.",
+          "si": {
+            "raza": "fantasma-en-practicas",
+            "clase": "ingeniero"
+          }
+        },
+        {
+          "id": "cs-10",
+          "texto": "Funcionario. El único concursante que ha llegado con su propio sello. Producción le ha pedido que no selle el decorado.",
+          "si": {
+            "clase": "funcionario"
+          }
+        },
+        {
+          "id": "cs-11",
+          "texto": "Un gnomo de jardín funcionario. Inmóvil, imperturbable y con plaza. Nadie lo va a mover de ahí. Nadie.",
+          "si": {
+            "raza": "gnomo-de-jardin",
+            "clase": "funcionario"
+          }
+        },
+        {
+          "id": "cs-12",
+          "texto": "Jugador de basket. Dos metros cuatro. La mazmorra tiene techos de dos metros. Ya me estoy riendo y aún no ha pasado nada.",
+          "si": {
+            "clase": "jugador-de-basket"
+          }
+        },
+        {
+          "id": "cs-13",
+          "texto": "Un gnomo de jardín jugador de basket. Cuarenta centímetros de altura y un mate en el corazón. Producción ha pedido una escalera.",
+          "si": {
+            "raza": "gnomo-de-jardin",
+            "clase": "jugador-de-basket"
+          }
+        }
       ]
     },
     {
-      "id": "construirAutomata", "evento": "skillUsed", "donde": { "habilidad": { "en": ["construir-automata", "despliegue-masivo"] } }, "probabilidad": 0.6, "prioridad": 2, "memoria": 8,
+      "id": "construirAutomata",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": {
+          "en": [
+            "construir-automata",
+            "despliegue-masivo"
+          ]
+        }
+      },
+      "probabilidad": 0.6,
+      "prioridad": 2,
+      "memoria": 8,
       "lineas": [
-        { "id": "au-01", "texto": "Un autómata nuevo. Chapa, tornillos sueltos y una luz verde. Es feo. Es leal. Es tuyo." },
-        { "id": "au-02", "texto": "Montado en dos turnos. Ikea tiene mucho que aprender." },
-        { "id": "au-03", "texto": "Otro autómata. Producción pregunta si tiene contrato. Le he dicho que es autónomo. Literalmente." },
-        { "id": "au-04", "texto": "Ha montado un robot en mitad de un combate. Hay ingenieros en la Tierra que tardan tres semanas en montar una antena. Bueno, había.", "si": { "enCombate": true } },
-        { "id": "au-05", "texto": "Tres de golpe. Esto ya no es un concursante: es una subcontrata.", "si": { "habilidad": "despliegue-masivo" } }
+        {
+          "id": "au-01",
+          "texto": "Un autómata nuevo. Chapa, tornillos sueltos y una luz verde. Es feo. Es leal. Es tuyo."
+        },
+        {
+          "id": "au-02",
+          "texto": "Montado en dos turnos. Ikea tiene mucho que aprender."
+        },
+        {
+          "id": "au-03",
+          "texto": "Otro autómata. Producción pregunta si tiene contrato. Le he dicho que es autónomo. Literalmente."
+        },
+        {
+          "id": "au-04",
+          "texto": "Ha montado un robot en mitad de un combate. Hay ingenieros en la Tierra que tardan tres semanas en montar una antena. Bueno, había.",
+          "si": {
+            "enCombate": true
+          }
+        },
+        {
+          "id": "au-05",
+          "texto": "Tres de golpe. Esto ya no es un concursante: es una subcontrata.",
+          "si": {
+            "habilidad": "despliegue-masivo"
+          }
+        }
       ]
     },
     {
-      "id": "arcoVoltaico", "evento": "skillUsed", "donde": { "habilidad": "arco-voltaico" }, "probabilidad": 0.45, "prioridad": 2, "memoria": 10,
+      "id": "arcoVoltaico",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": "arco-voltaico"
+      },
+      "probabilidad": 0.45,
+      "prioridad": 2,
+      "memoria": 10,
       "lineas": [
-        { "id": "r5-01", "texto": "¡Arco voltaico! Alta tensión, baja paciencia y un olor a pelo quemado que no viene en el folleto." },
-        { "id": "r5-02", "texto": "Chispazo del soldador. No es magia: es oficio. Que es más raro todavía." },
-        { "id": "r5-03", "texto": "Banda ancha aplicada a la cara de {enemigo:un}. Tecnología punta." },
-        { "id": "r5-04", "texto": "Rayo al agua. Agua electrificada. El ingeniero lo llama «despliegue de red». Yo lo llamo calamares a la plancha.", "si": { "electrificaAgua": true } },
-        { "id": "r5-05", "texto": "Arco voltaico en una sala sin cobertura. Al soldador le da igual la cobertura. Al soldador le da igual todo." , "si": { "sinCobertura": true } }
+        {
+          "id": "r5-01",
+          "texto": "¡Arco voltaico! Alta tensión, baja paciencia y un olor a pelo quemado que no viene en el folleto."
+        },
+        {
+          "id": "r5-02",
+          "texto": "Chispazo del soldador. No es magia: es oficio. Que es más raro todavía."
+        },
+        {
+          "id": "r5-03",
+          "texto": "Banda ancha aplicada a la cara de {enemigo:un}. Tecnología punta."
+        },
+        {
+          "id": "r5-04",
+          "texto": "Rayo al agua. Agua electrificada. El ingeniero lo llama «despliegue de red». Yo lo llamo calamares a la plancha.",
+          "si": {
+            "electrificaAgua": true
+          }
+        },
+        {
+          "id": "r5-05",
+          "texto": "Arco voltaico en una sala sin cobertura. Al soldador le da igual la cobertura. Al soldador le da igual todo.",
+          "si": {
+            "sinCobertura": true
+          }
+        }
       ]
     },
     {
-      "id": "automataDestruido", "evento": "entityDefeated", "donde": { "objetivo.etiquetas": { "tiene": "automata" } }, "probabilidad": 0.6, "prioridad": 2, "memoria": 6,
+      "id": "automataDestruido",
+      "evento": "entityDefeated",
+      "donde": {
+        "objetivo.etiquetas": {
+          "tiene": "automata"
+        }
+      },
+      "probabilidad": 0.6,
+      "prioridad": 2,
+      "memoria": 6,
       "lineas": [
-        { "id": "ad-01", "texto": "Autómata caído. Su luz verde se apaga. Un minuto de silencio. Vale, treinta segundos, que era de chapa." },
-        { "id": "ad-02", "texto": "Han roto un autómata. El ingeniero ya está pensando en la versión 2.0. Siempre hay una versión 2.0." },
-        { "id": "ad-03", "texto": "El autómata ha explotado llevándose a quien tenía al lado. Garantía caducada, pero con estilo.", "si": { "exploto": true } }
+        {
+          "id": "ad-01",
+          "texto": "Autómata caído. Su luz verde se apaga. Un minuto de silencio. Vale, treinta segundos, que era de chapa."
+        },
+        {
+          "id": "ad-02",
+          "texto": "Han roto un autómata. El ingeniero ya está pensando en la versión 2.0. Siempre hay una versión 2.0."
+        },
+        {
+          "id": "ad-03",
+          "texto": "El autómata ha explotado llevándose a quien tenía al lado. Garantía caducada, pero con estilo.",
+          "si": {
+            "exploto": true
+          }
+        }
       ]
     },
     {
-      "id": "sinCobertura", "evento": "roomEntered", "donde": { "sinCobertura": true, "willy.clase": "ingeniero" }, "probabilidad": 0.7, "prioridad": 2, "memoria": 6,
+      "id": "sinCobertura",
+      "evento": "roomEntered",
+      "donde": {
+        "sinCobertura": true,
+        "willy.clase": "ingeniero"
+      },
+      "probabilidad": 0.7,
+      "prioridad": 2,
+      "memoria": 6,
       "lineas": [
-        { "id": "sc-01", "texto": "Zona sin cobertura. El ingeniero mira el móvil, lo levanta, lo agita. Nada. Como en el pueblo de su suegra." },
-        { "id": "sc-02", "texto": "Sin señal. Los autómatas se miran entre ellos, confusos. Uno se ha puesto a dar vueltas. Es lo que hacemos todos sin cobertura." },
-        { "id": "sc-03", "texto": "Aquí no llega la señal. Los del gorro de papel de aluminio del público lo celebran. Son pocos, pero gritan mucho." }
+        {
+          "id": "sc-01",
+          "texto": "Zona sin cobertura. El ingeniero mira el móvil, lo levanta, lo agita. Nada. Como en el pueblo de su suegra."
+        },
+        {
+          "id": "sc-02",
+          "texto": "Sin señal. Los autómatas se miran entre ellos, confusos. Uno se ha puesto a dar vueltas. Es lo que hacemos todos sin cobertura."
+        },
+        {
+          "id": "sc-03",
+          "texto": "Aquí no llega la señal. Los del gorro de papel de aluminio del público lo celebran. Son pocos, pero gritan mucho."
+        }
       ]
     },
     {
@@ -195,34 +760,6 @@
             "primeraVez": true
           },
           "prioridadExtra": 3
-        },
-        {
-          "id": "g5-02",
-          "texto": "5G. Ha sonado un pitido. El ingeniero ha asentido. No ha pasado nada. Bueno, sí: el público se ha reído.",
-          "si": {
-            "nivel": 1
-          }
-        },
-        {
-          "id": "g5-03",
-          "texto": "Otra vez el 5G. Otra vez nada. Hay que admirar la constancia. Hay que admirarla mucho, porque es lo único que hay.",
-          "si": {
-            "nivel": 1
-          }
-        },
-        {
-          "id": "g5-04",
-          "texto": "5G activado. Los conspiranoicos de las gradas se han tapado la cabeza. Tampoco ha pasado nada. Ni a ellos.",
-          "si": {
-            "nivel": 1
-          }
-        },
-        {
-          "id": "g5-05",
-          "texto": "Le da al botón con la fe de quien sabe algo que nosotros no. Nada. Pero la barrita de progreso ha subido. Eso dice él.",
-          "si": {
-            "nivel": 1
-          }
         },
         {
           "id": "g6-01",
@@ -294,7 +831,8 @@
             "nivel": 6
           }
         }
-      ]
+      ],
+      "comentario": "g5-01 solo en el primer uso. Los usos siguientes a nivel 5G no tienen línea aquí: van al banco redG5Repetido."
     },
     {
       "id": "redGSubeNivel",
@@ -698,6 +1236,34 @@
         {
           "id": "tb-03",
           "texto": "Otra vez con la cabeza en el techo. Ya tiene un chichón con forma de viga."
+        }
+      ]
+    },
+    {
+      "id": "redG5Repetido",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": "red-g",
+        "nivel": 1,
+        "primeraVez": false
+      },
+      "probabilidad": 0.15,
+      "prioridad": 1,
+      "memoria": 3,
+      "noRepetirEnPartida": true,
+      "comentario": "Mínimo a propósito: el 5G repetido no hace nada y casi siempre en silencio. Cada línea sale como mucho una vez por partida.",
+      "lineas": [
+        {
+          "id": "g5r-01",
+          "texto": "Nada. Otra vez."
+        },
+        {
+          "id": "g5r-02",
+          "texto": "Pitido. Nada."
+        },
+        {
+          "id": "g5r-03",
+          "texto": "Él sabrá."
         }
       ]
     }
