@@ -13,7 +13,7 @@
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
-import { type Rgb } from './color.ts';
+import { type Rgb, hexToRgb } from './color.ts';
 import { type Rect, readSpriteList } from './sprite-list.ts';
 import { FLAMES, FLAME_LEGEND, type Key, T, ascii, get, rect, rgb, rng, set } from './pixel.ts';
 import * as env from './environment-art.ts';
@@ -1012,6 +1012,20 @@ function leverArt(pos: 0 | 1 | 2): Image {
   return img;
 }
 
+/** Faction foot ring (16x7, drawn under the feet): an ellipse outline with corner ticks; allies get a
+ *  dashed ring so they read apart from the party at a glance, enemies a heavier ring. */
+function factionRing(hex: string, style: 'solid' | 'dashed' | 'heavy'): Image {
+  const img = blank(T, 7);
+  const c = hexToRgb(hex), dark = hexToRgb(hex).map((v) => Math.round(v * 0.55)) as Rgb;
+  for (let y = 0; y < 7; y++) for (let x = 0; x < T; x++) {
+    const d = Math.hypot((x - 7.5) / 7.2, (y - 3) / 3.2);
+    if (d > 1.05 || d < (style === 'heavy' ? 0.62 : 0.78)) continue;
+    if (style === 'dashed' && Math.floor((Math.atan2(y - 3, x - 7.5) + Math.PI) / (Math.PI / 6)) % 2 === 1) continue;
+    set(img, x, y, d > 0.95 ? dark : c, 220);
+  }
+  return img;
+}
+
 /** Standing iron brazier with glowing coals and a 4-frame flame. */
 function brazier(frame: number): Image {
   const img = blank(T, T);
@@ -1212,6 +1226,10 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   brazier: { frames: [0, 1, 2, 3].map(brazier), note: 'Brasero de hierro', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
   candles: { frames: [0, 1, 2].map(candles), note: 'Velas en el suelo (capilla, cripta)', anchor: 'floor', fps: 6, loop: true, light: '#ffc070' },
   oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado de una escarpia', anchor: 'wall', fps: 6, loop: true, light: '#ffb050' },
+  marker_party: { frames: [factionRing('#e8c070', 'solid')], note: 'Aro bajo los pies: grupo', anchor: 'floor', fps: 0, loop: false },
+  marker_ally: { frames: [factionRing('#6ad0a0', 'dashed')], note: 'Aro bajo los pies: aliado que lucha por el grupo (IA)', anchor: 'floor', fps: 0, loop: false },
+  marker_enemy: { frames: [factionRing('#d04a3a', 'heavy')], note: 'Aro bajo los pies: enemigo', anchor: 'floor', fps: 0, loop: false },
+  marker_neutral: { frames: [factionRing('#9a9aa8', 'dashed')], note: 'Aro bajo los pies: neutral', anchor: 'floor', fps: 0, loop: false },
   lantern: { frames: [0, 1, 2].map(lantern), note: 'Farol de hierro en el suelo', anchor: 'floor', fps: 5, loop: true, light: '#ffb050' },
   blood_1: { frames: [bloodSplat(1)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
   blood_2: { frames: [bloodSplat(7)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },

@@ -450,3 +450,5 @@ Las luces sin `prop` en los mapas iluminan sin que se vea de dónde sale la luz.
 - `lantern` para `farol-pozo` y `farol-polvorin`.
 - `campfire` para las `hoguera-*` si no tienen ya un spawn `campfire` debajo.
 - Los `brillo-*` (plata, resonadores) pueden seguir sin prop.
+
+**Aros de bando** (props `floor`, 16×7, dibujar bajo los pies): `marker_party` (dorado, continuo), `marker_ally` (verde, a trazos: aliados que luchan por el grupo con IA), `marker_enemy` (rojo, grueso) y `marker_neutral` (gris, a trazos). **Petición al cliente:** el mapa solo marca al personaje activo; estos aros permiten distinguir bandos de un vistazo.
