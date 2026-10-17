@@ -19,7 +19,7 @@
 | R10 | Cambio de mapa conservando entidades | `engine/` | W3 | *Intereses* (pueblo ↔ mina) |
 | R11 | Eventos con causa y campos ricos | `engine/` + rulesets | W2 | Logros y tutorial de cualquier juego |
 | R12 | RNG derivados por propósito | `engine/rng.ts` | W3 | Todos |
-| R13 | Efectos adicionales y macros de ruleset | `engine/effects.ts` | W2-W4 | Todos |
+| R13 | Efectos adicionales, macros de ruleset e **invocaciones** (`spawnEntity` con dueño, controlador, duración e IA) | `engine/effects.ts` + IA | W2-W4 | Todos (refuerzos de jefes, invocaciones de clérigo en *Intereses*) |
 | R14 | Capa `markers` en el cargador de Tiled | `engine/tiled.ts` | W3 | *Intereses* (interactuables) |
 
 Ninguna mete reglas de *Willy* ni de d20 en `engine/`.
@@ -307,8 +307,9 @@ export function boxOdds(box, ctx): Array<{ item: string; pct: number }>;   // fo
 Ya previsto en `docs/DESIGN.md` → «Introducción y onboarding». *Willy* lo necesita en W6, quizá antes que *Intereses*. Pide además:
 - **`GameDefinition.cinematics`** con el reproductor de viñetas (formato de `INTRO.md`, campo `voice` y `fx` de paneo/partículas).
 - **`GameDefinition.howToPlay`** (páginas) y **`glossary`** (secciones y términos) como datos.
-- **`GameDefinition.feedbackUrl`**.
-- **`GameDefinition.saveMode`**: `'free'` (*Intereses*) o `'checkpoint'` (*Willy*: solo se guarda en zonas seguras, más un autoguardado de suspensión que se borra al cargarlo).
+- **`GameDefinition.feedbackUrl` opcional**: si no está definido, no hay botón (es el caso de *Willy* por decisión del usuario).
+- **`GameDefinition.theme.titleFontFamily`**: segunda fuente para títulos y rótulos (*Willy*: Press Start 2P para títulos, VT323 para el texto).
+- **`GameDefinition.saveMode`**: `'free'` (*Intereses*), `'checkpoint'` (*Willy* Con repetición: solo se guarda en zonas seguras, más un autoguardado de suspensión que se borra al cargarlo) o `'permadeath'` (*Willy* Sin repetición: una ranura propia, autoguardado tras cada comando, sin cargar ni exportar a mano, borrado al morir en la misma escritura que actualiza el perfil, y un contador de escrituras compartido con el perfil para detectar copias restauradas). El modo lo elige el jugador al empezar; el cliente lo lee de `GameState.settings.eliminationMode`.
 - **`GameState.settings.difficulty`** (ya previsto) con valores definidos por el ruleset.
 - Opción de cliente **«Animaciones reducidas»** respetada por `src/fx/`.
 
@@ -342,7 +343,36 @@ Ya previstos: `push`, `spawnSurface`. *Willy* necesita además, genéricos:
 - `modifyMeter` (R3), `addClock` (R2);
 - `teleport { entityId, to, ignoreHeight? }`;
 - `clearSurface { at, radius }`;
-- `spawnEntity { template, at, controllerId, factionId }` (fans invocados, cangrejos del Centollo).
+- `spawnEntity` y `despawnEntity`: ver abajo «Invocaciones».
+
+### Invocaciones (`spawnEntity`), ampliado tras la decisión del usuario
+
+La clase **Ingeniero de 5G** construye autómatas y antenas; la Influencer invoca fans; los jefes llaman refuerzos. Hace falta algo más que «crear una entidad»:
+
+```ts
+type SpawnEntityEffect = {
+  type: 'spawnEntity';
+  template: string;                  // entity template id resolved by the game (content data → Entity)
+  at: Vec2;                          // must be free and walkable; otherwise the command fails with 'blocked'
+  id?: string;                       // deterministic default: `${template}#${state counter}`
+  ownerId?: string;                  // summoner; kills and XP credited to the owner
+  controllerId: string;              // 'player:1' (controlled summon), 'ai'...
+  factionId: string;
+  ai?: string;                       // AI profile id when controllerId is 'ai' ('torreta', 'agresivo'...)
+  duration?: 'combat' | { turns: number } | 'permanent';
+  maxPerOwner?: { key: string; max: number; onExceed: 'fail' | 'replaceOldest' };
+  turnOrder?: 'afterOwner' | 'rollInitiative';   // summons in combat: act right after the owner, or roll
+};
+type DespawnEntityEffect = { type: 'despawnEntity'; entityId: string; reason: 'expired' | 'ownerDown' | 'combatEnded' | 'defeated' };
+```
+
+- **Estado:** `state.systems.summons = { [entityId]: { ownerId, expiresAtRound?, untilCombatEnd, key } }`. Serializable, con su RNG ya en el estado.
+- **Turnos:** si `turnOrder: 'afterOwner'`, la invocación se inserta en la iniciativa justo detrás del dueño (y se quita al desaparecer). Si el dueño cae, sus invocaciones desaparecen (configurable por plantilla: `persistIfOwnerDown`).
+- **Caducidad:** el motor emite `entityDespawned` al expirar por turnos (en `onTurnEnd` del dueño) o al terminar el combate; el render lo anima (plegarse, desvanecerse).
+- **Atribución:** los eventos de daño y eliminación causados por una invocación llevan `ownerId`, para que logros, audiencia y XP los cuenten como del dueño.
+- **Control:** una invocación con `controllerId: 'player:1'` acepta comandos del jugador como cualquier entidad (base del multijugador); con `'ai'` la mueve el sistema de IA de la Fase 2 con el perfil `ai`.
+- **IA de autómatas y torretas:** perfiles genéricos en datos que la IA de la Fase 2 debería admitir: `agresivo` (ir al enemigo más cercano y atacar), `torreta` (no moverse; usar su acción contra el objetivo más cercano en alcance), `escolta` (quedarse a ≤ N casillas del dueño). El ruleset aporta las acciones disponibles (`listActions`).
+- **Tests:** máximo por dueño, orden de turno, caducidad, desaparición al caer el dueño, atribución de eliminaciones, guardado y carga a mitad de combate con invocaciones activas.
 
 Y un mecanismo para que el ruleset declare **macros** que se compilan a efectos del motor (`damage` → tirar dados, aplicar resistencias e inmunidades → `modifyResource`; `heal`; `revealFloor`). Propuesta: `ruleset.effectMacros: Record<string, (state, macro, rng) => Effect[]>`, que `applyEffects` expande antes de aplicar.
 

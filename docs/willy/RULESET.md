@@ -1,7 +1,8 @@
 # Ruleset `willy`: el Reglamento del Concurso
 
 > Estado: **propuesta pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
-> Razas y clases completas en `content/willy/data/races.json` y `classes.json`. Objetos en `items.json`.
+> Razas (6) y clases (7, incluida la especial **Ingeniero de 5G**) en `content/willy/data/races.json` y `classes.json`. Objetos en `items.json`.
+> Estado tras la revisión del usuario (2026-10-17): **aprobado**; se añaden la clase Ingeniero de 5G y los modos de eliminación.
 
 ## Objetivos
 
@@ -213,6 +214,35 @@ Cada habilidad activa (y algunas pasivas) tiene **nivel de habilidad 1-5**, inde
 - «Uso con efecto» significa que hizo algo: un Empujón que movió a alguien, un Lanzar que acertó. Spamear contra la pared no cuenta.
 - Las **básicas** también suben: **Empujar** (nivel 3: empuja 2 casillas; 5: empuja en línea a dos enemigos), **Lanzar** (3: alcance +2; 5: rebota a un segundo objetivo), **Esquivar** (pasiva, sube cuando un enemigo falla: +1 DEF por nivel), **Trepar** (3: subir 2 niveles; 5: sin coste extra) y **Comer en combate** (3: comer es gratis una vez por turno; 5: la comida cura el doble). Datos en `classes.json` → `habilidadesBasicas`.
 - Los niveles de habilidad viven en la entidad como stats con espacio de nombres: `skill:empujar` (nivel) y `skillxp:empujar` (usos).
+
+## Clases de un vistazo
+
+| Clase | Atributos | Papel | Desventaja cómica |
+|---|---|---|---|
+| Butanero | +2 FUE, +1 AGU | Explosiones y cargas | La bombona de la espalda puede explotar con el fuego |
+| Influencer de mazmorra | +3 CAR, +1 AGI, −1 AGU | Audiencia, cegar, invocar fans | Bajón si la audiencia cae del mínimo |
+| Bardo de verbena | +2 CAR, +1 MAÑ | Controlar el movimiento enemigo (Bailando) | Repetir canción aburre |
+| Socorrista | +2 AGU, +1 AGI | Arrastrar, agua, curar | Se duerme si no se mueve |
+| Tasador de antigüedades | +2 MAÑ, +1 SUE, +1 CAR, −1 FUE | Críticos, botín, mercado | Romper decorado le da pena |
+| Mimo táctico | +2 AGI, +1 MAÑ, −1 CAR | Paredes, atraer, encerrar | Solo gestos en los diálogos |
+| **Ingeniero de 5G** | +3 MAÑ, +1 AGU, −1 CAR | **Invocador**: autómatas, antena-torreta y rayos en línea | **Cobertura irregular**: salas sin cobertura donde todo le cuesta más; Mamá Clementina desconfía de él |
+
+### Ingeniero de 5G: reglas de las invocaciones
+
+- **Autómata repetidor** (nivel 1): vida 10, DEF 12, ataque +4, 1d6, movimiento 4. Máximo 1 (2 con la habilidad a nivel 3). Lo controla el jugador y actúa justo después de Willy, con su propio movimiento y 1 acción. Dura hasta el final del combate.
+- **Señal:** a más de 4 casillas de Willy (6 con la Antena plegable) queda Mareado (−2 a todo).
+- **Antena repetidora** (nivel 6): torreta inmóvil 3 turnos con IA aliada; lanza un Rayo 5G gratis al empezar el turno de Willy.
+- Lo que eliminan las invocaciones da XP y audiencia a Willy. Las invocaciones no ganan XP ni suben de nivel; la que sube es la habilidad que las crea (por uso).
+- Si Willy cae o termina el combate, desaparecen (el autómata «se pliega»).
+- Implementación: efecto `spawnEntity` del motor (`ENGINE_REQUESTS.md` → R13) con dueño, controlador, facción, duración y perfil de IA.
+
+## Modos de eliminación
+
+Elegidos al empezar (`settings.eliminationMode`). No son del ruleset sino de la partida, pero el ruleset los lee:
+- **Con repetición:** al caer a 0 de vida, la partida vuelve al último guardado.
+- **Sin repetición:** al caer a 0, la temporada termina. Requiere dificultad Concursante o Prime time. La audiencia vale ×1,25.
+
+Detalle de guardado y reacciones en `DESIGN.md` §12.
 
 ## Dificultad
 

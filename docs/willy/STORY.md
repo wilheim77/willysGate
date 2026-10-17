@@ -2,7 +2,7 @@
 
 *Temporada 1: La Tierra*
 
-> Estado: **premisa definida por el usuario (2026-10-17); desarrollo pendiente de aprobación.**
+> Estado: **aprobada por el usuario con cambios (2026-10-17)**: los tres finales, el modo Sin repetición y la clase Ingeniero de 5G. Ver [`PROGRESS.md`](PROGRESS.md) → «Decisiones del usuario».
 > Sistemas y números en [`DESIGN.md`](DESIGN.md); reglas en [`RULESET.md`](RULESET.md); prólogo en [`INTRO.md`](INTRO.md).
 
 **Tema:** el fin del mundo como entretenimiento. Sobrevivir no basta: hay que hacerlo con gracia.
@@ -31,7 +31,8 @@ Al fondo de la Planta 5 espera el presentador, **Fausto Brillante**. Quien llega
 - Fuerte por oficio, paciente por carácter y testarudo por ser de Castro.
 - Habla poco. Cuando habla, suele tener razón o hambre.
 - Su único lujo es la **bombona**: no la suelta en todo el juego. Es su arma de partida si elige la clase Butanero, y un objeto de broma recurrente si no.
-- **Raza y clase:** al empezar la Planta 1, el Sistema del concurso le obliga a elegir entre opciones absurdas (ver `RULESET.md`). Willy sigue siendo Willy por dentro, aunque por fuera sea un gnomo de jardín.
+- **Raza y clase:** al empezar la Planta 1, el Sistema del concurso le obliga a elegir entre opciones absurdas (ver `RULESET.md`): 6 razas y 7 clases. Willy sigue siendo Willy por dentro, aunque por fuera sea un gnomo de jardín.
+- **La clase especial, Ingeniero de 5G** (dedicada a un amigo del usuario): Willy aparece como el técnico que estaba montando una antena en el tejado de la lonja cuando se acabó el mundo, y al que media comarca culpa del apocalipsis «por lo de las ondas». Construye autómatas de chapa y dispara rayos 5G. El humor es siempre cariñoso: el chiste son los conspiranoicos, nunca el ingeniero, que es el más competente de la mazmorra y el más cansado de dar explicaciones.
 
 ### El Narrador
 La voz del concurso. Un locutor contratado por Canal Abismo que ha narrado ya cuarenta y tantas temporadas en otros tantos planetas, y se le nota.
@@ -103,15 +104,21 @@ Los bastidores del concurso: cables, focos, decorados de cartón piedra y regido
 
 **Escena fija:** el despacho de Xelda, donde se descubre qué pasa con los ganadores de las temporadas anteriores.
 
-## 4. Desenlace (borrador)
+## 4. Desenlace (aprobado: los tres finales)
 
-Al derrotar a Fausto, el público vota. Xelda revela que los ganadores de otras temporadas se convierten en **presentadores** del concurso en el siguiente planeta: así llegó Fausto aquí. Willy puede:
+Al derrotar a Fausto, el público vota. Xelda revela que los ganadores de otras temporadas se convierten en **presentadores** del concurso en el siguiente planeta: así llegó Fausto aquí. Después, el jugador **elige**:
 
-- **Aceptar** el puesto: final cínico, con el Narrador encantado de tener por fin un compañero de cabina.
-- **Negarse** y volver con los suyos al Camerino: final amable, con el Narrador fingiendo que no se emociona.
-- **Final secreto** (con suficiente audiencia y al menos tres patrocinadores a favor): Willy compra la cadena con lo que ha ganado y cancela el programa. «En catorce galaxias nadie había leído la letra pequeña. Un butanero de Castro, sí.»
+- **Final A, «Nuevo presentador»:** Willy acepta el puesto. Final cínico, con el Narrador encantado de tener por fin un compañero de cabina.
+- **Final B, «Vuelta a casa»:** Willy se niega y vuelve con los suyos al Camerino. Final amable, con el Narrador fingiendo que no se emociona.
+- **Final C, secreto, «Letra pequeña»:** aparece como tercera opción solo si se cumplen **las tres** condiciones al derrotar a Fausto:
+  1. audiencia de **50 millones** o más;
+  2. **3 patrocinadores o más «a favor»** (o «fan») a la vez;
+  3. haber hablado con Xelda en su despacho de la Planta 5 (escena fija) y haber leído el contrato del concurso.
+  Willy compra la cadena con lo ganado y cancela el programa. «En catorce galaxias nadie había leído la letra pequeña. Un butanero de Castro, sí.»
 
-Los tres terminan con un gancho a la **Temporada 2**.
+Si no se cumplen, la opción C no se muestra (tampoco tachada: es secreta). Hay un logro oculto por cada final, con pista. Los tres terminan con un gancho a la **Temporada 2**.
+
+En modo **Sin repetición**, el final elegido se registra en el perfil con una marca especial («en directo»).
 
 ## 5. Muestra de tono
 
