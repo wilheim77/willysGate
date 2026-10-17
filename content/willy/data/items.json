@@ -426,7 +426,7 @@
         { "type": "damage", "entityId": "$target", "amount": "2d6", "element": "golpe" },
         { "type": "push", "entityId": "$target", "from": "$self", "distance": 3, "multiplicadorChoque": 2 }
       ] },
-      "desbloqueo": "logro:ley-de-la-gravedad", "valor": 60 },
+      "desbloqueo": "base", "valor": 60 },
     { "id": "cronometro-de-regidor", "nombre": "Cronómetro de regidor", "rareza": "legendaria", "tipo": "equipo", "ranura": "amuleto", "unico": true,
       "descripcion": "Robado del cuello de un regidor. Controla los tiempos del programa. Los de verdad.",
       "regla": "Una vez por planta: añades 2 minutos al reloj de la planta.",
@@ -456,7 +456,7 @@
         { "type": "setFlag", "flag": "planta:secretasVisibles", "value": true },
         { "type": "setFlag", "flag": "planta:abrirSinPrueba", "value": true }
       ] }],
-      "desbloqueo": "logro:esto-no-estaba-en-el-plano", "valor": 55 },
+      "desbloqueo": "base", "valor": 55 },
 
     { "id": "aviso-pausa-publicitaria", "nombre": "Aviso de Producción: pausa publicitaria", "rareza": "plata", "tipo": "aviso",
       "descripcion": "«Interrumpimos la emisión para un mensaje de nuestros patrocinadores. Concursantes: no se muevan. O sí, da igual, nadie mira.»",

@@ -77,3 +77,9 @@ Cuando la sesión principal cierre la Fase 2 del motor:
 
 - Los datos JSON se validaron con un script de comprobación cruzada (ids de objetos en tablas, clases, patrocinadores y logros; rarezas; pistas de ocultos; ids de frases únicos). Al crear `rulesets/willy/`, convertirlo en test de contenido (`tests/content/willy-data.test.ts`) junto con el test de variables del Narrador.
 - Todo lo de *Willy* respeta las fronteras: solo `docs/willy/` y `content/willy/` (salvo `cinematics/` y `public/assets/cinematics/`, que son de la sesión de arte).
+
+## Rondas de pulido (textos, logros y cajas)
+
+| Ronda | Fecha | Cambios |
+|---|---|---|
+| 1 | 2026-10-17 | 15 líneas reescritas (menos «catorce galaxias» y «once mil años»: de 19 y 10 apariciones a 8 y 7), 7 líneas nuevas con guiños a rivales, clases y al presentador, 1 línea floja sustituida. **Logros:** «Zapping» era imposible (la audiencia nunca baja del mínimo de la planta) y ahora pide llegar a ese mínimo; aclaradas 4 descripciones (5G y logros que solo puede conseguir una clase). **Cajas:** dos legendarios (Remo de la Castreña y Llavero de Producción) disponibles desde la primera partida, para que una tirada legendaria nunca se quede sin objetos en un perfil nuevo; sus logros dan ahora una caja de plata. |

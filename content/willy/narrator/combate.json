@@ -18,7 +18,7 @@
         { "id": "ci-11", "texto": "Gaviotas. Willy las conoce bien. Le han robado más bocadillos que cualquier atracador.", "si": { "enemigo.plantilla": "gaviota-de-lonja" } },
         { "id": "ci-12", "texto": "Maniquíes. No se mueven si los miras. Así que no parpadees. Nunca. Suerte.", "si": { "enemigo.plantilla": "maniqui" } },
         { "id": "ci-13", "texto": "Cabezudos. Con esas cabezas, cualquiera diría que piensan. No piensan.", "si": { "enemigo.plantilla": "cabezudo" } },
-        { "id": "ci-14", "texto": "Patos de goma gigantes. Ningún niño volverá a bañarse tranquilo en catorce galaxias.", "si": { "enemigo.plantilla": "patito-gigante" } },
+        { "id": "ci-14", "texto": "Patos de goma gigantes. Hacen «cuac». Luego hacen otras cosas, peores.", "si": { "enemigo.plantilla": "patito-gigante" } },
         { "id": "ci-15", "texto": "Figurantes. Cobran por estar ahí. Tú no. Piénsalo mientras les pegas.", "si": { "enemigo.plantilla": "figurante" } },
         { "id": "ci-16", "texto": "Combate a oscuras. A los monstruos les da igual. A ti, no tanto.", "si": { "luzSala": { "max": 0.3 } } },
         { "id": "ci-17", "texto": "Combate con poco reloj. Si quieres un consejo: rapidito.", "si": { "relojPct": { "max": 25 } } }
@@ -58,6 +58,7 @@
         { "id": "ee-29", "texto": "Corten. {enemigo:el:Mayus} sale de escena. Que pase el siguiente.", "si": { "planta": 5 } },
         { "id": "ee-30", "texto": "Era un mímico. Ahora es un cofre. Un cofre de verdad. Qué ironía tan triste.", "si": { "objetivo.plantilla": "mimico" } },
         { "id": "ee-31", "texto": "Eliminad{enemigo:o} mientras bailaba. Se fue con ritmo, que es lo que importa.", "si": { "objetivo.condiciones": { "tiene": "bailando" } } },
+        { "id": "ee-33", "texto": "Eliminad{enemigo:o}. Desde el pasillo, Gorka lo ha apuntado en una hoja de cálculo. Columna «Amenazas». Fila «Willy».", "si": { "planta": { "min": 2 } } },
         { "id": "ee-32", "texto": "Eliminad{enemigo:o} con un pan. Del día anterior. Mamá Clementina no sabe si aplaudir o llorar.", "si": { "objeto": "barra-de-pan" } }
       ]
     },
@@ -77,7 +78,7 @@
       "lineas": [
         { "id": "fa-01", "texto": "Fallo. El aire ha quedado bien golpeado, eso sí." },
         { "id": "fa-02", "texto": "Nada. {enemigo:el:Mayus} ni se ha enterado. Bueno, se ha enterado de que lo has intentado." },
-        { "id": "fa-03", "texto": "Ha fallado. En las gradas alguien ha dicho «uy». Muchos alguien. Catorce galaxias de «uy»." },
+        { "id": "fa-03", "texto": "Ha fallado. En las gradas, ochocientos millones de «uy» a la vez. La Colmena cuenta como uno." },
         { "id": "fa-04", "texto": "Fallado. Es estadística, no es personal. Bueno, un poco personal sí es." },
         { "id": "fa-05", "texto": "Al aire. Si el aire fuera el enemigo, ya habrías ganado." },
         { "id": "fa-06", "texto": "Fallo. Con esa probabilidad... bueno, con esa probabilidad, fallar era muy probable.", "si": { "probabilidad": { "max": 40 } } },

@@ -58,7 +58,7 @@
     {
       "id": "cajaResultado", "evento": "boxOpened", "probabilidad": 0.9, "prioridad": 3, "memoria": 12,
       "lineas": [
-        { "id": "cr-01", "texto": "{objeto:el:Mayus}. Bueno. Algo es algo." },
+        { "id": "cr-01", "texto": "{objeto:el:Mayus}. No es lo que querías, pero es lo que hay. Como el wifi del Camerino." },
         { "id": "cr-02", "texto": "Mira lo que había: {objeto:un}. Justo lo que no sabías que necesitabas." },
         { "id": "cr-03", "texto": "{cantidad} objetos y {fichas} fichas. El capitalismo galáctico funciona." },
         { "id": "cr-04", "texto": "{objeto:el:Mayus}. De bronce. Como la vida misma.", "si": { "rarezaMax": "bronce" } },

@@ -79,6 +79,15 @@
           "si": {
             "enCombate": true
           }
+        },
+        {
+          "id": "in-09",
+          "texto": "Mientras no haces nada, el presentador ha rejuvenecido dos semanas. Tú sabrás.",
+          "si": {
+            "segundos": {
+              "min": 90
+            }
+          }
         }
       ]
     },
@@ -108,6 +117,10 @@
         {
           "id": "es-04",
           "texto": "Esperando. Lord Vórtax ha empezado a tamborilear con los dedos. Tiene cuarenta dedos. Se oye mucho."
+        },
+        {
+          "id": "es-05",
+          "texto": "Esperando. En algún camerino del Plató, alguien acaba de sumar un poco de share. No eres tú."
         }
       ]
     },
@@ -142,6 +155,17 @@
           "texto": "Mochila vacía. Bonito minimalismo. Poco práctico, pero bonito.",
           "si": {
             "vacia": true
+          }
+        },
+        {
+          "id": "mo-06",
+          "texto": "El Funcionario lo tendría ordenado por orden alfabético. Tú lo tienes por orden de pánico."
+        },
+        {
+          "id": "mo-07",
+          "texto": "Inventario por orden alfabético, con índice y sello de entrada. Maripuri quiere contratarte.",
+          "si": {
+            "clase": "funcionario"
           }
         }
       ]
@@ -190,6 +214,15 @@
           "texto": "Kalimotxo en horario laboral. No lo digas en el Camerino.",
           "si": {
             "objeto": "botella-de-kalimotxo"
+          }
+        },
+        {
+          "id": "co-07",
+          "texto": "En algún lugar de la mazmorra, Asterio ha olido el chorizo y ha suspirado. Muy hondo.",
+          "si": {
+            "objeto.etiquetas": {
+              "tiene": "carne"
+            }
           }
         }
       ]
@@ -290,6 +323,10 @@
           "si": {
             "causa": "huida"
           }
+        },
+        {
+          "id": "ab-06",
+          "texto": "Baja la audiencia y, en su camerino, el presentador se mira al espejo y se ve más guapo. Haz algo, por favor."
         }
       ]
     },
@@ -550,7 +587,7 @@
         },
         {
           "id": "cs-08",
-          "texto": "Ingeniero. Tiene una habilidad que se llama 5G y que, según su propia ficha, no hace nada. Ya hay espectadores en catorce galaxias poniéndose gorros de papel de aluminio. Por si acaso.",
+          "texto": "Ingeniero. Tiene una habilidad que se llama 5G y que, según su propia ficha, no hace nada. En las gradas ya hay quien se está poniendo un gorro de papel de aluminio. Por si acaso.",
           "si": {
             "clase": "ingeniero"
           }
@@ -1038,7 +1075,7 @@
         },
         {
           "id": "sa-04",
-          "texto": "Salto. Aterrizaje. Chirrido de zapatillas. Lo mejor que ha sonado en esta mazmorra en once mil años."
+          "texto": "Salto. Aterrizaje. Chirrido de zapatillas. Lo mejor que ha sonado en esta mazmorra desde que quitaron el hilo musical."
         }
       ]
     },
@@ -1069,7 +1106,7 @@
         },
         {
           "id": "ma-03",
-          "texto": "¡Posterizado! Ese monstruo va a salir en un póster en catorce galaxias. Y no va a ser su mejor foto.",
+          "texto": "¡Posterizado! Ese monstruo acaba de convertirse en póster. Sale abajo.",
           "si": {
             "objetivo.tamano": {
               "en": [
