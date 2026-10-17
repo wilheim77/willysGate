@@ -50,6 +50,30 @@ export function surfaceCost(ruleset: Ruleset, state: GameState): (p: Vec2) => nu
   };
 }
 
+/**
+ * A story zone that wants the party to stop here: a scene not yet played (flag
+ * "scene:<name>"), or an encounter whose fighters are still standing, when its flags allow.
+ */
+export function haltsHere(ruleset: Ruleset, state: GameState, p: Vec2): boolean {
+  const zones = (state.systems.zones as unknown as { name: string; layer: string; x: number; y: number; width: number; height: number; properties: Record<string, unknown> }[] | undefined) ?? [];
+  for (const z of zones) {
+    if (z.layer !== 'scenes' && z.layer !== 'encounters') continue;
+    if (p.x < z.x || p.y < z.y || p.x >= z.x + z.width || p.y >= z.y + z.height) continue;
+    const props = z.properties;
+    if ((props.requiresFlag && !state.flags[String(props.requiresFlag)]) || (props.unlessFlag && state.flags[String(props.unlessFlag)])) continue;
+    if (z.layer === 'scenes') {
+      if (props.once !== false && state.flags[`scene:${z.name}`]) continue;
+      const speaker = props.speaker ? state.entities[String(props.speaker)] : undefined;
+      if (props.speaker && (!speaker || !ruleset.isStanding(speaker))) continue;
+      if (!props.dialogue) continue;
+      return true;
+    }
+    const foes = String(props.participants ?? '').split(',').map((x) => state.entities[x.trim()]).filter((e) => e && ruleset.isStanding(e));
+    if (foes.length) return true;
+  }
+  return false;
+}
+
 /** How much a mover would rather not step on a tile (fire, electrified water...). */
 export function surfaceHazard(ruleset: Ruleset, state: GameState): (p: Vec2) => number {
   const defs = ruleset.surfaces ?? {};
@@ -144,6 +168,16 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     segment.push(step);
     prev = step;
     next = placeAt(next, step);
+    // A scene or a fight waiting on this tile stops the walk here (otherwise a long tap walks
+    // straight past the miners blocking the road and the story never starts).
+    if (entity.controllerId.startsWith('player') && haltsHere(ruleset, next, step)) {
+      events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
+      from = step;
+      segment = [];
+      prev = step;
+      next = placeAt(next, step);
+      break;
+    }
     // Traps: stepping on an armed one sets it off; walking near a hidden one may reveal it.
     // Either stops the walk.
     const trapped = trapsAfterStep(next, entity.id, rng, ruleset);
