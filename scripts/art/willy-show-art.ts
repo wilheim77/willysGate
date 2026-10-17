@@ -362,3 +362,98 @@ export function hudIcons(): [string, Image][] {
     return [id, img];
   });
 }
+
+// --- The Presenter's arena (floor 5) ---------------------------------------------------------
+
+/** Phase 2: a cloud of bats, each with a tiny microphone (32x24, 4 frames). */
+export function batSwarm(frame: number): Image {
+  const img = blank(32, 24);
+  const bats: [number, number, number][] = [[6, 6, 0], [16, 3, 1], [25, 7, 2], [10, 14, 3], [21, 15, 1], [15, 10, 2], [27, 18, 0], [4, 17, 2]];
+  for (const [bx, by, ph] of bats) {
+    const up = (frame + ph) % 2 === 0;
+    const y = by + ((frame + ph) % 4 === 1 ? 1 : 0);
+    art(img, bx - 3, y - 2, up
+      ? ['k.....k', 'kk...kk', '.kkPkk.', '..kRk..']
+      : ['.......', 'kk...kk', 'kkkPkkk', '.k.R.k.'], { k: '#2a1e3a', P: '#5a3a7a', R: '#ff3040' });
+    px(img, bx + 2, y + 2, '#c0c6ce');
+    px(img, bx + 2, y + 3, '#5a5e66');
+  }
+  return img;
+}
+
+/** Contestant podium (16x20): coloured front with the player light and a buzzer. */
+export function podium(colour: string, lit: boolean): Image {
+  const img = blank(T, 20);
+  fill(img, 1, 4, 14, 16, '#2a2040');
+  fill(img, 2, 5, 12, 2, '#c0c6ce');
+  fill(img, 3, 8, 10, 9, colour);
+  fill(img, 3, 8, 10, 1, '#ffffff');
+  art(img, 6, 10, ['kkkk', 'k..k', 'kkkk'], { k: lit ? '#ffffff' : '#1e1c24' });
+  art(img, 6, 0, ['.kk.', 'kRRk', 'kkkk', '.kk.'], { k: OUT, R: lit ? '#ff4040' : '#a02020' });
+  return outline(img);
+}
+
+/** The giant question board (48x32): a question line and three coloured answers; frame 1-3 lights one. */
+export function questionBoard(frame: number): Image {
+  const img = blank(48, 32);
+  fill(img, 0, 0, 48, 32, OUT);
+  fill(img, 1, 1, 46, 30, '#2a2048');
+  for (let x = 2; x < 46; x += 2) (px(img, x, 1, frame % 2 ? '#ffe04f' : '#ff4fa0'), px(img, x + 1, 30, frame % 2 ? '#ff4fa0' : '#ffe04f'));
+  fill(img, 4, 4, 40, 7, '#4a3a8a');
+  drawText(img, '¿...?', 24 - Math.floor(textWidth('¿...?') / 2), 5, hexToRgb('#ffffff'));
+  ['#e0302a', '#3a8fd9', '#40c060'].forEach((c, i) => {
+    const y = 13 + i * 6;
+    fill(img, 4, y, 40, 5, '#1e1430');
+    fill(img, 4, y, 5, 5, c);
+    drawText(img, 'ABC'[i]!, 5, y, hexToRgb('#ffffff'));
+    if (frame === i + 1) fill(img, 10, y + 1, 33, 3, c, 160);
+  });
+  return img;
+}
+
+/** Bleachers seen from above with the live audience (not walkable). */
+export function bleachers(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  for (let y = 0; y < T; y++) fill(img, 0, y, T, 1, y % 4 === 3 ? '#14101e' : '#2a2040');
+  for (let row = 0; row < 4; row++) {
+    for (let x = 1; x < T; x += 4) {
+      const c = ['#ff4fa0', '#4fe8ff', '#ffe04f', '#7ae04a', '#b45cff'][Math.floor(r() * 5)]!;
+      px(img, x + Math.floor(r() * 2), row * 4, c);
+      px(img, x + Math.floor(r() * 2), row * 4 + 1, '#140c20');
+    }
+  }
+  return img;
+}
+
+/** Answer floor tile: a coloured glass panel, unlit (dithered) or lit. */
+export function answerTile(colour: string, lit: boolean): Image {
+  const img = blank(T, T);
+  fill(img, 0, 0, T, T, '#14101e');
+  fill(img, 1, 1, 14, 14, colour);
+  if (!lit) for (let y = 1; y < 15; y++) for (let x = 1; x < 15; x++) if ((x + y) % 2) px(img, x, y, '#14101e');
+  fill(img, 2, 2, 12, 1, lit ? '#ffffff' : '#5a5a6a');
+  fill(img, 2, 2, 1, 12, lit ? '#ffffff' : '#5a5a6a');
+  return img;
+}
+
+/** An opened trapdoor in the stage floor. */
+export function trapdoorOpen(): Image {
+  const img = blank(T, T);
+  fill(img, 0, 0, T, T, '#14101e');
+  fill(img, 1, 1, 14, 14, '#050308');
+  fill(img, 1, 1, 14, 2, '#2a2040');
+  fill(img, 1, 13, 14, 2, '#5a4488');
+  return img;
+}
+
+/** Glossy black studio floor with gaffer tape marks. */
+export function studioFloor(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  fill(img, 0, 0, T, T, '#1a1626');
+  for (let i = 0; i < 6; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), '#2a2440');
+  line(img, 0, 15, 15, 0, '#221e32');
+  if (r() < 0.5) (fill(img, 3, 6, 5, 1, '#ffe04f'), fill(img, 3, 6, 1, 4, '#ffe04f'));
+  return img;
+}
