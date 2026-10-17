@@ -6,15 +6,15 @@ import { W, engine, game, rat, until } from './willy-helpers';
 const ids = (s: ReturnType<typeof game>, id: string) => willy.listActions(s, id).map((a) => a.id);
 
 describe('listing abilities', () => {
-  it('shows class abilities by level and hides the ones that need engine summons', () => {
+  it('shows class abilities by level', () => {
     const s1 = game([W('f', 'funcionario', 0, 0, 1)]);
     expect(ids(s1, 'f')).toEqual(expect.arrayContaining(['basic:golpe', 'basic:empujar', 'hab:vuelva-usted-manana', 'hab:formulario-por-triplicado', 'hab:pausa-del-cafe']));
     expect(ids(s1, 'f')).not.toContain('hab:sello-oficial');
     const s9 = game([W('f', 'funcionario', 0, 0, 9)]);
     expect(ids(s9, 'f')).toEqual(expect.arrayContaining(['hab:sello-oficial', 'hab:silencio-administrativo']));
-    expect(ids(s9, 'f')).not.toContain('hab:ventanilla-cerrada');
+    expect(ids(s9, 'f')).toContain('hab:ventanilla-cerrada');
     const b = game([W('b', 'jugador-de-basket', 0, 0, 9)]);
-    expect(ids(b, 'b')).not.toContain('hab:tiempo-muerto');
+    expect(ids(b, 'b')).toContain('hab:tiempo-muerto');
     expect(ids(b, 'b')).toContain('hab:alley-oop');
   });
 

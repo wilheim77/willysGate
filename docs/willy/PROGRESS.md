@@ -6,7 +6,7 @@
 
 - **Fase W0, Diseño:** **completada y aprobada con cambios** (2026-10-17). Ver «Decisiones del usuario».
 - La premisa la definió el usuario: concurso galáctico retransmitido, 5 plantas con reloj, cásting LitRPG, audiencia, patrocinadores, cajas de botín, logros y Narrador.
-- **Ruleset `rulesets/willy/`:** hito 1 (núcleo + Butanero, Funcionario, Jugador de basket) y hito 2 (Influencer, Bardo, Socorrista, Tasador, Mimo, Ingeniero) hechos, con tests. Lo que falta espera al motor (invocaciones, barreras) o al juego (audiencia, valor de objetos). Aún no hay `game.ts`.
+- **Ruleset `rulesets/willy/`:** completo para las 9 clases, con invocaciones y barreras, ganchos de fin de turno e inicio de combate, subida de nivel, y los arreglos de la revisión 4. Falta lo que es del juego (audiencia, valor de objetos) y el salto real del motor (R15). **Siguiente:** `content/willy/game.ts` con una primera versión jugable.
 
 ## Hecho (W0)
 

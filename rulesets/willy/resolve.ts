@@ -14,6 +14,7 @@ import {
   hasTag,
   isHostile,
   lightLevelAt,
+  obstructionsBetween,
   simulatePush,
   surfaceAt,
   tileAt,
@@ -108,6 +109,8 @@ export function isCreature(e: Entity): boolean {
 
 const NO_ACT = ['aturdido', 'dormido', 'petrificado', 'eliminado', 'encajado'];
 export function canAct(e: Entity): boolean {
+  // Antennas fire on their owner's turn; barriers never act.
+  if (hasTag(e, 'torreta') || hasTag(e, 'barrera')) return false;
   return standing(e) && !NO_ACT.some((c) => hasCondition(e, c));
 }
 
@@ -155,6 +158,8 @@ export function attackModifiers(state: GameState, attacker: Entity, target: Enti
   if (flank && spec.melee) mods.push({ label: 'Flanqueo', value: 2, term: 'flanqueo' });
   if (hasCondition(target, 'tumbado')) mods.push({ label: 'Objetivo tumbado', value: spec.melee ? 3 : -2, term: 'tumbado' });
   if (lightLevelAt(state, target.position) < 0.25) mods.push({ label: 'A oscuras', value: -2, term: 'oscuridad' });
+  const cover = coverPenalty(state, attacker.position, target.position);
+  if (cover) mods.push({ label: cover === -5 ? 'Cubierto del todo' : 'Cubierto a medias', value: cover, term: 'cobertura' });
   if (hasCondition(attacker, 'cegado')) mods.push({ label: 'Cegado', value: -5, term: 'cegado' });
   if (hasCondition(attacker, 'mareado')) mods.push({ label: 'Mareado', value: -2, term: 'mareado' });
   if (hasCondition(attacker, 'compulsado')) mods.push({ label: 'Compulsado', value: 2, term: 'compulsado' });
@@ -162,6 +167,8 @@ export function attackModifiers(state: GameState, attacker: Entity, target: Enti
   if (hasTrait(attacker, 'pez') && surfaceAt(state, attacker.position)?.type === 'agua') mods.push({ label: 'Como pez en el agua', value: 2 });
   const studied = target.conditions.find((c) => c.id === 'estudiado' && c.sourceId === attacker.id);
   if (studied) mods.push({ label: 'Ojo clínico', value: skillLevel(attacker, 'ojo-clinico') >= 2 ? 5 : 4 });
+  const signal = automatonSignal(state, attacker);
+  if (signal > 0) mods.push({ label: 'Cobertura total', value: 1 });
   mods.push(...(spec.extra ?? []));
   const mode = resolveRollMode(hasCondition(attacker, 'afortunado'), false);
   return { modifiers: mods.filter((m) => m.value !== 0), mode };
@@ -205,6 +212,8 @@ export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; cr
     return { hit: true, crit: false, damage: dmg };
   }
   if (hasCondition(attacker, 'escondido')) r.apply({ type: 'removeCondition', entityId: attacker.id, condition: 'escondido' });
+  // «Afortunado» is for the next roll only.
+  if (hasCondition(attacker, 'afortunado')) r.apply({ type: 'removeCondition', entityId: attacker.id, condition: 'afortunado' });
   const { modifiers, mode } = attackModifiers(r.state, attacker, target, spec);
   const def = defence(target);
   const roll = d20Check(r.rng, { check: 'ataque', label: spec.label, mode, modifiers, target: def, targetLabel: 'DEF' });
@@ -261,6 +270,18 @@ export function dealDamage(r: Resolver, targetId: string, raw: number, element: 
 
 export function defeat(r: Resolver, id: string, sourceId: string | undefined, cause: string, element?: string): void {
   r.apply({ type: 'applyCondition', entityId: id, condition: 'eliminado' });
+  const fallen = r.entity(id);
+  // Automatons blow up when destroyed (Construir autómata, level 4).
+  const ownerId = fallen.tags.find((t) => t.startsWith('invocado-por:'))?.slice('invocado-por:'.length);
+  const owner = ownerId ? r.state.entities[ownerId] : undefined;
+  if (owner && hasTag(fallen, 'automata') && skillLevel(owner, 'construir-automata') >= 4) {
+    r.emit({ type: 'exploded', entityId: id, at: fallen.position } as WillyEvent);
+    for (const v of Object.values(r.state.entities)) {
+      if (v.id !== id && standing(v) && gridDistance(v.position, fallen.position) <= 1) dealDamage(r, v.id, rollDice(r.rng, { count: 1, sides: 6, bonus: 0 }), 'rayo', ownerId, 'explosion');
+    }
+  }
+  // Summons leave when their owner falls.
+  for (const e of Object.values(r.state.entities)) if (e.tags.includes(`invocado-por:${id}`)) r.apply({ type: 'despawnEntity', entityId: e.id });
   // «¡Que es de época!»: the Tasador is sad for a turn after breaking scenery.
   const source = sourceId ? r.state.entities[sourceId] : undefined;
   if (source && hasTrait(source, 'que-es-de-epoca') && r.entity(id).tags.includes(OBJECT_TAG)) {
@@ -374,7 +395,13 @@ export function onCollision(ruleset: Ruleset, state: GameState, id: string, hit:
   const e = state.entities[id];
   if (!e || !standing(e)) return r.outcome();
   const source = pusherOf(state, id);
-  if (hit.wall || !hit.entityId) {
+  const wall = hit.entityId ? r.state.entities[hit.entityId] : undefined;
+  if (wall && hasTag(wall, 'barrera:persiana-de-ventanilla') && (e.resources.acciones?.current ?? 0) > 0) {
+    // Ventanilla cerrada: whoever bumps into it loses an action complaining.
+    r.apply({ type: 'modifyResource', entityId: id, resource: 'acciones', delta: -1 });
+    r.emit({ type: 'traitTriggered', entityId: id, rasgo: 'ventanilla-cerrada' } as WillyEvent);
+  }
+  if (hit.wall || !hit.entityId || (wall && hasTag(wall, 'barrera'))) {
     r.emit({ type: 'collided', entityId: id, with: 'muro' } as WillyEvent);
     dealDamage(r, id, rollDice(rng, { count: 1, sides: 6, bonus: 0 }), 'golpe', source, 'choque');
     return r.outcome();
@@ -422,6 +449,23 @@ function nearestFreeTile(state: GameState, e: Entity): Vec2 | null {
     }
   }
   return null;
+}
+
+/** Cobertura total: +1 near the engineer (≤ 4 tiles), −2 (no signal) farther; 0 for everyone else. */
+export function automatonSignal(state: GameState, e: Entity): number {
+  if (!hasTag(e, 'automata')) return 0;
+  const ownerId = e.tags.find((t) => t.startsWith('invocado-por:'))?.slice('invocado-por:'.length);
+  const owner = ownerId ? state.entities[ownerId] : undefined;
+  if (!owner || !hasTrait(owner, 'cobertura-total')) return 0;
+  const range = hasTag(owner, 'antena-plegable') ? 6 : 4;
+  return gridDistance(owner.position, e.position) <= range ? 1 : -2;
+}
+
+/** Cover from scenery between the two (crates, barrels, barriers): −2 with one obstacle, −5 with two or more. Adjacent attacks ignore it. */
+export function coverPenalty(state: GameState, from: Vec2, to: Vec2): number {
+  if (gridDistance(from, to) <= 1) return 0;
+  const blockers = obstructionsBetween(state, from, to).filter((o) => o.kind === 'entity' && standing(state.entities[o.entityId!] ?? ({ resources: {}, conditions: [] } as never)));
+  return blockers.length >= 2 ? -5 : blockers.length === 1 ? -2 : 0;
 }
 
 /** Falling: 1 level is free; then 1d6 per level beyond the first, and you land prone. */
