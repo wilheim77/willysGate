@@ -1,18 +1,18 @@
 {
   "$comment": "The journal: the first entry whose condition holds is the current objective (top to bottom). Short, in the game's voice.",
   "objectives": [
-    { "when": { "flag": "epilogo_visto" }, "text": "Cuenta cerrada. Por ahora." },
-    { "when": { "flag": "d3_resuelta" }, "text": "Vuelve a la plaza. Es hora de cobrar." },
-    { "when": { "flag": "d2_resuelta" }, "text": "Baja a la Bóveda. Brea os espera, y algo más." },
-    { "when": { "flag": "d1_resuelto" }, "text": "Entra en la mina por el Pozo o la bocamina del Escorial. Busca la Galería Sellada." },
-    { "when": { "flag": "acceso_contrabando" }, "text": "Algo va a pasar esta noche en Hondonegra. Vuelve a la plaza." },
+    { "when": { "flag": "epilogo_visto" }, "text": "Cuenta cerrada. Por ahora: la Casa nunca cierra del todo." },
+    { "when": { "flag": "d3_resuelta" }, "text": "Vuelve a la plaza. Dorotea tiene una escritura y una pluma." },
+    { "when": { "flag": "d2_resuelta" }, "text": "Baja hasta la Bóveda. Brea te espera; lo que canta, también." },
+    { "when": { "flag": "d1_resuelto" }, "text": "Baja a la mina por el Pozo, la bocamina o la cripta, según a quién hayas ayudado. Busca la Galería Sellada." },
+    { "when": { "flag": "acceso_contrabando" }, "text": "Vuelve a la plaza. Esta noche Hondonegra enciende antorchas." },
     { "when": { "flag": "escorial_libre" }, "text": "Los Sinpaga ya no cortan el paso. Asómate al Pozo del Ahorcado." },
-    { "when": { "all": [{ "flag": "pista_plata_nueva" }, { "flag": "pista_pozo" }] }, "text": "La plata sale por el Pozo del Ahorcado, en el Escorial. Ve a verlo." },
-    { "when": { "flag": "audiencia_hecha" }, "text": "El barón no puede pagar. Pregunta en las calles: ¿de dónde sale la plata nueva? ¿Y por dónde?" },
-    { "when": { "flag": "audiencia_concedida" }, "text": "Te esperan en la sala capitular de la abadía." },
-    { "when": { "flag": "juicio_resuelto" }, "text": "Pide audiencia con el barón. La guardia de la abadía está al pie del camino." },
-    { "when": { "flag": "prologo_mineros_resuelto" }, "text": "Llega a la plaza de Hondonegra. Allí están juzgando a alguien." },
-    { "when": { "flag": "garran_reclutado" }, "text": "Sigue el camino hacia Hondonegra. Hay gente cortándolo." },
-    { "text": "Baja por el camino de Hondonegra. El barón Mazo debe cuatro mil coronas, más intereses." }
+    { "when": { "all": [{ "flag": "pista_plata_nueva" }, { "flag": "pista_pozo" }] }, "text": "La plata nueva sale por el Pozo del Ahorcado, en el Escorial. Ve a mirar." },
+    { "when": { "flag": "audiencia_hecha" }, "text": "El barón no puede pagar. Pregunta en las calles de dónde sale la plata nueva, y por dónde." },
+    { "when": { "flag": "audiencia_concedida" }, "text": "El barón te recibe en la sala capitular. Con desgana, pero te recibe." },
+    { "when": { "flag": "juicio_resuelto" }, "text": "Pide audiencia al barón. La guardia de la abadía vigila la cuesta desde la plaza." },
+    { "when": { "flag": "prologo_mineros_resuelto" }, "text": "Llega a la plaza de Hondonegra. Están ahorcando a alguien; llegas a tiempo de opinar." },
+    { "when": { "flag": "garran_reclutado" }, "text": "Sigue bajando hacia Hondonegra. Hay gente con hambre cortando el camino." },
+    { "text": "Baja por el camino de Hondonegra. El barón Mazo debe cuatro mil coronas. Más intereses." }
   ]
 }

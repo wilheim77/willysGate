@@ -1,87 +1,211 @@
 {
   "$comment": "Companion one-liners. Keys: 'map:<id>' (first arrival on a map), 'flag:<flag>' (when the flag first becomes true), or an engine event type during combat (downed, died, exploded, entityFell, entityPushed, combatStarted, combatEnded) plus 'crit' (critical hit by the party). Each entry: speaker (entity id; skipped if not in the party or not standing), text, optional when (DialogueWhen). The game picks the first eligible entry, or one at random for combat events, and shows it as a bubble; each map/flag bark plays once.",
   "map:camino": [
-    { "speaker": "dorotea", "text": "Bonito valle. Lo digo en sentido contable." }
+    {
+      "speaker": "dorotea",
+      "text": "Bonito valle. Lo digo en sentido contable."
+    }
   ],
   "map:plaza": [
-    { "speaker": "garran", "text": "La horca es nueva. Lo demás está igual, pero más flaco.", "when": { "flag": "juicio_resuelto" } },
-    { "speaker": "dorotea", "text": "Un pueblo entero mirando al suelo. Mala señal para el cobro." }
+    {
+      "speaker": "garran",
+      "text": "Aquí no ha cambiado nada. Eso es lo que me preocupa."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Un pueblo entero mirando al suelo. Mala señal para el cobro."
+    }
   ],
   "map:abadia": [
-    { "speaker": "anselmo", "text": "Una abadía sin monjes. Huele a vino de misa caducado. Mi favorito." },
-    { "speaker": "dorotea", "text": "Seis ballestas, como mínimo. Que nadie levante la voz." }
+    {
+      "speaker": "anselmo",
+      "text": "Una abadía sin monjes. Huele a vino de misa caducado. Mi favorito."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Seis ballestas, como mínimo. Que nadie levante la voz."
+    }
   ],
   "map:calles": [
-    { "speaker": "garran", "text": "Aquí jugaba yo de pequeño. A esconderme, sobre todo." },
-    { "speaker": "anselmo", "text": "Una capilla en una mina. Los dioses de aquí no salen ni a respirar." }
+    {
+      "speaker": "garran",
+      "text": "Aquí jugaba yo de pequeño. A esconderme, sobre todo."
+    },
+    {
+      "speaker": "anselmo",
+      "text": "Una capilla en una mina. Los dioses de aquí no salen ni a respirar."
+    }
   ],
   "map:escorial": [
-    { "speaker": "garran", "text": "Escombreras. Si os caéis, rodáis hasta el pueblo. Más o menos enteros." },
-    { "speaker": "dorotea", "text": "Un carro de aceite al pie de una cuesta. Alguien ha leído un manual." }
+    {
+      "speaker": "garran",
+      "text": "Escombreras. Si os caéis, rodáis hasta el pueblo. Más o menos enteros."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Un carro de aceite al pie de una cuesta. Alguien ha leído un manual."
+    }
   ],
   "map:mina": [
-    { "speaker": "garran", "text": "Huele igual. Ocho meses y huele igual. A piedra y a gente." },
-    { "speaker": "anselmo", "text": "Si me pierdo aquí abajo, no me busquéis. Rezad. Es más barato." }
+    {
+      "speaker": "garran",
+      "text": "Huele igual. Ocho meses y huele igual. A piedra y a gente."
+    },
+    {
+      "speaker": "anselmo",
+      "text": "Si me pierdo aquí abajo, no me busquéis. Rezad. Es más barato."
+    }
   ],
   "map:boveda": [
-    { "speaker": "anselmo", "text": "¿Lo oís? No, no lo oís. Se nota detrás de los ojos. Que alguien diga algo, por favor." },
-    { "speaker": "dorotea", "text": "Cien veces la deuda. Como mínimo. Le apunto, aunque no me guste." }
+    {
+      "speaker": "anselmo",
+      "text": "¿Lo oís? No, no lo oís. Se nota detrás de los ojos. Que alguien diga algo, por favor."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Cien veces la deuda. Como mínimo. Le apunto, aunque no me guste."
+    }
   ],
   "flag:pista_plata_nueva": [
-    { "speaker": "dorotea", "text": "Plata nueva de una mina cerrada. Eso no es un milagro: es un balance falso." }
+    {
+      "speaker": "dorotea",
+      "text": "Plata nueva de una mina cerrada. Eso no es un milagro: es un balance falso."
+    }
   ],
   "flag:pista_pozo": [
-    { "speaker": "garran", "text": "El Pozo del Ahorcado. Yo creía que estaba cegado. Yo creía muchas cosas." }
+    {
+      "speaker": "garran",
+      "text": "El Pozo del Ahorcado. Yo creía que estaba cegado. Yo creía muchas cosas."
+    }
   ],
   "flag:callado_visto": [
-    { "speaker": "anselmo", "text": "Ese hombre tenía los ojos abiertos y nadie dentro. He enterrado a gente con más vida." }
+    {
+      "speaker": "anselmo",
+      "text": "Ese hombre tenía los ojos abiertos y nadie dentro. He enterrado a gente con más vida."
+    }
   ],
   "flag:d1_resuelto": [
-    { "speaker": "dorotea", "text": "Una noche cara. Ya veremos quién la paga." }
+    {
+      "speaker": "dorotea",
+      "text": "Una noche cara. Ya veremos quién la paga."
+    }
   ],
   "flag:d2_encubierto": [
-    { "speaker": "anselmo", "text": "Yo no he oído nada. Tengo mucha práctica en no oír nada." }
+    {
+      "speaker": "anselmo",
+      "text": "Yo no he oído nada. Tengo mucha práctica en no oír nada."
+    }
   ],
   "flag:d2_confesara": [
-    { "speaker": "anselmo", "text": "Una confesión de verdad. Hacía años que no oía una. Se me ha olvidado qué se cobra." }
+    {
+      "speaker": "anselmo",
+      "text": "Una confesión de verdad. Hacía años que no oía una. Se me ha olvidado qué se cobra."
+    }
   ],
   "flag:d3_puesta": [
-    { "speaker": "anselmo", "text": "Te rezo y el dios se aparta. No te ofendas. A mí tampoco me toca mucho." }
+    {
+      "speaker": "anselmo",
+      "text": "Te rezo y el dios se aparta. No te ofendas. A mí tampoco me toca mucho."
+    }
   ],
   "combatStarted": [
-    { "speaker": "garran", "text": "Bien. Por lo menos esto lo sé hacer." },
-    { "speaker": "dorotea", "text": "Recuerden: cada flecha cuesta dinero." },
-    { "speaker": "anselmo", "text": "Yo me quedo detrás. Por la estrategia, no por el miedo. Bueno, por las dos." }
+    {
+      "speaker": "garran",
+      "text": "Bien. Por lo menos esto lo sé hacer."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Recuerden: cada flecha cuesta dinero."
+    },
+    {
+      "speaker": "anselmo",
+      "text": "Yo me quedo detrás. Por la estrategia, no por el miedo. Bueno, por las dos."
+    }
   ],
   "downed": [
-    { "speaker": "anselmo", "text": "¡No te mueras todavía, que no he cobrado la extremaunción!" },
-    { "speaker": "garran", "text": "Levanta. Levanta, que te cargo y peso más que tú." },
-    { "speaker": "dorotea", "text": "Ni se le ocurra morirse con el saldo pendiente." }
+    {
+      "speaker": "anselmo",
+      "text": "¡No te mueras todavía, que no he cobrado la extremaunción!"
+    },
+    {
+      "speaker": "garran",
+      "text": "Levanta. Levanta, que te cargo y peso más que tú."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Ni se le ocurra morirse con el saldo pendiente."
+    }
   ],
   "died": [
-    { "speaker": "garran", "text": "Uno menos." },
-    { "speaker": "anselmo", "text": "Que la tierra le sea leve. O, por lo menos, poco profunda." }
+    {
+      "speaker": "garran",
+      "text": "Ese ya no se levanta."
+    },
+    {
+      "speaker": "anselmo",
+      "text": "Que la tierra le sea leve. O, por lo menos, poco profunda."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Baja. Le apunto."
+    }
   ],
   "crit": [
-    { "speaker": "garran", "text": "Eso ha sonado a hueso." },
-    { "speaker": "dorotea", "text": "Eficiente. Le apunto." },
-    { "speaker": "anselmo", "text": "¡Alabado sea quien sea!" }
+    {
+      "speaker": "garran",
+      "text": "Eso ha sonado a hueso."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Eficiente. Le apunto."
+    },
+    {
+      "speaker": "anselmo",
+      "text": "¡Alabado sea quien sea!"
+    }
   ],
   "exploded": [
-    { "speaker": "garran", "text": "Mal puesta. Yo la habría puesto más abajo." },
-    { "speaker": "dorotea", "text": "Eso era propiedad de alguien. Ya no." },
-    { "speaker": "anselmo", "text": "¡Mis cejas! ¿Siguen ahí? No me lo digáis." }
+    {
+      "speaker": "garran",
+      "text": "Mal puesta. Yo la habría puesto más abajo."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "Eso era propiedad de alguien. Ya no."
+    },
+    {
+      "speaker": "anselmo",
+      "text": "¡Mis cejas! ¿Siguen ahí? No me lo digáis."
+    }
   ],
   "entityFell": [
-    { "speaker": "garran", "text": "La altura cobra. Siempre cobra." },
-    { "speaker": "dorotea", "text": "La gravedad no negocia. Admirable." }
+    {
+      "speaker": "garran",
+      "text": "La altura cobra. Siempre cobra."
+    },
+    {
+      "speaker": "dorotea",
+      "text": "La gravedad no negocia. Admirable."
+    }
   ],
   "entityPushed": [
-    { "speaker": "garran", "text": "Empujar es más barato que pegar. Y cansa menos." }
+    {
+      "speaker": "garran",
+      "text": "Empujar es más barato que pegar. Y cansa menos."
+    }
   ],
   "combatEnded": [
-    { "speaker": "dorotea", "text": "Recuento de bajas y de gastos, por ese orden." },
-    { "speaker": "anselmo", "text": "¿Ya está? ¿Seguro? Voy a abrir un ojo." },
-    { "speaker": "garran", "text": "Registrad los cuerpos. Ellos ya no van a quejarse." }
+    {
+      "speaker": "dorotea",
+      "text": "Recuento de bajas y de gastos, por ese orden."
+    },
+    {
+      "speaker": "anselmo",
+      "text": "¿Ya está? ¿Seguro? Voy a abrir un ojo."
+    },
+    {
+      "speaker": "garran",
+      "text": "Registrad los cuerpos. Ellos ya no van a quejarse."
+    }
   ]
 }
