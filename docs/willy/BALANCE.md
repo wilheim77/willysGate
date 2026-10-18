@@ -120,5 +120,5 @@ Antes de esta pasada (la misma temporada sin calibrar): los pisos de jefe (2, 4 
 - **Las fases del Presentador** (el agente del espectáculo las está haciendo) endurecerán el piso 10. Al llegar, volver a medir y ajustar `equilibrio.jefes['10']`.
 - **El piso 2** queda un poco por debajo del objetivo (74 %). Las pérdidas están repartidas en combates normales, sin un enemigo culpable. Si en partida se nota, bajar algo más `presupuesto['2']`.
 - **Pisos 4, 7 y 9:** al 100 %, quizá se pueden endurecer. Primero hay que ver las partidas reales.
-- **Golpe de valor del Tasador** sigue sin implementar (necesita el valor de los objetos). Con él, el Tasador ya no dependería tanto de su compañera.
+- **Golpe de valor del Tasador** ya funciona (2026-10-18): 1d6 más la mitad del valor del objeto lanzado. Falta medir cuánto ayuda al Tasador en la temporada.
 - **Fuera de la simulación:** las dificultades Turista y Prime time, los objetos y las cajas de botín.

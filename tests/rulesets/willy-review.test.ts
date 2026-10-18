@@ -88,7 +88,8 @@ function candidates(s: GameState, actorId: string, range: number): ActionTarget[
   return out;
 }
 
-const SITUATIONAL = new Set(['basic:liberarse', 'hab:bis', 'hab:actualizacion-de-firmware', 'hab:mate']);
+// Golpe de valor needs something in the bag (tests/content/willy-golpe-de-valor.test.ts).
+const SITUATIONAL = new Set(['basic:liberarse', 'hab:bis', 'hab:actualizacion-de-firmware', 'hab:mate', 'hab:golpe-de-valor']);
 
 describe('every ability of every class, at several levels', () => {
   const rows = ['..........', '....2.....', '..........', '..........'];
