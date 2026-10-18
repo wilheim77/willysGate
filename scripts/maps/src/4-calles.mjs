@@ -60,6 +60,7 @@ export default {
     benita: [28, 16],
     casilda: [31, 18],
     'viuda-3': [24, 6],
+    'campfire-5': [27, 6], // the widows' hearth: a short rest after the callejón (descanso_calles)
     // The pawnshop.
     lisandro: [7, 16],
     'door-trastienda': [8, 18],

@@ -15,6 +15,7 @@ const ABILITIES = { str: 14, dex: 14, con: 14, int: 14, wis: 12, cha: 10 };
 const pc = (id: string, classId: string, x: number): Entity =>
   createCharacter({ id, name: id, controllerId: 'player:1', factionId: 'party', position: { x, y: 0 }, spriteId: 'hero', classId, raceId: 'human', level: 5, abilities: { ...ABILITIES } });
 
+let lastEvents: { type: string; kind?: string }[] = [];
 function camp(kind: string, tweak: (s: GameState) => GameState): GameState {
   const engine = createEngine(dnd5e, 'test', { dialogues: { hoguera: fire(kind) } });
   const campfire: Entity = { ...pc('hoguera', 'fighter', 3), controllerId: 'none', factionId: 'scenery', tags: ['object', 'dialogue:hoguera'] };
@@ -24,6 +25,7 @@ function camp(kind: string, tweak: (s: GameState) => GameState): GameState {
     const r = engine.apply(s, { issuer: 'player:1', ...cmd } as BaseCommand);
     if (!r.ok) throw new Error(`${r.error.code} ${r.error.message}`);
     s = r.state;
+    lastEvents = r.events as { type: string; kind?: string }[];
   }
   return s;
 }
@@ -34,6 +36,15 @@ const set = (s: GameState, id: string, res: string, current: number): GameState 
 });
 
 describe('5e rests', () => {
+  it('emits { type: rested, kind } after the rest is applied, in the same command (the client checkpoints on it)', () => {
+    camp('long', (s0) => set(s0, 'fighter', 'hp', 3));
+    const i = lastEvents.findIndex((e) => e.type === 'rested');
+    expect(i).toBeGreaterThanOrEqual(0);
+    expect(lastEvents[i]!.kind).toBe('long');
+    expect(lastEvents.slice(0, i).some((e) => e.type === 'restRecovered')).toBe(true);
+    expect(lastEvents.slice(i + 1).some((e) => e.type === 'restRecovered' || e.type === 'resourceChanged')).toBe(false);
+  });
+
   it('a short rest spends hit dice up to about 3/4 HP and refreshes short-rest features', () => {
     const s = camp('short', (s0) => set(set(s0, 'fighter', 'hp', 5), 'fighter', 'second_wind', 0));
     const f = s.entities.fighter!;

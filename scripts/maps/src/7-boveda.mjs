@@ -28,8 +28,9 @@ export default {
     ivo: [14, 10],
     'callado-9': [9, 6],
     'callado-10': [22, 6],
-    'callado-11': [10, 18],
-    'callado_palido-3': [19, 12],
+    // Two more climb out of the chasm (the ramp at its east end): they join the fight late.
+    'callado-11': [9, 21],
+    'callado_palido-3': [11, 21],
     // Silver resonators (I6: destructible objects; WIS save each round while one stands).
     'resonator-1': [11, 8],
     'resonator-2': [20, 8],

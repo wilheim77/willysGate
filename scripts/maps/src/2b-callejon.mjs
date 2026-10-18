@@ -21,9 +21,9 @@ export default {
   spawns: {
     'entry-plaza': [1, 6],
     'entry-calles': [28, 7],
-    // Lisandro's collectors: two heavies in front, a lockpick behind the wall, a crossbow above.
+    // Lisandro's collectors: a heavy and a knife in front, a lockpick behind the wall, a crossbow above.
     'cobrador-1': [15, 6],
-    'cobrador-2': [15, 8],
+    'ganzua-3': [15, 8],
     'ganzua-1': [14, 3], // on the balcony
     'ganzua-2': [18, 5],
     'cart_sacks-1': [12, 8],
@@ -39,7 +39,8 @@ export default {
     { name: 'farol-boca-este', at: [28, 6], radius: 3, color: '#ffc070', flicker: 0.12, intensity: 0.8, prop: 'oil_lamp' },
   ],
   surfaces: [{ name: 'cuneta', rect: [20, 7, 4, 1], surface: 'water' }],
-  encounters: [{ name: 'cobradores', rect: [9, 2, 12, 10], participants: ['cobrador-1', 'cobrador-2', 'ganzua-1', 'ganzua-2'] }],
+  // The whole alley: the collectors see you as soon as you step in from either end.
+  encounters: [{ name: 'cobradores', rect: [0, 2, 30, 10], participants: ['cobrador-1', 'ganzua-3', 'ganzua-1', 'ganzua-2'], props: { setFlag: 'callejon_despejado' } }],
   exits: [
     { name: 'a-plaza', rect: [0, 6, 1, 2], to: 'plaza', spawn: 'entry-callejon' },
     { name: 'a-calles', rect: [29, 6, 1, 2], to: 'calles', spawn: 'entry-callejon' },

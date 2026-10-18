@@ -13,6 +13,8 @@ import cirilo from './cirilo.json';
 import d1AbadiaFinal from './d1_abadia_final.json';
 import d1Horca from './d1_horca.json';
 import descansoAbadia from './descanso_abadia.json';
+import descansoBoveda from './descanso_boveda.json';
+import descansoCalles from './descanso_calles.json';
 import descansoMina from './descanso_mina.json';
 import descansoTunel from './descanso_tunel.json';
 import doorBocamina from './door_bocamina.json';
@@ -38,5 +40,5 @@ import viudasLloro from './viudas_lloro.json';
 
 /** The act's conversations and interactables, by tree id (generated list; one import per file). */
 export const STORY_DIALOGUES: Record<string, DialogueTree> = Object.fromEntries(
-  [anselmo, audienciaAbadia, bovedaBrea, bovedaCollera, calladoPozo, caminoDorotea, caminoGarran, caminoMineros, caminoMinerosDespues, chestLibroCuentas, cirilo, d1AbadiaFinal, d1Horca, descansoAbadia, descansoMina, descansoTunel, doorBocamina, doorCripta, dorotea, elCobro, epilogo, galeriaSellada, garran, guardiaAbadia, hildaCardo, inscripcionBoveda, juicioAnselmo, lisandroFuss, nellaYesca, nocheAntorchas, oddaHulla, posaderaPicoRoto, pozoAhorcado, sermonCirilo, sinpagaJefe, viudasLloro].map((d) => [d.id, d as unknown as DialogueTree]),
+  [anselmo, audienciaAbadia, bovedaBrea, bovedaCollera, calladoPozo, caminoDorotea, caminoGarran, caminoMineros, caminoMinerosDespues, chestLibroCuentas, cirilo, d1AbadiaFinal, d1Horca, descansoAbadia, descansoBoveda, descansoCalles, descansoMina, descansoTunel, doorBocamina, doorCripta, dorotea, elCobro, epilogo, galeriaSellada, garran, guardiaAbadia, hildaCardo, inscripcionBoveda, juicioAnselmo, lisandroFuss, nellaYesca, nocheAntorchas, oddaHulla, posaderaPicoRoto, pozoAhorcado, sermonCirilo, sinpagaJefe, viudasLloro].map((d) => [d.id, d as unknown as DialogueTree]),
 );

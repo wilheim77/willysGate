@@ -188,7 +188,7 @@ F anselmo (10,6)
 G cirilo (13,6)
 I fanatico_pala-1 (8,9)
 J fanatico_pala-2 (13,9)
-K fanatico_pala-3 (6,8)
+K predicador_pala-1 (6,8)
 L nella (23,12)
 M odda (24,13)
 N minero_cuadrilla-1 (22,14)
@@ -201,7 +201,7 @@ T cart_sacks-1 (12,11)
 U sacks-1 (13,11)
 props: gallows-1, barrel-1, barrel_oil-1, well-1, barrel-2, crate-3, barrel-3
 arenas juicio (1,4 16x10) {}
-scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"gate":true,"protects":"a-calles,a-escorial,a-abadia","fight":"fanatico_pala-1,fanatico_pala-2,fanatico_pala-3"}
+scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"gate":true,"protects":"a-calles,a-escorial,a-abadia","fight":"fanatico_pala-1,fanatico_pala-2,predicador_pala-1"}
 ```
 
 ### `callejon`
@@ -229,7 +229,7 @@ E a-calles (29,6) -> calles:entry-callejon
 A entry-plaza (1,6)
 B entry-calles (28,7)
 C cobrador-1 (15,6)
-D cobrador-2 (15,8)
+D ganzua-3 (15,8)
 F ganzua-1 (14,3)
 G ganzua-2 (18,5)
 I cart_sacks-1 (12,8)
@@ -237,7 +237,7 @@ J sacks-1 (13,8)
 K rubble_pile-1 (6,10)
 L rubble_pile_b-1 (22,11)
 props: crate-1, barrel_oil-1
-encounter cobradores: cobrador-1,cobrador-2,ganzua-1,ganzua-2
+encounter cobradores: cobrador-1,ganzua-3,ganzua-1,ganzua-2
 arenas cobradores (8,2 14x10) {}
 ```
 
@@ -250,24 +250,24 @@ arenas cobradores (8,2 14x10) {}
 W##########################W   ############################
 Wo....#=t=====B=======t#..EW   #00000#0000011111100000#000#
 Wo....#=========C======#...W   #00000#0000011111100000#000#
-W.....#================#.O.W   #00000#0000000000000000#000#
-W.....#=D============F=#.*.W   #00000#0000000000000000#000#
+W.....#================#.T.W   #00000#0000000000000000#000#
+W..*..#=D============F=#.*.W   #00000#0000000000000000#000#
 W.....#================#...W   #00000#0000000000000000#000#
 W.....#===*========*===#...W   #00000#0000000000000000#000#
 W....x#================#...W   #00000#0000000000000000#000#
 W##/##########//#########d#W   ###0##########00############
 W......*............*......W   #00000000000000000000000000#
-W..........................W   #00000000000000000000000000#
-W....sPssssssssssssssQs....W   #00000000000000000000000000#
+W.............N............W   #00000000000000000000000000#
+W....sUsKssssssssssssVs....W   #00000000000000000000000000#
 W....ssssxsssussssussss....W   #00000000000000000000000000#
-W....ssssssMRssSNssssss....W   #00000000000000000000000000#
+W....ssssssRXsOYSssssss....W   #00000000000000000000000000#
 W............J.............W   #00000000000000000000000000#
-W.===GK======..======LI===.W   #12222222222200222222222221#
+W.===GPL=====..=====MQI===.W   #12222222222200222222222221#
 WWWWWWWWWWWWW//WWWWWWWWWWWWW   #############00#############
 RRRRRRRRRRRR*RR*RRRRRRRRRRRR   0000000000000000000000000000
-RRRRRRRZRRRxRRRRRxRRaRRRRRRR   0000000000000000000000000000
-WRRRRRRRTRRRRARfRReURRRRRRRW   #00000000000000000000000000#
-WWRRRRRRRdXRbRVRRYRRRRRRRRWW   ##000000000000000000000000##
+RRRRRRRfRRRxRRRRRxRRgRRRRRRR   0000000000000000000000000000
+WRRRRRRRZRRRRARmRRkaRRRRRRRW   #00000000000000000000000000#
+WWRRRRRRRjdRhRbRReRRRRRRRRWW   ##000000000000000000000000##
 WWWWWWWWWWWEEEEEEWWWWWWWWWWW   ###########000000###########
 E a-plaza (11,21) -> plaza:entry-abadia
 E escalera-cripta (26,1) -> mina:entry-cripta
@@ -277,30 +277,35 @@ C hilda (16,2)
 D guardia_baron-1 (8,4)
 F guardia_baron-2 (21,4)
 G guardia_baron-3 (5,15)
-I guardia_baron-4 (22,15)
+I capellan_abadia-1 (22,15)
 J guardia_baron_sargento-1 (13,14)
-K guardia_baron-5 (6,15)
-L guardia_baron-6 (21,15)
-M guardia_baron-7 (11,13)
-N guardia_baron-8 (16,13)
-O entry-cripta (25,3)
-P sacks-1 (6,11)
-Q sacks-2 (21,11)
-R tombstone-1 (12,13)
-S tombstone-2 (15,13)
-T minero_cuadrilla-1 (8,19)
-U minero_cuadrilla-2 (19,19)
-V minero_cuadrilla-3 (14,20)
-X hulla-1 (10,20)
-Y hulla-2 (17,20)
-Z minero_cuadrilla-4 (7,18)
-a minero_cuadrilla-5 (20,18)
-b minero_cuadrilla-6 (12,20)
-d hulla-3 (9,20)
-e hulla-4 (18,19)
-f odda_noche (15,19)
-props: tapestry_crossbow-1, tapestry-1, door-cripta, barrel_oil-1, barrel_oil-2, crate-1, crate-2, barrel-2, barrel-1, crate-3, crate-4
-encounter d1-asalto: guardia_baron-1,guardia_baron-2,guardia_baron-3,guardia_baron-4,guardia_baron_sargento-1,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
+K guardia_baron-9 (8,11)
+L guardia_baron-10 (7,15)
+M guardia_baron-11 (20,15)
+N capellan_abadia-2 (14,10)
+O guardia_baron_sargento-2 (14,13)
+P guardia_baron-5 (6,15)
+Q guardia_baron-6 (21,15)
+R guardia_baron-7 (11,13)
+S guardia_baron-8 (16,13)
+T entry-cripta (25,3)
+U sacks-1 (6,11)
+V sacks-2 (21,11)
+X tombstone-1 (12,13)
+Y tombstone-2 (15,13)
+Z minero_cuadrilla-1 (8,19)
+a minero_cuadrilla-2 (19,19)
+b minero_cuadrilla-3 (14,20)
+d hulla-1 (10,20)
+e hulla-2 (17,20)
+f minero_cuadrilla-4 (7,18)
+g minero_cuadrilla-5 (20,18)
+h minero_cuadrilla-6 (12,20)
+j hulla-3 (9,20)
+k hulla-4 (18,19)
+m odda_noche (15,19)
+props: tapestry_crossbow-1, tapestry-1, door-cripta, barrel_oil-1, barrel_oil-2, campfire-3, crate-1, crate-2, barrel-2, barrel-1, crate-3, crate-4
+encounter d1-asalto: guardia_baron-9,guardia_baron-10,guardia_baron-11,capellan_abadia-2,guardia_baron_sargento-2,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
 encounter d1-defensa: odda_noche,minero_cuadrilla-4,minero_cuadrilla-5,minero_cuadrilla-6,hulla-3,hulla-4,guardia_baron-5,guardia_baron-6,guardia_baron-7,guardia_baron-8
 arenas d1-puerta-y-claustro (0,9 28x13) {}
 scenes audiencia (12,4 4x3) {"dialogue":"audiencia_abadia","speaker":"mazo","once":true}
@@ -318,7 +323,7 @@ ghghghghgWW...C....WWh=====*=hghgh   ###########22222222###0000000#####
 hghghghghWW.D....F.WWg=======ghghg   ###########22222222###0000000#####
 ghghghghgWW........WWh=======hghgh   ###########22222222###0000000#####
 hghghghghWWWWW..WWWWWg=======ghghg   ##############22######0000000#####
-ghghghghgWWWWW..WWWWWh==J====hghgh   ##############11######0000000#####
+ghghghghgWWWWW..WWWWWh==J==*=hghgh   ##############11######0000000#####
 hghghghghWWWWW..WWWWWg=======ghghg   ##############00######0000000#####
 ghghghghgWWWWW..WWWWWhghg/ghghghgh   ##############00#########0########
 Eccccc*ccccccccccccc*ccccccc*ccccE   0000000000000000000000000000000000
@@ -348,7 +353,7 @@ G benita (28,16)
 I casilda (31,18)
 J viuda-3 (24,6)
 K lisandro (7,16)
-props: door-trastienda, door-patio_lisandro, chest-libro_cuentas, crate-1, crate-2, barrel-1, barrel_oil-1, crate-3, crate-4
+props: campfire-5, door-trastienda, door-patio_lisandro, chest-libro_cuentas, crate-1, crate-2, barrel-1, barrel_oil-1, crate-3, crate-4
 scenes sermon (13,5 4x3) {"dialogue":"sermon_cirilo","speaker":"cirilo","once":true}
 ```
 
@@ -398,7 +403,7 @@ F sinpaga_enmascarado-1 (13,5)
 G sinpaga_cuchillero-4 (26,18)
 I sinpaga_cuchillero-1 (12,20)
 J sinpaga_cuchillero-2 (20,20)
-K sinpaga_cuchillero-3 (18,16)
+K curandero_sinpaga-1 (18,16)
 L sinpaga_bruto-1 (15,19)
 M callado-1 (31,9)
 N cart-1 (21,17)
@@ -407,7 +412,7 @@ P ore_pile-2 (10,15)
 Q ore_pile-3 (27,13)
 props: barrel_oil-1, barrel_oil-2, oil_cart-1, barrel-1, campfire-1, door-bocamina, well-1
 arenas escombreras (8,2 23x21) {}
-scenes callado-pozo (30,7 3x4) {"dialogue":"callado_pozo","speaker":"callado-1","once":true}
+scenes callado-pozo (30,7 3x4) {"dialogue":"callado_pozo","speaker":"callado-1","once":true,"requiresFlag":"escorial_libre"}
 scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enmascarado-1","once":true,"gate":true,"protects":"pozo-del-ahorcado,bocamina"}
 ```
 
@@ -425,7 +430,7 @@ k.*..k..*..........F...N.......E   #2222#00000000000000000000000000
 k.A..k..........L..............E   #2222#00000000000000000000000000
 k..............G......C...*...BE   #2222100000000000000000000000000
 k....k-------------x-----x-----E   #2222#00000000000000000000000000
-k....k..........I....D.........E   #2222#00000000000000000000000000
+k....k..........I....D......*..E   #2222#00000000000000000000000000
 kkkkkk..wwwwwM........o.*......E   ######00000000000000000000000000
 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ################################
 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ################################
@@ -445,7 +450,7 @@ K esqueleto_minero-2 (18,2)
 L rubble_pile-2 (16,5)
 M rubble_pile_c-2 (13,9)
 N pillar_broken-2 (23,4)
-props: mine_wagon-3, mine_wagon_ore-2, barrel_oil-1
+props: mine_wagon-3, mine_wagon_ore-2, barrel_oil-1, campfire-2
 encounter callados-del-tunel: callado-14,callado-12,callado-13,rata_gigante-2,rata_gigante-3,esqueleto_minero-1,esqueleto_minero-2
 arenas tunel (6,1 22x9) {}
 ```
@@ -471,7 +476,7 @@ arenas tunel (6,1 22x9) {}
 ##############..H*...........HG#.o....*#   ##############00100000000000022#0000110#
 E.A.*..................o.......&.......E   0000000000000000000000000000000000001100
 E-------x----------x------x----&-u-*.D.E   0000000000000000000000000000000000000000
-E............................**&.......E   0000000000000000000000000000000000000000
+E............................**&......*E   0000000000000000000000000000000000000000
 ##############...........#...HH#..k.&&.#   ##############00000000000#00022#0000000#
 ##############...........#...HH#....&&.#   ##############00000000000#00022#0000000#
 ##############....P.wwww.....HH#.......#   ##############00000000000000022#0000000#
@@ -508,7 +513,7 @@ O callado_palido-2 (38,11)
 P rubble_pile-1 (18,18)
 Q ore_pile-1 (27,10)
 R rubble_pile_c-1 (34,10)
-props: fuse_charges-1, remains_forty-1, mine_wagon-1, mine_wagon_ore-1, barrel_oil-1, mine_wagon-2, barrel_oil-2, barrel-1, powder_keg-1, barrel_oil-3
+props: fuse_charges-1, remains_forty-1, mine_wagon-1, mine_wagon_ore-1, barrel_oil-1, mine_wagon-2, barrel_oil-2, barrel-1, campfire-4, powder_keg-1, barrel_oil-3
 encounter callados-andamios: callado-2,callado-3,callado-4,callado_palido-1
 encounter callados-cripta: callado-5,callado-6
 encounter emboscada-sellada: callado-7,callado-8,callado_palido-2
@@ -536,16 +541,16 @@ scenes galeria-sellada (32,12 3x5) {"dialogue":"galeria_sellada","speaker":"garr
 ######vvvvvvvvvvvvvvvvvvvv######   ######22222222222222222222######
 ######vv#vvvvvCvvvvvvvv#vv######   ######22#22222222222222#22######
 Ev*vvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
-EvAvvvvvvvLvvvvvvvvIvvvvvv######   22222222222222222222222222######
+EvAvvvvvvvLvvvvvvvvvvvvvvv######   22222222222222222222222222######
 Evvvvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
 ######vv#vvvvvvvvvvvvvv#vv######   ######22#22222222222222#22######
 ######vvvvvvvvvvvvvvvvvvov######   ######22222222222222223333######
 ######vKvvvrvvvvvvvvrvvovv######   ######22222222222222223333######
 ######vvvvv*vvvvvvvv*vvvov######   ######22222222222222223333######
-######vvvvGvvvvvvvvvvvvvv*######   ######22222222222222223333######
+######vvvvvvvvvvvvvvvvvvv*######   ######22222222222222223333######
 ######vvvvvvvvvvvvvvvvvvvv######   ######22222222222222222222######
 ########&&&vvvvvvvvvvvv#########   ########000000000000001#########
-########&&&vvvvvvvvvvv##########   ########00000000000000##########
+########&G&Ivvvvvvvvvv##########   ########00000000000000##########
 ################################   ################################
 ################################   ################################
 E a-mina (0,11) -> mina:entry-boveda
@@ -554,8 +559,8 @@ B absalon (16,2)
 C ivo (14,10)
 D callado-9 (9,6)
 F callado-10 (22,6)
-G callado-11 (10,18)
-I callado_palido-3 (19,12)
+G callado-11 (9,21)
+I callado_palido-3 (11,21)
 J sarcophagus-1 (7,8)
 K sarcophagus-2 (7,16)
 L pillar_broken-1 (10,12)

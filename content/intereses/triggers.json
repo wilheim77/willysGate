@@ -4,9 +4,11 @@
     { "id": "d1_llamada", "when": { "all": [{ "flag": "acceso_contrabando" }, { "notFlag": "d1_resuelto" }] }, "dialogue": "noche_antorchas", "partner": "nella", "map": "plaza" },
     { "id": "d1_horca", "when": { "all": [{ "flag": "d1_cuadrilla" }, { "flag": "d1_asalto_terminado" }, { "notFlag": "baron_prisionero" }] }, "dialogue": "d1_horca", "partner": "nella", "map": "plaza" },
     { "id": "d1_abadia_final", "when": { "all": [{ "flag": "d1_abadia" }, { "flag": "d1_asalto_terminado" }, { "notFlag": "d1_abadia_final_visto" }] }, "dialogue": "d1_abadia_final", "partner": "mazo", "map": "abadia" },
+    { "id": "descanso_calles", "when": { "all": [{ "flag": "callejon_despejado" }, { "notFlag": "descanso_calles" }] }, "dialogue": "descanso_calles", "partner": "campfire-5", "map": "calles" },
     { "id": "descanso_abadia", "when": { "all": [{ "flag": "d1_resuelto" }, { "notFlag": "descanso_abadia" }] }, "dialogue": "descanso_abadia", "partner": "campfire-3", "map": "abadia" },
     { "id": "descanso_mina", "when": { "all": [{ "flag": "d2_resuelta" }, { "notFlag": "descanso_mina" }] }, "dialogue": "descanso_mina", "partner": "campfire-4", "map": "mina" },
     { "id": "descanso_tunel", "when": { "all": [{ "flag": "tunel_despejado" }, { "notFlag": "descanso_tunel" }] }, "dialogue": "descanso_tunel", "partner": "campfire-2", "map": "tunel" },
+    { "id": "descanso_boveda", "when": { "all": [{ "flag": "brea_derrotado" }, { "notFlag": "descanso_boveda" }, { "notFlag": "d3_resuelta" }] }, "dialogue": "descanso_boveda", "map": "boveda" },
     { "id": "collera", "when": { "all": [{ "flag": "brea_derrotado" }, { "notFlag": "d3_resuelta" }] }, "dialogue": "boveda_collera", "map": "boveda" },
     { "id": "cobro", "when": { "all": [{ "flag": "d3_resuelta" }, { "notFlag": "d4_resuelta" }] }, "dialogue": "el_cobro", "partner": "dorotea", "map": "plaza" },
     { "id": "epilogo", "when": { "all": [{ "flag": "d4_resuelta" }, { "notFlag": "epilogo_visto" }] }, "dialogue": "epilogo" }

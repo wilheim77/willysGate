@@ -2,7 +2,7 @@
   "$comment": "Generic creatures spawned as <template>-<n> on the act's maps. monsterId from rulesets/dnd5e/data/monsters.json; spriteId from assets/0x72.json; faction groups who fights whom; noncombatant until a scene or dialogue changes it.",
   "sinpaga_enmascarado": {
     "name": "Jefe de los Sinpaga",
-    "monsterId": "veteran",
+    "monsterId": "bandit_captain",
     "spriteId": "sinpaga_enmascarado",
     "faction": "sinpaga"
   },
@@ -26,7 +26,7 @@
   },
   "callado_palido": {
     "name": "Callado pálido",
-    "monsterId": "ghoul",
+    "monsterId": "ghast",
     "spriteId": "callado_palido",
     "faction": "callados"
   },

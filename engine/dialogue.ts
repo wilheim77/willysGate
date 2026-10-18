@@ -260,7 +260,8 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
       const outcome = ruleset.onRest(next, party, kind, rng);
       const r = applyOutcome(ruleset, next, outcome, rng);
       next = r.state;
-      events.push({ type: 'rested', kind, party } as GameEvent, ...r.events);
+      // After the rest's own events: the client checkpoints the game on 'rested'.
+      events.push(...r.events, { type: 'rested', kind, party } as GameEvent);
       continue;
     }
     if (e.type === 'travel') {

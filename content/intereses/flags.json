@@ -869,5 +869,18 @@
   "descanso_mina": {
     "critical": false,
     "description": "El grupo ha descansado (descanso corto) antes de bajar a la Bóveda."
+  },
+  "callejon_despejado": {
+    "critical": false,
+    "description": "Ha terminado el combate contra los cobradores de Lisandro en el callejón.",
+    "setBy": "mapa callejon (encuentro, setFlag)"
+  },
+  "descanso_calles": {
+    "critical": false,
+    "description": "El grupo ha descansado (descanso corto) en la cocina de las viudas."
+  },
+  "descanso_boveda": {
+    "critical": false,
+    "description": "El grupo ha descansado (descanso corto) en la Bóveda tras vencer a Brea."
   }
 }

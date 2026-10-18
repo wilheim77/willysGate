@@ -9,37 +9,71 @@
 | `camino` | Perros carroñeros (tutorial) | 2× mastiff, 1× giant_rat | 75 | 18 | 3 | Obligatorio |
 | `camino` | Mineros hambrientos | 3× bandit, 1× thug | 175 | 43 | 3 | Evitable hablando |
 | `barranco` | Lobos del barranco | 4× wolf | 200 | 50 | 3 | Opcional (mapa lateral) |
-| `plaza` | Fanáticos del juicio | 3× bandit | 75 | 18 | 3 | Evitable (juicio a golpes) |
-| `callejon` | Cobradores de Lisandro | 2× thug, 2× bandit | 250 | 62 | 3 | En el paso plaza ↔ calles |
-| `escorial` | Los Sinpaga | 1× veteran, 4× bandit, 1× thug | 900 | 225 | 4 | Evitable hablando (sinpaga_jefe) |
-| `abadia` | D1 · asalto con la Cuadrilla | 4× guard, 1× knight | 800 | 200 | 4 | Ruta d1_cuadrilla (con 5 aliados) |
+| `plaza` | Fanáticos del juicio | 2× cultist, 1× cult_fanatic | 500 | 125 | 3 | Evitable (juicio a golpes) |
+| `callejon` | Cobradores de Lisandro | 1× thug, 3× bandit | 175 | 43 | 3 | En el paso plaza ↔ calles |
+| `escorial` | Callado del pozo | 1× zombie | 50 | 12 | 4 | Opcional (atacarlo en callado_pozo) |
+| `escorial` | Los Sinpaga | 1× bandit_captain, 3× bandit, 1× acolyte, 1× thug | 675 | 168 | 4 | Evitable hablando (sinpaga_jefe) |
+| `abadia` | D1 · asalto con la Cuadrilla | 3× guard, 1× acolyte, 1× knight | 825 | 206 | 4 | Ruta d1_cuadrilla (con 5 aliados) |
 | `abadia` | D1 · defensa con la guardia | 1× veteran, 5× bandit | 825 | 206 | 4 | Ruta d1_abadia (con 4 aliados) |
 | `tunel` | Callados del túnel | 3× zombie, 2× giant_rat, 2× skeleton | 300 | 75 | 5 | Ruta del pozo (tras D1) |
-| `mina` | Callados en los andamios | 3× zombie, 1× ghoul | 350 | 87 | 5 | Obligatorio |
+| `mina` | Callados en los andamios | 3× zombie, 1× ghast | 600 | 150 | 5 | Obligatorio |
 | `mina` | Callados de la cripta | 2× zombie | 100 | 25 | 5 | Ruta de la cripta |
-| `mina` | Emboscada de la Galería Sellada | 2× zombie, 1× ghoul | 300 | 75 | 5 | Tras D2 |
-| `boveda` | Brea (jefe) | 1× gladiator, 1× thug, 3× zombie, 1× ghoul | 2250 | 562 | 5 | Obligatorio |
+| `mina` | Emboscada de la Galería Sellada | 2× zombie, 1× ghast | 550 | 137 | 5 | Tras D2 |
+| `boveda` | Brea (jefe) | 1× foreman, 4× zombie, 1× ghast | 2950 | 737 | 5 | Obligatorio |
 
 **Notas:**
 - **Combates excluyentes:**
   - Los dos de D1 (asalto o defensa) son excluyentes.
   - Las rutas del túnel y de la cripta son alternativas para bajar a la mina (también se puede ir por la bocamina).
-  - Los Sinpaga y los mineros pueden acabar hablando, sin PX de combate; si se quiere premiar esa vía, la progresión puede dar PX por la escena.
-- **Total de un recorrido típico** (camino, barranco, plaza sin pelea, callejón, Escorial a golpes, D1, túnel, andamios, Galería Sellada y jefe): unos 5.000-5.500 PX de grupo, es decir, unos 1.300 por personaje. Con los umbrales del SRD (nivel 4 a 2.700 y nivel 5 a 6.500 por personaje) no basta. **El agente de progresión debe fijar umbrales propios** (por ejemplo, nivel 4 a unos 350 por personaje, antes del Escorial, y nivel 5 a unos 900, antes de la mina) o multiplicar los PX.
+  - Los Sinpaga y los mineros pueden acabar hablando, sin PX de combate; la progresión da PX por la escena (`gainProgress`).
+- **Umbrales** (`content/intereses/levelups.json`, del agente de progresión): nivel 4 a 1.000 PX de grupo y nivel 5 a 1.500. Un jugador normal llega a nivel 4 tras el callejón y a nivel 5 justo después de los Sinpaga. El acto termina a nivel 5.
 - **El jefe no da nivel:** sus PX llegan cuando el acto ya se ha resuelto.
+
+## Descansos
+
+Efecto de diálogo genérico `{ "type": "rest", "kind": "short" | "long" }` → `Ruleset.onRest` (5e en `rulesets/dnd5e/rest.ts`):
+- **Descanso corto:** gasta dados de golpe (1dDG + CON cada uno) hasta tener más o menos el 75 % de los PG, recarga lo que se recupera con descanso corto (Tomar aliento, Oleada de acción, Canalizar divinidad) y aplica la Recuperación arcana del mago una vez por descanso largo.
+- **Descanso largo:** PG al máximo, todos los recursos, la mitad de los dados de golpe y fuera los estados.
+- **En los dos,** quien está caído pero vivo se levanta.
+
+| Dónde | Tipo | Cuándo se ofrece (disparador de `triggers.json` y diálogo en el fuego) |
+|---|---|---|
+| `calles`: cocina de las viudas (`descanso_calles`) | Corto | Tras el combate del callejón (`callejon_despejado`) |
+| `tunel`: hoguera de los Callados (`descanso_tunel`) | Corto | Tras el combate del túnel (`tunel_despejado`) |
+| `abadia`: fogón de la cocina (`descanso_abadia`) | Largo | Tras D1 (`d1_resuelto`) |
+| `mina`: brasas junto a la bajada (`descanso_mina`) | Largo | Tras D2 (`d2_resuelta`), antes de la Bóveda |
+| `boveda`: tras caer Brea (`descanso_boveda`) | Corto | Tras el jefe (`brea_derrotado`) y antes de la collera; así se llega entero al posible duelo con Dorotea (D4, quemar) |
+
+Cada descanso se puede tomar **una vez por partida** (marca `descanso_*`). El disparador vuelve a ofrecerlo en cada visita mientras no se haya tomado, y también se puede usar el fuego directamente. Todo descanso emite el evento de motor `{ type: 'rested', kind }` después de aplicarse, en el mismo comando: el cliente guarda ahí el punto de control (si el grupo cae, se vuelve a la última hoguera).
 
 ## Equilibrio
 
-Simulaciones con el motor real, la IA a ambos lados y el grupo a su nivel (`scratchpad/mapas/sim.ts` y `variants.probe.ts`, 24 semillas por variante). Objetivo: 85-95 % de victorias con 1-2 caídas, y para el jefe 70-85 % con 2-3 caídas.
+**Simulación encadenada** (`tests/playthrough/routes.ts`, el conductor automático con la IA a ambos lados):
+- con `QA_DEEP=1`, **las 144 combinaciones de D1-D4 llegan al final sin aniquilación y ganando al jefe** con la configuración actual (incluidas las dos con `quemar` que fallaban en el duelo final contra Dorotea);
+- con 6 semillas por ruta de humo, 0 aniquilaciones en 3 de las 4 rutas y 1 de 6 en la otra (`unirse/echar`, el grupo de tres sin Garrán).
 
-| Combate | Variante elegida | Resultado simulado |
-|---|---|---|
-| Mineros (L3, grupo de 3) | Sin cambios | 100 %, 1,1 caídas (tutorial; con un jugador que estabilice no hay muertes) |
-| Fanáticos (L3, 3) | Sin cambios | 100 %, 0,1 caídas (fácil a propósito) |
-| Sinpaga (L4) | Jefe → `veteran` (E3) | 96 %, 2,9 caídas |
-| D1 asalto (L5, con 5 aliados) | Sin cambios | 100 %, 0 caídas. Variantes más duras: sargento `knight` + 2 `veteran` (100 %, 1,0 caídas); + 4 `veteran` (83 %, 3,3 caídas) |
-| D1 defensa (L5, con 4 aliados) | Sin cambios | 100 %, 0,1 caídas. Variante más dura: Odda `veteran` + 5 `thug` (100 %, 2,6 caídas) |
-| Andamios, cripta, Galería Sellada (L5) | `zombie`/`ghoul` | 100 %, 0-0,2 caídas |
-| Jefe (L6) | Brea `gladiator`, Ivo `thug`, Callados `zombie`/`ghoul` | Pendiente de volver a simular a L5 con el bestiario nuevo |
+**Endurecido respecto a la versión anterior:**
+- los Callados pálidos son `ghast` (garras que paralizan y hedor);
+- el jefe de los Sinpaga es `bandit_captain`;
+- Brea es `foreman` (agente del bestiario: Bomba de pólvora y Rugido);
+- los Callados de la Bóveda van con Brea, y dos más salen de la sima a mitad del combate.
 
-**Lo que limita el equilibrio: no hay descansos.** La simulación que encadena los combates (`tests/playthrough/goldenPathMatrix.test.ts`) aniquila al grupo en la mina o con el jefe en cuanto los Callados pasan a `ghast`/`wight` (M4: 100 % y 1,4 caídas por separado) o Brea lleva un lugarteniente fuerte. Por separado esos combates entran en el objetivo, pero encadenados sin recuperar PG no. Por eso los Callados se quedan de momento en `zombie`/`ghoul`. Para endurecer la mina y el jefe hace falta un **descanso** antes de la mina, por ejemplo un descanso corto en el campamento del pozo o la cripta, o uno largo tras D1. Es trabajo del motor o del ruleset, y se ha propuesto a la sesión principal.
+**Ajustado para que el recorrido encadenado no aniquile al grupo:**
+- Ivo es un Callado más (`zombie`);
+- el callejón tiene un matón y tres bandidos.
+
+**Probado y descartado:**
+- Callados comunes como `ghoul`: con la IA hay aniquilaciones en la mina en 1 de cada 6 semillas.
+- Callados comunes como `ghast` y pálidos como `wight`: aniquilación en la mina en la mitad de las rutas.
+
+Con un jugador humano, que cura a los caídos y usa los barriles, la mina con `ghoul` sería razonable. Queda para la prueba en el móvil.
+
+**Combates por separado** (`scratchpad/mapas/sim.ts`, 24 semillas, el grupo descansado):
+- Sinpaga a nivel 4: 92 % de victorias y 2,4 caídas;
+- Sinpaga a nivel 3: 79 % y 3,5 caídas;
+- el resto, como en la tabla anterior.
+
+**Correcciones de recorrido encontradas al simular:**
+- el combate del callejón ocupa todo el callejón, así que no se puede saltar;
+- la escena del Callado del pozo exige antes haber resuelto lo de los Sinpaga (`escorial_libre`), porque si no se peleaba con los Sinpaga al mismo tiempo;
+- las combinaciones con `quemar` que fallaban en el combate final contra Dorotea: el grupo llegaba a ese duelo sin recuperarse del jefe, y el conductor da la partida por perdida en cuanto cae el protagonista. Ahora hay un descanso corto en la Bóveda tras el jefe.

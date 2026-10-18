@@ -109,7 +109,7 @@ export default {
       { name: 'escombreras', rect: [8, 2, 23, 21] },
     ],
     scenes: [
-      { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true } },
+      { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true, requiresFlag: 'escorial_libre' } },
       { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },
     ],
   },
