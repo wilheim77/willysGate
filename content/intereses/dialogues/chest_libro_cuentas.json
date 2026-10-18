@@ -98,7 +98,7 @@
       "next": "abierto"
     },
     "abierto": {
-      "text": "Dentro hay monedas, pagarés de medio valle y un libro de cuentas encuadernado en piel buena. Las últimas páginas están escritas con una letra preciosa y paciente.",
+      "text": "Dentro hay monedas, dos pociones, pagarés de medio valle y un libro de cuentas encuadernado en piel buena. Las últimas páginas están escritas con una letra preciosa y paciente.",
       "effects": [
         {
           "type": "setEntity",
@@ -126,6 +126,12 @@
           "type": "setFlag",
           "flag": "tiene_libro_lisandro",
           "value": true
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "potion_curacion",
+          "count": 2
         }
       ],
       "next": "leer"

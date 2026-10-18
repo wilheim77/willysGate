@@ -129,7 +129,7 @@ export default {
         name: 'juicio-anselmo',
         // Opens as soon as the party walks into the square from the road (west half).
         rect: [0, 8, 16, 11],
-        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, gate: true, protects: 'a-calles,a-escorial,a-abadia', fight: 'fanatico_pala-1,fanatico_pala-2,predicador_pala-1' },
+        props: { dialogue: 'juicio_anselmo', speaker: 'cirilo', once: true, gate: true, protects: 'a-calles,a-escorial,a-abadia', settledFlag: 'juicio_resuelto', fight: 'fanatico_pala-1,fanatico_pala-2,predicador_pala-1' },
       },
     ],
   },

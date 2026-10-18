@@ -882,5 +882,8 @@
   "descanso_boveda": {
     "critical": false,
     "description": "El grupo ha descansado (descanso corto) en la Bóveda tras vencer a Brea."
+  },
+  "polea_probada": {
+    "description": "Han tirado de la cadena de la polea de la Bóveda."
   }
 }

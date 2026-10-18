@@ -21,6 +21,7 @@ export default {
   ambientLight: 0.12,
   ...c.source(),
   spawns: {
+    'chest-taquilla': [1, 4], // a dead miner's locker: potions, coin and a chance of a magic item
     'entry-pozo': [2, 5],
     'entry-mina': [30, 6],
     'callado-14': [22, 6], // in front

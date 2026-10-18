@@ -47,6 +47,7 @@ export default {
   ambientLight: 0.6,
   ...c.source(),
   spawns: {
+    'chest-contrabando': [13, 19], // the Sinpaga stash, by their shack: potions, coin and a chance of a magic item
     'entry-plaza': [4, 2],
     'entry-calles': [2, 12],
     'entry-pozo': [31, 8],
@@ -110,7 +111,7 @@ export default {
     ],
     scenes: [
       { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true, requiresFlag: 'escorial_libre' } },
-      { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },
+      { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina', settledFlag: 'escorial_libre' } },
     ],
   },
   exits: [

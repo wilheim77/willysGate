@@ -1,0 +1,80 @@
+{
+  "$comment": "Abadía: the alms box. Investigation DC 14 finds a Cloak of Protection.",
+  "id": "chest_limosnas",
+  "start": "cofre",
+  "nodes": {
+    "cofre": {
+      "text": "El cepillo de las limosnas de la abadía. «Para los pobres de Hondonegra», dice la placa. La placa es lo más limpio que hay en la sala.",
+      "choices": [
+        {
+          "text": "Abrirlo.",
+          "next": "abierto"
+        },
+        {
+          "text": "Dejarlo."
+        }
+      ]
+    },
+    "abierto": {
+      "text": "Monedas de cobre, una poción de curación y un pergamino de bendición que alguien dejó como promesa de pago.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "chest-limosnas",
+          "removeTags": [
+            "dialogue:chest_limosnas"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 12
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "potion_curacion",
+          "count": 1
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "pergamino_bendicion",
+          "count": 1
+        }
+      ],
+      "choices": [
+        {
+          "text": "Buscar un doble fondo.",
+          "check": {
+            "check": "investigation",
+            "dc": 14,
+            "success": "doble_fondo",
+            "failure": "nada"
+          }
+        },
+        {
+          "text": "Cerrarlo y seguir."
+        }
+      ]
+    },
+    "doble_fondo": {
+      "text": "Debajo, una capa de lana gris doblada con mimo. Los pobres no la iban a ver nunca, así que tampoco la echarán de menos.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "capa_proteccion",
+          "count": 1
+        }
+      ]
+    },
+    "nada": {
+      "text": "Abajo solo hay polvo y un botón. Hasta la caridad tiene fondo."
+    }
+  }
+}

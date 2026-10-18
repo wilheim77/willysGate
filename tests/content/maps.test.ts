@@ -321,6 +321,32 @@ describe('Intereses maps', () => {
     }
   });
 
+  it('every chest and lever has a script, or it can never be used (playtest: the ravine chest)', () => {
+    const dialoguesDir = join(content, 'dialogues');
+    for (const [mapId, parsed] of Object.entries(maps)) {
+      if (mapId === 'test') continue;
+      for (const name of Object.keys(parsed.spawns).filter((n) => kindOf(n) === 'chest' || kindOf(n) === 'lever')) {
+        const kind = kindOf(name);
+        const script = `${kind}_${name.slice(kind.length + 1).replace(/-/g, '_')}`;
+        expect(existsSync(join(dialoguesDir, `${script}.json`)), `${mapId}/${name} needs dialogues/${script}.json`).toBe(true);
+      }
+    }
+  });
+
+  it('every gate scene can settle through its own dialogue, or it replays on every return (playtest: the trial)', () => {
+    const dialoguesDir = join(content, 'dialogues');
+    for (const [mapId, parsed] of Object.entries(maps)) {
+      for (const z of parsed.zones.filter((x) => x.layer === 'scenes' && x.properties.gate)) {
+        const text = readFileSync(join(dialoguesDir, `${String(z.properties.dialogue)}.json`), 'utf8');
+        const sets = (flag: unknown) => new RegExp(`"flag":\\s*"${String(flag)}"`).test(text);
+        const joins = /"type":\s*"setController"/.test(text);
+        const exits = String(z.properties.protects ?? '').split(',').map((n) => parsed.zones.find((e) => e.layer === 'exits' && e.name === n.trim()));
+        const allOpened = exits.every((e) => e && (!e.properties.requiresFlag || sets(e.properties.requiresFlag)));
+        expect(joins || allOpened || (z.properties.settledFlag && sets(z.properties.settledFlag)), `${mapId}/${z.name}: its dialogue never settles it (add settledFlag)`).toBeTruthy();
+      }
+    }
+  });
+
   it('wires the act-critical scenes to their dialogues', () => {
     const scene = (map: string, name: string) => maps[map]?.zones.find((z) => z.layer === 'scenes' && z.name === name)?.properties;
     expect(scene('boveda', 'brea-habla')?.dialogue).toBe('boveda_brea');

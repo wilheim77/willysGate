@@ -65,6 +65,9 @@ export function gateSettled(state: GameState, z: StoryZone): boolean {
   // Someone who has joined the party (Garrán in the ditch) no longer blocks anything.
   const speaker = z.properties.speaker ? state.entities[String(z.properties.speaker)] : undefined;
   if (speaker?.controllerId.startsWith('player')) return true;
+  // The scene's own outcome (the trial is over) settles it, even if other exits it guards wait
+  // on later story beats; otherwise it would replay every time the party walks back in.
+  if (z.properties.settledFlag && state.flags[String(z.properties.settledFlag)]) return true;
   const zones = (state.systems.zones as unknown as StoryZone[] | undefined) ?? [];
   const names = String(z.properties.protects ?? '').split(',').map((n) => n.trim()).filter(Boolean);
   const exits = zones.filter((e) => e.layer === 'exits' && names.includes(e.name));

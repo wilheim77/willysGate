@@ -150,8 +150,12 @@ controller.onTrapReached = (trap, candidates) => {
 
   store.subscribe((change) => {
     if (change.kind !== 'events') return;
+    const dropped = new Set(change.events.filter((e) => e.type === 'lootDropped').map((e) => (e as unknown as { item: string }).item));
     for (const ev of change.events) {
-      if (ev.type !== 'lootDropped') continue;
+      // Gear found in a chest or handed over in a conversation gets the same "who wears it?" question.
+      const found = ev as unknown as { owner?: string; item?: string; from?: number; to?: number };
+      const fromChest = ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
+      if (ev.type !== 'lootDropped' && !fromChest) continue;
       const item = (ev as unknown as { item: string }).item;
       // Consumables and misc goods have no slot: they're already in the shared bag (see the
       // combat log line for them), nothing to ask.

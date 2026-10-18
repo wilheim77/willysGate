@@ -42,6 +42,7 @@ export default {
   ambientLight: 0.12,
   ...c.source(),
   spawns: {
+    'chest-capataz': [5, 28], // the old foreman's strongbox: potions, coin and a chance of a magic item
     'entry-bocamina': [2, 13],
     'entry-pozo': [21, 2],
     'entry-cripta': [2, 27],

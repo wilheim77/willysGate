@@ -53,6 +53,7 @@ export default {
   ambientLight: 0.35,
   ...c.source(),
   spawns: {
+    'chest-limosnas': [24, 1], // the alms chest: potions, coin and a chance of a magic item
     'entry-plaza': [13, 19],
     // The audience (scene 2).
     mazo: [14, 1],

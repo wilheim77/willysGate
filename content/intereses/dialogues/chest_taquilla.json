@@ -1,0 +1,74 @@
+{
+  "$comment": "Túnel (escorial↔mina). Potions and coin; Investigation DC 14 finds a Ring of Protection.",
+  "id": "chest_taquilla",
+  "start": "cofre",
+  "nodes": {
+    "cofre": {
+      "text": "Una taquilla de minero, abollada a golpes de pico. En la puerta alguien grabó un nombre y luego, con otra letra, una cruz.",
+      "choices": [
+        {
+          "text": "Abrirlo.",
+          "next": "abierto"
+        },
+        {
+          "text": "Dejarlo."
+        }
+      ]
+    },
+    "abierto": {
+      "text": "Dentro: una muda, dos pociones envueltas en trapo y unas monedas contadas con mucho cuidado. Era de los que ahorraban.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "chest-taquilla",
+          "removeTags": [
+            "dialogue:chest_taquilla"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 9
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "potion_curacion",
+          "count": 2
+        }
+      ],
+      "choices": [
+        {
+          "text": "Buscar un doble fondo.",
+          "check": {
+            "check": "investigation",
+            "dc": 14,
+            "success": "doble_fondo",
+            "failure": "nada"
+          }
+        },
+        {
+          "text": "Cerrarlo y seguir."
+        }
+      ]
+    },
+    "doble_fondo": {
+      "text": "Bajo la tabla del fondo, un anillo de hierro con una runa gastada. Nadie esconde así algo que no vale nada.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "anillo_proteccion",
+          "count": 1
+        }
+      ]
+    },
+    "nada": {
+      "text": "El fondo es fondo. Lo que tenía, lo llevaba encima."
+    }
+  }
+}
