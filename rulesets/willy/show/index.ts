@@ -50,7 +50,7 @@ const SHOW_EVENTS = new Set([
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
   'boxDelivered', 'itemObtained', 'coinsGranted',
   // Handled by the late pass, after the achievements.
-  'achievementUnlocked',
+  'achievementUnlocked', 'npcHelped',
 ]);
 
 export const showCommands: Record<string, CommandHandler> = { aceptarContrato, rechazarContrato };
