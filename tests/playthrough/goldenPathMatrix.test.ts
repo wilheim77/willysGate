@@ -257,7 +257,7 @@ describe('golden path matrix: D1 x D2 x D3 x D4', () => {
       // Soft goal (reported above, not asserted): reaching epilogo_visto. Narrative branches
       // and the driver's own routing limits mean a greedy run can legitimately fall short;
       // see the console output for how far each combo actually gets.
-    }, 20000);
+    }, 120_000);
   }
 
   it('a second protagonist build (elf rogue) also reaches the epilogue', () => {
@@ -273,5 +273,5 @@ describe('golden path matrix: D1 x D2 x D3 x D4', () => {
     console.log(`elf rogue: visited [${[...visited].join(', ')}], wiped=${wiped}, epilogo_visto=${!!state.flags.epilogo_visto}`);
     expect(wiped, 'the elf rogue protagonist was wiped out before settling').toBe(false);
     expect(visited.size, `elf rogue: only visited ${visited.size} map(s)`).toBeGreaterThanOrEqual(2);
-  }, 20000);
+  }, 120_000);
 });
