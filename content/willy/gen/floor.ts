@@ -90,10 +90,17 @@ const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X']);
 const MAX_ATTEMPTS = 20;
 
 /** Difficulty levers (floors.json → equilibrio), tuned with the balance simulations. */
-const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; primeraPelea: { planta: number; presupuestoMax: number }; jefes: Record<string, { multVida?: number; dano?: string }> };
+const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; primeraPelea: { piso: number; presupuestoMax: number }; jefes: Record<string, { multVida?: number; dano?: string }>; vidaEnemigos: Record<string, number>; guardian: { multVida: number; bonoAtaque: number; bonoDef: number; xp: number } };
 const SAFE_DISTANCE = 6;
 
-type FloorSpec = (typeof floorsData.plantas)[number];
+type Planta = (typeof floorsData.plantas)[number];
+type Piso = (typeof floorsData.pisos)[number];
+
+/** One floor of the season: its planta (biome, enemies, boss, mechanic) with the piso's own numbers. */
+export type FloorSpec = Planta & { piso: number; parte: number; plantaId: number; xpTotal: number; nivelEsperado: number };
+
+/** Floors in a season. */
+export const FLOOR_COUNT = floorsData.pisos.length;
 
 export interface RoomInfo {
   cell: Vec2;
@@ -126,9 +133,20 @@ const OPPOSITE: Record<Side, Side> = { N: 'S', S: 'N', E: 'W', W: 'E' };
 const key = (p: Vec2) => `${p.x},${p.y}`;
 
 export function floorSpec(n: number): FloorSpec {
-  const spec = floorsData.plantas.find((p) => p.id === n);
-  if (!spec) throw new Error(`No floor ${n}`);
-  return spec;
+  const piso = floorsData.pisos.find((p) => p.id === n) as Piso | undefined;
+  const planta = piso && floorsData.plantas.find((p) => p.id === piso.planta);
+  if (!piso || !planta) throw new Error(`No floor ${n}`);
+  return {
+    ...planta,
+    nombre: piso.nombre,
+    relojSegundos: piso.relojSegundos,
+    generacion: { ...planta.generacion, ...piso.generacion } as Planta['generacion'],
+    piso: n,
+    parte: piso.parte,
+    plantaId: planta.id,
+    xpTotal: piso.xpTotal,
+    nivelEsperado: piso.nivelEsperado,
+  } as FloorSpec;
 }
 
 /** The floor for this run. Throws only if every attempt fails (the tests make sure it doesn't). */
@@ -335,7 +353,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
   const nodes = layout(g, spec);
   if (typeof nodes === 'string') return nodes;
   const earlier = options.rivals ?? [];
-  const rivalRoom = earlier.every((r) => !r.plantas.includes(n)) && g.chance(RIVAL_RULES.roomChance(n));
+  const rivalRoom = earlier.every((r) => !r.plantas.includes(n)) && g.chance(RIVAL_RULES.roomChance(spec.plantaId));
   const roles = assignRoles(g, spec, nodes, rivalRoom);
   const heights = baseHeights(g, spec, nodes);
 
@@ -432,7 +450,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
         surfaces: surfaces as unknown as JsonValue,
         traps: populated.traps as unknown as JsonValue,
         lighting: { ambient: spec.luzAmbiente, lights: populated.lights } as unknown as JsonValue,
-        planta: { numero: n, nombre: spec.nombre, intento: attempt, salas: rooms } as unknown as JsonValue,
+        planta: { numero: n, bioma: spec.plantaId, parte: spec.parte, nombre: spec.nombre, intento: attempt, salas: rooms } as unknown as JsonValue,
       },
     },
     rooms,
@@ -487,9 +505,8 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
     // Boss.
     if (room.role === 'jefe') {
       const at = slots(i, 'J')[0];
-      const b = spec.jefe;
       if (at) {
-        const boss = createCreature({ id: b.id, name: b.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: b.id, vida: Math.round(b.vida * (BALANCE.jefes[n]?.multVida ?? 1)), def: b.def, ataque: b.ataque, dano: BALANCE.jefes[n]?.dano ?? b.dano, movimiento: b.movimiento, fue: 12, tags: ['jefe', `tamano:${b.tamano}`, ...b.etiquetas] });
+        const boss = spec.parte === 1 ? guardian(g, spec, at, enemies) : planetBoss(spec, at);
         entities.push(boss);
         foesByRoom[i]!.push(boss.id);
       }
@@ -505,23 +522,23 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       let e: Entity;
       if (back) {
         const legend = back.legendario ? legendaryById(back.legendario) : undefined;
-        e = legend ? legendaryEntity(legend, n, at) : rivalEntity(profiles.get(back.id)!, n, at);
+        e = legend ? legendaryEntity(legend, spec.plantaId, at) : rivalEntity(profiles.get(back.id)!, spec.plantaId, at);
         e = { ...e, tags: [...e.tags, `vuelta:${back.desenlace}`] };
         rival = { ...back, plantas: [...back.plantas, n] };
       } else {
         const usedLegendaries = new Set(earlier.map((r) => r.legendario).filter((x): x is string => !!x));
-        const legendary = g.chance(RIVAL_RULES.legendaryChance) ? legendaryFor(g, n, usedLegendaries) : undefined;
+        const legendary = g.chance(RIVAL_RULES.legendaryChance) ? legendaryFor(g, spec.plantaId, usedLegendaries) : undefined;
         if (legendary) {
-          e = legendaryEntity(legendary, n, at);
+          e = legendaryEntity(legendary, spec.plantaId, at);
           rival = { id: e.id, planta: n, ranura: i, legendario: legendary.id, plantas: [n] };
         } else {
           const taken = new Set([...profiles.values()].flatMap(rivalKeys));
           const profile = generateRival(runSeed, n, i, taken);
-          e = rivalEntity(profile, n, at);
+          e = rivalEntity(profile, spec.plantaId, at);
           rival = { id: e.id, planta: n, ranura: i, plantas: [n] };
         }
       }
-      entities.push(e);
+      entities.push({ ...e, tags: [...e.tags, 'xp:30'] });
       foesByRoom[i]!.push(e.id);
       enemySlots.length = 0;
     }
@@ -530,13 +547,13 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
     let budget = Math.floor((budgetSpec.base + budgetSpec.porProfundidad * room.depth) * mult * (BALANCE.presupuesto[n] ?? 1));
     if (room.role === 'inicio' || room.role === 'jefe') budget = 0;
     // The first fight of the season is a gentle one (floors.json → equilibrio.primeraPelea).
-    if (n === BALANCE.primeraPelea.planta && room.critical && i === firstFightRoom) budget = Math.min(budget, BALANCE.primeraPelea.presupuestoMax);
+    if (n === BALANCE.primeraPelea.piso && room.critical && i === firstFightRoom) budget = Math.min(budget, BALANCE.primeraPelea.presupuestoMax);
     while (budget >= cheapest && enemySlots.length) {
       const pick = g.weighted(enemies.filter(([, e]) => e.coste <= budget), () => 1);
       if (!pick) break;
       const [id, def] = pick;
       const at = enemySlots.shift()!;
-      const e = createCreature({ id: `${prefix}-${id}-${foesByRoom[i]!.length}`, name: def.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: id, vida: def.vida, def: def.def, ataque: def.ataque, dano: def.dano, movimiento: def.movimiento, fue: Math.max(3, def.coste * 3), tags: [...def.etiquetas, `xp:${def.xp}`] });
+      const e = createCreature({ id: `${prefix}-${id}-${foesByRoom[i]!.length}`, name: def.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: id, vida: Math.round(def.vida * (BALANCE.vidaEnemigos[n] ?? 1)), def: def.def, ataque: def.ataque, dano: def.dano, movimiento: def.movimiento, fue: Math.max(3, def.coste * 3), tags: [...def.etiquetas, `xp:${def.xp}`] });
       // Ordinary enemies act less than Willy (floors.json → equilibrio.accionesEnemigo).
       e.resources.acciones = { current: BALANCE.accionesEnemigo, max: BALANCE.accionesEnemigo };
       entities.push(e);
@@ -578,7 +595,45 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       chests.push({ at: m.at, critical: rooms[m.room]!.critical });
     }
   }
-  return { entities, foesByRoom, traps, lights, arrival: arrival ?? { x: 1, y: 1 }, stairs: stairs ?? { x: 1, y: 1 }, chests, ...(rival ? { rival } : {}) };
+  return { entities: scaleXp(entities, spec.xpTotal), foesByRoom, traps, lights, arrival: arrival ?? { x: 1, y: 1 }, stairs: stairs ?? { x: 1, y: 1 }, chests, ...(rival ? { rival } : {}) };
+}
+
+/** The floor's foes share its experience (floors.json → pisos[].xpTotal) in proportion to their own. */
+function scaleXp(entities: Entity[], total: number): Entity[] {
+  const base = (e: Entity) => Number(e.tags.find((t) => t.startsWith('xp:'))?.slice(3) ?? 0);
+  const sum = entities.reduce((s, e) => s + base(e), 0);
+  if (!sum) return entities;
+  return entities.map((e) => (base(e) ? { ...e, tags: [...e.tags.filter((t) => !t.startsWith('xp:')), `xp:${Math.max(1, Math.round((base(e) * total) / sum))}`] } : e));
+}
+
+/** The planta's boss, at the end of its second floor. */
+function planetBoss(spec: FloorSpec, at: Vec2): Entity {
+  const b = spec.jefe;
+  const tune = BALANCE.jefes[spec.piso] ?? {};
+  return createCreature({ id: b.id, name: b.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: b.id, vida: Math.round(b.vida * (tune.multVida ?? 1)), def: b.def, ataque: b.ataque, dano: tune.dano ?? b.dano, movimiento: b.movimiento, fue: 12, tags: ['jefe', `tamano:${b.tamano}`, ...b.etiquetas, `xp:${b.xp}`] });
+}
+
+/** The first floor's guardian: the planta's toughest ordinary enemy, elite and with a boss's two actions. */
+function guardian(g: Gen, spec: FloorSpec, at: Vec2, enemies: [string, EnemyDef][]): Entity {
+  const top = Math.max(...enemies.map(([, e]) => e.coste));
+  const [id, def] = g.pick(enemies.filter(([, e]) => e.coste === top));
+  const t = BALANCE.guardian;
+  const e = createCreature({
+    id: `guardian-p${spec.piso}`,
+    name: `${def.nombre}, guardián del piso`,
+    controllerId: 'ai',
+    factionId: 'monstruos',
+    position: at,
+    spriteId: id,
+    vida: Math.round(def.vida * t.multVida * (BALANCE.vidaEnemigos[spec.piso] ?? 1)),
+    def: def.def + t.bonoDef,
+    ataque: def.ataque + t.bonoAtaque,
+    dano: def.dano,
+    movimiento: def.movimiento,
+    fue: 10,
+    tags: ['jefe', 'guardian', 'elite', ...def.etiquetas, `xp:${def.xp * t.xp}`],
+  });
+  return e;
 }
 
 function chest(id: string, at: Vec2, spriteId: string, floor: number): Entity {

@@ -20,6 +20,7 @@ import { BARREL_BLAST, listActions, performAction, previewAction, setWillyRef } 
 import './more-classes';
 import './summons';
 import { syncCompanions } from './companions';
+import './xp';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';

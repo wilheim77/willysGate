@@ -1,6 +1,6 @@
 import { type CreationChoices, type Engine, type Entity, type GameState, type JsonValue, type MapBuilder, type MapSetup, type Vec2, withLighting, withZones } from '../../engine';
 import { buildWilly, createCompanion, createWilly } from '../../rulesets/willy';
-import { generateFloor } from './gen/floor';
+import { FLOOR_COUNT, generateFloor } from './gen/floor';
 import type { RivalRecord } from './gen/rivals';
 import { MAPS } from './maps';
 
@@ -17,8 +17,8 @@ import { MAPS } from './maps';
 export const PLAYER = 'player:1';
 export const FACTION = 'concursantes';
 
-/** The floors of a season. */
-export const FLOORS = [1, 2, 3, 4, 5];
+/** The floors of a season (floors.json → pisos). */
+export const FLOORS = Array.from({ length: FLOOR_COUNT }, (_, i) => i + 1);
 
 export function rivalsOf(state: GameState | undefined): RivalRecord[] {
   return ((state?.systems?.rivals as unknown as RivalRecord[] | undefined) ?? []).slice();
