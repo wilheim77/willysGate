@@ -179,19 +179,22 @@ sheet.onChangeGear = (item: string) => {
 };
 
 // Defeat: the leader can't get up once the fight is over (the party lost, or the leader bled
-// out while the others won). Without this the game just sat there. Offer to replay the fight
-// from the moment before it started.
+// out while the others won). Play starts again from the last campfire: the state saved by the
+// last rest (`rested` event), or the start of the game / the last loaded save if there was none.
 {
-  let beforeFight = store.state;
+  let checkpoint = store.state;
   let offered = false;
   store.subscribe((change, state) => {
-    if (change.kind === 'reset') offered = false;
+    if (change.kind === 'reset') {
+      offered = false;
+      checkpoint = state;
+      return;
+    }
+    if (change.events.some((e) => e.type === 'rested')) checkpoint = state;
     if (state.turn.mode === 'combat') return;
     const leader = state.entities[game.leaderId];
     if (!leader || engine.ruleset.isStanding(leader)) {
-      // Calm: this is where a lost fight would start over from.
       offered = false;
-      beforeFight = state;
       return;
     }
     // A story defeat may carry on in a conversation (captured, dragged off): let it.
@@ -199,9 +202,9 @@ sheet.onChangeGear = (item: string) => {
     if (offered) return;
     offered = true;
     const t = game.texts.combat ?? {};
-    const retry = beforeFight;
+    const back = checkpoint;
     setTimeout(() => {
-      dialogue.ask(t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: t.retryFight ?? 'Volver a intentarlo', onPick: () => store.load(retry) }], false);
+      dialogue.ask(t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: t.retryFight ?? 'Volver a la última hoguera', onPick: () => store.load(back) }], false);
     }, 1200);
   });
 }

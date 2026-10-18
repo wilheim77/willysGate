@@ -70,7 +70,9 @@
     "targets": "Objetivos",
     "done": "Listo",
     "fell": "¡Caída!",
-    "slipped": "¡Resbala!"
+    "slipped": "¡Resbala!",
+    "retryFight": "Volver a empezar la temporada",
+    "defeatText": "Willy ha sido eliminado. El público aplaude por educación."
   },
   "creation": {
     "title": "El cásting",
