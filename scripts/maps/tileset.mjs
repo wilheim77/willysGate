@@ -42,6 +42,10 @@ export const LOGIC_TILES = [
   { terrain: 'house', height: 3, walkable: false },
   { terrain: 'house_plain', height: 3, walkable: false },
   { terrain: 'stone_wall', height: 3, walkable: false },
+  { terrain: 'low_wall', height: 1, walkable: false }, // waist-high cover: blocks, can be seen over
+  { terrain: 'balcony', height: 1 },
+  { terrain: 'balcony', height: 2 },
+  { terrain: 'balcony', height: 3 },
   { terrain: 'rock', height: 4, walkable: false }, // cliff: paint as 'C' (height 4 = the unwalkable one)
 ];
 

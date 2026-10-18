@@ -64,7 +64,7 @@ const STORY_GATES: Record<string, Record<string, string>> = {
 
 const RULES = dnd5e.movement;
 // Scenery and art props (content/intereses/world.ts); all but levers and doors are assumed to block.
-const ART_PROPS = ['oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow', 'mine_wagon', 'mine_wagon_ore', 'powder_keg', 'resonator', 'fuse_charges', 'remains_forty', 'pulley', 'inscription'];
+const ART_PROPS = ['oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow', 'mine_wagon', 'mine_wagon_ore', 'powder_keg', 'resonator', 'fuse_charges', 'remains_forty', 'pulley', 'inscription', 'cart', 'cart_sacks', 'market_stall', 'sacks', 'rubble_pile', 'rubble_pile_b', 'rubble_pile_c', 'pillar_broken', 'dead_tree', 'dead_tree_b', 'dead_tree_c', 'ore_pile', 'tombstone', 'sarcophagus'];
 const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', ...ART_PROPS];
 const PROPS = [...OBSTACLE_PROPS, 'lever', 'door'];
 const kindOf = (name: string): string => name.split('-')[0]!;

@@ -67,7 +67,7 @@ export default {
   spawns: {
     'entry-camino': [2, 15],
     'entry-abadia': [23, 2],
-    'entry-calles': [27, 9],
+    'entry-callejon': [27, 9],
     'entry-escorial': [13, 19],
     // The trial (scene 1).
     anselmo: [10, 6],
@@ -85,16 +85,16 @@ export default {
     guardia_abadia: [23, 4],
     'guardia_baron-1': [25, 5],
     // Scenery: market stalls on the terrace, lamp oil by the gallows, the well's bucket barrel.
-    'crate-1': [2, 10],
-    'crate-2': [3, 10],
+    'market_stall-1': [2, 10],
+    'market_stall-2': [4, 10],
     'barrel-1': [2, 11],
     'barrel_oil-1': [15, 8],
     'well-1': [17, 12],
     'barrel-2': [19, 13],
     'crate-3': [20, 16],
     // A cart unloaded by the gallows: cover between the crowd and the fanatics.
-    'crate-4': [12, 11],
-    'crate-5': [13, 11],
+    'cart_sacks-1': [12, 11],
+    'sacks-1': [13, 11],
     'barrel-3': [11, 11],
   },
   lights: [
@@ -114,7 +114,7 @@ export default {
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
   exits: [
     { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_concedida', closedText: 'La guardia no os deja subir sin audiencia.' } },
-    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto', closedText: 'Medio pueblo se agolpa ante el cadalso. Hasta que acabe el juicio, no se pasa.' } },
+    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'callejon', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto', closedText: 'Medio pueblo se agolpa ante el cadalso. Hasta que acabe el juicio, no se pasa.' } },
     { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_hecha', closedText: 'Primero, la audiencia con el barón.' } },
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],

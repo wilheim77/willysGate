@@ -31,9 +31,10 @@ export default {
     'lobo-3': [9, 2],
     'lobo-4': [16, 8],
     'chest-viajero': [7, 2], // what the wolves left of a traveller
-    'crate-1': [9, 11], // dead trees for now (dead_tree when the art lands)
-    'crate-2': [14, 15],
-    'crate-3': [19, 5],
+    'dead_tree-1': [9, 11],
+    'dead_tree_b-1': [14, 15],
+    'rubble_pile-1': [19, 5],
+    'rubble_pile_b-1': [8, 5],
   },
   lights: [{ name: 'farol-viajero', at: [8, 2], radius: 3, color: '#ffc070', flicker: 0.2, intensity: 0.7, prop: 'lantern' }],
   surfaces: [

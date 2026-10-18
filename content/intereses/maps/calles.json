@@ -74,7 +74,7 @@
    "objects": [
     {
      "id": 1,
-     "name": "entry-plaza",
+     "name": "entry-callejon",
      "type": "",
      "point": true,
      "x": 80,
@@ -871,7 +871,7 @@
       {
        "name": "to",
        "type": "string",
-       "value": "plaza"
+       "value": "callejon"
       },
       {
        "name": "spawn",
@@ -962,10 +962,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 60,
-   "columns": 60,
+   "tilecount": 64,
+   "columns": 64,
    "image": "terrain-logic.png",
-   "imagewidth": 1920,
+   "imagewidth": 2048,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1887,6 +1887,71 @@
     },
     {
      "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "low_wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 60,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 63,
      "properties": [
       {
        "name": "terrain",

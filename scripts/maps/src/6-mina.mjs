@@ -67,6 +67,9 @@ export default {
     'mine_wagon-2': [26, 14],
     'barrel_oil-2': [28, 20],
     'barrel-1': [33, 14],
+    'rubble_pile-1': [18, 18],
+    'ore_pile-1': [27, 10],
+    'rubble_pile_c-1': [34, 10],
     'powder_keg-1': [33, 12], // what is left of the blasting powder
     'barrel_oil-3': [12, 27], // lamp oil in the crypt tunnel
   },
@@ -109,7 +112,7 @@ export default {
   ],
   exits: [
     { name: 'a-escorial-bocamina', rect: [0, 13, 1, 3], to: 'escorial', spawn: 'entry-bocamina' },
-    { name: 'a-escorial-pozo', rect: [21, 0, 1, 1], to: 'escorial', spawn: 'entry-pozo' },
+    { name: 'a-escorial-pozo', rect: [21, 0, 1, 1], to: 'tunel', spawn: 'entry-mina' },
     { name: 'a-abadia-cripta', rect: [0, 26, 1, 3], to: 'abadia', spawn: 'entry-cripta' },
     { name: 'a-boveda', rect: [39, 13, 1, 3], to: 'boveda', spawn: 'entry-mina' },
   ],

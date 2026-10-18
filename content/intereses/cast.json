@@ -208,7 +208,7 @@
   },
   "ivo": {
     "name": "Ivo",
-    "monsterId": "ghast",
+    "monsterId": "thug",
     "spriteId": "callado",
     "faction": "callados",
     "noncombatant": false,

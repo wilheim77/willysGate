@@ -1,6 +1,6 @@
 # Propuesta: más combates en el acto de *Intereses*
 
-> Agente de mapas, 2026-10-18. **Pendiente de aprobación del usuario.** Nada de esto está montado todavía.
+> Agente de mapas, 2026-10-18. **Aprobada por el usuario** (combate tutorial y subida por experiencia). Lo montado está en [`ENCOUNTERS.md`](ENCOUNTERS.md): el tutorial, el barranco, el callejón y el túnel. Los demás combates opcionales de la tabla quedan como ideas.
 >
 > Problema (prueba del usuario): se habla demasiado y se pelea poco. Propuesta: un combate tutorial al empezar el camino y combates opcionales o de relleno en cada mapa. Con eso tiene sentido subir de nivel por experiencia en vez de por escenas (lo decide el usuario).
 

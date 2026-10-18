@@ -18,6 +18,8 @@ import abadia from './maps/abadia.json';
 import calles from './maps/calles.json';
 import camino from './maps/camino.json';
 import barranco from './maps/barranco.json';
+import callejon from './maps/callejon.json';
+import tunel from './maps/tunel.json';
 import escorial from './maps/escorial.json';
 import mina from './maps/mina.json';
 import boveda from './maps/boveda.json';
@@ -38,6 +40,8 @@ import spawnDialoguesJson from './spawn-dialogues.json';
 export const ACT_MAPS: Record<string, TiledMapJson> = {
   camino: camino as TiledMapJson,
   barranco: barranco as TiledMapJson,
+  callejon: callejon as TiledMapJson,
+  tunel: tunel as TiledMapJson,
   plaza: plaza as TiledMapJson,
   abadia: abadia as TiledMapJson,
   calles: calles as TiledMapJson,
@@ -116,6 +120,21 @@ const ART_PROPS: Record<string, { kind: 'powder_keg' | 'wagon' | 'resonator' | '
   remains_forty: { kind: 'decor', name: 'Restos', obstacle: false },
   pulley: { kind: 'decor', name: 'Polea', obstacle: false },
   inscription: { kind: 'decor', name: 'Inscripción', obstacle: false },
+  // Cover for the tactical fight areas (docs/MAPS.md, «Combates tácticos»): all block.
+  cart: { kind: 'decor', name: 'Carro', obstacle: true },
+  cart_sacks: { kind: 'decor', name: 'Carro con sacos', obstacle: true },
+  market_stall: { kind: 'decor', name: 'Puesto', obstacle: true },
+  sacks: { kind: 'decor', name: 'Sacos', obstacle: true },
+  rubble_pile: { kind: 'decor', name: 'Escombros', obstacle: true },
+  rubble_pile_b: { kind: 'decor', name: 'Escombros', obstacle: true },
+  rubble_pile_c: { kind: 'decor', name: 'Escombros', obstacle: true },
+  pillar_broken: { kind: 'decor', name: 'Columna rota', obstacle: true },
+  dead_tree: { kind: 'decor', name: 'Árbol seco', obstacle: true },
+  dead_tree_b: { kind: 'decor', name: 'Árbol seco', obstacle: true },
+  dead_tree_c: { kind: 'decor', name: 'Tocón', obstacle: true },
+  ore_pile: { kind: 'decor', name: 'Montón de mineral', obstacle: true },
+  tombstone: { kind: 'decor', name: 'Lápida', obstacle: true },
+  sarcophagus: { kind: 'decor', name: 'Sarcófago', obstacle: true },
 };
 const USABLE_KINDS = new Set(['chest', 'door', 'lever']);
 

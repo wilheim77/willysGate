@@ -6,7 +6,6 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 
 | Pendiente | Juego | Situación actual | Qué hace falta |
 |---|---|---|---|
-| Bestias de los combates nuevos | intereses | Plantillas `perro_carronero`, `lobo` (sprite provisional `orc`) y `rata_gigante` (provisional `skeleton`) | Sprites `perro`, `rata` y `lobo` (pedidos al agente de arte); luego cambiar `spriteId` en `content/intereses/templates.json` |
 | Exteriores: atrezo | intereses | Terrenos de exterior hechos (`road`, `scrub`, `mud`, `rock`, `cobble`, `house`, `stone_wall`, `fence`, `river`, `slag_heap`) | Árboles muertos, carros, pozos y puertas de casa como props si los mapas los piden; transiciones hechas (`blend`); añadir más parejas si hace falta |
 | Llamas de antorcha en el juego | intereses | **Arte hecho** (`torch_wall`, `brazier`); el render aún usa la llama por código de `src/fx/LightingLayer.ts` | Petición al render n.º 1 en `docs/ART_CATALOG.md` |
 | Reborde de plataformas | intereses | Horneado en las caras (`*_face` con reborde) y `rim_*` sueltos | Petición al render n.º 4 para dibujarlo una sola vez |

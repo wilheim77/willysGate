@@ -14,7 +14,7 @@ c.rect(0, 9, 40, 2, 'R', 1).rect(35, 8, 5, 4, 'R', 1);
 
 // --- Tutorial: carrion dogs (x 6-14) ---------------------------------------------------
 c.rect(5, 4, 4, 3, 's', 2); // a hillock north of the road: height to shoot from
-c.rect(11, 12, 3, 1, 'W'); // a dry-stone field wall south of the road
+c.rect(11, 12, 3, 1, 'L', 1); // a low dry-stone field wall south of the road
 c.put(13, 7, 'k', 3).put(14, 7, 'k', 3); // a boulder
 
 // --- Garrán's ditch (x 15-21) ------------------------------------------------------------
@@ -22,7 +22,7 @@ c.rect(15, 12, 7, 3, 'm', 0);
 
 // --- The hungry miners (x 24-37) -----------------------------------------------------------
 c.rect(25, 3, 6, 5, 'k', 2).rect(26, 3, 4, 5, 'k', 3); // the outcrop: h2 ramp on its west and east sides, h3 crown
-c.rect(33, 7, 3, 1, 'W'); // a field wall north of the road beyond the cart
+c.rect(33, 7, 3, 1, 'L', 1); // a low field wall north of the road beyond the cart
 c.put(24, 13, 'k', 3).put(25, 14, 'k', 3); // boulders on the south flank
 c.rect(26, 15, 4, 2, 'm', 0); // a muddy hollow on the long way round
 
@@ -45,7 +45,10 @@ export default {
     'perro_carronero-2': [11, 10],
     'rata_gigante-1': [9, 11],
     'crate-1': [8, 7], // the mule's broken cart
-    'crate-2': [8, 8],
+    'sacks-1': [8, 8],
+    'dead_tree-1': [4, 13],
+    'dead_tree_b-1': [21, 6],
+    'dead_tree_c-1': [35, 16],
     garran: [18, 13],
     // The hungry miners: two in front on the road, one behind the cart, the lookout on the crown.
     minero_cabecilla: [30, 9],

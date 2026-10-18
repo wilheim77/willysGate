@@ -41,6 +41,9 @@ export default {
     'powder_keg-3': [24, 15],
     'lever-polea': [21, 1], // pulley and chains: drops the ore bucket on the trench (dialogue pulley_polea / lever_polea)
     'pulley-1': [20, 1],
+    'sarcophagus-1': [7, 8],
+    'sarcophagus-2': [7, 16],
+    'pillar_broken-1': [10, 12],
     'inscription-1': [7, 5], // the elvish carving: [Historia] CD 13 for an elf or dwarf
   },
   lights: [

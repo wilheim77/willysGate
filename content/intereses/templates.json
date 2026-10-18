@@ -133,19 +133,19 @@
   "perro_carronero": {
     "name": "Perro carroñero",
     "monsterId": "mastiff",
-    "spriteId": "orc",
+    "spriteId": "perro",
     "faction": "bestias"
   },
   "rata_gigante": {
     "name": "Rata gigante",
     "monsterId": "giant_rat",
-    "spriteId": "skeleton",
+    "spriteId": "rata",
     "faction": "bestias"
   },
   "lobo": {
     "name": "Lobo flaco",
     "monsterId": "wolf",
-    "spriteId": "orc",
+    "spriteId": "lobo",
     "faction": "bestias"
   },
   "cobrador": {
