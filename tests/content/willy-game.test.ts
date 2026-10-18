@@ -22,6 +22,11 @@ describe('Willy: first playable', () => {
     expect(after.entities.willy!.tags).toContain('clase:funcionario');
     expect(after.entities.willy!.spriteId).toBe('willy-funcionario');
     expect(after.entities.willy!.position).toEqual(s.entities.willy!.position);
+    // Iker, the intern, joins next to him; a second casting swaps the companion.
+    expect(after.entities['companero-iker']).toMatchObject({ controllerId: 'player:1', factionId: 'concursantes' });
+    const again = applyCasting(after, { clase: 'socorrista', puntos: { agu: 3 } });
+    expect(again.entities['companero-iker']).toBeUndefined();
+    expect(again.entities['companero-neptuno']).toBeDefined();
   });
 
   it('the service lift takes Willy down to floor 1, and its stairs up to the next Camerino', () => {

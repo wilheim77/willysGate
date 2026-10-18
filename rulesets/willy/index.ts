@@ -19,8 +19,9 @@ import { d20Check, resolveRollMode } from '../common/d20';
 import { listActions, performAction, previewAction, setWillyRef } from './actions';
 import './more-classes';
 import './summons';
+import { syncCompanions } from './companions';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
-import { type Attr, CLASSES, allAbilityIds } from './data';
+import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
@@ -247,6 +248,8 @@ function onTurnEnd(ruleset: Ruleset, state: GameState, id: string, rng: RngCurso
 /** «Silencio absoluto» (Mimo): unnoticed when a fight starts. */
 function onCombatStart(ruleset: Ruleset, state: GameState, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
+  // Companions catch up with Willy's level, and the ones that fell on another map are back.
+  r.apply(...syncCompanions(state));
   for (const id of state.turn.order) {
     const e = state.entities[id];
     if (e && standing(e) && hasTrait(e, 'silencio')) r.apply({ type: 'applyCondition', entityId: id, condition: 'escondido' });
@@ -259,6 +262,11 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
   const r = new Resolver(ruleset, state, null as never);
   for (const e of Object.values(state.entities)) {
     if (!standing(e)) continue;
+    // «Pausa publicitaria»: makeup patches up Willy and his companion during the ads.
+    const vida = e.resources.vida;
+    if (vida && (hasTag(e, 'pc') || hasTag(e, 'companero')) && vida.current < vida.max) {
+      r.apply({ type: 'modifyResource', entityId: e.id, resource: 'vida', delta: Math.min(vida.max - vida.current, Math.ceil(vida.max * WILLY.pausaPublicitaria.vida)) });
+    }
     const en = e.resources.energia;
     if (en && en.current < en.max) r.apply({ type: 'modifyResource', entityId: e.id, resource: 'energia', delta: en.max - en.current });
     for (const c of ['cafe-tomado', 'corriendo', 'salto']) if (hasCondition(e, c)) r.apply({ type: 'removeCondition', entityId: e.id, condition: c });
@@ -323,6 +331,7 @@ setWillyRef(willy);
 export { ATTRS, ATTR_LABELS, createCreature, createWilly, defence, skillLevel, type CreatureSpec, type WillySpec } from './character';
 export { CLASSES } from './data';
 export { WILLY_CREATION, buildWilly, defaultCreation } from './creation';
+export { COMPANIONS, companionOfClass, companionStats, createCompanion, syncCompanions } from './companions';
 export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
 export { HANDLERS, areaTiles } from './actions';
