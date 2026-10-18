@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition } from '../engine';
+import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition, nextAiCommand } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -211,4 +211,8 @@ new Phaser.Game({
 });
 
 // Development-only handle for testing from the browser console (stripped from production builds).
-if (import.meta.env.DEV) Object.assign(window, { __game: { store, controller, engine } });
+// `nextAiCommand` lets tests/browser/smoke.ts drive combat ("play it with the AI for the
+// player") the same way GameController.scheduleAi already drives enemies, without
+// duplicating that decision logic in the test script. Bound to the running ruleset/state
+// so the script only ever needs to pass an entity id.
+if (import.meta.env.DEV) Object.assign(window, { __game: { store, controller, engine, nextAiCommand: (entityId: string) => nextAiCommand(engine.ruleset, store.state, entityId) } });
