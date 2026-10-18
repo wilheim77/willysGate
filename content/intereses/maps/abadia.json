@@ -10,8 +10,8 @@
  "tilewidth": 32,
  "tileheight": 32,
  "infinite": false,
- "nextlayerid": 9,
- "nextobjectid": 47,
+ "nextlayerid": 10,
+ "nextobjectid": 53,
  "properties": [
   {
    "name": "name",
@@ -402,6 +402,66 @@
     },
     {
      "id": 21,
+     "name": "sacks-1",
+     "type": "",
+     "point": true,
+     "x": 208,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 22,
+     "name": "sacks-2",
+     "type": "",
+     "point": true,
+     "x": 688,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 23,
+     "name": "tombstone-1",
+     "type": "",
+     "point": true,
+     "x": 400,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 24,
+     "name": "tombstone-2",
+     "type": "",
+     "point": true,
+     "x": 496,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 25,
+     "name": "barrel-2",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 400,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 26,
      "name": "barrel-1",
      "type": "",
      "point": true,
@@ -413,7 +473,7 @@
      "visible": true
     },
     {
-     "id": 22,
+     "id": 27,
      "name": "crate-3",
      "type": "",
      "point": true,
@@ -425,7 +485,7 @@
      "visible": true
     },
     {
-     "id": 23,
+     "id": 28,
      "name": "crate-4",
      "type": "",
      "point": true,
@@ -437,7 +497,7 @@
      "visible": true
     },
     {
-     "id": 24,
+     "id": 29,
      "name": "minero_cuadrilla-1",
      "type": "",
      "point": true,
@@ -461,7 +521,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 30,
      "name": "minero_cuadrilla-2",
      "type": "",
      "point": true,
@@ -485,7 +545,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 31,
      "name": "minero_cuadrilla-3",
      "type": "",
      "point": true,
@@ -509,7 +569,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 32,
      "name": "hulla-1",
      "type": "",
      "point": true,
@@ -538,7 +598,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 33,
      "name": "hulla-2",
      "type": "",
      "point": true,
@@ -567,7 +627,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 34,
      "name": "minero_cuadrilla-4",
      "type": "",
      "point": true,
@@ -586,7 +646,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 35,
      "name": "minero_cuadrilla-5",
      "type": "",
      "point": true,
@@ -605,7 +665,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 36,
      "name": "minero_cuadrilla-6",
      "type": "",
      "point": true,
@@ -624,7 +684,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 37,
      "name": "hulla-3",
      "type": "",
      "point": true,
@@ -643,7 +703,7 @@
      ]
     },
     {
-     "id": 33,
+     "id": 38,
      "name": "hulla-4",
      "type": "",
      "point": true,
@@ -662,7 +722,7 @@
      ]
     },
     {
-     "id": 34,
+     "id": 39,
      "name": "odda_noche",
      "type": "",
      "point": true,
@@ -693,7 +753,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 35,
+     "id": 40,
      "name": "brasero-sala-1",
      "type": "",
      "point": true,
@@ -732,7 +792,7 @@
      ]
     },
     {
-     "id": 36,
+     "id": 41,
      "name": "brasero-sala-2",
      "type": "",
      "point": true,
@@ -771,7 +831,7 @@
      ]
     },
     {
-     "id": 37,
+     "id": 42,
      "name": "antorcha-claustro-1",
      "type": "",
      "point": true,
@@ -810,7 +870,7 @@
      ]
     },
     {
-     "id": 38,
+     "id": 43,
      "name": "antorcha-claustro-2",
      "type": "",
      "point": true,
@@ -849,7 +909,7 @@
      ]
     },
     {
-     "id": 39,
+     "id": 44,
      "name": "antorcha-puerta-1",
      "type": "",
      "point": true,
@@ -888,7 +948,7 @@
      ]
     },
     {
-     "id": 40,
+     "id": 45,
      "name": "antorcha-puerta-2",
      "type": "",
      "point": true,
@@ -927,7 +987,7 @@
      ]
     },
     {
-     "id": 41,
+     "id": 46,
      "name": "vela-cripta",
      "type": "",
      "point": true,
@@ -978,7 +1038,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 42,
+     "id": 47,
      "name": "d1-asalto",
      "type": "",
      "x": 0,
@@ -1006,7 +1066,7 @@
      ]
     },
     {
-     "id": 43,
+     "id": 48,
      "name": "d1-defensa",
      "type": "",
      "x": 0,
@@ -1068,7 +1128,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 44,
+     "id": 49,
      "name": "a-plaza",
      "type": "",
      "x": 352,
@@ -1091,7 +1151,7 @@
      ]
     },
     {
-     "id": 45,
+     "id": 50,
      "name": "escalera-cripta",
      "type": "",
      "x": 832,
@@ -1127,6 +1187,29 @@
   },
   {
    "id": 8,
+   "name": "arenas",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 51,
+     "name": "d1-puerta-y-claustro",
+     "type": "",
+     "x": 0,
+     "y": 288,
+     "width": 896,
+     "height": 416,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 9,
    "name": "scenes",
    "type": "objectgroup",
    "draworder": "topdown",
@@ -1136,7 +1219,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 46,
+     "id": 52,
      "name": "audiencia",
      "type": "",
      "x": 384,
@@ -1172,10 +1255,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 59,
-   "columns": 59,
+   "tilecount": 64,
+   "columns": 64,
    "image": "terrain-logic.png",
-   "imagewidth": 1888,
+   "imagewidth": 2048,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -2027,6 +2110,11 @@
        "name": "height",
        "type": "int",
        "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
       }
      ]
     },
@@ -2082,6 +2170,91 @@
        "name": "height",
        "type": "int",
        "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "low_wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 60,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 63,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 4
       },
       {
        "name": "walkable",
