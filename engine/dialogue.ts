@@ -1,6 +1,7 @@
 import { type StartCombatCommand, applyOutcome, startCombat } from './combat';
 import { type BaseCommand, type CommandHandler, type CommandResult, type GameEvent, SYSTEM_ISSUER, fail, requireControlled } from './command-types';
 import { type Effect, applyEffects } from './effects';
+import type { ProgressionContent } from './progression';
 import { gridDistance } from './grid';
 import { itemCount } from './inventory';
 import { RngCursor } from './rng';
@@ -94,6 +95,8 @@ export interface EngineContent {
   dialogues: Record<string, DialogueTree>;
   /** Builders for the game's maps, by id, used the first time the party travels there. */
   maps?: Record<string, MapBuilder>;
+  /** Points needed per level for the party's shared progress (engine/progression.ts). */
+  progression?: ProgressionContent;
 }
 
 export const EMPTY_CONTENT: EngineContent = { dialogues: {} };

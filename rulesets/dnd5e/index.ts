@@ -23,7 +23,8 @@ import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onSurface, triggerTrap
 import { setDnd5eRef } from './ref';
 import { onRest } from './rest';
 import { profBonus, tagValues } from './character';
-import { MONSTER_ACTIONS, SPELLS } from './data';
+import { MONSTERS, MONSTER_ACTIONS, SPELLS } from './data';
+import { levelUpCharacter } from './creation';
 import { parseDice, rollDice, sum } from './dice';
 import { Resolver, canReact, chanceToSucceed, dealDamage, die, heal, resolveAttack, rollSave, spellDc, standing } from './resolve';
 import { d20Check, resolveRollMode } from '../common/d20';
@@ -104,6 +105,7 @@ const conditions: Record<string, ConditionDef> = {
 };
 
 const glossary: Record<string, GlossaryEntry> = {
+  xp: { label: 'PX (puntos de experiencia)', text: 'Lo que el grupo aprende por el camino. Se ganan venciendo a enemigos o resolviendo un conflicto sin pelear, y se comparten. Al llegar a la cifra indicada, todos suben de nivel.' },
   ac: { label: 'CA (clase de armadura)', text: 'Lo difícil que es acertarte. Un ataque acierta si el dado más sus bonificadores iguala o supera la CA.' },
   dc: { label: 'CD (clase de dificultad)', text: 'El número que hay que igualar o superar con el dado más tus bonificadores para que algo salga bien.' },
   advantage: { label: 'Ventaja', text: 'Tiras dos dados de 20 y te quedas con el mayor. Pasa al atacar desde arriba o contra alguien indefenso.' },
@@ -353,6 +355,14 @@ export const dnd5e: Ruleset = {
     Object.values(state.entities).filter((e) => e.tags.includes('explosive_oil') && (e.resources.hp?.current ?? 0) > 0 && Math.max(Math.abs(e.position.x - p.x), Math.abs(e.position.y - p.y)) <= 1).length * OIL_BLAST * 0.3,
   triggerTrap: (state, id, trap, rng) => triggerTrap(dnd5e, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { resources, conditions }),
+  progression: {
+    label: 'PX',
+    // Only class characters level; monsters keep their stat block.
+    levelOf: (e) => (e.tags.some((t) => t.startsWith('class:')) ? stat(e, 'level', 1) : null),
+    levelUp: (_state, e, level) => levelUpCharacter(e, level),
+    // SRD experience by challenge rating (monsters.json "xp"); scenery and characters give none.
+    rewardFor: (e) => (hasTag(e, 'object') ? 0 : (MONSTERS[tagValue(e, 'monster') ?? '']?.xp ?? 0)),
+  },
 };
 setDnd5eRef(dnd5e);
 

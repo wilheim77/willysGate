@@ -1,4 +1,4 @@
-import { type GameState, type Ruleset, inventoriesOf } from '../../engine';
+import { type GameState, type Ruleset, inventoriesOf, nextLevel, progressOf } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { GameDefinition } from '../game/definition';
 import { portrait } from './portraits';
@@ -48,6 +48,18 @@ export class CharacterSheet {
     const scrollTop = this.openId === id ? (this.root.querySelector('.body')?.scrollTop ?? 0) : 0;
     this.openId = id;
     const sheet = this.ruleset.describeEntity?.(state, id) ?? { sections: [] };
+    // The party's shared points: «PX 450 / 900» (current / next level), on every member's sheet.
+    const progression = this.ruleset.progression;
+    const content = this.game.levels?.progression;
+    const level = progression?.levelOf(e);
+    if (progression && content && level != null && e.controllerId === this.game.playerId) {
+      const next = nextLevel(content, level);
+      const points = progressOf(state);
+      const row = { label: progression.label, value: next ? `${points} / ${next.points}` : `${points} (${this.game.texts.combat?.maxLevel ?? 'nivel máximo'})`, term: 'xp' };
+      const first = sheet.sections[0];
+      if (first) sheet.sections = [{ ...first, rows: [...(first.rows ?? []), row] }, ...sheet.sections.slice(1)];
+      else sheet.sections = [{ title: progression.label, rows: [row] }];
+    }
     // The party's shared bag (and the character's own), shown on any party member's sheet.
     if (e.controllerId === this.game.playerId) {
       const bags = inventoriesOf(state);

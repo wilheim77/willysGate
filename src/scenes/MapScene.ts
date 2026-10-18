@@ -70,6 +70,8 @@ const EXPLORE_STEP_MS = 95;
 const BLOCKED_TINT = 0x8a8a8a;
 /** Longest any one event may animate before playback moves on regardless. */
 const EVENT_WATCHDOG_MS = 10_000;
+/** Longest the walk/animation counter may hold input before it is reset. */
+const BUSY_LIMIT_MS = 15_000;
 const TAP_SLOP = 8;
 /** Zoom limits and defaults are expressed as on-screen pixels per tile, whatever the art's tile size. */
 const MIN_TILE_PX = 24;
@@ -431,8 +433,20 @@ export class MapScene extends Phaser.Scene {
 
   /** True while events are animating; input and AI wait for it. */
   get busy(): boolean {
-    return this.playing || this.animating > 0;
+    const busy = this.playing || this.animating > 0;
+    // Last line of defence: nothing legitimately animates for this long. If it seems to, some
+    // promise never settled; let the player act again rather than freeze the fight.
+    if (!busy) this.busySince = 0;
+    else if (!this.busySince) this.busySince = Date.now();
+    else if (Date.now() - this.busySince > BUSY_LIMIT_MS) {
+      console.warn('busy for too long; releasing input', { playing: this.playing, animating: this.animating });
+      this.animating = 0;
+      this.busySince = 0;
+      return this.playing;
+    }
+    return busy;
   }
+  private busySince = 0;
 
   /** Plays queued engine events one after another, then resyncs every sprite with the state. */
   private async playQueue(): Promise<void> {
@@ -1436,10 +1450,29 @@ export class MapScene extends Phaser.Scene {
 
     // A gesture lasts from the first finger down to the last finger up. It only counts as a tap
     // (move order) if it stayed a single, still pointer the whole time: pinches and drags never move.
-    const downPointers = () => this.input.manager.pointers.filter((ptr) => ptr.isDown);
+    // Fingers currently on the map, tracked by us: Phaser's own `isDown` can stay stuck when a
+    // touch ends over the HTML HUD, is cancelled, or the tab loses focus. A stuck "finger" made
+    // every later tap count as a pinch, so the map ignored all taps (playtest: "can't move or
+    // select enemies" mid-fight while the buttons still worked).
+    const downIds = new Set<number>();
+    const downPointers = () => this.input.manager.pointers.filter((ptr) => ptr.isDown && downIds.has(ptr.id));
+    const release = (p: Phaser.Input.Pointer) => downIds.delete(p.id);
+    const releaseAll = () => downIds.clear();
+    for (const type of ['pointerup', 'pointercancel', 'touchend', 'touchcancel'] as const) {
+      window.addEventListener(type, (ev) => {
+        // A touch list tells us exactly how many fingers remain; otherwise only clear when no button is held.
+        const remaining = 'touches' in ev ? (ev as TouchEvent).touches.length : (ev as PointerEvent).buttons ? 1 : 0;
+        if (remaining === 0) releaseAll();
+      });
+    }
+    window.addEventListener('blur', releaseAll);
+    document.addEventListener('visibilitychange', releaseAll);
+    this.input.on('pointerupoutside', release);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, releaseAll);
     let gestureIsTap = false;
 
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
+      downIds.add(p.id);
       const down = downPointers();
       if (down.length === 1) {
         gestureIsTap = true;
@@ -1465,7 +1498,7 @@ export class MapScene extends Phaser.Scene {
       }
       this.pinchDistance = null;
 
-      if (p.isDown) {
+      if (p.isDown && downIds.has(p.id)) {
         // After a pinch, the remaining finger restarts the pan from where it is (no jump).
         this.dragStart ??= { x: p.x, y: p.y, scrollX: cam.scrollX, scrollY: cam.scrollY };
         const dx = p.x - this.dragStart.x;
@@ -1484,6 +1517,7 @@ export class MapScene extends Phaser.Scene {
     });
 
     this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
+      release(p);
       this.pinchDistance = null;
       if (downPointers().length > 0) {
         // One finger of a pinch lifted; the other may keep panning.

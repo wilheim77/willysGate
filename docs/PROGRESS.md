@@ -168,6 +168,16 @@ Hay dos líneas en paralelo. Cada agente sigue su lista en orden y sube su rama 
 - **QA:** el arnés de partida completa de Willy, que activa cada comprobación cuando llega su rama.
 - **Revisor:** primero la revisión 11, una partida real de Intereses en el navegador, luego revisar cada rama al integrarla.
 
+## Progresión por experiencia (2026-10-18, agente de progresión, rama `progresion`)
+
+- [x] El nivel sale de la experiencia y lo aplica el **motor** tras cada comando (antes lo decidía el cliente con marcas de historia, y QA jugaba todo el acto a nivel 3). Ver `DESIGN.md`, «Progresión por experiencia».
+- [x] Intereses: de nivel 3 a 5. Umbrales de grupo: nivel 4 a 1000 PX (tras el callejón) y nivel 5 a 1500 (tras los Sinpaga, antes de D1 y la mina).
+- [x] PX por hablar en los conflictos que se resuelven sin pelea (mineros, juicio, Sinpaga, tregua de D1) y por resolver D2.
+- [x] Ficha: «PX actual / siguiente nivel». Registro: PX ganados y subidas.
+- [x] Arreglado: Cirilo en las calles reabría el juicio (se podía volver a pagar por Anselmo).
+- [ ] **Pendiente (equilibrio):** sin descansos, el jefe a nivel 5 tumba a veces al grupo del arnés (sobre todo sin Garrán). La matriz lo avisa sin fallar hasta que lleguen los descansos (`onRest`, agente de mapas).
+- [ ] **Pendiente (mapas):** en D1, los guardias del asalto siguen `noncombatant` y el combate de la zona `d1-asalto` no empieza. El arnés no recorre las zonas de combate (callejón, andamios, barranco), así que cobra menos PX que un jugador.
+
 ## Planificado para más adelante
 
 - **Efectos y ambiente** (2026-10-17): ver `DESIGN.md` → «Efectos y ambiente».

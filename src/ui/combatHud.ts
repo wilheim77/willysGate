@@ -293,6 +293,12 @@ export class CombatHud {
         case 'combatStarted':
           this.lines = [];
           break;
+        case 'progressGained':
+          this.push(`El grupo gana ${e.amount} ${this.game.ruleset.progression?.label ?? 'puntos'} (${e.total}).`);
+          break;
+        case 'leveledUp':
+          this.push(`${(e.entityIds as string[]).map(name).join(', ')}: nivel ${e.level}.`);
+          break;
       }
     }
     this.renderLog();

@@ -22,7 +22,7 @@ import { setupBarks } from './ui/barks';
 document.title = game.title;
 applyTheme(game.theme);
 
-const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {}, maps: game.maps ?? {} });
+const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {}, maps: game.maps ?? {}, ...(game.levels ? { progression: game.levels.progression } : {}) });
 const startMap = new URLSearchParams(location.search).get('mapa') ?? undefined;
 const store = new GameStore(engine, game.newGame(engine, randomSeed(), startMap ? { start: startMap } : undefined));
 const hud = new Hud(store, game);

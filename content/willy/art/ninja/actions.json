@@ -2,33 +2,274 @@
   "$comment": "Action animations derived from each sprite's idle frame by scripts/art/build-action-anims.ts (run after the sprite builders): attack (4 frames: wind-up, strike with a smear of the given kind, follow-through, recover), cast (4 frames, glow and rim light in the given colour) and hurt (2 frames: white flash, red flinch). Every frame of these sprites moves to assets/ninja/actors.png.",
   "output": "actors.png",
   "sprites": {
-    "willy-butanero": { "attack": "blunt", "cast": "#ff8030" },
-    "willy-influencer": { "attack": "thrust", "cast": "#ff4fa0" },
-    "willy-bardo-de-verbena": { "attack": "blunt", "cast": "#ffe04f" },
-    "willy-socorrista": { "attack": "thrust", "cast": "#ff4040" },
-    "willy-tasador": { "attack": "blunt", "cast": "#e0c060" },
-    "willy-mimo": { "attack": "thrust", "cast": "#f4f4f4" },
-    "willy-ingeniero": { "attack": "thrust", "cast": "#4fe8ff" },
-    "willy-funcionario": { "attack": "blunt", "cast": "#a8c0e0" },
-    "willy-jugador-de-basket": { "attack": "blunt", "cast": "#ff8030" },
-    "companero-jonatan": { "attack": "blunt", "cast": "#ff8030" },
-    "companero-kevin": { "attack": "thrust", "cast": "#80d8ff" },
-    "companero-loli": { "attack": "blunt", "cast": "#ff80d0" },
-    "companero-neptuno": { "attack": "thrust", "cast": "#ff7a1a" },
-    "companero-rosario": { "attack": "blunt", "cast": "#e0c060" },
-    "companero-plata": { "attack": "thrust", "cast": "#d8dce4" },
-    "companero-tornillo": { "attack": "thrust", "cast": "#4fe8ff" },
-    "companero-iker": { "attack": "blunt", "cast": "#a8c0e0" },
-    "chencho-el-base": { "attack": "blunt", "cast": "#ff8030" },
-    "gaviota-de-lonja": { "attack": "thrust" },
-    "rata-portuaria": { "attack": "thrust" },
-    "cangrejo-con-casco": { "attack": "slash" },
-    "bocarte-andante": { "attack": "thrust" },
-    "mimico": { "attack": "slash" },
-    "jefe-centollo": { "attack": "slash", "cast": "#ff6040" },
-    "jefe-encargada": { "attack": "blunt", "cast": "#ffe04f" },
-    "jefe-giganton": { "attack": "blunt", "cast": "#ff4fa0" },
-    "jefe-socorrista": { "attack": "thrust", "cast": "#ff4040" },
-    "jefe-presentador": { "attack": "slash", "cast": "#ff3040" }
+    "willy-butanero": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "willy-influencer": {
+      "attack": "thrust",
+      "cast": "#ff4fa0"
+    },
+    "willy-bardo-de-verbena": {
+      "attack": "blunt",
+      "cast": "#ffe04f"
+    },
+    "willy-socorrista": {
+      "attack": "thrust",
+      "cast": "#ff4040"
+    },
+    "willy-tasador": {
+      "attack": "blunt",
+      "cast": "#e0c060"
+    },
+    "willy-mimo": {
+      "attack": "thrust",
+      "cast": "#f4f4f4"
+    },
+    "willy-ingeniero": {
+      "attack": "thrust",
+      "cast": "#4fe8ff"
+    },
+    "willy-funcionario": {
+      "attack": "blunt",
+      "cast": "#a8c0e0"
+    },
+    "willy-jugador-de-basket": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "companero-jonatan": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "companero-kevin": {
+      "attack": "thrust",
+      "cast": "#80d8ff"
+    },
+    "companero-loli": {
+      "attack": "blunt",
+      "cast": "#ff80d0"
+    },
+    "companero-neptuno": {
+      "attack": "thrust",
+      "cast": "#ff7a1a"
+    },
+    "companero-rosario": {
+      "attack": "blunt",
+      "cast": "#e0c060"
+    },
+    "companero-plata": {
+      "attack": "thrust",
+      "cast": "#d8dce4"
+    },
+    "companero-tornillo": {
+      "attack": "thrust",
+      "cast": "#4fe8ff"
+    },
+    "companero-iker": {
+      "attack": "blunt",
+      "cast": "#a8c0e0"
+    },
+    "chencho-el-base": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "gaviota-de-lonja": {
+      "attack": "thrust"
+    },
+    "rata-portuaria": {
+      "attack": "thrust"
+    },
+    "cangrejo-con-casco": {
+      "attack": "slash"
+    },
+    "bocarte-andante": {
+      "attack": "thrust"
+    },
+    "mimico": {
+      "attack": "slash"
+    },
+    "jefe-centollo": {
+      "attack": "slash",
+      "cast": "#ff6040"
+    },
+    "jefe-encargada": {
+      "attack": "blunt",
+      "cast": "#ffe04f"
+    },
+    "jefe-giganton": {
+      "attack": "blunt",
+      "cast": "#ff4fa0"
+    },
+    "jefe-socorrista": {
+      "attack": "thrust",
+      "cast": "#ff4040"
+    },
+    "jefe-presentador": {
+      "attack": "slash",
+      "cast": "#ff3040"
+    },
+    "percebeiro-ahogado": {
+      "attack": "thrust",
+      "cast": "#3a7a40"
+    },
+    "percebeiro-ahogado--elite": {
+      "attack": "thrust",
+      "cast": "#3a7a40"
+    },
+    "dependienta-de-perfumeria": {
+      "attack": "thrust",
+      "cast": "#ff80d0"
+    },
+    "dependienta-de-perfumeria--elite": {
+      "attack": "thrust",
+      "cast": "#ff80d0"
+    },
+    "encargado-de-seccion": {
+      "attack": "blunt",
+      "cast": "#40e060"
+    },
+    "encargado-de-seccion--elite": {
+      "attack": "blunt",
+      "cast": "#40e060"
+    },
+    "guardia-de-seguridad": {
+      "attack": "blunt"
+    },
+    "guardia-de-seguridad--elite": {
+      "attack": "blunt"
+    },
+    "tirador-de-feria": {
+      "attack": "thrust",
+      "cast": "#ffe04f"
+    },
+    "tirador-de-feria--elite": {
+      "attack": "thrust",
+      "cast": "#ffe04f"
+    },
+    "abuela-del-bingo": {
+      "attack": "blunt",
+      "cast": "#e0302a"
+    },
+    "abuela-del-bingo--elite": {
+      "attack": "blunt",
+      "cast": "#e0302a"
+    },
+    "dj-de-la-carpa": {
+      "attack": "blunt",
+      "cast": "#ff4fa0"
+    },
+    "dj-de-la-carpa--elite": {
+      "attack": "blunt",
+      "cast": "#ff4fa0"
+    },
+    "bailarin-de-la-carpa": {
+      "attack": "slash"
+    },
+    "bailarin-de-la-carpa--elite": {
+      "attack": "slash"
+    },
+    "masajista-implacable": {
+      "attack": "blunt"
+    },
+    "masajista-implacable--elite": {
+      "attack": "blunt"
+    },
+    "terapeuta-de-lodos": {
+      "attack": "blunt",
+      "cast": "#8a6a3a"
+    },
+    "terapeuta-de-lodos--elite": {
+      "attack": "blunt",
+      "cast": "#8a6a3a"
+    },
+    "presentador-suplente": {
+      "attack": "slash",
+      "cast": "#b45cff"
+    },
+    "presentador-suplente--elite": {
+      "attack": "slash",
+      "cast": "#b45cff"
+    },
+    "maquilladora": {
+      "attack": "thrust",
+      "cast": "#ffc0d8"
+    },
+    "maquilladora--elite": {
+      "attack": "thrust",
+      "cast": "#ffc0d8"
+    },
+    "productor-ejecutivo": {
+      "attack": "thrust",
+      "cast": "#4fe8ff"
+    },
+    "productor-ejecutivo--elite": {
+      "attack": "thrust",
+      "cast": "#4fe8ff"
+    },
+    "pulpo-de-bajura": {
+      "attack": "slash",
+      "cast": "#a050c0"
+    },
+    "pulpo-de-bajura--elite": {
+      "attack": "slash",
+      "cast": "#a050c0"
+    },
+    "anguila-electrica": {
+      "attack": "thrust",
+      "cast": "#ffe04f"
+    },
+    "anguila-electrica--elite": {
+      "attack": "thrust",
+      "cast": "#ffe04f"
+    },
+    "lata-de-bonito": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "lata-de-bonito--elite": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "lata-de-fabada": {
+      "attack": "blunt",
+      "cast": "#7ad040"
+    },
+    "lata-de-fabada--elite": {
+      "attack": "blunt",
+      "cast": "#7ad040"
+    },
+    "petardo-andante": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "petardo-andante--elite": {
+      "attack": "blunt",
+      "cast": "#ff8030"
+    },
+    "nube-de-vapor": {
+      "attack": "blunt",
+      "cast": "#f4f8fa"
+    },
+    "nube-de-vapor--elite": {
+      "attack": "blunt",
+      "cast": "#f4f8fa"
+    },
+    "pastilla-efervescente": {
+      "attack": "blunt",
+      "cast": "#a8d8f0"
+    },
+    "pastilla-efervescente--elite": {
+      "attack": "blunt",
+      "cast": "#a8d8f0"
+    },
+    "foco-andante": {
+      "attack": "thrust",
+      "cast": "#fff4c0"
+    },
+    "foco-andante--elite": {
+      "attack": "thrust",
+      "cast": "#fff4c0"
+    }
   }
 }

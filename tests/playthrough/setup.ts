@@ -26,6 +26,7 @@ import puertaAlmacen from '../../content/intereses/dialogues/puerta_almacen.json
 import palancaAlmacen from '../../content/intereses/dialogues/palanca_almacen.json';
 import testMap from '../../content/intereses/maps/test.json';
 import manifest from '../../content/intereses/assets/0x72.json';
+import levelups from '../../content/intereses/levelups.json';
 
 /**
  * Rebuilds the Intereses world from the SAME content/intereses/world.ts (buildMap) that
@@ -59,7 +60,8 @@ export const LEGACY_TEST_DIALOGUE_IDS = new Set(['viejo_minero', 'cofre_prueba',
 
 export function makeEngine(): Engine {
   const dialogues = loadDialogues();
-  return createEngine(dnd5e, 'qa', { dialogues, maps: Object.fromEntries(ACT_MAP_IDS.map((id) => [id, () => buildMap(id, dialogues)])) });
+  // Same thresholds as content/intereses/game.ts: the engine levels the party by itself.
+  return createEngine(dnd5e, 'qa', { dialogues, maps: Object.fromEntries(ACT_MAP_IDS.map((id) => [id, () => buildMap(id, dialogues)])), progression: { thresholds: levelups.thresholds } });
 }
 
 const LANTERN = { id: 'lantern', attachedTo: 'hero', radius: 4, intensity: 0.85, color: '#ffcf8a', flicker: 0.08 };

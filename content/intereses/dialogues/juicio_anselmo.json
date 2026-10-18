@@ -521,6 +521,11 @@
           "addTags": [
             "dialogue:cirilo"
           ]
+        },
+        {
+          "type": "gainProgress",
+          "amount": 500,
+          "id": "juicio"
         }
       ],
       "next": "gracias"
@@ -569,6 +574,11 @@
           "addTags": [
             "dialogue:cirilo"
           ]
+        },
+        {
+          "type": "gainProgress",
+          "amount": 500,
+          "id": "juicio"
         }
       ],
       "next": "gracias"
