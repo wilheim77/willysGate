@@ -2,6 +2,7 @@ import { assetUrl } from '../assets/manifest';
 import type { GameDefinition } from '../game/definition';
 import { SaveSlots } from '../game/saves';
 import type { GameStore } from '../game/store';
+import { CreditsScreen } from './creditsScreen';
 
 /**
  * The first thing on screen: the game's key art, "Nueva partida" and, if there is a save,
@@ -9,12 +10,15 @@ import type { GameStore } from '../game/store';
  */
 export class TitleScreen {
   private root = document.querySelector<HTMLElement>('#title')!;
+  private credits: CreditsScreen;
 
   constructor(
     private store: GameStore,
     private game: GameDefinition,
     private onNewGame: () => void,
-  ) {}
+  ) {
+    this.credits = new CreditsScreen(game);
+  }
 
   open(): void {
     const t = this.game.texts.ui as Record<string, string>;
@@ -57,6 +61,10 @@ export class TitleScreen {
       this.onNewGame();
     });
     buttons.append(fresh);
+    const credits = document.createElement('button');
+    credits.textContent = t.credits ?? 'Créditos';
+    credits.addEventListener('click', () => this.credits.open());
+    buttons.append(credits);
     panel.append(buttons);
     this.root.replaceChildren(panel);
     this.root.hidden = false;

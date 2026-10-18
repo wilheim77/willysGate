@@ -109,8 +109,9 @@ export function gainMultiplier(state: GameState): number {
 }
 
 export function isHardcore(state: GameState): boolean {
-  const run = state.systems.run as unknown as { modoEliminacion?: string } | undefined;
-  return run?.modoEliminacion === 'sinRepeticion' || state.flags.modoEliminacion === 'sinRepeticion';
+  // DESIGN.md §12: chosen when the season starts (the meta systems store it in state.settings).
+  const settings = (state as unknown as { settings?: { eliminationMode?: string } }).settings;
+  return settings?.eliminationMode === 'sinRepeticion';
 }
 
 /** Spectacular moments: the novelty key of a gain (rule + cause or object). */
@@ -214,9 +215,11 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
         if (!acted) {
           lost += -lose(r, a, ruleLoss('esperar'), 'esperar');
           views.push({ evento: 'turnEnded', entityId: WILLY_ID, esperar: true });
+          r.emit({ type: 'turnEnded', entityId: WILLY_ID, esperar: true } as unknown as WillyEvent);
         } else if (!a.turnoWilly.interesante) {
           lost += -lose(r, a, ruleLoss('turno-soso'), 'turno-soso');
           views.push({ evento: 'turnEnded', entityId: WILLY_ID, sinEfecto: true });
+          r.emit({ type: 'turnEnded', entityId: WILLY_ID, sinEfecto: true } as unknown as WillyEvent);
         }
         a.turnoWilly = { activo: false, actuo: false, interesante: false };
       }
@@ -300,8 +303,9 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
   // Leaving the planta's second floor: the end-of-planta bonus box.
   for (const v of views) {
     if (v.evento !== 'floorExited') continue;
-    const planta = currentPlanta(r.state);
-    if (a.primas.includes(planta) || !isLastFloorOfPlanta(r.state)) continue;
+    const piso = showConfig()!.pisos.find((p) => p.id === Number(v.planta));
+    const planta = piso?.planta ?? currentPlanta(r.state);
+    if (a.primas.includes(planta) || (piso ? piso.parte < 2 : !isLastFloorOfPlanta(r.state))) continue;
     a.primas.push(planta);
     const prima = [...cfg.prima].reverse().find((p) => a.valor >= p.audienciaMin);
     if (prima) {

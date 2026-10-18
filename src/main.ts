@@ -15,8 +15,10 @@ import { CreationScreen } from './ui/creationScreen';
 import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
+import { setupClockHud } from './ui/clockHud';
 import { setupTutorial } from './ui/tutorialToasts';
 import { setupBarks } from './ui/barks';
+import { setupShowHud } from './ui/showHud';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
 document.title = game.title;
@@ -31,6 +33,7 @@ const audio = setupAudio(store, game);
 mountAudioControls(document.querySelector('.hud-top nav')!, audio);
 attachUiSfx(audio);
 setupTutorial(store, game);
+setupClockHud(store);
 const combatHud = new CombatHud(game);
 const controller = new GameController(store, game, combatHud);
 
@@ -322,6 +325,9 @@ if (game.objectives?.length) {
   });
 }
 
+// Game-specific counters, bubbles and panel (Willy's audience and sponsors).
+setupShowHud(store, game, (code) => hud.sayError(code));
+
 const creation = new CreationScreen(store, game);
 hud.onNewGame = () => creation.open();
 // The title screen first; a new game goes on to character creation.
@@ -337,6 +343,7 @@ const scene = new MapScene(
     onTileHovered: (tile) => hud.showTile(tile),
     onTileSelected: (tile, entityId) => controller.onTileSelected(tile, entityId),
     onIdle: () => controller.onIdle(),
+    ...(game.hud?.float ? { floatFor: (e: Parameters<NonNullable<typeof game.hud.float>>[0], st: Parameters<NonNullable<typeof game.hud.float>>[1]) => game.hud!.float!(e, st) } : {}),
   },
   {
     miss: combat.miss ?? 'Fallo',
@@ -353,7 +360,9 @@ const scene = new MapScene(
     trapTriggered: combat.trapTriggered ?? '¡Trampa!',
     trapDisarmed: combat.trapDisarmed ?? 'Desactivada',
     trapDisarmFailed: combat.trapDisarmFailed ?? 'No hay manera',
+    eliminated: combat.eliminated ?? '¡ELIMINADO!',
   },
+  game.onDeath ?? 'corpse',
 );
 controller.scene = scene;
 

@@ -60,6 +60,8 @@ export interface WillyTraits {
   desventaja: { id: string; nombre: string; texto: string };
   /** Health back at the end of each fight, as a share of the maximum (balance lever). */
   pausaPublicitaria: { vida: number };
+  /** Health back while exploring: `vida` of the maximum every `pasos` tiles; `camerino` of what is missing on arrival there. */
+  regeneracion: { pasos: number; vida: number; camerino: number };
 }
 export const WILLY = willyJson as unknown as WillyTraits;
 

@@ -127,7 +127,9 @@ export function syncCompanions(state: GameState): Effect[] {
       // Back in play as if summoned: despawn and spawn again, so a fight in progress gives it a turn.
       const back: Entity = {
         ...e,
-        conditions: e.conditions.filter((x) => x.id !== 'eliminado'),
+        // Strip both 'eliminado' (Willy's own) and 'dead' (applied alongside it in resolve.ts's
+        // defeat(), for the generic client's corpse/vanish handling) so the sprite comes back.
+        conditions: e.conditions.filter((x) => x.id !== 'eliminado' && x.id !== 'dead'),
         resources: { ...e.resources, vida: { ...vida, current: Math.ceil(vida.max / 2) } },
         tags: e.tags.filter((t) => t !== fell),
       };

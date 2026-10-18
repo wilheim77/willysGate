@@ -34,6 +34,7 @@
     "azulejo": { "top": ["azulejo_1", "azulejo_2"], "face": "balneario_pared", "stair": "escalon_baldosa" },
     "piscina": { "top": ["piscina_1", "piscina_2"], "face": "balneario_pared" },
     "hielo-balneario": { "top": ["hielo_1", "hielo_2"], "face": "balneario_pared", "stair": "escalon_baldosa" },
-    "muro-balneario": { "top": ["nieve_techo_1", "nieve_techo_2"], "face": "balneario_pared" }
+    "muro-balneario": { "top": ["nieve_techo_1", "nieve_techo_2"], "face": "balneario_pared" },
+    "hundido": { "top": ["hundido_1", "hundido_2"], "face": "hundido_cara" }
   }
 }

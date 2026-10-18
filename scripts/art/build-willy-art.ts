@@ -408,6 +408,8 @@ const tiles: [string, Image][] = [
   ['piscina_1', show.poolWater(0)], ['piscina_2', show.poolWater(3)],
   ['hielo_1', show.icyTiles(123)], ['hielo_2', show.icyTiles(124)],
   ['nieve_techo_1', show.snowTop(125)], ['nieve_techo_2', show.snowTop(126)], ['balneario_pared', show.spaWall()],
+  // Floor-collapse clock (every floor): the sunken pit left once a room falls.
+  ['hundido_1', show.sunkenPit(991)], ['hundido_2', show.sunkenPit(992)], ['hundido_cara', show.sunkenPitFace()],
 ];
 type Anchor = 'wall' | 'floor' | 'centre';
 const props: Record<string, { frames: Image[]; fps: number; loop: boolean; anchor: Anchor; light?: string }> = {
@@ -442,6 +444,27 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'fx-chispazo': { frames: [0, 1, 2, 3, 4].map(show.zapImpact), fps: 16, loop: false, anchor: 'centre', light: '#4fe8ff' },
   // Golden ring drawn under elite enemies (the sprite is the <id>--elite recolour).
   'aura-elite': { frames: [0, 1, 2, 3].map(show.eliteAura), fps: 8, loop: true, anchor: 'floor', light: '#ffc440' },
+  // Floor-collapse clock
+  'fx-polvo-derrumbe': { frames: [0, 1, 2, 3, 4, 5].map(show.collapseDust), fps: 10, loop: false, anchor: 'floor' },
+  'fx-cascotes': { frames: [0, 1, 2, 3, 4].map(show.fallingRubble), fps: 10, loop: false, anchor: 'floor' },
+  // Ability FX of the 21 new floor enemies (content/willy/art/ninja/fx.json)
+  'fx-tentaculo': { frames: [0, 1, 2].map(show.tentacleLash), fps: 10, loop: false, anchor: 'centre' },
+  'fx-percebe': { frames: [0, 1, 2].map(show.barnacleShot), fps: 10, loop: false, anchor: 'centre' },
+  'fx-chispa-mini': { frames: [0, 1, 2].map(show.eelZapBead), fps: 14, loop: true, anchor: 'centre' },
+  'fx-descarga-charco': { frames: [0, 1, 2, 3].map(show.puddleShock), fps: 10, loop: false, anchor: 'floor', light: '#4fe8ff' },
+  'fx-a-reponer': { frames: [0, 1, 2, 3].map(show.restockRing), fps: 10, loop: false, anchor: 'floor' },
+  'fx-placaje': { frames: [0, 1, 2].map(show.tackleHit), fps: 12, loop: false, anchor: 'centre' },
+  'fx-corcho': { frames: [0, 1, 2].map(show.corkShot), fps: 10, loop: false, anchor: 'centre' },
+  'fx-linea-bingo': { frames: [0, 1, 2, 3].map(show.bingoShout), fps: 10, loop: false, anchor: 'floor' },
+  'fx-bajo-carpa': { frames: [0, 1, 2, 3].map(show.bassThump), fps: 10, loop: false, anchor: 'floor' },
+  'fx-llave': { frames: [0, 1, 2].map(show.lockHold), fps: 12, loop: false, anchor: 'centre' },
+  'fx-lodo-curativo': { frames: [0, 1, 2, 3].map(show.mudHeal), fps: 8, loop: false, anchor: 'floor' },
+  'fx-barro-cara': { frames: [0, 1, 2].map(show.mudSlap), fps: 10, loop: false, anchor: 'centre' },
+  'fx-pregunta-trampa': { frames: [0, 1, 2].map(show.trickQuestion), fps: 8, loop: false, anchor: 'centre' },
+  'fx-retoque': { frames: [0, 1, 2, 3].map(show.makeupPuff), fps: 10, loop: false, anchor: 'floor' },
+  'fx-claqueta-llamada': { frames: [0, 1, 2].map(show.clapperCall), fps: 12, loop: false, anchor: 'centre' },
+  'fx-foco-cegador': { frames: [0, 1, 2].map(show.blindingCone), fps: 8, loop: false, anchor: 'centre', light: '#ffffff' },
+  'fx-nube-colonia': { frames: [0, 1, 2].map(show.perfumeCloud), fps: 8, loop: false, anchor: 'centre' },
   // Exit markers (same ids as Intereses, so the client needs no per-game names).
   exit_open: { frames: [0, 1, 2, 3].map((f) => markers.exitOpen(f, '#4fe8ff', '#2a8aa8')), fps: 6, loop: true, anchor: 'centre', light: '#4fe8ff' },
   exit_closed: { frames: [markers.exitClosed()], fps: 0, loop: false, anchor: 'centre' },
@@ -471,6 +494,8 @@ const surfaces: Record<string, { frames: Image[]; fps: number; loop: boolean }> 
   red: { frames: [show.net()], fps: 0, loop: false },
   expedientes: { frames: [show.expedientes(null)], fps: 0, loop: false },
   'expedientes-ardiendo': { frames: [0, 1, 2, 3].map((f) => show.expedientes(f)), fps: 8, loop: true },
+  // Floor-collapse clock: cracks during the 1-round warning before a room falls.
+  grieta: { frames: [0, 1, 2].map(show.crackedFloor), fps: 4, loop: true },
 };
 /** Objects (manifest 'sprites', kind 'frames'): idle (+ broken). */
 const objects: Record<string, Record<string, Image[]>> = {

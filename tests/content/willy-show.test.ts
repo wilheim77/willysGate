@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { type BaseCommand, type GameEvent, type GameState, type JsonValue, OBJECT_TAG, RngCursor, SYSTEM_ISSUER, hasCondition } from '../../engine';
 import { willy } from '../../rulesets/willy';
 import { Resolver, dealDamage } from '../../rulesets/willy/resolve';
-import { audienceOf, shareOf, showAfterCommand, sponsorsOf } from '../../rulesets/willy/show';
+import { audienceOf, shareOf, showAfterCommand, showLateAfterCommand, sponsorsOf } from '../../rulesets/willy/show';
 import '../../content/willy/show';
 import { W, engine, game, rat, until } from '../rulesets/willy-helpers';
 
@@ -66,8 +66,18 @@ describe('Willy show: audience', () => {
     s = withSystem(s, 'audiencia', { ...freshish(), valor: 4000 });
     const { state, events } = pushIntoVoid(s);
     expect(of(events, 'audienceMilestone')).toEqual([expect.objectContaining({ espectadores: 5000, caja: 'bronce' })]);
-    expect(of(events, 'boxDelivered')).toEqual([expect.objectContaining({ caja: 'bronce', origen: 'hito:5000' })]);
+    expect(of(events, 'boxDelivered')).toEqual([expect.objectContaining({ caja: 'bronce', motivo: 'hito:5000', origen: 'audiencia' })]);
     expect(audienceOf(state)!.hitos).toEqual([5000]);
+  });
+});
+
+describe('Willy show: other systems', () => {
+  it('an achievement unlocked in the same command gives audience (late pass, after the achievements)', () => {
+    const s = game([W('willy', 'butanero', 1, 0)]);
+    const out = showLateAfterCommand(willy, s, [{ type: 'achievementUnlocked', logroId: 'x', logro: 'X' } as GameEvent], new RngCursor(s.rng));
+    expect(of(out.events, 'audienceChanged')[0]).toMatchObject({ causa: 'logro' });
+    // The main pass leaves it alone (no double count).
+    expect(of(showAfterCommand(willy, s, [{ type: 'achievementUnlocked', logroId: 'x' } as GameEvent], new RngCursor(s.rng)).events, 'audienceChanged')).toHaveLength(0);
   });
 });
 

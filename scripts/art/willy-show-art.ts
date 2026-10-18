@@ -998,3 +998,242 @@ export function zapImpact(frame: number): Image {
   for (let i = 0; i < 3; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), '#4fe8ff');
   return img;
 }
+
+// --- Floor-collapse clock (derrumbe): warning cracks, the sunken pit, dust and falling debris ---
+
+/**
+ * Cracks spreading across the floor during the 1-round warning before a room falls (`grieta`
+ * surface, over any terrain). Dark fissures from an off-centre point with a pulsing amber glow
+ * so it reads as a hazard rather than a stain, even over busy floors. 3 frames, looping.
+ */
+export function crackedFloor(frame: number): Image {
+  const img = blank(T, T);
+  const glowA = [140, 255, 190][frame % 3]!;
+  const segs: [number, number, number, number][] = [
+    [6, 5, 1, 1], [6, 5, 13, 2], [6, 5, 3, 13], [6, 5, 14, 9], [6, 5, 9, 14],
+  ];
+  // A wide amber glow under the cracks (thick and semi-transparent) so it reads at a glance,
+  // then an opaque near-black crack line on top for contrast over any floor colour.
+  for (const [x0, y0, x1, y1] of segs) {
+    for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [-1, 0], [0, -1]] as const) line(img, x0 + dx, y0 + dy, x1 + dx, y1 + dy, '#ff9a40', Math.round(glowA * 0.55));
+    line(img, x0, y0, x1, y1, '#0c080a', 255);
+    line(img, x0 + 1, y0, x1 + 1, y1, '#0c080a', 170);
+  }
+  // Short secondary hairline cracks off the main ones.
+  const r = rng(960);
+  for (const [x0, y0, x1, y1] of segs) {
+    const t = 0.35 + r() * 0.35, mx = x0 + (x1 - x0) * t, my = y0 + (y1 - y0) * t;
+    const ang = Math.atan2(y1 - y0, x1 - x0) + (r() < 0.5 ? 1 : -1) * 1.1;
+    line(img, mx, my, mx + Math.cos(ang) * 2.5, my + Math.sin(ang) * 2.5, '#0c080a', 220);
+  }
+  disc(img, 6, 5, 1.4, '#ffe6b0', glowA);
+  return img;
+}
+
+/** Sunken rubble pit left where a room collapsed (`hundido` top, 16x16): unwalkable. 2 variants. */
+export function sunkenPit(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  fill(img, 0, 0, T, T, '#1c1418');
+  // Jagged broken rim catching a little light at the top edge, like a hole punched in the floor.
+  for (let x = 0; x < T; x++) {
+    const h = 1 + Math.floor(r() * 2);
+    for (let y = 0; y < h; y++) px(img, x, y, y === 0 ? '#6a564e' : '#3a2c2e');
+  }
+  // Big broken slabs tipped into the pit: chunky and lit on one edge so they read clearly.
+  const slabs: [number, number, number, number][] = [[1, 5, 4, 3], [10, 3, 4, 4], [6, 9, 5, 3], [11, 10, 3, 3], [2, 11, 3, 2]];
+  slabs.forEach(([x, y, w, h]) => {
+    fill(img, x, y, w, h, '#58483e');
+    fill(img, x, y, w, 1, '#8a7064');
+    fill(img, x, y + h - 1, w, 1, '#241a1c');
+    px(img, x, y, '#a08870');
+  });
+  // Dark cracks between the slabs so the pit still reads as a hole, not a floor.
+  for (let i = 0; i < 10; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), '#0e0810');
+  // A couple of warning embers glowing at the bottom, varied by seed.
+  if (r() < 0.7) px(img, 6 + Math.floor(r() * 3), 9 + Math.floor(r() * 3), '#ff7a1a', 190);
+  if (r() < 0.5) px(img, 5 + Math.floor(r() * 4), 12, '#ff9a40', 130);
+  return img;
+}
+
+/** Face below the sunken pit: sheared concrete and bent rebar where the floor gave way. */
+export function sunkenPitFace(): Image {
+  const img = blank(T, T);
+  fill(img, 0, 0, T, T, '#2a2024');
+  const r = rng(970);
+  for (let x = 0; x < T; x++) {
+    const h = Math.floor(r() * 4);
+    for (let y = 0; y < h; y++) px(img, x, y, '#150f14');
+  }
+  for (let x = 1; x < T; x += 4) {
+    const wobble = Math.floor(r() * 2);
+    line(img, x + wobble, 3, x, T - 1, '#59494a');
+  }
+  for (let i = 0; i < 3; i++) px(img, 2 + i * 5, 10 + (i % 2), '#8a7068');
+  fill(img, 0, T - 2, T, 2, '#0e0810');
+  return img;
+}
+
+/**
+ * Dust cloud billowing up as the room falls (`fx-polvo-derrumbe`, anchor floor, 24x20, 6 frames).
+ * Bigger and warmer than the combat `fx_dust` puff so it reads as a structural event.
+ */
+export function collapseDust(frame: number): Image {
+  const W = 24, H = 20;
+  const img = blank(W, H);
+  const grow = [1.5, 2.6, 3.6, 4.5, 5.2, 5.8][frame]!;
+  const rise = frame * 1.3;
+  const balls: [number, number, number][] = [[12, 16, 1], [6, 17, 0.75], [18, 17, 0.8], [9, 15, 0.6], [15, 15, 0.65]];
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    let inside = false, top = false;
+    for (const [bx, by, s] of balls) {
+      const rad = grow * s;
+      const dy = y - (by - rise);
+      if ((x - bx) ** 2 + dy ** 2 <= rad * rad) {
+        inside = true;
+        if (dy < -rad * 0.3) top = true;
+      }
+    }
+    if (!inside) continue;
+    const dith = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]][y % 4]![x % 4]!;
+    if (dith < [0, 0, 2, 5, 9, 13][frame]!) continue;
+    px(img, x, y, top ? '#d8c4a8' : frame > 3 ? '#9a8070' : '#b89a84');
+  }
+  return img;
+}
+
+/**
+ * Chunks of debris falling and landing (`fx-cascotes`, anchor floor, 16x24, 5 frames): a couple
+ * of rocks drop from above, hit the tile and kick up chips and a small dust burst.
+ */
+export function fallingRubble(frame: number): Image {
+  const img = blank(T, 24);
+  const stones: [number, number, number][] = [[4, -2, 3], [10, 1, 2]];
+  const fall = [0, 7, 14, 17, 17][frame]!;
+  if (frame < 3) {
+    stones.forEach(([x0, y0, size]) => {
+      const y = y0 + fall;
+      if (y > 17) return;
+      disc(img, x0, y, size * 0.8, '#6a564e');
+      px(img, x0 - 1, y - 1, '#8a7068');
+      // Motion streak above it.
+      for (let i = 1; i <= 3; i++) px(img, x0, y - i, '#4a3a38', 120 - i * 30);
+    });
+  }
+  if (frame >= 2) {
+    const p = (frame - 2) / 2;
+    for (const [x0] of stones) {
+      disc(img, x0, 18, 2 + p * 3, '#2a2024', Math.round(180 * (1 - p * 0.6)));
+    }
+    const r = rng(980 + frame);
+    for (let i = 0; i < 5; i++) {
+      const a = Math.PI + r() * Math.PI, d = 2 + p * 6;
+      px(img, Math.round(7.5 + Math.cos(a) * d), Math.round(19 - r() * p * 4), r() < 0.5 ? '#8a7068' : '#5a4a48');
+    }
+  }
+  if (frame === 4) fill(img, 2, 19, 12, 1, '#150f14');
+  return img;
+}
+
+// --- Ability FX for the 21 new floor enemies (shared shapes, themed per ability by colour) -----
+// A handful of generic shapes (beam, pulse ring, impact, cone, tossed bit) reused with different
+// colours/marks, the same way `gWave` covers six ids. Ids and kinds per docs/ART_CATALOG.md →
+// "Efectos nuevos de Willy" / fx.json.
+
+/** A reaching beam (tentacle, lash...) that grows across 3 frames, 32x16, pointing right. */
+export function reachBeam(frame: number, colour: string, glow: string): Image {
+  const img = blank(32, 16);
+  const len = [12, 22, 30][frame]!;
+  for (let x = 1; x < len; x++) {
+    const y = 8 + Math.round(Math.sin(x * 0.4) * 2);
+    px(img, x, y, colour);
+    px(img, x, y + 1, glow, 140);
+    if (x % 4 === 0) px(img, x, y - 1, glow, 90);
+  }
+  if (len < 31) (px(img, len, 8, '#ffffff'), px(img, len, 7, '#ffffff', 160));
+  return img;
+}
+
+/** `reachBeam` with a little mark riding along it (e.g. a question mark), 32x16, 3 frames. */
+export function markedBeam(frame: number, colour: string, mark: string[]): Image {
+  const img = reachBeam(frame, colour, colour);
+  const spots: [number, number][] = [[7, 2], [17, 10], [25, 3]];
+  const [x, y] = spots[frame % spots.length]!;
+  art(img, x, y, mark, { k: colour, w: '#ffffff' });
+  return img;
+}
+
+/** A pulsing AoE ring on the ground, 24x24, 4 frames: shared "ring"/"burst" landing shape. */
+export function groundPulse(frame: number, colour: string, glow: string): Image {
+  const S = 24;
+  const img = blank(S, S);
+  const c = S / 2 - 0.5;
+  const rr = 2 + frame * 4.5;
+  ring(img, c, c, rr, colour, 2, Math.round(255 * (1 - frame / 4)));
+  if (frame === 0) disc(img, c, c, 3, glow, 200);
+  return img;
+}
+
+/** A quick impact flash at the target: small ring plus radiating lines, 16x16, 3 frames. */
+export function impactBurst(frame: number, colour: string): Image {
+  const img = blank(T, T);
+  const c = T / 2 - 0.5;
+  ring(img, c, c, 2 + frame * 2.5, colour, 1, Math.round(255 * (1 - frame / 3)));
+  if (frame === 0) {
+    for (let a = 0; a < 6; a++) {
+      const ang = (a / 6) * Math.PI * 2;
+      line(img, c, c, c + Math.cos(ang) * 6, c + Math.sin(ang) * 6, colour, 160);
+    }
+    px(img, c, c, '#ffffff');
+  }
+  return img;
+}
+
+/** A soft cone washing outward (mist, light, sound), 32x32, 3 frames, pointing right. */
+export function coneWash(frame: number, colour: string): Image {
+  const S = 32;
+  const img = blank(S, S);
+  const reach = [10, 20, 28][frame]!;
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const dy = y - S / 2;
+    if (x > reach || x < 0) continue;
+    const spread = (x / reach) * S * 0.4;
+    if (Math.abs(dy) > spread) continue;
+    px(img, x, y, colour, Math.round(140 * (1 - x / (reach + 4))));
+  }
+  return img;
+}
+
+/** A small object thrown with a short motion trail, 16x16, 3 frames (drawn facing right). */
+export function tossedBit(frame: number, body: (img: Image) => void): Image {
+  const img = blank(T, T);
+  for (let i = 1; i <= 2 + frame; i++) px(img, 7 - i, 8, '#120e14', 140 - i * 30);
+  body(img);
+  return img;
+}
+
+/** Tiny generic bead used as `beadFx` for self-centred bursts that barely travel (8x8, 3 frames). */
+export function tinyBead(frame: number, colour: string): Image {
+  const img = blank(8, 8);
+  disc(img, 4, 4, 1.5 + frame * 0.3, colour, 220);
+  px(img, 4, 4, '#ffffff');
+  return img;
+}
+
+export function tentacleLash(frame: number): Image { return reachBeam(frame, '#8a3ad0', '#b45cff'); }
+export function barnacleShot(frame: number): Image { return tossedBit(frame, (img) => art(img, 5, 6, ['.kk.', 'kwwk', 'kwwk', '.kk.'], { k: '#5a5248', w: '#d8d0b8' })); }
+export function eelZapBead(frame: number): Image { return tinyBead(frame, '#4fe8ff'); }
+export function puddleShock(frame: number): Image { return groundPulse(frame, '#4fe8ff', '#a0e8ff'); }
+export function restockRing(frame: number): Image { return groundPulse(frame, '#40c060', '#9affb0'); }
+export function tackleHit(frame: number): Image { return impactBurst(frame, '#e0302a'); }
+export function corkShot(frame: number): Image { return tossedBit(frame, (img) => art(img, 6, 6, ['kk', 'wk'], { k: '#6a4020', w: '#d8302a' })); }
+export function bingoShout(frame: number): Image { return groundPulse(frame, '#ff4fa0', '#ffd0ea'); }
+export function bassThump(frame: number): Image { return groundPulse(frame, '#ff9a40', '#ffe0a0'); }
+export function lockHold(frame: number): Image { return impactBurst(frame, '#f4f4f0'); }
+export function mudHeal(frame: number): Image { return groundPulse(frame, '#6a4a2a', '#9aa84a'); }
+export function mudSlap(frame: number): Image { return tossedBit(frame, (img) => disc(img, 7, 8, 3, '#5a3e24')); }
+export function trickQuestion(frame: number): Image { return markedBeam(frame, '#e0302a', ['.k.', 'kwk', '.k.', 'kwk']); }
+export function makeupPuff(frame: number): Image { return groundPulse(frame, '#ff8fc8', '#ffe0f0'); }
+export function clapperCall(frame: number): Image { return impactBurst(frame, '#ffe04f'); }
+export function blindingCone(frame: number): Image { return coneWash(frame, '#ffffff'); }
+export function perfumeCloud(frame: number): Image { return coneWash(frame, '#ff8fc8'); }

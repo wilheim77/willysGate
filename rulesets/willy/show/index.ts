@@ -23,13 +23,32 @@ export function showAfterCommand(ruleset: Ruleset, state: GameState, events: Gam
   return r.outcome();
 }
 
+/**
+ * Runs after the achievements (order 110): an achievement unlocked by this same command still
+ * gives its audience (audience.json → «logro») and counts for the sponsors. Only that event.
+ */
+export function showLateAfterCommand(ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome {
+  if (!showConfig() || !state.entities.willy) return { effects: [], events: [] };
+  const late = events.filter((e) => LATE_EVENTS.has(e.type));
+  if (!late.length) return { effects: [], events: [] };
+  const r = new Resolver(ruleset, state, rng);
+  const { views } = runAudience(r, late);
+  runShare(r, late, r.events.slice());
+  runSponsors(r, views, late);
+  return r.outcome();
+}
+
+const LATE_EVENTS = new Set(['achievementUnlocked']);
+
 const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
-  'meterChanged', 'shareCero', 'enAntena',
+  'meterChanged', 'shareCero', 'enAntena', 'turnEnded',
   'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
-  'boxDelivered', 'itemGranted', 'coinsGranted',
+  'boxDelivered', 'itemObtained', 'coinsGranted',
+  // Handled by the late pass, after the achievements.
+  'achievementUnlocked',
 ]);
 
 export const showCommands: Record<string, CommandHandler> = { aceptarContrato, rechazarContrato };

@@ -51,7 +51,7 @@ export function commandActor(events: GameEvent[], state: GameState): string | un
     if (e.type === 'actionPerformed' && typeof f.actorId === 'string') return f.actorId;
     if ((e.type === 'skillUsed' || e.type === 'entityMoved' || e.type === 'showOff') && typeof f.entityId === 'string') return f.entityId;
   }
-  return state.turn.mode === 'combat' ? (state.turn.activeEntityId ?? undefined) : undefined;
+  return state.turn?.mode === 'combat' ? (state.turn.activeEntityId ?? undefined) : undefined;
 }
 
 /**
@@ -107,6 +107,15 @@ export function eventViews(events: GameEvent[], state: GameState, extra: { first
       case 'trapTriggered':
         out.push({ evento: 'trapTriggered', entidad: ent(f.entityId) });
         break;
+      case 'itemUsed':
+      case 'itemSold':
+      case 'itemEquipped': {
+        // The item stays a plain id (item: 'extintor'); its tags and type are flat keys for
+        // patterns like «item.etiquetas» (sponsors.json).
+        const tags = (f.etiquetas as string[] | undefined) ?? [];
+        out.push({ ...f, evento: e.type, actor: (f.actor as object | undefined) ? { ...ent(f.actorId), ...(f.actor as object) } : ent(f.actorId), 'item.etiquetas': tags, 'item.tipo': f.tipo });
+        break;
+      }
       case 'turnStarted':
         out.push({ evento: 'turnStarted', entityId: f.entityId, actor: ent(f.entityId) });
         break;
@@ -122,6 +131,7 @@ export function eventViews(events: GameEvent[], state: GameState, extra: { first
 
 /** Reads `a.b.c` from a view. */
 export function pathValue(view: Record<string, unknown>, path: string): unknown {
+  if (path in view) return view[path];
   let v: unknown = view;
   for (const k of path.split('.')) {
     if (v === null || typeof v !== 'object') return undefined;
