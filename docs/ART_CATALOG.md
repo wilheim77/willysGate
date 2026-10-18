@@ -514,3 +514,7 @@ Tres cambios para que se distinga a tamaño de móvil, sumados al tinte y al bor
    **Petición al cliente:** en `buildWorld`, si la casilla es escalón y `art.stair` existe, usar ese frame en el `tileSprite` de la cara en lugar de `art.face` y no dibujar las líneas de huella. Hay que añadir `stair?: number` al tipo del terreno en `src/assets/manifest.ts`.
 
 Antes y después, simulando el render del cliente: `art-previews/0x72-<mapa>-legibilidad.png` para `camino`, `plaza`, `abadia`, `calles`, `escorial`, `mina` y `boveda`, y la puerta del barón en la plaza a 4×: [`art-previews/0x72-plaza-puerta-baron-legibilidad.png`](art-previews/0x72-plaza-puerta-baron-legibilidad.png).
+
+# Marcadores de salida (las dos partidas)
+
+`exit_open` (4 frames, 6 fps, en bucle: dos galones que avanzan hacia el borde; dorado en *Intereses*, cian en *Willy*) y `exit_closed` (fijo: un galón apagado tras una barra). Mismo id en los dos manifiestos, `anchor: 'centre'`. Miran a la derecha: el cliente los gira hacia el borde del mapa por el que sale la salida. Vista previa: [`art-previews/exit-markers.png`](art-previews/exit-markers.png).
