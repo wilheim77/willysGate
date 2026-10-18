@@ -567,6 +567,7 @@ Los genera `scripts/art/build-icons.ts`, que corre después de `build-willy-art.
   - `caja-<nivel>-tapa-1..3`: la tapa se levanta y empieza a salir luz.
   - `caja-<nivel>-abierta`: tapa echada atrás, haces de luz y confeti.
   - El ojo de Canal Abismo va en el frontal. La caída, el temblor y el confeti grande los anima el cliente con CSS.
+  - `caja-legendaria-estrellas` (64×64, transparente salvo un resplandor morado y estrellas blancas/cian/moradas alrededor): capa de fondo opcional para cuando se abre una caja legendaria, pedida por el agente de la meta (`src/ui/rewardBoxes.ts`) para darle algo más a la mejor rareza; se coloca detrás de `caja-legendaria-abierta`.
 - `icono-reloj` (cuenta atrás del derrumbe) ya existía entre los iconos de estado.
 
 ## Enemigos nuevos de *Willy* y élites
@@ -642,6 +643,12 @@ El resto reutiliza props que ya existían: `fx-chispazo` (chispa eléctrica) par
 | `fx-cuerda` | `reachBeam` blanco/gris | Tirones invisibles: `cuerda-imaginaria`, `rescate`, `contra-el-viento` |
 
 Proyectiles genéricos reutilizan `fx-balon-estela` (objeto volando con estela): `lanzar`, `boya`, `carretillazo`, `golpe-de-valor`, `grapadora`, `foco-en-la-cara`, `disparo` y `lanzar-aceite` (rivales); `lanzar-canicas` (rival) usa `fx-corcho` (canica ≈ corcho pequeño). `cadena-de-reparto` y `bombona-de-camping` reutilizan el par bombona/explosión de `lanzar-bombona`. Vista previa: en [`art-previews/ninja-props.png`](art-previews/ninja-props.png), filas `fx-estudio` a `fx-cuerda`.
+
+### Aviso de «¡ELIMINADO!» (`fx_eliminado`)
+
+Pedido por el agente del cliente para `onDeath: 'vanish'` (`src/scenes/MapScene.ts`, el tono de concurso de *Willy*): un único gráfico de 112×24, `anchor: 'centre'`, 5 frames sin bucle, con la palabra «¡ELIMINADO!» horneada en una banderola roja y oro con reborde neón, en vez de superponer texto sobre un burst genérico. Las líneas que irradian de la banderola y el destello blanco inicial dan el golpe de efecto; se desvanece en el último frame. Dibujado por `scripts/art/willy-show-art.ts` → `eliminatedBanner` (usa la fuente de `font.ts`, igual que `cartel-en-directo`).
+
+A diferencia del resto de `props`, este id usa guión bajo (`fx_eliminado`) en vez de guión medio: el cliente lo busca directamente en `manifest.props.fx_eliminado` (no pasa por la tabla `fx` de habilidades), igual que los `fx_hit_spark`/`fx_dust`/`fx_explosion` de *Intereses*. Si el prop no existe, el cliente sigue funcionando con el texto flotante y las partículas de siempre (fallback ya implementado), así que esto es una mejora, no una dependencia nueva.
 
 ### Derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`)
 

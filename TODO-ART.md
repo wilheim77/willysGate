@@ -45,6 +45,8 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Enemigos nuevos de *Willy* | willy | 21 enemigos + élites dorados y `aura-elite`, efectos de sus 18 habilidades (tabla `fx`) y arte del derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`) hechos |
 | Élites de los enemigos antiguos de *Willy* | willy | Recolor dorado `<id>--elite` para los 20 enemigos de las 5 plantas que no venían de la tanda de 21 nuevos; `mimico` y los jefes de planta se quedan fuera (el mímico ya es un tipo élite y nunca sale sorteado como élite; los jefes son únicos) |
 | FX de clases, compañeros y rivales | willy | Auditoría completa de `fx.json` contra `rulesets/willy/data` (clases, básicas, compañeros) y `rival-generator.json`; faltaban 66+9, todas hechas con props reutilizados o 7 props genéricos nuevos. Las pasivas y de movimiento puro se quedan sin FX a propósito |
+| Caja legendaria con estrellas | willy | `caja-legendaria-estrellas` (64×64, capa de fondo con resplandor y estrellas), a petición del agente de la meta para la apertura de cajas |
+| Aviso de «¡ELIMINADO!» | willy | `fx_eliminado` (112×24, banderola roja y oro con el texto horneado), a petición del agente del cliente para `onDeath: 'vanish'`; sustituye el texto flotante si el cliente lo usa, con fallback si no |
 | Cadáveres | intereses | 7 tipos derivados del idle y mapa `corpses` en el manifiesto; falta que el cliente los use |
 | Pulido del HUD | intereses | Barra superior en una fila, fichas de iniciativa con retrato, barra de acciones en dos filas, botones de 44 px, paneles de hierro biselado |
 | Objetos interactivos (Fase 4) | intereses | `chest`, `chest_trapped`, `lever`, terrenos `door_closed`/`door_open`, props `trap_armed`/`trap_disarmed` |
