@@ -179,6 +179,25 @@ function lootBox(kind: string, lid: number): Image {
   return outline(img);
 }
 
+/** Transparent burst of purple/cyan stars for behind the open legendaria box (meta agent's ask). */
+function starBurst(): Image {
+  const img = blank(32, 32);
+  const c = 15.5;
+  disc(img, c, c, 9, '#c890ff', 70);
+  disc(img, c, c, 5, '#f0d0ff', 90);
+  const stars: [number, number, number, string][] = [
+    [c, 2, 2, '#ffffff'], [c, 29, 2, '#ffffff'], [2, c, 2, '#ffffff'], [29, c, 2, '#ffffff'],
+    [6, 6, 1, '#4fe8ff'], [25, 6, 1, '#4fe8ff'], [6, 25, 1, '#4fe8ff'], [25, 25, 1, '#4fe8ff'],
+    [10, 3, 1, '#c890ff'], [22, 4, 1, '#c890ff'], [4, 11, 1, '#c890ff'], [28, 21, 1, '#c890ff'],
+    [12, 28, 1, '#f0d0ff'], [20, 27, 1, '#f0d0ff'], [27, 12, 1, '#f0d0ff'], [3, 20, 1, '#f0d0ff'],
+  ];
+  for (const [x, y, r, col] of stars) {
+    if (r === 2) ascii(img, x - 2, y - 2, ['.k.', 'kwk', '.k.'], { k: col, w: '#ffffff' });
+    else px(img, x, y, col);
+  }
+  return img;
+}
+
 // --- Build -----------------------------------------------------------------------------------------
 type Entry = { id: string; img: Image };
 const entries: Entry[] = [];
@@ -204,6 +223,8 @@ for (const k of Object.keys(BOX)) {
   for (const t of [1, 2, 3]) entries.push({ id: `caja-${k}-tapa-${t}`, img: scale(lootBox(k, t), 2) });
   entries.push({ id: `caja-${k}-abierta`, img: scale(lootBox(k, 4), 2) });
 }
+// Optional background layer behind the open legendaria box (the meta agent's ask).
+entries.push({ id: 'caja-legendaria-estrellas', img: scale(starBurst(), 2) });
 
 // Shelf-pack into rows of at most 512 px.
 const W = 512;
