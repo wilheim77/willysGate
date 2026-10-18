@@ -346,10 +346,16 @@ export class GameController {
         this.store.dispatch({ type: 'endTurn', issuer: SYSTEM_ISSUER, entityId } as never);
         return;
       }
-      const command = nextAiCommand(this.store.engine.ruleset, this.state, entityId);
-      const result = this.store.dispatch(command);
-      // A plan the engine refuses must never stall the fight.
-      if (!result.ok) this.store.dispatch({ type: 'endTurn', issuer: SYSTEM_ISSUER, entityId } as never);
+      try {
+        const command = nextAiCommand(this.store.engine.ruleset, this.state, entityId);
+        const result = this.store.dispatch(command);
+        // A plan the engine refuses must never stall the fight.
+        if (!result.ok) this.store.dispatch({ type: 'endTurn', issuer: SYSTEM_ISSUER, entityId } as never);
+      } catch (err) {
+        // A bug in planning or in a rule must not freeze the fight either: log it and move on.
+        console.error('AI turn failed', entityId, err);
+        if (this.state.turn.activeEntityId === entityId) this.store.dispatch({ type: 'endTurn', issuer: SYSTEM_ISSUER, entityId } as never);
+      }
     }, AI_STEP_MS);
   }
 
