@@ -172,7 +172,7 @@ describe('Final boss: the Gran final and «Sin reflejo»', () => {
     const rig = bossFightOf(s)!.parrilla!;
     expect(rig).toBeTruthy();
     expect(rig.centro).toEqual(s.entities[BOSS]!.position);
-    let t = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: rig.cuerda } }, turn: { ...s.turn, activeEntityId: 'willy', order: ['willy', BOSS] } };
+    let t: GameState = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: rig.cuerda } }, turn: { ...s.turn, activeEntityId: 'willy', order: ['willy', BOSS] } };
     t = { ...t, systems: { ...t.systems, share: { valor: 0, max: 100 } as unknown as JsonValue } };
     expect(listActions(t, 'willy').map((a) => a.id)).toContain('show:derribar-parrilla');
     const before = t.entities[BOSS]!.resources.vida!.current;
