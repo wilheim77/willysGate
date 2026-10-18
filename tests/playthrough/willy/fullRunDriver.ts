@@ -43,6 +43,14 @@ export function resolveCombat(engine: Engine, state: GameState, maxCommands = 60
   while (s.turn.mode === 'combat' && guard++ < maxCommands) {
     const activeId = s.turn.activeEntityId;
     if (!activeId) throw new Error('in combat with no active entity');
+    if (!s.entities[activeId]) {
+      // Known engine bug (reported): the collapse's despawnEntity can remove the very
+      // combatant the turn just advanced to (it filters turn.order but never re-derives
+      // activeEntityId), leaving it pointing at a removed entity. nextAiCommand would throw
+      // a cryptic "Cannot read properties of undefined (reading 'controllerId')" - this gives
+      // it a name instead.
+      throw new Error(`DESPAWNED_ACTIVE_ENTITY: turn.activeEntityId "${activeId}" is not in state.entities (order=${JSON.stringify(s.turn.order)}) - likely despawned by a room collapse mid-turn`);
+    }
     const cmd = nextAiCommand(willy, s, activeId);
     const r = engine.apply(s, cmd);
     if (!r.ok) throw new Error(`AI command rejected for ${activeId}: ${JSON.stringify(r.error)}`);
