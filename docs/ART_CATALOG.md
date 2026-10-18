@@ -433,3 +433,38 @@ Dibujados por `scripts/art/spell-fx.ts` con rampas de la paleta de 0x72 (fuego, 
 - `hurt` (2 frames, ~12 fps, sin bucle): destello blanco y retroceso con tinte rojo.
 
 Se derivan del frame `idle` de cada personaje con `scripts/art/build-action-anims.ts`, así que conservan el estilo de 0x72. Todos los frames de estos sprites pasan a `assets/0x72/actors.png`. Los frames nuevos son más anchos (relleno simétrico de 4 px, 8 px en los de 32), así que el pivote de los pies no se mueve. Vista previa: [`art-previews/0x72-actions.png`](art-previews/0x72-actions.png). **Petición al cliente:** reproducir `attack`, `cast` y `hurt` cuando lleguen los eventos correspondientes y volver a `idle`.
+
+# Fuentes de luz y palanca (pulido de la demo)
+
+| Id | Tipo | Descripción |
+|---|---|---|
+| `candles` | prop, `floor`, luz `#ffc070` | Tres velas de sebo con goterones (capilla, cripta). 3 frames. |
+| `oil_lamp` | prop, `floor`, luz `#ffb050` | Candil de barro colgado del brazo de su propio poste de madera: vale en suelo abierto y junto a un muro. 3 frames. |
+| `lantern` | prop, `floor`, luz `#ffb050` | Farol de hierro con ventanas de cuerno. 3 frames. |
+| `lever` | sprite (`idle`, `up`, `down`, `pull`) | Palanca redibujada sobre placa de piedra, con pomo rojo grande: se lee como algo que se usa. Sustituye a la de 0x72. |
+
+Las luces sin `prop` en los mapas iluminan sin que se vea de dónde sale la luz. Sugerencia para `mapas`:
+
+- `candles` para `velas-capilla-*` y `vela-cripta`.
+- `oil_lamp` para `candil-*` y `lampara-empenos`.
+- `lantern` para `farol-pozo` y `farol-polvorin`.
+- `campfire` para las `hoguera-*` si no tienen ya un spawn `campfire` debajo.
+- Los `brillo-*` (plata, resonadores) pueden seguir sin prop.
+
+**Aros de bando** (props `floor`, 16×7, dibujar bajo los pies): `marker_party` (dorado, continuo), `marker_ally` (verde, a trazos: aliados que luchan por el grupo con IA), `marker_enemy` (rojo, grueso) y `marker_neutral` (gris, a trazos). **Petición al cliente:** el mapa solo marca al personaje activo; estos aros permiten distinguir bandos de un vistazo.
+
+## Compañeros de *Willy* (uno por clase)
+
+Sprites a mano (`hand-sprites.json`, `idle` y `move`, mirando a la derecha; el cliente los voltea) y bustos de 48×48 (`portraits.json`, con el mismo id). Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-hand.png) y [`art-previews/ninja-portraits-hand.png`](art-previews/ninja-portraits-hand.png).
+
+| Id | Clase | Aspecto |
+|---|---|---|
+| `companero-jonatan` | butanero | Aprendiz: gorra del revés, mono naranja y azul, carretilla de una rueda con un camping gas |
+| `companero-kevin` | influencer | Sudadera, cascos al cuello, móvil vertical en estabilizador y foco LED |
+| `companero-loli` | bardo-de-verbena | Cantante de orquesta: permanente cardada, lentejuelas, micro con cable en espiral |
+| `companero-neptuno` | socorrista | Terranova negro con chaleco salvavidas naranja (16×22, ancho) |
+| `companero-rosario` | tasador | Doña Rosario: bajita, permanente gris, abrigo negro, perlas y bolso enorme |
+| `companero-plata` | mimo | Estatua humana plateada con bombín; `idle` congelado con el sombrero de las monedas, `move` a tirones |
+| `companero-tornillo` | ingeniero | Autómata de hojalata redondeado: una antena, soplete por mano, le falta un tornillo (16×22) |
+| `companero-iker` | funcionario | Becario: camisa grande, corbata torcida, acreditación, gafas, grapadora y termo |
+| `chencho-el-base` | jugador-de-basket | Sprite existente; busto nuevo con la cinta roja |

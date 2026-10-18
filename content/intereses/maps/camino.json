@@ -439,6 +439,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "prologo_mineros_resuelto"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "Los mineros siguen cortando el camino."
       }
      ]
     }

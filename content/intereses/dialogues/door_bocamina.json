@@ -33,6 +33,13 @@
       "text": "Una docena de picos que saben dónde golpear. Los tablones caen en el orden correcto; la cadena del sello, la última. Detrás hay oscuridad y un aire que lleva ocho meses sin moverse.",
       "effects": [
         {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
+        },
+        {
           "type": "setEntity",
           "entityId": "door-bocamina",
           "removeTags": [
@@ -47,6 +54,13 @@
           "type": "setFlag",
           "flag": "bocamina_abierta",
           "value": true
+        },
+        {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
         }
       ]
     },
@@ -54,6 +68,13 @@
       "text": "Los tablones ceden con un crujido largo. Te sangran las manos y te sobra el aliento para pensar que, si esto era tan fácil, alguien prefería que nadie lo intentara.",
       "effects": [
         {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
+        },
+        {
           "type": "setEntity",
           "entityId": "door-bocamina",
           "removeTags": [
@@ -68,6 +89,13 @@
           "type": "setFlag",
           "flag": "bocamina_abierta",
           "value": true
+        },
+        {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
         }
       ]
     },

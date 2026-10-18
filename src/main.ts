@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine, evaluateCondition } from '../engine';
+import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -16,6 +16,7 @@ import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
 import { setupTutorial } from './ui/tutorialToasts';
+import { setupBarks } from './ui/barks';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
 document.title = game.title;
@@ -35,6 +36,7 @@ const controller = new GameController(store, game, combatHud);
 
 const requestedArt = new URLSearchParams(location.search).get('arte');
 const manifest = game.art.presets[requestedArt ?? ''] ?? game.art.presets[game.art.default]!;
+setupBarks(store, game, manifest);
 
 // Party portraits and character sheets (tap a portrait or an initiative chip).
 const sheet = new CharacterSheet(game, engine.ruleset, manifest);
@@ -81,6 +83,34 @@ controller.onTrapReached = (trap, candidates) => {
     }),
   );
 };
+
+// Defeat: the leader can't get up once the fight is over (the party lost, or the leader bled
+// out while the others won). Without this the game just sat there. Offer to replay the fight
+// from the moment before it started.
+{
+  let beforeFight = store.state;
+  let offered = false;
+  store.subscribe((change, state) => {
+    if (change.kind === 'reset') offered = false;
+    if (state.turn.mode === 'combat') return;
+    const leader = state.entities[game.leaderId];
+    if (!leader || engine.ruleset.isStanding(leader)) {
+      // Calm: this is where a lost fight would start over from.
+      offered = false;
+      beforeFight = state;
+      return;
+    }
+    // A story defeat may carry on in a conversation (captured, dragged off): let it.
+    if (dialogueOfState(state)) return;
+    if (offered) return;
+    offered = true;
+    const t = game.texts.combat ?? {};
+    const retry = beforeFight;
+    setTimeout(() => {
+      dialogue.ask(t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: t.retryFight ?? 'Volver a intentarlo', onPick: () => store.load(retry) }], false);
+    }, 1200);
+  });
+}
 
 // Levelling up: the narration and what each companion makes of it.
 controller.onLevelUp = (level) => {

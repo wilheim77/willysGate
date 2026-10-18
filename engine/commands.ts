@@ -1,5 +1,5 @@
-import { act, applyOutcome, checkCombatEnd, endTurn, inCombat, isAdjacent, isHostile, startCombat } from './combat';
-import { type BaseCommand, type CommandHandler, type GameEvent, fail, requireControlled } from './command-types';
+import { type EndTurnCommand, act, applyOutcome, checkCombatEnd, endTurn, inCombat, isAdjacent, isHostile, startCombat } from './combat';
+import { type BaseCommand, type CommandHandler, type CommandResult, type GameEvent, SYSTEM_ISSUER, fail, requireControlled } from './command-types';
 import { type Vec2, inBounds, posKey } from './grid';
 import { type PathResult, findPath } from './pathfinding';
 import { surfaceAt } from './surfaces';
@@ -48,6 +48,48 @@ export function surfaceCost(ruleset: Ruleset, state: GameState): (p: Vec2) => nu
     const s = surfaceAt(state, p);
     return s ? (defs[s.type]?.extraMoveCost ?? 0) : 0;
   };
+}
+
+/**
+ * A story zone that wants the party to stop here: a scene not yet played (flag
+ * "scene:<name>"), or an encounter whose fighters are still standing, when its flags allow.
+ */
+type StoryZone = { name: string; layer: string; x: number; y: number; width: number; height: number; properties: Record<string, unknown> };
+
+/**
+ * A gate scene (the miners blocking the road) is settled once every exit it protects is open;
+ * until then it plays again each time the party walks back in.
+ */
+export function gateSettled(state: GameState, z: StoryZone): boolean {
+  // Someone who has joined the party (Garrán in the ditch) no longer blocks anything.
+  const speaker = z.properties.speaker ? state.entities[String(z.properties.speaker)] : undefined;
+  if (speaker?.controllerId.startsWith('player')) return true;
+  const zones = (state.systems.zones as unknown as StoryZone[] | undefined) ?? [];
+  const names = String(z.properties.protects ?? '').split(',').map((n) => n.trim()).filter(Boolean);
+  const exits = zones.filter((e) => e.layer === 'exits' && names.includes(e.name));
+  return exits.length > 0 && exits.every((e) => !e.properties.requiresFlag || !!state.flags[String(e.properties.requiresFlag)]);
+}
+
+export function haltsHere(ruleset: Ruleset, state: GameState, p: Vec2, from?: Vec2): boolean {
+  const zones = (state.systems.zones as unknown as StoryZone[] | undefined) ?? [];
+  const inside = (z: StoryZone, q: Vec2) => q.x >= z.x && q.y >= z.y && q.x < z.x + z.width && q.y < z.y + z.height;
+  for (const z of zones) {
+    if (z.layer !== 'scenes' && z.layer !== 'encounters') continue;
+    if (!inside(z, p) || (from && inside(z, from))) continue;
+    const props = z.properties;
+    if ((props.requiresFlag && !state.flags[String(props.requiresFlag)]) || (props.unlessFlag && state.flags[String(props.unlessFlag)])) continue;
+    if (z.layer === 'scenes') {
+      if (props.gate ? gateSettled(state, z) : props.once !== false && state.flags[`scene:${z.name}`]) continue;
+      const speaker = props.speaker ? state.entities[String(props.speaker)] : undefined;
+      if (props.speaker && (!speaker || !ruleset.isStanding(speaker))) continue;
+      if (!props.dialogue) continue;
+      return true;
+    }
+    const party = Object.values(state.entities).find((e) => e.controllerId.startsWith('player'));
+    const foes = String(props.participants ?? '').split(',').map((x) => state.entities[x.trim()]).filter((e) => e && ruleset.isStanding(e) && (!party || isHostile(party, e)));
+    if (foes.length) return true;
+  }
+  return false;
 }
 
 /** How much a mover would rather not step on a tile (fire, electrified water...). */
@@ -142,8 +184,19 @@ const move: CommandHandler<MoveCommand> = (state, cmd, { ruleset }) => {
     const tileTo = next.map.tiles[step.y * next.map.width + step.x]!;
     spent += 1 + Math.max(0, tileTo.height - tileFrom.height) * ruleset.movement.climbCost + surfaceCost(ruleset, next)(step);
     segment.push(step);
+    const tileFromPos = prev;
     prev = step;
     next = placeAt(next, step);
+    // A scene or a fight waiting on this tile stops the walk here (otherwise a long tap walks
+    // straight past the miners blocking the road and the story never starts).
+    if (entity.controllerId.startsWith('player') && haltsHere(ruleset, next, step, tileFromPos)) {
+      events.push({ type: 'entityMoved', entityId: entity.id, from, path: segment } as EntityMovedEvent);
+      from = step;
+      segment = [];
+      prev = step;
+      next = placeAt(next, step);
+      break;
+    }
     // Traps: stepping on an armed one sets it off; walking near a hidden one may reveal it.
     // Either stops the walk.
     const trapped = trapsAfterStep(next, entity.id, rng, ruleset);
@@ -201,5 +254,23 @@ export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move,
 export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCommand, content?: EngineContent): ReturnType<CommandHandler> {
   const handler = ENGINE_COMMANDS[command.type] ?? ruleset.commands[command.type];
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
-  return handler(state, command, { ruleset, ...(content ? { content } : {}) });
+  const result = handler(state, command, { ruleset, ...(content ? { content } : {}) });
+  if (!result.ok || command.type === 'endTurn') return result;
+  return passTurnIfHelpless(ruleset, result, content);
+}
+
+/**
+ * Someone who goes down during their own turn (a trap under their feet, an opportunity
+ * attack, their own fireball) can't end it themselves: the turn passes on its own, or the
+ * fight would wait forever for a command that can't come.
+ */
+function passTurnIfHelpless(ruleset: Ruleset, result: CommandResult, content?: EngineContent): CommandResult {
+  if (!result.ok) return result;
+  const { turn } = result.state;
+  const active = turn.mode === 'combat' && turn.activeEntityId ? result.state.entities[turn.activeEntityId] : undefined;
+  if (!turn.activeEntityId || turn.mode !== 'combat') return result;
+  if (active && ruleset.canAct(active)) return result;
+  const passed = endTurn(result.state, { type: 'endTurn', issuer: SYSTEM_ISSUER, entityId: turn.activeEntityId } as EndTurnCommand, { ruleset, ...(content ? { content } : {}) });
+  if (!passed.ok) return result;
+  return { ok: true, state: passed.state, events: [...result.events, ...passed.events] };
 }

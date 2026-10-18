@@ -14,9 +14,11 @@ import {
   trapsOf,
   dialogueOf,
   evaluateCondition,
+  gateSettled,
   entityAt,
   gridDistance,
   inZone,
+  isHostile,
   nextAiCommand,
   posKey,
   reachableTiles,
@@ -46,6 +48,8 @@ export class GameController {
   /** Recent leader positions, so companions walk in single file behind them. */
   private trail: Vec2[] = [];
   private leaderMoved = false;
+  /** Gate scenes already played while the leader is still standing in them. */
+  private scenesInside = new Set<string>();
   /** Story triggers already offered since the party arrived on this map. */
   private triggersShown = new Set<string>();
   /** Who the leader is walking up to talk to (or open, or pull). */
@@ -323,7 +327,13 @@ export class GameController {
     if (this.aiTimer) return;
     this.aiTimer = setTimeout(() => {
       this.aiTimer = null;
-      if (this.scene.busy || this.state.turn.activeEntityId !== entityId) return;
+      if (this.state.turn.activeEntityId !== entityId) return;
+      // Still animating: try again shortly instead of dropping the turn on the floor (nothing
+      // else may come along to wake the AI up, and the fight would hang on an enemy's turn).
+      if (this.scene.busy) {
+        this.scheduleAi(entityId);
+        return;
+      }
       const command = nextAiCommand(this.store.engine.ruleset, this.state, entityId);
       const result = this.store.dispatch(command);
       // A plan the engine refuses must never stall the fight.
@@ -345,15 +355,22 @@ export class GameController {
   private checkScenes(): boolean {
     const leader = this.state.entities[this.game.leaderId];
     if (!leader || dialogueOf(this.state)) return false;
+    // A gate scene re-arms once the leader has stepped out of its zone.
+    for (const name of [...this.scenesInside]) {
+      const z = zonesOf(this.state, 'scenes').find((x) => x.name === name);
+      if (!z || !inZone(z, leader.position)) this.scenesInside.delete(name);
+    }
     for (const z of zonesOf(this.state, 'scenes')) {
       if (!inZone(z, leader.position) || !this.zoneAllowed(z)) continue;
       const dialogue = String(z.properties.dialogue ?? '');
       if (!dialogue || dialogue.startsWith('TODO') || !this.game.dialogues?.[dialogue]) continue;
       const seen = `scene:${z.name}`;
-      if (z.properties.once !== false && this.state.flags[seen]) continue;
+      // Gate scenes (someone blocking the way) come back each time you walk in, until the way opens.
+      if (z.properties.gate ? gateSettled(this.state, z) || this.scenesInside.has(z.name) : z.properties.once !== false && this.state.flags[seen]) continue;
       const speaker = z.properties.speaker ? this.state.entities[String(z.properties.speaker)] : undefined;
       if (z.properties.speaker && (!speaker || !this.store.engine.ruleset.isStanding(speaker))) continue;
-      const r = this.store.dispatch({ type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: dialogue, actorId: leader.id, markFlag: seen, ...(speaker ? { partnerId: speaker.id } : {}) } as never);
+      if (z.properties.gate) this.scenesInside.add(z.name);
+      const r = this.store.dispatch({ type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: dialogue, actorId: leader.id, ...(z.properties.gate ? {} : { markFlag: seen }), ...(speaker ? { partnerId: speaker.id } : {}) } as never);
       if (r.ok) return true;
     }
     return false;
@@ -425,7 +442,8 @@ export class GameController {
       const foes = String(zone.properties.participants ?? '')
         .split(',')
         .map((s) => s.trim())
-        .filter((id) => this.state.entities[id] && ruleset.isStanding(this.state.entities[id]!));
+        // Only those still standing and still against us (allies are listed too).
+        .filter((id) => this.state.entities[id] && ruleset.isStanding(this.state.entities[id]!) && isHostile(leader, this.state.entities[id]!));
       if (foes.length === 0) continue;
       const party = Object.values(this.state.entities)
         .filter((e) => e.factionId === leader.factionId && ruleset.isStanding(e))

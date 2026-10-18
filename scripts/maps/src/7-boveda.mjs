@@ -49,7 +49,7 @@ export default {
     { name: 'brillo-resonador-3', at: [11, 17], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
     { name: 'brillo-resonador-4', at: [20, 17], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
     { name: 'brasero-brea', at: [13, 2], radius: 4.5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
-    { name: 'farol-polvorin', at: [25, 18], radius: 3, color: '#ffb050', flicker: 0.15 },
+    { name: 'farol-polvorin', at: [25, 18], radius: 3, color: '#ffb050', flicker: 0.15, prop: 'lantern' },
   ],
   surfaces: [{ name: 'escombros-sima', rect: [8, 20, 3, 2], surface: 'rubble' }],
   // No encounters zone: boveda_brea (scene brea-habla) starts the fight by faction and sets

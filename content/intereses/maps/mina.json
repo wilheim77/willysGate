@@ -412,6 +412,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.15
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     },
@@ -485,6 +490,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.15
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     },
@@ -553,6 +563,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.18
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     },
@@ -587,6 +602,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.18
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     },
@@ -621,6 +641,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.2
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "candles"
       }
      ]
     }

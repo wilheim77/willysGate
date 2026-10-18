@@ -448,6 +448,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.2
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "candles"
       }
      ]
     },
@@ -482,6 +487,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.2
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "candles"
       }
      ]
     },
@@ -516,6 +526,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.15
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     },
@@ -550,6 +565,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     },
@@ -584,6 +604,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     },
@@ -618,6 +643,11 @@
        "name": "flicker",
        "type": "float",
        "value": 0.08
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
       }
      ]
     }
@@ -797,6 +827,11 @@
        "name": "requiresFlag",
        "type": "string",
        "value": "audiencia_hecha"
+      },
+      {
+       "name": "closedText",
+       "type": "string",
+       "value": "Primero, la audiencia con el barón."
       }
      ]
     }
