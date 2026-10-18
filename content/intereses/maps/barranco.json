@@ -1,0 +1,1332 @@
+{
+ "compressionlevel": -1,
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "width": 28,
+ "height": 20,
+ "tilewidth": 32,
+ "tileheight": 32,
+ "infinite": false,
+ "nextlayerid": 9,
+ "nextobjectid": 16,
+ "properties": [
+  {
+   "name": "name",
+   "type": "string",
+   "value": "Barranco de las Cabras"
+  },
+  {
+   "name": "ambientLight",
+   "type": "float",
+   "value": 0.45
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "ground",
+   "type": "tilelayer",
+   "width": 28,
+   "height": 20,
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,60,60,60,60,60,60,
+60,60,60,60,60,60,33,33,33,33,33,33,33,33,33,33,60,33,33,33,33,33,60,60,60,60,60,60,
+60,60,60,60,60,60,33,33,47,47,47,47,47,47,47,47,47,47,47,33,33,33,60,60,60,60,60,60,
+60,60,60,60,60,60,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,60,60,60,60,60,60,
+60,60,60,60,60,60,33,33,33,33,33,60,33,33,33,33,37,37,33,33,33,33,60,60,60,60,60,60,
+60,60,60,60,60,60,33,33,33,33,33,33,33,33,33,33,37,37,33,33,33,33,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,60,60,33,33,60,60,42,42,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,60,60,33,33,33,33,42,42,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,42,42,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,37,37,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,37,37,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,37,37,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,37,37,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,33,33,33,33,33,33,37,37,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,33,33,33,33,33,33,60,60,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,60,60,33,33,60,60,60,60,60,60,60,60,60,60,60,60,60,60,
+60,60,60,60,60,60,60,60,60,60,60,60,33,33,60,60,60,60,60,60,60,60,60,60,60,60,60,60
+]
+  },
+  {
+   "id": 2,
+   "name": "spawns",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 1,
+     "name": "entry-camino",
+     "type": "",
+     "point": true,
+     "x": 400,
+     "y": 560,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 2,
+     "name": "lobo-1",
+     "type": "",
+     "point": true,
+     "x": 368,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 3,
+     "name": "lobo-2",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 4,
+     "name": "lobo-3",
+     "type": "",
+     "point": true,
+     "x": 304,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 5,
+     "name": "lobo-4",
+     "type": "",
+     "point": true,
+     "x": 528,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 6,
+     "name": "chest-viajero",
+     "type": "",
+     "point": true,
+     "x": 240,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 7,
+     "name": "crate-1",
+     "type": "",
+     "point": true,
+     "x": 304,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 8,
+     "name": "crate-2",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 9,
+     "name": "crate-3",
+     "type": "",
+     "point": true,
+     "x": 624,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "lights",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 10,
+     "name": "farol-viajero",
+     "type": "",
+     "point": true,
+     "x": 272,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.7
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.2
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "encounters",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 11,
+     "name": "lobos",
+     "type": "",
+     "x": 192,
+     "y": 32,
+     "width": 512,
+     "height": 224,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "participants",
+       "type": "string",
+       "value": "lobo-1,lobo-2,lobo-3,lobo-4"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "surfaces",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 12,
+     "name": "arroyo",
+     "type": "",
+     "x": 256,
+     "y": 96,
+     "width": 352,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "water"
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "name": "pedregal",
+     "type": "",
+     "x": 512,
+     "y": 352,
+     "width": 64,
+     "height": 64,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "rubble"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "traps",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": []
+  },
+  {
+   "id": 7,
+   "name": "exits",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 14,
+     "name": "a-camino",
+     "type": "",
+     "x": 384,
+     "y": 608,
+     "width": 64,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "camino"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-barranco"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "arenas",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 15,
+     "name": "lobos",
+     "type": "",
+     "x": 192,
+     "y": 32,
+     "width": 512,
+     "height": 448,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  }
+ ],
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "name": "terrain-logic",
+   "tilewidth": 32,
+   "tileheight": 32,
+   "tilecount": 60,
+   "columns": 60,
+   "image": "terrain-logic.png",
+   "imagewidth": 1920,
+   "imageheight": 32,
+   "margin": 0,
+   "spacing": 0,
+   "tiles": [
+    {
+     "id": 0,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 1,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_closed"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_open"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 32,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 33,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 37,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 40,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 41,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 42,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 44,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 46,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "mud"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 48,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "mud"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 50,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "river"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_s"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_e"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_w"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "fence"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 56,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "house"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "house_plain"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 58,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone_wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

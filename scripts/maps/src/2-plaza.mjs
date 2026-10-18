@@ -92,6 +92,10 @@ export default {
     'well-1': [17, 12],
     'barrel-2': [19, 13],
     'crate-3': [20, 16],
+    // A cart unloaded by the gallows: cover between the crowd and the fanatics.
+    'crate-4': [12, 11],
+    'crate-5': [13, 11],
+    'barrel-3': [11, 11],
   },
   lights: [
     { name: 'farol-camino', at: [1, 13], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
@@ -115,6 +119,10 @@ export default {
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'juicio', rect: [1, 4, 16, 10] },
+    ],
     scenes: [
       // D1 (noche_antorchas, d1_horca) is opened by content/intereses/triggers.json.
       {

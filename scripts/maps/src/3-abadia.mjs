@@ -80,6 +80,9 @@ export default {
     'barrel_oil-2': [1, 2],
     'crate-1': [5, 7],
     'crate-2': [9, 12],
+    'crate-5': [6, 11],
+    'crate-6': [21, 11],
+    'barrel-2': [13, 12],
     'barrel-1': [18, 12],
     'crate-3': [11, 18],
     'crate-4': [17, 18],
@@ -128,6 +131,10 @@ export default {
     },
   ],
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'd1-puerta-y-claustro', rect: [0, 9, 28, 13] },
+    ],
     scenes: [
       { name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'audiencia_abadia', speaker: 'mazo', once: true } }],
   },

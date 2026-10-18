@@ -17,6 +17,7 @@ import { SURFACES, createCharacter, createMonster, createProp } from '../../rule
 import abadia from './maps/abadia.json';
 import calles from './maps/calles.json';
 import camino from './maps/camino.json';
+import barranco from './maps/barranco.json';
 import escorial from './maps/escorial.json';
 import mina from './maps/mina.json';
 import boveda from './maps/boveda.json';
@@ -36,6 +37,7 @@ import spawnDialoguesJson from './spawn-dialogues.json';
  */
 export const ACT_MAPS: Record<string, TiledMapJson> = {
   camino: camino as TiledMapJson,
+  barranco: barranco as TiledMapJson,
   plaza: plaza as TiledMapJson,
   abadia: abadia as TiledMapJson,
   calles: calles as TiledMapJson,

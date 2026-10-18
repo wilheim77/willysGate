@@ -101,6 +101,10 @@ export default {
   // The Sinpaga chief talks first (sinpaga_jefe); the fight, if any, is by faction. The band
   // covers both ways in from the town (plaza and streets), wall to wall.
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'escombreras', rect: [8, 2, 23, 21] },
+    ],
     scenes: [
       { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true } },
       { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },

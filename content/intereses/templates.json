@@ -1,8 +1,8 @@
 {
   "$comment": "Generic creatures spawned as <template>-<n> on the act's maps. monsterId from rulesets/dnd5e/data/monsters.json; spriteId from assets/0x72.json; faction groups who fights whom; noncombatant until a scene or dialogue changes it.",
   "sinpaga_enmascarado": {
-    "name": "Sinpaga",
-    "monsterId": "bandit",
+    "name": "Jefe de los Sinpaga",
+    "monsterId": "veteran",
     "spriteId": "sinpaga_enmascarado",
     "faction": "sinpaga"
   },
@@ -26,7 +26,7 @@
   },
   "callado_palido": {
     "name": "Callado pálido",
-    "monsterId": "zombie",
+    "monsterId": "ghoul",
     "spriteId": "callado_palido",
     "faction": "callados"
   },
@@ -45,7 +45,7 @@
   },
   "guardia_baron_sargento": {
     "name": "Sargento de la guardia",
-    "monsterId": "guard",
+    "monsterId": "knight",
     "spriteId": "guardia_baron_sargento",
     "faction": "abadia",
     "noncombatant": true
@@ -104,5 +104,60 @@
     "spriteId": "aldeano_viejo",
     "faction": "pueblo",
     "noncombatant": true
+  },
+  "guardia_veterano": {
+    "name": "Guardia veterano del barón",
+    "monsterId": "veteran",
+    "spriteId": "guardia_baron_sargento",
+    "faction": "abadia",
+    "noncombatant": true
+  },
+  "cuadrillero": {
+    "name": "Cuadrillero",
+    "monsterId": "thug",
+    "spriteId": "minero_cuadrilla",
+    "faction": "cuadrilla"
+  },
+  "hulla_bruto": {
+    "name": "Hulla con el pico",
+    "monsterId": "thug",
+    "spriteId": "minero_cuadrilla",
+    "faction": "cuadrilla"
+  },
+  "callado_bruto": {
+    "name": "Callado de carga",
+    "monsterId": "ogre",
+    "spriteId": "callado_palido",
+    "faction": "callados"
+  },
+  "perro_carronero": {
+    "name": "Perro carroñero",
+    "monsterId": "mastiff",
+    "spriteId": "orc",
+    "faction": "bestias"
+  },
+  "rata_gigante": {
+    "name": "Rata gigante",
+    "monsterId": "giant_rat",
+    "spriteId": "skeleton",
+    "faction": "bestias"
+  },
+  "lobo": {
+    "name": "Lobo flaco",
+    "monsterId": "wolf",
+    "spriteId": "orc",
+    "faction": "bestias"
+  },
+  "cobrador": {
+    "name": "Cobrador de Lisandro",
+    "monsterId": "thug",
+    "spriteId": "sinpaga_bruto",
+    "faction": "cobradores"
+  },
+  "ganzua": {
+    "name": "Ganzúa a sueldo",
+    "monsterId": "bandit",
+    "spriteId": "sinpaga_cuchillero",
+    "faction": "cobradores"
   }
 }

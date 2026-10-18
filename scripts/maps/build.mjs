@@ -42,6 +42,7 @@ export const TERRAIN_CHARS = {
   h: 'house',
   g: 'house_plain',
   W: 'stone_wall',
+  C: 'rock', // with height 4: an unwalkable cliff
 };
 
 function props(obj = {}) {

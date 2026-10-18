@@ -10,8 +10,8 @@
  "tilewidth": 32,
  "tileheight": 32,
  "infinite": false,
- "nextlayerid": 9,
- "nextobjectid": 41,
+ "nextlayerid": 10,
+ "nextobjectid": 45,
  "properties": [
   {
    "name": "name",
@@ -345,6 +345,42 @@
      "height": 0,
      "rotation": 0,
      "visible": true
+    },
+    {
+     "id": 24,
+     "name": "crate-4",
+     "type": "",
+     "point": true,
+     "x": 400,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 25,
+     "name": "crate-5",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 26,
+     "name": "barrel-3",
+     "type": "",
+     "point": true,
+     "x": 368,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
     }
    ]
   },
@@ -359,7 +395,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 24,
+     "id": 27,
      "name": "farol-camino",
      "type": "",
      "point": true,
@@ -398,7 +434,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 28,
      "name": "farol-calles-1",
      "type": "",
      "point": true,
@@ -437,7 +473,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 29,
      "name": "farol-calles-2",
      "type": "",
      "point": true,
@@ -476,7 +512,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 30,
      "name": "farol-escorial-1",
      "type": "",
      "point": true,
@@ -515,7 +551,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 31,
      "name": "farol-escorial-2",
      "type": "",
      "point": true,
@@ -554,7 +590,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 32,
      "name": "brasero-cadalso-1",
      "type": "",
      "point": true,
@@ -593,7 +629,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 33,
      "name": "brasero-cadalso-2",
      "type": "",
      "point": true,
@@ -632,7 +668,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 34,
      "name": "antorcha-pico-roto",
      "type": "",
      "point": true,
@@ -671,7 +707,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 35,
      "name": "candil-mercado",
      "type": "",
      "point": true,
@@ -710,7 +746,7 @@
      ]
     },
     {
-     "id": 33,
+     "id": 36,
      "name": "farol-pozo",
      "type": "",
      "point": true,
@@ -749,7 +785,7 @@
      ]
     },
     {
-     "id": 34,
+     "id": 37,
      "name": "antorcha-abadia",
      "type": "",
      "point": true,
@@ -811,7 +847,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 35,
+     "id": 38,
      "name": "abrevadero",
      "type": "",
      "x": 512,
@@ -852,7 +888,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 36,
+     "id": 39,
      "name": "a-abadia",
      "type": "",
      "x": 704,
@@ -885,7 +921,7 @@
      ]
     },
     {
-     "id": 37,
+     "id": 40,
      "name": "a-calles",
      "type": "",
      "x": 928,
@@ -918,7 +954,7 @@
      ]
     },
     {
-     "id": 38,
+     "id": 41,
      "name": "a-escorial",
      "type": "",
      "x": 384,
@@ -951,7 +987,7 @@
      ]
     },
     {
-     "id": 39,
+     "id": 42,
      "name": "a-camino",
      "type": "",
      "x": 0,
@@ -977,6 +1013,29 @@
   },
   {
    "id": 8,
+   "name": "arenas",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 43,
+     "name": "juicio",
+     "type": "",
+     "x": 32,
+     "y": 128,
+     "width": 512,
+     "height": 320,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 9,
    "name": "scenes",
    "type": "objectgroup",
    "draworder": "topdown",
@@ -986,7 +1045,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 40,
+     "id": 44,
      "name": "juicio-anselmo",
      "type": "",
      "x": 0,
@@ -1037,10 +1096,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 59,
-   "columns": 59,
+   "tilecount": 60,
+   "columns": 60,
    "image": "terrain-logic.png",
-   "imagewidth": 1888,
+   "imagewidth": 1920,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1892,6 +1951,11 @@
        "name": "height",
        "type": "int",
        "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
       }
      ]
     },
@@ -1947,6 +2011,26 @@
        "name": "height",
        "type": "int",
        "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 4
       },
       {
        "name": "walkable",

@@ -10,8 +10,8 @@
  "tilewidth": 32,
  "tileheight": 32,
  "infinite": false,
- "nextlayerid": 10,
- "nextobjectid": 30,
+ "nextlayerid": 11,
+ "nextobjectid": 31,
  "properties": [
   {
    "name": "name",
@@ -632,7 +632,7 @@
   },
   {
    "id": 8,
-   "name": "scenes",
+   "name": "arenas",
    "type": "objectgroup",
    "draworder": "topdown",
    "opacity": 1,
@@ -642,6 +642,29 @@
    "objects": [
     {
      "id": 27,
+     "name": "boveda",
+     "type": "",
+     "x": 96,
+     "y": 32,
+     "width": 800,
+     "height": 672,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "name": "scenes",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 28,
      "name": "brea-habla",
      "type": "",
      "x": 96,
@@ -671,7 +694,7 @@
    ]
   },
   {
-   "id": 9,
+   "id": 10,
    "name": "collapse",
    "type": "objectgroup",
    "draworder": "topdown",
@@ -681,7 +704,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 28,
+     "id": 29,
      "name": "derrumbe",
      "type": "",
      "x": 416,
@@ -709,7 +732,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 30,
      "name": "derrumbe-borde",
      "type": "",
      "x": 576,
@@ -745,10 +768,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 59,
-   "columns": 59,
+   "tilecount": 60,
+   "columns": 60,
    "image": "terrain-logic.png",
-   "imagewidth": 1888,
+   "imagewidth": 1920,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1600,6 +1623,11 @@
        "name": "height",
        "type": "int",
        "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
       }
      ]
     },
@@ -1655,6 +1683,26 @@
        "name": "height",
        "type": "int",
        "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 4
       },
       {
        "name": "walkable",

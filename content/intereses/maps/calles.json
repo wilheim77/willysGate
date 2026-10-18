@@ -962,10 +962,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 59,
-   "columns": 59,
+   "tilecount": 60,
+   "columns": 60,
    "image": "terrain-logic.png",
-   "imagewidth": 1888,
+   "imagewidth": 1920,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1817,6 +1817,11 @@
        "name": "height",
        "type": "int",
        "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
       }
      ]
     },
@@ -1872,6 +1877,26 @@
        "name": "height",
        "type": "int",
        "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 4
       },
       {
        "name": "walkable",
