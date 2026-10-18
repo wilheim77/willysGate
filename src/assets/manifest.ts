@@ -6,6 +6,8 @@ export interface TerrainArt {
   face: number;
   /** Optional lip drawn once at the south edge of raised tiles (only its top rows are opaque). */
   rim?: number;
+  /** Face drawn instead of `face` where a walkable tile is one step above walkable ground (stairs). */
+  stair?: number;
   /**
    * Soft edges onto lower-priority neighbours at the same height: overlay frames (mostly
    * transparent) for the side of the neighbour that touches this terrain.

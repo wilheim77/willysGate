@@ -230,19 +230,19 @@ export class MapScene extends Phaser.Scene {
       const depth = this.grid.depth(pos.y, h);
       const key = tilesetKey(art.tileset);
 
-      // Cliff or wall face below raised tiles: one band of `levelH` pixels per level.
-      if (h > 0) {
-        const face = this.add
-          .tileSprite(c.x, c.y + T / 2 + (h * LH) / 2, T, h * LH, key, art.face)
-          .setTint(0xb0b0b0)
-          .setDepth(depth);
-        this.worldObjects.push(face);
-      }
       // One walkable level above walkable ground to the south: that's a stair, not a ledge.
       // Draw treads on its face and no stone lip, so it reads as "you can go up here".
       const south = tileAt(map, { x: pos.x, y: pos.y + 1 });
       const stair = h > 0 && tile.walkable && south?.walkable === true && south.terrain !== 'void' && h - south.height === 1;
-      if (stair) {
+      // Cliff or wall face below raised tiles: one band of `levelH` pixels per level.
+      if (h > 0) {
+        const face = this.add
+          .tileSprite(c.x, c.y + T / 2 + (h * LH) / 2, T, h * LH, key, stair && art.stair !== undefined ? art.stair : art.face)
+          .setTint(0xb0b0b0)
+          .setDepth(depth);
+        this.worldObjects.push(face);
+      }
+      if (stair && art.stair === undefined) {
         const treads = this.add.graphics().setDepth(depth + 0.5);
         const faceTop = c.y + T / 2;
         for (let i = 0; i < 3; i++) {
