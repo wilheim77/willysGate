@@ -131,6 +131,38 @@
   - Efectos: los efectos visuales salen de `manifest.fx`, en los dos juegos.
   - QA: el driver ya no tapa los turnos atascados del jugador.
 
+## Prioridades de los agentes (2026-10-18)
+
+Hay dos líneas en paralelo. Cada agente sigue su lista en orden y sube su rama al terminar cada punto.
+
+**Intereses (demo jugable y táctica)**
+- **Mapas:**
+  1. Combate tutorial.
+  2. Rediseño táctico de las zonas de combate: coberturas, alturas, cuellos de botella, peligros.
+  3. Mapas intermedios con encuentros, como el callejón.
+  4. Documento `ENCOUNTERS.md` con los PX de cada encuentro.
+- **Progresión:** subida por PX en el motor, del nivel 3 al 5 antes del combate final, y los PX visibles en la ficha.
+- **Bestiario:** conjuros y habilidades especiales de monstruos (SRD), y enemigos lanzadores, no muertos con toque especial, sanadores y un jefe con recarga.
+
+**Willy (partida larga y meta)**
+- **Willy:**
+  1. Reloj de derrumbe.
+  2. Partida más larga: más plantas y más grandes, curva de niveles y habilidades que suben por uso hasta el máximo en el jefe final.
+  3. Variedad de enemigos con habilidades.
+  4. IA que empuja y usa barriles.
+- **Meta:**
+  1. Logros.
+  2. Cajas de botín, objetos, pociones e inventario.
+  3. Curación fuera de combate.
+  4. Elegir el modo, con o sin repetición.
+- **Show:** audiencia y seguidores, patrocinadores y el medidor Share del jefe.
+
+**Transversales**
+- **Arte:** primero los enemigos nuevos y los efectos de derrumbe de Willy, luego la caja de botín, los iconos de objetos y los logros.
+- **Cliente:** la pregunta de trampa como ventana modal y una prueba automática en el navegador real.
+- **QA:** el arnés de partida completa de Willy, que activa cada comprobación cuando llega su rama.
+- **Revisor:** primero la revisión 11, una partida real de Intereses en el navegador, luego revisar cada rama al integrarla.
+
 ## Planificado para más adelante
 
 - **Efectos y ambiente** (2026-10-17): ver `DESIGN.md` → «Efectos y ambiente».

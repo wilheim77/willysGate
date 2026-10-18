@@ -64,7 +64,7 @@ const STORY_GATES: Record<string, Record<string, string>> = {
 
 const RULES = dnd5e.movement;
 // Scenery and art props (content/intereses/world.ts); all but levers and doors are assumed to block.
-const ART_PROPS = ['oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow', 'mine_wagon', 'mine_wagon_ore', 'powder_keg', 'resonator', 'fuse_charges', 'remains_forty', 'pulley', 'inscription'];
+const ART_PROPS = ['oil_cart', 'well', 'campfire', 'gallows', 'tapestry', 'tapestry_crossbow', 'mine_wagon', 'mine_wagon_ore', 'powder_keg', 'resonator', 'fuse_charges', 'remains_forty', 'pulley', 'inscription', 'cart', 'cart_sacks', 'market_stall', 'sacks', 'rubble_pile', 'rubble_pile_b', 'rubble_pile_c', 'pillar_broken', 'dead_tree', 'dead_tree_b', 'dead_tree_c', 'ore_pile', 'tombstone', 'sarcophagus'];
 const OBSTACLE_PROPS = ['barrel_oil', 'barrel', 'crate', 'chest', ...ART_PROPS];
 const PROPS = [...OBSTACLE_PROPS, 'lever', 'door'];
 const kindOf = (name: string): string => name.split('-')[0]!;
@@ -243,6 +243,26 @@ describe('Intereses maps', () => {
             expect(exit, `${z.name} protects unknown exit ${name}`).toBeDefined();
             expect(zoneTiles(exit!).some((t) => around.has(posKey(t))), `${name} reachable around ${z.name}`).toBe(false);
           }
+        }
+      });
+
+      it('makes every fight area tactical: cover, height, a hazard (docs/MAPS.md, «Combates tácticos»)', () => {
+        const arenas = parsed.zones.filter((z) => z.layer === 'arenas');
+        const fights = parsed.zones.filter((z) => z.layer === 'encounters' || (z.layer === 'scenes' && z.properties.fight));
+        if (id !== 'test') for (const f of fights) expect(arenas.some((a) => a.x < f.x + f.width && f.x < a.x + a.width && a.y < f.y + f.height && f.y < a.y + a.height), `${f.layer}/${f.name} has no arena`).toBe(true);
+        const obstacles = new Set(Object.entries(parsed.spawns).filter(([n]) => OBSTACLE_PROPS.includes(kindOf(n))).map(([, p]) => posKey(p)));
+        const hazardProps = Object.entries(parsed.spawns).filter(([n]) => ['barrel_oil', 'powder_keg'].includes(kindOf(n))).map(([, p]) => p);
+        const hazardSurfaces = parsed.zones.filter((z) => z.layer === 'surfaces' && ['oil', 'grease', 'water', 'fire'].includes(String(z.properties.surface)));
+        for (const a of arenas) {
+          const tiles = zoneTiles(a).filter((t) => inBounds(map, t));
+          const blocked = tiles.filter((t) => !tileAt(map, t)!.walkable || obstacles.has(posKey(t))).length;
+          expect(blocked, `${a.name}: only ${blocked} blocking tiles (cover)`).toBeGreaterThanOrEqual(4);
+          const heights = tiles.filter((t) => tileAt(map, t)!.walkable).map((t) => tileAt(map, t)!.height);
+          expect(Math.max(...heights) - Math.min(...heights), `${a.name}: flat`).toBeGreaterThanOrEqual(1);
+          if (a.properties.tutorial) continue;
+          const drop = tiles.some((t) => tileAt(map, t)!.walkable && neighbours(t).some((n) => inBounds(map, n) && tileAt(map, n)!.walkable && tileAt(map, t)!.height - tileAt(map, n)!.height >= 2));
+          const hazard = drop || hazardProps.some((p) => inZone(a, p)) || hazardSurfaces.some((s) => zoneTiles(s).some((t) => inZone(a, t)));
+          expect(hazard, `${a.name}: no hazard (barrel, oil/water, a 2-level drop)`).toBe(true);
         }
       });
 
