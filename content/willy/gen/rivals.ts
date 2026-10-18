@@ -146,8 +146,10 @@ export function rivalName(p: RivalProfile): string {
   return `${p.nombre} ${p.apodo}`;
 }
 
-/** The rival as a creature: kit numbers scaled by floor (reglas.escalado) and the race's attributes. */
-export function rivalEntity(p: RivalProfile, floor: number, position: Vec2): Entity {
+/** The rival as a creature: kit numbers scaled by floor (reglas.escalado) and the race's attributes.
+ * `opening` picks the first line of the encounter dialogue: a fresh presentación, or vueltaHuida
+ * for one who fled before and is back (docs/willy/DESIGN.md §17). */
+export function rivalEntity(p: RivalProfile, floor: number, position: Vec2, opening: 'presentacion' | 'vueltaHuida' = 'presentacion'): Entity {
   const kit = generator.kits.find((k) => k.id === p.kit)!;
   const raza = generator.razas.find((r) => r.id === p.raza)!;
   const bonus = Math.floor((floor - 1) / 2);
@@ -178,6 +180,7 @@ export function rivalEntity(p: RivalProfile, floor: number, position: Vec2): Ent
       `genero:${p.genero}`,
       ...raza.rasgos.map((t) => `rasgo:${t.id}`),
       ...Object.entries(p.aspecto).filter(([, v]) => v !== 'ninguno').map(([k, v]) => `aspecto:${k}:${v}`),
+      ...dialogueTags(p, opening),
     ],
   });
   // The race's attributes for checks and saves; DEF stays the kit's (armadura absorbs AGI).
@@ -220,6 +223,33 @@ export function rivalLine(p: RivalProfile, moment: Moment, n = 0): string {
   });
 }
 
+/** A rival's own line for the encounter dialogue (content/willy/dialogues/rival-encuentro.json), chosen deterministically from the profile so the same rival always opens the same way. */
+export function openingLine(p: RivalProfile, opening: 'presentacion' | 'vueltaHuida' = 'presentacion'): string {
+  const n = [...p.id].reduce((s, c) => s + c.charCodeAt(0), 0);
+  return rivalLine(p, opening, n);
+}
+
+/** Tags read by the dialogue tree ($partnerTag) and the Narrador (rivalAfterCommand): the rival's
+ * own lines for each beat, plus its display fields and pact DC. See docs/willy/DESIGN.md §17. */
+function dialogueTags(p: RivalProfile, opening: 'presentacion' | 'vueltaHuida'): string[] {
+  const raza = generator.razas.find((r) => r.id === p.raza)!;
+  const n = [...p.id].reduce((s, c) => s + c.charCodeAt(0), 0);
+  return [
+    `rnombre:${p.nombre}`,
+    `rapodo:${p.apodo}`,
+    `rapellido:${p.apellido}`,
+    `rlugar:${p.lugar}`,
+    `roficio:${p.oficio}`,
+    `rmania:${p.mania}`,
+    `rraza:${raza.enFrase[p.genero]}`,
+    `dlg-inicio:${openingLine(p, opening)}`,
+    `dlg-amenaza:${rivalLine(p, 'amenaza', n)}`,
+    `dlg-pacto:${rivalLine(p, 'pacto', n)}`,
+    `dlg-huida:${rivalLine(p, 'huida', n)}`,
+    `dlg-derrota:${rivalLine(p, 'derrota', n)}`,
+  ];
+}
+
 /** The legendaries that can show up on this floor and haven't yet in this run. */
 export function legendaryFor(g: Gen, floor: number, used: ReadonlySet<string>): (typeof legendaries.legendarios)[number] | undefined {
   const options = legendaries.legendarios.filter((l) => l.plantas.includes(floor) && !used.has(l.id));
@@ -227,7 +257,33 @@ export function legendaryFor(g: Gen, floor: number, used: ReadonlySet<string>): 
 }
 
 /** A legendary as a creature (rivals.json, fixed numbers). */
-export function legendaryEntity(l: (typeof legendaries.legendarios)[number], floor: number, position: Vec2): Entity {
+type Legendary = (typeof legendaries.legendarios)[number];
+
+/** A legendary's own line for a moment, from its hand-written frases/desenlaces (rivals.json). */
+export function legendaryLine(l: Legendary, moment: Moment): string {
+  const frases = l.frases;
+  switch (moment) {
+    case 'presentacion':
+      return l.fraseNarrador ?? frases[0]!;
+    case 'amenaza':
+      return frases[1] ?? frases[0]!;
+    case 'pacto':
+      return l.desenlaces.pacto;
+    case 'huida':
+      return l.desenlaces.huida;
+    case 'derrota':
+      return l.desenlaces.derrotado;
+    case 'vueltaHuida':
+      return `${frases[2] ?? frases[0]!} ${l.desenlaces.huida}`;
+    default:
+      return frases[0]!;
+  }
+}
+
+/** Fallback pact DC for legendaries, which have no comportamiento id (DESIGN.md §17). */
+const LEGENDARY_PACTO_DIF = 16;
+
+export function legendaryEntity(l: Legendary, floor: number, position: Vec2, opening: 'presentacion' | 'vueltaHuida' = 'presentacion'): Entity {
   const bonus = Math.floor((floor - 1) / 2);
   const attrs = (l.atributos ?? {}) as unknown as Record<string, number>;
   const e = createCreature({
@@ -243,10 +299,29 @@ export function legendaryEntity(l: (typeof legendaries.legendarios)[number], flo
     dano: l.stats.dano,
     movimiento: l.stats.movimiento,
     fue: attrs.fue ?? 5,
-    tags: ['rival', 'legendario', `raza:${l.raza.id}`, `genero:${l.genero}`, ...(l.rasgos ?? []).map((t) => `rasgo:${t.id}`)],
+    tags: [
+      'rival',
+      'legendario',
+      `raza:${l.raza.id}`,
+      `genero:${l.genero}`,
+      `pacto:${LEGENDARY_PACTO_DIF}`,
+      `rnombre:${l.nombre}`,
+      `rraza:${l.raza.nombre.toLowerCase()}`,
+      `dlg-inicio:${legendaryLine(l, opening)}`,
+      `dlg-amenaza:${legendaryLine(l, 'amenaza')}`,
+      `dlg-pacto:${legendaryLine(l, 'pacto')}`,
+      `dlg-huida:${legendaryLine(l, 'huida')}`,
+      `dlg-derrota:${legendaryLine(l, 'derrota')}`,
+      ...(l.rasgos ?? []).map((t) => `rasgo:${t.id}`),
+    ],
   });
   const agi = attrs.agi ?? 0;
   return { ...e, stats: { ...e.stats, ...attrs, agi, armadura: l.stats.def + bonus - 10 - Math.floor(agi / 2) } };
+}
+
+/** Chance a tramposo betrays a pact when it returns as an ally (docs/willy/DESIGN.md §17). 0 for everyone else. */
+export function traicionChance(comportamientoId: string): number {
+  return (generator.comportamientos.find((c) => c.id === comportamientoId) as { traicion?: number } | undefined)?.traicion ?? 0;
 }
 
 export const RIVAL_RULES = {

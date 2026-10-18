@@ -28,6 +28,7 @@ import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
+import { rivalAfterCommand } from './rivals';
 import { describeEntity } from './sheet';
 import { showAfterCommand, showCommands } from './show';
 
@@ -287,6 +288,7 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
  */
 export const afterCommandHooks: ((ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor) => ActionOutcome)[] = [];
 afterCommandHooks.push(showAfterCommand);
+afterCommandHooks.push(rivalAfterCommand);
 
 function afterCommand(ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome {
   const out: ActionOutcome = { effects: [], events: [] };

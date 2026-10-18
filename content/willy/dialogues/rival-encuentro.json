@@ -1,0 +1,61 @@
+{
+  "$comment": "Templated rival encounter (docs/willy/DESIGN.md §17): the same tree for every procedural or legendary rival. Text starting with \"$partnerTag:\" is resolved by the client from a tag of whoever Willy is talking to (content/willy/gen/rivals.ts sets dlg-inicio/dlg-amenaza/dlg-pacto/dlg-huida/dlg-derrota on the entity when it's generated, so the line matches that exact rival's race, personality and mania). Speaker \"$partner\" resolves the same way to the rival's entity. The Pactar DC reads the rival's own \"pacto:<n>\" tag (comportamiento's pactoDif, or a legendary's fixed one). Tagged on the rival room's entity as dialogue:rivalEncuentro (content/willy/gen/floor.ts); rulesets/willy's rivalAfterCommand hook records the outcome in systems.rivals and fires the Narrador.",
+  "id": "rivalEncuentro",
+  "start": "inicio",
+  "nodes": {
+    "inicio": {
+      "speaker": "$partner",
+      "text": "$partnerTag:dlg-inicio",
+      "choices": [
+        {
+          "id": "derrotar",
+          "text": "Derrotar",
+          "effects": [{ "type": "startCombat", "factions": ["rivales"] }]
+        },
+        {
+          "id": "pactar",
+          "text": "Pactar",
+          "check": { "check": "car", "dc": { "partnerTag": "pacto", "fallback": 14 }, "success": "pactoExito", "failure": "pactoFallo" }
+        },
+        {
+          "id": "dejar",
+          "text": "Dejar ir",
+          "next": "huidaOk"
+        }
+      ]
+    },
+    "pactoExito": {
+      "speaker": "$partner",
+      "text": "$partnerTag:dlg-pacto",
+      "effects": [
+        { "type": "setSystem", "system": "rivalOutcome", "value": { "outcome": "pacto" } },
+        { "type": "modifyResource", "entityId": "willy", "resource": "fichas", "delta": 15 },
+        { "type": "despawnEntity", "entityId": "$partner" }
+      ]
+    },
+    "pactoFallo": {
+      "speaker": "$partner",
+      "text": "$partnerTag:dlg-amenaza",
+      "choices": [
+        {
+          "id": "derrotarTrasFallo",
+          "text": "Derrotar",
+          "effects": [{ "type": "startCombat", "factions": ["rivales"] }]
+        },
+        {
+          "id": "dejarTrasFallo",
+          "text": "Dejar ir",
+          "next": "huidaOk"
+        }
+      ]
+    },
+    "huidaOk": {
+      "speaker": "$partner",
+      "text": "$partnerTag:dlg-huida",
+      "effects": [
+        { "type": "setSystem", "system": "rivalOutcome", "value": { "outcome": "huida" } },
+        { "type": "despawnEntity", "entityId": "$partner" }
+      ]
+    }
+  }
+}
