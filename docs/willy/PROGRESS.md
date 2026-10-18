@@ -15,6 +15,26 @@
 - **Compañeros (2026-10-18):** uno por clase, se une tras el cásting, lo controla el jugador, sube con Willy y vuelve en la planta siguiente si cae (`RULESET.md` → «Compañeros»). Pausa publicitaria: 25 % de vida al acabar cada combate.
 - **Equilibrio:** simulador con IA en plantas generadas (`content/willy/sim/balance.ts`), palancas en `floors.json → equilibrio` y tabla en `BALANCE.md`. Resultado: llegar al jefe 85-100 %, ganarle 76-83 %. Test barato de la planta 1 en `npm test`; las cinco con `QA_DEEP=1`.
 - **FX:** los `skillUsed` llevan `target` y van antes de las tiradas.
+- **Meta (2026-10-18, rama `willy-meta`):**
+  - **Logros:** se evalúan en el ruleset tras cada comando (`Ruleset.afterCommand`, `rulesets/willy/achievements.ts`). Traduce los eventos del motor al vocabulario de `achievements.json` (`attackResolved`, `objectDestroyed`, `entityPushed`…) y aplica el lenguaje de condiciones con contadores por partida, planta, combate o turno, disparadores `al` y datos vivos (`dato`).
+    - Se guardan en la partida (`systems.willyMeta`): «siempre» cuenta como «partida».
+    - Al desbloquearse, aparece un aviso arriba, suena la frase del Narrador (cabecera + frase propia) y llega la caja. Hay una lista 🏆 en la barra superior, por categorías, con los ocultos como «???» y su pista.
+    - 158 logros, 23 de ellos nuevos: primera victoria, primer barril, empujón final, intocable, planta limpia, primer jefe, probar todas las habilidades, dos críticos, racha de fallos, remontada, una sola ronda, cinco en un combate, 15 de daño de un golpe…
+    - Las muertes del compañero cuentan para el grupo. Las recompensas de XP pasan a ser cajas: la XP es del agente de Willy.
+  - **Cajas:** se ganan con logros, jefes (tabla `fuentes.jefes`), élites, rivales y plantas limpias. El botón 🎁 cuenta las pendientes.
+    - La apertura sigue DESIGN §8: caída, sacudida según el nivel de la caja, tapa, haz de la mejor rareza y cartas boca abajo, más «Ver probabilidades».
+    - Se tira con el RNG de la partida, con garantía, piedad, sin repetir en la caja, únicos y como mucho 2 copias.
+  - **Objetos:** son acciones `obj:<id>` dentro y fuera de combate, con los macros de `items.json` interpretados en `rulesets/willy/items.ts`.
+    - El equipo cambia atributos mientras se lleva, aplica inmunidades y da luz.
+    - La mochila 🎒 (la misma que en *Intereses*) permite beber, comer, usar y equipar.
+    - El kit de clase se reparte en el cásting.
+    - 12 objetos nuevos: pociones (Gaseosa, Caldo, Agua de la Fuente Santa, Orujo), granadas (Bomba fétida, Bengala), una bebida energética y chatarra de patrocinadores.
+    - Los que necesitan sistemas que aún no existen quedan fuera de las cajas (`loot-tables.json → fueraDeCajas`).
+  - **Botín de enemigos:** fichas, a veces un consumible y, raramente, un objeto mágico, mejor en élites y jefes (`loot-tables.json → enemigos`). Avisa con un toast y una frase.
+  - **Curación fuera de combate:** 5 % de la vida máxima por cada 4 casillas que anda Willy, para él y su compañero, y vida completa al llegar al Camerino (`willy.json → regeneracion`). La Pausa publicitaria (25 %) se queda.
+  - **Modo de eliminación:** antes del cásting se elige la dificultad y luego Con o Sin repetición; Sin repetición no está disponible en Turista.
+    - Con repetición: se vuelve al último `rested` y las plantas siguientes se recolocan (`willy:intento`).
+    - Sin repetición: una ranura propia con autoguardado y contador de escrituras compartido con el perfil, sin guardar, cargar ni exportar a mano. Se borra al caer y sale el resumen de la temporada.
 
 ## Hecho (W0)
 
