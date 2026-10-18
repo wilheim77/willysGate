@@ -292,6 +292,28 @@ Datos: `classes.json` → `ingeniero` → habilidad `red-g` (`subidaPorUso`, `no
 - **Techo bajo:** propiedad de sala o casilla en Tiled (`ceiling: low`). Ahí no se puede saltar ni hacer Mate; intentarlo dispara el rasgo `techo-bajo`.
 - **Cosas redondas:** las entidades y objetos con la etiqueta `redondo` (bombonas, barriles, balones, cabezudos, patitos, el Centollo…).
 
+## Compañeros
+
+Willy no baja solo: tras el cásting, en el Camerino, se le une el compañero de su clase (`rulesets/willy/data/companions.json`). Lo controla el jugador, como a Willy (dos fichas por turno; en el móvil se manda igual que a Willy: tocar al compañero y elegir). Es del mismo bando (`concursantes`).
+
+| Clase | Compañero | Ataque | Apoyo o área |
+|---|---|---|---|
+| Butanero | **Jonatan, el aprendiz** (carretilla) | Carretillazo: 1d8 a 4 casillas, empuja 2 | Bombona de camping: 1d6 de fuego en área y fuego en el suelo |
+| Influencer | **Kevin, el cámara** | Foco en la cara: 1d4 a 4 casillas y Cegado | Primer plano: un aliado queda Afortunado |
+| Bardo de verbena | **Loli, la vocalista de la orquesta** | Do de pecho: Aturdidos los enemigos a 2 (salvación de AGU) | Estribillo: 1d6 de vida a ella y los aliados a 2 |
+| Socorrista | **Neptuno, el perro de rescate** | Mordisco y arrastre: 1d6 y lo arrastra 1 hacia él | Rescate canino: 1d8 de vida y quita Tumbado y Enredado |
+| Tasador | **Doña Rosario, la clienta** | Bolsazo: 1d8 y Tumbado | Esto es de imitación: el enemigo queda Estudiado para Willy |
+| Mimo | **Plata, la estatua humana** | Susto de estatua: 1d6 y Asustado | Moneda en la gorra: Afortunado y 1d4 de vida |
+| Ingeniero | **Tornillo, el autómata de serie** | Descarga: 1d6 de rayo a 4 | Soldadura: 1d6 de vida (doble a los autómatas) |
+| Funcionario | **Iker, el becario** | Grapadora industrial: 1d4 a 4 y Enredado | Café para el jefe: 1d4 de vida y Animado |
+| Jugador de basket | **Chencho, el base** | Robo de balón: 1d4 y pierde 1 acción | ¡Contraataque!: un aliado queda Corriendo |
+
+- **Números:** vida, DEF, ataque y dado propios; **suben con el nivel de Willy** (vida por nivel, +1 al ataque cada 2 niveles, +1 a DEF cada 3, el dado sube un escalón en los niveles 5 y 9, las curas suman la mitad del nivel). Se ajustan al empezar cada combate.
+- **Energía:** 4-5, se recupera al acabar cada combate como la de Willy. Cada habilidad cuesta 1-3.
+- **Si cae:** se queda fuera el resto de esa planta y **vuelve en el mapa siguiente** con media vida (el ruleset lo levanta al empezar el primer combate allí: R23 pedirá un gancho de cambio de mapa para hacerlo al llegar).
+- **Chencho y Tiempo muerto:** con Chencho como compañero, Tiempo muerto ya no saca un segundo Chencho: le da la charla (vida, toda la energía y Animado). Si Chencho ha caído, sale el suplente de siempre.
+- **Pausa publicitaria:** al acabar cada combate, Willy y su compañero recuperan el 25 % de su vida máxima (`data/willy.json → pausaPublicitaria`). Es una palanca de equilibrio (`BALANCE.md`).
+
 ## Modos de eliminación
 
 Elegidos al empezar (`settings.eliminationMode`). No son del ruleset sino de la partida, pero el ruleset los lee:

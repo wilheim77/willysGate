@@ -32,6 +32,9 @@ export class Resolver {
   readonly effects: Effect[] = [];
   readonly events: GameEvent[] = [];
 
+  /** What the action being resolved was aimed at; skillUsed events carry it for the client's FX. */
+  actionTarget?: { entityId?: string; tile?: Vec2 };
+
   constructor(
     readonly ruleset: Ruleset,
     public state: GameState,
@@ -49,6 +52,8 @@ export class Resolver {
   }
 
   emit(event: GameEvent): void {
+    const e = event as GameEvent & { target?: unknown };
+    if (e.type === 'skillUsed' && e.target === undefined && this.actionTarget) e.target = this.actionTarget;
     this.events.push(event);
   }
 
@@ -90,6 +95,7 @@ export interface WillyEvent extends GameEvent {
     | 'skillLevelUp'
     | 'showOff'
     | 'saltoCompleto'
+    | 'companeroCae'
     | 'cinta'
     | 'marea'
     | 'mareaAviso'
@@ -274,8 +280,12 @@ export function dealDamage(r: Resolver, targetId: string, raw: number, element: 
   return amount;
 }
 
+/** Run when someone is eliminated (companions remember where they fell). */
+export const defeatHooks: ((r: Resolver, id: string) => void)[] = [];
+
 export function defeat(r: Resolver, id: string, sourceId: string | undefined, cause: string, element?: string): void {
   r.apply({ type: 'applyCondition', entityId: id, condition: 'eliminado' });
+  for (const hook of defeatHooks) hook(r, id);
   const fallen = r.entity(id);
   // Automatons blow up when destroyed (Construir autómata, level 4).
   const ownerId = fallen.tags.find((t) => t.startsWith('invocado-por:'))?.slice('invocado-por:'.length);

@@ -62,7 +62,7 @@ export default {
     'guardia_baron-1': { at: [8, 4], unlessFlag: 'd1_abadia' },
     'guardia_baron-2': { at: [21, 4], unlessFlag: 'd1_abadia' },
     'guardia_baron-3': { at: [5, 15], unlessFlag: 'd1_abadia' }, // wall-walk
-    'guardia_baron-4': { at: [22, 15], unlessFlag: 'd1_abadia' },
+    'capellan_abadia-1': { at: [22, 15], unlessFlag: 'd1_abadia' }, // the baron's chaplain heals the guard
     'guardia_baron_sargento-1': { at: [13, 14], unlessFlag: 'd1_abadia' },
     'guardia_baron-5': { at: [6, 15], requiresFlag: 'd1_abadia', faction: 'party' },
     'guardia_baron-6': { at: [21, 15], requiresFlag: 'd1_abadia', faction: 'party' },
@@ -80,6 +80,11 @@ export default {
     'barrel_oil-2': [1, 2],
     'crate-1': [5, 7],
     'crate-2': [9, 12],
+    'sacks-1': [6, 11],
+    'sacks-2': [21, 11],
+    'tombstone-1': [12, 13],
+    'tombstone-2': [15, 13],
+    'barrel-2': [13, 12],
     'barrel-1': [18, 12],
     'crate-3': [11, 18],
     'crate-4': [17, 18],
@@ -117,7 +122,7 @@ export default {
     {
       name: 'd1-asalto',
       rect: [0, 9, 28, 13],
-      participants: ['guardia_baron-1', 'guardia_baron-2', 'guardia_baron-3', 'guardia_baron-4', 'guardia_baron_sargento-1', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
+      participants: ['guardia_baron-1', 'guardia_baron-2', 'guardia_baron-3', 'capellan_abadia-1', 'guardia_baron_sargento-1', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
       props: { requiresFlag: 'd1_cuadrilla', setFlag: 'd1_asalto_terminado' },
     },
     {
@@ -128,6 +133,10 @@ export default {
     },
   ],
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'd1-puerta-y-claustro', rect: [0, 9, 28, 13] },
+    ],
     scenes: [
       { name: 'audiencia', rect: [12, 4, 4, 3], props: { dialogue: 'audiencia_abadia', speaker: 'mazo', once: true } }],
   },

@@ -11,6 +11,7 @@ import {
   gridDistance,
   hasCondition,
   hasLineOfSight,
+  hasTag,
   inBounds,
   isHostile,
   type JumpRules,
@@ -19,6 +20,7 @@ import {
   simulatePush,
   surfaceAt,
   tileAt,
+  trapAt,
 } from '../../engine';
 import { classOf, damageBonus, hasTrait, isBig, isBoss, level, skillLevel } from './character';
 import { type AbilityData, CLASSES, abilityData } from './data';
@@ -115,12 +117,31 @@ export function withPushBonus(state: GameState, p: ActionPreview, targetId: stri
   return extra > 0 ? { ...p, expectedDamage: (p.expectedDamage ?? 0) + extra } : p;
 }
 
+/** A gas barrel's 2d6 on everyone around it, for previews and the AI. */
+export const BARREL_BLAST = 7;
+
+/**
+ * Who an explosive barrel would hurt if this hit breaks it: the chance of breaking it times the
+ * blast, for everyone within 1 tile (the AI weighs foes against friends).
+ */
+export function barrelCollateral(state: GameState, barrel: Entity, chance: number, expected: number): { entityId: string; damage: number }[] {
+  if (!hasTag(barrel, 'explosivo')) return [];
+  const hp = barrel.resources.vida?.current ?? 1;
+  const breaks = chance * Math.min(1, expected / Math.max(1, hp * chance));
+  return Object.values(state.entities)
+    .filter((e) => e.id !== barrel.id && isCreature(e) && standing(e) && gridDistance(e.position, barrel.position) <= 1)
+    .map((e) => ({ entityId: e.id, damage: breaks * BARREL_BLAST }));
+}
+
 export function attackPreviewOf(state: GameState, spec: AttackSpec, extra: Partial<ActionPreview> = {}): ActionPreview {
   const p = attackPreview(state, spec);
+  const target = state.entities[spec.targetId];
+  const collateral = target ? barrelCollateral(state, target, p.chance, p.expected) : [];
   return {
     valid: true,
     chance: p.chance,
     expectedDamage: p.expected,
+    ...(collateral.length ? { collateral } : {}),
     breakdown: [
       ...p.modifiers.map((m) => ({ label: m.label, value: `${m.value >= 0 ? '+' : ''}${m.value}`, ...(m.term ? { term: m.term } : {}) })),
       { label: 'Defensa del objetivo', value: String(p.def), term: 'def' },
@@ -260,6 +281,11 @@ export function pushExpectedDamage(state: GameState, targetId: string, from: Vec
   let dmg = 3.5 * Math.max(0, sim.dropped - 1);
   if (sim.collidedWith?.wall) dmg += 3.5;
   else if (sim.collidedWith?.entityId) dmg += 2.5;
+  // Where it lands: a hazardous surface (fire, gas...) or an armed trap.
+  const landing = surfaceAt(state, sim.to);
+  if (landing) dmg += willyRef().surfaces?.[landing.type]?.hazard ?? 0;
+  const trap = trapAt(state, sim.to);
+  if (trap?.armed && (sim.to.x !== target.position.x || sim.to.y !== target.position.y)) dmg += averageDice(parseDice(String(trap.params.dano ?? '1d4')));
   return dmg;
 }
 
@@ -814,6 +840,9 @@ function displayName(actor: Entity, data: AbilityData): string {
   return byLevel ?? data.nombre;
 }
 
+/** Other sources of actions (companions register theirs here, avoiding an import cycle). */
+export const extraActionSources: ((state: GameState, e: Entity) => ActionDef[])[] = [];
+
 export function listActions(state: GameState, actorId: string): ActionDef[] {
   const e = state.entities[actorId];
   if (!e || !standing(e)) return [];
@@ -825,6 +854,7 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
     const target = id === 'basic:golpe' ? { ...base, range: reachOf(e) } : base;
     out.push({ id, label: meta.label, description: meta.description, cost: { acciones: 1 }, target, tags: h.tags });
   }
+  for (const source of extraActionSources) out.push(...source(state, e));
   const cls = CLASSES[classOf(e) ?? ''];
   if (!cls) return out;
   for (const data of cls.habilidades) {
@@ -863,7 +893,13 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
 
 export function performAction(ruleset: Ruleset, state: GameState, actorId: string, actionId: string, target: ActionTarget, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
+  r.actionTarget = { ...(target.entityId ? { entityId: target.entityId } : {}), ...(target.tile ? { tile: { ...target.tile } } : {}) };
   HANDLERS[actionId]?.perform(r, actorId, target);
+  // Companion abilities have no use counter: announce them here.
+  if (actionId.startsWith('comp:')) r.emit({ type: 'skillUsed', entityId: actorId, habilidad: actionId.slice(5) } as WillyEvent);
+  // The ability's announcement goes first, so the client plays its FX before the rolls it causes.
+  const first = r.events.findIndex((e) => e.type === 'skillUsed' && (e as WillyEvent).entityId === actorId);
+  if (first > 0) r.events.unshift(...r.events.splice(first, 1));
   // Remember the last ability used (the Bardo's «¡Otra, otra!» and «Repertorio corto»).
   if (actionId.startsWith('hab:') && actionId !== 'hab:bis') r.apply({ type: 'setFlag', flag: lastAbilityFlag(actorId), value: `${actionId}|${JSON.stringify(target)}` });
   return r.outcome();

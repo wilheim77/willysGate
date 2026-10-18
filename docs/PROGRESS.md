@@ -130,6 +130,43 @@
     - Los escalones se dibujan como escalera (`stair`).
   - Efectos: los efectos visuales salen de `manifest.fx`, en los dos juegos.
   - QA: el driver ya no tapa los turnos atascados del jugador.
+- [x] **Bestiario** (rama `bestiario`, 2026-10-18):
+  - Los monstruos pueden lanzar conjuros del SRD (espacios o «x/día»), usar poderes propios con recarga 5-6 o «1/día» (`monster-actions.json`) y llevar efectos al impactar: parálisis del necrófago, derribo del lobo, drenar vida del tumulario (baja los PG máximos hasta el final del combate), veneno de la araña. Rasgos: parada, bruto, hedor, devoción oscura, valiente, inmunidades a estados.
+  - Nuevos: sectario, fanático sectario, acólito, sacerdote, mago, aprendiz de mago, espectro, araña gigante y el capataz de voladuras (Absalón Brea: bomba de pólvora con recarga 5-6 y grito 1/día). Mejorados los del agente de mapas (veterano, caballero, gladiador, ogro, necrófago, ghast, tumulario, mastín, lobo).
+  - IA (genérica): valora estados y mejoras (`utility` en la vista previa), no gasta espacios ni recargas si no compensa (`scarcity`) y los lanzadores guardan la distancia (`keepAway`, por criatura vía `Ruleset.aiProfile`).
+  - Intereses: un predicador entre los fanáticos de la plaza, un curandero con los Sinpaga y un capellán con la guardia del barón.
+
+## Prioridades de los agentes (2026-10-18)
+
+Hay dos líneas en paralelo. Cada agente sigue su lista en orden y sube su rama al terminar cada punto.
+
+**Intereses (demo jugable y táctica)**
+- **Mapas:**
+  1. Combate tutorial.
+  2. Rediseño táctico de las zonas de combate: coberturas, alturas, cuellos de botella, peligros.
+  3. Mapas intermedios con encuentros, como el callejón.
+  4. Documento `ENCOUNTERS.md` con los PX de cada encuentro.
+- **Progresión:** subida por PX en el motor, del nivel 3 al 5 antes del combate final, y los PX visibles en la ficha.
+- **Bestiario:** conjuros y habilidades especiales de monstruos (SRD), y enemigos lanzadores, no muertos con toque especial, sanadores y un jefe con recarga.
+
+**Willy (partida larga y meta)**
+- **Willy:**
+  1. Reloj de derrumbe.
+  2. Partida más larga: más plantas y más grandes, curva de niveles y habilidades que suben por uso hasta el máximo en el jefe final.
+  3. Variedad de enemigos con habilidades.
+  4. IA que empuja y usa barriles.
+- **Meta:**
+  1. Logros.
+  2. Cajas de botín, objetos, pociones e inventario.
+  3. Curación fuera de combate.
+  4. Elegir el modo, con o sin repetición.
+- **Show:** audiencia y seguidores, patrocinadores y el medidor Share del jefe.
+
+**Transversales**
+- **Arte:** primero los enemigos nuevos y los efectos de derrumbe de Willy, luego la caja de botín, los iconos de objetos y los logros.
+- **Cliente:** la pregunta de trampa como ventana modal y una prueba automática en el navegador real.
+- **QA:** el arnés de partida completa de Willy, que activa cada comprobación cuando llega su rama.
+- **Revisor:** primero la revisión 11, una partida real de Intereses en el navegador, luego revisar cada rama al integrarla.
 
 ## Planificado para más adelante
 

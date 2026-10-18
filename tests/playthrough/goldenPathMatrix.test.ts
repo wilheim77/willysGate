@@ -67,7 +67,7 @@ const D4_ROUTES: Record<string, number> = { embargo: 0, cuadrilla_firma: 1, refi
 // baron's key" and doesn't try to pick a 400-year-old monastery lock instead.
 const SKIP_INTERACTS = new Set(['door_cripta']);
 
-const MAP_ORDER = ['camino', 'plaza', 'abadia', 'calles', 'escorial', 'mina', 'boveda'];
+const MAP_ORDER = ['camino', 'barranco', 'plaza', 'callejon', 'abadia', 'calles', 'escorial', 'tunel', 'mina', 'boveda'];
 
 function criticalFlags(): string[] {
   const raw = JSON.parse(readFileSync(join(import.meta.dirname, '..', '..', 'content', 'intereses', 'flags.json'), 'utf8')) as Record<string, unknown>;
@@ -217,6 +217,19 @@ const BRANCH_FLAG: Record<string, string> = {
   embargo: 'd4_embargo', cuadrilla_firma: 'd4_cuadrilla', refinanciar: 'd4_refinanciar', quemar: 'd4_quemar',
 };
 
+// Some D4 choices are only on offer when the baron is alive (el_cobro.json's
+// "cuadrilla_firma"/"refinanciar" both require `not: {flag: baron_muerto}`), and D1=nada
+// kills him (noche_antorchas.json's "nada_2" sets baron_muerto). Review-8 §2 calls this out
+// by name as an expected invalid combination, not a bug: the driver falls back to whatever
+// D4 choice IS available (see driver.ts), so this combo's branch flag just won't match -
+// skip the branch-taken assertion for it rather than fail on something the content means
+// to disallow.
+// A failed mediation (D1=mediar loses its Persuasion roll) hangs him too, so it depends on the dice.
+function d4UnavailableFor(combo: Combo, state?: GameState): boolean {
+  const needsBaron = combo.d4 === 'cuadrilla_firma' || combo.d4 === 'refinanciar';
+  return needsBaron && (combo.d1 === 'nada' || !!state?.flags.baron_muerto);
+}
+
 // Heavy run: `QA_DEEP=1 npm run test:qa`. Plain `npm test`/`npm run check` only runs 4 smoke
 // combos (one per D1 option, varying D2/D3/D4 together) so the regular dev loop stays fast.
 const DEEP = process.env.QA_DEEP === '1';
@@ -248,9 +261,13 @@ describe('golden path matrix: D1 x D2 x D3 x D4', () => {
       );
       expect(wiped, `${comboLabel(combo)}: the party was wiped out before settling - see the console log above for how far it got`).toBe(false);
       expect(visited.size, `${comboLabel(combo)}: only visited ${visited.size} map(s)`).toBeGreaterThanOrEqual(2);
+      // The in-between maps on the main road (plaza -> calles, escorial -> mine) and their fights.
+      for (const m of ['callejon', 'tunel']) expect(visited.has(m), `${comboLabel(combo)}: never walked through "${m}"`).toBe(true);
       // Confirm the run actually took the scripted branch at each decision, not some other
-      // route to the same place.
-      for (const choice of [combo.d1, combo.d2, combo.d3, combo.d4]) {
+      // route to the same place - except D4 when this exact D1/D4 pairing is an invalid
+      // combination by design (d4UnavailableFor), where the driver had to fall back.
+      const choices = d4UnavailableFor(combo, state) ? [combo.d1, combo.d2, combo.d3] : [combo.d1, combo.d2, combo.d3, combo.d4];
+      for (const choice of choices) {
         const flag = BRANCH_FLAG[choice];
         if (flag) expect(state.flags[flag], `${comboLabel(combo)}: expected "${choice}"'s flag "${flag}" to be set`).toBe(true);
       }

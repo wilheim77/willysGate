@@ -249,12 +249,24 @@ Object.assign(HANDLERS, {
     target: { kind: 'self', range: 0 },
     tags: ['summon'],
     preview: (s: GameState, a: Entity) => {
+      // With Chencho as a companion, the time-out is a pep talk for him instead of a second Chencho.
+      if (companionChencho(s, a.id)) return { valid: true };
       if (summonsOf(s, a.id, 'chencho-el-base').length) return invalid('Chencho ya está en la pista.');
       return near(s, a, 1).length ? { valid: true } : invalid('No hay sitio para Chencho.');
     },
     perform: (r: Resolver, id: string) => {
       const me = r.entity(id);
       const lvl = skillLevel(me, 'tiempo-muerto');
+      const mate = companionChencho(r.state, id);
+      if (mate) {
+        heal(r, mate.id, rollDice(r.rng, dice('1d6')) + lvl * 2);
+        const en = r.entity(mate.id).resources.energia;
+        if (en && en.current < en.max) r.apply({ type: 'modifyResource', entityId: mate.id, resource: 'energia', delta: en.max - en.current });
+        r.apply({ type: 'applyCondition', entityId: mate.id, condition: 'animado', remainingTurns: lvl >= 4 ? 3 : 2 });
+        countUse(r, id, 'tiempo-muerto');
+        r.emit({ type: 'skillUsed', entityId: id, habilidad: 'tiempo-muerto', companero: mate.id } as WillyEvent);
+        return;
+      }
       const at = near(r.state, me, 1)[0];
       if (!at) return;
       const made = summon(r, id, 'chencho-el-base', at, { ...(lvl >= 5 ? {} : { rounds: lvl >= 2 ? 4 : 3 }), ...(lvl >= 3 ? { vida: 16 } : {}) });
@@ -263,6 +275,10 @@ Object.assign(HANDLERS, {
     },
   },
 });
+
+function companionChencho(state: GameState, ownerId: string): Entity | undefined {
+  return Object.values(state.entities).find((e) => hasTag(e, 'chencho') && hasTag(e, `companero-de:${ownerId}`) && standing(e));
+}
 
 function wallLength(a: Entity): number {
   const lvl = skillLevel(a, 'pared-invisible');

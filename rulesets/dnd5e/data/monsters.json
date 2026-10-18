@@ -1,5 +1,5 @@
 {
-  "$comment": "SRD 5.1 stat blocks (simplified to what the tactical game uses). speed in tiles; prof = proficiency bonus by CR; weapons reference weapons.json; multiattack = attacks per Attack action. Tags: resist:/immune:/vuln:<damage type>, type:<undead|humanoid>.",
+  "$comment": "SRD 5.1 stat blocks (simplified to what the tactical game uses). speed in tiles; prof = proficiency bonus by CR; weapons reference weapons.json; multiattack = attacks per Attack action; xp = SRD XP for the CR. Optional: spellcasting {ability, level, slots[per spell level], spells, innate{spell: uses/day}} with spells.json ids; actions = ids in monster-actions.json (recharge / per-day powers); riders {weapon: {label, save{ability,dc,half}, condition{id,turns}, damage{dice,type}, drain, immuneTags}}; combos {weapon: [weapons in order]} for mixed Attack actions; startConditions; keepAway (tiles a caster keeps from enemies). Tags: resist:/immune:/vuln:<damage type>, condimmune:<condition>, type:<undead|humanoid|beast|giant>, pack_tactics, brute (+1 die on melee weapons), parry:<AC bonus> (reaction vs one melee hit), stench:<DC> (poison aura), dark_devotion / brave (advantage on saves vs charmed/frightened), undead_fortitude. Not SRD stat blocks but built from SRD rules: apprentice (a level-1 SRD wizard), foreman (the SRD gladiator without Brute, 100 HP, plus powder_bomb and foreman_roar; a boss for a level 5-6 party).",
   "bandit": {
     "label": "Bandido",
     "abilities": {
@@ -118,7 +118,8 @@
     "tags": [
       "type:undead",
       "vuln:bludgeoning",
-      "immune:poison"
+      "immune:poison",
+      "condimmune:poisoned"
     ],
     "xp": 50
   },
@@ -143,7 +144,8 @@
     "tags": [
       "type:undead",
       "immune:poison",
-      "undead_fortitude"
+      "undead_fortitude",
+      "condimmune:poisoned"
     ],
     "xp": 50
   },
@@ -192,5 +194,744 @@
       "type:humanoid"
     ],
     "xp": 10
+  },
+  "veteran": {
+    "label": "Veterano",
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 14,
+      "int": 10,
+      "wis": 11,
+      "cha": 10
+    },
+    "ac": 17,
+    "hp": 58,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "longsword",
+      "shortsword",
+      "heavy_crossbow"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 700,
+    "combos": {
+      "longsword": [
+        "longsword",
+        "longsword",
+        "shortsword"
+      ]
+    }
+  },
+  "knight": {
+    "label": "Caballero",
+    "abilities": {
+      "str": 16,
+      "dex": 11,
+      "con": 14,
+      "int": 11,
+      "wis": 11,
+      "cha": 15
+    },
+    "ac": 18,
+    "hp": 52,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "greatsword",
+      "heavy_crossbow"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:humanoid",
+      "brave",
+      "parry:2"
+    ],
+    "xp": 700,
+    "actions": [
+      "leadership"
+    ]
+  },
+  "gladiator": {
+    "label": "Gladiador",
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 16,
+      "int": 10,
+      "wis": 12,
+      "cha": 15
+    },
+    "ac": 16,
+    "hp": 112,
+    "speed": 6,
+    "prof": 3,
+    "weapons": [
+      "spear",
+      "shield_bash",
+      "javelin"
+    ],
+    "multiattack": 3,
+    "tags": [
+      "type:humanoid",
+      "brute",
+      "brave",
+      "parry:3"
+    ],
+    "xp": 1800,
+    "riders": {
+      "shield_bash": {
+        "label": "Golpe de escudo",
+        "save": {
+          "ability": "str",
+          "dc": 15
+        },
+        "condition": {
+          "id": "prone",
+          "turns": 1
+        }
+      }
+    },
+    "combos": {
+      "shield_bash": [
+        "shield_bash",
+        "spear",
+        "spear"
+      ]
+    }
+  },
+  "ogre": {
+    "label": "Ogro",
+    "abilities": {
+      "str": 19,
+      "dex": 8,
+      "con": 16,
+      "int": 5,
+      "wis": 7,
+      "cha": 7
+    },
+    "ac": 11,
+    "hp": 59,
+    "speed": 8,
+    "prof": 2,
+    "weapons": [
+      "greatclub",
+      "javelin"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:giant"
+    ],
+    "xp": 450
+  },
+  "ghoul": {
+    "label": "Necrófago",
+    "abilities": {
+      "str": 13,
+      "dex": 15,
+      "con": 10,
+      "int": 7,
+      "wis": 10,
+      "cha": 6
+    },
+    "ac": 12,
+    "hp": 22,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "claws",
+      "bite"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:undead",
+      "immune:poison",
+      "condimmune:poisoned",
+      "condimmune:charmed"
+    ],
+    "xp": 200,
+    "riders": {
+      "claws": {
+        "label": "Parálisis",
+        "save": {
+          "ability": "con",
+          "dc": 10
+        },
+        "condition": {
+          "id": "paralyzed",
+          "turns": 1
+        },
+        "immuneTags": [
+          "race:elf",
+          "type:undead"
+        ]
+      }
+    }
+  },
+  "ghast": {
+    "label": "Ghast",
+    "abilities": {
+      "str": 16,
+      "dex": 17,
+      "con": 10,
+      "int": 11,
+      "wis": 10,
+      "cha": 8
+    },
+    "ac": 13,
+    "hp": 36,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "ghast_claws",
+      "ghast_bite"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:undead",
+      "resist:necrotic",
+      "immune:poison",
+      "stench:10",
+      "condimmune:poisoned",
+      "condimmune:charmed"
+    ],
+    "xp": 450,
+    "riders": {
+      "ghast_claws": {
+        "label": "Parálisis",
+        "save": {
+          "ability": "con",
+          "dc": 10
+        },
+        "condition": {
+          "id": "paralyzed",
+          "turns": 1
+        },
+        "immuneTags": [
+          "type:undead"
+        ]
+      }
+    }
+  },
+  "wight": {
+    "label": "Tumulario",
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 16,
+      "int": 10,
+      "wis": 13,
+      "cha": 15
+    },
+    "ac": 14,
+    "hp": 45,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "longsword",
+      "life_drain",
+      "longbow"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:undead",
+      "resist:necrotic",
+      "resist:bludgeoning",
+      "resist:piercing",
+      "resist:slashing",
+      "immune:poison",
+      "condimmune:poisoned"
+    ],
+    "xp": 700,
+    "riders": {
+      "life_drain": {
+        "label": "Drenar vida",
+        "save": {
+          "ability": "con",
+          "dc": 13
+        },
+        "drain": true,
+        "immuneTags": [
+          "type:undead"
+        ]
+      }
+    },
+    "combos": {
+      "life_drain": [
+        "life_drain",
+        "longsword"
+      ]
+    }
+  },
+  "mastiff": {
+    "label": "Mastín",
+    "abilities": {
+      "str": 13,
+      "dex": 14,
+      "con": 12,
+      "int": 3,
+      "wis": 12,
+      "cha": 7
+    },
+    "ac": 12,
+    "hp": 5,
+    "speed": 8,
+    "prof": 2,
+    "weapons": [
+      "fangs"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:beast"
+    ],
+    "xp": 25,
+    "riders": {
+      "fangs": {
+        "label": "Derribo",
+        "save": {
+          "ability": "str",
+          "dc": 11
+        },
+        "condition": {
+          "id": "prone",
+          "turns": 1
+        }
+      }
+    }
+  },
+  "giant_rat": {
+    "label": "Rata gigante",
+    "abilities": {
+      "str": 7,
+      "dex": 15,
+      "con": 11,
+      "int": 2,
+      "wis": 10,
+      "cha": 4
+    },
+    "ac": 12,
+    "hp": 7,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "rat_bite"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:beast",
+      "pack_tactics"
+    ],
+    "xp": 25
+  },
+  "wolf": {
+    "label": "Lobo",
+    "abilities": {
+      "str": 12,
+      "dex": 15,
+      "con": 12,
+      "int": 3,
+      "wis": 12,
+      "cha": 6
+    },
+    "ac": 13,
+    "hp": 11,
+    "speed": 8,
+    "prof": 2,
+    "weapons": [
+      "wolf_bite"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:beast",
+      "pack_tactics"
+    ],
+    "xp": 50,
+    "riders": {
+      "wolf_bite": {
+        "label": "Derribo",
+        "save": {
+          "ability": "str",
+          "dc": 11
+        },
+        "condition": {
+          "id": "prone",
+          "turns": 1
+        }
+      }
+    }
+  },
+  "cultist": {
+    "label": "Sectario",
+    "abilities": {
+      "str": 11,
+      "dex": 12,
+      "con": 10,
+      "int": 10,
+      "wis": 11,
+      "cha": 10
+    },
+    "ac": 12,
+    "hp": 9,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "scimitar"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid",
+      "dark_devotion"
+    ],
+    "xp": 25
+  },
+  "cult_fanatic": {
+    "label": "Fanático sectario",
+    "abilities": {
+      "str": 11,
+      "dex": 14,
+      "con": 12,
+      "int": 10,
+      "wis": 13,
+      "cha": 14
+    },
+    "ac": 13,
+    "hp": 33,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "dagger"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:humanoid",
+      "dark_devotion"
+    ],
+    "xp": 450,
+    "spellcasting": {
+      "ability": "wis",
+      "level": 4,
+      "slots": [
+        4,
+        3
+      ],
+      "spells": [
+        "sacred_flame",
+        "inflict_wounds",
+        "shield_of_faith",
+        "hold_person"
+      ]
+    },
+    "keepAway": 2
+  },
+  "acolyte": {
+    "label": "Acólito",
+    "abilities": {
+      "str": 10,
+      "dex": 10,
+      "con": 10,
+      "int": 10,
+      "wis": 14,
+      "cha": 11
+    },
+    "ac": 10,
+    "hp": 9,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "club"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid",
+      "prof:medicine"
+    ],
+    "xp": 50,
+    "spellcasting": {
+      "ability": "wis",
+      "level": 1,
+      "slots": [
+        3
+      ],
+      "spells": [
+        "sacred_flame",
+        "bless",
+        "cure_wounds"
+      ]
+    },
+    "keepAway": 3
+  },
+  "priest": {
+    "label": "Sacerdote",
+    "abilities": {
+      "str": 10,
+      "dex": 10,
+      "con": 12,
+      "int": 13,
+      "wis": 16,
+      "cha": 13
+    },
+    "ac": 13,
+    "hp": 27,
+    "speed": 5,
+    "prof": 2,
+    "weapons": [
+      "mace"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid",
+      "prof:medicine"
+    ],
+    "xp": 450,
+    "spellcasting": {
+      "ability": "wis",
+      "level": 5,
+      "slots": [
+        4,
+        3,
+        2
+      ],
+      "spells": [
+        "sacred_flame",
+        "cure_wounds",
+        "guiding_bolt",
+        "lesser_restoration",
+        "spirit_guardians"
+      ]
+    },
+    "keepAway": 2
+  },
+  "mage": {
+    "label": "Mago",
+    "abilities": {
+      "str": 9,
+      "dex": 14,
+      "con": 11,
+      "int": 17,
+      "wis": 12,
+      "cha": 11
+    },
+    "ac": 12,
+    "hp": 40,
+    "speed": 6,
+    "prof": 3,
+    "weapons": [
+      "dagger"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid",
+      "armor:none"
+    ],
+    "xp": 2300,
+    "spellcasting": {
+      "ability": "int",
+      "level": 9,
+      "slots": [
+        4,
+        3,
+        3
+      ],
+      "spells": [
+        "fire_bolt",
+        "mage_armor",
+        "magic_missile",
+        "shield",
+        "misty_step",
+        "fireball"
+      ]
+    },
+    "startConditions": [
+      "mage_armor"
+    ],
+    "keepAway": 5
+  },
+  "apprentice": {
+    "label": "Aprendiz de mago",
+    "abilities": {
+      "str": 9,
+      "dex": 10,
+      "con": 12,
+      "int": 14,
+      "wis": 10,
+      "cha": 10
+    },
+    "ac": 10,
+    "hp": 9,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "dagger"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:humanoid",
+      "armor:none"
+    ],
+    "xp": 50,
+    "spellcasting": {
+      "ability": "int",
+      "level": 1,
+      "slots": [
+        2
+      ],
+      "spells": [
+        "fire_bolt",
+        "ray_of_frost",
+        "magic_missile",
+        "burning_hands",
+        "shield"
+      ]
+    },
+    "startConditions": [
+      "mage_armor"
+    ],
+    "keepAway": 4
+  },
+  "specter": {
+    "label": "Espectro",
+    "abilities": {
+      "str": 1,
+      "dex": 14,
+      "con": 11,
+      "int": 10,
+      "wis": 10,
+      "cha": 11
+    },
+    "ac": 12,
+    "hp": 22,
+    "speed": 10,
+    "prof": 2,
+    "weapons": [
+      "specter_drain"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:undead",
+      "resist:acid",
+      "resist:cold",
+      "resist:fire",
+      "resist:lightning",
+      "resist:thunder",
+      "resist:bludgeoning",
+      "resist:piercing",
+      "resist:slashing",
+      "immune:necrotic",
+      "immune:poison",
+      "condimmune:poisoned",
+      "condimmune:charmed",
+      "condimmune:paralyzed",
+      "condimmune:prone",
+      "condimmune:restrained"
+    ],
+    "xp": 200,
+    "riders": {
+      "specter_drain": {
+        "label": "Drenar vida",
+        "save": {
+          "ability": "con",
+          "dc": 10
+        },
+        "drain": true,
+        "immuneTags": [
+          "type:undead"
+        ]
+      }
+    }
+  },
+  "giant_spider": {
+    "label": "Araña gigante",
+    "abilities": {
+      "str": 14,
+      "dex": 16,
+      "con": 12,
+      "int": 2,
+      "wis": 11,
+      "cha": 4
+    },
+    "ac": 14,
+    "hp": 26,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "spider_bite"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:beast"
+    ],
+    "xp": 200,
+    "riders": {
+      "spider_bite": {
+        "label": "Veneno",
+        "save": {
+          "ability": "con",
+          "dc": 11,
+          "half": true
+        },
+        "damage": {
+          "dice": "2d8",
+          "type": "poison"
+        }
+      }
+    },
+    "actions": [
+      "web"
+    ]
+  },
+  "foreman": {
+    "label": "Capataz de voladuras",
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 16,
+      "int": 12,
+      "wis": 12,
+      "cha": 15
+    },
+    "ac": 16,
+    "hp": 100,
+    "speed": 6,
+    "prof": 3,
+    "weapons": [
+      "spear",
+      "shield_bash",
+      "javelin"
+    ],
+    "multiattack": 3,
+    "tags": [
+      "type:humanoid",
+      "brave",
+      "parry:3"
+    ],
+    "xp": 2300,
+    "riders": {
+      "shield_bash": {
+        "label": "Golpe de escudo",
+        "save": {
+          "ability": "str",
+          "dc": 15
+        },
+        "condition": {
+          "id": "prone",
+          "turns": 1
+        }
+      }
+    },
+    "combos": {
+      "shield_bash": [
+        "shield_bash",
+        "spear",
+        "spear"
+      ]
+    },
+    "actions": [
+      "powder_bomb",
+      "foreman_roar"
+    ]
   }
 }

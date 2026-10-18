@@ -109,7 +109,7 @@
   },
   "odda_noche": {
     "name": "Odda Hulla",
-    "monsterId": "thug",
+    "monsterId": "veteran",
     "spriteId": "odda",
     "faction": "cuadrilla",
     "noncombatant": true,
@@ -197,7 +197,7 @@
   },
   "absalon": {
     "name": "Absalón Brea",
-    "monsterId": "bandit_captain",
+    "monsterId": "foreman",
     "spriteId": "absalon",
     "faction": "callados",
     "noncombatant": false,

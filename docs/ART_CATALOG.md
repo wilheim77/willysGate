@@ -531,3 +531,90 @@ Mismo criterio que en *Intereses*:
   - `escalon_plato`: `plato`, `moqueta` y `baldosa-*`, con el canto en neón cian.
 
 Antes y después (Camerino y las cinco plantas generadas con la semilla 7, esquina noroeste): `art-previews/ninja-camerino-legibilidad.png` y `art-previews/ninja-planta-<n>-legibilidad.png`.
+
+# Coberturas, alturas y bestias para los combates (*Intereses*)
+
+Los dibuja `scripts/art/cover-props.ts` con la paleta de 0x72. Cada uno lleva contorno oscuro y sombra de contacto en el suelo, para leerse como obstáculo a tamaño de móvil. Son `props` con `anchor: 'floor'` (la base en la fila inferior de la imagen); en el mapa se ponen como spawn `<id>-<n>`. Vista previa junto al Cobrador: [`art-previews/0x72-cover-props.png`](art-previews/0x72-cover-props.png).
+
+| Id | Tamaño | Qué es |
+|---|---|---|
+| `cart`, `cart_sacks` | 32×16 | Carro de dos ruedas con heno / con sacos |
+| `market_stall` | 16×24 | Puesto con toldo a rayas y mercancía |
+| `sacks` | 16×16 | Tres sacos de arpillera oscura apilados |
+| `rubble_pile`, `rubble_pile_b`, `rubble_pile_c` | 16×16 | Montón de cascotes sobre un túmulo de argamasa |
+| `pillar_broken` | 16×24 | Fuste estriado partido con un tambor caído |
+| `dead_tree`, `dead_tree_b`, `dead_tree_c` | 24×32 | Árbol seco: copa a la izquierda, a la derecha, o tronco tronchado |
+| `ore_pile` | 16×16 | Roca oscura con vetas de cobre y plata |
+| `tombstone` | 16×16 | Lápida con cruz y malas hierbas |
+| `sarcophagus` | 16×24 | Sarcófago con efigie, visto desde arriba con su cara frontal |
+
+Terrenos nuevos (`tiles.json`):
+
+- `low_wall`: muro bajo de piedra, para altura 1 y **no transitable**, con albardilla de piedras grandes y cara de mampostería.
+- `balcony`: tablones transitables con barandilla como `rim` (postes, pasamanos y sombra), cara de vigas con jabalcones y `stair` de madera.
+
+Bestias (`hand-sprites.json`, `idle`/`move`/`hit`, mirando a la derecha; los retratos de 32×32 se generan solos): `perro` (perro carroñero pardo y sarnoso, 16×14), `lobo` (gris oscuro con hocico claro, 16×14) y `rata` (rata gigante gris con cola rosa, 16×10). Vista previa: [`art-previews/0x72-beasts.png`](art-previews/0x72-beasts.png).
+
+## Inventario, logros y cajas de botín de *Willy* (`ui`, `assets/ninja/icons.png`)
+
+Los genera `scripts/art/build-icons.ts`, que corre después de `build-willy-art.ts` y añade sus entradas a `ui` sin borrar las demás. Vista previa: [`art-previews/ninja-icons.png`](art-previews/ninja-icons.png).
+
+- **`item-<id>`** (16×16): un icono por cada objeto de `data/items.json` (los que aún no tienen silueta salen con una caja con «?» y un aviso en el build). Salen de una biblioteca de 79 siluetas ASCII (botella, lata, bocadillo, llave inglesa, balón, casco, libro, aviso…) en `content/willy/art/ninja/icons.json`, con los colores propios de cada objeto. Un objeto nuevo es una línea más en `items` de ese fichero; el build falla si a algún objeto le falta icono.
+- **`logro-cat-<categoria>`** (24×24): una medalla por categoría de `achievements.json` con su glifo: huella, espadas, barril, cara, caja, ojo, moneda, reloj, flecha, calavera, interrogación, antena, sello y balón. Más `logro-bloqueado` (gris con interrogación).
+- **`marco-<rareza>`** (18×18): marcos finos para los iconos (bronce, plata, oro, legendaria), además de las `carta-*` que ya había.
+- **Cajas para la apertura** (64×64, dibujadas a 32 y escaladas ×2), para `<nivel>` = bronce, plata, oro, legendaria:
+  - `caja-<nivel>-cerrada`: caja de cartón con cinta, de metal con remaches, dorada con notas, o morada con estrellas.
+  - `caja-<nivel>-tapa-1..3`: la tapa se levanta y empieza a salir luz.
+  - `caja-<nivel>-abierta`: tapa echada atrás, haces de luz y confeti.
+  - El ojo de Canal Abismo va en el frontal. La caída, el temblor y el confeti grande los anima el cliente con CSS.
+- `icono-reloj` (cuenta atrás del derrumbe) ya existía entre los iconos de estado.
+
+## Enemigos nuevos de *Willy* y élites (en pausa)
+
+En `hand-sprites.json` (con `attack`, `cast` y `hurt` derivados vía `actions.json`, y retrato de 32×32), según la lista del agente de *Willy*:
+
+- **Castro:** `pulpo-de-bajura`, `percebeiro-ahogado`, `anguila-electrica` y `lata-de-bonito`.
+- **Híper:** `dependienta-de-perfumeria`, `encargado-de-seccion`, `guardia-de-seguridad` y `lata-de-fabada`.
+- **Verbena:** `tirador-de-feria`, `abuela-del-bingo`, `dj-de-la-carpa`, `bailarin-de-la-carpa` y `petardo-andante`.
+- **Balneario:** `masajista-implacable`, `terapeuta-de-lodos`, `nube-de-vapor` y `pastilla-efervescente`.
+- **Plató:** `presentador-suplente`, `maquilladora`, `productor-ejecutivo` y `foco-andante`.
+
+Cada uno tiene su `<id>--elite`: el mismo sprite con la paleta dorada que calcula el generador, más el prop `aura-elite` (aro dorado animado bajo los pies). Vista previa: [`art-previews/ninja-enemigos-nuevos.png`](art-previews/ninja-enemigos-nuevos.png). **Pendiente (Willy en pausa):** los efectos de sus habilidades y el derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`).
+
+# Cadáveres (*Intereses*)
+
+Siete props (`anchor: 'floor'`, un frame) en `assets/0x72/corpses.png`. Los genera `scripts/art/build-corpses.ts` a partir del idle de cada tipo, así que conservan el estilo de 0x72:
+
+| Prop | Sale de | Pose | Charco |
+|---|---|---|---|
+| `corpse_human` | `sinpaga_cuchillero` | de lado (girado un cuarto de vuelta, cabeza a la izquierda) | sangre |
+| `corpse_miner` | `minero_cuadrilla` | de lado | sangre |
+| `corpse_skeleton` | `esqueleto_minero` | montón de huesos | polvo de hueso |
+| `corpse_zombie` | `ahogado` | de lado | icor oscuro |
+| `corpse_dog` | `perro` | patas arriba | sangre |
+| `corpse_wolf` | `lobo` | patas arriba | sangre |
+| `corpse_rat` | `rata` | patas arriba | sangre |
+
+**`manifest.corpses`**: `{ "default": "corpse_human", "<spriteId>": "<corpseId>", … }` para cada criatura (todo sprite con animación `move`). Lo rellenan las `rules` de `content/intereses/art/0x72/corpses.json`, expresiones regulares sobre el id con la primera que coincida: esqueleto → huesos; ahogado o pálido → icor; minero, callado o guardia → minero; perro, lobo, rata; el resto, humano. Vista previa: [`art-previews/0x72-corpses.png`](art-previews/0x72-corpses.png).
+
+# Cómo funcionan los generadores (nota para quien siga)
+
+Todo el arte se reconstruye con `npm run art`, que llama a los scripts en este orden. Los PNG y las entradas del manifiesto **no se editan a mano**: se cambia la fuente (JSON o script) y se vuelve a generar.
+
+- **Paleta y base de *Intereses*:**
+  - `build-extra-art.ts`: tiles, props, superficies y objetos dibujados por código, en `extra.png`. Las funciones están en `environment-art.ts`, `spell-fx.ts`, `cover-props.ts` y `markers.ts`. **Reescribe `manifest.props` entero**, así que los scripts que añaden props corren después.
+  - `build-tiles.ts`: arma `terrain.png` desde `tiles.json` (campos `top`, `face`, `rim`, `stair` y `blend`).
+- **Personajes:**
+  - `build-palette-variants.ts` (`palettes.json`): recolores de 0x72 con decals.
+  - `build-hand-sprites.ts` (`hand-sprites.json`): sprites ASCII por partes. `extends` hereda de otro sprite; `over` y `under` añaden accesorios anclados al cuerpo; los élites son un `extends` con la `legend` recoloreada.
+  - `build-action-anims.ts` (`actions.json`): deriva `attack`, `cast` y `hurt` del idle y mueve los frames a `actors.png`.
+  - `build-corpses.ts` (`corpses.json`): los cadáveres.
+  - `build-portraits.ts` (`portraits.json`): retratos de 32 generados, y bustos de 48 con el kit `bust-kit.ts` (piel, pelo, ropa, expresión) más formas propias.
+- **Willy:**
+  - `build-willy-art.ts`: tiles y props; también reescribe `props` y `ui`.
+  - `build-icons.ts` (`icons.json`): iconos de objeto a partir de siluetas con huecos de color, medallas, marcos y cajas. Corre después de `build-willy-art`.
+  - `build-rivals.ts`: rivales modulares.
+- **Cinemáticas y títulos:** `build-cinematics.ts <juego> [intro|title]` desde `cinematics/*.spec.json`.
+- **Tabla `fx`:** `fx.json` de cada preset, que copia `fx-table.ts` al manifiesto.
+- **Vistas previas:** los scripts escriben `docs/art-previews/`. Las vistas «antes y después» de legibilidad se hicieron con scripts puntuales de Python que imitan `MapScene.buildWorld`.
+- **Comprobaciones:** antes de cada commit, `npm run art` y luego `npm run check`.
