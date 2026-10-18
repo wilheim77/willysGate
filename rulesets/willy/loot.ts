@@ -1,5 +1,5 @@
 import { type ActionOutcome, type CommandHandler, type Effect, type GameEvent, type GameState, type RngCursor, type Ruleset, OBJECT_TAG, RngCursor as Cursor, applyEffects, fail, hasTag } from '../../engine';
-import { type ItemDef, type MetaState, type PendingBox, RARITIES, type Rarity, hasEquipped, itemDef, metaOf, setMeta, willyContent } from './meta';
+import { type ItemDef, type MetaState, type PendingBox, RARITIES, type Rarity, cloneMeta, hasEquipped, itemDef, metaOf, setMeta, willyContent } from './meta';
 
 /**
  * Loot boxes (docs/willy/DESIGN.md §8): a box is granted (an achievement, a boss, an elite…) and
@@ -46,7 +46,7 @@ export function grantBox(meta: MetaState, tier: Rarity, origen: string, motivo?:
  * announcement. Apply the effects to the state you pass (or return them from your hook).
  */
 export function grantLootBox(state: GameState, tier: Rarity, reason: string, origen = 'patrocinio'): ActionOutcome {
-  const meta = structuredClone(metaOf(state));
+  const meta = cloneMeta(metaOf(state));
   const ev = grantBox(meta, tier, origen, reason);
   return { effects: [setMeta(meta)], events: [ev] };
 }
@@ -55,7 +55,7 @@ export function grantLootBox(state: GameState, tier: Rarity, reason: string, ori
 export function grantItem(state: GameState, itemId: string, reason: string, count = 1): ActionOutcome {
   const def = itemDef(itemId);
   if (!def) return { effects: [], events: [] };
-  const meta = structuredClone(metaOf(state));
+  const meta = cloneMeta(metaOf(state));
   meta.obtenidos[itemId] = (meta.obtenidos[itemId] ?? 0) + 1;
   return {
     effects: [{ type: 'giveItem', owner: 'party', item: itemId, count: count * (def.usos ?? 1) }, setMeta(meta)],
@@ -153,7 +153,7 @@ interface OpenBoxCommand {
 export const openBox: CommandHandler<OpenBoxCommand & { type: string }> = (state, cmd, { ruleset }) => {
   if (!willyContent()) return fail('unknown_command', 'No loot content');
   if (!cmd.issuer.startsWith('player')) return fail('not_your_entity', 'Only the player opens boxes');
-  const meta = structuredClone(metaOf(state));
+  const meta = cloneMeta(metaOf(state));
   const box = meta.cajas.find((b) => b.id === cmd.boxId);
   if (!box) return fail('invalid_target', 'No such box');
   meta.cajas = meta.cajas.filter((b) => b.id !== box.id);
@@ -205,7 +205,7 @@ export function dropsHook(_ruleset: Ruleset, state: GameState, events: GameEvent
     if (hasEquipped(state, 'willy', 'moneda-de-cinco-duros')) chips = Math.ceil(chips * 1.1);
     if (w.resources.fichas && chips > 0) effects.push({ type: 'modifyResource', entityId: 'willy', resource: 'fichas', delta: chips });
     if (rng.die(1000) <= Math.round(drop.consumible * 1000)) {
-      meta ??= structuredClone(metaOf(state));
+      meta ??= cloneMeta(metaOf(state));
       const def = rollItem(state, meta, rng, 'consumibles', kind === 'jefe' ? 'plata' : 'bronce', []);
       if (def) {
         meta.obtenidos[def.id] = (meta.obtenidos[def.id] ?? 0) + 1;
@@ -215,7 +215,7 @@ export function dropsHook(_ruleset: Ruleset, state: GameState, events: GameEvent
     }
     // Rarely, a piece of magic gear (a tool or equipment): elites and bosses more often and better.
     if (drop.magico && rng.die(1000) <= Math.round(drop.magico * 1000)) {
-      meta ??= structuredClone(metaOf(state));
+      meta ??= cloneMeta(metaOf(state));
       const rarity = weighted(rng, RARITIES.map((r) => ({ value: r, weight: drop.pesosRareza?.[r] ?? (r === 'bronce' ? 1 : 0) })))!;
       const table = rng.die(2) === 1 ? 'equipo' : 'herramientas';
       const def = rollItem(state, meta, rng, table, rarity, []);

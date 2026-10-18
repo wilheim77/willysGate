@@ -27,7 +27,7 @@ import {
 } from '../../engine';
 import { HANDLERS, type Handler, areaTiles, attackPreviewOf, extraActionSources, invalid, targetEntity } from './actions';
 import { type Dice, averageDice, parseDice, rollDice } from './dice';
-import { type ItemDef, type ItemEffect, equippedOf, hasEquipped, itemDef, metaOf, onConfigure, setMeta, willyContent } from './meta';
+import { type ItemDef, type ItemEffect, cloneMeta, equippedOf, hasEquipped, itemDef, metaOf, onConfigure, setMeta, willyContent } from './meta';
 import { type Resolver, type WillyEvent, dealDamage, heal, pushEntity, resolveAttack, standing } from './resolve';
 
 /**
@@ -279,10 +279,10 @@ function registerItemHandlers(): void {
       perform: (r, actorId, target) => {
         const actor = r.entity(actorId);
         const before = actor.conditions.map((c) => c.id);
-        r.emit({ type: 'itemUsed', actorId, item: def.id, nombre: def.nombre, etiquetas: def.etiquetas ?? [], actor: { id: actorId, condiciones: before }, enCombate: r.state.turn.mode === 'combat' } as WillyEvent);
+        r.emit({ type: 'itemUsed', actorId, item: def.id, nombre: def.nombre, etiquetas: def.etiquetas ?? [], actor: { id: actorId, condiciones: before }, enCombate: r.state.turn.mode === 'combat' } as unknown as WillyEvent);
         if (def.tipo === 'consumible' || def.tipo === 'chatarra') r.apply({ type: 'giveItem', owner: BAG, item: def.id, count: -1 });
         if (def.etiquetas?.includes('curacion')) {
-          const meta = structuredClone(metaOf(r.state));
+          const meta = cloneMeta(metaOf(r.state));
           meta.consumiblesCuracionUsados++;
           r.apply(setMeta(meta));
         }
@@ -332,7 +332,7 @@ export const equipItem: CommandHandler<EquipCommand> = (state, cmd, { ruleset })
   if (itemCount(state, BAG, def.id) < 1) return fail('invalid_target', 'Not in the bag');
   if (state.turn.mode === 'combat' && state.turn.activeEntityId !== e.id) return fail('not_your_turn', 'Not your turn');
   const slot = slotOf(def)!;
-  const meta = structuredClone(metaOf(state));
+  const meta = cloneMeta(metaOf(state));
   const slots = { ...(meta.equipo[e.id] ?? {}) };
   const effects: Effect[] = [];
   const old = slots[slot] ? itemDef(slots[slot]!) : undefined;
@@ -353,7 +353,7 @@ export const equipItem: CommandHandler<EquipCommand> = (state, cmd, { ruleset })
 export const unequipItem: CommandHandler<EquipCommand> = (state, cmd, { ruleset }) => {
   const e = state.entities[cmd.entityId];
   if (!e || e.controllerId !== cmd.issuer) return fail('not_your_entity', 'Not yours');
-  const meta = structuredClone(metaOf(state));
+  const meta = cloneMeta(metaOf(state));
   const slots = { ...(meta.equipo[e.id] ?? {}) };
   const slot = Object.keys(slots).find((s) => slots[s] === cmd.item);
   const def = itemDef(cmd.item);
@@ -419,7 +419,7 @@ export function itemsHook(ruleset: Ruleset, state: GameState, events: GameEvent[
       if (raw.type === 'combatStarted' && hasEquipped(state, id, 'dado-trucado')) {
         const key = `dado-trucado:${id}@${state.map.id}`;
         if (!meta.gastados.includes(key)) {
-          const m = structuredClone(meta);
+          const m = cloneMeta(meta);
           m.gastados.push(key);
           effects.push({ type: 'applyCondition', entityId: id, condition: 'afortunado' }, setMeta(m));
         }

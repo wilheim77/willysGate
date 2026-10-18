@@ -1,7 +1,7 @@
 import { type ActionOutcome, type Effect, type Entity, type GameEvent, type GameState, type JsonValue, type RngCursor, type Ruleset, OBJECT_TAG, gridDistance, hasCondition, hasTag, tileAt } from '../../engine';
 import { classOf, skillLevel } from './character';
 import { CLASSES } from './data';
-import { type AchievementDef, type CombatStats, type Condition, type EventPattern, type Match, type MetaState, type Rarity, type Scope, hasMeta, metaOf, setMeta, willyContent } from './meta';
+import { type AchievementDef, type CombatStats, type Condition, type EventPattern, type Match, type MetaState, type Rarity, type Scope, cloneMeta, metaOf, setMeta, willyContent } from './meta';
 import { grantBox } from './loot';
 import { pushedByFlag, standing } from './resolve';
 
@@ -284,9 +284,9 @@ export function datum(state: GameState, meta: MetaState, path: string, ctx: { co
     case 'partida.plantasLimpias':
       return meta.plantasLimpias.length;
     case 'partida.modoEliminacion':
-      return state.settings?.eliminationMode;
+      return state.flags.modoEliminacion;
     case 'partida.dificultad':
-      return state.settings?.difficulty;
+      return state.flags.dificultad ?? state.settings?.difficulty;
     default:
       return undefined;
   }
@@ -402,8 +402,9 @@ export function achievementsHook(_ruleset: Ruleset, state: GameState, events: Ga
   const content = willyContent();
   const w = state.entities[WILLY_ID];
   if (!content || !w) return { effects: [], events: [] };
-  const fresh = !hasMeta(state);
-  const meta = structuredClone(metaOf(state));
+  const meta = cloneMeta(metaOf(state));
+  const fresh = !meta.iniciado;
+  meta.iniciado = true;
   const outEvents: GameEvent[] = [];
   const queue: MetaEvent[] = [];
   if (fresh) queue.push({ type: 'runStarted' });

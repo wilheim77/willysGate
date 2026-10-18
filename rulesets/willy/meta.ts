@@ -161,6 +161,8 @@ export interface CombatStats {
 }
 
 export interface MetaState {
+  /** The run has started being tracked (the first command after the casting). */
+  iniciado: boolean;
   /** Unlocked achievement ids, in unlock order. */
   logros: string[];
   /** Event counters per achievement, for its current scope key. */
@@ -194,6 +196,7 @@ export const META = 'willyMeta';
 
 export function emptyMeta(): MetaState {
   return {
+    iniciado: false,
     logros: [],
     cont: {},
     cajas: [],
@@ -217,6 +220,11 @@ export function emptyMeta(): MetaState {
 export function metaOf(state: GameState): MetaState {
   const m = state.systems[META] as unknown as Partial<MetaState> | undefined;
   return m ? { ...emptyMeta(), ...m } : emptyMeta();
+}
+
+/** A deep copy to edit (the meta state is plain JSON). */
+export function cloneMeta<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value)) as T;
 }
 
 export function hasMeta(state: GameState): boolean {
