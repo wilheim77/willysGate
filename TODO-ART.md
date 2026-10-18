@@ -43,6 +43,7 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Coberturas y bestias de combate | intereses | 14 props de cobertura, terrenos `low_wall` y `balcony`, bestias `perro`, `lobo` y `rata`; falta darlos de alta en `ART_PROPS` (world.ts) y colocarlos |
 | Inventario y cajas de *Willy* | willy | Iconos de los 96 objetos, medallas por categoría de logro, marcos de rareza y cajas de apertura de 64×64; faltan los ~10 objetos nuevos que añada la meta |
 | Enemigos nuevos de *Willy* | willy | 21 enemigos + élites dorados y `aura-elite` hechos; **en pausa:** FX de habilidades y derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`) |
+| Cadáveres | intereses | 7 tipos derivados del idle y mapa `corpses` en el manifiesto; falta que el cliente los use |
 | Pulido del HUD | intereses | Barra superior en una fila, fichas de iniciativa con retrato, barra de acciones en dos filas, botones de 44 px, paneles de hierro biselado |
 | Objetos interactivos (Fase 4) | intereses | `chest`, `chest_trapped`, `lever`, terrenos `door_closed`/`door_open`, props `trap_armed`/`trap_disarmed` |
 | PNJ de Hondonegra | intereses | `mazo`, `hilda`, `cirilo`, `fanatico_pala`, `nella`, `odda`, `lisandro`, aldeanos; atrezo `tapestry`, `tapestry_crossbow`, `gallows` |
