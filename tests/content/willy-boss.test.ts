@@ -145,3 +145,16 @@ describe('Final boss: phases', () => {
     expect(of(showAfterCommand(willy, final, [turn], new RngCursor(final.rng)).events, 'audienceVote')).toHaveLength(1);
   });
 });
+
+describe('Final boss: the end', () => {
+  it('his defeat gets his last line (bossLine momento derrotado) and the lights come back', () => {
+    let s = step(fight(60)).state;
+    s = step(s).state;
+    const b = s.entities[BOSS]!;
+    const down = { ...s, entities: { ...s.entities, [BOSS]: { ...b, resources: { ...b.resources, vida: { current: 0, max: 100 } }, conditions: [...b.conditions, { id: 'eliminado' }] } } };
+    const out = step(down, [{ type: 'entityDefeated', entityId: BOSS, cause: 'golpe' } as GameEvent]);
+    expect(of(out.events, 'bossLine')[0]).toMatchObject({ momento: 'derrotado' });
+    expect(bossFightOf(out.state) ?? null).toBeNull();
+    expect(storedLighting(out.state).ambient).toBeGreaterThan(SHOW.boss!.pausaPublicitaria.ambiente);
+  });
+});

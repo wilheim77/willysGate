@@ -263,6 +263,7 @@ export function bossAfterCommand(ruleset: Ruleset, state: GameState, events: Gam
 
   // Over (he fell, or the combat ended): lights back, bookkeeping gone.
   if (existing && (!boss || state.turn.mode !== 'combat')) {
+    if (events.some((e) => e.type === 'entityDefeated' && (e as unknown as { entityId: string }).entityId === c.jefeId)) line(r, clone(existing), 'derrotado');
     if (existing.luz && existing.fase === 2) r.apply({ type: 'setSystem', system: 'lighting', value: existing.luz as unknown as JsonValue });
     else {
       const l = storedLighting(state);
