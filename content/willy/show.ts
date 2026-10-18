@@ -28,6 +28,8 @@ export const SHOW: ShowConfig = {
     curacionDivisor: 10,
     subePorPerdida: 5,
     subePorGolpe: 2,
+    votoPorRonda: 5,
+    drenajeEnAntena: 10,
   },
   sponsors: sponsors as unknown as ShowConfig['sponsors'],
 };
