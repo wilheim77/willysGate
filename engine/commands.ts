@@ -260,7 +260,17 @@ export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCo
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
   const result = handler(state, command, { ruleset, ...(content ? { content } : {}) });
   if (!result.ok) return result;
-  return levelUpIfEarned(ruleset, command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content), content);
+  return levelUpIfEarned(ruleset, afterCommand(ruleset, command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content)), content);
+}
+
+/** The ruleset's look at everything a command did (Ruleset.afterCommand). */
+function afterCommand(ruleset: Ruleset, result: CommandResult): CommandResult {
+  if (!result.ok || !ruleset.afterCommand) return result;
+  const rng = new RngCursor(result.state.rng);
+  const outcome = ruleset.afterCommand(result.state, result.events, rng);
+  if (!outcome.effects.length && !outcome.events.length && rng.state === result.state.rng) return result;
+  const r = applyOutcome(ruleset, { ...result.state, rng: rng.state }, outcome, rng);
+  return { ok: true, state: { ...r.state, rng: rng.state }, events: [...result.events, ...r.events] };
 }
 
 /** The party's shared points may have crossed a threshold: raise whoever is behind. */

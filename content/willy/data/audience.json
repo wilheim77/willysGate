@@ -57,6 +57,7 @@
     "segundosDeReloj": 30,
     "pct": 1
   },
+  "multSinRepeticion": 1.25,
   "expectacionAlEntrarEnPlanta": { "pct": 10 },
   "tramos": [
     { "desde": 0, "nombre": "Cuatro gatos" },

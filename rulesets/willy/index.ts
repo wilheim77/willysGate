@@ -2,12 +2,14 @@ import {
   type ActionOutcome,
   type CheckRequest,
   type ConditionDef,
+  type GameEvent,
   type GameState,
   type GlossaryEntry,
   type ResourceDef,
   type RngCursor,
   type Ruleset,
   type StatDef,
+  applyEffects,
   gridDistance,
   hasCondition,
   hasTag,
@@ -20,12 +22,14 @@ import { BARREL_BLAST, listActions, performAction, previewAction, setWillyRef } 
 import './more-classes';
 import './summons';
 import { syncCompanions } from './companions';
+import './xp';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
+import { showAfterCommand, showCommands } from './show';
 
 /**
  * «El Reglamento del Concurso»: Willy's light d20 ruleset (docs/willy/RULESET.md).
@@ -276,6 +280,27 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
   return r.outcome();
 }
 
+/**
+ * Things that look at every command's events (Ruleset.afterCommand): achievements, healing while
+ * walking, the floor clock. Each registers here and they run in order, each seeing the state
+ * left by the one before; their effects and events are all appended to the command's.
+ */
+export const afterCommandHooks: ((ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor) => ActionOutcome)[] = [];
+afterCommandHooks.push(showAfterCommand);
+
+function afterCommand(ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome {
+  const out: ActionOutcome = { effects: [], events: [] };
+  let current = state;
+  for (const hook of afterCommandHooks) {
+    const o = hook(ruleset, current, events, rng);
+    if (!o.effects.length && !o.events.length) continue;
+    current = applyEffects(ruleset, current, o.effects).state;
+    out.effects.push(...o.effects);
+    out.events.push(...o.events);
+  }
+  return out;
+}
+
 export const willy: Ruleset = {
   id: 'willy',
   version: 1,
@@ -296,7 +321,7 @@ export const willy: Ruleset = {
     habilidadAlMenos: (s, id, p) => skillLevel(s.entities[id]!, String(p.habilidad)) >= Number(p.min),
     rasgo: (s, id, p) => hasTrait(s.entities[id]!, String(p.is)),
   },
-  commands: {},
+  commands: { ...showCommands },
   rollInitiative: (state, id, rng) => {
     const e = state.entities[id]!;
     const agi = hasTag(e, 'criatura') ? Math.floor(stat(e, 'ataque', 3) / 2) : attr(e, 'agi');
@@ -327,6 +352,7 @@ export const willy: Ruleset = {
   noticeTrap: (state, id, trap) => noticeTrap(state, id, trap),
   triggerTrap: (state, id, trap, rng) => triggerTrap(willy, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
+  afterCommand: (state, events, rng) => afterCommand(willy, state, events, rng),
 };
 
 setWillyRef(willy);
@@ -339,3 +365,4 @@ export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progressi
 export { SURFACES } from './environment';
 export { HANDLERS, areaTiles } from './actions';
 export type { AttackRolledEvent, DamageDealtEvent, WillyEvent } from './resolve';
+export * as show from './show';

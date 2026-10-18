@@ -1,6 +1,6 @@
 import { type BaseCommand, type Engine, type Entity, type GameState, type JsonValue, type MapZone, type Vec2, SYSTEM_ISSUER, createEngine, nextAiCommand, withLighting, withZones, zonesOf } from '../../../engine';
-import { CLASSES, createCompanion, createWilly, willy } from '../../../rulesets/willy';
-import { generateFloor } from '../gen/floor';
+import { CLASSES, createCompanion, createWilly, skillLevel, willy } from '../../../rulesets/willy';
+import { FLOOR_COUNT, floorSpec, generateFloor } from '../gen/floor';
 
 /**
  * Balance simulator: Willy and his companion go through a generated floor, room by room in
@@ -12,8 +12,8 @@ import { generateFloor } from '../gen/floor';
  * numbers are a floor, not the experience of a good player.
  */
 
-/** Willy's expected level halfway through each floor (DESIGN.md §3 → «Curva de dificultad»). */
-export const EXPECTED_LEVEL: Record<number, number> = { 1: 2, 2: 5, 3: 7, 4: 9, 5: 11 };
+/** Willy's expected level on each floor (floors.json → pisos[].nivelEsperado: the level he enters with). */
+export const EXPECTED_LEVEL: Record<number, number> = Object.fromEntries(Array.from({ length: FLOOR_COUNT }, (_, i) => [i + 1, floorSpec(i + 1).nivelEsperado]));
 
 export interface FloorRun {
   floor: number;
@@ -157,6 +157,120 @@ export function simulateFloor(seed: number, floor: number, classId: string): Flo
   const wv = state.entities.willy!.resources.vida!;
   run.cleared = willy.isStanding(state.entities.willy!) && !run.stalled && run.bossWon;
   run.hpLeft = wv.current / wv.max;
+  return run;
+}
+
+// --- A whole season ---------------------------------------------------------------------------------
+
+export interface SeasonFloor {
+  floor: number;
+  /** Retries needed ("Volver a intentarlo" replays the lost fight with other dice). */
+  retries: number;
+  /** Willy's level when leaving the floor. */
+  level: number;
+  /** Tier of each active class ability (by use) when leaving the floor. */
+  tiers: Record<string, number>;
+  /** Uses of each active class ability so far (the by-use tiers count these). */
+  uses: Record<string, number>;
+  bossWon: boolean;
+  /** The boss (or guardian) fell at the first try. */
+  bossFirstTry: boolean;
+  fights: number;
+}
+
+export interface SeasonRun {
+  seed: number;
+  classId: string;
+  /** Got through every floor within the retry budget. */
+  finished: boolean;
+  floors: SeasonFloor[];
+}
+
+/**
+ * Willy (from level 1, earning XP) and his companion play every floor in order, carrying
+ * experience, ability uses and the companion between floors. The Camerino heals them fully.
+ * A lost fight is replayed with different dice, up to `maxRetries` times in the whole season.
+ */
+export function simulateSeason(seed: number, classId: string, maxRetries = 15, floors = FLOOR_COUNT): SeasonRun {
+  const run: SeasonRun = { seed, classId, finished: false, floors: [] };
+  let w = willyAt(classId, 1, { x: 0, y: 0 });
+  let mate: Entity | undefined;
+  let retriesLeft = maxRetries;
+  const abilities = (CLASSES[classId]!.habilidades as { id: string; pasiva?: boolean }[]).filter((h) => !h.pasiva).map((h) => h.id);
+  for (let floor = 1; floor <= floors; floor++) {
+    const built = generateFloor(seed, floor).setup;
+    const arrival = built.spawns.llegada!;
+    // The Camerino: full health and energy, back on their feet.
+    const heal = (e: Entity, at: Vec2): Entity => ({
+      ...e,
+      position: at,
+      conditions: e.conditions.filter((c) => c.id !== 'eliminado'),
+      resources: Object.fromEntries(Object.entries(e.resources).map(([k, r]) => [k, k === 'vida' || k === 'energia' ? { ...r, current: r.max } : r])),
+      tags: e.tags.filter((t) => !t.startsWith('caido-en:')),
+    });
+    w = heal(w, arrival);
+    let state = engine().newGame({ seed: seed * 31 + floor, map: built.map, entities: [w, ...built.entities] });
+    const systems = built.systems ?? {};
+    state = { ...state, systems: { ...state.systems, ...systems, spawns: built.spawns as unknown as JsonValue } };
+    if (systems.lighting) state = withLighting(state, systems.lighting as never);
+    if (systems.zones) state = withZones(state, systems.zones as never);
+    const spot = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }, { x: 1, y: 1 }, { x: -1, y: 1 }].map((d) => ({ x: arrival.x + d.x, y: arrival.y + d.y })).find((p) => free(state, p, new Set()))!;
+    mate = mate ? heal(mate, spot) : createCompanion(classId, w, spot)!;
+    state = { ...state, entities: { ...state.entities, [mate.id]: mate } };
+
+    const rooms = (systems.planta as unknown as { salas: { role: string; depth: number }[] }).salas;
+    const encounters = zonesOf(state, 'encounters').sort((a, b) => {
+      const ra = rooms[Number(a.name.split('-')[1])]!;
+      const rb = rooms[Number(b.name.split('-')[1])]!;
+      return Number(ra.role === 'jefe') - Number(rb.role === 'jefe') || ra.depth - rb.depth;
+    });
+    const partyIds = ['willy', mate.id];
+    let retries = 0;
+    let bossWon = false;
+    let bossFirstTry = false;
+    let fights = 0;
+    let failed = false;
+    for (const zone of encounters) {
+      const boss = rooms[Number(zone.name.split('-')[1])]!.role === 'jefe';
+      const foes = standingIds(state, String(zone.properties.participants).split(','));
+      if (!foes.length) continue;
+      const party = standingIds(state, partyIds);
+      const tiles = entryTiles(state, zone, foes.map((id) => state.entities[id]!), party.map((id) => state.entities[id]!));
+      const moved = { ...state.entities };
+      party.forEach((id, i) => {
+        if (tiles[i]) moved[id] = { ...moved[id]!, position: tiles[i]! };
+      });
+      const before: GameState = { ...state, entities: moved };
+      const near = (p: Vec2) => p.x >= zone.x - 4 && p.x < zone.x + zone.width + 4 && p.y >= zone.y - 4 && p.y < zone.y + zone.height + 4;
+      const aside = Object.fromEntries(Object.entries(before.entities).filter(([id, e]) => !party.includes(id) && !foes.includes(id) && !near(e.position)));
+      const inRoom = Object.fromEntries(Object.entries(before.entities).filter(([id]) => !aside[id]));
+      let won = false;
+      const retriesBefore = retries;
+      for (let attempt = 0; ; attempt++) {
+        const dice = { ...before.rng, a: (before.rng.a + attempt * 7919) >>> 0 };
+        const result = fight({ ...before, rng: dice, entities: inRoom }, party, foes);
+        state = { ...result.state, entities: { ...aside, ...result.state.entities } };
+        won = !result.stalled && willy.isStanding(state.entities.willy!);
+        if (won || retriesLeft <= 0) break;
+        retriesLeft--;
+        retries++;
+      }
+      fights++;
+      if (!won) {
+        failed = true;
+        break;
+      }
+      if (boss) {
+        bossWon = true;
+        bossFirstTry = retries === retriesBefore;
+      }
+    }
+    w = state.entities.willy!;
+    mate = state.entities[mate.id] ?? mate;
+    run.floors.push({ floor, retries, level: w.stats.nivel ?? 1, tiers: Object.fromEntries(abilities.map((id) => [id, skillLevel(w, id)])), uses: Object.fromEntries(abilities.map((id) => [id, w.resources[`uso:${id}`]?.current ?? 0])), bossWon, bossFirstTry, fights });
+    if (failed) return run;
+  }
+  run.finished = true;
   return run;
 }
 

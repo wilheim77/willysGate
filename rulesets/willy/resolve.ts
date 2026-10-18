@@ -96,6 +96,8 @@ export interface WillyEvent extends GameEvent {
     | 'showOff'
     | 'saltoCompleto'
     | 'companeroCae'
+    | 'xpGained'
+    | 'levelUp'
     | 'cinta'
     | 'marea'
     | 'mareaAviso'
@@ -283,7 +285,17 @@ export function dealDamage(r: Resolver, targetId: string, raw: number, element: 
 /** Run when someone is eliminated (companions remember where they fell). */
 export const defeatHooks: ((r: Resolver, id: string) => void)[] = [];
 
+/**
+ * Asked before anyone is eliminated: a hook that returns true keeps them in the fight at 1
+ * health, with no elimination, no entityDefeated and no experience (the final boss's Share).
+ */
+export const preventDefeatHooks: ((r: Resolver, id: string, cause: string) => boolean)[] = [];
+
 export function defeat(r: Resolver, id: string, sourceId: string | undefined, cause: string, element?: string): void {
+  if (preventDefeatHooks.some((h) => h(r, id, cause))) {
+    r.apply({ type: 'modifyResource', entityId: id, resource: 'vida', delta: 1 - (r.entity(id).resources.vida?.current ?? 0) });
+    return;
+  }
   r.apply({ type: 'applyCondition', entityId: id, condition: 'eliminado' });
   for (const hook of defeatHooks) hook(r, id);
   const fallen = r.entity(id);
