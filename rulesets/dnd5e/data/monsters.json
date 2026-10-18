@@ -1,5 +1,5 @@
 {
-  "$comment": "SRD 5.1 stat blocks (simplified to what the tactical game uses). speed in tiles; prof = proficiency bonus by CR; weapons reference weapons.json; multiattack = attacks per Attack action; xp = SRD XP for the CR. Optional: spellcasting {ability, level, slots[per spell level], spells, innate{spell: uses/day}} with spells.json ids; actions = ids in monster-actions.json (recharge / per-day powers); riders {weapon: {label, save{ability,dc,half}, condition{id,turns}, damage{dice,type}, drain, immuneTags}}; combos {weapon: [weapons in order]} for mixed Attack actions; startConditions; keepAway (tiles a caster keeps from enemies). Tags: resist:/immune:/vuln:<damage type>, condimmune:<condition>, type:<undead|humanoid|beast|giant>, pack_tactics, brute (+1 die on melee weapons), parry:<AC bonus> (reaction vs one melee hit), stench:<DC> (poison aura), dark_devotion / brave (advantage on saves vs charmed/frightened), undead_fortitude. Not SRD stat blocks but built from SRD rules: apprentice (a level-1 SRD wizard), foreman (the SRD gladiator plus powder_bomb and foreman_roar).",
+  "$comment": "SRD 5.1 stat blocks (simplified to what the tactical game uses). speed in tiles; prof = proficiency bonus by CR; weapons reference weapons.json; multiattack = attacks per Attack action; xp = SRD XP for the CR. Optional: spellcasting {ability, level, slots[per spell level], spells, innate{spell: uses/day}} with spells.json ids; actions = ids in monster-actions.json (recharge / per-day powers); riders {weapon: {label, save{ability,dc,half}, condition{id,turns}, damage{dice,type}, drain, immuneTags}}; combos {weapon: [weapons in order]} for mixed Attack actions; startConditions; keepAway (tiles a caster keeps from enemies). Tags: resist:/immune:/vuln:<damage type>, condimmune:<condition>, type:<undead|humanoid|beast|giant>, pack_tactics, brute (+1 die on melee weapons), parry:<AC bonus> (reaction vs one melee hit), stench:<DC> (poison aura), dark_devotion / brave (advantage on saves vs charmed/frightened), undead_fortitude. Not SRD stat blocks but built from SRD rules: apprentice (a level-1 SRD wizard), foreman (the SRD gladiator without Brute, 100 HP, plus powder_bomb and foreman_roar; a boss for a level 5-6 party).",
   "bandit": {
     "label": "Bandido",
     "abilities": {
@@ -894,7 +894,7 @@
       "cha": 15
     },
     "ac": 16,
-    "hp": 112,
+    "hp": 100,
     "speed": 6,
     "prof": 3,
     "weapons": [
@@ -905,7 +905,6 @@
     "multiattack": 3,
     "tags": [
       "type:humanoid",
-      "brute",
       "brave",
       "parry:3"
     ],
