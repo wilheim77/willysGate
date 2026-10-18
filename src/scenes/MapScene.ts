@@ -865,10 +865,15 @@ export class MapScene extends Phaser.Scene {
     g.fillCircle(cx, cy - T * 0.55, T * 0.22);
   }
 
+  /** Rotation for the `exit_open`/`exit_closed` props, which are drawn pointing right (east). */
+  private static readonly EXIT_ROTATION: Record<Dir, number> = { e: 0, s: Math.PI / 2, w: Math.PI, n: -Math.PI / 2 };
+
   /**
-   * Marks every tile of every `exits` zone so a way off the map is never invisible: a
-   * warm gold chevron (pointing off-map) or glow (no single direction — a lift, stairs)
-   * when the exit is open, a dim grey one when a requiresFlag/unlessFlag shuts it.
+   * Marks every tile of every `exits` zone so a way off the map is never invisible: the
+   * art's own `exit_open`/`exit_closed` prop (two sliding chevrons, or one dimmed behind a
+   * bar), rotated to point off-map, or a plain pulsing chevron/glow if a preset has no such
+   * art. Colour/choice mirrors GameController.zoneAllowed: open when nothing blocks it, shut
+   * (grey, or the bar) when a requiresFlag/unlessFlag does.
    */
   private drawExits(state: GameState): void {
     for (const o of this.exitMarkers) o.destroy();
@@ -876,15 +881,27 @@ export class MapScene extends Phaser.Scene {
     const T = this.grid.tile;
     for (const zone of zonesOf(state, 'exits')) {
       if (!zone.properties.to || !zone.properties.spawn) continue; // only actual travel exits
-      const color = this.zoneAllowed(zone) ? 0xe8c070 : 0x6a6266;
+      const open = this.zoneAllowed(zone);
       const dir = this.exitDirection(zone, state.map);
+      // A direction-less exit (a lift, a staircase, entirely inside the map) still needs some
+      // rotation for the sprite; "pointing right" reads fine as a plain marker in that case.
+      const rotation = dir ? MapScene.EXIT_ROTATION[dir] : 0;
+      const propId = open ? 'exit_open' : 'exit_closed';
+      const prop = this.manifest.props?.[propId];
       for (let y = zone.y; y < zone.y + zone.height; y++) {
         for (let x = zone.x; x < zone.x + zone.width; x++) {
           const tile = tileAt(state.map, { x, y });
           if (!tile) continue;
           const c = this.grid.tileCentre(x, y, tile.height);
-          const g = this.add.graphics().setDepth(this.grid.depth(y, tile.height, 4)).setBlendMode(Phaser.BlendModes.ADD);
-          g.fillStyle(color, 1);
+          const depth = this.grid.depth(y, tile.height, 4);
+          if (prop) {
+            const sprite = this.add.sprite(c.x, c.y, imageKey(prop.url)).setDepth(depth).setRotation(rotation);
+            sprite.play(`prop:${propId}`);
+            this.exitMarkers.push(sprite);
+            continue;
+          }
+          const g = this.add.graphics().setDepth(depth).setBlendMode(Phaser.BlendModes.ADD);
+          g.fillStyle(open ? 0xe8c070 : 0x6a6266, 1);
           if (dir) this.drawChevron(g, c.x, c.y, dir, T);
           else this.drawGlowMarker(g, c.x, c.y, T);
           this.tweens.add({ targets: g, alpha: { from: 0.35, to: 0.9 }, duration: 750 + ((x + y) % 3) * 120, yoyo: true, repeat: -1 });
