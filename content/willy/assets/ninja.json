@@ -19,241 +19,263 @@
         1,
         2
       ],
-      "face": 3
+      "face": 3,
+      "stair": 4
     },
     "agua": {
       "tileset": "terrain",
       "frames": [
-        4,
-        5
+        5,
+        6
       ],
-      "face": 6
+      "face": 7
     },
     "muelle": {
       "tileset": "terrain",
       "frames": [
-        7,
         8,
-        9
+        9,
+        10
       ],
-      "face": 10
+      "face": 11,
+      "stair": 12
     },
     "soportal": {
       "tileset": "terrain",
       "frames": [
-        11,
-        12
+        13,
+        14
       ],
-      "face": 13
+      "face": 15,
+      "stair": 16
     },
     "lonja": {
       "tileset": "terrain",
       "frames": [
-        14,
-        15,
-        16,
-        17
+        17,
+        18,
+        19,
+        20
       ],
-      "face": 18
+      "face": 21,
+      "stair": 22
     },
     "muro-castro": {
       "tileset": "terrain",
       "frames": [
-        19,
-        20
+        23,
+        24
       ],
-      "face": 21
+      "face": 25
     },
     "moqueta": {
       "tileset": "terrain",
       "frames": [
-        22,
-        23
+        26,
+        27
       ],
-      "face": 24
+      "face": 28,
+      "stair": 29
     },
     "tarima": {
-      "tileset": "terrain",
-      "frames": [
-        25,
-        26
-      ],
-      "face": 27
-    },
-    "muro-plato": {
-      "tileset": "terrain",
-      "frames": [
-        28
-      ],
-      "face": 29
-    },
-    "plato": {
       "tileset": "terrain",
       "frames": [
         30,
         31
       ],
-      "face": 32
+      "face": 32,
+      "stair": 33
+    },
+    "muro-plato": {
+      "tileset": "terrain",
+      "frames": [
+        34
+      ],
+      "face": 35
+    },
+    "plato": {
+      "tileset": "terrain",
+      "frames": [
+        36,
+        37
+      ],
+      "face": 38,
+      "stair": 39
     },
     "baldosa-roja": {
       "tileset": "terrain",
       "frames": [
-        33
+        40
       ],
-      "face": 34
+      "face": 41,
+      "stair": 42
     },
     "baldosa-roja-encendida": {
       "tileset": "terrain",
       "frames": [
-        35
+        43
       ],
-      "face": 36
+      "face": 44,
+      "stair": 45
     },
     "baldosa-azul": {
       "tileset": "terrain",
       "frames": [
-        37
+        46
       ],
-      "face": 38
+      "face": 47,
+      "stair": 48
     },
     "baldosa-azul-encendida": {
       "tileset": "terrain",
       "frames": [
-        39
+        49
       ],
-      "face": 40
+      "face": 50,
+      "stair": 51
     },
     "baldosa-verde": {
       "tileset": "terrain",
       "frames": [
-        41
+        52
       ],
-      "face": 42
+      "face": 53,
+      "stair": 54
     },
     "baldosa-verde-encendida": {
       "tileset": "terrain",
       "frames": [
-        43
+        55
       ],
-      "face": 44
+      "face": 56,
+      "stair": 57
     },
     "baldosa-amarilla": {
       "tileset": "terrain",
       "frames": [
-        45
+        58
       ],
-      "face": 46
+      "face": 59,
+      "stair": 60
     },
     "baldosa-amarilla-encendida": {
       "tileset": "terrain",
       "frames": [
-        47
+        61
       ],
-      "face": 48
+      "face": 62,
+      "stair": 63
     },
     "trampilla-abierta": {
       "tileset": "terrain",
       "frames": [
-        49
-      ],
-      "face": 50
-    },
-    "gradas": {
-      "tileset": "terrain",
-      "frames": [
-        51,
-        52
-      ],
-      "face": 53
-    },
-    "hiper": {
-      "tileset": "terrain",
-      "frames": [
-        54,
-        55,
-        56
-      ],
-      "face": 57
-    },
-    "hiper-oferta": {
-      "tileset": "terrain",
-      "frames": [
-        58
-      ],
-      "face": 59
-    },
-    "estanteria": {
-      "tileset": "terrain",
-      "frames": [
-        60,
-        61
-      ],
-      "face": 62
-    },
-    "cinta": {
-      "tileset": "terrain",
-      "frames": [
-        63,
         64
       ],
       "face": 65
     },
-    "verbena": {
+    "gradas": {
       "tileset": "terrain",
       "frames": [
         66,
-        67,
-        68
+        67
       ],
-      "face": 69
+      "face": 68
+    },
+    "hiper": {
+      "tileset": "terrain",
+      "frames": [
+        69,
+        70,
+        71
+      ],
+      "face": 72,
+      "stair": 73
+    },
+    "hiper-oferta": {
+      "tileset": "terrain",
+      "frames": [
+        74
+      ],
+      "face": 75,
+      "stair": 76
+    },
+    "estanteria": {
+      "tileset": "terrain",
+      "frames": [
+        77,
+        78
+      ],
+      "face": 79
+    },
+    "cinta": {
+      "tileset": "terrain",
+      "frames": [
+        80,
+        81
+      ],
+      "face": 82,
+      "stair": 83
+    },
+    "verbena": {
+      "tileset": "terrain",
+      "frames": [
+        84,
+        85,
+        86
+      ],
+      "face": 87,
+      "stair": 88
     },
     "escenario": {
       "tileset": "terrain",
       "frames": [
-        70,
-        71
+        89,
+        90
       ],
-      "face": 72
+      "face": 91,
+      "stair": 92
     },
     "muro-verbena": {
       "tileset": "terrain",
       "frames": [
-        73,
-        74
+        93,
+        94
       ],
-      "face": 75
+      "face": 95
     },
     "azulejo": {
       "tileset": "terrain",
       "frames": [
-        76,
-        77
+        96,
+        97
       ],
-      "face": 78
+      "face": 98,
+      "stair": 99
     },
     "piscina": {
       "tileset": "terrain",
       "frames": [
-        79,
-        80
+        100,
+        101
       ],
-      "face": 81
+      "face": 102
     },
     "hielo-balneario": {
       "tileset": "terrain",
       "frames": [
-        82,
-        83
+        103,
+        104
       ],
-      "face": 84
+      "face": 105,
+      "stair": 106
     },
     "muro-balneario": {
       "tileset": "terrain",
       "frames": [
-        85,
-        86
+        107,
+        108
       ],
-      "face": 87
+      "face": 109
     }
   },
   "sprites": {
