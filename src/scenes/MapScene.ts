@@ -586,7 +586,10 @@ export class MapScene extends Phaser.Scene {
       case 'stabilized': {
         const s = sprite(e.entityId);
         const defeated = event.type === 'died' || event.type === 'entityDefeated';
-        if (s && defeated) this.juice.burst(s.x, s.y, this.onDeath === 'vanish' ? 0xffe14d : 0x5a0f0a, 16);
+        // 'vanish' mode with real art (fx_eliminado) carries its own flash/burst baked in —
+        // the generic particle burst would just clutter it. No art: keep the code-drawn one.
+        const vanishHasArt = this.onDeath === 'vanish' && !!this.manifest.props?.fx_eliminado;
+        if (s && defeated && !vanishHasArt) this.juice.burst(s.x, s.y, this.onDeath === 'vanish' ? 0xffe14d : 0x5a0f0a, 16);
         if (s && event.type === 'downed') void this.juice.floatText(s.x, s.y, this.texts.downed, '#ff8a8a', 0.5);
         this.applyFate(String(e.entityId), state, true);
         return;
@@ -741,7 +744,10 @@ export class MapScene extends Phaser.Scene {
         this.shadows.get(id)?.setVisible(false);
         this.vanished.add(id);
         if (animate) {
-          void this.juice.floatText(s.x, s.y - this.grid.tile * 0.3, this.texts.eliminated ?? '¡ELIMINADO!', '#ffe14d', 0.9);
+          // Real art (fx_eliminado): a baked "¡ELIMINADO!" banner with its own flash/burst/
+          // fade, drawn by the art pack (docs/ART_CATALOG.md). No art: the code-drawn text.
+          if (this.manifest.props?.fx_eliminado) this.playProp('fx_eliminado', s.x, s.y - this.grid.tile * 0.3, 2_000_000);
+          else void this.juice.floatText(s.x, s.y - this.grid.tile * 0.3, this.texts.eliminated ?? '¡ELIMINADO!', '#ffe14d', 0.9);
           this.tweens.add({
             targets: s,
             alpha: 0,
