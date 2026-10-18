@@ -21,6 +21,8 @@
   "percebe": { "kind": "projectile", "fx": "fx-percebe", "tilesPerSec": 10 },
   "descarga-de-charco": { "kind": "burst", "beadFx": "fx-chispa-mini", "fx": "fx-descarga-charco", "tilesPerSec": 12 },
   "autodestruccion": { "kind": "instant", "fx": "fx-explosion" },
+  "autodestruccion-toxica": { "kind": "instant", "fx": "fx-explosion" },
+  "autodestruccion-vapor": { "kind": "instant", "fx": "fx-explosion" },
   "vaharada": { "kind": "burst", "beadFx": "fx-chispa-mini", "fx": "fx-vapor", "tilesPerSec": 12 },
   "nube-de-colonia": { "kind": "cone", "fx": "fx-nube-colonia", "delayPerTileMs": 40 },
   "a-reponer": { "kind": "ring", "fx": "fx-a-reponer" },

@@ -559,7 +559,7 @@ Bestias (`hand-sprites.json`, `idle`/`move`/`hit`, mirando a la derecha; los ret
 
 Los genera `scripts/art/build-icons.ts`, que corre después de `build-willy-art.ts` y añade sus entradas a `ui` sin borrar las demás. Vista previa: [`art-previews/ninja-icons.png`](art-previews/ninja-icons.png).
 
-- **`item-<id>`** (16×16): un icono por cada objeto de `data/items.json` (los que aún no tienen silueta salen con una caja con «?» y un aviso en el build). Salen de una biblioteca de 79 siluetas ASCII (botella, lata, bocadillo, llave inglesa, balón, casco, libro, aviso…) en `content/willy/art/ninja/icons.json`, con los colores propios de cada objeto. Un objeto nuevo es una línea más en `items` de ese fichero; el build falla si a algún objeto le falta icono.
+- **`item-<id>`** (16×16): un icono por cada objeto de `data/items.json` (los que aún no tienen silueta salen con una caja con «?» y un aviso en el build). Salen de una biblioteca de 79 siluetas ASCII (botella, lata, bocadillo, llave inglesa, balón, casco, libro, aviso…) en `content/willy/art/ninja/icons.json`, con los colores propios de cada objeto. Un objeto nuevo es una línea más en `items` de ese fichero; el build falla si a algún objeto le falta icono. Incluye los 12 objetos nuevos de la meta: `gaseosa-la-revoltosa` (botella), `caldo-de-la-abuela` (termo), `agua-de-la-fuente-santa` (garrafa), `chupito-de-orujo` (vial fosforito), `bebida-energetica-vortax` (lata negra y lila), `bomba-fetida-glorp` (bomba verde), `bengala-de-puerto` (petardo rojo), `folleto-la-prudente` (papeles), `iman-de-mama-clementina` (aviso rosa), `pegatina-yo-cai` (moneda amarilla), `llavero-butanos-perez` (llaves naranjas) y `poster-firmado-de-vortax` (mapa morado enrollado).
 - **`logro-cat-<categoria>`** (24×24): una medalla por categoría de `achievements.json` con su glifo: huella, espadas, barril, cara, caja, ojo, moneda, reloj, flecha, calavera, interrogación, antena, sello y balón. Más `logro-bloqueado` (gris con interrogación).
 - **`marco-<rareza>`** (18×18): marcos finos para los iconos (bronce, plata, oro, legendaria), además de las `carta-*` que ya había.
 - **Cajas para la apertura** (64×64, dibujadas a 32 y escaladas ×2), para `<nivel>` = bronce, plata, oro, legendaria:
@@ -583,14 +583,14 @@ Cada uno tiene su `<id>--elite`: el mismo sprite con la paleta dorada que calcul
 
 ### Efectos de sus habilidades (`fx` del manifiesto)
 
-18 ids de habilidad acordados con el agente de *Willy* (las mismas formas genéricas reutilizadas con otro color, como `gWave`), más `autodestruccion` (reutiliza `fx-explosion`) para los enemigos "lata"/petardo/pastilla que estallan. Dibujados por `scripts/art/willy-show-art.ts` (`reachBeam`/`markedBeam`, `groundPulse`, `impactBurst`, `coneWash`, `tossedBit`, `tinyBead`) y cableados en `content/willy/art/ninja/fx.json`.
+18 ids de habilidad acordados con el agente de *Willy* (las mismas formas genéricas reutilizadas con otro color, como `gWave`), más `autodestruccion`, `autodestruccion-toxica` y `autodestruccion-vapor` (las tres reutilizan `fx-explosion`) para los enemigos "lata"/petardo/pastilla que estallan. Dibujados por `scripts/art/willy-show-art.ts` (`reachBeam`/`markedBeam`, `groundPulse`, `impactBurst`, `coneWash`, `tossedBit`, `tinyBead`) y cableados en `content/willy/art/ninja/fx.json`.
 
 | Habilidad | Enemigo(s) | `kind` | Prop(s) |
 |---|---|---|---|
 | `tentaculo` | `pulpo-de-bajura` | ray | `fx-tentaculo` (lanzazo morado) |
 | `percebe` | `percebeiro-ahogado` | projectile | `fx-percebe` |
 | `descarga-de-charco` | `anguila-electrica` | burst | `fx-chispa-mini` (cuenta) + `fx-descarga-charco` (anillo cian) |
-| `autodestruccion` | `lata-de-bonito`, `lata-de-fabada`, `petardo-andante`, `pastilla-efervescente` | instant | `fx-explosion` (reutilizado) |
+| `autodestruccion` / `autodestruccion-toxica` / `autodestruccion-vapor` | `lata-de-bonito`, `lata-de-fabada`, `petardo-andante`, `pastilla-efervescente` | instant | `fx-explosion` (reutilizado, las tres variantes) |
 | `vaharada` | `pastilla-efervescente` | burst | `fx-chispa-mini` + `fx-vapor` (reutilizado) |
 | `nube-de-colonia` | `dependienta-de-perfumeria` | cone | `fx-nube-colonia` (niebla rosa) |
 | `a-reponer` | `encargado-de-seccion` | ring | `fx-a-reponer` (anillo verde) |
