@@ -15,6 +15,7 @@ const boss = (floors.plantas as unknown as { jefe?: { id: string; medidorShare?:
   .find((j) => j?.medidorShare);
 
 export const SHOW: ShowConfig = {
+  pisos: floors.pisos.map((p) => ({ id: p.id, planta: p.planta, parte: p.parte })),
   audience: {
     ...(audience as unknown as ShowConfig['audience']),
     hitos: loot.fuentes.hitosAudiencia,

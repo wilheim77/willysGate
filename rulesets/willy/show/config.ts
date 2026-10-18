@@ -100,6 +100,8 @@ export interface ShareConfig {
 }
 
 export interface ShowConfig {
+  /** Each floor's planta (biome) and part (1 = guardian floor, 2 = boss floor). */
+  pisos: { id: number; planta: number; parte: number }[];
   audience: AudienceData;
   share: ShareConfig;
   sponsors: { reglas: SponsorRules; patrocinadores: SponsorData[] };
