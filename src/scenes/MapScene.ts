@@ -113,6 +113,8 @@ export class MapScene extends Phaser.Scene {
   private worldObjects: Phaser.GameObjects.GameObject[] = [];
   private sprites = new Map<string, Phaser.GameObjects.Sprite>();
   private shadows = new Map<string, Phaser.GameObjects.Ellipse | Phaser.GameObjects.Sprite>();
+  /** Ids currently showing a manifest corpse prop in place of their living sprite (see applyFate). */
+  private corpseSprites = new Set<string>();
   private lighting: LightingLayer | null = null;
   private facing = new Map<string, Dir>();
   private breathing = new Map<string, Phaser.Tweens.Tween>();
@@ -687,25 +689,49 @@ export class MapScene extends Phaser.Scene {
     }
   }
 
-  /** Dead and fallen creatures lie down; the dead fade into the floor. */
+  /**
+   * Dead and fallen creatures lie down; the dead fade into the floor — or, when the art
+   * pack has a corpse for this spriteId (R?? "corpses for dead enemies"), are replaced by
+   * it outright. Downed-but-not-dead allies keep their current look unchanged. Floor depth
+   * either way, so a corpse never hides anyone still standing near it; `occupiesTile`
+   * already excludes the dead (rulesets/dnd5e/index.ts), so walking over one just works.
+   */
   private applyFate(id: string, state: GameState, animate = false): void {
     const s = this.sprites.get(id);
     const e = state.entities[id];
     if (!s || !e) return;
     const dead = hasCondition(e, 'dead');
     const down = hasCondition(e, 'downed');
+    const floorDepth = () => this.grid.depth(e.position.y, tileAt(state.map, e.position)?.height ?? 0, 1.8);
     if (e.tags.includes('object')) {
-      // Scenery breaks rather than lying down: debris if the art has it, gone otherwise.
+      // Scenery breaks rather than lying down: debris if the art has it, a dust puff otherwise.
       const art = this.manifest.sprites[e.spriteId];
       this.shadows.get(id)?.setVisible(false);
       if (dead && art?.kind === 'frames' && art.animations.broken) {
         s.stop().setFrame(`${e.spriteId}:broken-0`).setVisible(true);
-        s.setDepth(this.grid.depth(e.position.y, tileAt(state.map, e.position)?.height ?? 0, 1.8));
+        s.setDepth(floorDepth());
       } else {
+        if (dead && animate) this.playProp('fx_dust', s.x, s.y, s.depth + 1);
         s.setVisible(!dead);
       }
       return;
     }
+    // A manifest corpse for this spriteId (or a pack-wide 'default') replaces the sprite
+    // outright — its blood/ash pool is already baked into the art.
+    const corpseId = dead ? (this.manifest.corpses?.[e.spriteId] ?? this.manifest.corpses?.default) : undefined;
+    const corpseArt = corpseId ? this.manifest.props?.[corpseId] : undefined;
+    if (dead && corpseArt) {
+      s.stop();
+      this.stopBreathing(id);
+      s.setTexture(imageKey(corpseArt.url), `prop:${corpseId}-0`);
+      s.clearTint().setAngle(0).setAlpha(1).setDepth(floorDepth());
+      this.corpseSprites.add(id);
+      this.shadows.get(id)?.setVisible(false);
+      return;
+    }
+    // Revived/stabilized back from a corpse-art swap: restore the living sprite/texture
+    // (idle() plays an anim bound to the original texture, which resets both).
+    if (this.corpseSprites.delete(id)) this.idle(id, this.facing.get(id) ?? 's');
     const angle = dead || down ? 90 : 0;
     const alpha = dead ? 0.55 : 1;
     if (dead) s.setTint(0x6a6a6a);
@@ -720,7 +746,11 @@ export class MapScene extends Phaser.Scene {
     this.shadows.get(id)?.setVisible(!dead);
     if (animate) this.tweens.add({ targets: s, angle, alpha, duration: 300 });
     else s.setAngle(angle).setAlpha(alpha);
-    if (dead) s.setDepth(s.depth - 4);
+    if (dead) {
+      s.setDepth(floorDepth());
+      // No corpse art for this one: paint the blood/ash ourselves (once, on the real event).
+      if (animate) this.bloodDecal(s.x, s.y, s.depth);
+    }
   }
 
   /** Safety net after playback: every sprite where the state says it is. */
