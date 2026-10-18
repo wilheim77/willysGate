@@ -78,6 +78,7 @@ export default {
     // Scenery: kitchen oil, cloister cover, a barricade at the gate for the night of the torches.
     'barrel_oil-1': [1, 1],
     'barrel_oil-2': [1, 2],
+    'campfire-3': [3, 4], // the kitchen fire: a long rest after D1 (descanso_abadia)
     'crate-1': [5, 7],
     'crate-2': [9, 12],
     'sacks-1': [6, 11],

@@ -36,6 +36,7 @@ export default {
     'rubble_pile_c-2': [13, 9],
     'pillar_broken-2': [23, 4],
     'barrel_oil-1': [22, 9], // lamp oil by the timbering
+    'campfire-2': [28, 8], // the Callados' camp at the mine end: a short rest after the fight
   },
   lights: [
     { name: 'luz-pozo', at: [2, 4], radius: 3, color: '#c8d0e0', flicker: 0.05, intensity: 0.6 },
@@ -48,6 +49,7 @@ export default {
     {
       name: 'callados-del-tunel',
       rect: [10, 1, 16, 9],
+      props: { setFlag: 'tunel_despejado' },
       participants: ['callado-14', 'callado-12', 'callado-13', 'rata_gigante-2', 'rata_gigante-3', 'esqueleto_minero-1', 'esqueleto_minero-2'],
     },
   ],

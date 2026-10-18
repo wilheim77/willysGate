@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 25,
+ "nextobjectid": 26,
  "properties": [
   {
    "name": "name",
@@ -241,6 +241,18 @@
      "height": 0,
      "rotation": 0,
      "visible": true
+    },
+    {
+     "id": 16,
+     "name": "campfire-2",
+     "type": "",
+     "point": true,
+     "x": 912,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
     }
    ]
   },
@@ -255,7 +267,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 16,
+     "id": 17,
      "name": "luz-pozo",
      "type": "",
      "point": true,
@@ -289,7 +301,7 @@
      ]
     },
     {
-     "id": 17,
+     "id": 18,
      "name": "candil-galeria",
      "type": "",
      "point": true,
@@ -328,7 +340,7 @@
      ]
     },
     {
-     "id": 18,
+     "id": 19,
      "name": "candil-entibado",
      "type": "",
      "point": true,
@@ -367,7 +379,7 @@
      ]
     },
     {
-     "id": 19,
+     "id": 20,
      "name": "brillo-plata",
      "type": "",
      "point": true,
@@ -413,7 +425,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 20,
+     "id": 21,
      "name": "callados-del-tunel",
      "type": "",
      "x": 320,
@@ -427,6 +439,11 @@
        "name": "participants",
        "type": "string",
        "value": "callado-14,callado-12,callado-13,rata_gigante-2,rata_gigante-3,esqueleto_minero-1,esqueleto_minero-2"
+      },
+      {
+       "name": "setFlag",
+       "type": "string",
+       "value": "tunel_despejado"
       }
      ]
     }
@@ -443,7 +460,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 21,
+     "id": 22,
      "name": "filtracion",
      "type": "",
      "x": 256,
@@ -484,7 +501,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 22,
+     "id": 23,
      "name": "a-escorial",
      "type": "",
      "x": 64,
@@ -507,7 +524,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 24,
      "name": "a-mina",
      "type": "",
      "x": 992,
@@ -542,7 +559,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 24,
+     "id": 25,
      "name": "tunel",
      "type": "",
      "x": 192,

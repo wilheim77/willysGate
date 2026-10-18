@@ -255,7 +255,7 @@ describe('golden path matrix: D1 x D2 x D3 x D4', () => {
       const { state, visited, critical, steps, wiped } = runRoute(combo, 1);
       // eslint-disable-next-line no-console
       console.log(
-        `${comboLabel(combo)}: ${steps} steps, visited [${[...visited].join(', ')}], wiped=${wiped}, epilogo_visto=${!!state.flags.epilogo_visto}, critical flags (${critical.size}): ${[...critical].join(', ')}`,
+        `${comboLabel(combo)}: ${steps} steps, visited [${[...visited].join(', ')}], wiped=${wiped}, rests=[${['descanso_tunel', 'descanso_abadia', 'descanso_mina'].filter((f) => state.flags[f]).join(',')}], epilogo_visto=${!!state.flags.epilogo_visto}, critical flags (${critical.size}): ${[...critical].join(', ')}`,
       );
       expect(wiped, `${comboLabel(combo)}: the party was wiped out before settling - see the console log above for how far it got`).toBe(false);
       expect(visited.size, `${comboLabel(combo)}: only visited ${visited.size} map(s)`).toBeGreaterThanOrEqual(2);

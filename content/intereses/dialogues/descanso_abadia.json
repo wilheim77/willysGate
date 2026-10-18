@@ -1,0 +1,26 @@
+{
+  "$comment": "Long rest in the abbey kitchen after the night of the torches (trigger 'descanso_abadia' once d1_resuelto; also on the kitchen fire spawn: spawn-dialogues.json). Once per game (flag descanso_abadia). Map agent.",
+  "id": "descanso_abadia",
+  "start": "cocina",
+  "nodes": {
+    "cocina": {
+      "text": "El fogón de la cocina de la abadía. Huele a pan duro, a cera y, desde esta noche, a humo de antorcha. Esta noche la abadía es de quien la ha ganado, y nadie va a venir a preguntar quién duerme en sus sacos de harina.",
+      "choices": [
+        { "id": "dormir", "text": "Dormir hasta el alba. (Descanso largo)", "when": { "all": [{ "flag": "d1_resuelto" }, { "not": { "flag": "descanso_abadia" } }] }, "next": "noche" },
+        { "id": "seguir", "text": "Todavía no." }
+      ]
+    },
+    "noche": {
+      "text": "Dormís a ratos. En algún momento alguien recoge los cuerpos del claustro y friega la sangre de las losas. Cuando os despertáis, el fogón sigue encendido. Nadie os cobra la cama. Todavía.",
+      "effects": [
+        { "type": "rest", "kind": "long" },
+        { "type": "setFlag", "flag": "descanso_abadia", "value": true }
+      ],
+      "next": "alba"
+    },
+    "alba": {
+      "speaker": "garran",
+      "text": "Ahora, la mina. Lo que haya ahí abajo lleva meses sin dormir."
+    }
+  }
+}
