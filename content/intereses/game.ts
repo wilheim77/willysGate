@@ -14,6 +14,7 @@ import levelups from './levelups.json';
 import objectives from './objectives.json';
 import tutorial from './tutorial.json';
 import barks from './barks.json';
+import intro from './intro.json';
 import texts from './texts/ui.json';
 import viejoMinero from './dialogues/viejo_minero.json';
 import cofrePrueba from './dialogues/cofre_prueba.json';
@@ -75,6 +76,7 @@ export const game: GameDefinition = {
   maps: Object.fromEntries(Object.keys(ACT_MAPS).map((id) => [id, () => buildMap(id, DIALOGUES)])),
   // The act opens on the road: Dorotea talks first.
   opening: { dialogue: 'camino_dorotea', partner: 'dorotea' },
+  intro,
   triggers: triggers.triggers as NonNullable<GameDefinition['triggers']>,
   objectives: objectives.objectives as NonNullable<GameDefinition['objectives']>,
   levels: {

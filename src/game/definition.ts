@@ -86,6 +86,11 @@ export interface GameDefinition {
   narrate?(event: GameEvent, state: GameState): string | null;
   /** A conversation that opens as soon as the protagonist is created. */
   opening?: { dialogue: string; partner?: string };
+  /**
+   * Narration pages shown after character creation and before `opening`: who you are and why
+   * you're here. `{nombre}` is the protagonist's name; `byClass[<class tag>]` adds a page after the first.
+   */
+  intro?: { title?: string; pages: string[]; byClass?: Record<string, string>; next?: string; start?: string };
   /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
   tutorial?: TutorialStep[];
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */

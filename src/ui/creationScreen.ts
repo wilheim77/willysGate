@@ -168,6 +168,60 @@ export class CreationScreen {
     try {
       this.store.load(this.game.creation!.apply(this.store.engine, this.store.state, choices));
       this.root.hidden = true;
+      // Who you are and why you're on this road, then the story starts talking.
+      this.showIntro(() => this.startOpening());
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  /** Full-screen narration pages (GameDefinition.intro); `done` runs after the last one. */
+  private showIntro(done: () => void): void {
+    const intro = this.game.intro;
+    const hero = this.store.state.entities[this.game.leaderId];
+    if (!intro || !hero || this.store.state.map.id === 'test') return done();
+    const classId = hero.tags.find((t) => t.startsWith('class:'))?.slice(6);
+    const byClass = classId ? intro.byClass?.[classId] : undefined;
+    const pages = [intro.pages[0], ...(byClass ? [byClass] : []), ...intro.pages.slice(1)]
+      .filter((p): p is string => !!p)
+      .map((p) => p.replaceAll('{nombre}', hero.name));
+    const root = document.querySelector<HTMLElement>('#intro')!;
+    let i = 0;
+    const render = () => {
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      if (intro.title) {
+        const h = document.createElement('h2');
+        h.textContent = intro.title;
+        panel.append(h);
+      }
+      const p = document.createElement('p');
+      p.textContent = pages[i]!;
+      const last = i === pages.length - 1;
+      const next = document.createElement('button');
+      next.className = 'confirm';
+      next.textContent = last ? (intro.start ?? 'Empezar') : (intro.next ?? 'Siguiente');
+      next.addEventListener('click', () => {
+        if (last) {
+          root.hidden = true;
+          done();
+        } else {
+          i++;
+          render();
+        }
+      });
+      const dots = document.createElement('div');
+      dots.className = 'dots';
+      dots.textContent = pages.map((_, k) => (k === i ? '●' : '○')).join(' ');
+      panel.append(p, dots, next);
+      root.replaceChildren(panel);
+    };
+    render();
+    root.hidden = false;
+  }
+
+  private startOpening(): void {
+    try {
       // The story starts talking (only where its speaker is present, e.g. not on the test map).
       const opening = this.game.opening;
       if (opening && this.game.dialogues?.[opening.dialogue] && (!opening.partner || this.store.state.entities[opening.partner])) {
