@@ -13,6 +13,7 @@ it.runIf(!!process.env.SIM_SEASON)('season probe', () => {
       const r = simulateSeason(seed * 104729, classId, 15, floors);
       const line = r.floors.map((f) => `${f.floor}:L${f.level}r${f.retries}/${f.fights}${f.bossFirstTry ? "B" : "b"}[${Object.values(f.uses).join(',')}]`).join(' ');
       console.log(`${classId} ${seed} ${r.finished ? 'FIN' : 'X'} ${line}`);
+      for (const f of r.floors) if (f.toughest) console.log(`  toughest ${f.floor} r${f.retries}: ${f.toughest.join(',')}`);
     }
   }
   console.log(`${Date.now() - t0}ms`);

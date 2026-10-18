@@ -191,8 +191,8 @@ function enemiesAround(state: GameState, actor: Entity, centre: Vec2, radius: nu
 }
 
 function applyRider(r: Resolver, actorId: string, targetId: string, a: CompanionAbility): void {
-  const t = r.entity(targetId);
-  if (!standing(t)) return;
+  const t = r.state.entities[targetId];
+  if (!t || !standing(t) || !r.state.entities[actorId]) return;
   if (a.condicion && !hasTag(t, `inmune:${a.condicion}`)) {
     const source = a.fuente === 'dueno' ? ownerOf(r.entity(actorId)) ?? actorId : actorId;
     r.apply({ type: 'applyCondition', entityId: targetId, condition: a.condicion, sourceId: source, ...(a.turnos ? { remainingTurns: a.turnos } : {}) });
@@ -312,6 +312,7 @@ export function handlerFor(a: CompanionAbility): Handler {
         const me = r.entity(id);
         const targets = self ? alliesAround(r.state, me, me.position, a.radio ?? 0) : [r.entity(t.entityId!)];
         for (const target of targets) {
+          if (!target || !r.state.entities[target.id]) continue;
           if (a.curar) heal(r, target.id, healAmount(me, a, target, r.rng));
           for (const c of a.quitar ?? []) if (hasCondition(r.entity(target.id), c)) r.apply({ type: 'removeCondition', entityId: target.id, condition: c });
           if (a.condicion) r.apply({ type: 'applyCondition', entityId: target.id, condition: a.condicion, sourceId: id, ...(a.turnos ? { remainingTurns: a.turnos } : {}) });
@@ -338,7 +339,9 @@ export function handlerFor(a: CompanionAbility): Handler {
       const centre = self ? { ...me.position } : t.tile!;
       for (const v of enemiesAround(r.state, me, centre, a.radio ?? 0)) {
         if (a.dano) dealDamage(r, v.id, rollDice(r.rng, scaled(me, a.dano)), a.elemento ?? 'golpe', id, a.nombre);
-        if (!standing(r.entity(v.id))) continue;
+        // The blast may have taken someone out of play altogether (a summon whose owner fell).
+        const still = r.state.entities[v.id];
+        if (!still || !standing(still)) continue;
         if (a.salvacion && rollSave(r, v.id, a.salvacion.atributo as Attr, a.salvacion.dif)) continue;
         applyRider(r, id, v.id, { ...a, empuje: 0, tirar: 0 });
       }
