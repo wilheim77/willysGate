@@ -375,8 +375,9 @@ canvas.portrait { image-rendering: pixelated; display: block; }
   padding: 8px 8px calc(var(--bottom-h, 40px) + var(--safe-bottom, 0px) + 8px);
 }
 /* In combat the action bar is much taller than the plain bottom strip: clear it too,
-   so a question (e.g. who disarms the trap) doesn't land on top of "Terminar turno". */
-body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h, 40px) + var(--safe-bottom, 0px) + 170px); }
+   so a question (e.g. who disarms the trap) doesn't land on top of "Terminar turno". 200px
+   (not 170) accounts for a two-row actions grid (6+ actions) on a narrow phone screen. */
+body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h, 40px) + var(--safe-bottom, 0px) + 200px); }
 #dialogue .panel {
   width: min(640px, 100%); max-height: 62vh; overflow-y: auto;
   background: var(--panel); border: 3px solid var(--iron); box-shadow: 4px 4px 0 #000; padding: 10px 12px;
@@ -439,6 +440,19 @@ body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h,
   border: 3px solid var(--gold);
   box-shadow: 4px 4px 0 #000;
   padding: 10px 12px;
+}
+/* The initiative strip, the combat-log toggle (left:66px) and #meters (right:6px, pushed down
+   the same +44px as this) all live in this band in combat; the toast is nearly full-width, so
+   it needs to clear #meters too — +100px covers one meter's height (~51px) plus a margin. */
+body:has(#combat:not([hidden])) .tutorial-toast { top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap) + 100px); }
+/* Centered and nearly full-width, the toast would otherwise sit right over #party (left,
+   ~58px wide) and under #meters (right, ~160px) at this width — inset instead of centering.
+   (After the base/combat rules above, same specificity: source order must put it last.) */
+@media (max-width: 560px) {
+  .tutorial-toast {
+    left: 64px; right: 8px; transform: none; width: auto;
+    top: calc(var(--top-h) + var(--safe-top) + 64px);
+  }
 }
 .tutorial-toast p { margin: 0; flex: 1 1 auto; font-size: var(--fs-s); line-height: 1.3; }
 .tutorial-toast .close { flex: none; min-width: var(--touch); min-height: var(--touch); line-height: 1; }
@@ -507,11 +521,16 @@ body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h,
 /* --- Narrator line --- */
 #narrator[hidden] { display: none; }
 #narrator {
-  position: fixed; left: 50%; transform: translateX(-50%); top: calc(var(--top-h, 48px) + 64px); z-index: 4;
-  width: min(560px, calc(100vw - 24px)); padding: 8px 12px; background: rgba(20, 12, 30, 0.92);
+  /* Left-anchored (not centered) and capped well short of the right edge, so it never
+     reaches under #meters/#clock-hud's top-right column — a centered, nearly-full-width
+     box would, on a phone, and the meters' own width varies (clock, one or more meters). */
+  position: fixed; left: 8px; right: 190px; top: calc(var(--top-h, 48px) + var(--safe-top, 0px) + var(--gap, 6px)); z-index: 4;
+  width: auto; max-width: 560px; padding: 8px 12px; background: rgba(20, 12, 30, 0.92);
   border: 2px solid #e8c070; box-shadow: 3px 3px 0 #000; color: #f3e6c8; font-size: 19px; line-height: 1.2; cursor: pointer;
 }
 #narrator::before { content: '🎙 '; }
+/* In combat the initiative strip occupies this same band; drop below it like #meters does. */
+body:has(#combat:not([hidden])) #narrator { top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap)); }
 
 /* --- Countdown (state.systems.clock) --- */
 #clock-hud[hidden] { display: none; }
@@ -532,7 +551,9 @@ body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h,
   top: calc(var(--top-h) + var(--safe-top) + var(--gap));
 }
 body:has(#clock-hud:not([hidden])) #meters { top: calc(var(--top-h) + var(--safe-top) + var(--gap) + 44px); }
-body:has(#combat:not([hidden])) #meters { top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap) + 34px); }
+/* +44px clears #combat-log's collapsed toggle (min-height: 40px) sitting just above, so a
+   phone-width screen (where #meters starts closer to the left edge) doesn't catch its corner. */
+body:has(#combat:not([hidden])) #meters { top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap) + 44px); }
 #meters .meter {
   --meter: var(--gold);
   position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 6px;
@@ -555,7 +576,10 @@ body:has(#combat:not([hidden])) #meters { top: calc(var(--top-h) + var(--safe-to
   position: fixed; left: 50%; transform: translateX(-50%); z-index: 4; display: flex; flex-direction: column; gap: 4px;
   bottom: calc(44px + var(--safe-bottom) + var(--gap)); width: min(520px, calc(100vw - 16px)); pointer-events: none;
 }
-body:has(#combat:not([hidden])) #bubbles { bottom: calc(150px + var(--safe-bottom)); }
+/* 256px (not 150): clears a two-row actions grid on a narrow phone screen (measured ~196px
+   tall plus the card/end-turn row and hint line above it) so a sponsor bubble never lands
+   on top of the action bar mid-fight. */
+body:has(#combat:not([hidden])) #bubbles { bottom: calc(256px + var(--safe-bottom)); }
 #bubbles .bubble {
   --bubble: var(--gold);
   display: flex; gap: 8px; align-items: flex-start; padding: 6px 8px; pointer-events: auto; cursor: pointer;
