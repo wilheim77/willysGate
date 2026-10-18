@@ -867,7 +867,13 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
 
 export function performAction(ruleset: Ruleset, state: GameState, actorId: string, actionId: string, target: ActionTarget, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
+  r.actionTarget = { ...(target.entityId ? { entityId: target.entityId } : {}), ...(target.tile ? { tile: { ...target.tile } } : {}) };
   HANDLERS[actionId]?.perform(r, actorId, target);
+  // Companion abilities have no use counter: announce them here.
+  if (actionId.startsWith('comp:')) r.emit({ type: 'skillUsed', entityId: actorId, habilidad: actionId.slice(5) } as WillyEvent);
+  // The ability's announcement goes first, so the client plays its FX before the rolls it causes.
+  const first = r.events.findIndex((e) => e.type === 'skillUsed' && (e as WillyEvent).entityId === actorId);
+  if (first > 0) r.events.unshift(...r.events.splice(first, 1));
   // Remember the last ability used (the Bardo's «¡Otra, otra!» and «Repertorio corto»).
   if (actionId.startsWith('hab:') && actionId !== 'hab:bis') r.apply({ type: 'setFlag', flag: lastAbilityFlag(actorId), value: `${actionId}|${JSON.stringify(target)}` });
   return r.outcome();

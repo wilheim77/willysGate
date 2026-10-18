@@ -31,6 +31,14 @@ describe('Willy: companions', () => {
         expect(p.valid, `${classId} ${a.id}: ${p.reason}`).toBe(true);
         const r = engine.apply(s, { type: 'act', issuer: 'player:1', entityId: mate.id, actionId: a.id, target } as BaseCommand);
         expect(r.ok, `${classId} ${a.id}: ${r.ok ? '' : r.error.message}`).toBe(true);
+        // The client plays the ability's FX from this event: first, with its target.
+        if (r.ok) {
+          const used = r.events.find((ev) => ev.type === 'skillUsed') as { habilidad?: string; target?: unknown } | undefined;
+          expect(used?.habilidad).toBe(a.id.slice(5));
+          expect(used?.target).toEqual(target);
+          const roll = r.events.findIndex((ev) => ev.type === 'attackRolled');
+          if (roll >= 0) expect(r.events.findIndex((ev) => ev.type === 'skillUsed')).toBeLessThan(roll);
+        }
       }
     }
   });

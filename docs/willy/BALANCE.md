@@ -30,6 +30,34 @@ La IA juega peor que una persona: no se retira, no prepara combos, no usa objeto
 | Presupuesto de enemigos por planta | `equilibrio.presupuesto` | ver tabla |
 | Vida y daño de los jefes por planta | `equilibrio.jefes` | ver tabla |
 
-## Resultados
+Valores actuales (2026-10-18):
 
-Ver la tabla de abajo (se rellena con cada ajuste).
+| Planta | Nivel | Presupuesto | Jefe: vida | Jefe: daño |
+|---|---|---|---|---|
+| 1 | 2 | ×0,9 (y la primera pelea, 2 como máximo: dos ratas) | ×0,5 (30) | 1d10 |
+| 2 | 5 | ×1 | ×0,45 (41) | 1d10+2 |
+| 3 | 7 | ×0,75 | ×0,5 (60) | 2d6 |
+| 4 | 9 | ×0,8 | ×0,45 (68) | 2d6 |
+| 5 | 11 | ×0,55 | ×0,32 (70) | 2d6+1 |
+
+Además: los compañeros de las clases de apoyo (Influencer, Bardo, Tasador, Funcionario) pegan más fuerte que los de las clases de golpe, porque la IA juega peor el apoyo.
+
+## Resultados (9 clases × 6 semillas por planta, 270 partidas)
+
+| Planta | Llega al jefe | Gana al jefe | Planta entera | Caídas del compañero | Vida de Willy al final |
+|---|---|---|---|---|---|
+| 1 | 100 % | 83 % | 83 % | 0,24 | 71 % |
+| 2 | 94 % | 78 % | 74 % | 0,41 | 62 % |
+| 3 | 91 % | 78 % | 70 % | 0,37 | 51 % |
+| 4 | 85 % | 76 % | 65 % | 0,33 | 57 % |
+| 5 | 93 % | 82 % | 76 % | 0,52 | 62 % |
+
+Antes de los compañeros y los ajustes (Willy solo, mismo simulador): planta 1, 11 % entera; el Centollo ganaba 4 de cada 5 veces.
+
+**Por clase** (las 5 plantas juntas, planta entera): Socorrista 97 %, Jugador de basket 93 %, Ingeniero 93 %, Butanero 87 %, Mimo 70 %, Bardo 63 %, Influencer 60 %, Funcionario 57 %, Tasador 43 %. La diferencia es sobre todo de la IA: las clases de apoyo y de control (Tasador, Funcionario) dependen de combos que la IA no prepara. Si en las partidas de prueba el Tasador se nota duro, el siguiente paso es darle más daño propio (Golpe de valor) antes que tocar a los enemigos.
+
+## Pendiente
+
+- La IA de Willy no empuja a propósito ni usa barriles: cuando lo haga, volver a medir (seguramente sobrará dificultad y se podrá subir el presupuesto).
+- Objetos y cajas de botín no entran en la simulación.
+- Dificultades Turista y Prime time: aplicar sus multiplicadores sobre estos valores.

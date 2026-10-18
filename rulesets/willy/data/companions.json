@@ -1,7 +1,14 @@
 {
   "$comment": "Compañeros de Willy: uno por clase, se une en el Camerino después del cásting. Los controla el jugador (como Willy), suben de nivel con él y, si caen, vuelven en la planta siguiente. Habilidades por tipo: 'ataque' (a un enemigo; tirada de ataque salvo sinTirada), 'apoyo' (a un aliado, o a todos los aliados a 'radio' casillas si radio > 0) y 'area' (en una casilla; daño y efectos a los enemigos en 'radio'). Escalado: vida + porNivel.vida por nivel; ataque +1 cada 2 niveles; DEF +1 cada 3; los dados de daño suben un escalón en los niveles 5 y 9; las curas suman la mitad del nivel. Ver docs/willy/RULESET.md → «Compañeros».",
   "version": 1,
-  "escalado": { "ataqueCadaNiveles": 2, "defCadaNiveles": 3, "dadoSubeEnNiveles": [5, 9] },
+  "escalado": {
+    "ataqueCadaNiveles": 2,
+    "defCadaNiveles": 3,
+    "dadoSubeEnNiveles": [
+      5,
+      9
+    ]
+  },
   "companeros": {
     "butanero": {
       "id": "jonatan",
@@ -10,14 +17,57 @@
       "genero": "m",
       "descripcion": "Diecinueve años, primer día de reparto y una carretilla con una rueda que chirría. Llama «jefe» a Willy y no hay forma de quitárselo.",
       "spriteId": "companero-jonatan",
-      "base": { "vida": 16, "def": 12, "ataque": 3, "dano": "1d6", "movimiento": 5, "fue": 7, "energia": 4 },
-      "porNivel": { "vida": 3 },
-      "etiquetas": ["humano"],
-      "habilidades": [
-        { "id": "carretillazo", "nombre": "Carretillazo", "texto": "Suelta la carretilla cuesta abajo contra un enemigo a 4 casillas: 1d8 y lo empuja 2.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 4, "dano": "1d8", "elemento": "golpe", "empuje": 2 },
-        { "id": "bombona-de-camping", "nombre": "Bombona de camping", "texto": "La pequeña, la de las excursiones. Explota en una casilla a 4: 1d6 de fuego a todo lo que esté al lado y fuego en el suelo.", "tipo": "area", "coste": { "acciones": 1, "energia": 3 }, "alcance": 4, "radio": 1, "dano": "1d6", "elemento": "fuego", "aplicarElemento": "fuego" }
+      "base": {
+        "vida": 16,
+        "def": 12,
+        "ataque": 3,
+        "dano": "1d6",
+        "movimiento": 5,
+        "fue": 7,
+        "energia": 4
+      },
+      "porNivel": {
+        "vida": 3
+      },
+      "etiquetas": [
+        "humano"
       ],
-      "frases": { "seUne": "¡Jefe! Me manda la empresa. Dicen que aprenda de usted. Yo traigo la carretilla.", "cae": "Jefe… dígale a mi madre que la bombona era de las de la empresa.", "vuelve": "¡Ya estoy! Me han puesto una tirita en el ascensor." }
+      "habilidades": [
+        {
+          "id": "carretillazo",
+          "nombre": "Carretillazo",
+          "texto": "Suelta la carretilla cuesta abajo contra un enemigo a 4 casillas: 1d8 y lo empuja 2.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 4,
+          "dano": "1d8",
+          "elemento": "golpe",
+          "empuje": 2
+        },
+        {
+          "id": "bombona-de-camping",
+          "nombre": "Bombona de camping",
+          "texto": "La pequeña, la de las excursiones. Explota en una casilla a 4: 1d6 de fuego a todo lo que esté al lado y fuego en el suelo.",
+          "tipo": "area",
+          "coste": {
+            "acciones": 1,
+            "energia": 3
+          },
+          "alcance": 4,
+          "radio": 1,
+          "dano": "1d6",
+          "elemento": "fuego",
+          "aplicarElemento": "fuego"
+        }
+      ],
+      "frases": {
+        "seUne": "¡Jefe! Me manda la empresa. Dicen que aprenda de usted. Yo traigo la carretilla.",
+        "cae": "Jefe… dígale a mi madre que la bombona era de las de la empresa.",
+        "vuelve": "¡Ya estoy! Me han puesto una tirita en el ascensor."
+      }
     },
     "influencer": {
       "id": "kevin",
@@ -26,14 +76,56 @@
       "genero": "m",
       "descripcion": "Graba todo en vertical. Todo. Dice que es su sello. Su foco de mano deslumbra a los monstruos y le sube la autoestima a cualquiera.",
       "spriteId": "companero-kevin",
-      "base": { "vida": 13, "def": 12, "ataque": 3, "dano": "1d4", "movimiento": 5, "fue": 4, "energia": 4 },
-      "porNivel": { "vida": 2 },
-      "etiquetas": ["humano"],
-      "habilidades": [
-        { "id": "foco-en-la-cara", "nombre": "Foco en la cara", "texto": "Le planta el foco a un enemigo a 4 casillas: 1d4 y Cegado 1 turno.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 4, "dano": "1d4", "elemento": "golpe", "condicion": "cegado", "turnos": 1 },
-        { "id": "primer-plano", "nombre": "Primer plano", "texto": "«Mira a cámara.» Un aliado a 5 casillas queda Afortunado: su próxima tirada, con dos dados.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 1 }, "alcance": 5, "condicion": "afortunado", "turnos": 2 }
+      "base": {
+        "vida": 16,
+        "def": 12,
+        "ataque": 4,
+        "dano": "1d6",
+        "movimiento": 5,
+        "fue": 4,
+        "energia": 4
+      },
+      "porNivel": {
+        "vida": 2
+      },
+      "etiquetas": [
+        "humano"
       ],
-      "frases": { "seUne": "Hola, soy Kevin, del equipo de contenido. Tú haz lo tuyo, que yo te saco el lado bueno.", "cae": "Que alguien pare la grabación… no, mejor no la paréis.", "vuelve": "He vuelto. He perdido tres mil seguidores, pero he vuelto." }
+      "habilidades": [
+        {
+          "id": "foco-en-la-cara",
+          "nombre": "Foco en la cara",
+          "texto": "Le planta el foco a un enemigo a 4 casillas: 1d4 y Cegado 1 turno.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 4,
+          "dano": "1d4",
+          "elemento": "golpe",
+          "condicion": "cegado",
+          "turnos": 1
+        },
+        {
+          "id": "primer-plano",
+          "nombre": "Primer plano",
+          "texto": "«Mira a cámara.» Un aliado a 5 casillas queda Afortunado: su próxima tirada, con dos dados.",
+          "tipo": "apoyo",
+          "coste": {
+            "acciones": 1,
+            "energia": 1
+          },
+          "alcance": 5,
+          "condicion": "afortunado",
+          "turnos": 2
+        }
+      ],
+      "frases": {
+        "seUne": "Hola, soy Kevin, del equipo de contenido. Tú haz lo tuyo, que yo te saco el lado bueno.",
+        "cae": "Que alguien pare la grabación… no, mejor no la paréis.",
+        "vuelve": "He vuelto. He perdido tres mil seguidores, pero he vuelto."
+      }
     },
     "bardo-de-verbena": {
       "id": "loli",
@@ -42,14 +134,59 @@
       "genero": "f",
       "descripcion": "Treinta veranos cantando «Paquito el chocolatero» en fiestas de pueblo. Su estribillo cura y su do de pecho tumba a un cabezudo.",
       "spriteId": "companero-loli",
-      "base": { "vida": 13, "def": 11, "ataque": 2, "dano": "1d4", "movimiento": 5, "fue": 4, "energia": 5 },
-      "porNivel": { "vida": 2 },
-      "etiquetas": ["humano"],
-      "habilidades": [
-        { "id": "estribillo", "nombre": "Estribillo", "texto": "Todos a coro: ella y los aliados a 2 casillas recuperan 1d6 de vida.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 2 }, "alcance": 0, "radio": 2, "curar": "1d6" },
-        { "id": "do-de-pecho", "nombre": "Do de pecho", "texto": "Los enemigos a 2 casillas resisten con Aguante contra DIF 12 o se quedan Aturdidos 1 turno.", "tipo": "area", "coste": { "acciones": 1, "energia": 3 }, "alcance": 0, "radio": 2, "condicion": "aturdido", "turnos": 1, "salvacion": { "atributo": "agu", "dif": 12 } }
+      "base": {
+        "vida": 17,
+        "def": 12,
+        "ataque": 5,
+        "dano": "1d8",
+        "movimiento": 5,
+        "fue": 4,
+        "energia": 5
+      },
+      "porNivel": {
+        "vida": 3
+      },
+      "etiquetas": [
+        "humano"
       ],
-      "frases": { "seUne": "¿Tú eres el de la bombona? Pues yo canto. Entre los dos, verbena.", "cae": "Se me ha ido la voz… y la vida, un poco.", "vuelve": "¡Probando, probando! Sí, se me oye. Seguimos." }
+      "habilidades": [
+        {
+          "id": "estribillo",
+          "nombre": "Estribillo",
+          "texto": "Todos a coro: ella y los aliados a 2 casillas recuperan 1d6 de vida.",
+          "tipo": "apoyo",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 0,
+          "radio": 2,
+          "curar": "1d6"
+        },
+        {
+          "id": "do-de-pecho",
+          "nombre": "Do de pecho",
+          "texto": "Los enemigos a 2 casillas resisten con Aguante contra DIF 12 o se quedan Aturdidos 1 turno.",
+          "tipo": "area",
+          "coste": {
+            "acciones": 1,
+            "energia": 3
+          },
+          "alcance": 0,
+          "radio": 2,
+          "condicion": "aturdido",
+          "turnos": 1,
+          "salvacion": {
+            "atributo": "agu",
+            "dif": 12
+          }
+        }
+      ],
+      "frases": {
+        "seUne": "¿Tú eres el de la bombona? Pues yo canto. Entre los dos, verbena.",
+        "cae": "Se me ha ido la voz… y la vida, un poco.",
+        "vuelve": "¡Probando, probando! Sí, se me oye. Seguimos."
+      }
     },
     "socorrista": {
       "id": "neptuno",
@@ -58,14 +195,60 @@
       "genero": "m",
       "descripcion": "Terranova de sesenta kilos con chaleco naranja. Saca a la gente del agua, de los fosos y de las peleas, quieran o no.",
       "spriteId": "companero-neptuno",
-      "base": { "vida": 16, "def": 13, "ataque": 4, "dano": "1d6", "movimiento": 7, "fue": 8, "energia": 4 },
-      "porNivel": { "vida": 3 },
-      "etiquetas": ["animal", "rasgo:pez"],
-      "habilidades": [
-        { "id": "mordisco-y-arrastre", "nombre": "Mordisco y arrastre", "texto": "Muerde a un enemigo al lado: 1d6 y lo arrastra 1 casilla hacia él.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 1 }, "alcance": 1, "melee": true, "dano": "1d6", "elemento": "golpe", "tirar": 1 },
-        { "id": "rescate-canino", "nombre": "Rescate canino", "texto": "Lame, empuja y reanima a un aliado al lado: 1d8 de vida y le quita Tumbado y Enredado.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 2 }, "alcance": 1, "curar": "1d8", "quitar": ["tumbado", "enredado"] }
+      "base": {
+        "vida": 16,
+        "def": 13,
+        "ataque": 4,
+        "dano": "1d6",
+        "movimiento": 7,
+        "fue": 8,
+        "energia": 4
+      },
+      "porNivel": {
+        "vida": 3
+      },
+      "etiquetas": [
+        "animal",
+        "rasgo:pez"
       ],
-      "frases": { "seUne": "¡Guau! (Neptuno se sienta a tus pies y no se mueve. Ya es tuyo.)", "cae": "(Neptuno se tumba y gime. Alguien tendría que rescatar al de rescate.)", "vuelve": "(Neptuno vuelve con una zapatilla en la boca. De quién, no se sabe.)" }
+      "habilidades": [
+        {
+          "id": "mordisco-y-arrastre",
+          "nombre": "Mordisco y arrastre",
+          "texto": "Muerde a un enemigo al lado: 1d6 y lo arrastra 1 casilla hacia él.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 1
+          },
+          "alcance": 1,
+          "melee": true,
+          "dano": "1d6",
+          "elemento": "golpe",
+          "tirar": 1
+        },
+        {
+          "id": "rescate-canino",
+          "nombre": "Rescate canino",
+          "texto": "Lame, empuja y reanima a un aliado al lado: 1d8 de vida y le quita Tumbado y Enredado.",
+          "tipo": "apoyo",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 1,
+          "curar": "1d8",
+          "quitar": [
+            "tumbado",
+            "enredado"
+          ]
+        }
+      ],
+      "frases": {
+        "seUne": "¡Guau! (Neptuno se sienta a tus pies y no se mueve. Ya es tuyo.)",
+        "cae": "(Neptuno se tumba y gime. Alguien tendría que rescatar al de rescate.)",
+        "vuelve": "(Neptuno vuelve con una zapatilla en la boca. De quién, no se sabe.)"
+      }
     },
     "tasador": {
       "id": "rosario",
@@ -74,14 +257,59 @@
       "genero": "f",
       "descripcion": "Ochenta y un años, bolso de piel de verdad y la certeza de que todo lo que hay en la mazmorra es de imitación. Lo tasa a bolsazos.",
       "spriteId": "companero-rosario",
-      "base": { "vida": 15, "def": 12, "ataque": 4, "dano": "1d6", "movimiento": 4, "fue": 6, "energia": 4 },
-      "porNivel": { "vida": 3 },
-      "etiquetas": ["humano"],
-      "habilidades": [
-        { "id": "bolsazo", "nombre": "Bolsazo", "texto": "Un bolsazo con el bolso bueno a un enemigo al lado: 1d8 y lo deja Tumbado 1 turno.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 1, "melee": true, "dano": "1d8", "elemento": "golpe", "condicion": "tumbado", "turnos": 1 },
-        { "id": "esto-es-de-imitacion", "nombre": "Esto es de imitación", "texto": "Señala los fallos de un enemigo a 5 casillas. Sin tirada: queda Estudiado para Willy, que le acierta mejor.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 1 }, "alcance": 5, "sinTirada": true, "condicion": "estudiado", "turnos": 3, "fuente": "dueno" }
+      "base": {
+        "vida": 20,
+        "def": 13,
+        "ataque": 5,
+        "dano": "1d8",
+        "movimiento": 4,
+        "fue": 6,
+        "energia": 4
+      },
+      "porNivel": {
+        "vida": 3
+      },
+      "etiquetas": [
+        "humano"
       ],
-      "frases": { "seUne": "Joven, ¿usted tasa? Pues tase esto: yo voy con usted y usted no me lleva la contraria.", "cae": "Ay, mi bolso… que no lo toque nadie.", "vuelve": "Ya estoy aquí. Me he tomado un caldito." }
+      "habilidades": [
+        {
+          "id": "bolsazo",
+          "nombre": "Bolsazo",
+          "texto": "Un bolsazo con el bolso bueno a un enemigo al lado: 1d10 y lo deja Tumbado 1 turno.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 1,
+          "melee": true,
+          "dano": "1d10",
+          "elemento": "golpe",
+          "condicion": "tumbado",
+          "turnos": 1
+        },
+        {
+          "id": "esto-es-de-imitacion",
+          "nombre": "Esto es de imitación",
+          "texto": "Señala los fallos de un enemigo a 5 casillas. Sin tirada: queda Estudiado para Willy, que le acierta mejor.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 1
+          },
+          "alcance": 5,
+          "sinTirada": true,
+          "condicion": "estudiado",
+          "turnos": 3,
+          "fuente": "dueno"
+        }
+      ],
+      "frases": {
+        "seUne": "Joven, ¿usted tasa? Pues tase esto: yo voy con usted y usted no me lleva la contraria.",
+        "cae": "Ay, mi bolso… que no lo toque nadie.",
+        "vuelve": "Ya estoy aquí. Me he tomado un caldito."
+      }
     },
     "mimo": {
       "id": "plata",
@@ -90,14 +318,58 @@
       "genero": "f",
       "descripcion": "Pintada de plata de la cabeza a los pies. Se queda quieta horas y, cuando se mueve, el enemigo se lleva el susto de su vida.",
       "spriteId": "companero-plata",
-      "base": { "vida": 18, "def": 14, "ataque": 3, "dano": "1d4", "movimiento": 4, "fue": 7, "energia": 4 },
-      "porNivel": { "vida": 3 },
-      "etiquetas": ["humano"],
-      "habilidades": [
-        { "id": "susto-de-estatua", "nombre": "Susto de estatua", "texto": "¡Se mueve! Un enemigo al lado recibe 1d6 y queda Asustado 2 turnos.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 1, "melee": true, "dano": "1d6", "elemento": "golpe", "condicion": "asustado", "turnos": 2 },
-        { "id": "moneda-en-la-gorra", "nombre": "Moneda en la gorra", "texto": "Un aliado a 3 casillas le echa una moneda: queda Afortunado y recupera 1d4 de vida.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 1 }, "alcance": 3, "curar": "1d4", "condicion": "afortunado", "turnos": 2 }
+      "base": {
+        "vida": 18,
+        "def": 14,
+        "ataque": 3,
+        "dano": "1d4",
+        "movimiento": 4,
+        "fue": 7,
+        "energia": 4
+      },
+      "porNivel": {
+        "vida": 3
+      },
+      "etiquetas": [
+        "humano"
       ],
-      "frases": { "seUne": "(Plata no dice nada. Pero te sigue. Muy despacio. Y luego está a tu lado sin que la hayas visto moverse.)", "cae": "(Plata se queda quieta. Esta vez, de verdad.)", "vuelve": "(Plata aparece en la llegada como si llevara ahí toda la vida.)" }
+      "habilidades": [
+        {
+          "id": "susto-de-estatua",
+          "nombre": "Susto de estatua",
+          "texto": "¡Se mueve! Un enemigo al lado recibe 1d6 y queda Asustado 2 turnos.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 1,
+          "melee": true,
+          "dano": "1d6",
+          "elemento": "golpe",
+          "condicion": "asustado",
+          "turnos": 2
+        },
+        {
+          "id": "moneda-en-la-gorra",
+          "nombre": "Moneda en la gorra",
+          "texto": "Un aliado a 3 casillas le echa una moneda: queda Afortunado y recupera 1d4 de vida.",
+          "tipo": "apoyo",
+          "coste": {
+            "acciones": 1,
+            "energia": 1
+          },
+          "alcance": 3,
+          "curar": "1d4",
+          "condicion": "afortunado",
+          "turnos": 2
+        }
+      ],
+      "frases": {
+        "seUne": "(Plata no dice nada. Pero te sigue. Muy despacio. Y luego está a tu lado sin que la hayas visto moverse.)",
+        "cae": "(Plata se queda quieta. Esta vez, de verdad.)",
+        "vuelve": "(Plata aparece en la llegada como si llevara ahí toda la vida.)"
+      }
     },
     "ingeniero": {
       "id": "tornillo",
@@ -106,14 +378,55 @@
       "genero": "m",
       "descripcion": "El primer autómata que montaste, el de la caja. Le falta un tornillo, de ahí el nombre. Suelda, da calambres y te llama «usuario».",
       "spriteId": "companero-tornillo",
-      "base": { "vida": 15, "def": 13, "ataque": 3, "dano": "1d6", "movimiento": 4, "fue": 7, "energia": 4 },
-      "porNivel": { "vida": 3 },
-      "etiquetas": ["automata", "constructo"],
-      "habilidades": [
-        { "id": "descarga", "nombre": "Descarga", "texto": "Un calambre a un enemigo a 4 casillas: 1d6 de rayo (el doble si está Empapado).", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 4, "dano": "1d6", "elemento": "rayo" },
-        { "id": "soldadura", "nombre": "Soldadura", "texto": "Suelda a un aliado al lado (o a sí mismo): 1d6 de vida. A los autómatas, el doble.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 2 }, "alcance": 1, "curar": "1d6", "dobleA": "automata" }
+      "base": {
+        "vida": 15,
+        "def": 13,
+        "ataque": 3,
+        "dano": "1d6",
+        "movimiento": 4,
+        "fue": 7,
+        "energia": 4
+      },
+      "porNivel": {
+        "vida": 3
+      },
+      "etiquetas": [
+        "automata",
+        "constructo"
       ],
-      "frases": { "seUne": "USUARIO DETECTADO. ASIGNADO A: WILLY. NIVEL DE ENTUSIASMO: MODERADO.", "cae": "ERROR 404: TORNILLO NO ENCONTRADO.", "vuelve": "REINICIO COMPLETADO. HE VUELTO. NO PREGUNTES CÓMO." }
+      "habilidades": [
+        {
+          "id": "descarga",
+          "nombre": "Descarga",
+          "texto": "Un calambre a un enemigo a 4 casillas: 1d6 de rayo (el doble si está Empapado).",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 4,
+          "dano": "1d6",
+          "elemento": "rayo"
+        },
+        {
+          "id": "soldadura",
+          "nombre": "Soldadura",
+          "texto": "Suelda a un aliado al lado (o a sí mismo): 1d6 de vida. A los autómatas, el doble.",
+          "tipo": "apoyo",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 1,
+          "curar": "1d6",
+          "dobleA": "automata"
+        }
+      ],
+      "frases": {
+        "seUne": "USUARIO DETECTADO. ASIGNADO A: WILLY. NIVEL DE ENTUSIASMO: MODERADO.",
+        "cae": "ERROR 404: TORNILLO NO ENCONTRADO.",
+        "vuelve": "REINICIO COMPLETADO. HE VUELTO. NO PREGUNTES CÓMO."
+      }
     },
     "funcionario": {
       "id": "iker",
@@ -122,14 +435,57 @@
       "genero": "m",
       "descripcion": "Becario de la Diputación sin cobrar desde 2019. Lleva una grapadora industrial y un termo de café para el jefe. El jefe eres tú.",
       "spriteId": "companero-iker",
-      "base": { "vida": 13, "def": 11, "ataque": 3, "dano": "1d4", "movimiento": 5, "fue": 4, "energia": 5 },
-      "porNivel": { "vida": 2 },
-      "etiquetas": ["humano"],
-      "habilidades": [
-        { "id": "grapadora", "nombre": "Grapadora industrial", "texto": "Grapa a un enemigo a 4 casillas contra el suelo: 1d4 y Enredado 1 turno.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 4, "dano": "1d4", "elemento": "golpe", "condicion": "enredado", "turnos": 1 },
-        { "id": "cafe-para-el-jefe", "nombre": "Café para el jefe", "texto": "Un aliado a 3 casillas recupera 1d4 de vida y queda Animado (+1 al daño) 2 turnos.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 2 }, "alcance": 3, "curar": "1d4", "condicion": "animado", "turnos": 2 }
+      "base": {
+        "vida": 16,
+        "def": 11,
+        "ataque": 4,
+        "dano": "1d6",
+        "movimiento": 5,
+        "fue": 4,
+        "energia": 5
+      },
+      "porNivel": {
+        "vida": 3
+      },
+      "etiquetas": [
+        "humano"
       ],
-      "frases": { "seUne": "Buenos días. Me han dicho en personal que le acompañe. ¿Tiene usted el anexo IV? Da igual, ya lo relleno yo.", "cae": "Me cojo… la baja. Por fin.", "vuelve": "Ya me han dado el alta. No he cobrado la baja, pero bueno." }
+      "habilidades": [
+        {
+          "id": "grapadora",
+          "nombre": "Grapadora industrial",
+          "texto": "Grapa a un enemigo a 4 casillas contra el suelo: 1d4 y Enredado 1 turno.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 4,
+          "dano": "1d4",
+          "elemento": "golpe",
+          "condicion": "enredado",
+          "turnos": 1
+        },
+        {
+          "id": "cafe-para-el-jefe",
+          "nombre": "Café para el jefe",
+          "texto": "Un aliado a 3 casillas recupera 1d4 de vida y queda Animado (+1 al daño) 2 turnos.",
+          "tipo": "apoyo",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 3,
+          "curar": "1d4",
+          "condicion": "animado",
+          "turnos": 2
+        }
+      ],
+      "frases": {
+        "seUne": "Buenos días. Me han dicho en personal que le acompañe. ¿Tiene usted el anexo IV? Da igual, ya lo relleno yo.",
+        "cae": "Me cojo… la baja. Por fin.",
+        "vuelve": "Ya me han dado el alta. No he cobrado la baja, pero bueno."
+      }
     },
     "jugador-de-basket": {
       "id": "chencho",
@@ -138,14 +494,57 @@
       "genero": "m",
       "descripcion": "Metro sesenta, rapidísimo y con la boca más grande que la cancha. Le pasa el balón a Willy aunque no se lo pida (con él cerca, el Alley-oop es el de verdad).",
       "spriteId": "chencho-el-base",
-      "base": { "vida": 14, "def": 14, "ataque": 4, "dano": "1d4", "movimiento": 6, "fue": 5, "energia": 4 },
-      "porNivel": { "vida": 2 },
-      "etiquetas": ["humano", "chencho"],
-      "habilidades": [
-        { "id": "robo-de-balon", "nombre": "Robo de balón", "texto": "Le roba la cartera, el bocadillo o el ritmo a un enemigo al lado: 1d4 y pierde 1 acción en su turno.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 1, "melee": true, "dano": "1d4", "elemento": "golpe", "quitarAcciones": 1 },
-        { "id": "contraataque", "nombre": "¡Contraataque!", "texto": "Un aliado a 6 casillas queda Corriendo: este turno, otro movimiento completo.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 1 }, "alcance": 6, "condicion": "corriendo", "turnos": 1 }
+      "base": {
+        "vida": 14,
+        "def": 14,
+        "ataque": 4,
+        "dano": "1d4",
+        "movimiento": 6,
+        "fue": 5,
+        "energia": 4
+      },
+      "porNivel": {
+        "vida": 2
+      },
+      "etiquetas": [
+        "humano",
+        "chencho"
       ],
-      "frases": { "seUne": "¿Tú eres el pívot? Pues yo soy el base. Tú salta, que yo te la pongo.", "cae": "¡Falta! ¡Eso es falta! … me siento un rato.", "vuelve": "Vuelvo a pista. El míster dice que sin mí no hay juego." }
+      "habilidades": [
+        {
+          "id": "robo-de-balon",
+          "nombre": "Robo de balón",
+          "texto": "Le roba la cartera, el bocadillo o el ritmo a un enemigo al lado: 1d4 y pierde 1 acción en su turno.",
+          "tipo": "ataque",
+          "coste": {
+            "acciones": 1,
+            "energia": 2
+          },
+          "alcance": 1,
+          "melee": true,
+          "dano": "1d4",
+          "elemento": "golpe",
+          "quitarAcciones": 1
+        },
+        {
+          "id": "contraataque",
+          "nombre": "¡Contraataque!",
+          "texto": "Un aliado a 6 casillas queda Corriendo: este turno, otro movimiento completo.",
+          "tipo": "apoyo",
+          "coste": {
+            "acciones": 1,
+            "energia": 1
+          },
+          "alcance": 6,
+          "condicion": "corriendo",
+          "turnos": 1
+        }
+      ],
+      "frases": {
+        "seUne": "¿Tú eres el pívot? Pues yo soy el base. Tú salta, que yo te la pongo.",
+        "cae": "¡Falta! ¡Eso es falta! … me siento un rato.",
+        "vuelve": "Vuelvo a pista. El míster dice que sin mí no hay juego."
+      }
     }
   }
 }

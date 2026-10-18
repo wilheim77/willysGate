@@ -32,6 +32,9 @@ export class Resolver {
   readonly effects: Effect[] = [];
   readonly events: GameEvent[] = [];
 
+  /** What the action being resolved was aimed at; skillUsed events carry it for the client's FX. */
+  actionTarget?: { entityId?: string; tile?: Vec2 };
+
   constructor(
     readonly ruleset: Ruleset,
     public state: GameState,
@@ -49,6 +52,8 @@ export class Resolver {
   }
 
   emit(event: GameEvent): void {
+    const e = event as GameEvent & { target?: unknown };
+    if (e.type === 'skillUsed' && e.target === undefined && this.actionTarget) e.target = this.actionTarget;
     this.events.push(event);
   }
 

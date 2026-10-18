@@ -12,6 +12,9 @@
 - **Rivales procedurales (`content/willy/gen/rivals.ts`):** de `rival-generator.json`, con unicidad en la partida, escalado por planta, cuerpo y paleta del arte modular, frases con variables y un 6 % de legendario. `systems.rivals` guarda de dónde salió cada uno. Falta el pacto y la huida (capa de diálogo y Narrador).
 - **Trampas en el ruleset:** `noticeTrap` (8 + SUE contra la detección) y `triggerTrap` (salvación de AGI: condición, superficie, empuje o caída).
 - **R15:** saltos con el motor y rebote del Pase picado.
+- **Compañeros (2026-10-18):** uno por clase, se une tras el cásting, lo controla el jugador, sube con Willy y vuelve en la planta siguiente si cae (`RULESET.md` → «Compañeros»). Pausa publicitaria: 25 % de vida al acabar cada combate.
+- **Equilibrio:** simulador con IA en plantas generadas (`content/willy/sim/balance.ts`), palancas en `floors.json → equilibrio` y tabla en `BALANCE.md`. Resultado: llegar al jefe 85-100 %, ganarle 76-83 %. Test barato de la planta 1 en `npm test`; las cinco con `QA_DEEP=1`.
+- **FX:** los `skillUsed` llevan `target` y van antes de las tiradas.
 
 ## Hecho (W0)
 

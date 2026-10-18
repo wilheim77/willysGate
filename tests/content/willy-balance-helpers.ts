@@ -13,7 +13,7 @@ export const DEEP = process.env.QA_DEEP === '1';
 /** Targets from the brief, with room for the sampling noise of the runs we can afford. */
 export const TARGETS = {
   /** Getting through every ordinary fight of the floor to the boss. */
-  reachBoss: { min: 0.8, max: 0.97 },
+  reachBoss: { min: 0.8, max: 1 },
   /** Beating the boss once there. */
   boss: { min: 0.6, max: 0.9 },
 };

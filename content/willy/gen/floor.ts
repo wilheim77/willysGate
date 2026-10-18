@@ -90,7 +90,7 @@ const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X']);
 const MAX_ATTEMPTS = 20;
 
 /** Difficulty levers (floors.json → equilibrio), tuned with the balance simulations. */
-const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; jefes: Record<string, { multVida?: number; dano?: string }> };
+const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; primeraPelea: { planta: number; presupuestoMax: number }; jefes: Record<string, { multVida?: number; dano?: string }> };
 const SAFE_DISTANCE = 6;
 
 type FloorSpec = (typeof floorsData.plantas)[number];
@@ -472,6 +472,10 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
   let stairs: Vec2 | undefined;
   let rival: RivalRecord | undefined;
 
+  const firstFightRoom = rooms
+    .map((r, i) => ({ r, i }))
+    .filter(({ r }) => r.critical && (r.role === 'combate' || r.role === 'trampa' || r.role === 'rival'))
+    .sort((a, b) => a.r.depth - b.r.depth)[0]?.i;
   rooms.forEach((room, i) => {
     const prefix = `p${n}-s${i}`;
     // Fixed markers.
@@ -525,6 +529,8 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
     const mult = budgetSpec.multRol[room.role === 'rival' ? 'combate' : room.role] ?? 0;
     let budget = Math.floor((budgetSpec.base + budgetSpec.porProfundidad * room.depth) * mult * (BALANCE.presupuesto[n] ?? 1));
     if (room.role === 'inicio' || room.role === 'jefe') budget = 0;
+    // The first fight of the season is a gentle one (floors.json → equilibrio.primeraPelea).
+    if (n === BALANCE.primeraPelea.planta && room.critical && i === firstFightRoom) budget = Math.min(budget, BALANCE.primeraPelea.presupuestoMax);
     while (budget >= cheapest && enemySlots.length) {
       const pick = g.weighted(enemies.filter(([, e]) => e.coste <= budget), () => 1);
       if (!pick) break;
