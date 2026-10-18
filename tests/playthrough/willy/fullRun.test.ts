@@ -202,7 +202,7 @@ describe('collapse timer: the floor always resolves, never leaves the party stuc
         expect(exits.length, `"${classId}": never left a single floor over the run`).toBeGreaterThan(0);
         // Every floorExited is one of the two sanctioned ways out - never a bare "the floor
         // disappeared and nothing recorded why" (the actual stuck case this test exists for).
-        for (const exit of exits) expect(['escaleras', 'derrumbe'], `unexpected floorExited.metodo "${exit.metodo}"`).toContain(exit.metodo);
+        for (const exit of exits) expect(['escalera', 'derrumbe'], `unexpected floorExited.metodo "${exit.metodo}"`).toContain(exit.metodo);
         // The collapse timer is reflected in GameState (a resource/systems entry), not just a
         // UI countdown: state.systems.clock, read via clockOf(), should have shown up at some
         // point - checked on the state right after the first floorEntered, since by the end of
@@ -216,7 +216,7 @@ describe('collapse timer: the floor always resolves, never leaves the party stuc
   it('leaving through the stairs before the clock runs out skips the collapse cleanly', () => {
     // Most floors are cleared well inside the clock's budget (the fights above typically take
     // single-digit minutes of in-fiction time against a 15-45 minute floor clock), so a normal
-    // run's early floors should show the clean exit: floorExited{metodo:'escaleras'} with no
+    // run's early floors should show the clean exit: floorExited{metodo:'escalera'} with no
     // clockExpired for that same floor beforehand.
     const outcome = runFor(CLASSES_TO_RUN[0]!);
     if (outcome.knownBugError) {
@@ -232,11 +232,11 @@ describe('collapse timer: the floor always resolves, never leaves the party stuc
       if (e.type === 'clockExpired') expiredSinceLastExit = true;
       if (e.type === 'floorExited') {
         const metodo = (e as unknown as { metodo: string }).metodo;
-        if (metodo === 'escaleras' && !expiredSinceLastExit) sawCleanExit = true;
+        if (metodo === 'escalera' && !expiredSinceLastExit) sawCleanExit = true;
         expiredSinceLastExit = false;
       }
     }
-    expect(sawCleanExit, 'never saw a floorExited{metodo:"escaleras"} without a prior clockExpired - either every floor is timing out, or the clean-exit path is broken').toBe(true);
+    expect(sawCleanExit, 'never saw a floorExited{metodo:"escalera"} without a prior clockExpired - either every floor is timing out, or the clean-exit path is broken').toBe(true);
   });
 
   it('the collapse timer is reflected in GameState (clockOf), not just a UI countdown', () => {
