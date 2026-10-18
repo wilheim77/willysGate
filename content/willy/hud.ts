@@ -6,6 +6,9 @@ import itemsData from './data/items.json';
 import loot from './data/loot-tables.json';
 import { SHOW } from './show';
 import T from './texts/show.json';
+import { viewers } from './format';
+
+export { viewers };
 
 /**
  * The show's HUD for the generic client (GameDefinition.hud): the audience counter (tap it for
@@ -18,15 +21,6 @@ const ITEM_NAMES: Record<string, string> = Object.fromEntries(itemsData.items.ma
 
 function fill(text: string, vars: Record<string, string | number>): string {
   return text.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ''));
-}
-
-/** Spanish short numbers: 950 → «950»; 1.250 → «1,2 mil»; 3.400.000 → «3,4 M». */
-export function viewers(n: number): string {
-  const a = Math.abs(n);
-  const short = (v: number, unit: string) => `${(Math.floor(v * 10) / 10).toLocaleString('es-ES', { maximumFractionDigits: v < 10 ? 1 : 0 })} ${unit}`;
-  if (a >= 1_000_000) return short(n / 1_000_000, 'M');
-  if (a >= 1_000) return short(n / 1_000, 'mil');
-  return String(Math.round(n));
 }
 
 const tierName = (v: number) => SHOW.audience.tramos.reduce((name, t) => (v >= t.desde ? t.nombre : name), SHOW.audience.tramos[0]!.nombre);

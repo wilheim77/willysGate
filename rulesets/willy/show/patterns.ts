@@ -51,7 +51,7 @@ export function commandActor(events: GameEvent[], state: GameState): string | un
     if (e.type === 'actionPerformed' && typeof f.actorId === 'string') return f.actorId;
     if ((e.type === 'skillUsed' || e.type === 'entityMoved' || e.type === 'showOff') && typeof f.entityId === 'string') return f.entityId;
   }
-  return state.turn.mode === 'combat' ? (state.turn.activeEntityId ?? undefined) : undefined;
+  return state.turn?.mode === 'combat' ? (state.turn.activeEntityId ?? undefined) : undefined;
 }
 
 /**
