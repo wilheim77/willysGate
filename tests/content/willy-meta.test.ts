@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { type BaseCommand, type GameEvent, type GameState, SYSTEM_ISSUER, createEngine, itemCount, nextAiCommand, zonesOf } from '../../engine';
 import { BAG, itemActions, metaOf, willy, willyContent } from '../../rulesets/willy';
-import { applyCasting, maps, newWillyGame } from '../../content/willy/setup';
+import { ATTEMPT_FLAG, applyCasting, buildFloor, maps, newWillyGame } from '../../content/willy/setup';
+import { defeat, newGameSetup, onRestoredCopy, savePolicy } from '../../content/willy/run-modes';
 import achievementsData from '../../content/willy/data/achievements.json';
 import itemsData from '../../content/willy/data/items.json';
 import loot from '../../content/willy/data/loot-tables.json';
@@ -129,6 +130,29 @@ describe('Willy meta: achievements, boxes and items', () => {
     const off = apply(on, { type: 'unequipItem', issuer: 'player:1', entityId: 'willy', item: 'casco-de-obra' }).state;
     expect(off.entities.willy!.resources.vida!.max).toBe(max);
     expect(itemCount(off, BAG, 'casco-de-obra')).toBe(1);
+  });
+});
+
+describe('Willy: elimination modes', () => {
+  it('the setup writes difficulty and mode; Sin repetición needs more than Turista', () => {
+    const s = newWillyGame(engine, 1);
+    expect(newGameSetup.apply(s, { dificultad: 'concursante', modo: 'sinRepeticion' }).flags).toMatchObject({ dificultad: 'concursante', modoEliminacion: 'sinRepeticion' });
+    const tourist = newGameSetup.apply(s, { dificultad: 'turista', modo: 'sinRepeticion' });
+    expect(tourist.flags.modoEliminacion).toBe('repeticion');
+    expect(savePolicy(tourist)).toBe('free');
+    expect(savePolicy(newGameSetup.apply(s, { dificultad: 'primetime', modo: 'sinRepeticion' }))).toBe('permadeath');
+    expect(savePolicy(onRestoredCopy(newGameSetup.apply(s, { dificultad: 'primetime', modo: 'sinRepeticion' })))).toBe('free');
+  });
+
+  it('Con repetición: going back reshuffles the floors ahead; Sin repetición: a summary', () => {
+    const s = cast(4);
+    const d = defeat(s);
+    const back = d.retry!.prepare!(s);
+    expect(back.flags[ATTEMPT_FLAG]).toBe(1);
+    expect(buildFloor(1, back).map).not.toEqual(buildFloor(1, s).map);
+    const hard = defeat(newGameSetup.apply(s, { dificultad: 'concursante', modo: 'sinRepeticion' }));
+    expect(hard.summary?.lines.length).toBeGreaterThan(0);
+    expect(hard.retry).toBeUndefined();
   });
 });
 

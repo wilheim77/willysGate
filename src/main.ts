@@ -20,6 +20,8 @@ import { setupBarks } from './ui/barks';
 import { setupAchievements } from './ui/achievements';
 import { setupRewardBoxes } from './ui/rewardBoxes';
 import './ui/meta.css';
+import { SetupScreen } from './ui/setupScreen';
+import { PermadeathSlot } from './game/permadeath';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
 document.title = game.title;
@@ -246,6 +248,31 @@ sheet.onChangeGear = (item: string) => {
   dialogue.ask(`¿Quién lleva ${def?.label ?? item}?`, options, false);
 };
 
+// Permadeath runs (GameDefinition.savePolicy): saved after every command in their own slot, and
+// no saving, loading or exporting by hand while one is going.
+const permadeath = new PermadeathSlot(engine);
+const newRun = () => {
+  store.load(game.newGame(engine, randomSeed(), hud.startOptions));
+  startNew();
+};
+{
+  const manual = ['save', 'load', 'export', 'import'];
+  const apply = () => {
+    const hard = game.savePolicy?.(store.state) === 'permadeath';
+    for (const b of document.querySelectorAll<HTMLElement>('.hud-top nav button[data-action]')) if (manual.includes(b.dataset.action ?? '')) b.hidden = hard;
+    return hard;
+  };
+  store.subscribe((change, state) => {
+    if (apply() && change.kind === 'events') {
+      const leader = state.entities[game.leaderId];
+      // A lost run is not saved again (its slot is cleared with the summary).
+      if (leader && engine.ruleset.isStanding(leader)) permadeath.save(state);
+    }
+    if (change.kind === 'reset' && apply()) permadeath.save(state);
+  });
+  apply();
+}
+
 // Defeat: the leader can't get up once the fight is over (the party lost, or the leader bled
 // out while the others won). Play starts again from the last campfire: the state saved by the
 // last rest (`rested` event), or the start of the game / the last loaded save if there was none.
@@ -271,8 +298,17 @@ sheet.onChangeGear = (item: string) => {
     offered = true;
     const t = game.texts.combat ?? {};
     const back = checkpoint;
+    const policy = game.defeat?.(state);
     setTimeout(() => {
-      dialogue.ask(t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: t.retryFight ?? 'Volver a la última hoguera', onPick: () => store.load(back) }], false);
+      if (policy?.summary) {
+        // The run is over (permadeath): the slot goes in the same moment, then the summary.
+        if (game.savePolicy?.(state) === 'permadeath') permadeath.clear();
+        const s = policy.summary;
+        dialogue.ask(`${policy.text}\n\n${s.title}\n${s.lines.map((l: string) => `• ${l}`).join('\n')}`, [{ label: s.button, onPick: () => newRun() }], false);
+        return;
+      }
+      const retry = policy?.retry;
+      dialogue.ask(policy?.text ?? t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: retry?.label ?? t.retryFight ?? 'Volver a la última hoguera', onPick: () => store.load(retry?.prepare ? retry.prepare(back) : back) }], false);
     }, 1200);
   });
 }
@@ -328,9 +364,28 @@ if (game.objectives?.length) {
 }
 
 const creation = new CreationScreen(store, game);
-hud.onNewGame = () => creation.open();
+// A new game: the game's questions (difficulty, elimination mode...), then character creation.
+const setupScreen = new SetupScreen(store, game);
+const startNew = () => setupScreen.open(() => creation.open());
+hud.onNewGame = startNew;
 // The title screen first; a new game goes on to character creation.
-new TitleScreen(store, game, () => creation.open()).open();
+new TitleScreen(store, game, startNew).open();
+// A permadeath run in progress: «Continuar» resumes it exactly where it was (no other way in).
+{
+  const saved = permadeath.load();
+  const buttons = document.querySelector('#title .buttons');
+  if (saved && buttons) {
+    const cont = document.createElement('button');
+    cont.className = 'confirm';
+    cont.textContent = game.texts.ui && (game.texts.ui as Record<string, string>).continueHardcore ? (game.texts.ui as Record<string, string>).continueHardcore! : 'Continuar (sin repetición)';
+    cont.addEventListener('click', () => {
+      store.load(saved.restored && game.onRestoredCopy ? game.onRestoredCopy(saved.state) : saved.state);
+      document.querySelector<HTMLElement>('#title')!.hidden = true;
+      if (saved.restored) hud.say('Esta copia es más antigua que la última partida: sigue, pero ya con repetición.', true);
+    });
+    buttons.prepend(cont);
+  }
+}
 
 const combat = game.texts.combat ?? {};
 const scene = new MapScene(

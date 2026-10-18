@@ -52,6 +52,21 @@ export interface RewardBoxResult {
   coinsLabel?: string;
 }
 
+export interface SetupQuestion {
+  id: string;
+  title: string;
+  options: {
+    id: string;
+    label: string;
+    text: string;
+    recommended?: boolean;
+    /** Shown in red under the option when chosen. */
+    warning?: string;
+    /** Not available when an earlier answer is one of these; `reason` says why. */
+    unavailableIf?: { question: string; is: string[]; reason: string };
+  }[];
+}
+
 /** Visual identity of a game: CSS custom properties applied to the HUD, plus the UI font. */
 export interface Theme {
   /** Keys are CSS custom property names without the leading dashes (bg, panel, iron, text, accent...). */
@@ -146,6 +161,26 @@ export interface GameDefinition {
     /** Exact odds, shown on request (no hidden numbers). */
     odds(tier: string): string[];
   };
+  /**
+   * Questions before character creation (difficulty, elimination mode...), one screen each.
+   * An option can be unavailable given an earlier answer; `apply` writes the answers into the state.
+   */
+  newGameSetup?: {
+    questions: SetupQuestion[];
+    apply(state: GameState, answers: Record<string, string>): GameState;
+  };
+  /**
+   * How this run may be saved: 'free' (save, load, export by hand) or 'permadeath' (one slot of its
+   * own, saved after every command, no loading by hand, deleted when the run is lost).
+   */
+  savePolicy?(state: GameState): 'free' | 'permadeath';
+  /** A permadeath slot turned out to be an older copy than the browser's profile: what changes. */
+  onRestoredCopy?(state: GameState): GameState;
+  /**
+   * What happens when the leader is down after a fight. `retry` goes back to the last checkpoint
+   * (the state at the last `rested` event), optionally changed by `prepare`; `summary` ends the run.
+   */
+  defeat?(state: GameState): { text: string; retry?: { label: string; prepare?(checkpoint: GameState): GameState }; summary?: { title: string; lines: string[]; button: string } };
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

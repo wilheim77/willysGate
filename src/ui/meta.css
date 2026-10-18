@@ -88,3 +88,16 @@ canvas.ui-icon { image-rendering: pixelated; }
 @media (prefers-reduced-motion: reduce) {
   .box-art.drop, .box-art.shake, .achievement-toast.pop, .box-stage .card, .box-stage.beam::before, .boxes-button.bump { animation: none !important; }
 }
+
+/* --- New-game questions (difficulty, elimination mode) --- */
+#setup .box.setup .body { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; }
+.setup-option { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 8px 10px; min-height: var(--touch); }
+.setup-option strong { font-weight: normal; font-size: var(--fs-m); color: var(--text); }
+.setup-option span { font-size: var(--fs-s); line-height: 1.2; color: var(--muted); }
+.setup-option.selected { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold) inset; }
+.setup-option.selected strong { color: var(--gold); }
+.setup-option:disabled { opacity: 0.45; }
+#setup .warning { margin: 0; min-height: 1.2em; color: var(--error); font-size: var(--fs-s); }
+.setup-buttons { display: flex; justify-content: space-between; gap: 8px; padding: 8px 12px 12px; }
+.setup-buttons button { min-height: var(--touch); min-width: 120px; }
+.setup-buttons .primary { margin-left: auto; border-color: var(--gold); color: var(--gold); }

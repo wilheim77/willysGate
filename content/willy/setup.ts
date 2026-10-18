@@ -30,9 +30,14 @@ export function rivalsOf(state: GameState | undefined): RivalRecord[] {
  * Floor `n` for this run. Its systems carry the updated rival list (a new rival, or one coming
  * back), which travel merges into the state when Willy arrives.
  */
+/** How many times Willy has gone back to a Camerino (Con repetición); reshuffles the floors ahead. */
+export const ATTEMPT_FLAG = 'willy:intento';
+
 export function buildFloor(n: number, state: GameState | undefined): MapSetup {
   const rivals = rivalsOf(state);
-  const floor = generateFloor(state?.seed ?? 0, n, { rivals });
+  // Con repetición: after Willy falls, the floor is rebuilt differently («la mazmorra se recoloca»).
+  const attempt = Number(state?.flags?.[ATTEMPT_FLAG] ?? 0);
+  const floor = generateFloor(((state?.seed ?? 0) + attempt * 7919) >>> 0, n, { rivals });
   if (!floor.rival) return floor.setup;
   const others = rivals.filter((r) => r.id !== floor.rival!.id);
   return { ...floor.setup, systems: { ...floor.setup.systems, rivals: [...others, floor.rival] as unknown as JsonValue } };
