@@ -2,26 +2,342 @@
   "$comment": "Habilidades de los enemigos (mon:<id>). Una criatura las tiene con la etiqueta habilidad:<id> (las pone el generador de plantas desde floors.json → enemigos[].habilidades). Mismos tipos que las de los compañeros: 'ataque', 'apoyo', 'area', y además 'invocar' (saca criaturas de 'plantilla' alrededor) y 'autodestruccion' (revienta: daño en 'radio', superficie en el suelo, y la criatura queda eliminada). Coste en energía: los enemigos con habilidades tienen 'energia' (4 por defecto), que se recupera al acabar cada combate; con ella gastada, golpean normal. Al morir, una criatura con estalla:<id> revienta igual que con su autodestrucción.",
   "version": 1,
   "habilidades": {
-    "tentaculo": { "nombre": "Tentáculo", "texto": "Agarra a alguien a 2 casillas: 1d4, lo arrastra 1 y queda Enredado 1 turno.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 2, "dano": "1d4", "elemento": "golpe", "condicion": "enredado", "turnos": 1, "tirar": 1 },
-    "percebe": { "nombre": "Percebe al ojo", "texto": "Lanza un percebe a 5 casillas: 1d8.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 1 }, "alcance": 5, "dano": "1d8", "elemento": "golpe" },
-    "descarga-de-charco": { "nombre": "Descarga de charco", "texto": "Electrifica todo a 1 casilla: 1d6 de rayo y el agua se electrifica.", "tipo": "area", "coste": { "acciones": 1, "energia": 2 }, "alcance": 0, "radio": 1, "dano": "1d6", "elemento": "rayo", "aplicarElemento": "rayo" },
-    "autodestruccion": { "nombre": "¡Revienta!", "texto": "Revienta: 2d6 de fuego a 1 casilla y fuego en el suelo. Se acabó la lata.", "tipo": "autodestruccion", "coste": { "acciones": 1 }, "alcance": 0, "radio": 1, "dano": "2d6", "elemento": "fuego", "aplicarElemento": "fuego" },
-    "autodestruccion-toxica": { "nombre": "¡Revienta (caducada)!", "texto": "Revienta: 2d4 de veneno a 1 casilla y deja una nube tóxica.", "tipo": "autodestruccion", "coste": { "acciones": 1 }, "alcance": 0, "radio": 1, "dano": "2d4", "elemento": "veneno", "superficie": "toxico" },
-    "autodestruccion-vapor": { "nombre": "¡Efervescencia!", "texto": "Se disuelve de golpe: 1d6 a 1 casilla y vapor que tapa la vista.", "tipo": "autodestruccion", "coste": { "acciones": 1 }, "alcance": 0, "radio": 1, "dano": "1d6", "elemento": "agua", "superficie": "vapor" },
-    "nube-de-colonia": { "nombre": "Nube de colonia", "texto": "Una nube de perfume a 3 casillas: 1d4 y Mareado 2 turnos a quien no resista con AGU (DIF 12).", "tipo": "area", "coste": { "acciones": 1, "energia": 2 }, "alcance": 3, "radio": 1, "dano": "1d4", "elemento": "veneno", "condicion": "mareado", "turnos": 2, "salvacion": { "atributo": "agu", "dif": 12 } },
-    "a-reponer": { "nombre": "¡A reponer!", "texto": "Grita al equipo: él y sus aliados a 2 casillas recuperan 1d6 y quedan Animados 2 turnos.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 2 }, "alcance": 0, "radio": 2, "curar": "1d6", "condicion": "animado", "turnos": 2 },
-    "placaje": { "nombre": "Placaje", "texto": "Placa a alguien al lado: 1d6, Tumbado y Enredado 1 turno.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 1, "melee": true, "dano": "1d6", "elemento": "golpe", "condicion": "enredado", "turnos": 1 },
-    "corcho": { "nombre": "Escopeta de corchos", "texto": "Un corcho a 6 casillas: 1d6.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 1 }, "alcance": 6, "dano": "1d6", "elemento": "golpe" },
-    "linea": { "nombre": "¡LÍNEA!", "texto": "Grita tan fuerte que los enemigos a 3 casillas quedan Asustados 2 turnos si no resisten con CAR (DIF 12).", "tipo": "area", "coste": { "acciones": 1, "energia": 3 }, "alcance": 0, "radio": 3, "condicion": "asustado", "turnos": 2, "salvacion": { "atributo": "car", "dif": 12 } },
-    "bajo-de-la-carpa": { "nombre": "Bajo de la carpa", "texto": "Un bajo que tumba: los enemigos al lado quedan Tumbados si no resisten con FUE (DIF 12), y 1d4.", "tipo": "area", "coste": { "acciones": 1, "energia": 2 }, "alcance": 0, "radio": 1, "dano": "1d4", "elemento": "golpe", "condicion": "tumbado", "turnos": 1, "salvacion": { "atributo": "fue", "dif": 12 } },
-    "llamar-bailarines": { "nombre": "¡Todos a la pista!", "texto": "Saca dos bailarines a la pista hasta el final del combate.", "tipo": "invocar", "coste": { "acciones": 1, "energia": 3 }, "alcance": 0, "cuantos": 2, "plantilla": { "id": "bailarin-de-la-carpa", "nombre": "Bailarín de la carpa", "spriteId": "bailarin-de-la-carpa", "vida": 6, "def": 11, "ataque": 3, "dano": "1d4", "movimiento": 5 } },
-    "llave": { "nombre": "Llave de masaje", "texto": "Inmoviliza a alguien al lado: 1d8 y Enredado 2 turnos.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 2 }, "alcance": 1, "melee": true, "dano": "1d8", "elemento": "golpe", "condicion": "enredado", "turnos": 2 },
-    "lodo-curativo": { "nombre": "Lodo curativo", "texto": "Embadurna: ella y sus aliados a 2 casillas recuperan 1d8.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 2 }, "alcance": 0, "radio": 2, "curar": "1d8" },
-    "barro-a-la-cara": { "nombre": "Barro a la cara", "texto": "Un pegote de barro a 4 casillas: 1d4 y Cegado 1 turno.", "tipo": "ataque", "coste": { "acciones": 1, "energia": 1 }, "alcance": 4, "dano": "1d4", "elemento": "golpe", "condicion": "cegado", "turnos": 1 },
-    "vaharada": { "nombre": "Vaharada", "texto": "Suelta vapor: 1d4 a 1 casilla y una nube que tapa la vista.", "tipo": "area", "coste": { "acciones": 1, "energia": 2 }, "alcance": 0, "radio": 1, "dano": "1d4", "elemento": "agua", "superficie": "vapor" },
-    "pregunta-trampa": { "nombre": "Pregunta trampa", "texto": "«¿Cuál es la capital de Burkina Faso?» Alguien a 5 casillas se queda Aturdido 1 turno si no resiste con MAÑ (DIF 13).", "tipo": "ataque", "coste": { "acciones": 1, "energia": 3 }, "alcance": 5, "sinTirada": true, "condicion": "aturdido", "turnos": 1, "salvacion": { "atributo": "man", "dif": 13 } },
-    "retoque": { "nombre": "Retoque", "texto": "Retoca a su equipo a 2 casillas: 1d6 de vida y les quita Cegado, Mareado y Tumbado.", "tipo": "apoyo", "coste": { "acciones": 1, "energia": 2 }, "alcance": 0, "radio": 2, "curar": "1d6", "quitar": ["cegado", "mareado", "tumbado"] },
-    "llamar-figurantes": { "nombre": "¡Que entren los figurantes!", "texto": "Llama a dos figurantes hasta el final del combate.", "tipo": "invocar", "coste": { "acciones": 1, "energia": 3 }, "alcance": 0, "cuantos": 2, "plantilla": { "id": "figurante", "nombre": "Figurante", "spriteId": "figurante", "vida": 8, "def": 11, "ataque": 4, "dano": "1d6", "movimiento": 4 } },
-    "foco-cegador": { "nombre": "Foco cegador", "texto": "Un fogonazo a 4 casillas: Cegados 2 turnos a 1 casilla si no resisten con AGI (DIF 12).", "tipo": "area", "coste": { "acciones": 1, "energia": 2 }, "alcance": 4, "radio": 1, "condicion": "cegado", "turnos": 2, "salvacion": { "atributo": "agi", "dif": 12 } }
+    "tentaculo": {
+      "nombre": "Tentáculo",
+      "texto": "Agarra a alguien a 2 casillas: 1d4, lo arrastra 1 y queda Enredado 1 turno.",
+      "tipo": "ataque",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 2,
+      "dano": "1d4",
+      "elemento": "golpe",
+      "condicion": "enredado",
+      "turnos": 1,
+      "tirar": 1
+    },
+    "percebe": {
+      "nombre": "Percebe al ojo",
+      "texto": "Lanza un percebe a 5 casillas: 1d8.",
+      "tipo": "ataque",
+      "coste": {
+        "acciones": 1,
+        "energia": 1
+      },
+      "alcance": 5,
+      "dano": "1d8",
+      "elemento": "golpe"
+    },
+    "descarga-de-charco": {
+      "nombre": "Descarga de charco",
+      "texto": "Electrifica todo a 1 casilla: 1d6 de rayo y el agua se electrifica.",
+      "tipo": "area",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 0,
+      "radio": 1,
+      "dano": "1d6",
+      "elemento": "rayo",
+      "aplicarElemento": "rayo"
+    },
+    "autodestruccion": {
+      "nombre": "¡Revienta!",
+      "texto": "Revienta: 2d6 de fuego a 1 casilla y fuego en el suelo. Se acabó la lata.",
+      "tipo": "autodestruccion",
+      "coste": {
+        "acciones": 1
+      },
+      "alcance": 0,
+      "radio": 1,
+      "dano": "2d6",
+      "elemento": "fuego",
+      "aplicarElemento": "fuego"
+    },
+    "autodestruccion-toxica": {
+      "nombre": "¡Revienta (caducada)!",
+      "texto": "Revienta: 2d4 de veneno a 1 casilla y deja una nube tóxica.",
+      "tipo": "autodestruccion",
+      "coste": {
+        "acciones": 1
+      },
+      "alcance": 0,
+      "radio": 1,
+      "dano": "2d4",
+      "elemento": "veneno",
+      "superficie": "toxico"
+    },
+    "autodestruccion-vapor": {
+      "nombre": "¡Efervescencia!",
+      "texto": "Se disuelve de golpe: 1d6 a 1 casilla y vapor que tapa la vista.",
+      "tipo": "autodestruccion",
+      "coste": {
+        "acciones": 1
+      },
+      "alcance": 0,
+      "radio": 1,
+      "dano": "1d6",
+      "elemento": "agua",
+      "superficie": "vapor"
+    },
+    "nube-de-colonia": {
+      "nombre": "Nube de colonia",
+      "texto": "Una nube de perfume a 3 casillas: 1d4 y Mareado 2 turnos a quien no resista con AGU (DIF 12).",
+      "tipo": "area",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 3,
+      "radio": 1,
+      "dano": "1d4",
+      "elemento": "veneno",
+      "condicion": "mareado",
+      "turnos": 2,
+      "salvacion": {
+        "atributo": "agu",
+        "dif": 12
+      }
+    },
+    "a-reponer": {
+      "nombre": "¡A reponer!",
+      "texto": "Grita al equipo: él y sus aliados a 2 casillas recuperan 1d6 y quedan Animados 2 turnos.",
+      "tipo": "apoyo",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 0,
+      "radio": 2,
+      "curar": "1d6",
+      "condicion": "animado",
+      "turnos": 2
+    },
+    "placaje": {
+      "nombre": "Placaje",
+      "texto": "Placa a alguien al lado: 1d6, Tumbado y Enredado 1 turno.",
+      "tipo": "ataque",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 1,
+      "melee": true,
+      "dano": "1d6",
+      "elemento": "golpe",
+      "condicion": "enredado",
+      "turnos": 1
+    },
+    "corcho": {
+      "nombre": "Escopeta de corchos",
+      "texto": "Un corcho a 6 casillas: 1d6.",
+      "tipo": "ataque",
+      "coste": {
+        "acciones": 1,
+        "energia": 1
+      },
+      "alcance": 6,
+      "dano": "1d6",
+      "elemento": "golpe"
+    },
+    "linea": {
+      "nombre": "¡LÍNEA!",
+      "texto": "Grita tan fuerte que los enemigos a 3 casillas quedan Asustados 2 turnos si no resisten con CAR (DIF 12).",
+      "tipo": "area",
+      "coste": {
+        "acciones": 1,
+        "energia": 3
+      },
+      "alcance": 0,
+      "radio": 3,
+      "condicion": "asustado",
+      "turnos": 2,
+      "salvacion": {
+        "atributo": "car",
+        "dif": 12
+      }
+    },
+    "bajo-de-la-carpa": {
+      "nombre": "Bajo de la carpa",
+      "texto": "Un bajo que tumba: los enemigos al lado quedan Tumbados si no resisten con FUE (DIF 12), y 1d4.",
+      "tipo": "area",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 0,
+      "radio": 1,
+      "dano": "1d4",
+      "elemento": "golpe",
+      "condicion": "tumbado",
+      "turnos": 1,
+      "salvacion": {
+        "atributo": "fue",
+        "dif": 12
+      }
+    },
+    "llamar-bailarines": {
+      "nombre": "¡Todos a la pista!",
+      "texto": "Saca dos bailarines a la pista hasta el final del combate.",
+      "tipo": "invocar",
+      "coste": {
+        "acciones": 1,
+        "energia": 3
+      },
+      "alcance": 0,
+      "cuantos": 2,
+      "plantilla": {
+        "id": "bailarin-de-la-carpa",
+        "nombre": "Bailarín de la carpa",
+        "spriteId": "bailarin-de-la-carpa",
+        "vida": 6,
+        "def": 11,
+        "ataque": 3,
+        "dano": "1d4",
+        "movimiento": 5
+      }
+    },
+    "llave": {
+      "nombre": "Llave de masaje",
+      "texto": "Inmoviliza a alguien al lado: 1d8 y Enredado 2 turnos.",
+      "tipo": "ataque",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 1,
+      "melee": true,
+      "dano": "1d8",
+      "elemento": "golpe",
+      "condicion": "enredado",
+      "turnos": 2
+    },
+    "lodo-curativo": {
+      "nombre": "Lodo curativo",
+      "texto": "Embadurna: ella y sus aliados a 2 casillas recuperan 1d8.",
+      "tipo": "apoyo",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 0,
+      "radio": 2,
+      "curar": "1d8"
+    },
+    "barro-a-la-cara": {
+      "nombre": "Barro a la cara",
+      "texto": "Un pegote de barro a 4 casillas: 1d4 y Cegado 1 turno.",
+      "tipo": "ataque",
+      "coste": {
+        "acciones": 1,
+        "energia": 1
+      },
+      "alcance": 4,
+      "dano": "1d4",
+      "elemento": "golpe",
+      "condicion": "cegado",
+      "turnos": 1
+    },
+    "vaharada": {
+      "nombre": "Vaharada",
+      "texto": "Suelta vapor: 1d4 a 1 casilla y una nube que tapa la vista.",
+      "tipo": "area",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 0,
+      "radio": 1,
+      "dano": "1d4",
+      "elemento": "agua",
+      "superficie": "vapor"
+    },
+    "pregunta-trampa": {
+      "nombre": "Pregunta trampa",
+      "texto": "«¿Cuál es la capital de Burkina Faso?» Alguien a 5 casillas se queda Aturdido 1 turno si no resiste con MAÑ (DIF 13).",
+      "tipo": "ataque",
+      "coste": {
+        "acciones": 1,
+        "energia": 3
+      },
+      "alcance": 5,
+      "sinTirada": true,
+      "condicion": "aturdido",
+      "turnos": 1,
+      "salvacion": {
+        "atributo": "man",
+        "dif": 13
+      }
+    },
+    "retoque": {
+      "nombre": "Retoque",
+      "texto": "Retoca a su equipo a 2 casillas: 1d6 de vida y les quita Cegado, Mareado y Tumbado.",
+      "tipo": "apoyo",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 0,
+      "radio": 2,
+      "curar": "1d6",
+      "quitar": [
+        "cegado",
+        "mareado",
+        "tumbado"
+      ]
+    },
+    "llamar-figurantes": {
+      "nombre": "¡Que entren los figurantes!",
+      "texto": "Llama a dos figurantes hasta el final del combate.",
+      "tipo": "invocar",
+      "coste": {
+        "acciones": 1,
+        "energia": 3
+      },
+      "alcance": 0,
+      "cuantos": 2,
+      "plantilla": {
+        "id": "figurante",
+        "nombre": "Figurante",
+        "spriteId": "figurante",
+        "vida": 8,
+        "def": 11,
+        "ataque": 4,
+        "dano": "1d6",
+        "movimiento": 4
+      }
+    },
+    "foco-cegador": {
+      "nombre": "Foco cegador",
+      "texto": "Un fogonazo a 4 casillas: Cegados 2 turnos a 1 casilla si no resisten con AGI (DIF 12).",
+      "tipo": "area",
+      "coste": {
+        "acciones": 1,
+        "energia": 2
+      },
+      "alcance": 4,
+      "radio": 1,
+      "condicion": "cegado",
+      "turnos": 2,
+      "salvacion": {
+        "atributo": "agi",
+        "dif": 12
+      }
+    },
+    "autodestruccion-lata": {
+      "nombre": "¡Revienta!",
+      "texto": "La lata revienta: 1d6 a 1 casilla y aceite de bonito por el suelo.",
+      "tipo": "autodestruccion",
+      "coste": {
+        "acciones": 1
+      },
+      "alcance": 0,
+      "radio": 1,
+      "dano": "1d6",
+      "elemento": "fuego",
+      "superficie": "aceite"
+    }
   }
 }
