@@ -77,16 +77,16 @@
       "descripcion": "Graba todo en vertical. Todo. Dice que es su sello. Su foco de mano deslumbra a los monstruos y le sube la autoestima a cualquiera.",
       "spriteId": "companero-kevin",
       "base": {
-        "vida": 16,
+        "vida": 22,
         "def": 12,
-        "ataque": 4,
-        "dano": "1d6",
+        "ataque": 6,
+        "dano": "1d8",
         "movimiento": 5,
         "fue": 4,
         "energia": 4
       },
       "porNivel": {
-        "vida": 2
+        "vida": 4
       },
       "etiquetas": [
         "humano"
@@ -321,8 +321,8 @@
       "base": {
         "vida": 18,
         "def": 14,
-        "ataque": 3,
-        "dano": "1d4",
+        "ataque": 5,
+        "dano": "1d6",
         "movimiento": 4,
         "fue": 7,
         "energia": 4

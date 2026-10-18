@@ -80,7 +80,7 @@ Valores actuales (2026-10-18):
 | Piso | Presupuesto | Vida enemigos | Élites | Jefe: vida | Jefe: daño |
 |---|---|---|---|---|---|
 | 1 | ×0,6 | ×0,8 | 0 % | guardián ×2 | — |
-| 2 | ×0,45 | ×0,8 | 10 % | ×0,3 (Centollo, 18) | 1d6 |
+| 2 | ×0,4 | ×0,8 | 10 % | ×0,3 (Centollo, 18) | 1d6 |
 | 3 | ×1 | ×1 | 15 % | guardián | — |
 | 4 | ×0,7 | ×1 | 20 % | ×0,25 (Encargada, 23) | 1d8 |
 | 5 | ×0,75 | ×1 | 25 % | guardián | — |
@@ -90,7 +90,7 @@ Valores actuales (2026-10-18):
 | 9 | ×0,55 | ×1 | 45 % | guardián | — |
 | 10 | ×0,55 | ×1,25 | 50 % | ×0,27 (Presentador, 59) + Share | 2d6 |
 
-Compañeros reforzados en esta pasada: Doña Rosario (Tasador: vida 24, +4 por nivel, ataque 6) e Iker (Funcionario: vida 18, ataque 5).
+Compañeros reforzados en esta pasada: Doña Rosario (Tasador: vida 24, +4 por nivel, ataque 6), Iker (Funcionario: vida 18, ataque 5), Kevin (Influencer: vida 22, +4 por nivel, ataque 6, 1d8) y Plata (Mimo: ataque 5, 1d6).
 
 ## Resultados (27 temporadas: 9 clases × 3 semillas, 2026-10-18)
 
@@ -118,7 +118,7 @@ Antes de esta pasada (la misma temporada sin calibrar): los pisos de jefe (2, 4 
 ## Pendiente
 
 - **Las fases del Presentador** (el agente del espectáculo las está haciendo) endurecerán el piso 10. Al llegar, volver a medir y ajustar `equilibrio.jefes['10']`.
-- **El piso 2** queda un poco por debajo del objetivo (74 %). Las pérdidas están repartidas en combates normales, sin un enemigo culpable. Si en partida se nota, bajar algo más `presupuesto['2']`.
+- **El piso 2, ajustado (2026-10-18):** la causa eran el Influencer (5 de 16 pisos sin perder) y el Mimo (9 de 16), que llegan al Centollo casi sin daño; las demás clases pasaban de largo. Se reforzaron sus compañeros y se bajó un poco el presupuesto (×0,4). Con 144 temporadas cortas (pisos 1-2, 9 clases × 16 semillas), el piso 2 se pasa sin perder el 86 % de las veces (antes el 81 %, y el 74 % con 27) y el jefe cae a la primera el 94 %. Ninguna clase baja del 75 %. Los compañeros más fuertes facilitan algo los pisos siguientes, que ya iban sobrados.
 - **Pisos 4, 7 y 9:** al 100 %, quizá se pueden endurecer. Primero hay que ver las partidas reales.
 - **Golpe de valor del Tasador** ya funciona (2026-10-18): 1d6 más la mitad del valor del objeto lanzado. Falta medir cuánto ayuda al Tasador en la temporada.
 - **Fuera de la simulación:** las dificultades Turista y Prime time, los objetos y las cajas de botín.
