@@ -260,7 +260,13 @@ export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCo
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
   const result = handler(state, command, { ruleset, ...(content ? { content } : {}) });
   if (!result.ok) return result;
-  return levelUpIfEarned(ruleset, afterCommand(ruleset, command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content)), content);
+  const before = command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content);
+  const after = afterCommand(ruleset, before);
+  // A ruleset's afterCommand hook can remove the entity whose turn it now is (a room collapsing
+  // on a boss's turn, say, right after `endTurn`'s own beginTurn settled on it): re-check even
+  // for `endTurn` itself, so the turn still passes instead of leaving it on a ghost.
+  const settled = passTurnIfHelpless(ruleset, after, content);
+  return levelUpIfEarned(ruleset, settled, content);
 }
 
 /** The ruleset's look at everything a command did (Ruleset.afterCommand). */

@@ -1,5 +1,6 @@
 import { type Entity, type GridMap, type JsonValue, type MapSetup, type MapZone, type Tile, type Trap, type Vec2, OBSTACLE_TAG } from '../../../engine';
 import { createCreature } from '../../../rulesets/willy';
+import ninja from '../assets/ninja.json';
 import floorsData from '../data/floors.json';
 import balneario from '../data/rooms/balneario.json';
 import castro from '../data/rooms/castro.json';
@@ -90,7 +91,7 @@ const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X']);
 const MAX_ATTEMPTS = 20;
 
 /** Difficulty levers (floors.json → equilibrio), tuned with the balance simulations. */
-const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; primeraPelea: { piso: number; presupuestoMax: number }; jefes: Record<string, { multVida?: number; dano?: string }>; vidaEnemigos: Record<string, number>; guardian: { multVida: number; bonoAtaque: number; bonoDef: number; xp: number } };
+const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; primeraPelea: { piso: number; presupuestoMax: number }; jefes: Record<string, { multVida?: number; dano?: string }>; vidaEnemigos: Record<string, number>; elites: { probabilidad: Record<string, number>; modificadores: Record<string, unknown> }; guardian: { multVida: number; bonoAtaque: number; bonoDef: number; xp: number } };
 const SAFE_DISTANCE = 6;
 
 type Planta = (typeof floorsData.plantas)[number];
@@ -491,7 +492,62 @@ interface Populated {
   rival?: RivalRecord;
 }
 
-type EnemyDef = { nombre: string; tipo: string; coste: number; vida: number; def: number; ataque: number; dano: string; movimiento: number; rasgos: string[]; xp: number; etiquetas: string[] };
+type EnemyDef = {
+  nombre: string;
+  genero?: string;
+  tipo: string;
+  coste: number;
+  vida: number;
+  def: number;
+  ataque: number;
+  dano: string;
+  movimiento: number;
+  rasgos: string[];
+  xp: number;
+  etiquetas: string[];
+  /** Ability ids (rulesets/willy/data/monster-abilities.json). */
+  habilidades?: string[];
+  /** Ranged and keeps its distance. */
+  kite?: boolean;
+  /** Blows up like this ability when knocked out. */
+  estalla?: string;
+};
+
+type EliteMod = { m: string; f: string; def?: number; ataque?: number; acciones?: number; multVida?: number; movimiento?: number; estalla?: string };
+
+/** An ordinary enemy of the floor's table, perhaps an elite (floors.json → equilibrio.elites). */
+function enemy(entityId: string, id: string, def: EnemyDef, at: Vec2, n: number, eliteId?: string): Entity {
+  const mod = eliteId ? (BALANCE.elites.modificadores[eliteId] as EliteMod) : undefined;
+  const sprites = ninja.sprites as Record<string, unknown>;
+  const e = createCreature({
+    id: entityId,
+    name: mod ? `${def.nombre} ${def.genero === 'f' ? mod.f : mod.m}` : def.nombre,
+    controllerId: 'ai',
+    factionId: 'monstruos',
+    position: at,
+    spriteId: mod && sprites[`${id}--elite`] ? `${id}--elite` : id,
+    vida: Math.round(def.vida * (BALANCE.vidaEnemigos[n] ?? 1) * (mod?.multVida ?? 1)),
+    def: def.def + (mod?.def ?? 0),
+    ataque: def.ataque + (mod?.ataque ?? 0),
+    dano: def.dano,
+    movimiento: def.movimiento + (mod?.movimiento ?? 0),
+    fue: Math.max(3, def.coste * 3),
+    ...(def.kite ? { alcance: 4, distancia: true } : {}),
+    tags: [
+      ...def.etiquetas,
+      `xp:${def.xp * (mod ? 2 : 1)}`,
+      ...(def.habilidades ?? []).map((h) => `habilidad:${h}`),
+      ...(def.kite ? ['kite'] : []),
+      ...(def.estalla || mod?.estalla ? [`estalla:${def.estalla ?? mod!.estalla}`] : []),
+      ...(mod ? ['elite', `elite:${eliteId}`] : []),
+    ],
+  });
+  // Ordinary enemies act less than Willy (floors.json → equilibrio.accionesEnemigo); some elites more.
+  const acts = mod?.acciones ?? BALANCE.accionesEnemigo;
+  e.resources.acciones = { current: acts, max: acts };
+  if (def.habilidades?.length) e.resources.energia = { current: 4, max: 4 };
+  return e;
+}
 
 function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Biome, rooms: RoomInfo[], markers: { ch: string; at: Vec2; room: number }[], earlier: RivalRecord[], rivalRoom: boolean): Populated {
   const entities: Entity[] = [];
@@ -587,17 +643,19 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
     if (room.role === 'inicio' || room.role === 'jefe') budget = 0;
     // The first fight of the season is a gentle one (floors.json → equilibrio.primeraPelea).
     if (n === BALANCE.primeraPelea.piso && room.critical && i === firstFightRoom) budget = Math.min(budget, BALANCE.primeraPelea.presupuestoMax);
+    // Sometimes one of them is an elite, with a modifier (floors.json → equilibrio.elites).
+    let eliteMod = budget > 0 && g.chance(BALANCE.elites.probabilidad[n] ?? 0) ? g.pick(Object.keys(BALANCE.elites.modificadores)) : undefined;
     while (budget >= cheapest && enemySlots.length) {
       const pick = g.weighted(enemies.filter(([, e]) => e.coste <= budget), () => 1);
       if (!pick) break;
       const [id, def] = pick;
       const at = enemySlots.shift()!;
-      const e = createCreature({ id: `${prefix}-${id}-${foesByRoom[i]!.length}`, name: def.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: id, vida: Math.round(def.vida * (BALANCE.vidaEnemigos[n] ?? 1)), def: def.def, ataque: def.ataque, dano: def.dano, movimiento: def.movimiento, fue: Math.max(3, def.coste * 3), tags: [...def.etiquetas, `xp:${def.xp}`] });
-      // Ordinary enemies act less than Willy (floors.json → equilibrio.accionesEnemigo).
-      e.resources.acciones = { current: BALANCE.accionesEnemigo, max: BALANCE.accionesEnemigo };
+      const elite = eliteMod && def.coste * 2 <= budget ? eliteMod : undefined;
+      if (elite) eliteMod = undefined;
+      const e = enemy(`${prefix}-${id}-${foesByRoom[i]!.length}`, id, def, at, n, elite);
       entities.push(e);
       foesByRoom[i]!.push(e.id);
-      budget -= def.coste;
+      budget -= def.coste * (elite ? 2 : 1);
     }
     // Chests.
     const chestSlots = slots(i, 'c');
@@ -663,16 +721,17 @@ function guardian(g: Gen, spec: FloorSpec, at: Vec2, enemies: [string, EnemyDef]
     controllerId: 'ai',
     factionId: 'monstruos',
     position: at,
-    spriteId: id,
+    spriteId: (ninja.sprites as Record<string, unknown>)[`${id}--elite`] ? `${id}--elite` : id,
     vida: Math.round(def.vida * t.multVida * (BALANCE.vidaEnemigos[spec.piso] ?? 1)),
     def: def.def + t.bonoDef,
     ataque: def.ataque + t.bonoAtaque,
     dano: def.dano,
     movimiento: def.movimiento,
     fue: 10,
-    tags: ['jefe', 'guardian', 'elite', ...def.etiquetas, `xp:${def.xp * t.xp}`],
+    ...(def.kite ? { alcance: 4, distancia: true } : {}),
+    tags: ['jefe', 'guardian', 'elite', ...def.etiquetas, `xp:${def.xp * t.xp}`, ...(def.habilidades ?? []).map((h) => `habilidad:${h}`), ...(def.estalla ? [`estalla:${def.estalla}`] : [])],
   });
-  return e;
+  return def.habilidades?.length ? { ...e, resources: { ...e.resources, energia: { current: 6, max: 6 } } } : e;
 }
 
 function chest(id: string, at: Vec2, spriteId: string, floor: number): Entity {
@@ -700,7 +759,40 @@ export function reachable(map: GridMap, from: Vec2, blocked: Set<string>): Set<s
   return seen;
 }
 
+const ALL_DIRS: Vec2[] = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }, { x: 1, y: 1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: -1, y: -1 }];
+
+/**
+ * Isolated platforms (an "island": a walkable tile whose every neighbour is more than one
+ * level away) could strand a pushed creature with no legal move (no jump ability, nothing
+ * to attack): a real softlock. Walled off from the walkable area, a tile with no neighbour
+ * at all is fine (it's never reachable in the first place); one surrounded only by a cliff
+ * taller than a step is the bug, however it's reached.
+ */
+function islandTile(map: GridMap): string | undefined {
+  for (let y = 0; y < map.height; y++) {
+    for (let x = 0; x < map.width; x++) {
+      const t = map.tiles[y * map.width + x]!;
+      if (!t.walkable) continue;
+      let hasWalkableNeighbour = false;
+      let onlyFarNeighbours = true;
+      for (const d of ALL_DIRS) {
+        const nx = x + d.x;
+        const ny = y + d.y;
+        if (nx < 0 || ny < 0 || nx >= map.width || ny >= map.height) continue;
+        const n = map.tiles[ny * map.width + nx]!;
+        if (!n.walkable) continue;
+        hasWalkableNeighbour = true;
+        if (Math.abs(n.height - t.height) <= 1) onlyFarNeighbours = false;
+      }
+      if (hasWalkableNeighbour && onlyFarNeighbours) return `island at ${x},${y} (height ${t.height})`;
+    }
+  }
+  return undefined;
+}
+
 function validate(map: GridMap, p: Populated, spec: FloorSpec): string | undefined {
+  const island = islandTile(map);
+  if (island) return island;
   const blocked = new Set([...p.entities.filter((e) => e.tags.includes(OBSTACLE_TAG)).map((e) => key(e.position)), ...p.traps.flatMap((t) => t.tiles.map(key))]);
   const reach = reachable(map, p.arrival, blocked);
   const near = (v: Vec2) => (Object.keys(DIRS) as Side[]).some((s) => reach.has(key(neighbour(v, s))));
