@@ -23,6 +23,15 @@
   - Los enemigos son variados: élites, «kite», `estalla` y 22 habilidades de monstruo.
   - `simulateSeason` simula la temporada entera. Con 27 temporadas sale un 74-100 % de pisos sin perder, un 88-100 % de jefes a la primera y 24 de 27 temporadas terminadas. Tabla y palancas en `BALANCE.md`.
   - Falta volver a medir el piso 10 cuando lleguen las fases del Presentador.
+- **Golpe de valor (2026-10-18):** el Tasador lanza un objeto de la mochila, que se pierde (el de bronce vuelve con la Maestría). Daño: 1d6 más la mitad de su valor; desde el nivel 4, el valor entero. Elige solo: primero la chatarra, luego lo que no cura y al final lo que cura. El oro y lo legendario, solo si lleva otro igual. La previsualización dice qué se lanza.
+- **Fin de la temporada (2026-10-18):** al caer el jefe del piso 10, que lleva la etiqueta `jefe-final` (`rulesets/willy/ending.ts`):
+  - El reloj se para, y un disparador del juego abre la conversación `final-temporada` (`content/willy/dialogues/final.ts`).
+  - Xelda cuenta lo que vio, el Presentador ofrece el puesto y se elige A o B, o C si se cumplen sus condiciones (50 millones de audiencia, 3 patrocinadores a favor o fans y el contrato leído).
+  - Cada final tiene su epílogo y luego el gancho de la Temporada 2.
+  - El último nodo fija `willy:final`: sale `runEnded { resultado: 'victoria', final }`, con los logros de final y fin de temporada.
+  - Después, el resumen de la temporada (`GameDefinition.ending`, nuevo y genérico en el cliente) con «Créditos» y «Nueva temporada». En Sin repetición se borra la ranura y el título dice «En directo, sin repetición».
+  - **Desviación:** el despacho de Xelda (escena fija) no existe todavía. El contrato se lee hablando con Xelda en los Camerinos 8 y 9.
+  - Pendiente: la marca «en directo» en el perfil (agente meta).
 - **FX:** los `skillUsed` llevan `target` y van antes de las tiradas.
 - **Meta (2026-10-18, rama `willy-meta`):**
   - **Logros:** se evalúan en el ruleset tras cada comando (`Ruleset.afterCommand`, `rulesets/willy/achievements.ts`). Traduce los eventos del motor al vocabulario de `achievements.json` (`attackResolved`, `objectDestroyed`, `entityPushed`…) y aplica el lenguaje de condiciones con contadores por partida, planta, combate o turno, disparadores `al` y datos vivos (`dato`).

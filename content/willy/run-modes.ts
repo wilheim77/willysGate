@@ -1,5 +1,5 @@
 import type { GameState } from '../../engine';
-import { metaOf } from '../../rulesets/willy';
+import { FINAL_FLAG, RESULT_FLAG, metaOf, show } from '../../rulesets/willy';
 import { ATTEMPT_FLAG } from './setup';
 
 /**
@@ -85,5 +85,34 @@ export const defeat = (state: GameState): DefeatPolicy => {
       label: 'Volver al Camerino',
       prepare: (checkpoint) => ({ ...checkpoint, flags: { ...checkpoint.flags, [ATTEMPT_FLAG]: Number(state.flags[ATTEMPT_FLAG] ?? 0) + 1 } }),
     },
+  };
+};
+
+const FINAL_NAMES: Record<string, string> = { A: '«Nuevo presentador»', B: '«Vuelta a casa»', C: '«Letra pequeña»' };
+
+function viewers(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toLocaleString('es-ES', { maximumFractionDigits: 1 })} millones`;
+  return n.toLocaleString('es-ES');
+}
+
+/** A won season, once the ending's conversation is over: the summary (GameDefinition.ending). */
+export const ending = (state: GameState): { title: string; lines: string[]; button: string } | null => {
+  if (state.flags[RESULT_FLAG] !== 'victoria') return null;
+  const meta = metaOf(state);
+  const w = state.entities.willy;
+  const audience = show.audienceOf(state);
+  const final = String(state.flags[FINAL_FLAG] ?? '');
+  return {
+    title: hardcore(state) ? 'Temporada completada. En directo, sin repetición.' : 'Temporada completada',
+    lines: [
+      `Final: ${FINAL_NAMES[final] ?? final}`,
+      `Nivel: ${w?.stats.nivel ?? 1}`,
+      `Audiencia máxima: ${viewers(audience?.pico ?? audience?.valor ?? 0)} de espectadores`,
+      `Repeticiones: ${Number(state.flags[ATTEMPT_FLAG] ?? 0)}`,
+      `Logros: ${meta.logros.length}`,
+      `Cajas abiertas: ${meta.cajasAbiertas}`,
+      `Fichas: ${w?.resources.fichas?.current ?? 0}`,
+    ],
+    button: 'Nueva temporada',
   };
 };

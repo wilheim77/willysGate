@@ -1,4 +1,5 @@
 import { type ActionOutcome, type Effect, type Entity, type GameEvent, type GameState, type JsonValue, type RngCursor, type Ruleset, type Vec2, hasTag, zonesOf } from '../../engine';
+import { seasonDecided } from './ending';
 import { standing } from './resolve';
 
 /**
@@ -146,6 +147,8 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
   }
   const p = plantaOf(state);
   if (!p) return { effects, events: out };
+  // The final boss is down: the floor stays up for the ending.
+  if (seasonDecided(state)) return { effects, events: out };
   if (!clock || clock.mapa !== state.map.id) {
     const visitas = Number(state.flags[visitFlag(p.mapa)] ?? 0) + 1;
     clock = { label: 'Reloj', remaining: p.reloj.segundos, total: p.reloj.segundos, mapa: p.mapa, planta: p.numero, ultimaRonda: 0, avisados: [], pasado: 0, agrietadas: [], caidas: [], expulsado: false };

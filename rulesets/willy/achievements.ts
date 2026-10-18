@@ -292,6 +292,9 @@ export function datum(state: GameState, meta: MetaState, path: string, ctx: { co
       return meta.logros.length;
     case 'partida.plantasLimpias':
       return meta.plantasLimpias.length;
+    case 'partida.resultado':
+      // Set by ending.ts when a won season's ending is chosen.
+      return state.flags['willy:resultado'];
     case 'partida.modoEliminacion':
       return state.flags.modoEliminacion;
     case 'partida.dificultad':
