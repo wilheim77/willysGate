@@ -17,9 +17,18 @@ import { runFullGame } from './fullRunDriver';
  * the `describe.todo` blocks at the bottom for what hasn't yet):
  * - 10 floors, XP and character level-ups: landed (rulesets/willy/xp.ts, engine/progression.ts).
  * - the show (audience, sponsors, the presenter's Share): landed (rulesets/willy/show/*).
- * - the collapse clock, achievements, loot boxes and out-of-combat healing: not yet (see the
- *   `it.todo`s below) - watch origin/willy (clock, more floors/enemies) and origin/willy-meta
- *   (achievements, boxes, items, healing).
+ * - the collapse clock: landed (rulesets/willy/clock.ts).
+ * - achievements, loot boxes and out-of-combat healing: not yet (see the `it.todo`s below) -
+ *   watch origin/willy-meta.
+ *
+ * Two real bugs this harness found and reported were since fixed upstream (kept here as a
+ * changelog, not a warning - no more guarding needed):
+ * - a stray teleport in resolveNextEncounter (zone.x+1, zone.y+1 instead of a real walkable
+ *   tile) could box Willy into a wall/shelf tile and hang a run forever; fixed below by
+ *   scanning the zone for a walkable, unoccupied tile instead.
+ * - a room collapse (rulesets/willy/clock.ts) despawning the entity a turn had just advanced
+ *   to left `turn.activeEntityId` dangling, crashing the next AI decision; fixed upstream in
+ *   engine/commands.ts (passTurnIfHelpless now re-runs after a ruleset's afterCommand too).
  *
  * Smoke (plain `npm test`): one class, two floors. Full 9-class x every floor matrix:
  * `QA_DEEP=1 npm run test:qa`.
@@ -39,68 +48,32 @@ const MAX_STEPS = DEEP ? 4000 : 1500;
 // environment awareness) - individual fights now routinely take 1-4s of AI "thinking" alone,
 // so a two-floor smoke run and a ten-floor deep run both need generous budgets. The smoke
 // budget in particular needs real headroom: run inside the full `npm test` suite (dozens of
-// files competing for CPU across workers) it took ~90s vs. ~35s standalone.
-const TEST_TIMEOUT = DEEP ? 180_000 : 120_000;
+// files competing for CPU across workers) it took ~90s vs. ~35s standalone. The final floor's
+// boss (jefe-presentador, kept above 0 HP by Share) can make a full 10-floor run take several
+// minutes for some classes - "jugador-de-basket" took ~410s against a 180s budget.
+const TEST_TIMEOUT = DEEP ? 600_000 : 120_000;
 
 const MAX_SKILL_LEVEL = SKILL_THRESHOLDS.length;
 
-// Known bug, reported to the Willy agent and the coordinator (seed 1): "mimo" stalls forever
-// in planta-4's "sala-6" (reponedor-zombi x2 + maniqui vs. Willy alone, companion already
-// down) - 700+ AI commands across 35+ rounds with nobody's HP moving at all, a genuine AI
-// stalemate rather than a harness timeout. Quarantined here (not fixed - this is content/AI,
-// not the harness) until it's addressed; remove this entry once it is.
-const KNOWN_STALLED: Record<string, string> = {
-  mimo: 'stalls forever in planta-4/sala-6 (reponedor-zombi x2 + maniqui vs. solo Willy) - reported, not a harness bug',
-};
-
-// Known engine bug (reported to the Willy agent and the coordinator): the collapse's
-// despawnEntity can remove the combatant the turn just advanced to (it filters turn.order but
-// never re-derives activeEntityId), leaving the turn pointing at a despawned entity - the next
-// AI decision then crashes reading its controllerId. fullRunDriver.ts names this error
-// "DESPAWNED_ACTIVE_ENTITY" so it can be told apart from a genuine new crash here. It can hit
-// any class on any floor once a room collapses on someone mid-combat, so it's caught per-run
-// (not quarantined by class name like KNOWN_STALLED below) and reported rather than failed.
-const DESPAWN_BUG_SIGNATURE = 'DESPAWNED_ACTIVE_ENTITY';
-
-interface RunOutcome {
-  result?: ReturnType<typeof runFullGame>;
-  knownBugError?: string;
-}
-
-// One run per class, memoized: a full run is expensive (combat got noticeably heavier with
-// the expansion's bigger floors/rosters and the AI's own environment awareness - individual
-// fights now routinely take 1-4s of AI "thinking" alone), and the softlock, show and skill
+// One run per class, memoized: a full run is expensive, and the softlock, show and skill
 // progression checks below all want to inspect the *same* run rather than resimulating it.
-const runCache = new Map<string, RunOutcome>();
-function runFor(classId: string): RunOutcome {
-  let outcome = runCache.get(classId);
-  if (!outcome) {
+const runCache = new Map<string, ReturnType<typeof runFullGame>>();
+function runFor(classId: string): ReturnType<typeof runFullGame> {
+  let result = runCache.get(classId);
+  if (!result) {
     const state = startRun(1, classId);
-    try {
-      outcome = { result: runFullGame(engine, state, 'willy', MAX_STEPS) };
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      if (!message.includes(DESPAWN_BUG_SIGNATURE)) throw err; // a genuine new crash - let it fail loudly.
-      outcome = { knownBugError: message };
-    }
-    runCache.set(classId, outcome);
+    result = runFullGame(engine, state, 'willy', MAX_STEPS);
+    runCache.set(classId, result);
   }
-  return outcome;
+  return result;
 }
 
 describe('Willy full run: casting through every floor, no softlock', () => {
   for (const classId of CLASSES_TO_RUN) {
-    const itMaybe = KNOWN_STALLED[classId] ? it.skip : it;
-    itMaybe(
-      `"${classId}": the lift/stairs always lead somewhere, every fight ends (${DEEP ? 'full run' : 'first two floors'})${KNOWN_STALLED[classId] ? ` - SKIPPED: ${KNOWN_STALLED[classId]}` : ''}`,
+    it(
+      `"${classId}": the lift/stairs always lead somewhere, every fight ends (${DEEP ? 'full run' : 'first two floors'})`,
       () => {
-        const outcome = runFor(classId);
-        if (outcome.knownBugError) {
-          // eslint-disable-next-line no-console
-          console.warn(`"${classId}": hit the known collapse/despawned-active-entity engine bug (reported, not a harness bug) - ${outcome.knownBugError}`);
-          return;
-        }
-        const result = outcome.result!;
+        const result = runFor(classId);
         // eslint-disable-next-line no-console
         console.log(`${classId}: ${result.steps} steps, floors cleared ${result.floorsCleared}, visited [${result.visitedMaps.join(', ')}]`);
         expect(result.steps, `"${classId}": did not settle within ${MAX_STEPS} steps - possible softlock`).toBeLessThan(MAX_STEPS);
@@ -132,13 +105,7 @@ describe('the show: audience events fire and stay within bounds', () => {
     it(
       `a run produces audienceChanged events, and the audience never drops below its floor (${classId})`,
       () => {
-        const outcome = runFor(classId);
-        if (outcome.knownBugError) {
-          // eslint-disable-next-line no-console
-          console.warn(`"${classId}": hit the known collapse/despawned-active-entity engine bug (reported, not a show/audience bug) - ${outcome.knownBugError}`);
-          return;
-        }
-        const result = outcome.result!;
+        const result = runFor(classId);
         const audienceEvents = result.events.filter((e) => e.type === 'audienceChanged') as (WillyEvent & { delta: number; espectadores: number; causa: string })[];
         expect(audienceEvents.length, 'no audienceChanged events over the whole run - is content/willy/show wired up?').toBeGreaterThan(0);
         const minimum = show.floorMinimum(result.state);
@@ -157,16 +124,10 @@ describe('the show: audience events fire and stay within bounds', () => {
 
 describe('class progression: skills reach their top use-tier before the final floor', () => {
   for (const classId of CLASSES_TO_RUN) {
-    it.runIf(DEEP && !KNOWN_STALLED[classId])(
+    it.runIf(DEEP)(
       `"${classId}" has at least one ability at skill level ${MAX_SKILL_LEVEL} by the last floor`,
       () => {
-        const outcome = runFor(classId);
-        if (outcome.knownBugError) {
-          // eslint-disable-next-line no-console
-          console.warn(`"${classId}": hit the known collapse/despawned-active-entity engine bug (reported) - ${outcome.knownBugError}`);
-          return;
-        }
-        const result = outcome.result!;
+        const result = runFor(classId);
         if (!willy.isStanding(result.state.entities.willy!)) return; // a run-ending defeat is reported above, not asserted here.
         const maxima = result.events.filter((e): e is WillyEvent & { habilidad: string; nivel: number } => e.type === 'skillLevelUp' && Number((e as { nivel?: number }).nivel) >= MAX_SKILL_LEVEL);
         const willyEntity = result.state.entities.willy!;
@@ -190,19 +151,13 @@ describe('collapse timer: the floor always resolves, never leaves the party stuc
     it(
       `every "planta-*" floor the run leaves is left cleanly or by the collapse, never stuck (${classId})`,
       () => {
-        const outcome = runFor(classId);
-        if (outcome.knownBugError) {
-          // eslint-disable-next-line no-console
-          console.warn(`"${classId}": hit the known collapse/despawned-active-entity engine bug (reported) - ${outcome.knownBugError}`);
-          return;
-        }
-        const result = outcome.result!;
+        const result = runFor(classId);
         expect(result.events.some((e) => e.type === 'floorEntered'), 'no floorEntered event - is rulesets/willy/clock wired into afterCommand?').toBe(true);
         const exits = result.events.filter((e): e is WillyEvent & { metodo: string; planta: number } => e.type === 'floorExited');
         expect(exits.length, `"${classId}": never left a single floor over the run`).toBeGreaterThan(0);
         // Every floorExited is one of the two sanctioned ways out - never a bare "the floor
         // disappeared and nothing recorded why" (the actual stuck case this test exists for).
-        for (const exit of exits) expect(['escaleras', 'derrumbe'], `unexpected floorExited.metodo "${exit.metodo}"`).toContain(exit.metodo);
+        for (const exit of exits) expect(['escalera', 'derrumbe'], `unexpected floorExited.metodo "${exit.metodo}"`).toContain(exit.metodo);
         // The collapse timer is reflected in GameState (a resource/systems entry), not just a
         // UI countdown: state.systems.clock, read via clockOf(), should have shown up at some
         // point - checked on the state right after the first floorEntered, since by the end of
@@ -216,15 +171,9 @@ describe('collapse timer: the floor always resolves, never leaves the party stuc
   it('leaving through the stairs before the clock runs out skips the collapse cleanly', () => {
     // Most floors are cleared well inside the clock's budget (the fights above typically take
     // single-digit minutes of in-fiction time against a 15-45 minute floor clock), so a normal
-    // run's early floors should show the clean exit: floorExited{metodo:'escaleras'} with no
+    // run's early floors should show the clean exit: floorExited{metodo:'escalera'} with no
     // clockExpired for that same floor beforehand.
-    const outcome = runFor(CLASSES_TO_RUN[0]!);
-    if (outcome.knownBugError) {
-      // eslint-disable-next-line no-console
-      console.warn(`hit the known collapse/despawned-active-entity engine bug (reported) - ${outcome.knownBugError}`);
-      return;
-    }
-    const result = outcome.result!;
+    const result = runFor(CLASSES_TO_RUN[0]!);
     const events = result.events;
     let sawCleanExit = false;
     let expiredSinceLastExit = false;
@@ -232,11 +181,11 @@ describe('collapse timer: the floor always resolves, never leaves the party stuc
       if (e.type === 'clockExpired') expiredSinceLastExit = true;
       if (e.type === 'floorExited') {
         const metodo = (e as unknown as { metodo: string }).metodo;
-        if (metodo === 'escaleras' && !expiredSinceLastExit) sawCleanExit = true;
+        if (metodo === 'escalera' && !expiredSinceLastExit) sawCleanExit = true;
         expiredSinceLastExit = false;
       }
     }
-    expect(sawCleanExit, 'never saw a floorExited{metodo:"escaleras"} without a prior clockExpired - either every floor is timing out, or the clean-exit path is broken').toBe(true);
+    expect(sawCleanExit, 'never saw a floorExited{metodo:"escalera"} without a prior clockExpired - either every floor is timing out, or the clean-exit path is broken').toBe(true);
   });
 
   it('the collapse timer is reflected in GameState (clockOf), not just a UI countdown', () => {

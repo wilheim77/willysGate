@@ -2,12 +2,14 @@ import {
   SYSTEM_ISSUER,
   inZone,
   nextAiCommand,
+  tileAt,
   zonesOf,
   type BaseCommand,
   type Engine,
   type GameEvent,
   type GameState,
   type MapZone,
+  type Vec2,
 } from '../../../engine';
 import { willy } from '../../../rulesets/willy';
 
@@ -29,8 +31,24 @@ interface Step {
   events: GameEvent[];
 }
 
-function standAt(state: GameState, entityId: string, p: { x: number; y: number }): GameState {
+function standAt(state: GameState, entityId: string, p: Vec2): GameState {
   return { ...state, entities: { ...state.entities, [entityId]: { ...state.entities[entityId]!, position: p } } };
+}
+
+/** The first walkable, unoccupied tile inside `zone`'s bounds (scanning row by row), or the
+ *  leader's own current position if the zone has none - never the bare corner-plus-one offset
+ *  (reported by the Willy agent: an encounter zone spans its room including its furniture, so
+ *  `zone.x+1, zone.y+1` can land Willy on a wall/shelf tile and box him in for good). */
+function walkableSpotIn(state: GameState, zone: MapZone, fallback: Vec2): Vec2 {
+  for (let y = zone.y; y < zone.y + zone.height; y++) {
+    for (let x = zone.x; x < zone.x + zone.width; x++) {
+      const p = { x, y };
+      if (!tileAt(state.map, p)?.walkable) continue;
+      if (Object.values(state.entities).some((e) => e.position.x === x && e.position.y === y && willy.occupiesTile?.(e))) continue;
+      return p;
+    }
+  }
+  return fallback;
 }
 
 /** Runs every turn through nextAiCommand, both sides, exactly as a real fight would be
@@ -44,11 +62,11 @@ export function resolveCombat(engine: Engine, state: GameState, maxCommands = 60
     const activeId = s.turn.activeEntityId;
     if (!activeId) throw new Error('in combat with no active entity');
     if (!s.entities[activeId]) {
-      // Known engine bug (reported): the collapse's despawnEntity can remove the very
-      // combatant the turn just advanced to (it filters turn.order but never re-derives
-      // activeEntityId), leaving it pointing at a removed entity. nextAiCommand would throw
-      // a cryptic "Cannot read properties of undefined (reading 'controllerId')" - this gives
-      // it a name instead.
+      // Defensive: this used to be reachable when a room collapse despawned the entity whose
+      // turn had just started (turn.activeEntityId left dangling) - fixed upstream in
+      // engine/commands.ts (passTurnIfHelpless now re-runs after a ruleset's afterCommand
+      // too). Kept as a named guard so a regression surfaces clearly instead of a cryptic
+      // "Cannot read properties of undefined (reading 'controllerId')" inside nextAiCommand.
       throw new Error(`DESPAWNED_ACTIVE_ENTITY: turn.activeEntityId "${activeId}" is not in state.entities (order=${JSON.stringify(s.turn.order)}) - likely despawned by a room collapse mid-turn`);
     }
     const cmd = nextAiCommand(willy, s, activeId);
@@ -72,7 +90,7 @@ export function resolveNextEncounter(engine: Engine, state: GameState, leaderId:
       .map((s) => s.trim())
       .filter((id) => state.entities[id] && willy.isStanding(state.entities[id]!));
     if (foes.length === 0) continue;
-    const standing = inZone(zone, leader.position) ? state : standAt(state, leaderId, { x: zone.x + 1, y: zone.y + 1 });
+    const standing = inZone(zone, leader.position) ? state : standAt(state, leaderId, walkableSpotIn(state, zone, leader.position));
     const party = Object.values(standing.entities)
       .filter((e) => e.factionId === leader.factionId && willy.isStanding(e))
       .map((e) => e.id);
