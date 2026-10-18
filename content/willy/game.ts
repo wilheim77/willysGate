@@ -43,6 +43,8 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'willy',
+  // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
+  onDeath: 'vanish',
   audio: audio as unknown as AudioManifest,
   items: Object.fromEntries(itemsData.items.map((i) => [i.id, { label: i.nombre, text: i.descripcion }])),
   creation: {

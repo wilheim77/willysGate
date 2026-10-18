@@ -158,6 +158,13 @@ export interface GameDefinition {
   barks?: BarksData;
   /** Extra HUD pieces (counters, floating texts, message bubbles, a panel). */
   hud?: HudExtension;
+  /**
+   * What a dead creature leaves behind: 'corpse' (default) lies it flat on the floor —
+   * manifest art if the pack has one for its spriteId, a generic darkened fallback
+   * otherwise. 'vanish' instead plays a TV-gameshow "¡ELIMINADO!" flash and removes the
+   * sprite — Willy's showier tone; Intereses keeps 'corpse'.
+   */
+  onDeath?: 'corpse' | 'vanish';
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

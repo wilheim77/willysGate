@@ -106,6 +106,10 @@ const conditions: Record<string, ConditionDef> = {
   encajado: { label: 'En una caja invisible', description: 'No puede moverse ni actuar, ni nadie le puede tocar.' },
   pena: { label: 'Qué pena', description: 'Ha roto algo de época: pierde 1 acción.' },
   eliminado: { label: 'Eliminado', description: 'Fuera del concurso. O de esta planta, al menos.' },
+  // Applied alongside 'eliminado' (rulesets/willy/resolve.ts's defeat()) so the generic
+  // client's cross-ruleset death handling (engine/dialogue.ts, MapScene.applyFate) works
+  // for Willy too; same label so it reads the same if a badge ever shows both.
+  dead: { label: 'Eliminado' },
 };
 
 const glossary: Record<string, GlossaryEntry> = {
