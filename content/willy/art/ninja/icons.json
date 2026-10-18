@@ -1716,6 +1716,121 @@
     "W": "#f4f0e8",
     "D": "#8a9098"
    }
+  },
+  "gaseosa-la-revoltosa": {
+   "shape": "bottle",
+   "colors": {
+    "A": "#e8b020",
+    "a": "#a87010",
+    "B": "#f4ece0",
+    "W": "#ffe090",
+    "D": "#5a5e66"
+   }
+  },
+  "caldo-de-la-abuela": {
+   "shape": "thermos",
+   "colors": {
+    "A": "#8a6a4a",
+    "a": "#5a4228",
+    "B": "#e8d0b0",
+    "W": "#f4e4d0",
+    "G": "#c0c6ce"
+   }
+  },
+  "agua-de-la-fuente-santa": {
+   "shape": "jug",
+   "colors": {
+    "A": "#eaf6ff",
+    "a": "#b8d8ea",
+    "B": "#f4ecd0",
+    "W": "#ffffff",
+    "D": "#c89a20"
+   }
+  },
+  "chupito-de-orujo": {
+   "shape": "vial",
+   "colors": {
+    "D": "#1e1c24",
+    "W": "#d8ffb0",
+    "B": "#c8ff5a",
+    "A": "#7aff2a",
+    "a": "#3ac010"
+   }
+  },
+  "bebida-energetica-vortax": {
+   "shape": "can",
+   "colors": {
+    "G": "#8a9098",
+    "W": "#b45cff",
+    "A": "#1e1c24",
+    "B": "#7a2ac0",
+    "D": "#2a1040",
+    "a": "#0e0a12"
+   }
+  },
+  "bomba-fetida-glorp": {
+   "shape": "ball",
+   "colors": {
+    "A": "#5a8a3a",
+    "a": "#355a1e",
+    "W": "#9ad86a",
+    "D": "#1e1c24"
+   }
+  },
+  "bengala-de-puerto": {
+   "shape": "firecracker",
+   "colors": {
+    "W": "#ffb060",
+    "D": "#5a5e66",
+    "A": "#e02a2a",
+    "B": "#ffe04f",
+    "a": "#a01818"
+   }
+  },
+  "folleto-la-prudente": {
+   "shape": "papers",
+   "colors": {
+    "B": "#c8c0b0",
+    "b": "#8a8478",
+    "W": "#f4f0e8",
+    "D": "#3a8fd9"
+   }
+  },
+  "iman-de-mama-clementina": {
+   "shape": "notice",
+   "colors": {
+    "A": "#c8c0b0",
+    "a": "#8a8478",
+    "B": "#ff4fa0",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  },
+  "pegatina-yo-cai": {
+   "shape": "coin",
+   "colors": {
+    "A": "#ffe04f",
+    "a": "#c8a020",
+    "W": "#fff8c0"
+   }
+  },
+  "llavero-butanos-perez": {
+   "shape": "keys",
+   "colors": {
+    "G": "#c0c6ce",
+    "A": "#e86a2a",
+    "B": "#5a5e66",
+    "b": "#b04a1e"
+   }
+  },
+  "poster-firmado-de-vortax": {
+   "shape": "map",
+   "colors": {
+    "A": "#2a1040",
+    "B": "#b45cff",
+    "W": "#f0c0ff",
+    "D": "#000000"
+   }
   }
  }
 }
