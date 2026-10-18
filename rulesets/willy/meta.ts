@@ -155,6 +155,8 @@ export interface CombatStats {
   criticos: number;
   fallosSeguidos: number;
   vidaMinimaPct: number;
+  /** Rounds the fight has lasted. */
+  rondas: number;
   jefe?: string;
   elite: boolean;
   rival: boolean;

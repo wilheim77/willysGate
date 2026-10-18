@@ -47,6 +47,21 @@ const stats: Record<string, StatDef> = {
   armadura: { label: 'Armadura' },
   ataque: { label: 'Ataque' },
   movimiento: { label: 'Movimiento' },
+  // Worn items' bonuses (items.json → pasivo); most are read by the systems they name.
+  bonoGanso: { label: 'Bonus de «Hacer el ganso»' },
+  defEnAgua: { label: 'DEF en agua' },
+  defDistancia: { label: 'DEF a distancia' },
+  verVida: { label: 'Ver la vida de los enemigos' },
+  alcanceSenal: { label: 'Alcance de la señal' },
+  alcanceSalto: { label: 'Alcance de salto' },
+  bonoFichas: { label: 'Bonus de fichas' },
+  reduccionTrampas: { label: 'Daño de trampas reducido' },
+  deteccion: { label: 'Detección' },
+  objetosPorCofre: { label: 'Objetos por cofre' },
+  mimicosPct: { label: 'Mímicos' },
+  radioLuz: { label: 'Radio de luz' },
+  huecos: { label: 'Huecos de mochila' },
+  multAudiencia: { label: 'Multiplicador de audiencia' },
 };
 
 const resources: Record<string, ResourceDef> = {

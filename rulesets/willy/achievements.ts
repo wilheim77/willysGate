@@ -145,6 +145,9 @@ export function translate(state: GameState, events: GameEvent[]): MetaEvent[] {
         out.push({ type: 'entityPushed', actor: snap(typeof flag === 'string' ? flag : actorId), objetivo: snap(id), choque: collided.get(id) === 'entidad' ? 'entidad' : collided.get(id) === 'muro' ? 'muro' : null });
         break;
       }
+      case 'damageDealt':
+        out.push({ type: 'damageDealt', objetivo: snap(e.targetId), cantidad: Number(e.amount) || 0, critico: !!e.crit, elemento: e.element as string | undefined, actor: snap(actorId) });
+        break;
       case 'entityFell':
         out.push({ type: 'fell', entidad: snap(e.entityId), niveles: (e.levels as number) ?? 0 });
         break;
@@ -176,7 +179,7 @@ export function translate(state: GameState, events: GameEvent[]): MetaEvent[] {
   return out;
 }
 
-const GAME_EVENTS = new Set(['combatStarted', 'combatEnded', 'floorExited', 'floorCleared', 'runStarted', 'runEnded', 'boxDelivered', 'boxOpened', 'itemObtained', 'itemUsed', 'itemEquipped', 'itemSold', 'achievementUnlocked', 'trapTriggered', 'trapSpotted', 'rested', 'npcTalked', 'surfaceReacted']);
+const GAME_EVENTS = new Set(['combatStarted', 'combatEnded', 'floorExited', 'floorCleared', 'runStarted', 'runEnded', 'boxDelivered', 'boxOpened', 'itemObtained', 'itemUsed', 'itemEquipped', 'itemSold', 'achievementUnlocked', 'trapTriggered', 'trapSpotted', 'rested', 'npcTalked', 'surfaceReacted', 'regenerated', 'partyPatchedUp', 'audienceChanged', 'audienceMilestone', 'meterChanged', 'sponsorMessage', 'sponsorWithdrew', 'sponsorReturned', 'sponsorGift']);
 
 // --- Combat bookkeeping -------------------------------------------------------------------------
 
@@ -199,6 +202,7 @@ function startCombat(state: GameState): CombatStats {
     vidaMinimaPct: w?.resources.vida ? w.resources.vida.current / Math.max(1, w.resources.vida.max) : 1,
     ...(foes.find((f) => hasTag(f, 'jefe')) ? { jefe: foes.find((f) => hasTag(f, 'jefe'))!.spriteId } : {}),
     elite: foes.some((f) => hasTag(f, 'elite')),
+    rondas: 1,
     rival: foes.some((f) => hasTag(f, 'rival')),
   };
 }
@@ -218,6 +222,7 @@ function trackCombat(c: CombatStats, state: GameState, events: GameEvent[]): voi
     }
     if (raw.type === 'attackRolled' && raw.crit && isParty(state, state.entities[String(raw.attackerId)])) c.criticos++;
   }
+  c.rondas = Math.max(c.rondas ?? 1, state.turn.round || 1);
   const v = state.entities[WILLY_ID]?.resources.vida;
   if (v) c.vidaMinimaPct = Math.min(c.vidaMinimaPct, v.current / Math.max(1, v.max));
 }
@@ -244,6 +249,8 @@ export function datum(state: GameState, meta: MetaState, path: string, ctx: { co
       return c?.fallosSeguidos;
     case 'combate.vidaMinimaPct':
       return c ? Math.round(c.vidaMinimaPct * 100) : undefined;
+    case 'combate.rondas':
+      return c?.rondas;
     case 'combate.jefe':
       return c?.jefe;
     case 'combate.enemigosAturdidos':
@@ -266,6 +273,8 @@ export function datum(state: GameState, meta: MetaState, path: string, ctx: { co
       const lvl = w.stats.nivel ?? 1;
       return cls.habilidades.filter((h) => !h.pasiva && h.nivelPersonaje <= lvl && !meta.habilidadesUsadas.includes(h.id)).length;
     }
+    case 'partida.habilidadesUsadas':
+      return meta.habilidadesUsadas.length;
     case 'partida.cajasSinAbrir':
       return meta.cajas.length;
     case 'partida.cajasAbiertas':
