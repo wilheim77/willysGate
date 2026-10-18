@@ -64,6 +64,8 @@ export interface MapSceneTexts {
 const STEP_MS = 160;
 /** Out of combat walking is brisker: exploring shouldn't feel like wading. */
 const EXPLORE_STEP_MS = 95;
+/** Darkens tiles nobody can walk on (walls, roofs, rubble) so they stand apart from floors. */
+const BLOCKED_TINT = 0x8a8a8a;
 /** Longest any one event may animate before playback moves on regardless. */
 const EVENT_WATCHDOG_MS = 10_000;
 const TAP_SLOP = 8;
@@ -262,12 +264,30 @@ export class MapScene extends Phaser.Scene {
           .setDepth(depth);
         this.worldObjects.push(face);
       }
-      if (h > 0 && art.rim !== undefined) {
+      // One walkable level above walkable ground to the south: that's a stair, not a ledge.
+      // Draw treads on its face and no stone lip, so it reads as "you can go up here".
+      const south = tileAt(map, { x: pos.x, y: pos.y + 1 });
+      const stair = h > 0 && tile.walkable && south?.walkable === true && south.terrain !== 'void' && h - south.height === 1;
+      if (stair) {
+        const treads = this.add.graphics().setDepth(depth + 0.5);
+        const faceTop = c.y + T / 2;
+        for (let i = 0; i < 3; i++) {
+          const y = faceTop + ((i + 0.5) * LH) / 3;
+          treads.fillStyle(0xd8c8a8, 0.35).fillRect(c.x - T / 2, y - 1, T, 1);
+          treads.fillStyle(0x000000, 0.35).fillRect(c.x - T / 2, y, T, 1);
+        }
+        this.worldObjects.push(treads);
+      }
+      if (h > 0 && art.rim !== undefined && !stair) {
         // A single lip at the platform's south edge (the rest of the frame is transparent).
         this.worldObjects.push(this.add.image(c.x, c.y + T, key, art.rim).setDepth(depth + 0.5));
       }
       const frame = art.frames[variantHash(pos.x, pos.y) % art.frames.length]!;
-      this.worldObjects.push(this.add.image(c.x, c.y, key, frame).setDepth(depth + 1));
+      const surface = this.add.image(c.x, c.y, key, frame).setDepth(depth + 1);
+      // Where you can't walk must read as such at a glance (playtest: "is that a wall or the
+      // floor?"): blocked tiles are darker, with a hard edge facing the walkable ground.
+      if (!tile.walkable) surface.setTint(BLOCKED_TINT);
+      this.worldObjects.push(surface);
       this.drawFringes(map, pos, tile, c, depth);
 
       // Readability of elevation: dark rims where the ground drops, soft shadows where it rises.
@@ -289,6 +309,14 @@ export class MapScene extends Phaser.Scene {
       if (west !== null && west > h) {
         const s = Math.min(T, (west - h) * LH);
         g.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.4, 0, 0.4, 0).fillRect(left, top, s, T);
+      }
+      if (!tile.walkable) {
+        const open = (x: number, y: number) => tileAt(map, { x, y })?.walkable === true;
+        g.fillStyle(0x000000, 0.8);
+        if (open(pos.x, pos.y + 1)) g.fillRect(left, top + T - 2, T, 2);
+        if (open(pos.x, pos.y - 1)) g.fillRect(left, top, T, 2);
+        if (open(pos.x - 1, pos.y)) g.fillRect(left, top, 2, T);
+        if (open(pos.x + 1, pos.y)) g.fillRect(left + T - 2, top, 2, T);
       }
       this.worldObjects.push(g);
       this.tiles.push({ pos, bounds: new Phaser.Geom.Rectangle(left, top, T, T + h * LH) });
