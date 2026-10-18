@@ -30,6 +30,7 @@ import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDama
 import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
 import { showAfterCommand, showCommands } from './show';
+import { clockAfterCommand } from './clock';
 
 /**
  * «El Reglamento del Concurso»: Willy's light d20 ruleset (docs/willy/RULESET.md).
@@ -287,6 +288,8 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
  */
 export const afterCommandHooks: ((ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor) => ActionOutcome)[] = [];
 afterCommandHooks.push(showAfterCommand);
+// The floor clock and the collapse (clock.ts).
+afterCommandHooks.push(clockAfterCommand);
 
 function afterCommand(ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome {
   const out: ActionOutcome = { effects: [], events: [] };

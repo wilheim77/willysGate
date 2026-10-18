@@ -483,3 +483,16 @@ body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h,
   border: 2px solid #e8c070; box-shadow: 3px 3px 0 #000; color: #f3e6c8; font-size: 19px; line-height: 1.2; cursor: pointer;
 }
 #narrator::before { content: '🎙 '; }
+
+/* --- Countdown (state.systems.clock) --- */
+#clock-hud[hidden] { display: none; }
+#clock-hud {
+  position: fixed; right: 12px; top: calc(var(--top-h, 48px) + 8px); z-index: 4; padding: 4px 10px;
+  background: rgba(20, 12, 30, 0.9); border: 2px solid var(--iron-light, #6d5f9a); box-shadow: 3px 3px 0 #000;
+  color: var(--text, #fff4e0); font-size: 24px; letter-spacing: 1px; pointer-events: none;
+}
+#clock-hud::before { content: '⏱ '; }
+#clock-hud.low { border-color: #e8a030; color: #ffd27a; }
+#clock-hud.critical { border-color: #ff5577; color: #ff8899; }
+#clock-hud.expired { border-color: #ff5577; color: #ff5577; animation: clock-flash 0.8s steps(2) infinite; }
+@keyframes clock-flash { 50% { opacity: 0.35; } }
