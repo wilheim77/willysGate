@@ -1,84 +1,124 @@
 # Willy el mazmorrero: equilibrio
 
-> Cómo se mide y se ajusta la dificultad. Simulador: `content/willy/sim/balance.ts`. Tests: `tests/content/willy-balance-*.test.ts` (planta 1 en `npm test`, las cinco con `QA_DEEP=1`).
+> Cómo se mide y se ajusta la dificultad. Simulador: `content/willy/sim/balance.ts` (`simulateFloor` y `simulateSeason`). Tests: `tests/content/willy-balance-*.test.ts` (el piso 1 en `npm test`, los diez con `QA_DEEP=1`). Sonda manual de temporadas: `SIM_SEASON=3 npx vitest run tests/content/willy-season-probe.test.ts --silent=false`.
 
 ## Qué se mide
 
-Willy y su compañero, **jugados por la IA de los dos lados**, recorren una planta generada de verdad (semilla, salas, enemigos, jefe) al **nivel esperado** a mitad de planta: 2, 5, 7, 9 y 11. Las salas se juegan en el orden del grafo (de menos a más profundas) y el jefe al final. La vida pasa de un combate al siguiente; entre combates solo vuelve lo que dan las reglas (la Pausa publicitaria y la energía).
+**Una temporada entera** (`simulateSeason`), jugada por la IA de los dos lados:
+- Willy empieza a nivel 1 y gana experiencia de verdad; su compañero viene con él.
+- Recorre los diez pisos en orden, con los usos de habilidad acumulándose.
+- Al pasar por el Camerino recupera toda la vida.
+- Dentro de un piso la vida pasa de un combate al siguiente. Solo vuelve lo que dan las reglas: la Pausa publicitaria (25 % al acabar cada combate), la regeneración al andar (`willy.json → regeneracion`) y la energía.
+- El simulador carga el espectáculo (audiencia, patrocinadores y el Share del Presentador).
+- Si se pierde un combate, se repite con otros dados, como «Volver a intentarlo». La temporada tiene 15 repeticiones en total; si se acaban, la temporada se pierde.
 
-- **Llega al jefe:** gana todos los combates normales de la planta.
-- **Jefe:** gana al jefe, una vez allí.
-- **Caídas del compañero:** media por planta (el compañero caído no vuelve hasta la planta siguiente).
+Por piso se mide:
+- **Piso limpio:** se pasa sin repetir ningún combate.
+- **Jefe a la primera:** el jefe (o el guardián, en el primer piso de cada planta) cae sin repetir.
+- **Nivel al salir:** el nivel de Willy al bajar la escalera.
 
-La IA juega peor que una persona: no se retira, no prepara combos, no usa objetos ni el entorno a propósito. Los números son un suelo: un jugador normal debería ganar algo más.
+La IA juega peor que una persona: no se retira, no prepara combos, no abre cajas ni usa objetos. Los números son un suelo: un jugador normal debería ganar algo más.
 
 ## Objetivo (petición del usuario)
 
 | | Objetivo |
 |---|---|
-| Llegar al jefe (planta «limpia») | 85-90 % |
+| Piso sin perder ningún combate | 85-90 % |
 | Ganar al jefe | 70-80 % |
-| Caídas | 1-2 por planta entre Willy y su compañero |
+| Temporada larga | 10 pisos, de nivel 1 a 11-12; las habilidades principales llegan a la Maestría hacia el jefe final |
+
+## La temporada (10 pisos)
+
+Dos pisos por planta. El primero acaba en un **guardián** (el enemigo más duro de la planta, en élite y con 2 acciones); el segundo, en el **jefe de la planta**. Datos: `content/willy/data/floors.json → pisos`.
+
+| Piso | Planta | Nivel al entrar | Salas | Reloj | Experiencia del piso |
+|---|---|---|---|---|---|
+| 1 | Castro Sumergido: Las calles anegadas | 1 | 7-9 | 23:00 | 78 |
+| 2 | Castro Sumergido: La lonja | 2 | 11-14 | 26:00 | 130 |
+| 3 | Hipermercado Eterno: Pasillos infinitos | 3 | 9-11 | 19:33 | 208 |
+| 4 | Hipermercado Eterno: La trastienda | 4 | 11-14 | 22:06 | 299 |
+| 5 | La Verbena Sin Fin: Las barracas | 5 | 9-11 | 18:24 | 390 |
+| 6 | La Verbena Sin Fin: La plaza mayor | 6 | 11-14 | 20:48 | 520 |
+| 7 | Balneario Glaciar: Los vestuarios | 7 | 9-11 | 17:15 | 650 |
+| 8 | Balneario Glaciar: Las termas | 8 | 11-14 | 19:30 | 780 |
+| 9 | El Plató: Los pasillos de producción | 9 | 9-11 | 17:15 | 910 |
+| 10 | El Plató: El plató principal | 10 | 11-14 | 19:30 | 1105 |
+
+**Curva de nivel:** se entra en el piso N a nivel N y se sale a nivel N+1. La experiencia de cada piso es lo que falta para el siguiente nivel, ×1,3 (no hace falta limpiar todas las salas). Las habilidades de clase de nivel 9 llegan en el piso 8-9, así que se usan en el último tercio de la temporada.
+
+## Curva de habilidades (subida por uso)
+
+Umbrales: 8 / 24 / 48 / 80 usos para los niveles 2-5 (red-g: 6 / 16 / 30 / 50 / 75). Resultado en la temporada simulada, mediana de las 27 temporadas:
+
+| Piso | Habilidad más usada | Segunda habilidad | Temporadas con alguna Maestría |
+|---|---|---|---|
+| 1 | nivel 1 | 1 | 0 % |
+| 2-3 | nivel 2 | 1 | 0 % |
+| 4-5 | nivel 3 | 1 | 19-27 % |
+| 6-7 | nivel 4 | 1 | 28-32 % |
+| 8 | nivel 5 (Maestría) | 1 | 56 % |
+| 9 | 5 | 1 | 62 % |
+| 10 | 5 | 2 | 71 % |
+
+La IA se apoya casi siempre en una sola habilidad; una persona reparte más. Por eso la segunda habilidad sube poco aquí, y en partida real debería ir uno o dos niveles por detrás de la primera.
 
 ## Palancas
 
-| Palanca | Dónde | Valor |
-|---|---|---|
-| Compañero por clase | `rulesets/willy/data/companions.json` | ver `RULESET.md` → «Compañeros» |
-| Pausa publicitaria (vida al acabar cada combate) | `rulesets/willy/data/willy.json` → `pausaPublicitaria.vida` | 25 % |
-| Acciones de los enemigos normales | `content/willy/data/floors.json` → `equilibrio.accionesEnemigo` | 1 (élites, rivales y jefes: 2) |
-| Presupuesto de enemigos por planta | `equilibrio.presupuesto` | ver tabla |
-| Vida y daño de los jefes por planta | `equilibrio.jefes` | ver tabla |
+| Palanca | Dónde |
+|---|---|
+| Compañero por clase | `rulesets/willy/data/companions.json` (ver `RULESET.md` → «Compañeros») |
+| Pausa publicitaria (vida al acabar cada combate) | `rulesets/willy/data/willy.json → pausaPublicitaria.vida` (25 %) |
+| Regeneración al andar | `willy.json → regeneracion` (5 % cada 4 casillas) |
+| Acciones de los enemigos normales | `floors.json → equilibrio.accionesEnemigo` (1; élites, rivales y jefes: 2) |
+| Presupuesto de enemigos, vida de los enemigos, élites, jefes y guardián por piso | `floors.json → equilibrio` (`presupuesto`, `vidaEnemigos`, `elites`, `jefes`, `guardian`) |
+| La primera pelea | `equilibrio.primeraPelea` (dos ratas como mucho) |
+| Umbrales de las habilidades por uso | `rulesets/willy/data/classes.json → umbralesHabilidad` |
+| El Share del Presentador | `content/willy/show.ts` (`votoPorRonda`, `drenajeEnAntena`, `curacionDivisor`...) |
 
 Valores actuales (2026-10-18):
 
-| Planta | Nivel | Presupuesto | Jefe: vida | Jefe: daño |
-|---|---|---|---|---|
-| 1 | 2 | ×0,9 (y la primera pelea, 2 como máximo: dos ratas) | ×0,5 (30) | 1d10 |
-| 2 | 5 | ×1 | ×0,45 (41) | 1d10+2 |
-| 3 | 7 | ×0,75 | ×0,5 (60) | 2d6 |
-| 4 | 9 | ×0,8 | ×0,45 (68) | 2d6 |
-| 5 | 11 | ×0,55 | ×0,32 (70) | 2d6+1 |
-
-Además: los compañeros de las clases de apoyo (Influencer, Bardo, Tasador, Funcionario) pegan más fuerte que los de las clases de golpe, porque la IA juega peor el apoyo.
-
-## Resultados (9 clases × 6 semillas por planta, 270 partidas)
-
-| Planta | Llega al jefe | Gana al jefe | Planta entera | Caídas del compañero | Vida de Willy al final |
+| Piso | Presupuesto | Vida enemigos | Élites | Jefe: vida | Jefe: daño |
 |---|---|---|---|---|---|
-| 1 | 100 % | 83 % | 83 % | 0,24 | 71 % |
-| 2 | 94 % | 78 % | 74 % | 0,41 | 62 % |
-| 3 | 91 % | 78 % | 70 % | 0,37 | 51 % |
-| 4 | 85 % | 76 % | 65 % | 0,33 | 57 % |
-| 5 | 93 % | 82 % | 76 % | 0,52 | 62 % |
+| 1 | ×0,6 | ×0,8 | 0 % | guardián ×2 | — |
+| 2 | ×0,45 | ×0,8 | 10 % | ×0,3 (Centollo, 18) | 1d6 |
+| 3 | ×1 | ×1 | 15 % | guardián | — |
+| 4 | ×0,7 | ×1 | 20 % | ×0,25 (Encargada, 23) | 1d8 |
+| 5 | ×0,75 | ×1 | 25 % | guardián | — |
+| 6 | ×0,65 | ×1,25 | 30 % | ×0,32 (Gigantón, 38) | 1d10 |
+| 7 | ×0,8 | ×1 | 35 % | guardián | — |
+| 8 | ×0,8 | ×1,25 | 40 % | ×0,33 (Socorrista, 50) | 1d10 |
+| 9 | ×0,55 | ×1 | 45 % | guardián | — |
+| 10 | ×0,55 | ×1,25 | 50 % | ×0,27 (Presentador, 59) + Share | 2d6 |
 
-Antes de los compañeros y los ajustes (Willy solo, mismo simulador): planta 1, 11 % entera; el Centollo ganaba 4 de cada 5 veces.
+Compañeros reforzados en esta pasada: Doña Rosario (Tasador: vida 24, +4 por nivel, ataque 6) e Iker (Funcionario: vida 18, ataque 5).
 
-**Por clase** (las 5 plantas juntas, planta entera): Socorrista 97 %, Jugador de basket 93 %, Ingeniero 93 %, Butanero 87 %, Mimo 70 %, Bardo 63 %, Influencer 60 %, Funcionario 57 %, Tasador 43 %. La diferencia es sobre todo de la IA: las clases de apoyo y de control (Tasador, Funcionario) dependen de combos que la IA no prepara. Si en las partidas de prueba el Tasador se nota duro, el siguiente paso es darle más daño propio (Golpe de valor) antes que tocar a los enemigos.
+## Resultados (27 temporadas: 9 clases × 3 semillas, 2026-10-18)
 
-## Curación fuera de combate (2026-10-18)
+Con enemigos que usan sus habilidades especiales (IA de monstruos del agente meta), el espectáculo cargado y la regeneración al andar.
 
-Regla (`willy.json → regeneracion`): fuera de combate, 5 % de la vida máxima por cada 4 casillas que anda Willy, para él y para su compañero si sigue en pie. Al llegar al Camerino, vida completa. La Pausa publicitaria (25 %) se mantiene.
+| Piso | Combates por piso | Piso sin perder | Jefe a la primera | Nivel al salir |
+|---|---|---|---|---|
+| 1 | 5,7 | 96 % | 100 % | 1,6 |
+| 2 | 9,0 | 74 % | 96 % | 3 |
+| 3 | 8,2 | 81 % | 89 % | 4 |
+| 4 | 9,6 | 100 % | 100 % | 5 |
+| 5 | 7,3 | 81 % | 96 % | 6 |
+| 6 | 9,3 | 88 % | 96 % | 7 |
+| 7 | 7,7 | 100 % | 100 % | 8 |
+| 8 | 9,5 | 88 % | 92 % | 9 |
+| 9 | 7,8 | 100 % | 100 % | 10 |
+| 10 | 10,6 | 88 % | 88 % | 11 |
 
-Medida con el simulador de 10 plantas, en una copia local con un parche: al pasar de una sala a la siguiente, el grupo se cura lo que andaría (distancia de Chebyshev hasta la entrada de la sala). La configuración: 9 clases × 3 semillas × 10 plantas, con y sin la regla. El parche está en manos del agente de Willy, que está reescribiendo `balance.ts`.
+**Temporadas terminadas:** 24 de 27 (89 %). Por clase:
+- 3 de 3: Butanero, Bardo, Socorrista, Ingeniero, Funcionario y Jugador de basket.
+- 2 de 3: Influencer, Tasador y Mimo. Las tres temporadas perdidas gastaron sus 15 repeticiones antes del piso 3 en el caso del Influencer, y entre los pisos 6 y 9 en las otras dos.
 
-| Planta | Planta entera sin → con | Llega al jefe sin → con | Vida al final sin → con |
-|---|---|---|---|
-| 1 | 70 → 74 % | 78 → 78 % | 67 → 70 % |
-| 2 | 22 → 26 % | 59 → 63 % | 19 → 22 % |
-| 3 | 56 → 67 % | 67 → 78 % | 46 → 57 % |
-| 4 | 44 → 63 % | 70 → 81 % | 33 → 50 % |
-| 5 | 89 → 89 % | 96 → 96 % | 78 → 79 % |
-| 6 | 44 → 59 % | 74 → 89 % | 36 → 47 % |
-| 7 | 52 → 59 % | 70 → 81 % | 38 → 49 % |
-| 8 | 48 → 59 % | 59 → 93 % | 33 → 48 % |
-| 9 | 74 → 85 % | 78 → 85 % | 69 → 78 % |
-| 10 | 67 → 70 % | 89 → 100 % | 52 → 53 % |
-
-Resultado: de media, de 57 % a 65 % de plantas enteras. Se nota sobre todo en las plantas largas: se llega con más vida a las últimas salas. Ninguna planta se vuelve un paseo: la 2 sigue en el 26 % y los jefes siguen ganando entre un 5 % y un 59 % de las veces. Con la regla, las plantas siguen siendo difíciles, y sin ella estaban por debajo del objetivo de llegar al jefe (85-90 %). No hace falta bajar la Pausa publicitaria. Si sobra facilidad cuando la IA use objetos y cajas, la primera palanca es `regeneracion.vida` (5 % → 3 %).
+Antes de esta pasada (la misma temporada sin calibrar): los pisos de jefe (2, 4 y 6) se pasaban sin perder solo el 44-56 % de las veces, y el Tasador no terminaba ninguna temporada.
 
 ## Pendiente
 
-- La IA de Willy no empuja a propósito ni usa barriles: cuando lo haga, volver a medir (seguramente sobrará dificultad y se podrá subir el presupuesto).
-- Objetos y cajas de botín no entran en la simulación.
-- Dificultades Turista y Prime time: aplicar sus multiplicadores sobre estos valores.
+- **Las fases del Presentador** (el agente del espectáculo las está haciendo) endurecerán el piso 10. Al llegar, volver a medir y ajustar `equilibrio.jefes['10']`.
+- **El piso 2** queda un poco por debajo del objetivo (74 %). Las pérdidas están repartidas en combates normales, sin un enemigo culpable. Si en partida se nota, bajar algo más `presupuesto['2']`.
+- **Pisos 4, 7 y 9:** al 100 %, quizá se pueden endurecer. Primero hay que ver las partidas reales.
+- **Golpe de valor del Tasador** sigue sin implementar (necesita el valor de los objetos). Con él, el Tasador ya no dependería tanto de su compañera.
+- **Fuera de la simulación:** las dificultades Turista y Prime time, los objetos y las cajas de botín.

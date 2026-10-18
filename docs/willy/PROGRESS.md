@@ -14,7 +14,15 @@
 - **Trampas en el ruleset:** `noticeTrap` (8 + SUE contra la detección) y `triggerTrap` (salvación de AGI: condición, superficie, empuje o caída).
 - **R15:** saltos con el motor y rebote del Pase picado.
 - **Compañeros (2026-10-18):** uno por clase, se une tras el cásting, lo controla el jugador, sube con Willy y vuelve en la planta siguiente si cae (`RULESET.md` → «Compañeros»). Pausa publicitaria: 25 % de vida al acabar cada combate.
-- **Equilibrio:** simulador con IA en plantas generadas (`content/willy/sim/balance.ts`), palancas en `floors.json → equilibrio` y tabla en `BALANCE.md`. Resultado: llegar al jefe 85-100 %, ganarle 76-83 %. Test barato de la planta 1 en `npm test`; las cinco con `QA_DEEP=1`.
+- **Equilibrio (2026-10-18, temporada de 10 pisos):** la temporada tiene 10 pisos, dos por planta (guardián y jefe).
+  - La experiencia es real: de nivel 1 a 11 (`rulesets/willy/xp.ts`).
+  - Habilidades por uso con umbrales 8/24/48/80; la principal llega a la Maestría hacia el piso 8.
+  - En pantalla: «Nivel N · usos X/Y» y avisos al subir.
+  - El reloj de derrumbe está en `rulesets/willy/clock.ts`.
+  - Las derrotas vuelven al último Camerino.
+  - Los enemigos son variados: élites, «kite», `estalla` y 22 habilidades de monstruo.
+  - `simulateSeason` simula la temporada entera. Con 27 temporadas sale un 74-100 % de pisos sin perder, un 88-100 % de jefes a la primera y 24 de 27 temporadas terminadas. Tabla y palancas en `BALANCE.md`.
+  - Falta volver a medir el piso 10 cuando lleguen las fases del Presentador.
 - **FX:** los `skillUsed` llevan `target` y van antes de las tiradas.
 - **Meta (2026-10-18, rama `willy-meta`):**
   - **Logros:** se evalúan en el ruleset tras cada comando (`Ruleset.afterCommand`, `rulesets/willy/achievements.ts`). Traduce los eventos del motor al vocabulario de `achievements.json` (`attackResolved`, `objectDestroyed`, `entityPushed`…) y aplica el lenguaje de condiciones con contadores por partida, planta, combate o turno, disparadores `al` y datos vivos (`dato`).

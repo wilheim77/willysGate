@@ -258,16 +258,16 @@
       "descripcion": "Ochenta y un años, bolso de piel de verdad y la certeza de que todo lo que hay en la mazmorra es de imitación. Lo tasa a bolsazos.",
       "spriteId": "companero-rosario",
       "base": {
-        "vida": 20,
+        "vida": 24,
         "def": 13,
-        "ataque": 5,
+        "ataque": 6,
         "dano": "1d8",
         "movimiento": 4,
         "fue": 6,
         "energia": 4
       },
       "porNivel": {
-        "vida": 3
+        "vida": 4
       },
       "etiquetas": [
         "humano"
@@ -436,9 +436,9 @@
       "descripcion": "Becario de la Diputación sin cobrar desde 2019. Lleva una grapadora industrial y un termo de café para el jefe. El jefe eres tú.",
       "spriteId": "companero-iker",
       "base": {
-        "vida": 16,
+        "vida": 18,
         "def": 11,
-        "ataque": 4,
+        "ataque": 5,
         "dano": "1d6",
         "movimiento": 5,
         "fue": 4,
