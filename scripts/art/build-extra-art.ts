@@ -19,6 +19,8 @@ import { FLAMES, FLAME_LEGEND, type Key, T, ascii, get, rect, rgb, rng, set } fr
 import * as env from './environment-art.ts';
 import * as fx from './spell-fx.ts';
 import { applyFxTable } from './fx-table.ts';
+import * as markers from './markers.ts';
+import * as cover from './cover-props.ts';
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -1269,6 +1271,13 @@ const tiles: [string, Image][] = [
   ['cobble_3', cobbles(213)],
   ['roof_1', slateRoof(214)],
   ['roof_2', slateRoof(215)],
+  ['low_wall_1', cover.lowWallTop(1)],
+  ['low_wall_2', cover.lowWallTop(2)],
+  ['low_wall_face', cover.lowWallFace()],
+  ['balcony_1', cover.balconyTop(1)],
+  ['balcony_2', cover.balconyTop(2)],
+  ['balcony_rail', cover.balconyRail()],
+  ['balcony_face', cover.balconyFace()],
   ['roof_clay_1', clayRoof(216, false)],
   ['roof_clay_2', clayRoof(217, false)],
   ['rim_eaves', eavesRim()],
@@ -1305,6 +1314,23 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   brazier: { frames: [0, 1, 2, 3].map(brazier), note: 'Brasero de hierro', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
   candles: { frames: [0, 1, 2].map(candles), note: 'Velas en el suelo (capilla, cripta)', anchor: 'floor', fps: 6, loop: true, light: '#ffc070' },
   oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado del brazo de su poste', anchor: 'floor', fps: 6, loop: true, light: '#ffb050' },
+  // Tactical cover (cover-props.ts): spawned as <id>-<n>, they block movement and give cover.
+  cart: { frames: [cover.cart('hay')], note: 'Carro con heno (32x16)', anchor: 'floor', fps: 0, loop: false },
+  cart_sacks: { frames: [cover.cart('sacks')], note: 'Carro con sacos (32x16)', anchor: 'floor', fps: 0, loop: false },
+  market_stall: { frames: [cover.marketStall()], note: 'Puesto de mercado (16x24)', anchor: 'floor', fps: 0, loop: false },
+  sacks: { frames: [cover.sacks()], note: 'Sacos apilados', anchor: 'floor', fps: 0, loop: false },
+  rubble_pile: { frames: [cover.rubblePile(1)], note: 'Montón de cascotes', anchor: 'floor', fps: 0, loop: false },
+  rubble_pile_b: { frames: [cover.rubblePile(2)], note: 'Montón de cascotes (variante)', anchor: 'floor', fps: 0, loop: false },
+  rubble_pile_c: { frames: [cover.rubblePile(3)], note: 'Montón de cascotes (variante)', anchor: 'floor', fps: 0, loop: false },
+  pillar_broken: { frames: [cover.pillarBroken()], note: 'Columna rota (16x24)', anchor: 'floor', fps: 0, loop: false },
+  dead_tree: { frames: [cover.deadTree(1)], note: 'Árbol seco (24x32)', anchor: 'floor', fps: 0, loop: false },
+  dead_tree_b: { frames: [cover.deadTree(2)], note: 'Árbol seco (variante)', anchor: 'floor', fps: 0, loop: false },
+  dead_tree_c: { frames: [cover.deadTree(3)], note: 'Árbol seco (variante)', anchor: 'floor', fps: 0, loop: false },
+  ore_pile: { frames: [cover.orePile()], note: 'Montón de mineral', anchor: 'floor', fps: 0, loop: false },
+  tombstone: { frames: [cover.tombstone()], note: 'Lápida', anchor: 'floor', fps: 0, loop: false },
+  sarcophagus: { frames: [cover.sarcophagus()], note: 'Sarcófago (16x24)', anchor: 'floor', fps: 0, loop: false },
+  exit_open: { frames: [0, 1, 2, 3].map((f) => markers.exitOpen(f, '#f4d878', '#a8873a')), note: 'Salida abierta (gira hacia el borde)', anchor: 'centre', fps: 6, loop: true, light: '#f4d878' },
+  exit_closed: { frames: [markers.exitClosed()], note: 'Salida cerrada', anchor: 'centre', fps: 0, loop: false },
   marker_party: { frames: [factionRing('#e8c070', 'solid')], note: 'Aro bajo los pies: grupo', anchor: 'floor', fps: 0, loop: false },
   marker_ally: { frames: [factionRing('#6ad0a0', 'dashed')], note: 'Aro bajo los pies: aliado que lucha por el grupo (IA)', anchor: 'floor', fps: 0, loop: false },
   marker_enemy: { frames: [factionRing('#d04a3a', 'heavy')], note: 'Aro bajo los pies: enemigo', anchor: 'floor', fps: 0, loop: false },

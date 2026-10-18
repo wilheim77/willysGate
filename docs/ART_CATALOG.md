@@ -514,3 +514,43 @@ Tres cambios para que se distinga a tamaño de móvil, sumados al tinte y al bor
    **Petición al cliente:** en `buildWorld`, si la casilla es escalón y `art.stair` existe, usar ese frame en el `tileSprite` de la cara en lugar de `art.face` y no dibujar las líneas de huella. Hay que añadir `stair?: number` al tipo del terreno en `src/assets/manifest.ts`.
 
 Antes y después, simulando el render del cliente: `art-previews/0x72-<mapa>-legibilidad.png` para `camino`, `plaza`, `abadia`, `calles`, `escorial`, `mina` y `boveda`, y la puerta del barón en la plaza a 4×: [`art-previews/0x72-plaza-puerta-baron-legibilidad.png`](art-previews/0x72-plaza-puerta-baron-legibilidad.png).
+
+# Marcadores de salida (las dos partidas)
+
+`exit_open` (4 frames, 6 fps, en bucle: dos galones que avanzan hacia el borde; dorado en *Intereses*, cian en *Willy*) y `exit_closed` (fijo: un galón apagado tras una barra). Mismo id en los dos manifiestos, `anchor: 'centre'`. Miran a la derecha: el cliente los gira hacia el borde del mapa por el que sale la salida. Vista previa: [`art-previews/exit-markers.png`](art-previews/exit-markers.png).
+
+## Legibilidad de los mapas de *Willy* (Camerino y plantas generadas)
+
+Mismo criterio que en *Intereses*:
+
+- **Remates de muro sin franjas.** `plato_muro_techo` (muro del plató, también en el Camerino) es casi negro con la trama diagonal de «macizo». Antes eran franjas moradas que se confundían con el suelo oscuro del plató. `nieve_techo_1/2` (muros del balneario) es nieve con la misma trama, sin el borde por casilla que rayaba las masas de muro como un enlosado. Tejados del Castro y de la verbena, y baldas del híper, se quedan como están: ya se leen.
+- **Escalones** (`stair`, que el cliente ya usa):
+  - `escalon_piedra`: `piedra-mojada`, `soportal`, `verbena` y `muelle`.
+  - `escalon_madera`: `tarima` y `escenario`.
+  - `escalon_baldosa`: `lonja`, `hiper*`, `azulejo`, `hielo-balneario` y `cinta`.
+  - `escalon_plato`: `plato`, `moqueta` y `baldosa-*`, con el canto en neón cian.
+
+Antes y después (Camerino y las cinco plantas generadas con la semilla 7, esquina noroeste): `art-previews/ninja-camerino-legibilidad.png` y `art-previews/ninja-planta-<n>-legibilidad.png`.
+
+# Coberturas, alturas y bestias para los combates (*Intereses*)
+
+Los dibuja `scripts/art/cover-props.ts` con la paleta de 0x72. Cada uno lleva contorno oscuro y sombra de contacto en el suelo, para leerse como obstáculo a tamaño de móvil. Son `props` con `anchor: 'floor'` (la base en la fila inferior de la imagen); en el mapa se ponen como spawn `<id>-<n>`. Vista previa junto al Cobrador: [`art-previews/0x72-cover-props.png`](art-previews/0x72-cover-props.png).
+
+| Id | Tamaño | Qué es |
+|---|---|---|
+| `cart`, `cart_sacks` | 32×16 | Carro de dos ruedas con heno / con sacos |
+| `market_stall` | 16×24 | Puesto con toldo a rayas y mercancía |
+| `sacks` | 16×16 | Tres sacos de arpillera oscura apilados |
+| `rubble_pile`, `rubble_pile_b`, `rubble_pile_c` | 16×16 | Montón de cascotes sobre un túmulo de argamasa |
+| `pillar_broken` | 16×24 | Fuste estriado partido con un tambor caído |
+| `dead_tree`, `dead_tree_b`, `dead_tree_c` | 24×32 | Árbol seco: copa a la izquierda, a la derecha, o tronco tronchado |
+| `ore_pile` | 16×16 | Roca oscura con vetas de cobre y plata |
+| `tombstone` | 16×16 | Lápida con cruz y malas hierbas |
+| `sarcophagus` | 16×24 | Sarcófago con efigie, visto desde arriba con su cara frontal |
+
+Terrenos nuevos (`tiles.json`):
+
+- `low_wall`: muro bajo de piedra, para altura 1 y **no transitable**, con albardilla de piedras grandes y cara de mampostería.
+- `balcony`: tablones transitables con barandilla como `rim` (postes, pasamanos y sombra), cara de vigas con jabalcones y `stair` de madera.
+
+Bestias (`hand-sprites.json`, `idle`/`move`/`hit`, mirando a la derecha; los retratos de 32×32 se generan solos): `perro` (perro carroñero pardo y sarnoso, 16×14), `lobo` (gris oscuro con hocico claro, 16×14) y `rata` (rata gigante gris con cola rosa, 16×10). Vista previa: [`art-previews/0x72-beasts.png`](art-previews/0x72-beasts.png).
