@@ -43,6 +43,7 @@ export const SHOW: ShowConfig = {
     rondaDePreguntas: finalBoss.rondaDePreguntas,
     pausaPublicitaria: finalBoss.pausaPublicitaria,
     alergiaALosFocos: finalBoss.alergiaALosFocos,
+    granFinal: finalBoss.granFinal,
   },
 };
 

@@ -131,6 +131,10 @@ export function eventViews(events: GameEvent[], state: GameState, extra: { first
     }
   }
   if (kills >= 2) out.push({ evento: 'multiKill', cantidad: kills });
+  // The planta (biome, 1-5) Willy is on, for data like «si: { planta: 5 }». An event's own
+  // `planta` (floorExited: the floor number) wins.
+  const p = (state.systems?.planta as unknown as { bioma?: number } | undefined)?.bioma;
+  if (p !== undefined) for (const v of out) if (v.planta === undefined) v.planta = p;
   return out;
 }
 

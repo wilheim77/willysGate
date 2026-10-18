@@ -145,3 +145,57 @@ describe('Final boss: phases', () => {
     expect(of(showAfterCommand(willy, final, [turn], new RngCursor(final.rng)).events, 'audienceVote')).toHaveLength(1);
   });
 });
+
+describe('Final boss: the end', () => {
+  it('his defeat gets his last line (bossLine momento derrotado) and the lights come back', () => {
+    let s = step(fight(60)).state;
+    s = step(s).state;
+    const b = s.entities[BOSS]!;
+    const down = { ...s, entities: { ...s.entities, [BOSS]: { ...b, resources: { ...b.resources, vida: { current: 0, max: 100 } }, conditions: [...b.conditions, { id: 'eliminado' }] } } };
+    const out = step(down, [{ type: 'entityDefeated', entityId: BOSS, cause: 'golpe' } as GameEvent]);
+    expect(of(out.events, 'bossLine')[0]).toMatchObject({ momento: 'derrotado' });
+    expect(bossFightOf(out.state) ?? null).toBeNull();
+    expect(storedLighting(out.state).ambient).toBeGreaterThan(SHOW.boss!.pausaPublicitaria.ambiente);
+  });
+});
+
+describe('Final boss: the Gran final and «Sin reflejo»', () => {
+  function granFinal(): GameState {
+    let s = step(fight(60)).state;
+    s = step(s).state;
+    const b = s.entities[BOSS]!;
+    return step({ ...s, entities: { ...s.entities, [BOSS]: { ...b, resources: { ...b.resources, vida: { current: 30, max: 100 } } } } }).state;
+  }
+
+  it('the lighting rig hangs over him; from its rope it drops once: 2d6 and Aturdido to whoever is under it', () => {
+    const s = granFinal();
+    const rig = bossFightOf(s)!.parrilla!;
+    expect(rig).toBeTruthy();
+    expect(rig.centro).toEqual(s.entities[BOSS]!.position);
+    let t: GameState = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: rig.cuerda } }, turn: { ...s.turn, activeEntityId: 'willy', order: ['willy', BOSS] } };
+    t = { ...t, systems: { ...t.systems, share: { valor: 0, max: 100 } as unknown as JsonValue } };
+    expect(listActions(t, 'willy').map((a) => a.id)).toContain('show:derribar-parrilla');
+    const before = t.entities[BOSS]!.resources.vida!.current;
+    const r = engine.apply(t, { type: 'act', issuer: 'player:1', entityId: 'willy', actionId: 'show:derribar-parrilla', target: {} } as BaseCommand);
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(of(r.events, 'rigDropped')[0]).toMatchObject({ afectados: [BOSS] });
+    const boss = r.state.entities[BOSS]!;
+    expect(boss.resources.vida!.current).toBeLessThan(before);
+    expect(boss.conditions.some((c) => c.id === 'aturdido') || boss.resources.vida!.current <= 0).toBe(true);
+    // Once only.
+    expect(bossFightOf(r.state)!.parrilla!.usada).toBe(true);
+    expect(listActions(r.state, 'willy').map((a) => a.id)).not.toContain('show:derribar-parrilla');
+  });
+
+  it('«Sin reflejo»: nothing he does gives anyone audience (a crit of his on Willy, for one)', () => {
+    const s = granFinal();
+    const crit = { type: 'attackRolled', attackerId: BOSS, targetId: 'willy', hit: true, crit: true } as GameEvent;
+    const theirs = showAfterCommand(willy, s, [crit], new RngCursor(s.rng));
+    expect(of(theirs.events, 'audienceChanged').filter((c) => Number(c.delta) > 0)).toHaveLength(0);
+    // The same «drama» from anyone else does count.
+    const other = { ...s, entities: { ...s.entities, r: rat('r', 0, 0) } };
+    const mine = showAfterCommand(willy, other, [{ ...crit, attackerId: 'r' } as GameEvent], new RngCursor(s.rng));
+    expect(of(mine.events, 'audienceChanged').some((c) => c.causa === 'drama')).toBe(true);
+  });
+});

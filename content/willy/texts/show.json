@@ -49,5 +49,8 @@
   "trampilla": "¡Trampilla!",
   "aOscuras": "A oscuras: no le haces nada",
   "focoEncendido": "¡Foco!",
-  "bajoFoco": "¡Bajo el foco!"
+  "bajoFoco": "¡Bajo el foco!",
+  "parrillaTitulo": "La parrilla de focos",
+  "parrillaTexto": "Cuelga sobre la zona dorada. Desde la cuerda (la luz pequeña) la puedes derribar una vez: 2d6 y Aturdido a quien esté debajo. A quien sea.",
+  "parrilla": "¡Parrilla!"
 }
