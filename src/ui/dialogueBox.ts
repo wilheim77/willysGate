@@ -16,7 +16,7 @@ export class DialogueBox {
   private lastRoll: { actor: string; result: CheckResult } | null = null;
   /** A client-side question (disarm this trap? who?) shown in the same panel. */
   private autoTimer = 0;
-  private question: { text: string; options: { label: string; onPick: () => void }[]; closeLabel?: string } | null = null;
+  private question: { text: string; options: { label: string; onPick: () => void }[]; closeLabel?: string | false } | null = null;
 
   constructor(
     private store: GameStore,
@@ -36,8 +36,9 @@ export class DialogueBox {
   }
 
   /** Asks something outside any conversation tree; a "Dejarlo" option is always added. */
-  ask(text: string, options: { label: string; onPick: () => void }[], closeLabel?: string): void {
-    this.question = { text, options, ...(closeLabel ? { closeLabel } : {}) };
+  /** A question outside any dialogue tree. `closeLabel: false` leaves no way out but the options. */
+  ask(text: string, options: { label: string; onPick: () => void }[], closeLabel?: string | false): void {
+    this.question = { text, options, ...(closeLabel !== undefined ? { closeLabel } : {}) };
     this.render(this.store.state);
   }
 
@@ -66,10 +67,12 @@ export class DialogueBox {
           }),
         ),
       );
-      list.append(this.button(q.closeLabel ?? `${q.options.length + 1}. ${this.t('leaveIt', 'Dejarlo')}`, true, () => {
-        this.lastRoll = null;
-        close();
-      }));
+      if (q.closeLabel !== false) {
+        list.append(this.button(q.closeLabel ?? `${q.options.length + 1}. ${this.t('leaveIt', 'Dejarlo')}`, true, () => {
+          this.lastRoll = null;
+          close();
+        }));
+      }
       panel.append(line, list);
       this.root.replaceChildren(panel);
       this.root.hidden = false;

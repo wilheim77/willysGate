@@ -327,7 +327,13 @@ export class GameController {
     if (this.aiTimer) return;
     this.aiTimer = setTimeout(() => {
       this.aiTimer = null;
-      if (this.scene.busy || this.state.turn.activeEntityId !== entityId) return;
+      if (this.state.turn.activeEntityId !== entityId) return;
+      // Still animating: try again shortly instead of dropping the turn on the floor (nothing
+      // else may come along to wake the AI up, and the fight would hang on an enemy's turn).
+      if (this.scene.busy) {
+        this.scheduleAi(entityId);
+        return;
+      }
       const command = nextAiCommand(this.store.engine.ruleset, this.state, entityId);
       const result = this.store.dispatch(command);
       // A plan the engine refuses must never stall the fight.

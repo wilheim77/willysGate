@@ -64,6 +64,8 @@ export interface MapSceneTexts {
 const STEP_MS = 160;
 /** Out of combat walking is brisker: exploring shouldn't feel like wading. */
 const EXPLORE_STEP_MS = 95;
+/** Longest any one event may animate before playback moves on regardless. */
+const EVENT_WATCHDOG_MS = 10_000;
 const TAP_SLOP = 8;
 /** Zoom limits and defaults are expressed as on-screen pixels per tile, whatever the art's tile size. */
 const MIN_TILE_PX = 24;
@@ -136,6 +138,8 @@ export class MapScene extends Phaser.Scene {
   private breathing = new Map<string, Phaser.Tweens.Tween>();
   private pathPreview!: Phaser.GameObjects.Graphics;
   private animating = 0;
+  /** Settles the walk in flight per entity (see animateMove). */
+  private moveFinish = new Map<string, () => void>();
   private queue: GameEvent[] = [];
   private playing = false;
   /** A spellCast immediately followed by its own attackRolled should skip the plain 'attack' animation. */
@@ -366,7 +370,8 @@ export class MapScene extends Phaser.Scene {
   private animateMove(event: EntityMovedEvent, state: GameState, blocking = true): Promise<void> {
     const sprite = this.sprites.get(event.entityId);
     if (!sprite) return Promise.resolve();
-    // A follower already mid-walk jumps to where its last walk was going before starting the next.
+    // A walk still in flight for this sprite is cut short (and settled) before the next starts.
+    this.moveFinish.get(event.entityId)?.();
     this.tweens.killTweensOf(sprite);
     if (blocking) this.animating++;
     this.pathPreview.clear();
@@ -394,15 +399,21 @@ export class MapScene extends Phaser.Scene {
       };
     });
     return new Promise((resolve) => {
-      this.tweens.chain({
-        targets: sprite,
-        tweens,
-        onComplete: () => {
-          if (blocking) this.animating--;
-          this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
-          resolve();
-        },
-      });
+      // Settles exactly once: when the walk ends, when another walk replaces it, or by a
+      // watchdog if the tween dies with its sprite (a rebuild mid-walk). Otherwise `busy`
+      // would stay true and the game would stop taking input and AI turns for good.
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        if (blocking) this.animating--;
+        if (this.moveFinish.get(event.entityId) === finish) this.moveFinish.delete(event.entityId);
+        if (sprite.active) this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
+        resolve();
+      };
+      this.moveFinish.set(event.entityId, finish);
+      this.time.delayedCall(event.path.length * stepMs + 1000, finish);
+      this.tweens.chain({ targets: sprite, tweens, onComplete: finish });
     });
   }
 
@@ -421,7 +432,10 @@ export class MapScene extends Phaser.Scene {
     while (this.queue.length > 0) {
       const event = this.queue.shift()!;
       try {
-        await this.play(event);
+        // No single event may hold the game: an animation whose tween died (its sprite was
+        // rebuilt mid-way) would otherwise leave input and AI waiting forever.
+        const stuck = new Promise<'stuck'>((r) => setTimeout(() => r('stuck'), EVENT_WATCHDOG_MS));
+        if ((await Promise.race([this.play(event), stuck])) === 'stuck') console.warn('event playback timed out', event.type);
       } catch (err) {
         console.error('event playback failed', event, err);
       }
