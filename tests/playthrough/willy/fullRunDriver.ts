@@ -133,7 +133,8 @@ export interface RunResult {
  *  exit (or until nothing more can be done): resolve every encounter on the current map,
  *  then take its one exit. No chest-opening, achievements or clock yet - see
  *  fullRun.test.ts's `it.todo`s for those. */
-export function runFullGame(engine: Engine, state: GameState, leaderId = 'willy', maxSteps = 4000): RunResult {
+/** `maxFloors`: stop once that many floors are cleared (the smoke run only needs the first two). */
+export function runFullGame(engine: Engine, state: GameState, leaderId = 'willy', maxSteps = 4000, maxFloors = Infinity): RunResult {
   let s = state;
   const visited: string[] = [s.map.id];
   const events: GameEvent[] = [];
@@ -155,6 +156,7 @@ export function runFullGame(engine: Engine, state: GameState, leaderId = 'willy'
     events.push(...traveled.events);
     if (fromFloor.startsWith('planta-')) floorsCleared++;
     visited.push(s.map.id);
+    if (floorsCleared >= maxFloors) break;
   }
   return { state: s, floorsCleared, visitedMaps: visited, steps, events };
 }

@@ -62,7 +62,7 @@ function runFor(classId: string): ReturnType<typeof runFullGame> {
   let result = runCache.get(classId);
   if (!result) {
     const state = startRun(1, classId);
-    result = runFullGame(engine, state, 'willy', MAX_STEPS);
+    result = runFullGame(engine, state, 'willy', MAX_STEPS, DEEP ? Infinity : 2);
     runCache.set(classId, result);
   }
   return result;
