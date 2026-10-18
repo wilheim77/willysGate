@@ -49,7 +49,11 @@ c.put(25, 15, '/', 0); // the door of El Pico Roto
 // Exterior art: packed earth for the square, cobbles up the abbey road and on the terrace,
 // timber houses alternating, the Torre del Cepo in stone.
 c.retile((t, h, x, y) => {
-  if (t === '#') return x >= 8 && x <= 11 && y >= 3 && y <= 5 ? 'W' : (x + y) % 2 ? 'h' : 'g';
+  if (t === '#') {
+    if (x >= 8 && x <= 11 && y >= 3 && y <= 5) return 'W'; // the Torre del Cepo
+    if ((x === 21 || x === 26) && y <= 3) return 'W'; // the abbey gate's posts
+    return (x + y) % 2 ? 'h' : 'g';
+  }
   if (t === '.') return 'c';
   if (t === ',') return y >= 19 ? 'I' : 'R';
   return t;
@@ -90,6 +94,12 @@ export default {
     'crate-3': [20, 16],
   },
   lights: [
+    { name: 'farol-camino', at: [1, 13], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-calles-1', at: [28, 8], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-calles-2', at: [28, 10], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-escorial-1', at: [11, 18], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-escorial-2', at: [15, 18], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+
     { name: 'brasero-cadalso-1', at: [7, 8], radius: 4.5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
     { name: 'brasero-cadalso-2', at: [14, 9], radius: 4.5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
     { name: 'antorcha-pico-roto', at: [25, 12], radius: 4, color: '#ffb050', flicker: 0.12, prop: 'torch_wall' },

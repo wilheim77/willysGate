@@ -74,6 +74,9 @@ export default {
     'crate-4': [21, 21],
   },
   lights: [
+    { name: 'farol-salida-plaza', at: [1, 12], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-salida-escorial', at: [32, 12], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+
     { name: 'farol-1', at: [6, 9], radius: 4, color: '#ffb050', flicker: 0.1, prop: 'torch_wall' },
     { name: 'farol-2', at: [20, 9], radius: 4, color: '#ffb050', flicker: 0.1, prop: 'torch_wall' },
     { name: 'farol-3', at: [28, 9], radius: 4, color: '#ffb050', flicker: 0.1, prop: 'torch_wall' },

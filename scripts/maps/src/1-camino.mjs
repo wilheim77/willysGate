@@ -41,7 +41,9 @@ const c = new Canvas(32, 18).stamp(0, 0, ROWS, L);
 // Exterior art: the road, scrub, mud in the ditch, rock for the heights and the outcrop.
 c.retile((t, h) => (t === '.' ? 'R' : t === ';' ? 'k' : t === ',' ? (h === 0 ? 'm' : h >= 2 ? 'k' : 's') : t));
 // Fences along the road's north edge (same height as the road: decoration, not a barrier).
-c.rect(1, 7, 6, 1, 'f', 1).rect(9, 7, 5, 1, 'f', 1).rect(25, 7, 6, 1, 'f', 1);
+c.rect(1, 7, 6, 1, 'f', 1).rect(9, 7, 5, 1, 'f', 1).rect(25, 7, 3, 1, 'f', 1);
+// The road opens up towards the valley: the exit is the whole mouth of the road, framed by fires.
+c.rect(28, 7, 4, 4, 'R', 1);
 
 export default {
   id: 'camino',
@@ -65,7 +67,9 @@ export default {
     'crate-3': [7, 7],
     'campfire-1': [25, 13], // a milestone-sized crate: first cover the player sees
   },
-  lights: [{ name: 'hoguera-mineros', at: [25, 13], radius: 5, color: '#ff9a4a', flicker: 0.18 }],
+  lights: [
+    { name: 'hoguera-salida-1', at: [29, 6], radius: 4, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
+    { name: 'hoguera-salida-2', at: [29, 11], radius: 4, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },{ name: 'hoguera-mineros', at: [25, 13], radius: 5, color: '#ff9a4a', flicker: 0.18 }],
   surfaces: [
     { name: 'charco-camino', rect: [14, 8, 2, 2], surface: 'water' },
     { name: 'aceite-carro', rect: [25, 12, 2, 1], surface: 'oil' },
@@ -77,7 +81,7 @@ export default {
       props: { marker: 'trap_beartrap', detect: 10, save: 'dex', dc: 11, damage: '1d6', type: 'piercing', condition: 'restrained', disarmCheck: 'sleight_of_hand', disarmDc: 10 },
     },
   ],
-  exits: [{ name: 'a-hondonegra', rect: [31, 8, 1, 2], to: 'plaza', spawn: 'entry-camino', props: { requiresFlag: 'prologo_mineros_resuelto', closedText: 'Los mineros siguen cortando el camino.' } }],
+  exits: [{ name: 'a-hondonegra', rect: [31, 7, 1, 4], to: 'plaza', spawn: 'entry-camino', props: { requiresFlag: 'prologo_mineros_resuelto', closedText: 'Los mineros siguen cortando el camino.' } }],
   zones: {
     // Proposed layer (docs/ENGINE_REQUESTS_INTERESES.md, I1): entering opens the dialogue once.
     scenes: [
