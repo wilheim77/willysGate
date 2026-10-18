@@ -645,13 +645,25 @@ export function icyTiles(seed: number): Image {
 }
 
 /** Snowy roof seen from above (spa wall top). */
+/** Snow on the spa's roofs: seamless, with the diagonal hatch that marks solid ground you can't
+ *  stand on (no per-tile edge, which striped big masses like paving). */
 export function snowTop(seed: number): Image {
   const img = blank(T, T);
   const r = rng(seed);
   fill(img, 0, 0, T, T, '#f4f8fc');
   for (let i = 0; i < 10; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), '#d0e0ec');
-  fill(img, 0, T - 2, T, 2, '#a8c8dc');
-  for (let x = 1; x < T; x += 4) (px(img, x, T - 1, '#e8f4f8'), px(img, x, T, '#e8f4f8'));
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) if ((x + y) % 4 === 0) px(img, x, y, '#b8d0e0');
+  return img;
+}
+
+/** Stair face for walkable one-level steps (Willy's palette): treads every 3 rows, lit nose. */
+export function stairFace(pal: [string, string, string, string]): Image {
+  const img = blank(T, T);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const step = y % 3;
+    px(img, x, y, pal[step === 0 ? 3 : step === 1 ? 2 : 0]!);
+    if (step === 1 && x % 8 === 0) px(img, x, y, pal[1]!);
+  }
   return img;
 }
 

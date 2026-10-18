@@ -244,12 +244,12 @@ function stageBoards(seed: number): Image {
   return img;
 }
 
+/** Top of the studio walls: near-black with the diagonal hatch that means "solid", seamless, so it
+ *  can't be read as the (also dark) studio floor. */
 function studioWallTop(): Image {
   const img = blank(T, T);
-  fill(img, 0, 0, T, T, 'stu0');
-  for (let y = 0; y < T; y += 4) fill(img, 0, y, T, 1, 'stu1');
-  fill(img, 0, T - 3, T, 1, 'stu2');
-  fill(img, 0, T - 2, T, 2, 'stu3');
+  fill(img, 0, 0, T, T, '#0e0a16');
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) if ((x + y) % 4 === 0) px(img, x, y, c('stu1'));
   return img;
 }
 
@@ -384,6 +384,10 @@ const tiles: [string, Image][] = [
   ['tejado_1', roofTop(51)], ['tejado_2', roofTop(52)], ['fachada', plasterFace(false)], ['fachada_ventana', plasterFace(true)],
   ['moqueta_1', carpet(61)], ['moqueta_2', carpet(62)],
   ['tarima_1', stageBoards(71)], ['tarima_2', stageBoards(72)],
+  ['escalon_piedra', show.stairFace(['#343c46', '#4a5562', '#86929e', '#cfe2ee'])],
+  ['escalon_madera', show.stairFace(['#4a2c1c', '#6e4428', '#8e5e34', '#d0a060'])],
+  ['escalon_baldosa', show.stairFace(['#6a7a88', '#a8b6c2', '#d8e0e8', '#ffffff'])],
+  ['escalon_plato', show.stairFace(['#1e1430', '#2e2048', '#5a4488', '#4fe8ff'])],
   ['plato_muro_techo', studioWallTop()], ['plato_muro_cara', studioWallFace(false)], ['plato_muro_neon', studioWallFace(true)],
   // Floor 5 arena
   ['plato_suelo_1', show.studioFloor(81)], ['plato_suelo_2', show.studioFloor(82)],
