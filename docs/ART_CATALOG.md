@@ -581,6 +581,22 @@ En `hand-sprites.json` (con `attack`, `cast` y `hurt` derivados vía `actions.js
 
 Cada uno tiene su `<id>--elite`: el mismo sprite con la paleta dorada que calcula el generador, más el prop `aura-elite` (aro dorado animado bajo los pies). Vista previa: [`art-previews/ninja-enemigos-nuevos.png`](art-previews/ninja-enemigos-nuevos.png) (de la sesión anterior; los sprites no han cambiado) y, para los que siguen abajo, [`art-previews/ninja-props.png`](art-previews/ninja-props.png), [`art-previews/ninja-surfaces.png`](art-previews/ninja-surfaces.png) y [`art-previews/ninja-terrain.png`](art-previews/ninja-terrain.png).
 
+### `--elite` de los 20 enemigos antiguos (las 5 plantas)
+
+Mismo tratamiento que los 21 nuevos, para que cualquier enemigo de planta pueda salir como guardián o élite:
+
+- **Castro:** `gaviota-de-lonja`, `rata-portuaria`, `cangrejo-con-casco`, `bocarte-andante`.
+- **Híper:** `maniqui`, `carrito-poseido`, `reponedor-zombi`, `etiqueta-de-oferta`.
+- **Verbena:** `cabezudo`, `musico-de-charanga`, `vaquilla`, `feriante`.
+- **Balneario:** `patito-gigante`, `yeti-de-sauna`, `medusa-de-piscina`, `monitor-de-aquagym`.
+- **Plató:** `regidor`, `camara-dron`, `tecnico-de-sonido`, `figurante`.
+
+`mimico` se queda fuera (ya es un tipo élite y nunca sale sorteado como élite) y los jefes de planta también (son únicos). Las 4 de Castro Sumergido llevan además sus `attack`/`cast`/`hurt` propios en `actions.json` (copiados de la base), como las de ese piso ya tenían; el resto de plantas no tenía animaciones de acción propias y sus élites tampoco las llevan, para no romper la paridad con la base.
+
+Igual que los 21, ninguno tiene retrato de HUD propio (`portraits.json` excluye cualquier id con `--` a propósito): el HUD debe mostrar el retrato del enemigo base cuando el id no esté en `manifest.portraits`.
+
+Paleta dorada calculada de forma determinista (sin ajuste a mano) a partir de la paleta resuelta de cada enemigo (siguiendo su cadena de `extends`, incluida la plantilla `willy` si la usa): HSV, hue hacia ~42° (dorado) o ~14° (rojizo-dorado, para quien ya era magenta/púrpura), satura menos y sube el negro hacia gris oscuro; el negro de contorno (`k`, valor < 0,17) se deja igual. La fórmula se ajustó contra las paletas de los 21 ya hechos, así que el resultado es compatible en estilo aunque no sea pixel a pixel igual a un recolor a mano.
+
 ### Efectos de sus habilidades (`fx` del manifiesto)
 
 18 ids de habilidad acordados con el agente de *Willy* (las mismas formas genéricas reutilizadas con otro color, como `gWave`), más `autodestruccion`, `autodestruccion-toxica` y `autodestruccion-vapor` (las tres reutilizan `fx-explosion`) para los enemigos "lata"/petardo/pastilla que estallan. Dibujados por `scripts/art/willy-show-art.ts` (`reachBeam`/`markedBeam`, `groundPulse`, `impactBurst`, `coneWash`, `tossedBit`, `tinyBead`) y cableados en `content/willy/art/ninja/fx.json`.
