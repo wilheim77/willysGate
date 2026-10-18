@@ -3,5 +3,9 @@
   "escorial:callado-1": "callado_pozo",
   "escorial:well-1": "pozo_ahorcado",
   "boveda:inscription-1": "inscripcion_boveda",
-  "calles:cirilo": "cirilo"
+  "calles:cirilo": "cirilo",
+  "tunel:campfire-2": "descanso_tunel",
+  "abadia:campfire-3": "descanso_abadia",
+  "mina:campfire-4": "descanso_mina",
+  "calles:campfire-5": "descanso_calles"
 }

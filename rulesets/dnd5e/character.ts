@@ -83,6 +83,9 @@ export function createCharacter(spec: CharacterSpec): Entity {
   }
   // Turns left before a downed character dies (set to 3 when they drop).
   resources.bleed = { current: 0, max: 3 };
+  // Hit dice to spend on a short rest (one per level); Arcane Recovery once per long rest.
+  resources.hit_dice = pool(level);
+  if (features.includes('arcane_recovery')) resources.arcane_recovery = pool(1);
   if (features.includes('sneak_attack')) resources.sneak_attack = pool(1);
   if (features.includes('relentless_endurance')) resources.relentless = pool(1);
   if (features.includes('action_surge')) resources.extra_action = { current: 0, max: 1 };

@@ -59,11 +59,19 @@ export default {
     hilda: [16, 2],
     // The abbey's guards, by day and when the party storms the abbey with the Cuadrilla (D1, join).
     // When the party defends it (d1_abadia) they are replaced by guardia_baron-5..8, on the party's side.
-    'guardia_baron-1': { at: [8, 4], unlessFlag: 'd1_abadia' },
-    'guardia_baron-2': { at: [21, 4], unlessFlag: 'd1_abadia' },
-    'guardia_baron-3': { at: [5, 15], unlessFlag: 'd1_abadia' }, // wall-walk
-    'capellan_abadia-1': { at: [22, 15], unlessFlag: 'd1_abadia' }, // the baron's chaplain heals the guard
-    'guardia_baron_sargento-1': { at: [13, 14], unlessFlag: 'd1_abadia' },
+    // Day guards: gone once the night of the torches starts (d1_resuelto is set as the party chooses).
+    'guardia_baron-1': { at: [8, 4], unlessFlag: 'd1_resuelto' },
+    'guardia_baron-2': { at: [21, 4], unlessFlag: 'd1_resuelto' },
+    'guardia_baron-3': { at: [5, 15], unlessFlag: 'd1_resuelto' }, // wall-walk
+    'capellan_abadia-1': { at: [22, 15], unlessFlag: 'd1_resuelto' },
+    'guardia_baron_sargento-1': { at: [13, 14], unlessFlag: 'd1_resuelto' },
+    // Joining the Cuadrilla (d1_cuadrilla): the guard holds the cloister against the party. Their own
+    // faction (not noncombatant) so the d1-asalto encounter starts.
+    'guardia_baron-9': { at: [8, 11], requiresFlag: 'd1_cuadrilla', faction: 'abadia' },
+    'guardia_baron-10': { at: [7, 15], requiresFlag: 'd1_cuadrilla', faction: 'abadia' }, // wall-walk
+    'guardia_baron-11': { at: [20, 15], requiresFlag: 'd1_cuadrilla', faction: 'abadia' }, // wall-walk
+    'capellan_abadia-2': { at: [14, 10], requiresFlag: 'd1_cuadrilla', faction: 'abadia' }, // the baron's chaplain heals the guard
+    'guardia_baron_sargento-2': { at: [14, 13], requiresFlag: 'd1_cuadrilla', faction: 'abadia' },
     'guardia_baron-5': { at: [6, 15], requiresFlag: 'd1_abadia', faction: 'party' },
     'guardia_baron-6': { at: [21, 15], requiresFlag: 'd1_abadia', faction: 'party' },
     'guardia_baron-7': { at: [11, 13], requiresFlag: 'd1_abadia', faction: 'party' },
@@ -78,6 +86,7 @@ export default {
     // Scenery: kitchen oil, cloister cover, a barricade at the gate for the night of the torches.
     'barrel_oil-1': [1, 1],
     'barrel_oil-2': [1, 2],
+    'campfire-3': [3, 4], // the kitchen fire: a long rest after D1 (descanso_abadia)
     'crate-1': [5, 7],
     'crate-2': [9, 12],
     'sacks-1': [6, 11],
@@ -97,12 +106,12 @@ export default {
     'hulla-1': { at: [10, 20], requiresFlag: 'd1_cuadrilla', unlessFlag: 'hulla_no_luchan', faction: 'party' },
     'hulla-2': { at: [17, 20], requiresFlag: 'd1_cuadrilla', unlessFlag: 'hulla_no_luchan', faction: 'party' },
     // Defending the abbey (d1_abadia): the same people at the gate, against the party, Odda leading.
-    'minero_cuadrilla-4': { at: [7, 18], requiresFlag: 'd1_abadia' },
-    'minero_cuadrilla-5': { at: [20, 18], requiresFlag: 'd1_abadia' },
-    'minero_cuadrilla-6': { at: [12, 20], requiresFlag: 'd1_abadia' },
-    'hulla-3': { at: [9, 20], requiresFlag: 'd1_abadia' },
-    'hulla-4': { at: [18, 19], requiresFlag: 'd1_abadia' },
-    odda_noche: { at: [15, 19], requiresFlag: 'd1_abadia' },
+    'minero_cuadrilla-4': { at: [7, 18], requiresFlag: 'd1_abadia', faction: 'cuadrilla' },
+    'minero_cuadrilla-5': { at: [20, 18], requiresFlag: 'd1_abadia', faction: 'cuadrilla' },
+    'minero_cuadrilla-6': { at: [12, 20], requiresFlag: 'd1_abadia', faction: 'cuadrilla' },
+    'hulla-3': { at: [9, 20], requiresFlag: 'd1_abadia', faction: 'cuadrilla' },
+    'hulla-4': { at: [18, 19], requiresFlag: 'd1_abadia', faction: 'cuadrilla' },
+    odda_noche: { at: [15, 19], requiresFlag: 'd1_abadia', faction: 'cuadrilla' },
   },
   lights: [
     { name: 'brasero-sala-1', at: [10, 6], radius: 5, color: '#ffb060', flicker: 0.12, prop: 'brazier' },
@@ -122,7 +131,7 @@ export default {
     {
       name: 'd1-asalto',
       rect: [0, 9, 28, 13],
-      participants: ['guardia_baron-1', 'guardia_baron-2', 'guardia_baron-3', 'capellan_abadia-1', 'guardia_baron_sargento-1', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
+      participants: ['guardia_baron-9', 'guardia_baron-10', 'guardia_baron-11', 'capellan_abadia-2', 'guardia_baron_sargento-2', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
       props: { requiresFlag: 'd1_cuadrilla', setFlag: 'd1_asalto_terminado' },
     },
     {

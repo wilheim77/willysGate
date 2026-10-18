@@ -109,6 +109,12 @@ export interface Ruleset {
   /** What a trap does to whoever sets it off. */
   triggerTrap?(state: GameState, entityId: string, trap: Trap, rng: RngCursor): ActionOutcome;
 
+  /**
+   * The party rests (a dialogue effect `rest`). `kind` is the ruleset's own word for it
+   * (5e: 'short' / 'long'); the engine only passes it through and applies the outcome.
+   */
+  onRest?(state: GameState, partyIds: string[], kind: string, rng: RngCursor): ActionOutcome;
+
   /** Ruleset bookkeeping when a combat ends (e.g. downed allies get back up). */
   onCombatEnd?(state: GameState, winner: string | null): ActionOutcome;
 

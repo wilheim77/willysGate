@@ -927,6 +927,11 @@
        "name": "once",
        "type": "bool",
        "value": true
+      },
+      {
+       "name": "requiresFlag",
+       "type": "string",
+       "value": "escorial_libre"
       }
      ]
     },

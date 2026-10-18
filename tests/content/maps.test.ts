@@ -33,6 +33,13 @@ function factionOf(parsed: ParsedMap, name: string): string | undefined {
   const dash = name.lastIndexOf('-');
   return TEMPLATES[dash > 0 ? name.slice(0, dash) : name]?.faction;
 }
+/** Bystander by default (cast or template), unless the spawn sets its own faction. */
+function noncombatant(parsed: ParsedMap, name: string): boolean {
+  if (parsed.spawnProperties?.[name]?.faction) return false;
+  if (CAST[name]) return !!(CAST[name] as { noncombatant?: boolean }).noncombatant;
+  const dash = name.lastIndexOf('-');
+  return !!(TEMPLATES[dash > 0 ? name.slice(0, dash) : name] as { noncombatant?: boolean } | undefined)?.noncombatant;
+}
 /** Is a spawn present when exactly these flags are set? (requiresFlag / unlessFlag / requiresAnyFlag) */
 function presentWith(parsed: ParsedMap, name: string, flags: Set<string>): boolean {
   const p = parsed.spawnProperties?.[name] ?? {};
@@ -205,7 +212,8 @@ describe('Intereses maps', () => {
         for (const e of parsed.zones.filter((z) => z.layer === 'encounters')) {
           const flags = new Set([e.properties.requiresFlag].filter(Boolean).map(String));
           const present = String(e.properties.participants ?? '').split(',').filter((id) => parsed.spawns[id] && presentWith(parsed, id, flags));
-          const hostile = present.filter((id) => factionOf(parsed, id) !== 'party');
+          // Hostile = another faction and not a bystander (a spawn's own `faction` makes it a fighter).
+          const hostile = present.filter((id) => factionOf(parsed, id) !== 'party' && !noncombatant(parsed, id));
           expect(hostile.length, `${e.name}: nobody hostile among ${present.join(',')}`).toBeGreaterThan(0);
           for (const id of present) expect(factionOf(parsed, id), `${e.name}: ${id} has no faction`).toBeDefined();
         }

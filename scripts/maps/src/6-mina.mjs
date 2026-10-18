@@ -67,6 +67,7 @@ export default {
     'mine_wagon-2': [26, 14],
     'barrel_oil-2': [28, 20],
     'barrel-1': [33, 14],
+    'campfire-4': [38, 15], // embers at the way down: a short rest after D2 (descanso_mina)
     'rubble_pile-1': [18, 18],
     'ore_pile-1': [27, 10],
     'rubble_pile_c-1': [34, 10],

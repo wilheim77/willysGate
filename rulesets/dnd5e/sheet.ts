@@ -7,7 +7,7 @@ import { CLASSES, MONSTER_ACTIONS, MONSTERS, RACES, SPELLS, WEAPONS } from './da
 /** Features and racial traits in plain Spanish, for the character sheet. */
 export const FEATURES: Record<string, { label: string; text: string }> = {
   action_surge: { label: 'Oleada de acción', text: 'Una vez por descanso corto, una acción más en tu turno.' },
-  arcane_recovery: { label: 'Recuperación arcana', text: 'Al descansar recuperas algunos espacios de conjuro.' },
+  arcane_recovery: { label: 'Recuperación arcana', text: 'Una vez por descanso largo, en un descanso corto recuperas espacios de conjuro (niveles hasta la mitad de tu nivel).' },
   asi: { label: 'Mejora de característica', text: 'Has mejorado tus características al subir de nivel.' },
   blessed_healer: { label: 'Sanador bendito', text: 'Al curar a otros con un conjuro, tú también te curas.' },
   brave: { label: 'Valiente', text: 'Ventaja para resistir el miedo.' },

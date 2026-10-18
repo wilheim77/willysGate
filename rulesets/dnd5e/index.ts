@@ -21,6 +21,7 @@ import {
 import { OIL_BLAST, listActions, performAction, previewAction } from './actions';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onSurface, triggerTrap } from './environment';
 import { setDnd5eRef } from './ref';
+import { onRest } from './rest';
 import { equippedItems, profBonus, tagValues } from './character';
 import { ITEMS, MONSTERS, MONSTER_ACTIONS, SPELLS } from './data';
 import { levelUpCharacter } from './creation';
@@ -62,6 +63,8 @@ const resources: Record<string, ResourceDef> = {
   channel_divinity: { label: 'Canalizar divinidad', refresh: 'shortRest' },
   relentless: { label: 'Aguante incansable', refresh: 'longRest' },
   bleed: { label: 'Turnos antes de morir', refresh: 'never' },
+  hit_dice: { label: 'Dados de golpe', refresh: 'never', visible: true },
+  arcane_recovery: { label: 'Recuperación arcana', refresh: 'longRest' },
   drained: { label: 'Vida drenada', refresh: 'never' },
   // Monsters: innate spells (x/day) and their own powers (recharge or x/day).
   ...Object.fromEntries(Object.entries(SPELLS).map(([id, sp]) => [`innate_${id}`, { label: `${sp.label} (innato)`, refresh: 'longRest' } as ResourceDef])),
@@ -365,6 +368,7 @@ export const dnd5e: Ruleset = {
   performAction: (state, actorId, actionId, target, rng) => performAction(dnd5e, state, actorId, actionId, target, rng),
   onLeaveReach: (state, reactorId, moverId, rng) => onLeaveReach(dnd5e, state, reactorId, moverId, rng),
   onCombatEnd: (state, winner) => onCombatEnd(dnd5e, state, winner),
+  onRest: (state, partyIds, kind, rng) => onRest(dnd5e, resources, state, partyIds, kind, rng),
   surfaces: SURFACES,
   surfaceReactions: SURFACE_REACTIONS,
   onSurface: (state, id, surface, trigger, rng) => onSurface(dnd5e, state, id, surface, trigger, rng),

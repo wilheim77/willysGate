@@ -852,5 +852,35 @@
   "epilogo_visto": {
     "critical": false,
     "description": "Has visto el epílogo."
+  },
+  "tunel_despejado": {
+    "critical": false,
+    "description": "El grupo ha ganado (o terminado) el combate del túnel de los Callados.",
+    "setBy": "mapa tunel (encuentro, setFlag)"
+  },
+  "descanso_tunel": {
+    "critical": false,
+    "description": "El grupo ha descansado (descanso corto) en la hoguera del túnel."
+  },
+  "descanso_abadia": {
+    "critical": false,
+    "description": "El grupo ha dormido (descanso largo) en la cocina de la abadía tras D1."
+  },
+  "descanso_mina": {
+    "critical": false,
+    "description": "El grupo ha descansado (descanso corto) antes de bajar a la Bóveda."
+  },
+  "callejon_despejado": {
+    "critical": false,
+    "description": "Ha terminado el combate contra los cobradores de Lisandro en el callejón.",
+    "setBy": "mapa callejon (encuentro, setFlag)"
+  },
+  "descanso_calles": {
+    "critical": false,
+    "description": "El grupo ha descansado (descanso corto) en la cocina de las viudas."
+  },
+  "descanso_boveda": {
+    "critical": false,
+    "description": "El grupo ha descansado (descanso corto) en la Bóveda tras vencer a Brea."
   }
 }

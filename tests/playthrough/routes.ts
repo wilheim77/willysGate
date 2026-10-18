@@ -105,9 +105,7 @@ function pickExit(exits: MapZone[], visited: Set<string>, pending: Set<string>):
  *  gets hero killed is reported as "wiped", not asserted against here. */
 function assertInvariants(state: GameState, where: string) {
   for (const e of Object.values(state.entities)) {
-    // TODO(rests): a party member tagged essential (Anselmo) can bleed out in the boss fight at
-    // level 5 with no rests before it; reported by goldenPathMatrix, not failed, in the Vault only.
-    if (hasTag(e, 'essential') && !(where.includes('map boveda') && e.controllerId.startsWith('player'))) expect(hasCondition(e, 'dead'), `${where}: essential NPC "${e.id}" died`).toBe(false);
+    if (hasTag(e, 'essential')) expect(hasCondition(e, 'dead'), `${where}: essential NPC "${e.id}" died`).toBe(false);
   }
   expect(itemCount(state, 'party', 'coronas'), `${where}: coronas went negative`).toBeGreaterThanOrEqual(0);
 }
