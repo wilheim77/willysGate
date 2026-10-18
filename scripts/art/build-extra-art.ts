@@ -19,6 +19,7 @@ import { FLAMES, FLAME_LEGEND, type Key, T, ascii, get, rect, rgb, rng, set } fr
 import * as env from './environment-art.ts';
 import * as fx from './spell-fx.ts';
 import { applyFxTable } from './fx-table.ts';
+import * as markers from './markers.ts';
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -1305,6 +1306,8 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   brazier: { frames: [0, 1, 2, 3].map(brazier), note: 'Brasero de hierro', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
   candles: { frames: [0, 1, 2].map(candles), note: 'Velas en el suelo (capilla, cripta)', anchor: 'floor', fps: 6, loop: true, light: '#ffc070' },
   oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado del brazo de su poste', anchor: 'floor', fps: 6, loop: true, light: '#ffb050' },
+  exit_open: { frames: [0, 1, 2, 3].map((f) => markers.exitOpen(f, '#f4d878', '#a8873a')), note: 'Salida abierta (gira hacia el borde)', anchor: 'centre', fps: 6, loop: true, light: '#f4d878' },
+  exit_closed: { frames: [markers.exitClosed()], note: 'Salida cerrada', anchor: 'centre', fps: 0, loop: false },
   marker_party: { frames: [factionRing('#e8c070', 'solid')], note: 'Aro bajo los pies: grupo', anchor: 'floor', fps: 0, loop: false },
   marker_ally: { frames: [factionRing('#6ad0a0', 'dashed')], note: 'Aro bajo los pies: aliado que lucha por el grupo (IA)', anchor: 'floor', fps: 0, loop: false },
   marker_enemy: { frames: [factionRing('#d04a3a', 'heavy')], note: 'Aro bajo los pies: enemigo', anchor: 'floor', fps: 0, loop: false },

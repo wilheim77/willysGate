@@ -5,6 +5,7 @@ import {
   type GameEvent,
   type GameState,
   type LightSource,
+  type MapZone,
   type Tile,
   type Vec2,
   blockedTiles,
@@ -21,6 +22,7 @@ import {
   surfacesOf,
   trapsOf,
   tileAt,
+  zonesOf,
 } from '../../engine';
 import { DEFAULT_FX, Juice, tween, wait } from '../fx/juice';
 import { type AssetManifest, type LpcAnimation, type SpellFx, type SpriteArt, assetUrl, tilesetKey } from '../assets/manifest';
@@ -130,6 +132,7 @@ export class MapScene extends Phaser.Scene {
   private grid: GridProjection;
   private propSprites: Phaser.GameObjects.Sprite[] = [];
   private surfaceObjects: Phaser.GameObjects.GameObject[] = [];
+  private exitMarkers: Phaser.GameObjects.GameObject[] = [];
 
   constructor(
     private store: GameStore,
@@ -351,6 +354,7 @@ export class MapScene extends Phaser.Scene {
     }
     this.lighting = new LightingLayer(this, map.width * T, map.height * T, T, LIGHTING_DEPTH, !torchProp);
     this.drawSurfaces(state);
+    this.drawExits(state);
   }
 
   override update(time: number): void {
@@ -571,6 +575,12 @@ export class MapScene extends Phaser.Scene {
       case 'tileChanged': {
         // A chest opens, a door swings, a lever flips: rebuild the world from state.
         this.buildWorld(state);
+        return;
+      }
+      case 'flagChanged': {
+        // A requiresFlag/unlessFlag on an exit may have just flipped: redraw its markers
+        // (gold <-> grey) without rebuilding the whole scene.
+        this.drawExits(state);
         return;
       }
       case 'trapSpotted':
@@ -816,6 +826,89 @@ export class MapScene extends Phaser.Scene {
         for (let i = -1; i <= 1; i++) g.fillStyle(color, trap.armed ? 0.9 : 0.5).fillTriangle(c.x + i * s * 0.6 - 2, c.y + s * 0.4, c.x + i * s * 0.6 + 2, c.y + s * 0.4, c.x + i * s * 0.6, c.y - s * 0.4);
         if (trap.armed) this.tweens.add({ targets: g, alpha: { from: 0.55, to: 1 }, duration: 600, yoyo: true, repeat: -1 });
         this.surfaceObjects.push(g);
+      }
+    }
+  }
+
+  /** Flag conditions a zone may carry — mirrors GameController.zoneAllowed (private there). */
+  private zoneAllowed(z: MapZone): boolean {
+    const req = z.properties.requiresFlag;
+    const unless = z.properties.unlessFlag;
+    if (req && !this.store.state.flags[String(req)]) return false;
+    if (unless && this.store.state.flags[String(unless)]) return false;
+    return true;
+  }
+
+  /**
+   * Which way an exit zone faces, if it touches the edge of the map: tiles exactly on
+   * the border point off-map in that direction. An exit entirely inside the map (a lift,
+   * a staircase) has no single direction, so it gets a plain pulsing marker instead.
+   */
+  private exitDirection(zone: MapZone, map: GameState['map']): Dir | null {
+    if (zone.x <= 0) return 'w';
+    if (zone.x + zone.width >= map.width) return 'e';
+    if (zone.y <= 0) return 'n';
+    if (zone.y + zone.height >= map.height) return 's';
+    return null;
+  }
+
+  /** Triangle pointing off-map, floating over the tile at about chest height. */
+  private drawChevron(g: Phaser.GameObjects.Graphics, cx: number, cy: number, dir: Dir, T: number): void {
+    const y = cy - T * 0.55;
+    const s = T * 0.2;
+    if (dir === 'e') g.fillTriangle(cx - s, y - s, cx - s, y + s, cx + s, y);
+    else if (dir === 'w') g.fillTriangle(cx + s, y - s, cx + s, y + s, cx - s, y);
+    else if (dir === 's') g.fillTriangle(cx - s, y - s, cx + s, y - s, cx, y + s);
+    else g.fillTriangle(cx - s, y + s, cx + s, y + s, cx, y - s);
+  }
+
+  /** No clear off-map direction (a lift, a staircase): a soft glow over the tile instead. */
+  private drawGlowMarker(g: Phaser.GameObjects.Graphics, cx: number, cy: number, T: number): void {
+    g.fillCircle(cx, cy - T * 0.55, T * 0.22);
+  }
+
+  /** Rotation for the `exit_open`/`exit_closed` props, which are drawn pointing right (east). */
+  private static readonly EXIT_ROTATION: Record<Dir, number> = { e: 0, s: Math.PI / 2, w: Math.PI, n: -Math.PI / 2 };
+
+  /**
+   * Marks every tile of every `exits` zone so a way off the map is never invisible: the
+   * art's own `exit_open`/`exit_closed` prop (two sliding chevrons, or one dimmed behind a
+   * bar), rotated to point off-map, or a plain pulsing chevron/glow if a preset has no such
+   * art. Colour/choice mirrors GameController.zoneAllowed: open when nothing blocks it, shut
+   * (grey, or the bar) when a requiresFlag/unlessFlag does.
+   */
+  private drawExits(state: GameState): void {
+    for (const o of this.exitMarkers) o.destroy();
+    this.exitMarkers = [];
+    const T = this.grid.tile;
+    for (const zone of zonesOf(state, 'exits')) {
+      if (!zone.properties.to || !zone.properties.spawn) continue; // only actual travel exits
+      const open = this.zoneAllowed(zone);
+      const dir = this.exitDirection(zone, state.map);
+      // A direction-less exit (a lift, a staircase, entirely inside the map) still needs some
+      // rotation for the sprite; "pointing right" reads fine as a plain marker in that case.
+      const rotation = dir ? MapScene.EXIT_ROTATION[dir] : 0;
+      const propId = open ? 'exit_open' : 'exit_closed';
+      const prop = this.manifest.props?.[propId];
+      for (let y = zone.y; y < zone.y + zone.height; y++) {
+        for (let x = zone.x; x < zone.x + zone.width; x++) {
+          const tile = tileAt(state.map, { x, y });
+          if (!tile) continue;
+          const c = this.grid.tileCentre(x, y, tile.height);
+          const depth = this.grid.depth(y, tile.height, 4);
+          if (prop) {
+            const sprite = this.add.sprite(c.x, c.y, imageKey(prop.url)).setDepth(depth).setRotation(rotation);
+            sprite.play(`prop:${propId}`);
+            this.exitMarkers.push(sprite);
+            continue;
+          }
+          const g = this.add.graphics().setDepth(depth).setBlendMode(Phaser.BlendModes.ADD);
+          g.fillStyle(open ? 0xe8c070 : 0x6a6266, 1);
+          if (dir) this.drawChevron(g, c.x, c.y, dir, T);
+          else this.drawGlowMarker(g, c.x, c.y, T);
+          this.tweens.add({ targets: g, alpha: { from: 0.35, to: 0.9 }, duration: 750 + ((x + y) % 3) * 120, yoyo: true, repeat: -1 });
+          this.exitMarkers.push(g);
+        }
       }
     }
   }

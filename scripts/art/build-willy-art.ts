@@ -15,6 +15,7 @@ import { bayer, rng, valueNoise } from './pixel.ts';
 import * as env from './environment-art.ts';
 import * as show from './willy-show-art.ts';
 import { applyFxTable } from './fx-table.ts';
+import * as markers from './markers.ts';
 
 const [game = 'willy', preset = 'ninja'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -435,6 +436,9 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'fx-papeleo': { frames: [0, 1, 2, 3, 4, 5].map(show.paperStorm), fps: 10, loop: false, anchor: 'floor' },
   'fx-sello': { frames: [0, 1, 2, 3, 4].map(show.stampThump), fps: 12, loop: false, anchor: 'centre' },
   'fx-chispazo': { frames: [0, 1, 2, 3, 4].map(show.zapImpact), fps: 16, loop: false, anchor: 'centre', light: '#4fe8ff' },
+  // Exit markers (same ids as Intereses, so the client needs no per-game names).
+  exit_open: { frames: [0, 1, 2, 3].map((f) => markers.exitOpen(f, '#4fe8ff', '#2a8aa8')), fps: 6, loop: true, anchor: 'centre', light: '#4fe8ff' },
+  exit_closed: { frames: [markers.exitClosed()], fps: 0, loop: false, anchor: 'centre' },
   // Floor 5 arena
   'atril-rojo': { frames: [show.podium('#e0302a', false), show.podium('#e0302a', true)], fps: 0, loop: false, anchor: 'floor' },
   'atril-azul': { frames: [show.podium('#3a8fd9', false), show.podium('#3a8fd9', true)], fps: 0, loop: false, anchor: 'floor' },
