@@ -101,3 +101,8 @@ canvas.ui-icon { image-rendering: pixelated; }
 .setup-buttons { display: flex; justify-content: space-between; gap: 8px; padding: 8px 12px 12px; }
 .setup-buttons button { min-height: var(--touch); min-width: 120px; }
 .setup-buttons .primary { margin-left: auto; border-color: var(--gold); color: var(--gold); }
+
+/* A legendary's star burst behind the open box. */
+.box-art canvas.burst { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: -1; pointer-events: none; animation: burst-spin 6s linear infinite; }
+@keyframes burst-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .box-art canvas.burst { animation: none; } }

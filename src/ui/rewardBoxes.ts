@@ -165,6 +165,11 @@ export function setupRewardBoxes(store: GameStore, game: GameDefinition, manifes
         await wait(110);
       }
       frame(box.art?.open);
+      if (box.art?.burst && hasUiArt(manifest, box.art.burst)) {
+        const burst = uiIcon(manifest, box.art.burst, 256);
+        burst.classList.add('burst');
+        art.prepend(burst);
+      }
       stage.style.setProperty('--beam', best.color);
       stage.classList.add('beam', `best-${best.rarity}`);
       await wait(350);

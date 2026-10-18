@@ -42,7 +42,7 @@ export interface RewardBoxView {
   description?: string;
   reason?: string;
   /** UI art ids: closed, lid frames, open. */
-  art?: { closed: string; lid: string[]; open: string };
+  art?: { closed: string; lid: string[]; open: string; /** Drawn behind the open box (a legendary's star burst). */ burst?: string };
 }
 
 export interface RewardBoxResult {
