@@ -164,6 +164,8 @@ export class MapScene extends Phaser.Scene {
       if (change.kind === 'reset') {
         this.queue = [];
         this.buildWorld(state);
+        // A save loaded on an enemy's turn: nothing else would wake the AI up.
+        this.hooks.onIdle?.();
       } else {
         this.queue.push(...change.events);
         void this.playQueue();

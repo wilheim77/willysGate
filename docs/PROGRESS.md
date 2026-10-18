@@ -149,7 +149,12 @@
 
 ## Decisiones abiertas
 
-- (2026-10-18) Feedback de las pruebas: hay mucha conversación y poco combate. Se propone empezar con un combate tutorial, subir de nivel por PX y añadir combates opcionales. Falta decidir qué hacen los guardias en un combate cercano. Todo está pendiente de aprobación.
+- (2026-10-18, aprobado) Progresión y combates:
+  - **Combate tutorial:** una pelea fácil al empezar el camino.
+  - **Niveles por PX:** se empieza en nivel 3 y hay que llegar a nivel 5 antes del combate final. Las subidas se aplican en el motor.
+  - **Diálogos:** se mantienen.
+  - **Más encuentros:** mapas más grandes y mapas intermedios pequeños, como un callejón.
+  - **Guardias:** no intervienen.
 
 - ¿Un cuarto compañero **mago** opcional? Por ahora no.
 

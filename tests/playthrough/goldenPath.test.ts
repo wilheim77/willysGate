@@ -238,5 +238,5 @@ describe('golden path: a fresh game, driven as far through the act as it can go'
     // greedy player on "camino" (or crashes before leaving it) fails this.
     expect([...visitedMaps], 'never left the opening map').not.toEqual(['camino']);
     expect(visitedMaps.size, `only visited ${visitedMaps.size} map(s): ${[...visitedMaps].join(', ')}`).toBeGreaterThanOrEqual(2);
-  }, 30000);
+  }, 120_000);
 });

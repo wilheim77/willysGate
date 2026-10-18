@@ -32,6 +32,8 @@ import type { GameDefinition } from './definition';
 import type { GameStore } from './store';
 
 const AI_STEP_MS = 380;
+/** Commands one AI fighter may issue in a single turn before it is ended for it. */
+const AI_MAX_STEPS_PER_TURN = 40;
 
 /**
  * Turns player input into commands and drives everything that isn't the player:
@@ -323,6 +325,8 @@ export class GameController {
     if (active && !this.isPlayer(active)) this.scheduleAi(active);
   }
 
+  private aiSteps = { key: '', n: 0 };
+
   private scheduleAi(entityId: string): void {
     if (this.aiTimer) return;
     this.aiTimer = setTimeout(() => {
@@ -332,6 +336,14 @@ export class GameController {
       // else may come along to wake the AI up, and the fight would hang on an enemy's turn).
       if (this.scene.busy) {
         this.scheduleAi(entityId);
+        return;
+      }
+      // A plan that keeps "working" without ever ending the turn would loop forever.
+      const turnKey = `${this.state.turn.round}:${entityId}`;
+      this.aiSteps = this.aiSteps.key === turnKey ? { key: turnKey, n: this.aiSteps.n + 1 } : { key: turnKey, n: 1 };
+      if (this.aiSteps.n > AI_MAX_STEPS_PER_TURN) {
+        console.warn(`AI ${entityId} took ${AI_MAX_STEPS_PER_TURN} steps without ending its turn`);
+        this.store.dispatch({ type: 'endTurn', issuer: SYSTEM_ISSUER, entityId } as never);
         return;
       }
       const command = nextAiCommand(this.store.engine.ruleset, this.state, entityId);
