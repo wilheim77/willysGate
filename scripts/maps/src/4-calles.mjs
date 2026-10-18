@@ -81,7 +81,7 @@ export default {
     { name: 'velas-capilla-2', at: [17, 1], radius: 3, color: '#ffd090', flicker: 0.2, intensity: 0.8, prop: 'candles' },
     { name: 'candil-viudas', at: [27, 2], radius: 3, color: '#ffc070', flicker: 0.15, intensity: 0.7, prop: 'oil_lamp' },
     { name: 'candil-patio', at: [6, 22], radius: 3, color: '#ffb050', flicker: 0.12, intensity: 0.7, prop: 'oil_lamp' },
-    { name: 'candil-lloro', at: [30, 17], radius: 3, color: '#ffc070', flicker: 0.12, intensity: 0.7, prop: 'oil_lamp' },
+    { name: 'candil-lloro', at: [31, 16], radius: 3, color: '#ffc070', flicker: 0.12, intensity: 0.7, prop: 'oil_lamp' },
     { name: 'lampara-empenos', at: [10, 16], radius: 3.5, color: '#ffd090', flicker: 0.08, prop: 'oil_lamp' },
   ],
   surfaces: [{ name: 'el-lloro', rect: [29, 13, 2, 11], surface: 'water' }],

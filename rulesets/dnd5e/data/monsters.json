@@ -192,5 +192,176 @@
       "type:humanoid"
     ],
     "xp": 10
+  },
+  "veteran": {
+    "label": "Veterano",
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 14,
+      "int": 10,
+      "wis": 11,
+      "cha": 10
+    },
+    "ac": 17,
+    "hp": 58,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "longsword",
+      "heavy_crossbow"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 700
+  },
+  "knight": {
+    "label": "Caballero",
+    "abilities": {
+      "str": 16,
+      "dex": 11,
+      "con": 14,
+      "int": 11,
+      "wis": 11,
+      "cha": 15
+    },
+    "ac": 18,
+    "hp": 52,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "greatsword",
+      "heavy_crossbow"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 700
+  },
+  "gladiator": {
+    "label": "Gladiador",
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 16,
+      "int": 10,
+      "wis": 12,
+      "cha": 15
+    },
+    "ac": 16,
+    "hp": 112,
+    "speed": 6,
+    "prof": 3,
+    "weapons": [
+      "spear"
+    ],
+    "multiattack": 3,
+    "tags": [
+      "type:humanoid"
+    ],
+    "xp": 1800
+  },
+  "ogre": {
+    "label": "Ogro",
+    "abilities": {
+      "str": 19,
+      "dex": 8,
+      "con": 16,
+      "int": 5,
+      "wis": 7,
+      "cha": 7
+    },
+    "ac": 11,
+    "hp": 59,
+    "speed": 8,
+    "prof": 2,
+    "weapons": [
+      "greatclub"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:giant"
+    ],
+    "xp": 450
+  },
+  "ghoul": {
+    "label": "Necrófago",
+    "abilities": {
+      "str": 13,
+      "dex": 15,
+      "con": 10,
+      "int": 7,
+      "wis": 10,
+      "cha": 6
+    },
+    "ac": 12,
+    "hp": 22,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "claws",
+      "bite"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:undead",
+      "immune:poison"
+    ],
+    "xp": 200
+  },
+  "ghast": {
+    "label": "Ghast",
+    "abilities": {
+      "str": 16,
+      "dex": 17,
+      "con": 10,
+      "int": 11,
+      "wis": 10,
+      "cha": 8
+    },
+    "ac": 13,
+    "hp": 36,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "claws",
+      "bite"
+    ],
+    "multiattack": 1,
+    "tags": [
+      "type:undead",
+      "resist:necrotic",
+      "immune:poison"
+    ],
+    "xp": 450
+  },
+  "wight": {
+    "label": "Tumulario",
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 16,
+      "int": 10,
+      "wis": 13,
+      "cha": 15
+    },
+    "ac": 14,
+    "hp": 45,
+    "speed": 6,
+    "prof": 2,
+    "weapons": [
+      "longsword",
+      "longbow"
+    ],
+    "multiattack": 2,
+    "tags": [
+      "type:undead",
+      "resist:necrotic",
+      "immune:poison"
+    ],
+    "xp": 700
   }
 }
