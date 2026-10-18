@@ -927,8 +927,8 @@ export function performAction(ruleset: Ruleset, state: GameState, actorId: strin
   const r = new Resolver(ruleset, state, rng);
   r.actionTarget = { ...(target.entityId ? { entityId: target.entityId } : {}), ...(target.tile ? { tile: { ...target.tile } } : {}) };
   HANDLERS[actionId]?.perform(r, actorId, target);
-  // Companion abilities have no use counter: announce them here.
-  if (actionId.startsWith('comp:')) r.emit({ type: 'skillUsed', entityId: actorId, habilidad: actionId.slice(5) } as WillyEvent);
+  // Companion and enemy abilities have no use counter: announce them here.
+  if (actionId.startsWith('comp:') || actionId.startsWith('mon:')) r.emit({ type: 'skillUsed', entityId: actorId, habilidad: actionId.slice(actionId.indexOf(':') + 1) } as WillyEvent);
   // The ability's announcement goes first, so the client plays its FX before the rolls it causes.
   const first = r.events.findIndex((e) => e.type === 'skillUsed' && (e as WillyEvent).entityId === actorId);
   if (first > 0) r.events.unshift(...r.events.splice(first, 1));
