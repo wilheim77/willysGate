@@ -1237,3 +1237,53 @@ export function makeupPuff(frame: number): Image { return groundPulse(frame, '#f
 export function clapperCall(frame: number): Image { return impactBurst(frame, '#ffe04f'); }
 export function blindingCone(frame: number): Image { return coneWash(frame, '#ffffff'); }
 export function perfumeCloud(frame: number): Image { return coneWash(frame, '#ff8fc8'); }
+
+// --- Generic FX for class/companion/rival abilities that had none (content/willy/art/ninja/fx.json
+// audit): a handful of shared shapes reused across many abilities by colour, the same way the
+// enemy ability FX above are built. Named after what they read as, not any one ability, since
+// several unrelated abilities share each one (same convention as `mate`/`mate-del-concurso`
+// sharing `fx-mate-impacto`, or `viral`/`@critical` sharing `fx-confeti`).
+export function studyFlash(frame: number): Image { return impactBurst(frame, '#f4f4f0'); }
+export function lockdownPulse(frame: number): Image { return groundPulse(frame, '#8a9098', '#d8dce2'); }
+export function healAura(frame: number): Image { return groundPulse(frame, '#ffe04f', '#fff4c0'); }
+export function rallyShout(frame: number): Image { return groundPulse(frame, '#ff6a40', '#ffc8a0'); }
+export function tidalWave(frame: number): Image { return groundPulse(frame, '#3a8fd9', '#a8dcff'); }
+export function whistleBlast(frame: number): Image { return coneWash(frame, '#ffe04f'); }
+export function invisibleTug(frame: number): Image { return reachBeam(frame, '#d8d8d8', '#ffffff'); }
+
+/**
+ * The game-show "¡ELIMINADO!" banner (requested by the client agent for `onDeath: 'vanish'`):
+ * one cohesive graphic (banner + baked text), not text drawn over a separate burst. 64x24,
+ * anchor 'centre', non-looping: pops in with a white flash, holds with a neon glow and
+ * radiating lines, then fades. `manifest.props.fx_eliminado` — played directly by MapScene
+ * (not through the ability fx table), so it keeps the Intereses-style `fx_` id, not `fx-`.
+ */
+export function eliminatedBanner(frame: number): Image {
+  const W = 112, H = 28;
+  const img = blank(W, H);
+  const text = '¡ELIMINADO!';
+  const scale = frame === 0 ? 1 : 2;
+  const tw = textWidth(text, scale);
+  const bw = Math.min(W - 2, tw + 10), bh = scale === 1 ? 12 : 20;
+  const bx = Math.round((W - bw) / 2), by = Math.round((H - bh) / 2);
+  const alpha = frame === 4 ? 150 : 255;
+  // Radiating burst lines behind the banner (frames 1-3, fading out by 3).
+  if (frame >= 1 && frame <= 3) {
+    const cx = W / 2, cy = H / 2;
+    const len = 9 + frame * 2;
+    for (let a = 0; a < 10; a++) {
+      const ang = (a / 10) * Math.PI * 2;
+      line(img, cx + Math.cos(ang) * (bw / 2), cy + Math.sin(ang) * (bh / 2), cx + Math.cos(ang) * len, cy + Math.sin(ang) * len, frame === 3 ? '#a01818' : '#ffe04f', frame === 3 ? 120 : 200);
+    }
+  }
+  // Banner plate: red with a gold neon edge, angled a touch like a TV lower-third.
+  fill(img, bx, by, bw, bh, '#8a1212', alpha);
+  fill(img, bx, by, bw, 1, '#ffe04f', alpha);
+  fill(img, bx, by + bh - 1, bw, 1, '#ffe04f', alpha);
+  fill(img, bx, by, 1, bh, '#ffe04f', alpha);
+  fill(img, bx + bw - 1, by, 1, bh, '#ffe04f', alpha);
+  fill(img, bx + 1, by + 1, bw - 2, bh - 2, frame <= 1 ? '#ffffff' : '#c81a1a', alpha);
+  if (frame >= 2) drawText(img, text, Math.round((W - tw) / 2), by + Math.round((bh - 5 * scale) / 2), hexToRgb('#fff4c0'), scale);
+  else if (frame === 1) drawText(img, text, Math.round((W - tw) / 2), by + Math.round((bh - 5 * scale) / 2), hexToRgb('#8a1212'), scale);
+  return img;
+}

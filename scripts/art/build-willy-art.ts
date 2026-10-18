@@ -444,6 +444,8 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'fx-chispazo': { frames: [0, 1, 2, 3, 4].map(show.zapImpact), fps: 16, loop: false, anchor: 'centre', light: '#4fe8ff' },
   // Golden ring drawn under elite enemies (the sprite is the <id>--elite recolour).
   'aura-elite': { frames: [0, 1, 2, 3].map(show.eliteAura), fps: 8, loop: true, anchor: 'floor', light: '#ffc440' },
+  // Death feedback (played directly by MapScene, not through the ability fx table; Intereses-style id)
+  fx_eliminado: { frames: [0, 1, 2, 3, 4].map(show.eliminatedBanner), fps: 8, loop: false, anchor: 'centre' },
   // Floor-collapse clock
   'fx-polvo-derrumbe': { frames: [0, 1, 2, 3, 4, 5].map(show.collapseDust), fps: 10, loop: false, anchor: 'floor' },
   'fx-cascotes': { frames: [0, 1, 2, 3, 4].map(show.fallingRubble), fps: 10, loop: false, anchor: 'floor' },
@@ -465,6 +467,14 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'fx-claqueta-llamada': { frames: [0, 1, 2].map(show.clapperCall), fps: 12, loop: false, anchor: 'centre' },
   'fx-foco-cegador': { frames: [0, 1, 2].map(show.blindingCone), fps: 8, loop: false, anchor: 'centre', light: '#ffffff' },
   'fx-nube-colonia': { frames: [0, 1, 2].map(show.perfumeCloud), fps: 8, loop: false, anchor: 'centre' },
+  // Generic ability FX shared by several class/companion/rival abilities (fx.json audit)
+  'fx-estudio': { frames: [0, 1, 2].map(show.studyFlash), fps: 12, loop: false, anchor: 'centre' },
+  'fx-bloqueo': { frames: [0, 1, 2, 3].map(show.lockdownPulse), fps: 8, loop: false, anchor: 'floor' },
+  'fx-aura-curativa': { frames: [0, 1, 2, 3].map(show.healAura), fps: 8, loop: false, anchor: 'floor' },
+  'fx-grito-aoe': { frames: [0, 1, 2, 3].map(show.rallyShout), fps: 8, loop: false, anchor: 'floor' },
+  'fx-ola': { frames: [0, 1, 2, 3].map(show.tidalWave), fps: 8, loop: false, anchor: 'floor', light: '#3a8fd9' },
+  'fx-silbato': { frames: [0, 1, 2].map(show.whistleBlast), fps: 8, loop: false, anchor: 'centre' },
+  'fx-cuerda': { frames: [0, 1, 2].map(show.invisibleTug), fps: 10, loop: false, anchor: 'centre' },
   // Exit markers (same ids as Intereses, so the client needs no per-game names).
   exit_open: { frames: [0, 1, 2, 3].map((f) => markers.exitOpen(f, '#4fe8ff', '#2a8aa8')), fps: 6, loop: true, anchor: 'centre', light: '#4fe8ff' },
   exit_closed: { frames: [markers.exitClosed()], fps: 0, loop: false, anchor: 'centre' },
