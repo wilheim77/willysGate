@@ -268,11 +268,18 @@ export function adjustDamage(target: Entity, amount: number, element: string): n
 /** Hooks run after damage (the Butanero's gas bottle...). Registered by abilities.ts. */
 export const damageHooks: ((r: Resolver, targetId: string, amount: number, element: string) => void)[] = [];
 
+/**
+ * Asked after adjustDamage: each may change the amount (0 means no damage). The final boss uses
+ * it: in the dark he only takes damage under a spotlight, and a spotlight makes it +50 %.
+ */
+export const damageModifierHooks: ((r: Resolver, targetId: string, amount: number, element: string, sourceId?: string) => number)[] = [];
+
 export function dealDamage(r: Resolver, targetId: string, raw: number, element: string, sourceId?: string, cause = 'golpe', crit = false): number {
   // Someone may have left play earlier in the same action (a summon whose owner fell, a collapsed room).
   const target = r.state.entities[targetId];
   if (!target || !standing(target)) return 0;
-  const amount = adjustDamage(target, raw, element);
+  let amount = adjustDamage(target, raw, element);
+  for (const hook of damageModifierHooks) if (amount > 0) amount = Math.max(0, Math.floor(hook(r, targetId, amount, element, sourceId)));
   if (amount <= 0) return 0;
   const hp = target.resources.vida?.current ?? 0;
   r.emit({ type: 'damageDealt', targetId, amount, element, crit } as DamageDealtEvent);

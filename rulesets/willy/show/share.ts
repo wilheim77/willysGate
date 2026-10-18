@@ -9,12 +9,19 @@ import { WILLY_ID, clone, showConfig } from './config';
  * Every audience gain Willy makes while he is on the map drains it (1 point per 1 % gained, at
  * least 1); every loss, every wait and every hit he lands on Willy refills it. At the start of
  * his turn the audience votes (votoPorRonda × Willy's audience over the planta's minimum, up
- * to ×4, comes off the Share) and then he heals Share ÷ 10. The «mordisco de share» (event shareStolen { pct }) moves that
+ * to ×4, comes off the Share; only in the Gran final) and then he heals curacionPctVida % of his
+ * health at full Share (less with less), except under a spotlight. The «mordisco de share» (event shareStolen { pct }) moves that
  * share of Willy's audience into his meter.
  *
  * state.systems.share = { valor, max }. Events: meterChanged { medidor: 'share', de, a,
  * entityId }, shareCero { entityId }, enAntena { entityId }.
  */
+
+/** Set by boss.ts (is he under a spotlight?), so this module doesn't import the phases. */
+export let bossLitHook: ((state: GameState) => boolean) | undefined;
+export function setBossLitHook(f: (state: GameState) => boolean): void {
+  bossLitHook = f;
+}
 
 export interface ShareState {
   valor: number;
@@ -75,11 +82,16 @@ export function runShare(r: Resolver, events: GameEvent[], emitted: GameEvent[])
     const a = audienceOf(r.state);
     const min = Math.max(1, floorMinimum(r.state));
     const votes = Math.round(cfg.votoPorRonda * Math.min(4, (a?.valor ?? 0) / min));
-    if (votes > 0 && s.valor > 0) {
+    // Only in the Gran final (the phase system says which; without it, always).
+    const fase = (r.state.systems.jefeFinal as unknown as { fase?: number } | null | undefined)?.fase ?? 3;
+    if (votes > 0 && s.valor > 0 && fase >= 3) {
       r.emit({ type: 'audienceVote', entityId: boss.id, votos: votes } as unknown as WillyEvent);
       setShare(r, s, s.valor - votes, boss.id);
     }
-    if (s.valor > 0) heal(r, boss.id, Math.floor(s.valor / cfg.curacionDivisor));
+    // «Alergia a los focos»: under a spotlight he doesn't heal.
+    const lit = bossLitHook?.(r.state) ?? false;
+    const hp = boss.resources.vida?.max ?? 0;
+    if (s.valor > 0 && !lit) heal(r, boss.id, Math.floor((hp * cfg.curacionPctVida * s.valor) / 10000));
   }
   if (fresh || s.valor !== shareOf(r.state)?.valor) r.apply({ type: 'setSystem', system: 'share', value: s as unknown as JsonValue });
 }
