@@ -18,7 +18,9 @@ import { setBossLitHook } from './share';
  *    the party switches on the room's spotlights («Encender foco», adjacent, 1 action) and a
  *    moving spotlight sweeps the room every round. His hits on Willy bite the audience
  *    (shareStolen). Every few rounds two azafatos join.
- * 3. Gran final (33-0 %): the lights come back; the audience votes (share.ts).
+ * 3. Gran final (33-0 %): the lights come back; the audience votes (share.ts). The lighting rig
+ *    hangs over where he stood: dropping it («Derribar la parrilla», next to its rope, once) deals
+ *    2d6 and Aturdido to everyone under it.
  *
  * The arena is dressed at runtime from his encounter zone, so any boss room works.
  * state.systems.jefeFinal holds the fight. Events: bossPhase { jefe, fase, nombre, momento? },
@@ -47,6 +49,7 @@ export interface BossConfig {
     azafato: { nombre: string; sprite: string; vida: number; def: number; ataque: number; dano: string; movimiento: number; xp: number };
   };
   alergiaALosFocos: number;
+  granFinal: { parrilla: { dano: string; aturdido: number; radio: number; distanciaCuerda: number } };
 }
 
 interface QuestionTile {
@@ -74,6 +77,8 @@ export interface BossFight {
   luz: LightingState | null;
   azafatos: number;
   dichas: string[];
+  /** Gran final: the lighting rig over the stage, the rope to drop it, and whether it fell. */
+  parrilla?: { centro: Vec2; cuerda: Vec2; usada: boolean } | null;
 }
 
 export function bossFightOf(state: GameState): BossFight | undefined {
@@ -141,6 +146,10 @@ function setLights(r: Resolver, f: BossFight, round: number): void {
   const base: LightingState = f.fase === 2 ? { ambient: c.pausaPublicitaria.ambiente, lights: [] } : (f.luz ?? storedLighting(r.state));
   const own: LightSource[] = [];
   if (f.pregunta) for (const [i, t] of f.pregunta.baldosas.entries()) own.push({ id: `jefe:pregunta-${i}`, position: t.position, radius: 1, intensity: 0.7, color: t.color, flicker: 0.1 });
+  if (f.fase === 3 && f.parrilla && !f.parrilla.usada) {
+    own.push({ id: 'jefe:parrilla', position: f.parrilla.centro, radius: c.granFinal.parrilla.radio + 1, intensity: 0.6, color: '#ffb84d', flicker: 0.15, prop: 'parrilla-de-focos' });
+    own.push({ id: 'jefe:cuerda', position: f.parrilla.cuerda, radius: 1, intensity: 0.45, color: '#ffe08a', flicker: 0.3 });
+  }
   if (f.fase === 2) {
     const p = c.pausaPublicitaria;
     for (const foco of f.focos) {
@@ -190,7 +199,7 @@ function resolveQuestion(r: Resolver, f: BossFight, round: number): void {
       fell = true;
       r.emit({ type: 'trapdoorOpened', entityId: e.id, position: t.position } as unknown as WillyEvent);
       r.apply({ type: 'applyCondition', entityId: e.id, condition: 'tumbado' });
-      dealDamage(r, e.id, rollDice(r.rng, parseDice(c.rondaDePreguntas.dano)), 'golpe', undefined, 'caida');
+      dealDamage(r, e.id, rollDice(r.rng, parseDice(c.rondaDePreguntas.dano)), 'golpe', c.jefeId, 'trampilla');
     }
   }
   if (right) {
@@ -223,6 +232,25 @@ function spawnAzafatos(r: Resolver, f: BossFight, boss: Entity): void {
   }
 }
 
+/**
+ * Gran final: the lighting rig hangs over where he stands now; its rope is a few tiles away,
+ * towards Willy. Whoever stands next to the rope can drop it («Derribar la parrilla») once:
+ * everyone under it takes the damage and is stunned. He moves, so it's about luring him back.
+ */
+function hangRig(r: Resolver, f: BossFight): void {
+  const c = cfg()!;
+  const boss = r.state.entities[c.jefeId];
+  const willy = r.state.entities[WILLY_ID];
+  if (!boss) return;
+  const p = c.granFinal.parrilla;
+  const centro = { ...boss.position };
+  const options = freeTiles(r.state, f).filter((t) => gridDistance(t, centro) > p.radio && gridDistance(t, centro) <= p.distanciaCuerda);
+  const cuerda = options.sort((a, b) => (willy ? gridDistance(a, willy.position) - gridDistance(b, willy.position) : 0))[0];
+  if (!cuerda) return;
+  f.parrilla = { centro, cuerda, usada: false };
+  r.emit({ type: 'rigHung', entityId: c.jefeId, centro, cuerda } as unknown as WillyEvent);
+}
+
 function enterPhase(r: Resolver, f: BossFight, fase: number, round: number): void {
   const c = cfg()!;
   const from = f.fase;
@@ -239,6 +267,7 @@ function enterPhase(r: Resolver, f: BossFight, fase: number, round: number): voi
     f.focos = [];
     f.movil = null;
   }
+  if (fase === 3) hangRig(r, f);
   r.emit({ type: 'bossPhase', jefe: c.jefeId, fase, nombre: c.fases[fase - 1]?.nombre ?? '' } as unknown as WillyEvent);
   setLights(r, f, round);
 }
@@ -263,6 +292,7 @@ export function bossAfterCommand(ruleset: Ruleset, state: GameState, events: Gam
 
   // Over (he fell, or the combat ended): lights back, bookkeeping gone.
   if (existing && (!boss || state.turn.mode !== 'combat')) {
+    if (events.some((e) => e.type === 'entityDefeated' && (e as unknown as { entityId: string }).entityId === c.jefeId)) line(r, clone(existing), 'derrotado');
     if (existing.luz && existing.fase === 2) r.apply({ type: 'setSystem', system: 'lighting', value: existing.luz as unknown as JsonValue });
     else {
       const l = storedLighting(state);
@@ -319,7 +349,7 @@ export function bossAfterCommand(ruleset: Ruleset, state: GameState, events: Gam
       line(r, f, 'vidaUno');
       r.emit({ type: 'bossPhase', jefe: c.jefeId, fase: f.fase, momento: 'vidaUno' } as unknown as WillyEvent);
     }
-    if (e.type === 'spotlightOn') setLights(r, f, round);
+    if (e.type === 'spotlightOn' || e.type === 'rigDropped') setLights(r, f, round);
     // The first spotlit blow of each round: «¡Ese foco!».
     if (e.type === 'bossUnderSpotlight' && !f.dichas.includes(`bajoFoco:${round}`)) {
       f.dichas.push(`bajoFoco:${round}`);
@@ -373,6 +403,37 @@ HANDLERS['show:encender-foco'] = {
     r.emit({ type: 'spotlightOn', entityId: id, focoId: foco.id, position: foco.position } as unknown as WillyEvent);
   },
 };
+
+function rigRopeNear(state: GameState, actor: Entity): boolean {
+  const f = bossFightOf(state);
+  return !!f && f.fase === 3 && !!f.parrilla && !f.parrilla.usada && gridDistance(f.parrilla.cuerda, actor.position) <= 1;
+}
+
+HANDLERS['show:derribar-parrilla'] = {
+  target: { kind: 'self', range: 0 },
+  tags: ['show'],
+  preview: (state, actor) => (rigRopeNear(state, actor) ? { valid: true } : { valid: false, reason: 'La cuerda de la parrilla no está a tu lado.' }),
+  perform: (r, id) => {
+    const c = cfg()!;
+    const f = clone(bossFightOf(r.state)!);
+    if (!f.parrilla || f.parrilla.usada) return;
+    f.parrilla.usada = true;
+    r.apply({ type: 'setSystem', system: 'jefeFinal', value: f as unknown as JsonValue });
+    const p = c.granFinal.parrilla;
+    const under = Object.values(r.state.entities).filter((e) => standing(e) && !e.tags.includes(OBJECT_TAG) && gridDistance(e.position, f.parrilla!.centro) <= p.radio);
+    r.emit({ type: 'rigDropped', entityId: id, position: f.parrilla.centro, afectados: under.map((e) => e.id) } as unknown as WillyEvent);
+    for (const e of under) {
+      dealDamage(r, e.id, rollDice(r.rng, parseDice(p.dano)), 'golpe', id, 'decorado');
+      if (r.state.entities[e.id] && standing(r.state.entities[e.id]!)) r.apply({ type: 'applyCondition', entityId: e.id, condition: 'aturdido', remainingTurns: p.aturdido });
+    }
+  },
+};
+
+extraActionSources.push((state, e) => {
+  if (!e.tags.includes('pc') && !e.tags.some((t) => t.startsWith('companero-de:'))) return [];
+  if (!rigRopeNear(state, e)) return [];
+  return [{ id: 'show:derribar-parrilla', label: 'Derribar la parrilla', description: 'Sueltas la cuerda: la parrilla de focos cae sobre la zona marcada (2d6 y Aturdido a quien esté debajo, sea quien sea).', cost: { acciones: 1 }, target: { kind: 'self', range: 0 }, tags: ['show'] }];
+});
 
 extraActionSources.push((state, e) => {
   if (!e.tags.includes('pc') && !e.tags.some((t) => t.startsWith('companero-de:'))) return [];

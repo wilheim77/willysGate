@@ -27,5 +27,9 @@
     "azafatos": 1,
     "azafato": { "nombre": "Azafato con bandeja", "sprite": "figurante", "vida": 8, "def": 11, "ataque": 3, "dano": "1d4", "movimiento": 5, "xp": 0 }
   },
-  "alergiaALosFocos": 1.5
+  "alergiaALosFocos": 1.5,
+  "granFinal": {
+    "$comment": "La parrilla de focos cuelga sobre donde estaba el presentador al empezar la Gran final ('radio' casillas alrededor); su cuerda está a 'distanciaCuerda' casillas como mucho, hacia Willy. Quien esté junto a la cuerda puede derribarla una vez: 'dano' y Aturdido 'aturdido' turnos a todos los que estén debajo, sea del bando que sea.",
+    "parrilla": { "dano": "2d6", "aturdido": 1, "radio": 1, "distanciaCuerda": 3 }
+  }
 }

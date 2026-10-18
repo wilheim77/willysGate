@@ -261,8 +261,12 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
     a.turnoWilly = { activo: false, actuo: false, interesante: false };
   }
 
-  // Gains.
+  // Gains. «Sin reflejo» (the presenter): the drones don't film him, so nothing he does gives
+  // anyone audience (his crits on Willy, his shoves, his trapdoors).
+  const unfilmed = showConfig()!.share.jefeId;
+  const byHim = (v: View) => [v.actor, v.atacante].some((x) => x && typeof x === 'object' && (x as { id?: string }).id === unfilmed) || v.causaOriginal === 'trampilla';
   for (const v of views) {
+    if (byHim(v)) continue;
     for (const rule of cfg.ganancias) {
       if (!rule.base || !matchPattern(v, rule.patron)) continue;
       if (rule.id === 'ganso') a.gansos += 1;
