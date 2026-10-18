@@ -15,6 +15,7 @@ import { CreationScreen } from './ui/creationScreen';
 import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
+import { setupClockHud } from './ui/clockHud';
 import { setupTutorial } from './ui/tutorialToasts';
 import { setupBarks } from './ui/barks';
 
@@ -31,6 +32,7 @@ const audio = setupAudio(store, game);
 mountAudioControls(document.querySelector('.hud-top nav')!, audio);
 attachUiSfx(audio);
 setupTutorial(store, game);
+setupClockHud(store);
 const combatHud = new CombatHud(game);
 const controller = new GameController(store, game, combatHud);
 

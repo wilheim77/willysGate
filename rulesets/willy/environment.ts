@@ -19,6 +19,8 @@ export const SURFACES: Record<string, SurfaceDef> = {
   red: { label: 'Red', hazard: 1, color: '#8a7a5a' },
   expedientes: { label: 'Expedientes', hazard: 1, durationRounds: 3, color: '#efe8d0' },
   gas: { label: 'Gas', hazard: 1, durationRounds: 3, color: '#c8d870' },
+  // The floor clock ran out: this room comes down next (clock.ts).
+  grieta: { label: 'Grieta', hazard: 3, color: '#6b5a45' },
 };
 
 export const SURFACE_REACTIONS: SurfaceReaction[] = [
