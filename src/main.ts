@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition } from '../engine';
+import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition, inventoriesOf } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -163,6 +163,63 @@ controller.onTrapReached = (trap, candidates) => {
       lootQueue.push(item);
     }
     pumpLootQueue();
+  });
+
+  // The shared bag, one tap away (🎒 in the top bar): what you carry, what it does, and the
+  // obvious things to do with it - drink a potion out of combat, put on gear left in the bag.
+  const openBag = () => {
+    const ruleset = store.engine.ruleset;
+    const entries = Object.entries(inventoriesOf(store.state).party ?? {}).filter(([, n]) => n > 0);
+    const worn = new Set(partyMemberIds().flatMap((id) => ruleset.equippedItems?.(store.state.entities[id]!) ?? []));
+    const lines = entries.map(([item, n]) => {
+      const def = game.items?.[item];
+      return `• ${def?.label ?? item}${n > 1 ? ` ×${n}` : ''}${def?.text ? ` — ${def.text}` : ''}`;
+    });
+    const options: { label: string; onPick: () => void }[] = [];
+    const fighting = store.state.turn.mode === 'combat';
+    for (const [item] of entries) {
+      const def = game.items?.[item];
+      const name = def?.label ?? item;
+      if (!fighting && /^potion_/.test(item)) {
+        options.push({
+          label: `Beber ${name}`,
+          onPick: () =>
+            dialogue.ask(
+              `¿Quién bebe ${name}?`,
+              partyMemberIds().map((id) => {
+                const e = store.state.entities[id]!;
+                const hp = e.resources.hp;
+                return { label: `${e.name}${hp ? ` (${hp.current}/${hp.max} PG)` : ''}`, onPick: () => {
+                  const r = store.dispatch({ type: 'useItem', issuer: game.playerId, entityId: id, item } as never);
+                  if (!r.ok) hud.say(r.error.message, true);
+                } };
+              }),
+            ),
+        });
+      } else if (ruleset.itemSlot?.(item) && !worn.has(item)) {
+        options.push({ label: `Equipar ${name}`, onPick: () => offerEquip(item, () => undefined) });
+      }
+    }
+    const empty = game.texts.combat?.emptyBag ?? 'Nada. Ni una corona.';
+    const hint = fighting ? '\n\nEn combate, las pociones y pergaminos se usan desde la barra de acciones.' : '';
+    dialogue.ask(`🎒 ${game.texts.combat?.inventory ?? 'Mochila del grupo'}\n\n${lines.length ? lines.join('\n') : empty}${hint}`, options, game.texts.combat?.ok ?? 'Vale');
+  };
+  const bagButton = document.createElement('button');
+  bagButton.textContent = '🎒';
+  bagButton.title = game.texts.combat?.inventory ?? 'Mochila del grupo';
+  bagButton.setAttribute('aria-label', bagButton.title);
+  bagButton.addEventListener('click', openBag);
+  document.querySelector('.hud-top nav')!.prepend(bagButton);
+
+  // Picking things up says so: "+2 Poción de curación".
+  store.subscribe((change) => {
+    if (change.kind !== 'events') return;
+    const gained = change.events
+      .filter((e) => e.type === 'itemsChanged')
+      .map((e) => e as unknown as { owner: string; item: string; from: number; to: number })
+      .filter((e) => e.owner === 'party' && e.to > e.from);
+    if (!gained.length) return;
+    hud.say(`🎒 ${gained.map((g) => `+${g.to - g.from} ${game.items?.[g.item]?.label ?? g.item}`).join(', ')}`);
   });
 }
 
