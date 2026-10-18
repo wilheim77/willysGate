@@ -1,3 +1,4 @@
+import type { AiProfile } from './ai';
 import type { CommandHandler, GameEvent } from './commands';
 import type { Effect } from './effects';
 import type { Vec2 } from './grid';
@@ -64,6 +65,11 @@ export interface Ruleset {
    * damage. The UI shows it ("72 % de acierto") and the AI ranks options with it.
    */
   previewAction(state: GameState, actorId: string, actionId: string, target: ActionTarget): ActionPreview;
+  /**
+   * Per-creature tuning of the generic AI (a spellcaster keeps its distance), merged
+   * over the profile the caller passes. Values are AiProfile fields.
+   */
+  aiProfile?(state: GameState, entityId: string): Partial<AiProfile> | undefined;
   /** Resolves an action. The engine has already checked turn, cost, range and target filter. */
   performAction(state: GameState, actorId: string, actionId: string, target: ActionTarget, rng: RngCursor): ActionOutcome;
   /**
@@ -179,6 +185,11 @@ export interface ActionPreview {
   chance?: number;
   expectedDamage?: number;
   expectedHealing?: number;
+  /**
+   * Worth of everything that is neither damage nor healing (a condition imposed, a buff,
+   * a creature held in place), in health-equivalent points. Only the AI reads it.
+   */
+  utility?: number;
   /** Lines for the tooltip, each optionally linked to a glossary term. */
   breakdown?: { label: string; value?: string; term?: string }[];
   /** Tiles an area effect would cover, for the UI to paint before confirming. */

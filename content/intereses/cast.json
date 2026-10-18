@@ -197,7 +197,7 @@
   },
   "absalon": {
     "name": "Absalón Brea",
-    "monsterId": "gladiator",
+    "monsterId": "foreman",
     "spriteId": "absalon",
     "faction": "callados",
     "noncombatant": false,
