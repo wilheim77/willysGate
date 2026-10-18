@@ -37,6 +37,7 @@ import { achievementsHook } from './achievements';
 import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
 import { regenHook } from './regen';
+import { monsterAiProfile } from './monsters';
 import { traitsAfterCommand } from './traits';
 
 /**
@@ -405,7 +406,11 @@ export const willy: Ruleset = {
   onVoid: (state, id, rng) => onVoid(willy, state, id, rng),
   onRoundEnd: (state, round, rng) => onRoundEnd(willy, state, round, rng),
   // Ranged enemies that keep their distance (tag 'kite'): the AI backs off to 4 tiles before shooting.
-  aiProfile: (state, id) => (state.entities[id] && hasTag(state.entities[id]!, 'kite') ? { keepAway: 4 } : undefined),
+  aiProfile: (state, id) => {
+    const kite = state.entities[id] && hasTag(state.entities[id]!, 'kite') ? { keepAway: 4 } : undefined;
+    const abilities = monsterAiProfile(state, id);
+    return kite || abilities ? { ...kite, ...abilities } : undefined;
+  },
   // For the AI: standing next to a gas barrel is asking for it (someone may blow it up).
   dangerAt: (state, _id, p) =>
     Object.values(state.entities).filter((e) => hasTag(e, 'explosivo') && standing(e) && Math.max(Math.abs(e.position.x - p.x), Math.abs(e.position.y - p.y)) <= 1).length * BARREL_BLAST * 0.35,

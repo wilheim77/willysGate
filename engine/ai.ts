@@ -124,11 +124,23 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
     const scarce = Object.entries(action.cost).reduce((n, [r, c]) => n + (ruleset.resources[r] && ruleset.resources[r]!.refresh !== 'turn' ? c : 0), 0);
     for (const target of targets) {
       // Try the tiles from which the target is in range, nearest first.
-      const spots = reachable
-        .filter((r) => action.target.kind === 'self' || gridDistance(r.pos, target.position) <= action.target.range)
+      const inRange = reachable.filter((r) => action.target.kind === 'self' || gridDistance(r.pos, target.position) <= action.target.range);
+      const cheapest = inRange
         .map((r) => ({ ...r, exposed: exposureAt(ruleset, state, actor, r.pos, profile) }))
         .sort((a, b) => a.cost + a.exposed - (b.cost + b.exposed))
         .slice(0, 6);
+      // Something done around oneself (a blast, a war cry) is worth trying next to the foes too,
+      // not only on the cheapest tiles.
+      const foes = action.target.kind === 'self' ? others.filter((e) => isHostile(actor, e)) : [];
+      const nearFoes = foes.length
+        ? inRange
+            .map((r) => ({ ...r, d: Math.min(...foes.map((f) => gridDistance(r.pos, f.position))) }))
+            .sort((a, b) => a.d - b.d || a.cost - b.cost)
+            .slice(0, 4)
+            .filter((r) => !cheapest.some((c) => c.pos.x === r.pos.x && c.pos.y === r.pos.y))
+            .map((r) => ({ pos: r.pos, cost: r.cost, exposed: exposureAt(ruleset, state, actor, r.pos, profile) }))
+        : [];
+      const spots = [...cheapest, ...nearFoes];
       for (const spot of spots) {
         const hypothetical = withPosition(state, actor.id, spot.pos);
         const ref: ActionTarget = action.target.kind === 'tile' ? { tile: { ...target.position } } : { entityId: target.id };
@@ -161,6 +173,10 @@ function scorePreview(
   if (preview.expectedDamage && isHostile(actor, target) && !target.tags.includes(OBJECT_TAG)) {
     score += preview.expectedDamage * profile.damage + missing * profile.focusWounded;
     if (health && preview.expectedDamage >= health.current) score += profile.kill * (preview.chance ?? 1);
+  } else if (preview.expectedDamage && target.id === actor.id) {
+    // Aimed at oneself (a blast all around, a self-destruct): the damage lands on the foes about;
+    // the ruleset's preview already nets out the allies caught in it (collateral).
+    score += preview.expectedDamage * profile.damage;
   }
   if (preview.expectedHealing && !isHostile(actor, target)) {
     // Healing a healthy ally is worthless; healing a dying one is worth a lot.
