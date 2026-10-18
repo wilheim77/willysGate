@@ -1,25 +1,39 @@
+import type { ActionOutcome } from '../../../engine';
+import { grantItem as metaGrantItem, grantLootBox } from '../loot';
+import { RARITIES, type Rarity, itemDef } from '../meta';
 import type { Resolver, WillyEvent } from '../resolve';
 import { WILLY_ID as WILLY } from './config';
 
 /**
  * The show pays in loot boxes, items and coins. Boxes and items belong to the meta systems
- * (loot boxes, inventory); this is the one place the show hands them over, so the show never
- * runs a parallel box system.
+ * (rulesets/willy/loot.ts): the show only hands them over, so there is one box queue and one
+ * item path for everything.
  *
- * - grantBox: emits boxDelivered { caja, origen } (the Narrador's «cajaLlega» bank); the box
- *   system turns it into a box to open.
- * - grantItem: puts the item in Willy's pack and emits itemObtained { item, origen }.
- * - grantCoins: fichas (the Camerino's money), positive or negative.
+ * - grantBox: a box into the run's queue (loot.grantLootBox → boxDelivered { boxId, caja, origen, motivo }).
+ * - grantItem: an item into the party's bag (loot.grantItem → itemObtained { item, nombre, rareza, origen }).
+ * - grantCoins: fichas (the Camerino's money), positive or negative → coinsGranted { amount, origen }.
  */
 
+function take(r: Resolver, o: ActionOutcome): void {
+  r.apply(...o.effects);
+  for (const e of o.events) r.emit(e);
+}
+
+/** `origen` is where it comes from (hito:5000, patrocinador:glorp, contrato:...). */
 export function grantBox(r: Resolver, caja: string, origen: string): void {
-  r.emit({ type: 'boxDelivered', caja, origen, entityId: WILLY } as unknown as WillyEvent);
+  const tier = (RARITIES as string[]).includes(caja) ? (caja as Rarity) : 'bronce';
+  take(r, grantLootBox(r.state, tier, origen, origen.startsWith('hito') || origen.startsWith('prima') ? 'audiencia' : 'patrocinio'));
 }
 
 export function grantItem(r: Resolver, item: string, origen: string): void {
+  if (itemDef(item)) {
+    take(r, metaGrantItem(r.state, item, origen));
+    return;
+  }
+  // Without the item catalogue (ruleset tests), straight into Willy's pack.
   if (!r.state.entities[WILLY]) return;
   r.apply({ type: 'giveItem', owner: WILLY, item, count: 1 });
-  r.emit({ type: 'itemObtained', item, origen, entityId: WILLY } as unknown as WillyEvent);
+  r.emit({ type: 'itemObtained', item, origen } as unknown as WillyEvent);
 }
 
 export function grantCoins(r: Resolver, amount: number, origen: string): number {

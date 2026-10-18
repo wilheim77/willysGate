@@ -29,7 +29,7 @@ import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface,
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
-import { showAfterCommand, showCommands } from './show';
+import { showAfterCommand, showCommands, showLateAfterCommand } from './show';
 import { achievementsHook } from './achievements';
 import { equipItem, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
@@ -325,6 +325,7 @@ registerAfterCommand(itemsHook, 20);
 registerAfterCommand(showAfterCommand, 50);
 registerAfterCommand(regenHook, 60);
 registerAfterCommand(achievementsHook, 100);
+registerAfterCommand(showLateAfterCommand, 110);
 
 /**
  * Runs the hooks in order. Each sees the state left by the ones before and the command's events
