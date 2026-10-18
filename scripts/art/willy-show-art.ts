@@ -856,3 +856,118 @@ export function directorChair(): Image {
   line(img, 12, 12, 3, 19, '#a8743e');
   return outline(img);
 }
+
+// --- Signature ability FX ---------------------------------------------------------------------
+
+/** Butane bottle blowing up (48x48): blue gas core, orange fireball, bottle shards and the valve cap flying off. */
+export function bottleBlast(): Image[] {
+  const S = 48, c = 23.5;
+  const ramp = ['#3a1a10', '#b04a1e', '#e86a2a', '#ffb040', '#4fa8ff', '#e8f4ff'];
+  return Array.from({ length: 7 }, (_, f) => {
+    const img = blank(S, S);
+    const p = (f + 1) / 7, R = 22 * Math.min(1, 0.3 + p * 1.1);
+    const hollow = p > 0.55 ? (p - 0.55) * 1.7 : 0, fade = p > 0.65 ? (p - 0.65) * 2.4 : 0;
+    const n = valueNoise(880 + f, 48, 8);
+    for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+      const d = (Math.hypot(x - c, (y - c) * 1.1) / R) * (0.85 + 0.3 * n(x, y));
+      if (d > 1 || d < hollow || (fade && bayer(x, y) < fade)) continue;
+      const t = 1 - d;
+      const k = f < 2 && t > 0.55 ? 5 : t > 0.6 ? 4 : t > 0.4 ? 3 : t > 0.2 ? 2 : t > 0.08 ? 1 : 0;
+      px(img, x, y, p > 0.6 && d > 0.7 ? '#5a5254' : ramp[k]!);
+    }
+    const r = rng(890);
+    for (let i = 0; i < 9; i++) {
+      const a = r() * Math.PI * 2, d = 6 + p * 22 + r() * 3;
+      const x = Math.round(c + Math.cos(a) * d), y = Math.round(c + Math.sin(a) * d - p * 4);
+      if (f < 6) fill(img, x, y, 2, 2, i % 3 ? '#e86a2a' : '#b04a1e');
+    }
+    if (f < 6) {
+      const x = Math.round(c + 4 + p * 14), y = Math.round(c - 6 - p * 18);
+      fill(img, x, y, 3, 2, '#8a8f96');
+      px(img, x + 1, y - 1, OUT);
+    }
+    return img;
+  });
+}
+
+/** A thrown butane bottle tumbling through the air (16x16, 4 frames of rotation). */
+export function flyingBottle(frame: number): Image {
+  const img = blank(T, T);
+  const shapes = [
+    ['..kk..', '.kggk.', 'kAAAAk', 'kAWWAk', 'kAAAAk', 'kaaaak', 'kAAAAk', '.kkkk.'],
+    ['....kk..', '...kggk.', '..kAAAk.', '.kAWAAk.', 'kAAAAk..', 'kaaak...', '.kkk....'],
+    ['.kkkkkk.', 'kAaAAAAk', 'kAaWWAAkgk', 'kAaAAAAk', '.kkkkkk.'],
+    ['.kkk....', 'kaaak...', 'kAAAAk..', '.kAWAAk.', '..kAAAk.', '...kggk.', '....kk..'],
+  ];
+  const s = shapes[frame % 4]!;
+  art(img, Math.floor((T - s[0]!.length) / 2), Math.floor((T - s.length) / 2), s, { k: OUT, A: '#e86a2a', a: '#b04a1e', W: '#f4ece0', g: '#8a8f96' });
+  return img;
+}
+
+/** Slam dunk impact (32x16, at the feet): a shock ring on the floor, dust and orange stars. */
+export function dunkImpact(): Image[] {
+  return Array.from({ length: 6 }, (_, f) => {
+    const img = blank(32, 16);
+    const p = (f + 1) / 6, rx = 4 + p * 11, ry = 2 + p * 4;
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 32; x++) {
+      const d = Math.hypot((x - 15.5) / rx, (y - 11) / ry);
+      if (Math.abs(d - 1) > 0.18 || bayer(x, y) < (f > 3 ? (f - 3) * 0.35 : 0)) continue;
+      px(img, x, y, d < 1 ? '#fff0a0' : '#e8b830');
+    }
+    const r = rng(900);
+    for (let i = 0; i < 6; i++) {
+      const a = Math.PI + r() * Math.PI, d = rx * (0.8 + r() * 0.3);
+      const x = Math.round(15.5 + Math.cos(a) * d), y = Math.round(11 + Math.sin(a) * ry * 1.4 - p * 3);
+      if (f < 5) {
+        px(img, x, y, '#e87a2a');
+        px(img, x + 1, y, '#ffb040');
+        px(img, x, y - 1, '#ffb040');
+      }
+    }
+    if (f < 3) for (let i = 0; i < 8; i++) px(img, 8 + i * 2, 13 + (i % 2), '#b0a89e');
+    return img;
+  });
+}
+
+/** Paperwork storm over the target (16x24): forms flutter down around it (Vuelva usted mañana). */
+export function paperStorm(frame: number): Image {
+  const img = blank(T, 24);
+  const sheets = [[2, 0], [10, 3], [5, 7], [12, 10], [1, 12], [8, 15]];
+  sheets.forEach(([x0, y0], i) => {
+    const y = y0! + frame * 2 - (i % 2), x = x0! + Math.round(Math.sin(frame + i) * 1.5);
+    if (y < 0 || y > 20) return;
+    const tilt = (frame + i) % 2;
+    art(img, x, y, tilt ? ['kkkk', 'kWWk', 'kWlk', 'kkkk'] : ['kkk.', 'kWWk', 'kWlk', '.kkk'], { k: '#5a5e66', W: '#f4f4f0', l: '#3a6ab0' });
+  });
+  return img;
+}
+
+/** Official rubber stamp (16x16): comes down, thumps, leaves a red mark. */
+export function stampThump(frame: number): Image {
+  const img = blank(T, T);
+  const y = [0, 3, 5, 5, 5][frame]!;
+  if (frame < 3) art(img, 5, y, ['.kk.', '.kTk', '.kTk', 'kkkkk', 'kXXXk', 'kkkkk'], { k: OUT, T: '#a07040', X: '#d02020' });
+  if (frame >= 2) {
+    art(img, 3, 11, ['XXXXXXXXX', 'X.......X', 'X.XX.XX.X', 'X.......X', 'XXXXXXXXX'], { X: frame === 4 ? '#a01818' : '#e02a2a' });
+    if (frame === 2) for (const [dx, dy] of [[1, 10], [13, 10], [0, 14], [14, 14]]) px(img, dx!, dy!, '#e02a2a');
+  }
+  return img;
+}
+
+/** Electric impact for the voltaic arc (16x16): forking sparks around the target. */
+export function zapImpact(frame: number): Image {
+  const img = blank(T, T);
+  const r = rng(920 + frame * 7);
+  const cols = ['#ffffff', '#4fe8ff', '#a0e8ff'];
+  if (frame < 4) for (let a = 0; a < 4; a++) {
+    let x = 7.5, y = 7.5;
+    const ang = r() * Math.PI * 2;
+    for (let s = 0; s < 6; s++) {
+      x += Math.cos(ang) * 1.1 + (r() - 0.5) * 1.6;
+      y += Math.sin(ang) * 1.1 + (r() - 0.5) * 1.6;
+      px(img, Math.round(x), Math.round(y), cols[s < 2 ? 0 : s < 4 ? 1 : 2]!);
+    }
+  }
+  for (let i = 0; i < 3; i++) px(img, Math.floor(r() * T), Math.floor(r() * T), '#4fe8ff');
+  return img;
+}

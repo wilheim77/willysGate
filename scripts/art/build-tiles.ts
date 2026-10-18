@@ -21,7 +21,7 @@ const spec = JSON.parse(readFileSync(join(gameDir, 'art', preset, 'tiles.json'),
   atlas: string;
   tileList?: string;
   tileSize: number;
-  terrain: Record<string, { top: Cell[]; face: Cell; rim?: Cell; blend?: { priority: number; edges: Record<string, Cell> } }>;
+  terrain: Record<string, { top: Cell[]; face: Cell; rim?: Cell; stair?: Cell; blend?: { priority: number; edges: Record<string, Cell> } }>;
 };
 const T = spec.tileSize;
 const atlas = readPng(join(root, 'art-src', spec.atlas));
@@ -53,7 +53,7 @@ const cell = (c: Cell, what: string, partial = false) => {
   return frames.length - 1;
 };
 
-const terrain: Record<string, { tileset: string; frames: number[]; face: number; rim?: number; blend?: { priority: number; edges: Record<string, number> } }> = {};
+const terrain: Record<string, { tileset: string; frames: number[]; face: number; rim?: number; stair?: number; blend?: { priority: number; edges: Record<string, number> } }> = {};
 for (const [id, t] of Object.entries(spec.terrain)) {
   terrain[id] = {
     tileset: 'terrain',
@@ -61,6 +61,8 @@ for (const [id, t] of Object.entries(spec.terrain)) {
     face: cell(t.face, `${id} face`),
     // Optional lip strip (top rows of the cell) for renderers that draw platform edges.
     ...(t.rim ? { rim: cell(t.rim, `${id} rim`, true) } : {}),
+    // Optional face for walkable one-level steps (a stair), used instead of 'face' there.
+    ...(t.stair ? { stair: cell(t.stair, `${id} stair`) } : {}),
     // Optional blend fringes, drawn over lower-priority neighbours (edges.n = along their north edge).
     ...(t.blend
       ? { blend: { priority: t.blend.priority, edges: Object.fromEntries(Object.entries(t.blend.edges).map(([side, c]) => [side, cell(c, `${id} blend ${side}`, true)])) } }

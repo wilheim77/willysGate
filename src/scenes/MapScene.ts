@@ -23,7 +23,7 @@ import {
   tileAt,
 } from '../../engine';
 import { DEFAULT_FX, Juice, tween, wait } from '../fx/juice';
-import { type AssetManifest, type LpcAnimation, type SpriteArt, assetUrl, tilesetKey } from '../assets/manifest';
+import { type AssetManifest, type LpcAnimation, type SpellFx, type SpriteArt, assetUrl, tilesetKey } from '../assets/manifest';
 import { LightingLayer } from '../fx/LightingLayer';
 import type { Theme } from '../game/definition';
 import type { GameStore } from '../game/store';
@@ -86,37 +86,11 @@ type Dir = 'n' | 'w' | 's' | 'e';
 const DIR_ROWS: Dir[] = ['n', 'w', 's', 'e'];
 
 /**
- * How to play a spell's VFX props (`fx_*` in `assets/0x72/extra.png`), per spell id —
- * see docs/ART_CATALOG.md "Efectos de conjuros y habilidades". Spells with no entry here
- * fall back to the plain ring flourish (the previous, generic behaviour).
+ * Which event triggers the 'cast' animation + a `manifest.fx` lookup, and which of its
+ * fields to read, when the game's manifest doesn't say otherwise (`AssetManifest.castEvent`)
+ * — dnd5e's own `spellCast` shape (see rulesets/dnd5e/actions.ts).
  */
-type SpellFx =
-  /** From the caster to the target, rotated to the travel angle; `count` > 1 staggers several (Magic Missile). */
-  | { kind: 'projectile'; fx: string; impactFx?: string; tilesPerSec?: number; count?: number; staggerMs?: number }
-  /** A beam stretched along the caster-target line for a fixed time, then an impact. */
-  | { kind: 'ray'; fx: string; impactFx?: string; durationMs?: number }
-  /** Once, at the target (or the caster if there is none) — a touch spell or a single mote. */
-  | { kind: 'instant'; fx: string }
-  /** One flare per tile of `event.tiles` (computed by the engine/ruleset), staggered by distance from the caster. */
-  | { kind: 'cone'; fx: string; delayPerTileMs?: number }
-  /** A bead flies to the target, then the burst plays there (Fireball). */
-  | { kind: 'burst'; beadFx: string; fx: string; tilesPerSec?: number }
-  /** Centred on the caster (Thunderwave; Turn Undead also flashes `extraFx` on the caster). */
-  | { kind: 'ring'; fx: string; extraFx?: string };
-
-const SPELL_FX: Record<string, SpellFx> = {
-  fire_bolt: { kind: 'projectile', fx: 'fx_firebolt', impactFx: 'fx_firebolt_impact', tilesPerSec: 12 },
-  ray_of_frost: { kind: 'ray', fx: 'fx_ray_of_frost', impactFx: 'fx_frost_impact', durationMs: 400 },
-  shocking_grasp: { kind: 'instant', fx: 'fx_shocking_grasp' },
-  magic_missile: { kind: 'projectile', fx: 'fx_magic_missile', impactFx: 'fx_magic_missile_impact', tilesPerSec: 14, count: 3, staggerMs: 80 },
-  burning_hands: { kind: 'cone', fx: 'fx_burning_hands', delayPerTileMs: 40 },
-  thunderwave: { kind: 'ring', fx: 'fx_thunderwave' },
-  fireball: { kind: 'burst', beadFx: 'fx_fireball_bead', fx: 'fx_fireball', tilesPerSec: 14 },
-  guiding_bolt: { kind: 'projectile', fx: 'fx_guiding_bolt', impactFx: 'fx_guiding_bolt_impact', tilesPerSec: 12 },
-  sacred_flame: { kind: 'instant', fx: 'fx_sacred_flame' },
-  bless: { kind: 'instant', fx: 'fx_bless' },
-  turn_undead: { kind: 'ring', fx: 'fx_turn_undead', extraFx: 'fx_holy_symbol' },
-};
+const DEFAULT_CAST_EVENT = { type: 'spellCast', casterField: 'casterId', idField: 'spellId', targetField: 'target', tilesField: 'tiles' };
 
 /** Stable per-tile variant choice so floors don't look tiled. */
 const variantHash = (x: number, y: number): number => (Math.imul(x, 73856093) ^ Math.imul(y, 19349663)) >>> 0;
@@ -256,19 +230,19 @@ export class MapScene extends Phaser.Scene {
       const depth = this.grid.depth(pos.y, h);
       const key = tilesetKey(art.tileset);
 
-      // Cliff or wall face below raised tiles: one band of `levelH` pixels per level.
-      if (h > 0) {
-        const face = this.add
-          .tileSprite(c.x, c.y + T / 2 + (h * LH) / 2, T, h * LH, key, art.face)
-          .setTint(0xb0b0b0)
-          .setDepth(depth);
-        this.worldObjects.push(face);
-      }
       // One walkable level above walkable ground to the south: that's a stair, not a ledge.
       // Draw treads on its face and no stone lip, so it reads as "you can go up here".
       const south = tileAt(map, { x: pos.x, y: pos.y + 1 });
       const stair = h > 0 && tile.walkable && south?.walkable === true && south.terrain !== 'void' && h - south.height === 1;
-      if (stair) {
+      // Cliff or wall face below raised tiles: one band of `levelH` pixels per level.
+      if (h > 0) {
+        const face = this.add
+          .tileSprite(c.x, c.y + T / 2 + (h * LH) / 2, T, h * LH, key, stair && art.stair !== undefined ? art.stair : art.face)
+          .setTint(0xb0b0b0)
+          .setDepth(depth);
+        this.worldObjects.push(face);
+      }
+      if (stair && art.stair === undefined) {
         const treads = this.add.graphics().setDepth(depth + 0.5);
         const faceTop = c.y + T / 2;
         for (let i = 0; i < 3; i++) {
@@ -348,8 +322,10 @@ export class MapScene extends Phaser.Scene {
       // otherwise a soft contact shadow drawn by code so any art pack gets one.
       const ring = this.factionRing(entity, state);
       const ringArt = ring ? this.manifest.props?.[ring] : undefined;
+      // A touch under full strength and slightly smaller than the tile: at close phone zoom a
+      // full-size, full-opacity ring reads as a hard colour block under every creature on screen.
       const shadow = ringArt
-        ? this.add.sprite(c.x, c.y, imageKey(ringArt.url)).setDepth(depth - 1).play(`prop:${ring}`)
+        ? this.add.sprite(c.x, c.y, imageKey(ringArt.url)).setDepth(depth - 1).setAlpha(0.8).setScale(0.9).play(`prop:${ring}`)
         : this.add.ellipse(c.x, c.y, T * 0.7, T * 0.28, 0x000000, 0.35).setDepth(depth - 1);
       const sprite = this.add.sprite(c.x, c.y, imageKey(art.url)).setDepth(depth).setScale(this.baseScale(entity.spriteId));
       this.sprites.set(entity.id, sprite);
@@ -483,6 +459,10 @@ export class MapScene extends Phaser.Scene {
     const e = event as GameEvent & Record<string, unknown>;
     const sprite = (id: unknown) => (typeof id === 'string' ? this.sprites.get(id) : undefined);
     const T = this.grid.tile;
+    // Which event means "cast an ability" is configurable per game (AssetManifest.castEvent);
+    // dnd5e's spellCast is the default. Not a `case` label since the type isn't a literal here.
+    const castEvent = this.manifest.castEvent ?? DEFAULT_CAST_EVENT;
+    if (event.type === castEvent.type) return this.playCastEvent(e, castEvent, state, T);
     switch (event.type) {
       case 'entityMoved': {
         const ev = event as EntityMovedEvent;
@@ -522,6 +502,9 @@ export class MapScene extends Phaser.Scene {
         if (target && e.crit) {
           this.juice.shake(1.6);
           void this.juice.floatText(target.x, target.y - T * 0.4, this.texts.crit, '#ffd24a', 0.7);
+          // '@critical' in manifest.fx is a hook, not an ability: the game's own crit flourish.
+          const criticalFx = this.manifest.fx?.['@critical'];
+          if (criticalFx) void this.playSpellEffect(criticalFx, attackerId, { entityId: String(e.targetId) });
           await this.juice.hitStop();
         }
         return;
@@ -557,42 +540,6 @@ export class MapScene extends Phaser.Scene {
       case 'reactionUsed': {
         const s = sprite(e.entityId);
         if (s && e.detail) await this.juice.floatText(s.x, s.y - T * 0.3, String(e.detail), '#ffe08a', 0.45);
-        return;
-      }
-      case 'spellCast': {
-        const casterId = String(e.casterId);
-        const spellId = String(e.spellId);
-        const target = (e.target as { entityId?: string; tile?: Vec2 } | undefined) ?? {};
-        const tiles = e.tiles as Vec2[] | undefined;
-        // If the very next queued event is this spell's own attack roll, its 'attack'
-        // animation would be redundant with the 'cast' we're about to play.
-        if (this.queue[0]?.type === 'attackRolled') this.suppressNextAttackAnim = true;
-
-        if (target.tile) {
-          const casterPos = state.entities[casterId]?.position;
-          if (casterPos) this.face(casterId, target.tile.x < casterPos.x ? 'w' : 'e');
-        }
-        const hasCastAnim = this.art(casterId)?.kind === 'frames' && !!this.art(casterId)?.animations.cast;
-        if (hasCastAnim) {
-          void this.playAction(casterId, 'cast');
-          await wait(this, 350); // ~frame 3 of 4 at 8fps: the glow is released, so the fx reads as cast by the hand
-        }
-
-        if (SPELL_FX[spellId]) {
-          await this.playSpellEffect(casterId, spellId, target, tiles);
-        } else {
-          // No entry in SPELL_FX: the original, generic ring-at-caster-then-target flourish.
-          const caster = this.centreOf(casterId);
-          if (caster) await this.juice.ring(caster.x, caster.y - T * 0.4, 0.6, 0x9ad0ff);
-          const at = target.tile
-            ? this.grid.tileCentre(target.tile.x, target.tile.y, tileAt(state.map, target.tile)?.height ?? 0)
-            : target.entityId
-              ? this.centreOf(target.entityId)
-              : null;
-          if (at && caster && (at.x !== caster.x || at.y !== caster.y)) await this.juice.ring(at.x, at.y, target.tile ? 2.5 : 0.8, 0xffa060);
-        }
-
-        if (hasCastAnim) this.idle(casterId, this.facing.get(casterId) ?? 's');
         return;
       }
       case 'downed':
@@ -989,8 +936,20 @@ export class MapScene extends Phaser.Scene {
     const dist = Phaser.Math.Distance.Between(from.x, from.y, to.x, to.y);
     const duration = Math.max(80, (dist / this.grid.tile / tilesPerSec) * 1000);
     s.setRotation(Phaser.Math.Angle.Between(from.x, from.y, to.x, to.y));
-    await tween(this, { targets: s, x: to.x, y: to.y, duration, ease: 'Linear' });
-    s.destroy();
+    // Settles exactly once: Phaser drops a tween silently (no onComplete) if its target is
+    // destroyed mid-flight, so a watchdog backs up the tween's own completion.
+    await new Promise<void>((resolve) => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      s.once(Phaser.GameObjects.Events.DESTROY, finish);
+      this.time.delayedCall(duration + 500, finish);
+      this.tweens.add({ targets: s, x: to.x, y: to.y, duration, ease: 'Linear', onComplete: finish });
+    });
+    if (s.active) s.destroy();
     if (impactFxId) this.playProp(impactFxId, to.x, to.y, 2_050_000);
   }
 
@@ -1022,10 +981,50 @@ export class MapScene extends Phaser.Scene {
     );
   }
 
-  /** Dispatches one entry of `SPELL_FX` by its spell id, resolving once the main visual is done. */
-  private async playSpellEffect(casterId: string, spellId: string, target: { entityId?: string; tile?: Vec2 }, tiles?: Vec2[]): Promise<void> {
-    const cfg = SPELL_FX[spellId];
-    if (!cfg) return;
+  /**
+   * Plays one engine event that casts an ability (dnd5e's `spellCast` by default — see
+   * `AssetManifest.castEvent`): the caster's 'cast' animation (if its art has one), then
+   * its `manifest.fx` entry (if any), falling back to the original generic ring flourish.
+   */
+  private async playCastEvent(e: GameEvent & Record<string, unknown>, cfg: NonNullable<AssetManifest['castEvent']>, state: GameState, T: number): Promise<void> {
+    const casterId = String(e[cfg.casterField]);
+    const abilityId = String(e[cfg.idField]);
+    const target = (e[cfg.targetField] as { entityId?: string; tile?: Vec2 } | undefined) ?? {};
+    const tiles = cfg.tilesField ? (e[cfg.tilesField] as Vec2[] | undefined) : undefined;
+    // If the very next queued event is this ability's own attack roll, its 'attack'
+    // animation would be redundant with the 'cast' we're about to play.
+    if (this.queue[0]?.type === 'attackRolled') this.suppressNextAttackAnim = true;
+
+    if (target.tile) {
+      const casterPos = state.entities[casterId]?.position;
+      if (casterPos) this.face(casterId, target.tile.x < casterPos.x ? 'w' : 'e');
+    }
+    const hasCastAnim = this.art(casterId)?.kind === 'frames' && !!this.art(casterId)?.animations.cast;
+    if (hasCastAnim) {
+      void this.playAction(casterId, 'cast');
+      await wait(this, 350); // ~frame 3 of 4 at 8fps: the glow is released, so the fx reads as cast by the hand
+    }
+
+    const fx = this.manifest.fx?.[abilityId];
+    if (fx) {
+      await this.playSpellEffect(fx, casterId, target, tiles);
+    } else {
+      // No entry in manifest.fx: the original, generic ring-at-caster-then-target flourish.
+      const caster = this.centreOf(casterId);
+      if (caster) await this.juice.ring(caster.x, caster.y - T * 0.4, 0.6, 0x9ad0ff);
+      const at = target.tile
+        ? this.grid.tileCentre(target.tile.x, target.tile.y, tileAt(state.map, target.tile)?.height ?? 0)
+        : target.entityId
+          ? this.centreOf(target.entityId)
+          : null;
+      if (at && caster && (at.x !== caster.x || at.y !== caster.y)) await this.juice.ring(at.x, at.y, target.tile ? 2.5 : 0.8, 0xffa060);
+    }
+
+    if (hasCastAnim) this.idle(casterId, this.facing.get(casterId) ?? 's');
+  }
+
+  /** Plays one `manifest.fx` entry, resolving once its main visual is done. */
+  private async playSpellEffect(cfg: SpellFx, casterId: string, target: { entityId?: string; tile?: Vec2 }, tiles?: Vec2[]): Promise<void> {
     const from = this.centreOf(casterId);
     if (!from) return;
     const state = this.store.state;
@@ -1307,8 +1306,19 @@ export class MapScene extends Phaser.Scene {
     if (!s || !art || art.kind !== 'frames' || !art.animations[name]) return Promise.resolve(false);
     const id = this.spriteIdOf(entityId);
     return new Promise((resolve) => {
+      // Settles exactly once: on the animation's own complete, if the sprite dies mid-play
+      // (a rebuild), or by a watchdog — same reasoning as animateMove's `moveFinish`, since a
+      // dead sprite never fires ANIMATION_COMPLETE and would otherwise stall the whole queue.
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve(true);
+      };
+      s.once(Phaser.Animations.Events.ANIMATION_COMPLETE, finish);
+      s.once(Phaser.GameObjects.Events.DESTROY, finish);
+      this.time.delayedCall(1500, finish);
       s.play(`${id}:${name}`, true);
-      s.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => resolve(true));
     });
   }
 

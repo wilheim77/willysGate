@@ -115,6 +115,22 @@
 - [x] R12 `deriveSeed`, R14 capa `markers` (y puntos de Tiled como zonas 1×1, propiedades del mapa), R19 efecto `modifyStat`.
 - [ ] Peticiones de Willy al motor: causa en eventos (R11), invocaciones (R13), salto (R15), generador (R16), choques (R17), vacío (R18), `modifyStat` (R19), `blocksSight`/`onRoundEnd` (R20).
 
+- [x] Pruebas de juego del 2026-10-18:
+  - Cuelgues arreglados:
+    - El turno pasa solo si quien juega cae en su propio turno (trampa, ataque de oportunidad).
+    - Las animaciones ya no pueden dejar la partida «ocupada» para siempre.
+    - La IA reintenta su turno si está ocupada.
+  - Derrota: si el líder no puede levantarse al acabar el combate, se ofrece «Volver a intentarlo» desde antes del combate.
+  - Cámara: al cambiar de mapa sigue al personaje.
+  - Movimiento: se camina más rápido fuera de combate y los compañeros no bloquean.
+  - Enemigos: al empezar el combate parpadean en rojo con un «!» y la cámara los enfoca. Quien no participa lleva anillo neutro.
+  - Mapas:
+    - Las casillas no transitables se ven más oscuras.
+    - Tejados de teja con alero y remates de muro nuevos.
+    - Los escalones se dibujan como escalera (`stair`).
+  - Efectos: los efectos visuales salen de `manifest.fx`, en los dos juegos.
+  - QA: el driver ya no tapa los turnos atascados del jugador.
+
 ## Planificado para más adelante
 
 - **Efectos y ambiente** (2026-10-17): ver `DESIGN.md` → «Efectos y ambiente».
@@ -132,6 +148,8 @@
 - **Niveles:** se empieza a nivel 3 y se termina a nivel 5-6. Las clases tienen datos del 1 al 6, solo con contenido del SRD 5.1. La subida de nivel interactiva llega en la Fase 5.
 
 ## Decisiones abiertas
+
+- (2026-10-18) Feedback de las pruebas: hay mucha conversación y poco combate. Se propone empezar con un combate tutorial, subir de nivel por PX y añadir combates opcionales. Falta decidir qué hacen los guardias en un combate cercano. Todo está pendiente de aprobación.
 
 - ¿Un cuarto compañero **mago** opcional? Por ahora no.
 
