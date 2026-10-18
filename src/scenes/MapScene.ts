@@ -657,9 +657,18 @@ export class MapScene extends Phaser.Scene {
       case 'combatStarted':
         // Bystanders pulled into the fight change rings.
         this.refreshRings(state);
+        // Show who you're up against before the first turn takes the camera elsewhere.
+        const foes = this.markFoes(state);
+        if (foes.length) {
+          this.cameras.main.stopFollow();
+          const cx = foes.reduce((a, f) => a + f.x, 0) / foes.length;
+          const cy = foes.reduce((a, f) => a + f.y, 0) / foes.length;
+          this.cameras.main.pan(cx, cy, 350, 'Sine.easeInOut');
+        }
         await this.juice.banner(this.texts.combatStart);
         return;
       case 'combatEnded': {
+        this.refreshRings(state);
         const won = e.winner && Object.values(state.entities).some((x) => x.factionId === e.winner && x.controllerId.startsWith('player'));
         await this.juice.banner(won ? this.texts.victory : this.texts.defeat, won ? '#e8d6b0' : '#ff7a6a');
         return;
@@ -846,11 +855,35 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** Which foot ring an entity wears, seen from the side of the character the player controls. */
+  /** Fight starts: every foe flashes red with a "!" over the head, so nobody wonders who's who. */
+  private markFoes(state: GameState): Vec2[] {
+    const me = state.entities[this.hooks.controlledEntityId()];
+    const at: Vec2[] = [];
+    if (!me) return at;
+    for (const id of state.turn.order) {
+      const foe = state.entities[id];
+      const s = this.sprites.get(id);
+      if (!foe || !s || !isHostile(me, foe)) continue;
+      at.push({ x: s.x, y: s.y });
+      s.setTint(0xff5040);
+      this.time.delayedCall(1400, () => s.active && s.clearTint());
+      const mark = this.add
+        .text(s.x, s.y - this.grid.tile * 1.1, '!', { fontFamily: 'VT323, monospace', fontSize: `${Math.round(this.grid.tile * 0.7)}px`, color: '#ff5a40', stroke: '#000', strokeThickness: Math.max(2, Math.round(this.grid.tile / 8)) })
+        .setOrigin(0.5, 1)
+        .setResolution(4)
+        .setDepth(2_000_000);
+      this.tweens.add({ targets: mark, y: mark.y - 10, alpha: 0, delay: 1400, duration: 500, onComplete: () => mark.destroy() });
+    }
+    return at;
+  }
+
   private factionRing(entity: Entity, state: GameState): string | null {
     const me = state.entities[this.hooks.controlledEntityId()];
     if (!me || entity.tags.includes('object')) return null;
     if (entity.controllerId === me.controllerId) return 'marker_party';
     if (entity.tags.includes('noncombatant')) return 'marker_neutral';
+    // Mid-fight, whoever isn't in it is scenery (the guards watching don't look like foes).
+    if (state.turn.mode === 'combat' && !state.turn.order.includes(entity.id)) return 'marker_neutral';
     return isHostile(me, entity) ? 'marker_enemy' : 'marker_ally';
   }
 
