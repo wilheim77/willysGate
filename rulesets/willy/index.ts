@@ -2,12 +2,14 @@ import {
   type ActionOutcome,
   type CheckRequest,
   type ConditionDef,
+  type GameEvent,
   type GameState,
   type GlossaryEntry,
   type ResourceDef,
   type RngCursor,
   type Ruleset,
   type StatDef,
+  applyEffects,
   gridDistance,
   hasCondition,
   hasTag,
@@ -276,6 +278,26 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
   return r.outcome();
 }
 
+/**
+ * Things that look at every command's events (Ruleset.afterCommand): achievements, healing while
+ * walking, the floor clock. Each registers here and they run in order, each seeing the state
+ * left by the one before; their effects and events are all appended to the command's.
+ */
+export const afterCommandHooks: ((ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor) => ActionOutcome)[] = [];
+
+function afterCommand(ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome {
+  const out: ActionOutcome = { effects: [], events: [] };
+  let current = state;
+  for (const hook of afterCommandHooks) {
+    const o = hook(ruleset, current, events, rng);
+    if (!o.effects.length && !o.events.length) continue;
+    current = applyEffects(ruleset, current, o.effects).state;
+    out.effects.push(...o.effects);
+    out.events.push(...o.events);
+  }
+  return out;
+}
+
 export const willy: Ruleset = {
   id: 'willy',
   version: 1,
@@ -324,6 +346,7 @@ export const willy: Ruleset = {
   noticeTrap: (state, id, trap) => noticeTrap(state, id, trap),
   triggerTrap: (state, id, trap, rng) => triggerTrap(willy, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
+  afterCommand: (state, events, rng) => afterCommand(willy, state, events, rng),
 };
 
 setWillyRef(willy);
