@@ -1,5 +1,5 @@
 import { type EntitySheet, type GameState, type SheetSection, hasTag } from '../../engine';
-import { ATTRS, ATTR_LABELS, abilityUses, attr, baseMovement, classOf, defence, level, skillLevel } from './character';
+import { ATTRS, ATTR_LABELS, abilityUses, attr, baseMovement, classOf, defence, level, skillLevel, tierLabel } from './character';
 import { BASIC_SKILLS, CLASSES, SKILL_THRESHOLDS, WILLY } from './data';
 
 /** Willy's character sheet: big visible numbers, skills with their level and uses. */
@@ -29,8 +29,7 @@ export function describeEntity(state: GameState, id: string, labels: { condition
       title: 'Habilidades',
       items: [...abilities, ...BASIC_SKILLS].map((h) => {
         const lvl = skillLevel(e, h.id);
-        const next = SKILL_THRESHOLDS[lvl];
-        const progress = next !== undefined ? ` · ${abilityUses(e, h.id)}/${next} usos` : ' · maestría';
+        const progress = `\n${tierLabel(e, h.id)}`;
         const byLevel = (h as { nombresPorNivel?: Record<string, string> }).nombresPorNivel?.[String(lvl)];
         const unused = (h as { textoSinEstrenar?: string }).textoSinEstrenar;
         const text = unused && !e.tags.includes(`estrenado:${h.id}`) && abilityUses(e, h.id) === 0 ? unused : h.texto;

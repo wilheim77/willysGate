@@ -146,13 +146,22 @@ export function rivalName(p: RivalProfile): string {
   return `${p.nombre} ${p.apodo}`;
 }
 
-/** The rival as a creature: kit numbers scaled by floor (reglas.escalado) and the race's attributes. */
+/**
+ * How a rival grows over the season's ten floors (balance pass, BALANCE.md): health from 55 %
+ * of the kit's on floor 1 to about 190 % on floor 10; to-hit and DEF from one below the kit's;
+ * the damage die up a step every three floors.
+ */
+export function rivalScale(floor: number): { vida: number; ataque: number; def: number; pasos: number } {
+  return { vida: 0.55 + 0.15 * (floor - 1), ataque: -1 + Math.floor((floor - 1) / 2), def: -1 + Math.floor((floor - 1) / 3), pasos: Math.floor((floor - 1) / 3) };
+}
+
+/** The rival as a creature: kit numbers scaled by floor (1-10, rivalScale) and the race's attributes. */
 export function rivalEntity(p: RivalProfile, floor: number, position: Vec2): Entity {
   const kit = generator.kits.find((k) => k.id === p.kit)!;
   const raza = generator.razas.find((r) => r.id === p.raza)!;
-  const bonus = Math.floor((floor - 1) / 2);
-  const steps = Math.floor((floor - 1) / 2);
-  const dano = stepDice(kit.dano, steps);
+  const scale = rivalScale(floor);
+  const bonus = scale.ataque;
+  const dano = stepDice(kit.dano, scale.pasos);
   const attrs = raza.atributos as unknown as Record<string, number>;
   const e = createCreature({
     id: p.id,
@@ -161,8 +170,8 @@ export function rivalEntity(p: RivalProfile, floor: number, position: Vec2): Ent
     factionId: 'rivales',
     position,
     spriteId: `${raza.cuerpoBase}--${p.paleta}`,
-    vida: Math.round(kit.vidaBase * (1 + 0.35 * (floor - 1))),
-    def: kit.def + bonus,
+    vida: Math.round(kit.vidaBase * scale.vida),
+    def: kit.def + scale.def,
     ataque: kit.ataque + bonus,
     dano,
     movimiento: kit.movimiento,
@@ -182,7 +191,7 @@ export function rivalEntity(p: RivalProfile, floor: number, position: Vec2): Ent
   });
   // The race's attributes for checks and saves; DEF stays the kit's (armadura absorbs AGI).
   const agi = attrs.agi ?? 0;
-  return { ...e, stats: { ...e.stats, ...attrs, agi, armadura: kit.def + bonus - 10 - Math.floor(agi / 2) } };
+  return { ...e, stats: { ...e.stats, ...attrs, agi, armadura: kit.def + scale.def - 10 - Math.floor(agi / 2) } };
 }
 
 const DICE_LADDER = ['1d3', '1d4', '1d6', '1d8', '1d10', '1d12'];
@@ -228,7 +237,8 @@ export function legendaryFor(g: Gen, floor: number, used: ReadonlySet<string>): 
 
 /** A legendary as a creature (rivals.json, fixed numbers). */
 export function legendaryEntity(l: (typeof legendaries.legendarios)[number], floor: number, position: Vec2): Entity {
-  const bonus = Math.floor((floor - 1) / 2);
+  const scale = rivalScale(floor);
+  const bonus = scale.ataque;
   const attrs = (l.atributos ?? {}) as unknown as Record<string, number>;
   const e = createCreature({
     id: l.id,
@@ -237,8 +247,8 @@ export function legendaryEntity(l: (typeof legendaries.legendarios)[number], flo
     factionId: 'rivales',
     position,
     spriteId: l.spriteId,
-    vida: Math.round(l.stats.vida * (1 + 0.2 * (floor - 1))),
-    def: l.stats.def + bonus,
+    vida: Math.round(l.stats.vida * (scale.vida + 0.15)),
+    def: l.stats.def + scale.def,
     ataque: l.stats.ataque + bonus,
     dano: l.stats.dano,
     movimiento: l.stats.movimiento,
@@ -246,7 +256,7 @@ export function legendaryEntity(l: (typeof legendaries.legendarios)[number], flo
     tags: ['rival', 'legendario', `raza:${l.raza.id}`, `genero:${l.genero}`, ...(l.rasgos ?? []).map((t) => `rasgo:${t.id}`)],
   });
   const agi = attrs.agi ?? 0;
-  return { ...e, stats: { ...e.stats, ...attrs, agi, armadura: l.stats.def + bonus - 10 - Math.floor(agi / 2) } };
+  return { ...e, stats: { ...e.stats, ...attrs, agi, armadura: l.stats.def + scale.def - 10 - Math.floor(agi / 2) } };
 }
 
 export const RIVAL_RULES = {

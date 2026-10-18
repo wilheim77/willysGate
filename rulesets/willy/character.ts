@@ -54,8 +54,16 @@ export function abilityUses(e: Entity, abilityId: string): number {
   return e.resources[useResource(abilityId)]?.current ?? 0;
 }
 
-function thresholdsFor(e: Entity, abilityId: string): number[] {
+export function thresholdsFor(e: Entity, abilityId: string): number[] {
   return abilityData(classOf(e), abilityId)?.subidaPorUso?.umbrales ?? SKILL_THRESHOLDS;
+}
+
+/** «Nivel 2 · usos 9/18», or «Nivel 5 · Maestría (80 usos)»: for the sheet and the tooltips. */
+export function tierLabel(e: Entity, abilityId: string): string {
+  const lvl = skillLevel(e, abilityId);
+  const uses = abilityUses(e, abilityId);
+  const next = thresholdsFor(e, abilityId)[lvl];
+  return next === undefined ? `Nivel ${lvl} · Maestría (${uses} usos)` : `Nivel ${lvl} · usos ${uses}/${next}`;
 }
 
 /** 1..5 (1..6 for abilities with their own thresholds), from the use counter. */

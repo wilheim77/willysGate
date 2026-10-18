@@ -103,9 +103,9 @@ describe('Willy: environment is the strongest weapon', () => {
     expect(willy.previewAction(s, 'w', 'basic:empujar', { entityId: 'f' }).valid).toBe(false);
   });
 
-  it('Empujar levels up after 4 uses with effect, and then pushes harder', () => {
+  it('Empujar levels up after 8 uses with effect, and then pushes harder', () => {
     let w = W('w', 'butanero', 1, 0);
-    w = { ...w, resources: { ...w.resources, 'uso:empujar': { current: 3, max: 99999 } } };
+    w = { ...w, resources: { ...w.resources, 'uso:empujar': { current: 7, max: 99999 } } };
     const s = game([w, rat('r', 2, 0, { vida: 30 })]);
     const { events, state } = until(s, 'w', 'basic:empujar', { entityId: 'r' }, (st) => st.entities.r!.position.x === 3);
     expect(events).toContainEqual(expect.objectContaining({ type: 'skillLevelUp', habilidad: 'empujar', nivel: 2 }));
@@ -182,10 +182,10 @@ describe('Willy: rules maths (RULESET.md)', () => {
     chances.forEach((c, i) => expect(c).toBeCloseTo([0.85, 0.7, 0.55, 0.35, 0.1][i]!));
   });
 
-  it('skills level up at exactly 4, 12, 25 and 45 uses', () => {
+  it('skills level up at exactly 8, 24, 48 and 80 uses', () => {
     const w = W('w', 'butanero', 0, 0);
     const at = (uses: number) => skillLevel({ ...w, resources: { ...w.resources, 'uso:empujar': { current: uses, max: 99999 } } }, 'empujar');
-    expect([0, 3, 4, 11, 12, 24, 25, 44, 45, 99].map(at)).toEqual([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
+    expect([0, 7, 8, 23, 24, 47, 48, 79, 80, 199].map(at)).toEqual([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
   });
 
   it('attacks: a natural 20 is a critical hit and a natural 1 always misses (forced RNG)', () => {

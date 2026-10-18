@@ -541,19 +541,19 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       let e: Entity;
       if (back) {
         const legend = back.legendario ? legendaryById(back.legendario) : undefined;
-        e = legend ? legendaryEntity(legend, spec.plantaId, at) : rivalEntity(profiles.get(back.id)!, spec.plantaId, at);
+        e = legend ? legendaryEntity(legend, n, at) : rivalEntity(profiles.get(back.id)!, n, at);
         e = { ...e, tags: [...e.tags, `vuelta:${back.desenlace}`] };
         rival = { ...back, plantas: [...back.plantas, n] };
       } else {
         const usedLegendaries = new Set(earlier.map((r) => r.legendario).filter((x): x is string => !!x));
         const legendary = g.chance(RIVAL_RULES.legendaryChance) ? legendaryFor(g, spec.plantaId, usedLegendaries) : undefined;
         if (legendary) {
-          e = legendaryEntity(legendary, spec.plantaId, at);
+          e = legendaryEntity(legendary, n, at);
           rival = { id: e.id, planta: n, ranura: i, legendario: legendary.id, plantas: [n] };
         } else {
           const taken = new Set([...profiles.values()].flatMap(rivalKeys));
           const profile = generateRival(runSeed, n, i, taken);
-          e = rivalEntity(profile, spec.plantaId, at);
+          e = rivalEntity(profile, n, at);
           rival = { id: e.id, planta: n, ranura: i, plantas: [n] };
         }
       }

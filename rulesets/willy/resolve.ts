@@ -20,8 +20,8 @@ import {
   tileAt,
 } from '../../engine';
 import { type RollMode, d20Check, resolveRollMode } from '../common/d20';
-import { ATTR_LABELS, attackAttr, attr, defence, hasTrait, isBoss, levelAfter, skillLevel, useResource } from './character';
-import type { Attr } from './data';
+import { ATTR_LABELS, attackAttr, attr, classOf, defence, hasTrait, isBoss, levelAfter, skillLevel, useResource } from './character';
+import { type Attr, abilityData } from './data';
 import { type Dice, averageDice, rollDice } from './dice';
 
 /**
@@ -370,7 +370,7 @@ export function countUse(r: Resolver, entityId: string, abilityId: string): void
   r.apply({ type: 'modifyResource', entityId, resource: res, delta: 1 });
   const after = levelAfter(e, abilityId, (e.resources[res]?.current ?? 0) + 1);
   r.emit({ type: 'skillUsed', entityId, habilidad: abilityId, nivel: before } as WillyEvent);
-  if (after > before) r.emit({ type: 'skillLevelUp', entityId, habilidad: abilityId, nivel: after } as WillyEvent);
+  if (after > before) r.emit({ type: 'skillLevelUp', entityId, habilidad: abilityId, nombre: abilityData(classOf(e), abilityId)?.nombre ?? abilityId, nivel: after, maestria: after >= 5 } as WillyEvent);
 }
 
 // --- Pushes, collisions, the void --------------------------------------------------------------

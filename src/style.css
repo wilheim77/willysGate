@@ -484,6 +484,19 @@ body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h,
 }
 #narrator::before { content: '🎙 '; }
 
+/* --- Announcements (GameDefinition.announce) --- */
+#announce[hidden] { display: none; }
+#announce {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 140px; z-index: 5; padding: 6px 14px;
+  background: rgba(20, 12, 30, 0.94); border: 2px solid var(--accent, #ff7a1a); box-shadow: 3px 3px 0 #000;
+  color: var(--text, #fff4e0); font-size: 22px; cursor: pointer; text-align: center;
+}
+#announce.big {
+  top: 38%; bottom: auto; font-size: 42px; padding: 14px 28px; letter-spacing: 2px; color: #ffd27a;
+  border-width: 4px; animation: announce-pop 0.35s ease-out;
+}
+@keyframes announce-pop { from { transform: translateX(-50%) scale(0.6); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
+
 /* --- Countdown (state.systems.clock) --- */
 #clock-hud[hidden] { display: none; }
 #clock-hud {
