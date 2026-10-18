@@ -11,7 +11,7 @@
       "lineas": [
         {
           "id": "ep-1a",
-          "texto": "Planta 1: Castro Sumergido. Tu pueblo, pero bajo tierra y con goteras. Bueno, como siempre, pero bajo tierra.",
+          "texto": "Planta {planta}: Castro Sumergido. Tu pueblo, pero bajo tierra y con goteras. Bueno, como siempre, pero bajo tierra.",
           "si": {
             "planta": 1
           }
@@ -38,7 +38,7 @@
         },
         {
           "id": "ep-2a",
-          "texto": "Planta 2: el Hipermercado Eterno. Abierto veinticuatro horas, trescientos sesenta y cinco días, desde hace once mil años. Las colas de la caja también.",
+          "texto": "Planta {planta}: el Hipermercado Eterno. Abierto veinticuatro horas, trescientos sesenta y cinco días, desde hace once mil años. Las colas de la caja también.",
           "si": {
             "planta": 2
           }
@@ -55,7 +55,7 @@
         },
         {
           "id": "ep-3a",
-          "texto": "Planta 3: la Verbena Sin Fin. Farolillos, orquesta, olor a churros y a pólvora. Las fiestas de tu pueblo, pero para siempre. Suena bonito hasta que lo piensas.",
+          "texto": "Planta {planta}: la Verbena Sin Fin. Farolillos, orquesta, olor a churros y a pólvora. Las fiestas de tu pueblo, pero para siempre. Suena bonito hasta que lo piensas.",
           "si": {
             "planta": 3
           }
@@ -72,7 +72,7 @@
         },
         {
           "id": "ep-4a",
-          "texto": "Planta 4: el Balneario Glaciar. Termas, saunas y piscinas heladas. Trae toalla. Y ganas de vivir.",
+          "texto": "Planta {planta}: el Balneario Glaciar. Termas, saunas y piscinas heladas. Trae toalla. Y ganas de vivir.",
           "si": {
             "planta": 4
           }
@@ -89,7 +89,7 @@
         },
         {
           "id": "ep-5a",
-          "texto": "Planta 5: el Plató. Bienvenido a la casa de ¡Mazmorreros! Mira bien: todo es de cartón piedra. Menos los monstruos.",
+          "texto": "Planta {planta}: el Plató. Bienvenido a la casa de ¡Mazmorreros! Mira bien: todo es de cartón piedra. Menos los monstruos.",
           "si": {
             "planta": 5
           }
@@ -111,6 +111,41 @@
             "llegada": "derrumbe"
           },
           "prioridadExtra": 2
+        },
+        {
+          "id": "ep-1a2",
+          "si": {
+            "planta": 2
+          },
+          "texto": "Planta {planta}: sigue siendo Castro Sumergido, pero más adentro. La lonja huele peor cuanto más se baja. No preguntes por qué."
+        },
+        {
+          "id": "ep-2a2",
+          "si": {
+            "planta": 4
+          },
+          "texto": "Planta {planta}: la trastienda del Hipermercado Eterno. Aquí es donde van las ofertas que nadie quiso. Y ahora tú."
+        },
+        {
+          "id": "ep-3a2",
+          "si": {
+            "planta": 6
+          },
+          "texto": "Planta {planta}: la plaza mayor de la Verbena. La orquesta nunca para. Ni cuando hay un derrumbe. Sobre todo cuando hay un derrumbe."
+        },
+        {
+          "id": "ep-4a2",
+          "si": {
+            "planta": 8
+          },
+          "texto": "Planta {planta}: las termas del Balneario. El agua está helada y dicen que es reconfortante. Dicen muchas cosas."
+        },
+        {
+          "id": "ep-5a2",
+          "si": {
+            "planta": 10
+          },
+          "texto": "Planta {planta}: el plató principal. Las cámaras ya están encendidas. Esto es en directo. Sonríe, o no, da igual: lo emiten de todas formas."
         }
       ]
     },
@@ -465,7 +500,7 @@
           "texto": "Otra concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
           "si": {
             "primeraVez": true,
-            "rival.genero": "f"
+            "rivalGenero": "f"
           }
         },
         {
@@ -561,7 +596,7 @@
           "texto": "Otro concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
           "si": {
             "primeraVez": true,
-            "rival.genero": "m"
+            "rivalGenero": "m"
           }
         },
         {
@@ -576,20 +611,20 @@
           "texto": "Una {rivalRaza} te corta el paso. Producción dice que es legal. Producción dice muchas cosas.",
           "si": {
             "primeraVez": true,
-            "rival.raza": {
+            "rivalGenero": "f",
+            "rivalRazaId": {
               "en": [
                 "semigaviota",
                 "fantasma-en-practicas"
               ]
-            },
-            "rival.genero": "f"
+            }
           }
         },
         {
           "id": "rg-14",
           "texto": "{rivalNombre} ha cambiado su rol de rival a aliad{rival:o}. En la sala de guionistas se oye un «¿y ahora qué hacemos?».",
           "si": {
-            "evento": "pacto"
+            "comoAliado": true
           }
         }
       ],

@@ -1,4 +1,4 @@
-import { type CheckResult, type DialogueCheckEvent, type GameEvent, type GameState, dialogueChoices, dialogueOf, isEvent, resolveNext } from '../../engine';
+import { type CheckResult, type DialogueCheckEvent, type GameEvent, type GameState, dialogueChoices, dialogueOf, isEvent, resolveNext, tagValue } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { GameDefinition } from '../game/definition';
 import type { GameStore } from '../game/store';
@@ -93,8 +93,12 @@ export class DialogueBox {
 
     if (this.lastRoll) panel.append(this.rollLine(this.lastRoll));
 
+    // "$partner" resolves to whoever Willy is talking to, for conversations reused across many
+    // entities (a templated encounter): procedurally generated NPCs have no fixed id to write
+    // into the tree ahead of time.
+    const speakerId = node.speaker === '$partner' ? d.partnerId : node.speaker;
     // Someone speaking from off this map (the baron at the inn): the cast says who they are.
-    const speaker = node.speaker ? (state.entities[node.speaker] ?? this.game.cast?.[node.speaker]) : undefined;
+    const speaker = speakerId ? (state.entities[speakerId] ?? this.game.cast?.[speakerId]) : undefined;
     const line = document.createElement('div');
     line.className = speaker ? 'line' : 'line narration';
     if (speaker) {
@@ -104,7 +108,7 @@ export class DialogueBox {
       line.append(who);
     }
     const text = document.createElement('p');
-    text.textContent = node.text;
+    text.textContent = this.resolveText(state, d.partnerId, node.text);
     line.append(text);
     panel.append(line);
 
@@ -131,6 +135,19 @@ export class DialogueBox {
     panel.append(list);
     this.root.replaceChildren(panel);
     this.root.hidden = false;
+  }
+
+  /**
+   * A node's text is normally shown as written; "$partnerTag:<prefix>" instead reads that tag
+   * off whoever the party is talking to (e.g. "$partnerTag:dlg-amenaza" for a generated rival's
+   * own, already-rendered line — content/willy/gen/rivals.ts sets those tags when the rival is
+   * created, so the same templated tree reads differently for every one of them).
+   */
+  private resolveText(state: GameState, partnerId: string | undefined, text: string): string {
+    if (!text.startsWith('$partnerTag:')) return text;
+    const prefix = text.slice('$partnerTag:'.length);
+    const partner = partnerId ? state.entities[partnerId] : undefined;
+    return (partner && tagValue(partner, prefix)) ?? text;
   }
 
   private rollLine(last: { actor: string; result: CheckResult }): HTMLElement {

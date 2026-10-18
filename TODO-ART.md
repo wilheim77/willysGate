@@ -41,8 +41,9 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Combate de *Willy* | willy | `attack`/`cast`/`hurt` derivadas para clases, compañeros, Planta 1 y jefes; seis efectos nuevos y tabla `fx` en el manifiesto; falta que el cliente lea `manifest.fx` |
 | Legibilidad de los mapas | intereses, willy | Tejados de teja con alero, muros macizos con trama, caras de escalón (`stair`) en las dos partidas, marcadores de salida |
 | Coberturas y bestias de combate | intereses | 14 props de cobertura, terrenos `low_wall` y `balcony`, bestias `perro`, `lobo` y `rata`; falta darlos de alta en `ART_PROPS` (world.ts) y colocarlos |
-| Inventario y cajas de *Willy* | willy | Iconos de los 96 objetos, medallas por categoría de logro, marcos de rareza y cajas de apertura de 64×64; faltan los ~10 objetos nuevos que añada la meta |
-| Enemigos nuevos de *Willy* | willy | 21 enemigos + élites dorados y `aura-elite` hechos; **en pausa:** FX de habilidades y derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`) |
+| Inventario y cajas de *Willy* | willy | Iconos de los 108 objetos (96 + los 12 nuevos de la meta: gaseosas, chatarra de patrocinador, granadas...), medallas por categoría de logro, marcos de rareza y cajas de apertura de 64×64 |
+| Enemigos nuevos de *Willy* | willy | 21 enemigos + élites dorados y `aura-elite`, efectos de sus 18 habilidades (tabla `fx`) y arte del derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`) hechos |
+| Élites de los enemigos antiguos de *Willy* | willy | Recolor dorado `<id>--elite` para los 20 enemigos de las 5 plantas que no venían de la tanda de 21 nuevos; `mimico` y los jefes de planta se quedan fuera (el mímico ya es un tipo élite y nunca sale sorteado como élite; los jefes son únicos) |
 | Cadáveres | intereses | 7 tipos derivados del idle y mapa `corpses` en el manifiesto; falta que el cliente los use |
 | Pulido del HUD | intereses | Barra superior en una fila, fichas de iniciativa con retrato, barra de acciones en dos filas, botones de 44 px, paneles de hierro biselado |
 | Objetos interactivos (Fase 4) | intereses | `chest`, `chest_trapped`, `lever`, terrenos `door_closed`/`door_open`, props `trap_armed`/`trap_disarmed` |

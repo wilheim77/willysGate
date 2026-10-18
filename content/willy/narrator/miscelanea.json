@@ -1270,6 +1270,51 @@
           "texto": "Él sabrá."
         }
       ]
+    },
+    {
+      "id": "preguntaTrampa",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": "pregunta-trampa"
+      },
+      "probabilidad": 0.6,
+      "prioridad": 2,
+      "memoria": 6,
+      "lineas": [
+        { "id": "pt-01", "texto": "Te hace una pregunta. No tiene respuesta correcta. Es trampa. Está en el nombre." },
+        { "id": "pt-02", "texto": "«¿Cuánto es ocho más ocho?» No importa lo que digas: ya has fallado." },
+        { "id": "pt-03", "texto": "Pregunta con truco. Willy duda. Dudar, aquí, hace daño." }
+      ]
+    },
+    {
+      "id": "linea",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": "linea"
+      },
+      "probabilidad": 1,
+      "prioridad": 2,
+      "memoria": 6,
+      "lineas": [
+        { "id": "li-01", "texto": "¡LÍNEA! Grita la abuela del bingo. No hay bingo. No hay cartón. Pero grita igual, y duele igual." },
+        { "id": "li-02", "texto": "¡LÍNEA! El grito paraliza más que el ataque. Esa mujer tiene un don." },
+        { "id": "li-03", "texto": "Otra «¡LÍNEA!» a pleno pulmón. En algún asilo, están orgullosos." }
+      ]
+    },
+    {
+      "id": "llamarFigurantes",
+      "evento": "skillUsed",
+      "donde": {
+        "habilidad": "llamar-figurantes"
+      },
+      "probabilidad": 0.7,
+      "prioridad": 2,
+      "memoria": 6,
+      "lineas": [
+        { "id": "lf-01", "texto": "Llama a los figurantes. Entran por los dos lados, con cara de que les pagan por sesión, no por hora." },
+        { "id": "lf-02", "texto": "Refuerzos de producción. Vestuario les ha dado un casco y un «buena suerte»." },
+        { "id": "lf-03", "texto": "Más figurantes. Alguien del sindicato de extras va a tener que hablar con Dirección." }
+      ]
     }
   ]
 }

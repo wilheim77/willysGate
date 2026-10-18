@@ -29,6 +29,7 @@ import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
+import { rivalAfterCommand } from './rivals';
 import { describeEntity } from './sheet';
 import { clockAfterCommand } from './clock';
 import { showAfterCommand, showCommands, showLateAfterCommand } from './show';
@@ -331,6 +332,8 @@ registerAfterCommand(itemsHook, 20);
 // The floor clock and the collapse (clock.ts), before the show reacts to the turn.
 registerAfterCommand(clockAfterCommand, 40);
 registerAfterCommand(showAfterCommand, 50);
+// Rival outcomes and their Narrador moments (rivals.ts).
+registerAfterCommand(rivalAfterCommand, 55);
 registerAfterCommand(regenHook, 60);
 registerAfterCommand(achievementsHook, 100);
 registerAfterCommand(showLateAfterCommand, 110);

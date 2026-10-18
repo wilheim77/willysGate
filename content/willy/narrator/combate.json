@@ -59,7 +59,9 @@
         { "id": "ee-30", "texto": "Era un mímico. Ahora es un cofre. Un cofre de verdad. Qué ironía tan triste.", "si": { "objetivo.plantilla": "mimico" } },
         { "id": "ee-31", "texto": "Eliminad{enemigo:o} mientras bailaba. Se fue con ritmo, que es lo que importa.", "si": { "objetivo.condiciones": { "tiene": "bailando" } } },
         { "id": "ee-33", "texto": "Eliminad{enemigo:o}. Desde el pasillo, Gorka lo ha apuntado en una hoja de cálculo. Columna «Amenazas». Fila «Willy».", "si": { "planta": { "min": 2 } } },
-        { "id": "ee-32", "texto": "Eliminad{enemigo:o} con un pan. Del día anterior. Mamá Clementina no sabe si aplaudir o llorar.", "si": { "objeto": "barra-de-pan" } }
+        { "id": "ee-32", "texto": "Eliminad{enemigo:o} con un pan. Del día anterior. Mamá Clementina no sabe si aplaudir o llorar.", "si": { "objeto": "barra-de-pan" } },
+        { "id": "ee-34", "texto": "{enemigo:el:Mayus} ha decidido que, si él no gana, no gana nadie. Ha explotado. Ganaba igualmente nadie.", "si": { "causa": "autodestruccion" } },
+        { "id": "ee-35", "texto": "Autodestrucción. Es una forma de retirarse del concurso que no recomienda el seguro de producción.", "si": { "causa": "autodestruccion" } }
       ]
     },
     {
