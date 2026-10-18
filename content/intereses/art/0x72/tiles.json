@@ -931,6 +931,46 @@
           }
         }
       }
+    },
+    "low_wall": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "low_wall_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "low_wall_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "low_wall_face"
+      }
+    },
+    "balcony": {
+      "top": [
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "balcony_1"
+        },
+        {
+          "atlas": "generated/intereses-0x72-extra.png",
+          "sprite": "balcony_2"
+        }
+      ],
+      "face": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "balcony_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_wood"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "balcony_rail"
+      }
     }
   }
 }
