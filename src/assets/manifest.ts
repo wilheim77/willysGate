@@ -80,6 +80,12 @@ export interface AssetManifest {
   terrain: Record<string, TerrainArt>;
   sprites: Record<string, SpriteArt>;
   props?: Record<string, PropArt>;
+  /**
+   * Which prop (into `props`, anchor 'floor') to show in place of a dead creature's sprite,
+   * keyed by spriteId, with a 'default' fallback. Missing entirely: the client falls back
+   * to a generic code-drawn corpse (lying flat, darkened, blood decal) instead.
+   */
+  corpses?: Record<string, string>;
   /** Animated overlays for surfaces (oil, fire, ice...), drawn over the floor. */
   surfaces?: Record<string, { url: string; frames: Rect[]; fps: number; loop: boolean }>;
   /** Hand-made HUD portraits by spriteId; otherwise the HUD crops the sprite's idle frame. */
