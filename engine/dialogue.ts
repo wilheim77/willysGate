@@ -57,6 +57,11 @@ export interface DialogueChoice {
   once?: boolean;
   /** Stable id for "once" bookkeeping, so reordering choices doesn't break saved games. */
   id?: string;
+  /**
+   * Free-form flavour labels for other systems to react to (e.g. a sponsor who likes kindness
+   * reading "amable"/"grosero" off the dialogueChoice event). The engine never looks at them.
+   */
+  tags?: string[];
 }
 
 export type DialogueWhen =
@@ -86,6 +91,8 @@ export interface DialogueEvent extends GameEvent {
   index?: number;
   actorId?: string;
   partnerId?: string;
+  /** dialogueChoice only: the picked choice's own DialogueChoice.tags, if it has any. */
+  tags?: string[];
 }
 
 /** A visible roll in conversation ("[Persuasión] CD 14"). */
@@ -382,7 +389,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
     const view = dialogueChoices(ruleset, state, tree).find((c) => c.index === cmd.index);
     if (!view || !view.available) return fail('invalid_target', 'That choice is not available');
     const choice = node.choices[cmd.index]!;
-    events.push({ type: 'dialogueChoice', treeId: d.treeId, nodeId: d.nodeId, index: cmd.index } as DialogueEvent);
+    events.push({ type: 'dialogueChoice', treeId: d.treeId, nodeId: d.nodeId, index: cmd.index, ...(choice.tags ? { tags: choice.tags } : {}) } as DialogueEvent);
 
     let next = state;
     let taken = d.taken;

@@ -69,6 +69,9 @@ export function rivalAfterCommand(_ruleset: Ruleset, state: GameState, events: G
       byId.set(partnerId, { ...r, desenlace: outcome });
       changed = true;
       out.events.push(rivalFields(state, partnerId, { momento: outcome }));
+      // A kind option with a rival (pactar, dejar ir) is also npcHelped — a sponsor like
+      // Mamá Clementina can react to it without knowing anything about rivals specifically.
+      out.events.push({ type: 'npcHelped', entityId: partnerId, metodo: outcome } as unknown as GameEvent);
     }
   }
 
