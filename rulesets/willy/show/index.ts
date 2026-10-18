@@ -45,7 +45,7 @@ const LATE_EVENTS = new Set(['achievementUnlocked', 'npcHelped']);
 const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
   'meterChanged', 'shareCero', 'enAntena', 'turnEnded', 'audienceVote',
-  'bossPhase', 'bossLine', 'bossQuestion', 'bossInDark', 'bossUnderSpotlight', 'trapdoorOpened', 'spotlightOn',
+  'bossPhase', 'bossLine', 'bossQuestion', 'bossInDark', 'bossUnderSpotlight', 'trapdoorOpened', 'spotlightOn', 'rigHung', 'rigDropped',
   'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
