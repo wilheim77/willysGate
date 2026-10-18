@@ -20,8 +20,8 @@ import {
   tileAt,
 } from '../../engine';
 import { type RollMode, d20Check, resolveRollMode } from '../common/d20';
-import { ATTR_LABELS, attackAttr, attr, defence, hasTrait, isBoss, levelAfter, skillLevel, useResource } from './character';
-import type { Attr } from './data';
+import { ATTR_LABELS, attackAttr, attr, classOf, defence, hasTrait, isBoss, levelAfter, skillLevel, useResource } from './character';
+import { type Attr, abilityData } from './data';
 import { type Dice, averageDice, rollDice } from './dice';
 
 /**
@@ -269,8 +269,9 @@ export function adjustDamage(target: Entity, amount: number, element: string): n
 export const damageHooks: ((r: Resolver, targetId: string, amount: number, element: string) => void)[] = [];
 
 export function dealDamage(r: Resolver, targetId: string, raw: number, element: string, sourceId?: string, cause = 'golpe', crit = false): number {
-  const target = r.entity(targetId);
-  if (!standing(target)) return 0;
+  // Someone may have left play earlier in the same action (a summon whose owner fell, a collapsed room).
+  const target = r.state.entities[targetId];
+  if (!target || !standing(target)) return 0;
   const amount = adjustDamage(target, raw, element);
   if (amount <= 0) return 0;
   const hp = target.resources.vida?.current ?? 0;
@@ -375,7 +376,7 @@ export function countUse(r: Resolver, entityId: string, abilityId: string): void
   r.apply({ type: 'modifyResource', entityId, resource: res, delta: 1 });
   const after = levelAfter(e, abilityId, (e.resources[res]?.current ?? 0) + 1);
   r.emit({ type: 'skillUsed', entityId, habilidad: abilityId, nivel: before } as WillyEvent);
-  if (after > before) r.emit({ type: 'skillLevelUp', entityId, habilidad: abilityId, nivel: after } as WillyEvent);
+  if (after > before) r.emit({ type: 'skillLevelUp', entityId, habilidad: abilityId, nombre: abilityData(classOf(e), abilityId)?.nombre ?? abilityId, nivel: after, maestria: after >= 5 } as WillyEvent);
 }
 
 // --- Pushes, collisions, the void --------------------------------------------------------------

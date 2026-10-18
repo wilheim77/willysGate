@@ -220,10 +220,12 @@ Cada habilidad activa (y algunas pasivas) tiene **nivel de habilidad 1-5**, inde
 | Nivel de habilidad | Usos con efecto acumulados | Qué gana |
 |---|---|---|
 | 1 | 0 | Base |
-| 2 | 4 | +números (daño, alcance o duración) |
-| 3 | 12 | **Añadido** (un efecto extra que cambia cómo se usa) |
-| 4 | 25 | +números |
-| 5 | 45 | **Maestría** (efecto vistoso; el Narrador lo anuncia) |
+| 2 | 8 | +números (daño, alcance o duración) |
+| 3 | 24 | **Añadido** (un efecto extra que cambia cómo se usa) |
+| 4 | 48 | +números |
+| 5 | 80 | **Maestría** (efecto vistoso; el Narrador lo anuncia) |
+
+Umbrales ajustados para la temporada de 10 pisos (2026-10-18): quien reparte el juego entre sus tres habilidades principales llega a la maestría hacia el jefe final (`BALANCE.md` → «Curva de habilidades»). La ficha y la ayuda de cada habilidad muestran «Nivel N · usos X/Y». Al subir de nivel, el evento `skillLevelUp { entityId, habilidad, nombre, nivel, maestria }` da frase del Narrador y aviso en pantalla (grande en la maestría).
 
 - «Uso con efecto» significa que hizo algo: un Empujón que movió a alguien, un Lanzar que acertó. Spamear contra la pared no cuenta.
 - Las **básicas** también suben: **Empujar** (nivel 3: empuja 2 casillas; 5: empuja en línea a dos enemigos), **Lanzar** (3: alcance +2; 5: rebota a un segundo objetivo), **Esquivar** (pasiva, sube cuando un enemigo falla: +1 DEF por nivel), **Trepar** (3: subir 2 niveles; 5: sin coste extra) y **Comer en combate** (3: comer es gratis una vez por turno; 5: la comida cura el doble). Datos en `classes.json` → `habilidadesBasicas`.
@@ -254,11 +256,11 @@ Cada habilidad activa (y algunas pasivas) tiene **nivel de habilidad 1-5**, inde
 | Nivel | Usos | Nombre | Coste | Efecto |
 |---|---|---|---|---|
 | 1 | 0 | 5G | 1 acción | Nada |
-| 2 | 3 | 6G | 1 acción, 1 energía | «Se le cuelga el vídeo»: un enemigo a 4 casillas, Mareado 1 turno |
-| 3 | 7 | 7G | 1 acción, 1 energía | «Latencia cero»: Willy y sus autómatas +1 movimiento y +1 a acertar 2 turnos |
-| 4 | 12 | 8G | 1 acción, 2 energía | «Actualización obligatoria»: enemigos en radio 3 Aturdidos 1 turno (jefes: −1 acción) |
-| 5 | 18 | 9G | 2 acciones, 3 energía | «Cobertura interplanetaria»: toda la sala, 2d6 de rayo y Electrocutados; autómatas a tope de vida |
-| 6 | 25 | 10G | 2 acciones, 4 energía, una vez por planta | «Señal absoluta»: enemigos no jefes Electrocutados y Bailando 3 turnos; jefes −25 % de vida máxima; un patrocinador al azar se hace fan; +60 s de reloj; el Narrador pierde la conexión una frase |
+| 2 | 6 | 6G | 1 acción, 1 energía | «Se le cuelga el vídeo»: un enemigo a 4 casillas, Mareado 1 turno |
+| 3 | 16 | 7G | 1 acción, 1 energía | «Latencia cero»: Willy y sus autómatas +1 movimiento y +1 a acertar 2 turnos |
+| 4 | 30 | 8G | 1 acción, 2 energía | «Actualización obligatoria»: enemigos en radio 3 Aturdidos 1 turno (jefes: −1 acción) |
+| 5 | 50 | 9G | 2 acciones, 3 energía | «Cobertura interplanetaria»: toda la sala, 2d6 de rayo y Electrocutados; autómatas a tope de vida |
+| 6 | 75 | 10G | 2 acciones, 4 energía, una vez por planta | «Señal absoluta»: enemigos no jefes Electrocutados y Bailando 3 turnos; jefes −25 % de vida máxima; un patrocinador al azar se hace fan; +60 s de reloj; el Narrador pierde la conexión una frase |
 
 Con un uso por turno, 6G llega en el primer combate largo, 8G hacia la Planta 2 y 10G hacia la Planta 4 si se usa a menudo. Hay un logro por nivel (de «¿Y esto qué hace?» a «Cobertura total: 10G»).
 
@@ -390,4 +392,4 @@ Las 9 clases están completas, con invocaciones y barreras (`summons.ts`, sobre 
 ### Lo que sigue esperando al motor
 
 
-Tests: `tests/rulesets/willy-core.test.ts`, `willy-classes.test.ts`, `willy-classes2.test.ts`, `willy-summons.test.ts` y `willy-review.test.ts` (este recorre todas las habilidades de todas las clases en los niveles 1, 3, 6 y 9) (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 4/12/25/45 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).
+Tests: `tests/rulesets/willy-core.test.ts`, `willy-classes.test.ts`, `willy-classes2.test.ts`, `willy-summons.test.ts` y `willy-review.test.ts` (este recorre todas las habilidades de todas las clases en los niveles 1, 3, 6 y 9) (números de nivel 1, tabla de %, críticos y pifias con RNG forzado, determinismo, subidas de habilidad en 8/24/48/80 usos, empujones, vacío, caídas, superficies y cada habilidad implementada).

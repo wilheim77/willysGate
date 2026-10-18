@@ -22,7 +22,7 @@ import {
   tileAt,
   trapAt,
 } from '../../engine';
-import { classOf, damageBonus, hasTrait, isBig, isBoss, level, skillLevel } from './character';
+import { classOf, damageBonus, hasTrait, isBig, isBoss, level, skillLevel, tierLabel } from './character';
 import { type AbilityData, CLASSES, abilityData } from './data';
 import { type Dice, averageDice, formatDice, parseDice, rollDice } from './dice';
 import { d20Check } from '../common/d20';
@@ -888,15 +888,47 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   if (aimed && aimed.id !== actorId && isHostile(aimed, actor) && hasCondition(aimed, 'escondido')) return invalid('No lo ves: está escondido.');
   if (aimed && aimed.id !== actorId && hasCondition(aimed, 'encajado')) return invalid('Está dentro de una caja invisible: no se le puede tocar.');
   if (hasCondition(actor, 'silenciado') && actionId.startsWith('hab:')) return invalid('Silencio administrativo: no puedes usar habilidades.');
-  return h.preview(state, actor, target);
+  const p = h.preview(state, actor, target);
+  return p.valid && !p.expectedDamage && !p.expectedHealing && p.utility === undefined ? { ...p, utility: utilityOf(state, actor, h, target, p) * (p.chance ?? 1) } : p;
+}
+
+/** Damage a foe deals per turn, roughly: its weapon's average times its actions, at a 60 % hit rate. */
+function threat(e: Entity): number {
+  const weapon = e.tags.find((t) => t.startsWith('arma:'))?.slice(5) ?? '1d4';
+  return averageDice(parseDice(weapon)) * Math.max(1, e.resources.acciones?.max ?? 1) * 0.6;
+}
+
+/**
+ * For the AI (ActionPreview.utility): what a control, buff or summon is worth in health points.
+ * Control: the threat of the foes it reaches (a stunned or entangled foe doesn't hit); a buff or
+ * a song for one's own side, a few points per ally reached; a summon, a body on the field.
+ */
+function utilityOf(state: GameState, actor: Entity, h: Handler, target: ActionTarget, p: ActionPreview): number {
+  const tiles = p.affectedTiles;
+  const aimed = targetEntity(state, target);
+  const inArea = (pred: (e: Entity) => boolean) =>
+    tiles ? Object.values(state.entities).filter((e) => isCreature(e) && standing(e) && pred(e) && tiles.some((t) => t.x === e.position.x && t.y === e.position.y)) : [];
+  if (h.tags.includes('summon')) return 6;
+  if (h.tags.includes('control')) {
+    const foes = tiles ? inArea((e) => isHostile(e, actor)) : aimed && isHostile(aimed, actor) ? [aimed] : hostilesAround(state, actor, actor.position, 2);
+    return foes.reduce((sum, e) => sum + threat(e), 0);
+  }
+  if (h.tags.includes('buff') || h.tags.includes('song') || h.tags.includes('audience')) {
+    // Only worth it in a fight with foes about.
+    if (!Object.values(state.entities).some((e) => isCreature(e) && standing(e) && isHostile(e, actor))) return 0;
+    const allies = tiles ? inArea((e) => !isHostile(e, actor)).length : 1;
+    return 2.5 * Math.max(1, allies);
+  }
+  if (h.tags.includes('barrier')) return 2;
+  return 0;
 }
 
 export function performAction(ruleset: Ruleset, state: GameState, actorId: string, actionId: string, target: ActionTarget, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
   r.actionTarget = { ...(target.entityId ? { entityId: target.entityId } : {}), ...(target.tile ? { tile: { ...target.tile } } : {}) };
   HANDLERS[actionId]?.perform(r, actorId, target);
-  // Companion abilities have no use counter: announce them here.
-  if (actionId.startsWith('comp:')) r.emit({ type: 'skillUsed', entityId: actorId, habilidad: actionId.slice(5) } as WillyEvent);
+  // Companion and enemy abilities have no use counter: announce them here.
+  if (actionId.startsWith('comp:') || actionId.startsWith('mon:')) r.emit({ type: 'skillUsed', entityId: actorId, habilidad: actionId.slice(actionId.indexOf(':') + 1) } as WillyEvent);
   // The ability's announcement goes first, so the client plays its FX before the rolls it causes.
   const first = r.events.findIndex((e) => e.type === 'skillUsed' && (e as WillyEvent).entityId === actorId);
   if (first > 0) r.events.unshift(...r.events.splice(first, 1));
@@ -913,9 +945,11 @@ export function handlerTarget(h: Handler, actor: Entity, state: GameState): Acti
 
 /** Text for the current level of abilities with per-level texts (the 5G line). */
 function levelText(actor: Entity, data: AbilityData): string {
-  if (data.textoSinEstrenar && !actor.tags.includes(`estrenado:${data.id}`) && (actor.resources[`uso:${data.id}`]?.current ?? 0) === 0) return data.textoSinEstrenar;
+  if (data.textoSinEstrenar && !actor.tags.includes(`estrenado:${data.id}`) && (actor.resources[`uso:${data.id}`]?.current ?? 0) === 0) return `${data.textoSinEstrenar}\n${tierLabel(actor, data.id)}`;
   const entry = data.niveles?.[String(skillLevel(actor, data.id))] as { texto?: string } | undefined;
-  return typeof entry === 'object' && entry?.texto ? entry.texto : data.texto;
+  const text = typeof entry === 'object' && entry?.texto ? entry.texto : data.texto;
+  // The ability levels with use: show how far it is (RULESET.md → «Habilidades que suben con el uso»).
+  return `${text}\n${tierLabel(actor, data.id)}`;
 }
 
 export { damageBonus, HANDLERS };

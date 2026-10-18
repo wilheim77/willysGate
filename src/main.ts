@@ -345,6 +345,28 @@ if (game.narrate) {
   box.addEventListener('click', () => (box.hidden = true));
 }
 
+// Announcements (an ability levelling up...): a toast, or a big banner for the big moments.
+if (game.announce) {
+  const box = document.createElement('div');
+  box.id = 'announce';
+  box.hidden = true;
+  document.body.append(box);
+  let timer = 0;
+  store.subscribe((change, state) => {
+    if (change.kind !== 'events') return;
+    for (const e of change.events) {
+      const a = game.announce!(e, state);
+      if (!a) continue;
+      box.textContent = a.text;
+      box.classList.toggle('big', !!a.big);
+      box.hidden = false;
+      clearTimeout(timer);
+      timer = window.setTimeout(() => (box.hidden = true), a.big ? 4000 : 2500);
+    }
+  });
+  box.addEventListener('click', () => (box.hidden = true));
+}
+
 // The journal: what to do now. A 📜 button shows it; a change of objective is announced.
 if (game.objectives?.length) {
   const current = () => {

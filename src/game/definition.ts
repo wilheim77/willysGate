@@ -194,6 +194,11 @@ export interface GameDefinition {
   narrate?(event: GameEvent, state: GameState): string | null;
   /** One narrator line for all of a command's events (the most important one), if any. */
   narrateEvents?(events: GameEvent[], state: GameState): string | null;
+  /**
+   * A short on-screen announcement for an event (an ability levelling up...), if any.
+   * `big` shows it large in the middle of the screen. Cosmetic.
+   */
+  announce?(event: GameEvent, state: GameState): { text: string; big?: boolean } | null;
   /** A conversation that opens as soon as the protagonist is created. */
   opening?: { dialogue: string; partner?: string };
   /**

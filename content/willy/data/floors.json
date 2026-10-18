@@ -272,6 +272,93 @@
           ],
           "xp": 40,
           "etiquetas": []
+        },
+        "pulpo-de-bajura": {
+          "nombre": "Pulpo de bajura",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 10,
+          "def": 12,
+          "ataque": 3,
+          "dano": "1d4",
+          "movimiento": 4,
+          "rasgos": [
+            "tentáculo: agarra y arrastra"
+          ],
+          "xp": 14,
+          "etiquetas": [
+            "animal"
+          ],
+          "habilidades": [
+            "tentaculo"
+          ]
+        },
+        "percebeiro-ahogado": {
+          "nombre": "Percebeiro ahogado",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 9,
+          "def": 11,
+          "ataque": 3,
+          "dano": "1d4",
+          "movimiento": 4,
+          "rasgos": [
+            "a distancia: tira percebes y se aparta"
+          ],
+          "xp": 14,
+          "etiquetas": [
+            "humano",
+            "no-muerto"
+          ],
+          "habilidades": [
+            "percebe"
+          ],
+          "kite": true
+        },
+        "anguila-electrica": {
+          "nombre": "Anguila eléctrica",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 8,
+          "def": 12,
+          "ataque": 3,
+          "dano": "1d4",
+          "movimiento": 5,
+          "rasgos": [
+            "descarga: electrifica los charcos"
+          ],
+          "xp": 14,
+          "etiquetas": [
+            "animal"
+          ],
+          "habilidades": [
+            "descarga-de-charco"
+          ]
+        },
+        "lata-de-bonito": {
+          "nombre": "Lata de bonito",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 1,
+          "vida": 4,
+          "def": 10,
+          "ataque": 2,
+          "dano": "1d3",
+          "movimiento": 5,
+          "rasgos": [
+            "revienta: se tira encima y explota"
+          ],
+          "xp": 10,
+          "etiquetas": [
+            "objeto-vivo"
+          ],
+          "habilidades": [
+            "autodestruccion"
+          ],
+          "estalla": "autodestruccion"
         }
       },
       "jefe": {
@@ -544,6 +631,91 @@
           ],
           "xp": 40,
           "etiquetas": []
+        },
+        "dependienta-de-perfumeria": {
+          "nombre": "Dependienta de perfumería",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 12,
+          "def": 12,
+          "ataque": 4,
+          "dano": "1d4",
+          "movimiento": 4,
+          "rasgos": [
+            "nube de colonia: marea"
+          ],
+          "xp": 18,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "nube-de-colonia"
+          ]
+        },
+        "encargado-de-seccion": {
+          "nombre": "Encargado de sección",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 14,
+          "def": 12,
+          "ataque": 3,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "¡a reponer!: cura y anima a los suyos"
+          ],
+          "xp": 22,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "a-reponer"
+          ]
+        },
+        "guardia-de-seguridad": {
+          "nombre": "Guardia de seguridad",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 18,
+          "def": 13,
+          "ataque": 4,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "placaje: tumba y agarra"
+          ],
+          "xp": 22,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "placaje"
+          ]
+        },
+        "lata-de-fabada": {
+          "nombre": "Lata de fabada caducada",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 1,
+          "vida": 5,
+          "def": 10,
+          "ataque": 2,
+          "dano": "1d4",
+          "movimiento": 4,
+          "rasgos": [
+            "revienta: nube tóxica"
+          ],
+          "xp": 12,
+          "etiquetas": [
+            "objeto-vivo"
+          ],
+          "habilidades": [
+            "autodestruccion-toxica"
+          ],
+          "estalla": "autodestruccion-toxica"
         }
       },
       "jefe": {
@@ -826,6 +998,94 @@
           ],
           "xp": 45,
           "etiquetas": []
+        },
+        "tirador-de-feria": {
+          "nombre": "Tirador de feria",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 12,
+          "def": 12,
+          "ataque": 5,
+          "dano": "1d4",
+          "movimiento": 4,
+          "rasgos": [
+            "escopeta de corchos: de lejos y se aparta"
+          ],
+          "xp": 20,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "corcho"
+          ],
+          "kite": true
+        },
+        "abuela-del-bingo": {
+          "nombre": "Abuela del bingo",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 12,
+          "def": 11,
+          "ataque": 3,
+          "dano": "1d4",
+          "movimiento": 3,
+          "rasgos": [
+            "¡LÍNEA!: asusta a todo el que la oye"
+          ],
+          "xp": 20,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "linea"
+          ]
+        },
+        "dj-de-la-carpa": {
+          "nombre": "DJ de la carpa",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 16,
+          "def": 12,
+          "ataque": 4,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "saca bailarines",
+            "el bajo tumba"
+          ],
+          "xp": 28,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "llamar-bailarines",
+            "bajo-de-la-carpa"
+          ]
+        },
+        "petardo-andante": {
+          "nombre": "Petardo andante",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 1,
+          "vida": 5,
+          "def": 11,
+          "ataque": 3,
+          "dano": "1d4",
+          "movimiento": 6,
+          "rasgos": [
+            "revienta: fuego"
+          ],
+          "xp": 14,
+          "etiquetas": [
+            "objeto-vivo"
+          ],
+          "habilidades": [
+            "autodestruccion"
+          ],
+          "estalla": "autodestruccion"
         }
       },
       "jefe": {
@@ -1093,6 +1353,93 @@
           ],
           "xp": 50,
           "etiquetas": []
+        },
+        "masajista-implacable": {
+          "nombre": "Masajista implacable",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 20,
+          "def": 13,
+          "ataque": 5,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "llave: inmoviliza 2 turnos"
+          ],
+          "xp": 28,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "llave"
+          ]
+        },
+        "terapeuta-de-lodos": {
+          "nombre": "Terapeuta de lodos",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 16,
+          "def": 12,
+          "ataque": 4,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "lodo curativo",
+            "barro a la cara: ciega"
+          ],
+          "xp": 28,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "lodo-curativo",
+            "barro-a-la-cara"
+          ]
+        },
+        "nube-de-vapor": {
+          "nombre": "Nube de vapor",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 12,
+          "def": 13,
+          "ataque": 4,
+          "dano": "1d4",
+          "movimiento": 5,
+          "rasgos": [
+            "vaharada: tapa la vista"
+          ],
+          "xp": 22,
+          "etiquetas": [
+            "elemental"
+          ],
+          "habilidades": [
+            "vaharada"
+          ]
+        },
+        "pastilla-efervescente": {
+          "nombre": "Pastilla efervescente",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 1,
+          "vida": 6,
+          "def": 11,
+          "ataque": 3,
+          "dano": "1d4",
+          "movimiento": 5,
+          "rasgos": [
+            "se disuelve de golpe: vapor"
+          ],
+          "xp": 16,
+          "etiquetas": [
+            "objeto-vivo"
+          ],
+          "habilidades": [
+            "autodestruccion-vapor"
+          ],
+          "estalla": "autodestruccion-vapor"
         }
       },
       "jefe": {
@@ -1373,6 +1720,90 @@
           ],
           "xp": 55,
           "etiquetas": []
+        },
+        "presentador-suplente": {
+          "nombre": "Presentador suplente",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 18,
+          "def": 13,
+          "ataque": 5,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "pregunta trampa: aturde"
+          ],
+          "xp": 32,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "pregunta-trampa"
+          ]
+        },
+        "maquilladora": {
+          "nombre": "Maquilladora",
+          "genero": "f",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 16,
+          "def": 13,
+          "ataque": 4,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "retoque: cura y limpia a los suyos"
+          ],
+          "xp": 32,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "retoque"
+          ]
+        },
+        "productor-ejecutivo": {
+          "nombre": "Productor ejecutivo",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 3,
+          "vida": 20,
+          "def": 13,
+          "ataque": 5,
+          "dano": "1d6",
+          "movimiento": 4,
+          "rasgos": [
+            "llama a los figurantes"
+          ],
+          "xp": 34,
+          "etiquetas": [
+            "humano"
+          ],
+          "habilidades": [
+            "llamar-figurantes"
+          ]
+        },
+        "foco-andante": {
+          "nombre": "Foco andante",
+          "genero": "m",
+          "tipo": "normal",
+          "coste": 2,
+          "vida": 14,
+          "def": 14,
+          "ataque": 5,
+          "dano": "1d6",
+          "movimiento": 3,
+          "rasgos": [
+            "fogonazo: ciega en área"
+          ],
+          "xp": 28,
+          "etiquetas": [
+            "objeto-vivo"
+          ],
+          "habilidades": [
+            "foco-cegador"
+          ]
         }
       },
       "jefe": {
@@ -1659,6 +2090,50 @@
       "bonoAtaque": 2,
       "bonoDef": 2,
       "xp": 3
+    },
+    "elites": {
+      "$comment": "Enemigos de élite: en cada sala de combate, con esta probabilidad por piso (más arriba, más), uno de los enemigos normales sale de élite con un modificador. Cuesta el doble de presupuesto y da el doble de experiencia. Sprite <id>--elite (recoloreado dorado).",
+      "probabilidad": {
+        "1": 0,
+        "2": 0.1,
+        "3": 0.15,
+        "4": 0.2,
+        "5": 0.25,
+        "6": 0.3,
+        "7": 0.35,
+        "8": 0.4,
+        "9": 0.45,
+        "10": 0.5
+      },
+      "modificadores": {
+        "blindado": {
+          "m": "blindado",
+          "f": "blindada",
+          "def": 3
+        },
+        "furioso": {
+          "m": "furioso",
+          "f": "furiosa",
+          "ataque": 2,
+          "acciones": 2
+        },
+        "tocho": {
+          "m": "tocho",
+          "f": "tocha",
+          "multVida": 2
+        },
+        "veloz": {
+          "m": "veloz",
+          "f": "veloz",
+          "movimiento": 3,
+          "acciones": 2
+        },
+        "explosivo": {
+          "m": "explosivo",
+          "f": "explosiva",
+          "estalla": "autodestruccion"
+        }
+      }
     }
   },
   "pisos": [

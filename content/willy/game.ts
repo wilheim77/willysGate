@@ -9,6 +9,7 @@ import itemsData from './data/items.json';
 import meta from './meta.json';
 import { PLAYER, applyCasting, maps, newWillyGame } from './setup';
 import { narrate, narrateEvents } from './narrator';
+import { announce } from './announce';
 import { willyHud } from './hud';
 import { achievements, rewardBoxes } from './meta-view';
 import { defeat, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
@@ -65,6 +66,7 @@ export const game: GameDefinition = {
   savePolicy,
   onRestoredCopy,
   defeat,
+  announce,
   hud: willyHud,
   // The service lift needs the engine to know the floors (travel builds them on arrival).
   maps,

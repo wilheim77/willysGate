@@ -4,10 +4,10 @@
   "recomendada": "butanero",
   "umbralesHabilidad": [
     0,
-    4,
-    12,
-    25,
-    45
+    8,
+    24,
+    48,
+    80
   ],
   "habilidadesBasicas": [
     {
@@ -1004,11 +1004,11 @@
           "subidaPorUso": {
             "umbrales": [
               0,
-              3,
-              7,
-              12,
-              18,
-              25
+              6,
+              16,
+              30,
+              50,
+              75
             ],
             "cuentaSi": "Usada en combate, como mucho una vez por turno. Cuenta aunque no haga nada (a nivel 5G, nunca hace nada).",
             "comentario": "Excepción a la regla general: esta habilidad tiene 6 niveles con umbrales propios."

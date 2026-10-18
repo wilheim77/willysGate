@@ -187,15 +187,15 @@ describe('Ingeniero', () => {
     expect(again.state.entities.e!.resources['uso:red-g']!.current).toBe(1);
   });
 
-  it('the G line levels 5G → 6G → … → 10G at 3/7/12/18/25 uses and each level does more', () => {
+  it('the G line levels 5G → 6G → … → 10G at 6/16/30/50/75 uses and each level does more', () => {
     const e = W('e', 'ingeniero', 0, 0);
-    expect([0, 3, 7, 12, 18, 25].map((n) => skillLevel(withUses(e, 'red-g', n), 'red-g'))).toEqual([1, 2, 3, 4, 5, 6]);
-    const six = game([withUses(e, 'red-g', 3), rat('r', 3, 0)]);
+    expect([0, 6, 16, 30, 50, 75].map((n) => skillLevel(withUses(e, 'red-g', n), 'red-g'))).toEqual([1, 2, 3, 4, 5, 6]);
+    const six = game([withUses(e, 'red-g', 6), rat('r', 3, 0)]);
     const a = willy.listActions(six, 'e').find((x) => x.id === 'hab:red-g')!;
     expect(a.label).toBe('6G');
     expect(a.target).toMatchObject({ kind: 'creature', range: 4 });
     expect(hasCondition(act(six, 'e', 'hab:red-g', { entityId: 'r' }).state.entities.r!, 'mareado')).toBe(true);
-    const ten = game([withUses(e, 'red-g', 25), rat('r', 3, 0), rat('boss', 4, 0, { vida: 100, tags: ['jefe'] })]);
+    const ten = game([withUses(e, 'red-g', 75), rat('r', 3, 0), rat('boss', 4, 0, { vida: 100, tags: ['jefe'] })]);
     const boom = act(ten, 'e', 'hab:red-g', {});
     expect(hasCondition(boom.state.entities.r!, 'bailando')).toBe(true);
     expect(boom.state.entities.boss!.resources.vida!.current).toBe(75);

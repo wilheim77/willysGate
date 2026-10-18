@@ -468,22 +468,22 @@
       "lineas": [
         {
           "id": "hs-01",
-          "texto": "¡{habilidad} sube a nivel {nivel}! La práctica hace al maestro. Y al concursante."
+          "texto": "¡{nombre} sube a nivel {nivel}! La práctica hace al maestro. Y al concursante."
         },
         {
           "id": "hs-02",
-          "texto": "{habilidad}, nivel {nivel}. Tanto usarla, al final aprendes. Como con la cafetera de Paco."
+          "texto": "{nombre}, nivel {nivel}. Tanto usarla, al final aprendes. Como con la cafetera de Paco."
         },
         {
           "id": "hs-03",
-          "texto": "{habilidad} a nivel 3: ahora hace algo nuevo. Míralo en la ficha. Te va a gustar. Al público, más.",
+          "texto": "{nombre} a nivel 3: ahora hace algo nuevo. Míralo en la ficha. Te va a gustar. Al público, más.",
           "si": {
             "nivel": 3
           }
         },
         {
           "id": "hs-04",
-          "texto": "¡MAESTRÍA en {habilidad}! Nivel cinco. Cuarenta y cinco usos. En cualquier otro trabajo esto se llama rutina. Aquí, gloria.",
+          "texto": "¡MAESTRÍA en {nombre}! Nivel cinco. Ochenta usos. En cualquier otro trabajo esto se llama rutina. Aquí, gloria.",
           "si": {
             "nivel": 5
           }
