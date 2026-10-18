@@ -739,7 +739,40 @@ export function reachable(map: GridMap, from: Vec2, blocked: Set<string>): Set<s
   return seen;
 }
 
+const ALL_DIRS: Vec2[] = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }, { x: 1, y: 1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: -1, y: -1 }];
+
+/**
+ * Isolated platforms (an "island": a walkable tile whose every neighbour is more than one
+ * level away) could strand a pushed creature with no legal move (no jump ability, nothing
+ * to attack): a real softlock. Walled off from the walkable area, a tile with no neighbour
+ * at all is fine (it's never reachable in the first place); one surrounded only by a cliff
+ * taller than a step is the bug, however it's reached.
+ */
+function islandTile(map: GridMap): string | undefined {
+  for (let y = 0; y < map.height; y++) {
+    for (let x = 0; x < map.width; x++) {
+      const t = map.tiles[y * map.width + x]!;
+      if (!t.walkable) continue;
+      let hasWalkableNeighbour = false;
+      let onlyFarNeighbours = true;
+      for (const d of ALL_DIRS) {
+        const nx = x + d.x;
+        const ny = y + d.y;
+        if (nx < 0 || ny < 0 || nx >= map.width || ny >= map.height) continue;
+        const n = map.tiles[ny * map.width + nx]!;
+        if (!n.walkable) continue;
+        hasWalkableNeighbour = true;
+        if (Math.abs(n.height - t.height) <= 1) onlyFarNeighbours = false;
+      }
+      if (hasWalkableNeighbour && onlyFarNeighbours) return `island at ${x},${y} (height ${t.height})`;
+    }
+  }
+  return undefined;
+}
+
 function validate(map: GridMap, p: Populated, spec: FloorSpec): string | undefined {
+  const island = islandTile(map);
+  if (island) return island;
   const blocked = new Set([...p.entities.filter((e) => e.tags.includes(OBSTACLE_TAG)).map((e) => key(e.position)), ...p.traps.flatMap((t) => t.tiles.map(key))]);
   const reach = reachable(map, p.arrival, blocked);
   const near = (v: Vec2) => (Object.keys(DIRS) as Side[]).some((s) => reach.has(key(neighbour(v, s))));
