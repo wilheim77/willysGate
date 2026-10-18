@@ -13,11 +13,12 @@
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Image, blank, blit, crop, readPng, writePng } from './png.ts';
-import { type Rgb } from './color.ts';
+import { type Rgb, hexToRgb } from './color.ts';
 import { type Rect, readSpriteList } from './sprite-list.ts';
 import { FLAMES, FLAME_LEGEND, type Key, T, ascii, get, rect, rgb, rng, set } from './pixel.ts';
 import * as env from './environment-art.ts';
 import * as fx from './spell-fx.ts';
+import { applyFxTable } from './fx-table.ts';
 
 const [game = 'intereses', preset = '0x72'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -125,26 +126,26 @@ function planksFace(): Image {
   return img;
 }
 
-/** Solid top for walls: dark capstones with the 0x72 lit edge on the south side. */
-function wallTop(atlas: Image, list: Record<string, Rect>, seed: number): Image {
+/** Solid top for walls and rock masses: big dark capstones under a faint diagonal hatch, seamless,
+ *  with no lit edge of its own (the renderer outlines blocked ground), so a large wall mass reads as
+ *  solid at phone size instead of as a striped floor. */
+function wallTop(seed: number): Image {
   const r = rng(seed);
   const img = blank(T, T);
   rect(img, 0, 0, T, T, rgb('cap'));
-  // Irregular capstone seams.
-  const rows = [0, 4, 8];
-  for (const y of rows) {
-    rect(img, 0, y, T, 1, rgb('out'));
-    let x = Math.floor(r() * 5);
-    while (x < T) {
-      for (let yy = y; yy < y + 4; yy++) set(img, x, yy, rgb('out'));
-      set(img, x + 1, y + 1, rgb('s0')); // chipped corner catches a little light
-      x += 4 + Math.floor(r() * 5);
+  // Irregular capstones, 8 px courses offset by half a tile so the pattern wraps.
+  for (const y of [0, 8]) {
+    for (let x = 0; x < T; x++) set(img, x, y, rgb('out'));
+    let x = y ? 4 : 0;
+    while (x < T + 4) {
+      for (let yy = y; yy < y + 8; yy++) set(img, x % T, yy, rgb('out'));
+      set(img, (x + 1) % T, y + 1, rgb('s0')); // chipped corner catches a little light
+      x += 6 + Math.floor(r() * 3);
     }
   }
-  for (let n = 0; n < 6; n++) set(img, Math.floor(r() * T), Math.floor(r() * 12), rgb(r() < 0.5 ? 's0' : 'ink'));
-  // Bottom four rows: the original lit brick edge of wall_top_mid.
-  const src = list.wall_top_mid!;
-  blit(img, crop(atlas, src.x, src.y + 12, T, 4), 0, 12);
+  // Diagonal hatch: the universal "solid, you can't stand here" mark.
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) if ((x + y) % 4 === 0 && !get(img, x, y)?.every((v, i) => v === rgb('out')[i])) set(img, x, y, rgb('ink'));
+  for (let n = 0; n < 4; n++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb('s0'));
   return img;
 }
 
@@ -749,6 +750,72 @@ function timberFace(window: boolean): Image {
   return img;
 }
 
+/** Clay roof seen from above (teja árabe): warm terracotta channels in overlapping courses, so a
+ *  roof can't be mistaken for the grey cobbles or the brown road. `ridge` adds the ridge capping. */
+function clayRoof(seed: number, ridge: boolean): Image {
+  const r = rng(seed);
+  const img = blank(T, T);
+  const base = ['#7a3420', '#9a4428', '#b85a34', '#d27a4a'];
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const col = x % 4; // a channel: lit left edge, body, shadowed right edge
+    const course = (y + (Math.floor(x / 4) % 2) * 2) % 5; // tiles overlap every 5 rows, staggered
+    let k = col === 0 ? 3 : col === 3 ? 0 : 2;
+    if (course === 4) k = 0; // the dark lower lip of each tile
+    else if (course === 0 && col !== 3) k = Math.min(3, k + 1);
+    if (r() < 0.06) k = Math.max(0, k - 1); // weathering
+    set(img, x, y, rgb(hex(base[k]!)));
+  }
+  for (let i = 0; i < 3; i++) set(img, Math.floor(r() * T), Math.floor(r() * T), rgb(hex('#5a6a3a'))); // moss
+  if (ridge) {
+    rect(img, 0, 0, T, 3, rgb(hex('#6a2c1a')));
+    for (let x = 0; x < T; x += 4) (set(img, x, 1, rgb(hex('#c86a40'))), set(img, x + 1, 1, rgb(hex('#c86a40'))));
+  }
+  return img;
+}
+
+/** Eaves along a roof's south edge (a rim strip): rounded tile ends, a dark soffit and the shadow
+ *  they cast on the wall below. Drawn by the renderer at the top of the wall face. */
+function eavesRim(): Image {
+  const img = blank(T, T);
+  for (let x = 0; x < T; x++) {
+    const end = x % 4;
+    set(img, x, 0, rgb(hex(end === 3 ? '#5a2418' : '#b85a34')));
+    set(img, x, 1, rgb(hex(end === 0 ? '#d27a4a' : end === 3 ? '#3a160e' : '#9a4428')));
+    set(img, x, 2, rgb(hex(end === 1 || end === 2 ? '#7a3420' : '#3a160e')));
+    set(img, x, 3, rgb('out'));
+    set(img, x, 4, rgb(hex('#000000')), 110);
+    if ((x + 1) % 2) set(img, x, 5, rgb(hex('#000000')), 60);
+  }
+  return img;
+}
+
+/** Stair face for walkable one-level steps: treads every 3 rows (two steps per level), so the drop
+ *  reads as "you can go up here" instead of a wall. Kinds: cut stone, wood, earth with log risers, rock. */
+function stairFace(kind: 'stone' | 'wood' | 'earth' | 'rock'): Image {
+  const img = blank(T, T);
+  const r = rng({ stone: 81, wood: 82, earth: 83, rock: 84 }[kind]);
+  const pal = {
+    stone: ['#3e3432', '#6a5852', '#aa8d7a', '#d3bfa9'],
+    wood: ['#2c1d1b', '#4a2e27', '#7d5536', '#a8784a'],
+    earth: ['#3a2a1e', '#5a4030', '#7d5536', '#a8784a'],
+    rock: ['#2e2a2a', '#4e4846', '#7a726c', '#a8a098'],
+  }[kind];
+  for (let y = 0; y < T; y++) {
+    const step = y % 3; // 0: tread nose (lit), 1: riser, 2: riser in shadow
+    for (let x = 0; x < T; x++) {
+      let k = step === 0 ? 3 : step === 1 ? 2 : 1;
+      if (kind === 'earth' && step !== 0) k = step === 1 ? 2 : 1; // log risers
+      if (kind === 'rock' && r() < 0.18) k = Math.max(0, k - 1);
+      if (kind === 'stone' && step !== 0 && (x + Math.floor(y / 3) * 5) % 8 === 0) k = 0; // joints
+      if (kind === 'wood' && step === 0 && x % 8 === 3) k = 1; // nails / plank ends
+      set(img, x, y, rgb(hex(pal[k]!)));
+    }
+    if (step === 2) for (let x = 0; x < T; x++) if (kind !== 'rock' || r() < 0.8) set(img, x, y, rgb(hex(pal[0]!)));
+  }
+  if (kind === 'earth') for (let y = 1; y < T; y += 3) for (const x of [0, 15]) set(img, x, y, rgb(hex(pal[0]!))); // stake ends
+  return img;
+}
+
 /** Rough stone masonry face (village walls, the abbey's outer walls). */
 function masonryFace(): Image {
   const img = blank(T, T);
@@ -953,23 +1020,28 @@ function candles(frame: number): Image {
   return img;
 }
 
-/** Oil lamp (candil) hanging from an iron wall bracket. */
+/** Oil lamp (candil) hanging from the arm of its own wooden post, so it stands anywhere. */
 function oilLamp(frame: number): Image {
   const img = blank(T, T);
-  ascii(img, 0, 2, [
-    '..#iiiiii#......',
-    '..#I#...#i#.....',
-    '.........#i#....',
-    '..........#i#...',
-    '.........#iI#...',
-    '..........#.....',
-    '..........#.....',
-    '........#WWW#...',
-    '.......#WggwW#..',
-    '........#WWW#...',
-    '.........###....',
-  ], { '#': 'out', i: 'i1', I: 'i2', W: 'gr1', w: 'gr3', g: 'gr2' });
-  smallFlame(img, 9, 5, frame);
+  ascii(img, 0, 0, [
+    '...##########...',
+    '..#wWWWWWWWWi#..',
+    '..#Ww#####.#i#..',
+    '..#Ww#.....#i#..',
+    '..#Ww#.........',
+    '..#Ww#....#gg#..',
+    '..#Ww#...#gGGg#.',
+    '..#Ww#....#gg#..',
+    '..#Ww#.....##...',
+    '..#Ww#..........',
+    '..#Ww#..........',
+    '..#Ww#..........',
+    '..#Ww#..........',
+    '.#wWWw#.........',
+    '#wwWWww#........',
+    '########........',
+  ], { '#': 'out', W: 'w3', w: 'w1', i: 'i1', g: 'gr1', G: 'gr3' });
+  smallFlame(img, 8, 3, frame);
   return img;
 }
 
@@ -1009,6 +1081,20 @@ function leverArt(pos: 0 | 1 | 2): Image {
     ['...........#RR#.', '..........#RrRR#', '...........#RRR#', '............#I#.', '...........#I#..', '..........#I#...', '.........#I#....', '........#I#.....', '........##......'],
   ][pos]!;
   ascii(img, pos === 0 ? 2 : pos === 2 ? -2 : 0, 2, handle, { '#': 'out', R: 'b3', r: 'f4', I: 'i2' });
+  return img;
+}
+
+/** Faction foot ring (16x7, drawn under the feet): an ellipse outline with corner ticks; allies get a
+ *  dashed ring so they read apart from the party at a glance, enemies a heavier ring. */
+function factionRing(hex: string, style: 'solid' | 'dashed' | 'heavy'): Image {
+  const img = blank(T, 7);
+  const c = hexToRgb(hex), dark = hexToRgb(hex).map((v) => Math.round(v * 0.55)) as Rgb;
+  for (let y = 0; y < 7; y++) for (let x = 0; x < T; x++) {
+    const d = Math.hypot((x - 7.5) / 7.2, (y - 3) / 3.2);
+    if (d > 1.05 || d < (style === 'heavy' ? 0.62 : 0.78)) continue;
+    if (style === 'dashed' && Math.floor((Math.atan2(y - 3, x - 7.5) + Math.PI) / (Math.PI / 6)) % 2 === 1) continue;
+    set(img, x, y, d > 0.95 ? dark : c, 220);
+  }
   return img;
 }
 
@@ -1144,8 +1230,8 @@ const tiles: [string, Image][] = [
   ['scaffold_1', scaffold(5)],
   ['scaffold_2', scaffold(9)],
   ['scaffold_face', scaffoldFace()],
-  ['wall_top_1', wallTop(atlas, list, 3)],
-  ['wall_top_2', wallTop(atlas, list, 8)],
+  ['wall_top_1', wallTop(3)],
+  ['wall_top_2', wallTop(8)],
   ['stone_face_lip', withLip(wallMid, ['s1', 's2', 's3'])],
   ['dirt_face', withLip(rampRecolour(crop(ninjaRelief, 5 * T, 6 * T, T, T), ['ink', 'out', 's0', 'd0', 'd1']), ['d0', 'd2', 'd3'])],
   ['slag_face', withLip(rampRecolour(crop(ninjaRelief, 5 * T, 1 * T, T, T), ['void', 'ink', 'cap', 'i0', 's0']), ['i0', 's0', 's1'])],
@@ -1183,6 +1269,13 @@ const tiles: [string, Image][] = [
   ['cobble_3', cobbles(213)],
   ['roof_1', slateRoof(214)],
   ['roof_2', slateRoof(215)],
+  ['roof_clay_1', clayRoof(216, false)],
+  ['roof_clay_2', clayRoof(217, false)],
+  ['rim_eaves', eavesRim()],
+  ['stair_stone', stairFace('stone')],
+  ['stair_wood', stairFace('wood')],
+  ['stair_earth', stairFace('earth')],
+  ['stair_rock', stairFace('rock')],
   ['timber_face', timberFace(false)],
   ['timber_face_window', timberFace(true)],
   ['masonry_face', masonryFace()],
@@ -1211,7 +1304,11 @@ const props: Record<string, { frames: Image[]; note: string; anchor: Anchor; fps
   torch_wall: { frames: [0, 1, 2, 3].map(torch), note: 'Antorcha de pared', anchor: 'wall', fps: 8, loop: true, light: '#ffb060' },
   brazier: { frames: [0, 1, 2, 3].map(brazier), note: 'Brasero de hierro', anchor: 'floor', fps: 8, loop: true, light: '#ff9a4a' },
   candles: { frames: [0, 1, 2].map(candles), note: 'Velas en el suelo (capilla, cripta)', anchor: 'floor', fps: 6, loop: true, light: '#ffc070' },
-  oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado de una escarpia', anchor: 'wall', fps: 6, loop: true, light: '#ffb050' },
+  oil_lamp: { frames: [0, 1, 2].map(oilLamp), note: 'Candil colgado del brazo de su poste', anchor: 'floor', fps: 6, loop: true, light: '#ffb050' },
+  marker_party: { frames: [factionRing('#e8c070', 'solid')], note: 'Aro bajo los pies: grupo', anchor: 'floor', fps: 0, loop: false },
+  marker_ally: { frames: [factionRing('#6ad0a0', 'dashed')], note: 'Aro bajo los pies: aliado que lucha por el grupo (IA)', anchor: 'floor', fps: 0, loop: false },
+  marker_enemy: { frames: [factionRing('#d04a3a', 'heavy')], note: 'Aro bajo los pies: enemigo', anchor: 'floor', fps: 0, loop: false },
+  marker_neutral: { frames: [factionRing('#9a9aa8', 'dashed')], note: 'Aro bajo los pies: neutral', anchor: 'floor', fps: 0, loop: false },
   lantern: { frames: [0, 1, 2].map(lantern), note: 'Farol de hierro en el suelo', anchor: 'floor', fps: 5, loop: true, light: '#ffb050' },
   blood_1: { frames: [bloodSplat(1)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
   blood_2: { frames: [bloodSplat(7)], note: 'Mancha de sangre (decal)', anchor: 'floor', fps: 0, loop: false },
@@ -1335,5 +1432,6 @@ for (const [id, o] of Object.entries(objects)) {
   const animations = Object.fromEntries(Object.entries(o).map(([a, imgs]) => [a, imgs.map(() => rects[i++]!)]));
   manifest.sprites[id] = { kind: 'frames', url, facing: 'right', animations };
 }
+applyFxTable(manifest, gameDir, preset);
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 console.log(`${preset} extra art: ${tiles.length} tiles, ${Object.keys(props).length} props, ${Object.keys(surfaces).length} surfaces, ${Object.keys(objects).length} objects -> art-src/generated/${base}.png`);

@@ -1,0 +1,18 @@
+{
+  "$comment": "How each Willy ability's VFX plays, keyed by ability id (rulesets/willy/data/classes.json); copied into the manifest's `fx` by build-willy-art.ts (scripts/art/fx-table.ts checks every prop exists). Kinds: projectile, ray, instant, cone, burst, ring (docs/ART_CATALOG.md, 'Tabla fx'). Keys starting with '@' are hooks that are not abilities ('@critical': a critical hit).",
+  "lanzar-bombona": { "kind": "burst", "beadFx": "fx-bombona-volando", "fx": "fx-explosion-bombona", "tilesPerSec": 9 },
+  "fuga-de-gas": { "kind": "instant", "fx": "fx-vapor" },
+  "arco-voltaico": { "kind": "ray", "fx": "fx-arco-voltaico", "impactFx": "fx-chispazo", "durationMs": 350 },
+  "red-g": { "kind": "ring", "fx": "fx-onda-5g" },
+  "cobertura-total": { "kind": "ring", "fx": "fx-onda-8g" },
+  "despliegue-masivo": { "kind": "ring", "fx": "fx-onda-10g" },
+  "vuelva-usted-manana": { "kind": "projectile", "fx": "fx-impreso-volador", "impactFx": "fx-papeleo", "tilesPerSec": 10 },
+  "formulario-por-triplicado": { "kind": "projectile", "fx": "fx-impreso-volador", "impactFx": "fx-papeleo", "tilesPerSec": 10, "count": 3, "staggerMs": 90 },
+  "sello-oficial": { "kind": "instant", "fx": "fx-sello" },
+  "mate": { "kind": "instant", "fx": "fx-mate-impacto" },
+  "mate-del-concurso": { "kind": "instant", "fx": "fx-mate-impacto" },
+  "pase-picado": { "kind": "projectile", "fx": "fx-balon-estela", "tilesPerSec": 14 },
+  "alley-oop": { "kind": "projectile", "fx": "fx-balon-estela", "impactFx": "fx-mate-impacto", "tilesPerSec": 12 },
+  "viral": { "kind": "instant", "fx": "fx-confeti" },
+  "@critical": { "kind": "instant", "fx": "fx-confeti" }
+}

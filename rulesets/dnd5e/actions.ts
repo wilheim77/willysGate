@@ -576,7 +576,11 @@ function castSpell(r: Resolver, casterId: string, spell: SpellData, spellId: str
   const caster = r.entity(casterId);
   const ability = castingAbility(caster) ?? 'int';
   const slot = spell.level === 0 ? 0 : (lowestSlot(caster, spell.level) ?? spell.level);
-  r.emit({ type: 'spellCast', casterId, spellId, target } as never);
+  // Area spells (cones, lines, spheres) carry their affected tiles, so the client can
+  // draw a flare per tile without duplicating the shape math that already lives here.
+  const aimedAt = target.tile ?? (target.entityId ? r.state.entities[target.entityId]?.position : undefined) ?? caster.position;
+  const tiles = spell.area ? areaTiles(r.state, caster, spell, aimedAt) : undefined;
+  r.emit({ type: 'spellCast', casterId, spellId, target, ...(tiles ? { tiles } : {}) } as never);
 
   if (spell.concentration) {
     endConcentration(r, casterId);

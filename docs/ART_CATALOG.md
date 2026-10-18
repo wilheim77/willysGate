@@ -439,7 +439,7 @@ Se derivan del frame `idle` de cada personaje con `scripts/art/build-action-anim
 | Id | Tipo | Descripción |
 |---|---|---|
 | `candles` | prop, `floor`, luz `#ffc070` | Tres velas de sebo con goterones (capilla, cripta). 3 frames. |
-| `oil_lamp` | prop, `wall`, luz `#ffb050` | Candil de barro colgado de una escarpia. 3 frames. |
+| `oil_lamp` | prop, `floor`, luz `#ffb050` | Candil de barro colgado del brazo de su propio poste de madera: vale en suelo abierto y junto a un muro. 3 frames. |
 | `lantern` | prop, `floor`, luz `#ffb050` | Farol de hierro con ventanas de cuerno. 3 frames. |
 | `lever` | sprite (`idle`, `up`, `down`, `pull`) | Palanca redibujada sobre placa de piedra, con pomo rojo grande: se lee como algo que se usa. Sustituye a la de 0x72. |
 
@@ -450,3 +450,67 @@ Las luces sin `prop` en los mapas iluminan sin que se vea de dónde sale la luz.
 - `lantern` para `farol-pozo` y `farol-polvorin`.
 - `campfire` para las `hoguera-*` si no tienen ya un spawn `campfire` debajo.
 - Los `brillo-*` (plata, resonadores) pueden seguir sin prop.
+
+**Aros de bando** (props `floor`, 16×7, dibujar bajo los pies): `marker_party` (dorado, continuo), `marker_ally` (verde, a trazos: aliados que luchan por el grupo con IA), `marker_enemy` (rojo, grueso) y `marker_neutral` (gris, a trazos). **Petición al cliente:** el mapa solo marca al personaje activo; estos aros permiten distinguir bandos de un vistazo.
+
+## Compañeros de *Willy* (uno por clase)
+
+Sprites a mano (`hand-sprites.json`, `idle` y `move`, mirando a la derecha; el cliente los voltea) y bustos de 48×48 (`portraits.json`, con el mismo id). Vista previa: [`art-previews/willy-ninja-hand.png`](art-previews/willy-ninja-hand.png) y [`art-previews/ninja-portraits-hand.png`](art-previews/ninja-portraits-hand.png).
+
+| Id | Clase | Aspecto |
+|---|---|---|
+| `companero-jonatan` | butanero | Aprendiz: gorra del revés, mono naranja y azul, carretilla de una rueda con un camping gas |
+| `companero-kevin` | influencer | Sudadera, cascos al cuello, móvil vertical en estabilizador y foco LED |
+| `companero-loli` | bardo-de-verbena | Cantante de orquesta: permanente cardada, lentejuelas, micro con cable en espiral |
+| `companero-neptuno` | socorrista | Terranova negro con chaleco salvavidas naranja (16×22, ancho) |
+| `companero-rosario` | tasador | Doña Rosario: bajita, permanente gris, abrigo negro, perlas y bolso enorme |
+| `companero-plata` | mimo | Estatua humana plateada con bombín; `idle` congelado con el sombrero de las monedas, `move` a tirones |
+| `companero-tornillo` | ingeniero | Autómata de hojalata redondeado: una antena, soplete por mano, le falta un tornillo (16×22) |
+| `companero-iker` | funcionario | Becario: camisa grande, corbata torcida, acreditación, gafas, grapadora y termo |
+| `chencho-el-base` | jugador-de-basket | Sprite existente; busto nuevo con la cinta roja |
+
+# Tabla `fx` del manifiesto (las dos partidas)
+
+Cada partida describe cómo se reproduce el efecto de cada conjuro o habilidad en `content/<juego>/art/<preset>/fx.json`. `build-extra-art.ts` y `build-willy-art.ts` lo copian a `fx` del manifiesto con `scripts/art/fx-table.ts`, que comprueba que cada prop nombrado existe. La clave es el id del conjuro o habilidad; las claves que empiezan por `@` son ganchos que no son habilidades (`@critical`: golpe crítico). Las entradas tienen la misma forma que la antigua tabla `SPELL_FX` del cliente:
+
+| `kind` | Campos | Cómo se reproduce |
+|---|---|---|
+| `projectile` | `fx`, `impactFx?`, `tilesPerSec?`, `count?`, `staggerMs?` | Del lanzador al objetivo, girado según la trayectoria; `count` > 1 lanza varios con desfase |
+| `ray` | `fx`, `impactFx?`, `durationMs?` | Estirado a lo largo de la línea lanzador→objetivo durante `durationMs`; luego el impacto |
+| `instant` | `fx` | Una vez en el objetivo (o en el lanzador si no hay objetivo) |
+| `cone` | `fx`, `delayPerTileMs?` | Una vez por casilla afectada, con retardo según la distancia al lanzador |
+| `burst` | `beadFx`, `fx`, `tilesPerSec?` | La cuenta vuela al objetivo y allí estalla `fx` |
+| `ring` | `fx`, `extraFx?` | Centrado en el lanzador |
+
+## Efectos nuevos de *Willy* (`props` de `assets/ninja/extra.png`)
+
+| Id | Uso |
+|---|---|
+| `fx-bombona-volando` | Bombona que gira por el aire (proyectil de *Lanzar bombona*) |
+| `fx-explosion-bombona` | Estallido de 48×48 con núcleo azul de gas, bola naranja, esquirlas y la válvula saliendo despedida |
+| `fx-mate-impacto` | Onda en el suelo con polvo y estrellas (32×16, a los pies): *Mate*, *Alley-oop* |
+| `fx-papeleo` | Lluvia de impresos sobre el objetivo (16×24): *Vuelva usted mañana*, *Formulario por triplicado* |
+| `fx-sello` | El sello baja, golpea y deja la marca roja: *Sello oficial* |
+| `fx-chispazo` | Chispazos en el objetivo al final del *Arco voltaico* |
+
+Vista previa de todos los efectos de *Willy*: [`art-previews/ninja-ability-fx.png`](art-previews/ninja-ability-fx.png).
+
+## Animaciones de acción de *Willy* (`actions.json`)
+
+Las mismas `attack`, `cast` y `hurt` que en *Intereses* (ver «Animaciones de acción»), derivadas con `build-action-anims.ts` para las 9 clases de Willy, los 8 compañeros, Chencho, los enemigos de la Planta 1 (`gaviota-de-lonja`, `rata-portuaria`, `cangrejo-con-casco`, `bocarte-andante`, `mimico`) y los jefes (`jefe-centollo`, `jefe-encargada`, `jefe-giganton`, `jefe-socorrista`, `jefe-presentador`). Sus frames pasan a `assets/ninja/actors.png`. Vista previa: [`art-previews/ninja-actions.png`](art-previews/ninja-actions.png).
+
+# Legibilidad de los mapas: qué se pisa y qué no (*Intereses*)
+
+Tres cambios para que se distinga a tamaño de móvil, sumados al tinte y al borde negro que el cliente ya pone en las casillas bloqueadas:
+
+1. **Tejados** (`house`, `house_plain`): teja árabe de barro (`roof_clay_1/2`) en lugar de pizarra oscura, que se confundía con el suelo. Llevan **alero** como `rim` (`rim_eaves`): remates redondos de teja, sofito oscuro y la sombra sobre la fachada de entramado.
+2. **Muros y roca maciza** (`wall`, `stone_wall`): sillares grandes y oscuros con una trama diagonal tenue. Ya no repiten en cada casilla el borde de ladrillo iluminado, que convertía las masas de muro en un suelo a rayas.
+3. **Escalones** (nuevo campo `stair` del terreno): la cara que se dibuja en lugar de `face` cuando una casilla transitable está un nivel por encima de otra transitable al sur. Tiene huellas cada 3 filas (dos peldaños por nivel), así que no se confunde con un muro. Hay cuatro tipos:
+   - `stair_stone`: `stone`, `cobble`, `vault`, `rails*` y `door_open`.
+   - `stair_wood`: `planks` y `scaffold`.
+   - `stair_earth`: con travesaños de troncos, para `road*`, `mud`, `scrub`, `dirt`, `riverbank*` y `slag_heap`.
+   - `stair_rock`: `rock` y `slag`.
+
+   **Petición al cliente:** en `buildWorld`, si la casilla es escalón y `art.stair` existe, usar ese frame en el `tileSprite` de la cara en lugar de `art.face` y no dibujar las líneas de huella. Hay que añadir `stair?: number` al tipo del terreno en `src/assets/manifest.ts`.
+
+Antes y después, simulando el render del cliente: `art-previews/0x72-<mapa>-legibilidad.png` para `camino`, `plaza`, `abadia`, `calles`, `escorial`, `mina` y `boveda`, y la puerta del barón en la plaza a 4×: [`art-previews/0x72-plaza-puerta-baron-legibilidad.png`](art-previews/0x72-plaza-puerta-baron-legibilidad.png).

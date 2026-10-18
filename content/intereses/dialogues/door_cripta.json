@@ -39,6 +39,13 @@
       "text": "La cerradura gira con un suspiro. Detrás, unas escaleras de piedra bajan hacia la oscuridad, gastadas por pies que no tenían prisa. Los monjes se fueron «por motivos». Los motivos siguen ahí abajo.",
       "effects": [
         {
+          "type": "setTile",
+          "position": "$partner",
+          "walkable": true,
+          "terrain": "door_open",
+          "height": 0
+        },
+        {
           "type": "setEntity",
           "entityId": "door-cripta",
           "removeTags": [

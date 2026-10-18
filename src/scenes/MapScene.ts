@@ -13,6 +13,8 @@ import {
   surfaceCost,
   surfaceHazard,
   hasCondition,
+  isHostile,
+  type Entity,
   isEvent,
   lightPosition,
   lightingOf,
@@ -20,8 +22,8 @@ import {
   trapsOf,
   tileAt,
 } from '../../engine';
-import { DEFAULT_FX, Juice, tween } from '../fx/juice';
-import { type AssetManifest, type LpcAnimation, type SpriteArt, assetUrl, tilesetKey } from '../assets/manifest';
+import { DEFAULT_FX, Juice, tween, wait } from '../fx/juice';
+import { type AssetManifest, type LpcAnimation, type SpellFx, type SpriteArt, assetUrl, tilesetKey } from '../assets/manifest';
 import { LightingLayer } from '../fx/LightingLayer';
 import type { Theme } from '../game/definition';
 import type { GameStore } from '../game/store';
@@ -60,6 +62,12 @@ export interface MapSceneTexts {
 }
 
 const STEP_MS = 160;
+/** Out of combat walking is brisker: exploring shouldn't feel like wading. */
+const EXPLORE_STEP_MS = 95;
+/** Darkens tiles nobody can walk on (walls, roofs, rubble) so they stand apart from floors. */
+const BLOCKED_TINT = 0x8a8a8a;
+/** Longest any one event may animate before playback moves on regardless. */
+const EVENT_WATCHDOG_MS = 10_000;
 const TAP_SLOP = 8;
 /** Zoom limits and defaults are expressed as on-screen pixels per tile, whatever the art's tile size. */
 const MIN_TILE_PX = 24;
@@ -77,6 +85,13 @@ const LPC_FEET_Y = 60;
 type Dir = 'n' | 'w' | 's' | 'e';
 const DIR_ROWS: Dir[] = ['n', 'w', 's', 'e'];
 
+/**
+ * Which event triggers the 'cast' animation + a `manifest.fx` lookup, and which of its
+ * fields to read, when the game's manifest doesn't say otherwise (`AssetManifest.castEvent`)
+ * — dnd5e's own `spellCast` shape (see rulesets/dnd5e/actions.ts).
+ */
+const DEFAULT_CAST_EVENT = { type: 'spellCast', casterField: 'casterId', idField: 'spellId', targetField: 'target', tilesField: 'tiles' };
+
 /** Stable per-tile variant choice so floors don't look tiled. */
 const variantHash = (x: number, y: number): number => (Math.imul(x, 73856093) ^ Math.imul(y, 19349663)) >>> 0;
 /** One texture per image file; several sprites can share an atlas. */
@@ -93,14 +108,18 @@ export class MapScene extends Phaser.Scene {
   private tiles: DrawnTile[] = [];
   private worldObjects: Phaser.GameObjects.GameObject[] = [];
   private sprites = new Map<string, Phaser.GameObjects.Sprite>();
-  private shadows = new Map<string, Phaser.GameObjects.Ellipse>();
+  private shadows = new Map<string, Phaser.GameObjects.Ellipse | Phaser.GameObjects.Sprite>();
   private lighting: LightingLayer | null = null;
   private facing = new Map<string, Dir>();
   private breathing = new Map<string, Phaser.Tweens.Tween>();
   private pathPreview!: Phaser.GameObjects.Graphics;
   private animating = 0;
+  /** Settles the walk in flight per entity (see animateMove). */
+  private moveFinish = new Map<string, () => void>();
   private queue: GameEvent[] = [];
   private playing = false;
+  /** A spellCast immediately followed by its own attackRolled should skip the plain 'attack' animation. */
+  private suppressNextAttackAnim = false;
   private juice!: Juice;
   private overlay!: Phaser.GameObjects.Graphics;
   private activeRing: Phaser.GameObjects.Ellipse | null = null;
@@ -211,20 +230,38 @@ export class MapScene extends Phaser.Scene {
       const depth = this.grid.depth(pos.y, h);
       const key = tilesetKey(art.tileset);
 
+      // One walkable level above walkable ground to the south: that's a stair, not a ledge.
+      // Draw treads on its face and no stone lip, so it reads as "you can go up here".
+      const south = tileAt(map, { x: pos.x, y: pos.y + 1 });
+      const stair = h > 0 && tile.walkable && south?.walkable === true && south.terrain !== 'void' && h - south.height === 1;
       // Cliff or wall face below raised tiles: one band of `levelH` pixels per level.
       if (h > 0) {
         const face = this.add
-          .tileSprite(c.x, c.y + T / 2 + (h * LH) / 2, T, h * LH, key, art.face)
+          .tileSprite(c.x, c.y + T / 2 + (h * LH) / 2, T, h * LH, key, stair && art.stair !== undefined ? art.stair : art.face)
           .setTint(0xb0b0b0)
           .setDepth(depth);
         this.worldObjects.push(face);
       }
-      if (h > 0 && art.rim !== undefined) {
+      if (stair && art.stair === undefined) {
+        const treads = this.add.graphics().setDepth(depth + 0.5);
+        const faceTop = c.y + T / 2;
+        for (let i = 0; i < 3; i++) {
+          const y = faceTop + ((i + 0.5) * LH) / 3;
+          treads.fillStyle(0xd8c8a8, 0.35).fillRect(c.x - T / 2, y - 1, T, 1);
+          treads.fillStyle(0x000000, 0.35).fillRect(c.x - T / 2, y, T, 1);
+        }
+        this.worldObjects.push(treads);
+      }
+      if (h > 0 && art.rim !== undefined && !stair) {
         // A single lip at the platform's south edge (the rest of the frame is transparent).
         this.worldObjects.push(this.add.image(c.x, c.y + T, key, art.rim).setDepth(depth + 0.5));
       }
       const frame = art.frames[variantHash(pos.x, pos.y) % art.frames.length]!;
-      this.worldObjects.push(this.add.image(c.x, c.y, key, frame).setDepth(depth + 1));
+      const surface = this.add.image(c.x, c.y, key, frame).setDepth(depth + 1);
+      // Where you can't walk must read as such at a glance (playtest: "is that a wall or the
+      // floor?"): blocked tiles are darker, with a hard edge facing the walkable ground.
+      if (!tile.walkable) surface.setTint(BLOCKED_TINT);
+      this.worldObjects.push(surface);
       this.drawFringes(map, pos, tile, c, depth);
 
       // Readability of elevation: dark rims where the ground drops, soft shadows where it rises.
@@ -246,6 +283,14 @@ export class MapScene extends Phaser.Scene {
       if (west !== null && west > h) {
         const s = Math.min(T, (west - h) * LH);
         g.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.4, 0, 0.4, 0).fillRect(left, top, s, T);
+      }
+      if (!tile.walkable) {
+        const open = (x: number, y: number) => tileAt(map, { x, y })?.walkable === true;
+        g.fillStyle(0x000000, 0.8);
+        if (open(pos.x, pos.y + 1)) g.fillRect(left, top + T - 2, T, 2);
+        if (open(pos.x, pos.y - 1)) g.fillRect(left, top, T, 2);
+        if (open(pos.x - 1, pos.y)) g.fillRect(left, top, 2, T);
+        if (open(pos.x + 1, pos.y)) g.fillRect(left + T - 2, top, 2, T);
       }
       this.worldObjects.push(g);
       this.tiles.push({ pos, bounds: new Phaser.Geom.Rectangle(left, top, T, T + h * LH) });
@@ -273,8 +318,15 @@ export class MapScene extends Phaser.Scene {
       const tile = tileAt(map, entity.position)!;
       const c = this.grid.tileCentre(entity.position.x, entity.position.y, tile.height);
       const depth = this.grid.depth(entity.position.y, tile.height, 5);
-      // Soft contact shadow, drawn by code so any art pack gets one.
-      const shadow = this.add.ellipse(c.x, c.y, T * 0.7, T * 0.28, 0x000000, 0.35).setDepth(depth - 1);
+      // Under the feet: a ring by side (yours, allies, enemies, bystanders) when the art has one,
+      // otherwise a soft contact shadow drawn by code so any art pack gets one.
+      const ring = this.factionRing(entity, state);
+      const ringArt = ring ? this.manifest.props?.[ring] : undefined;
+      // A touch under full strength and slightly smaller than the tile: at close phone zoom a
+      // full-size, full-opacity ring reads as a hard colour block under every creature on screen.
+      const shadow = ringArt
+        ? this.add.sprite(c.x, c.y, imageKey(ringArt.url)).setDepth(depth - 1).setAlpha(0.8).setScale(0.9).play(`prop:${ring}`)
+        : this.add.ellipse(c.x, c.y, T * 0.7, T * 0.28, 0x000000, 0.35).setDepth(depth - 1);
       const sprite = this.add.sprite(c.x, c.y, imageKey(art.url)).setDepth(depth).setScale(this.baseScale(entity.spriteId));
       this.sprites.set(entity.id, sprite);
       this.shadows.set(entity.id, shadow);
@@ -319,13 +371,17 @@ export class MapScene extends Phaser.Scene {
     return this.grid.tileCentre(p.x, p.y, tile?.height ?? 0);
   }
 
-  private animateMove(event: EntityMovedEvent, state: GameState): Promise<void> {
+  private animateMove(event: EntityMovedEvent, state: GameState, blocking = true): Promise<void> {
     const sprite = this.sprites.get(event.entityId);
     if (!sprite) return Promise.resolve();
-    this.animating++;
+    // A walk still in flight for this sprite is cut short (and settled) before the next starts.
+    this.moveFinish.get(event.entityId)?.();
+    this.tweens.killTweensOf(sprite);
+    if (blocking) this.animating++;
     this.pathPreview.clear();
     this.stopBreathing(event.entityId);
-    this.cameras.main.startFollow(sprite, true, 0.12, 0.12);
+    if (blocking) this.cameras.main.startFollow(sprite, true, 0.12, 0.12);
+    const stepMs = state.turn.mode === 'combat' ? STEP_MS : EXPLORE_STEP_MS;
 
     let prev = event.from;
     const tweens = event.path.map((step) => {
@@ -337,7 +393,7 @@ export class MapScene extends Phaser.Scene {
       return {
         x: c.x,
         y: c.y,
-        duration: STEP_MS,
+        duration: stepMs,
         onStart: () => {
           // While crossing two tiles, draw in front of both.
           sprite.setDepth(Math.max(this.grid.depth(from.y, fromTile.height, 5), this.grid.depth(step.y, tile.height, 5)));
@@ -347,15 +403,21 @@ export class MapScene extends Phaser.Scene {
       };
     });
     return new Promise((resolve) => {
-      this.tweens.chain({
-        targets: sprite,
-        tweens,
-        onComplete: () => {
-          this.animating--;
-          this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
-          resolve();
-        },
-      });
+      // Settles exactly once: when the walk ends, when another walk replaces it, or by a
+      // watchdog if the tween dies with its sprite (a rebuild mid-walk). Otherwise `busy`
+      // would stay true and the game would stop taking input and AI turns for good.
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        if (blocking) this.animating--;
+        if (this.moveFinish.get(event.entityId) === finish) this.moveFinish.delete(event.entityId);
+        if (sprite.active) this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
+        resolve();
+      };
+      this.moveFinish.set(event.entityId, finish);
+      this.time.delayedCall(event.path.length * stepMs + 1000, finish);
+      this.tweens.chain({ targets: sprite, tweens, onComplete: finish });
     });
   }
 
@@ -374,7 +436,10 @@ export class MapScene extends Phaser.Scene {
     while (this.queue.length > 0) {
       const event = this.queue.shift()!;
       try {
-        await this.play(event);
+        // No single event may hold the game: an animation whose tween died (its sprite was
+        // rebuilt mid-way) would otherwise leave input and AI waiting forever.
+        const stuck = new Promise<'stuck'>((r) => setTimeout(() => r('stuck'), EVENT_WATCHDOG_MS));
+        if ((await Promise.race([this.play(event), stuck])) === 'stuck') console.warn('event playback timed out', event.type);
       } catch (err) {
         console.error('event playback failed', event, err);
       }
@@ -394,9 +459,20 @@ export class MapScene extends Phaser.Scene {
     const e = event as GameEvent & Record<string, unknown>;
     const sprite = (id: unknown) => (typeof id === 'string' ? this.sprites.get(id) : undefined);
     const T = this.grid.tile;
+    // Which event means "cast an ability" is configurable per game (AssetManifest.castEvent);
+    // dnd5e's spellCast is the default. Not a `case` label since the type isn't a literal here.
+    const castEvent = this.manifest.castEvent ?? DEFAULT_CAST_EVENT;
+    if (event.type === castEvent.type) return this.playCastEvent(e, castEvent, state, T);
     switch (event.type) {
-      case 'entityMoved':
-        return this.animateMove(event as EntityMovedEvent, state);
+      case 'entityMoved': {
+        const ev = event as EntityMovedEvent;
+        // Exploring: companions catch up in the background; only the leader's walk holds input.
+        if (state.turn.mode !== 'combat' && ev.entityId !== this.hooks.controlledEntityId()) {
+          void this.animateMove(ev, state, false);
+          return;
+        }
+        return this.animateMove(ev, state);
+      }
       case 'entityTeleported': {
         const ev = event as EntityTeleportedEvent;
         const s = sprite(ev.entityId);
@@ -408,33 +484,48 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       case 'attackRolled': {
-        const attacker = sprite(e.attackerId);
+        const attackerId = String(e.attackerId);
+        const attacker = sprite(attackerId);
         const target = this.centreOf(String(e.targetId));
+        // A spellCast immediately followed by this attackRolled already played 'cast'.
+        const skipAttackAnim = this.suppressNextAttackAnim;
+        this.suppressNextAttackAnim = false;
         if (attacker && target) {
-          this.face(String(e.attackerId), target.x < attacker.x ? 'w' : 'e');
-          await this.juice.lunge(attacker, target);
+          this.face(attackerId, target.x < attacker.x ? 'w' : 'e');
+          if (!skipAttackAnim) {
+            const played = await this.playAction(attackerId, 'attack');
+            if (!played) await this.juice.lunge(attacker, target);
+            else this.idle(attackerId, this.facing.get(attackerId) ?? 's');
+          }
         }
         if (target && !e.hit) await this.juice.floatText(target.x, target.y, this.texts.miss, '#b8b8b8');
         if (target && e.crit) {
           this.juice.shake(1.6);
           void this.juice.floatText(target.x, target.y - T * 0.4, this.texts.crit, '#ffd24a', 0.7);
+          // '@critical' in manifest.fx is a hook, not an ability: the game's own crit flourish.
+          const criticalFx = this.manifest.fx?.['@critical'];
+          if (criticalFx) void this.playSpellEffect(criticalFx, attackerId, { entityId: String(e.targetId) });
           await this.juice.hitStop();
         }
         return;
       }
       case 'damageDealt': {
-        const s = sprite(e.targetId);
+        const targetId = String(e.targetId);
+        const s = sprite(targetId);
         if (!s) return;
         this.playProp('fx_hit_spark', s.x, s.y - T * 0.4, 2_000_000);
         if (['slashing', 'piercing', 'bludgeoning'].includes(String(e.damageType))) this.bloodDecal(s.x, s.y, s.depth);
         this.juice.burst(s.x, s.y, 0x8a1c14, e.crit ? 14 : 8);
         void this.juice.floatText(s.x, s.y, `-${e.amount}`, '#ff6a55', e.crit ? 0.8 : 0.6);
-        await this.juice.hit(s);
+        const played = await this.playAction(targetId, 'hurt');
+        if (played) this.idle(targetId, this.facing.get(targetId) ?? 's');
+        else await this.juice.hit(s);
         return;
       }
       case 'healed': {
         const s = sprite(e.targetId);
         if (s && Number(e.amount) > 0) {
+          this.playProp('fx_healing', s.x, s.y - T * 0.3, 2_000_000);
           this.juice.burst(s.x, s.y, 0x7fe08a, 6);
           await this.juice.floatText(s.x, s.y, `+${e.amount}`, '#8cf09a');
         }
@@ -451,18 +542,6 @@ export class MapScene extends Phaser.Scene {
         if (s && e.detail) await this.juice.floatText(s.x, s.y - T * 0.3, String(e.detail), '#ffe08a', 0.45);
         return;
       }
-      case 'spellCast': {
-        const caster = this.centreOf(String(e.casterId));
-        const target = e.target as { entityId?: string; tile?: Vec2 } | undefined;
-        if (caster) await this.juice.ring(caster.x, caster.y - T * 0.4, 0.6, 0x9ad0ff);
-        const at = target?.tile
-          ? this.grid.tileCentre(target.tile.x, target.tile.y, tileAt(state.map, target.tile)?.height ?? 0)
-          : target?.entityId
-            ? this.centreOf(target.entityId)
-            : null;
-        if (at && (at.x !== caster?.x || at.y !== caster?.y)) await this.juice.ring(at.x, at.y, target?.tile ? 2.5 : 0.8, 0xffa060);
-        return;
-      }
       case 'downed':
       case 'died':
       case 'revived':
@@ -474,11 +553,16 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       case 'mapChanged': {
-        // A new place: rebuild everything and look at the party.
+        // A new place: rebuild everything and put the camera on the leader (not on a sprite
+        // of the map we just left, which the camera might still be following).
+        this.cameras.main.stopFollow();
         this.buildWorld(state);
         this.focusOn(this.hooks.controlledEntityId());
+        const lead = this.sprites.get(this.hooks.controlledEntityId());
+        if (lead) this.cameras.main.startFollow(lead, true, 0.12, 0.12);
         return;
       }
+      case 'controllerChanged':
       case 'entitySpawned':
       case 'entityDespawned':
       case 'entityChanged':
@@ -546,9 +630,20 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       case 'combatStarted':
+        // Bystanders pulled into the fight change rings.
+        this.refreshRings(state);
+        // Show who you're up against before the first turn takes the camera elsewhere.
+        const foes = this.markFoes(state);
+        if (foes.length) {
+          this.cameras.main.stopFollow();
+          const cx = foes.reduce((a, f) => a + f.x, 0) / foes.length;
+          const cy = foes.reduce((a, f) => a + f.y, 0) / foes.length;
+          this.cameras.main.pan(cx, cy, 350, 'Sine.easeInOut');
+        }
         await this.juice.banner(this.texts.combatStart);
         return;
       case 'combatEnded': {
+        this.refreshRings(state);
         const won = e.winner && Object.values(state.entities).some((x) => x.factionId === e.winner && x.controllerId.startsWith('player'));
         await this.juice.banner(won ? this.texts.victory : this.texts.defeat, won ? '#e8d6b0' : '#ff7a6a');
         return;
@@ -723,6 +818,50 @@ export class MapScene extends Phaser.Scene {
     }
   }
 
+  /** Re-dress the foot rings after sides change (no full rebuild). */
+  private refreshRings(state: GameState): void {
+    for (const [id, old] of this.shadows) {
+      const e = state.entities[id];
+      const ring = e ? this.factionRing(e, state) : null;
+      const art = ring ? this.manifest.props?.[ring] : undefined;
+      if (!art || !(old instanceof Phaser.GameObjects.Sprite)) continue;
+      old.play(`prop:${ring}`);
+    }
+  }
+
+  /** Which foot ring an entity wears, seen from the side of the character the player controls. */
+  /** Fight starts: every foe flashes red with a "!" over the head, so nobody wonders who's who. */
+  private markFoes(state: GameState): Vec2[] {
+    const me = state.entities[this.hooks.controlledEntityId()];
+    const at: Vec2[] = [];
+    if (!me) return at;
+    for (const id of state.turn.order) {
+      const foe = state.entities[id];
+      const s = this.sprites.get(id);
+      if (!foe || !s || !isHostile(me, foe)) continue;
+      at.push({ x: s.x, y: s.y });
+      s.setTint(0xff5040);
+      this.time.delayedCall(1400, () => s.active && s.clearTint());
+      const mark = this.add
+        .text(s.x, s.y - this.grid.tile * 1.1, '!', { fontFamily: 'VT323, monospace', fontSize: `${Math.round(this.grid.tile * 0.7)}px`, color: '#ff5a40', stroke: '#000', strokeThickness: Math.max(2, Math.round(this.grid.tile / 8)) })
+        .setOrigin(0.5, 1)
+        .setResolution(4)
+        .setDepth(2_000_000);
+      this.tweens.add({ targets: mark, y: mark.y - 10, alpha: 0, delay: 1400, duration: 500, onComplete: () => mark.destroy() });
+    }
+    return at;
+  }
+
+  private factionRing(entity: Entity, state: GameState): string | null {
+    const me = state.entities[this.hooks.controlledEntityId()];
+    if (!me || entity.tags.includes('object')) return null;
+    if (entity.controllerId === me.controllerId) return 'marker_party';
+    if (entity.tags.includes('noncombatant')) return 'marker_neutral';
+    // Mid-fight, whoever isn't in it is scenery (the guards watching don't look like foes).
+    if (state.turn.mode === 'combat' && !state.turn.order.includes(entity.id)) return 'marker_neutral';
+    return isHostile(me, entity) ? 'marker_enemy' : 'marker_ally';
+  }
+
   /** Simple code-drawn stand-ins for entities whose art isn't in the pack yet (barrels, crates). */
   private addPlaceholderEntity(id: string, spriteId: string, position: Vec2, map: GameState['map']): void {
     const key = `placeholder:${spriteId}`;
@@ -776,6 +915,174 @@ export class MapScene extends Phaser.Scene {
     const s = this.add.sprite(x, y, imageKey(prop.url)).setDepth(depth).setBlendMode(Phaser.BlendModes.ADD);
     s.play(`prop:${id}`);
     s.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => s.destroy());
+  }
+
+  /** Same art as `playProp`, but doesn't auto-destroy — for a prop whose animation loops
+   * (a projectile in flight, a ray, a held buff glow) and whose lifetime the caller manages. */
+  private spawnProp(id: string, x: number, y: number, depth: number): Phaser.GameObjects.Sprite | null {
+    const prop = this.manifest.props?.[id];
+    if (!prop) return null;
+    const s = this.add.sprite(x, y, imageKey(prop.url)).setDepth(depth).setBlendMode(Phaser.BlendModes.ADD);
+    s.play(`prop:${id}`);
+    return s;
+  }
+
+  // --- Spell VFX (docs/ART_CATALOG.md "Efectos de conjuros y habilidades") -----------
+
+  /** A sprite flies from `from` to `to`, rotated to the travel angle; an impact plays on arrival. */
+  private async playProjectile(fxId: string, impactFxId: string | undefined, from: Vec2, to: Vec2, tilesPerSec = 12): Promise<void> {
+    const s = this.spawnProp(fxId, from.x, from.y, 2_050_000);
+    if (!s) return;
+    const dist = Phaser.Math.Distance.Between(from.x, from.y, to.x, to.y);
+    const duration = Math.max(80, (dist / this.grid.tile / tilesPerSec) * 1000);
+    s.setRotation(Phaser.Math.Angle.Between(from.x, from.y, to.x, to.y));
+    // Settles exactly once: Phaser drops a tween silently (no onComplete) if its target is
+    // destroyed mid-flight, so a watchdog backs up the tween's own completion.
+    await new Promise<void>((resolve) => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      s.once(Phaser.GameObjects.Events.DESTROY, finish);
+      this.time.delayedCall(duration + 500, finish);
+      this.tweens.add({ targets: s, x: to.x, y: to.y, duration, ease: 'Linear', onComplete: finish });
+    });
+    if (s.active) s.destroy();
+    if (impactFxId) this.playProp(impactFxId, to.x, to.y, 2_050_000);
+  }
+
+  /** A beam stretched along the caster-target line for a fixed time, so one sprite covers any range. */
+  private async playRay(fxId: string, from: Vec2, to: Vec2, durationMs: number): Promise<void> {
+    const prop = this.manifest.props?.[fxId];
+    if (!prop) return;
+    const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
+    const dist = Phaser.Math.Distance.Between(from.x, from.y, to.x, to.y);
+    const s = this.spawnProp(fxId, mid.x, mid.y, 2_050_000);
+    if (!s) return;
+    s.setRotation(Phaser.Math.Angle.Between(from.x, from.y, to.x, to.y));
+    s.setScale(Math.max(1, dist / (prop.frames[0]?.w ?? dist)), 1);
+    await wait(this, durationMs);
+    s.destroy();
+  }
+
+  /** One flare per tile, staggered by distance from the caster (a cone or line sweeping outward). */
+  private async playCone(fxId: string, casterPos: Vec2, tiles: Vec2[], delayPerTileMs: number): Promise<void> {
+    const state = this.store.state;
+    // Mobile perf: a cone/line is a handful of tiles already, but cap it just in case content grows.
+    const capped = tiles.slice(0, 24);
+    await Promise.all(
+      capped.map((t) => {
+        const c = this.grid.tileCentre(t.x, t.y, tileAt(state.map, t)?.height ?? 0);
+        const dist = Math.hypot(t.x - casterPos.x, t.y - casterPos.y);
+        return wait(this, dist * delayPerTileMs).then(() => this.playProp(fxId, c.x, c.y, 2_050_000));
+      }),
+    );
+  }
+
+  /**
+   * Plays one engine event that casts an ability (dnd5e's `spellCast` by default — see
+   * `AssetManifest.castEvent`): the caster's 'cast' animation (if its art has one), then
+   * its `manifest.fx` entry (if any), falling back to the original generic ring flourish.
+   */
+  private async playCastEvent(e: GameEvent & Record<string, unknown>, cfg: NonNullable<AssetManifest['castEvent']>, state: GameState, T: number): Promise<void> {
+    const casterId = String(e[cfg.casterField]);
+    const abilityId = String(e[cfg.idField]);
+    const target = (e[cfg.targetField] as { entityId?: string; tile?: Vec2 } | undefined) ?? {};
+    const tiles = cfg.tilesField ? (e[cfg.tilesField] as Vec2[] | undefined) : undefined;
+    // If the very next queued event is this ability's own attack roll, its 'attack'
+    // animation would be redundant with the 'cast' we're about to play.
+    if (this.queue[0]?.type === 'attackRolled') this.suppressNextAttackAnim = true;
+
+    if (target.tile) {
+      const casterPos = state.entities[casterId]?.position;
+      if (casterPos) this.face(casterId, target.tile.x < casterPos.x ? 'w' : 'e');
+    }
+    const hasCastAnim = this.art(casterId)?.kind === 'frames' && !!this.art(casterId)?.animations.cast;
+    if (hasCastAnim) {
+      void this.playAction(casterId, 'cast');
+      await wait(this, 350); // ~frame 3 of 4 at 8fps: the glow is released, so the fx reads as cast by the hand
+    }
+
+    const fx = this.manifest.fx?.[abilityId];
+    if (fx) {
+      await this.playSpellEffect(fx, casterId, target, tiles);
+    } else {
+      // No entry in manifest.fx: the original, generic ring-at-caster-then-target flourish.
+      const caster = this.centreOf(casterId);
+      if (caster) await this.juice.ring(caster.x, caster.y - T * 0.4, 0.6, 0x9ad0ff);
+      const at = target.tile
+        ? this.grid.tileCentre(target.tile.x, target.tile.y, tileAt(state.map, target.tile)?.height ?? 0)
+        : target.entityId
+          ? this.centreOf(target.entityId)
+          : null;
+      if (at && caster && (at.x !== caster.x || at.y !== caster.y)) await this.juice.ring(at.x, at.y, target.tile ? 2.5 : 0.8, 0xffa060);
+    }
+
+    if (hasCastAnim) this.idle(casterId, this.facing.get(casterId) ?? 's');
+  }
+
+  /** Plays one `manifest.fx` entry, resolving once its main visual is done. */
+  private async playSpellEffect(cfg: SpellFx, casterId: string, target: { entityId?: string; tile?: Vec2 }, tiles?: Vec2[]): Promise<void> {
+    const from = this.centreOf(casterId);
+    if (!from) return;
+    const state = this.store.state;
+    const to = target.entityId
+      ? this.centreOf(target.entityId)
+      : target.tile
+        ? this.grid.tileCentre(target.tile.x, target.tile.y, tileAt(state.map, target.tile)?.height ?? 0)
+        : null;
+
+    switch (cfg.kind) {
+      case 'projectile': {
+        if (!to) return;
+        const count = cfg.count ?? 1;
+        await Promise.all(
+          Array.from({ length: count }, (_, i) => wait(this, i * (cfg.staggerMs ?? 0)).then(() => this.playProjectile(cfg.fx, cfg.impactFx, from, to, cfg.tilesPerSec))),
+        );
+        return;
+      }
+      case 'ray': {
+        if (!to) return;
+        await this.playRay(cfg.fx, from, to, cfg.durationMs ?? 400);
+        if (cfg.impactFx) this.playProp(cfg.impactFx, to.x, to.y, 2_050_000);
+        return;
+      }
+      case 'instant': {
+        const at = to ?? from;
+        const def = this.manifest.props?.[cfg.fx];
+        if (def?.loop) {
+          // A looping texture used as a single flash: hold it briefly, then remove it by hand.
+          const s = this.spawnProp(cfg.fx, at.x, at.y, 2_050_000);
+          await wait(this, 1200);
+          s?.destroy();
+        } else {
+          this.playProp(cfg.fx, at.x, at.y, 2_050_000);
+        }
+        return;
+      }
+      case 'cone': {
+        if (!tiles?.length) return;
+        const casterPos = state.entities[casterId]?.position;
+        if (!casterPos) return;
+        await this.playCone(cfg.fx, casterPos, tiles, cfg.delayPerTileMs ?? 40);
+        return;
+      }
+      case 'burst': {
+        if (!to) return;
+        await this.playProjectile(cfg.beadFx, undefined, from, to, cfg.tilesPerSec);
+        this.playProp(cfg.fx, to.x, to.y, 2_050_000);
+        this.juice.shake(1.6);
+        return;
+      }
+      case 'ring': {
+        this.playProp(cfg.fx, from.x, from.y, 2_050_000);
+        if (cfg.extraFx) this.playProp(cfg.extraFx, from.x, from.y, 2_060_000);
+        this.juice.shake(1);
+        return;
+      }
+    }
   }
 
   /** Blood stays on the floor for a while after a hit, then fades. */
@@ -899,10 +1206,12 @@ export class MapScene extends Phaser.Scene {
           });
           const key = `${id}:${name}`;
           if (this.anims.exists(key)) continue;
+          // Action anims (actions.json) have their own pace: attack ~10fps, hurt ~12fps, cast stays at 8fps.
+          const frameRate = name === 'attack' ? 10 : name === 'hurt' ? 12 : 8;
           this.anims.create({
             key,
             frames: rects.map((_, f) => ({ key: imageKey(art.url), frame: `${id}:${name}-${f}` })),
-            frameRate: 8,
+            frameRate,
             repeat: name === 'idle' || name === 'move' ? -1 : 0,
           });
         }
@@ -983,6 +1292,34 @@ export class MapScene extends Phaser.Scene {
       entityId,
       this.tweens.add({ targets: sprite, scaleY: this.baseScale(this.spriteIdOf(entityId)) * 1.025, duration: 1200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }),
     );
+  }
+
+  /**
+   * Plays a non-looping action animation ('attack', 'cast' or 'hurt' — content/<game>/art/
+   * <preset>/actions.json) and resolves once it finishes. Resolves `false` immediately, without
+   * playing anything, when this sprite doesn't have that animation (older packs, LPC art):
+   * the caller falls back to its own code-driven effect.
+   */
+  private playAction(entityId: string, name: 'attack' | 'cast' | 'hurt'): Promise<boolean> {
+    const art = this.art(entityId);
+    const s = this.sprites.get(entityId);
+    if (!s || !art || art.kind !== 'frames' || !art.animations[name]) return Promise.resolve(false);
+    const id = this.spriteIdOf(entityId);
+    return new Promise((resolve) => {
+      // Settles exactly once: on the animation's own complete, if the sprite dies mid-play
+      // (a rebuild), or by a watchdog — same reasoning as animateMove's `moveFinish`, since a
+      // dead sprite never fires ANIMATION_COMPLETE and would otherwise stall the whole queue.
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve(true);
+      };
+      s.once(Phaser.Animations.Events.ANIMATION_COMPLETE, finish);
+      s.once(Phaser.GameObjects.Events.DESTROY, finish);
+      this.time.delayedCall(1500, finish);
+      s.play(`${id}:${name}`, true);
+    });
   }
 
   private stopBreathing(entityId: string): void {

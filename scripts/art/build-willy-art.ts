@@ -14,6 +14,7 @@ import { type Rgb, hexToRgb, mix } from './color.ts';
 import { bayer, rng, valueNoise } from './pixel.ts';
 import * as env from './environment-art.ts';
 import * as show from './willy-show-art.ts';
+import { applyFxTable } from './fx-table.ts';
 
 const [game = 'willy', preset = 'ninja'] = process.argv.slice(2);
 const root = join(import.meta.dirname, '..', '..');
@@ -428,6 +429,12 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'fx-confeti': { frames: [0, 1, 2, 3, 4].map(show.confetti), fps: 12, loop: false, anchor: 'centre' },
   'fx-vapor': { frames: env.steam(), fps: 10, loop: false, anchor: 'floor' },
   'fx-explosion': { frames: env.explosion(), fps: 14, loop: false, anchor: 'centre', light: '#ffb060' },
+  'fx-explosion-bombona': { frames: show.bottleBlast(), fps: 14, loop: false, anchor: 'centre', light: '#ffb060' },
+  'fx-bombona-volando': { frames: [0, 1, 2, 3].map(show.flyingBottle), fps: 14, loop: true, anchor: 'centre' },
+  'fx-mate-impacto': { frames: show.dunkImpact(), fps: 14, loop: false, anchor: 'floor', light: '#ffb040' },
+  'fx-papeleo': { frames: [0, 1, 2, 3, 4, 5].map(show.paperStorm), fps: 10, loop: false, anchor: 'floor' },
+  'fx-sello': { frames: [0, 1, 2, 3, 4].map(show.stampThump), fps: 12, loop: false, anchor: 'centre' },
+  'fx-chispazo': { frames: [0, 1, 2, 3, 4].map(show.zapImpact), fps: 16, loop: false, anchor: 'centre', light: '#4fe8ff' },
   // Floor 5 arena
   'atril-rojo': { frames: [show.podium('#e0302a', false), show.podium('#e0302a', true)], fps: 0, loop: false, anchor: 'floor' },
   'atril-azul': { frames: [show.podium('#3a8fd9', false), show.podium('#3a8fd9', true)], fps: 0, loop: false, anchor: 'floor' },
@@ -527,5 +534,6 @@ for (const [id, o] of Object.entries(objects)) {
 }
 const uiRects = layout.get('ui')!;
 manifest.ui = Object.fromEntries(Object.keys(ui).map((id, i) => [id, { url, ...uiRects[i]!, ...(id.startsWith('carta-') ? { slice: 8 } : {}) }]));
+applyFxTable(manifest, gameDir, preset);
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
 console.log(`${game} ${preset} art: ${tiles.length} tiles, ${Object.keys(props).length} props, ${Object.keys(surfaces).length} surfaces, ${Object.keys(objects).length} objects, ${Object.keys(ui).length} ui -> art-src/generated/${base}.png`);

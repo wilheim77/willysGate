@@ -286,7 +286,8 @@ function decrementConditions(state: GameState, entityId: string): GameState {
 export const startCombat: CommandHandler<StartCombatCommand> = (initial, cmd, { ruleset }) => {
   let state = initial;
   if (cmd.issuer !== SYSTEM_ISSUER) return fail('not_your_entity', 'Only the system starts combat');
-  const participants = cmd.participants.filter((id) => state.entities[id]);
+  // Each fighter once (an ally can be listed both as the party's and as the encounter's).
+  const participants = [...new Set(cmd.participants)].filter((id) => state.entities[id]);
   // Whoever is pulled into a fight stops being a bystander.
   const entities = { ...state.entities };
   for (const id of participants) {

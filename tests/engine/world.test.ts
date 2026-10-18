@@ -101,3 +101,15 @@ describe('story-conditional presence', () => {
     void e;
   });
 });
+
+describe('story zones stop the walk', () => {
+  it('a long walk stops on the first tile of a pending scene, and not once it has played', () => {
+    let s = engine.newGame({ seed: 1, map: asciiMap(['........'], 'road'), entities: [hunter('hero', 0, 0), makeEntity({ id: 'miner', controllerId: 'ai', factionId: 'miners', position: { x: 7, y: 0 }, resources: { blood: pool(4) } })] });
+    s = withZones(s, [{ name: 'block', layer: 'scenes', x: 4, y: 0, width: 1, height: 1, properties: { dialogue: 'cart', speaker: 'miner', once: true } }]);
+    const r = engine.apply(s, { type: 'move', issuer: 'player:1', entityId: 'hero', to: { x: 6, y: 0 } } as BaseCommand);
+    expect(r.ok && r.state.entities.hero!.position).toEqual({ x: 4, y: 0 });
+    const played = { ...s, flags: { 'scene:block': true } };
+    const r2 = engine.apply(played, { type: 'move', issuer: 'player:1', entityId: 'hero', to: { x: 6, y: 0 } } as BaseCommand);
+    expect(r2.ok && r2.state.entities.hero!.position).toEqual({ x: 6, y: 0 });
+  });
+});
