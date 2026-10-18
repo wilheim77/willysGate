@@ -21,5 +21,8 @@
   "heavy_crossbow": { "label": "Ballesta pesada", "damage": "1d10", "type": "piercing", "properties": ["ranged", "heavy", "two-handed"], "range": 20 },
   "longbow": { "label": "Arco largo", "damage": "1d8", "type": "piercing", "properties": ["ranged", "heavy", "two-handed"], "range": 30 },
   "claws": { "label": "Garras", "damage": "2d4", "type": "slashing", "properties": ["natural", "finesse"], "range": 1 },
-  "bite": { "label": "Mordisco", "damage": "2d6", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 }
+  "bite": { "label": "Mordisco", "damage": "2d6", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
+  "fangs": { "label": "Colmillos", "damage": "1d6", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
+  "rat_bite": { "label": "Mordisco", "damage": "1d4", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
+  "wolf_bite": { "label": "Dentellada", "damage": "2d4", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 }
 }
