@@ -2,7 +2,7 @@ import { itemCount, withItems } from './inventory';
 import type { GameEvent } from './command-types';
 import type { Ruleset } from './ruleset';
 import type { Tile, Vec2 } from './grid';
-import type { AppliedCondition, Entity, FlagValue, GameState } from './state';
+import type { AppliedCondition, Entity, FlagValue, GameState, JsonValue } from './state';
 import { inBounds, posKey, tileAt } from './grid';
 import { makeSurface, surfaceable, surfacesOf, withSurfaces } from './surfaces';
 
@@ -16,6 +16,11 @@ export type Effect =
   | { type: 'applyCondition'; entityId: string; condition: string; sourceId?: string; remainingTurns?: number }
   | { type: 'removeCondition'; entityId: string; condition: string }
   | { type: 'setFlag'; flag: string; value: FlagValue }
+  /**
+   * Replace one entry of `state.systems` (a ruleset's own bookkeeping: achievements, a clock...).
+   * The engine never reads it; no event (the ruleset announces what matters with its own).
+   */
+  | { type: 'setSystem'; system: string; value: JsonValue }
   /** Raise or lower a pool's maximum (e.g. a spell granting extra hit points). Current moves with it. */
   | { type: 'modifyResourceMax'; entityId: string; resource: string; delta: number }
   /** Instant relocation (teleport); walking always goes through the move command. */
@@ -451,6 +456,10 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
       case 'setFlag': {
         next = { ...next, flags: { ...next.flags, [effect.flag]: effect.value } };
         events.push({ type: 'flagChanged', flag: effect.flag, value: effect.value });
+        break;
+      }
+      case 'setSystem': {
+        next = { ...next, systems: { ...next.systems, [effect.system]: effect.value } };
         break;
       }
     }
