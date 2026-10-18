@@ -126,8 +126,8 @@ describe('rival encounter dialogue: play', () => {
     if (!r.ok) throw new Error(r.error.message);
     expect(r.state.entities[rival.id]).toBeUndefined();
     expect((r.state.systems.rivals as unknown as { id: string; desenlace?: string }[])?.find((x) => x.id === rival.id)?.desenlace).toBe('huida');
-    expect(started.events.some((e) => e.type === 'rivalEncountered' && (e as unknown as { evento: string }).evento === 'presentacion')).toBe(true);
-    expect(r.events.some((e) => e.type === 'rivalEncountered' && (e as unknown as { evento: string }).evento === 'huida')).toBe(true);
+    expect(started.events.some((e) => e.type === 'rivalEncountered' && (e as unknown as { momento: string }).momento === 'presentacion')).toBe(true);
+    expect(r.events.some((e) => e.type === 'rivalEncountered' && (e as unknown as { momento: string }).momento === 'huida')).toBe(true);
     // One more "Continuar" (the final node has no choices) closes the conversation.
     expect(dialogueOf(r.state)?.nodeId).toBe('huidaOk');
     const closed = engine.apply(r.state, { type: 'chooseOption', issuer: 'player:1', index: 0 } as BaseCommand);

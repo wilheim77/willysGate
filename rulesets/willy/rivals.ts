@@ -54,7 +54,7 @@ export function rivalAfterCommand(_ruleset: Ruleset, state: GameState, events: G
   if (started?.partnerId) {
     const r = byId.get(started.partnerId);
     const primeraVez = !r || r.desenlace === undefined;
-    out.events.push(rivalFields(state, started.partnerId, { evento: 'presentacion', primeraVez, ...(r?.desenlace ? { desenlaceAnterior: r.desenlace } : {}) }));
+    out.events.push(rivalFields(state, started.partnerId, { momento: 'presentacion', primeraVez, ...(r?.desenlace ? { desenlaceAnterior: r.desenlace } : {}) }));
   }
 
   // 2) The pact or the "dejar ir" node of that same tree resolved this command.
@@ -68,7 +68,7 @@ export function rivalAfterCommand(_ruleset: Ruleset, state: GameState, events: G
     if (r && r.desenlace !== outcome) {
       byId.set(partnerId, { ...r, desenlace: outcome });
       changed = true;
-      out.events.push(rivalFields(state, partnerId, { evento: outcome }));
+      out.events.push(rivalFields(state, partnerId, { momento: outcome }));
     }
   }
 
@@ -79,7 +79,7 @@ export function rivalAfterCommand(_ruleset: Ruleset, state: GameState, events: G
     if (!r || r.desenlace === 'derrotado') continue;
     byId.set(e.id, { ...r, desenlace: 'derrotado' });
     changed = true;
-    out.events.push(rivalFields(state, e.id, { evento: 'derrota' }));
+    out.events.push(rivalFields(state, e.id, { momento: 'derrota' }));
   }
 
   // 4) A pact-return showing up: a loyal ally at Willy's side, or a tramposo's betrayal ambush.
@@ -89,7 +89,7 @@ export function rivalAfterCommand(_ruleset: Ruleset, state: GameState, events: G
     for (const e of Object.values(state.entities)) {
       if (!hasTag(e, 'vuelta:pacto') || hasTag(e, 'anunciado:vuelta')) continue;
       const traiciona = hasTag(e, 'traicion:si');
-      out.events.push(rivalFields(state, e.id, traiciona ? { evento: 'traicion', traicion: true } : { evento: 'pacto', comoAliado: true }));
+      out.events.push(rivalFields(state, e.id, traiciona ? { momento: 'traicion', traicion: true } : { momento: 'pacto', comoAliado: true }));
       out.effects.push({ type: 'setEntity', entityId: e.id, addTags: ['anunciado:vuelta'] });
     }
   }

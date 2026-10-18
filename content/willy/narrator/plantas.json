@@ -624,7 +624,7 @@
           "id": "rg-14",
           "texto": "{rivalNombre} ha cambiado su rol de rival a aliad{rival:o}. En la sala de guionistas se oye un «¿y ahora qué hacemos?».",
           "si": {
-            "evento": "pacto"
+            "comoAliado": true
           }
         }
       ],
