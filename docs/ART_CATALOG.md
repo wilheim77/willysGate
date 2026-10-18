@@ -569,7 +569,7 @@ Los genera `scripts/art/build-icons.ts`, que corre después de `build-willy-art.
   - El ojo de Canal Abismo va en el frontal. La caída, el temblor y el confeti grande los anima el cliente con CSS.
 - `icono-reloj` (cuenta atrás del derrumbe) ya existía entre los iconos de estado.
 
-## Enemigos nuevos de *Willy* y élites (en pausa)
+## Enemigos nuevos de *Willy* y élites
 
 En `hand-sprites.json` (con `attack`, `cast` y `hurt` derivados vía `actions.json`, y retrato de 32×32), según la lista del agente de *Willy*:
 
@@ -579,7 +579,48 @@ En `hand-sprites.json` (con `attack`, `cast` y `hurt` derivados vía `actions.js
 - **Balneario:** `masajista-implacable`, `terapeuta-de-lodos`, `nube-de-vapor` y `pastilla-efervescente`.
 - **Plató:** `presentador-suplente`, `maquilladora`, `productor-ejecutivo` y `foco-andante`.
 
-Cada uno tiene su `<id>--elite`: el mismo sprite con la paleta dorada que calcula el generador, más el prop `aura-elite` (aro dorado animado bajo los pies). Vista previa: [`art-previews/ninja-enemigos-nuevos.png`](art-previews/ninja-enemigos-nuevos.png). **Pendiente (Willy en pausa):** los efectos de sus habilidades y el derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`).
+Cada uno tiene su `<id>--elite`: el mismo sprite con la paleta dorada que calcula el generador, más el prop `aura-elite` (aro dorado animado bajo los pies). Vista previa: [`art-previews/ninja-enemigos-nuevos.png`](art-previews/ninja-enemigos-nuevos.png) (de la sesión anterior; los sprites no han cambiado) y, para los que siguen abajo, [`art-previews/ninja-props.png`](art-previews/ninja-props.png), [`art-previews/ninja-surfaces.png`](art-previews/ninja-surfaces.png) y [`art-previews/ninja-terrain.png`](art-previews/ninja-terrain.png).
+
+### Efectos de sus habilidades (`fx` del manifiesto)
+
+18 ids de habilidad acordados con el agente de *Willy* (las mismas formas genéricas reutilizadas con otro color, como `gWave`), más `autodestruccion` (reutiliza `fx-explosion`) para los enemigos "lata"/petardo/pastilla que estallan. Dibujados por `scripts/art/willy-show-art.ts` (`reachBeam`/`markedBeam`, `groundPulse`, `impactBurst`, `coneWash`, `tossedBit`, `tinyBead`) y cableados en `content/willy/art/ninja/fx.json`.
+
+| Habilidad | Enemigo(s) | `kind` | Prop(s) |
+|---|---|---|---|
+| `tentaculo` | `pulpo-de-bajura` | ray | `fx-tentaculo` (lanzazo morado) |
+| `percebe` | `percebeiro-ahogado` | projectile | `fx-percebe` |
+| `descarga-de-charco` | `anguila-electrica` | burst | `fx-chispa-mini` (cuenta) + `fx-descarga-charco` (anillo cian) |
+| `autodestruccion` | `lata-de-bonito`, `lata-de-fabada`, `petardo-andante`, `pastilla-efervescente` | instant | `fx-explosion` (reutilizado) |
+| `vaharada` | `pastilla-efervescente` | burst | `fx-chispa-mini` + `fx-vapor` (reutilizado) |
+| `nube-de-colonia` | `dependienta-de-perfumeria` | cone | `fx-nube-colonia` (niebla rosa) |
+| `a-reponer` | `encargado-de-seccion` | ring | `fx-a-reponer` (anillo verde) |
+| `placaje` | `guardia-de-seguridad` | instant | `fx-placaje` (destello rojo) |
+| `corcho` | `tirador-de-feria` | projectile | `fx-corcho` |
+| `linea` | `abuela-del-bingo` | ring | `fx-linea-bingo` (anillo rosa) |
+| `bajo-de-la-carpa` | `dj-de-la-carpa` | ring | `fx-bajo-carpa` (anillo naranja) |
+| `llamar-bailarines` | `dj-de-la-carpa` | instant | `fx-confeti` (reutilizado) |
+| `llave` | `masajista-implacable` | instant | `fx-llave` (destello blanco) |
+| `lodo-curativo` | `terapeuta-de-lodos` | ring | `fx-lodo-curativo` (anillo pardo/verde) |
+| `barro-a-la-cara` | `terapeuta-de-lodos` | projectile | `fx-barro-cara` |
+| `pregunta-trampa` | `presentador-suplente` | ray | `fx-pregunta-trampa` (rayo con interrogaciones) |
+| `retoque` | `maquilladora` | ring | `fx-retoque` (anillo rosa, polvo) |
+| `llamar-figurantes` | `productor-ejecutivo` | instant | `fx-claqueta-llamada` (destello amarillo) |
+| `foco-cegador` | `foco-andante` | cone | `fx-foco-cegador` (cono blanco, `light`) |
+
+`bailarin-de-la-carpa` y `nube-de-vapor` no tienen habilidad propia con FX todavía (atacan cuerpo a cuerpo o con rasgos sin proyección visual); se puede añadir si el ruleset les da una.
+
+### Derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`)
+
+Arte para el reloj de derrumbe de planta (`floors.json` → `reloj.derrumbe`): la sala tiembla y se agrieta una ronda antes de caer, luego la casilla queda hundida e intransitable.
+
+| Id | Tipo | Dónde | Qué es |
+|---|---|---|---|
+| `grieta` | surface | `assets/ninja/extra.png` | Grietas oscuras y opacas con un resplandor ámbar grueso debajo (se ve sobre cualquier suelo), 3 frames que pulsan durante el aviso previo de 1 ronda |
+| `hundido` | terrain | `tiles.json` → `tiles.json` de Willy | Hueco con losas rotas volcadas (2 variantes de `top`) y una cara de hormigón partido con varillas (`hundido_cara`); **intransitable**: la sala/mapa debe poner `walkable: false` en esas casillas al hacer el `setTile`/`setTiles` del derrumbe |
+| `fx-polvo-derrumbe` | prop (`floor`) | `assets/ninja/extra.png` | Polvareda grande y cálida que sube al caer la sala, 6 frames |
+| `fx-cascotes` | prop (`floor`) | `assets/ninja/extra.png` | Un par de cascotes cayendo con estela y golpe de polvo al tocar el suelo, 5 frames |
+
+Vista previa: [`art-previews/ninja-terrain.png`](art-previews/ninja-terrain.png) (`hundido`), [`art-previews/ninja-surfaces.png`](art-previews/ninja-surfaces.png) (`grieta`) y [`art-previews/ninja-props.png`](art-previews/ninja-props.png) (los dos FX). **Petición al cliente:** al entrar en el aviso previo, poner `grieta` como superficie de las casillas de la sala; al cumplirse el `segundosPorSala`, lanzar `fx-cascotes` y `fx-polvo-derrumbe` y hacer `setTiles` a `hundido` con `walkable: false`.
 
 # Cadáveres (*Intereses*)
 
