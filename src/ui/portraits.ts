@@ -21,9 +21,17 @@ function load(url: string): Promise<HTMLImageElement> {
   return p;
 }
 
+/**
+ * A `<id>--<suffix>` variant (Willy's elites, rivals' colour variants...) shares its base
+ * id's portrait by design — there's no art budget for a dedicated one per variant. Strips
+ * everything from the first `--` on, not just a hardcoded `--elite`: the same convention
+ * covers every suffixed sprite id in the manifest (`content/willy/assets/ninja.json`).
+ */
+const baseIdOf = (spriteId: string): string => spriteId.replace(/--.+$/, '');
+
 /** Source rectangle for a sprite's portrait: [image url, frame rect, crop the bust?]. */
 function sourceOf(manifest: AssetManifest, spriteId: string): [string, Rect, boolean] | null {
-  const portrait = manifest.portraits?.[spriteId];
+  const portrait = manifest.portraits?.[spriteId] ?? manifest.portraits?.[baseIdOf(spriteId)];
   if (portrait) return [portrait.url, portrait, false];
   const art = manifest.sprites[spriteId];
   if (!art) return null;
