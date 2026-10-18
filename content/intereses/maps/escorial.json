@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 35,
+ "nextobjectid": 37,
  "properties": [
   {
    "name": "name",
@@ -316,6 +316,84 @@
    "objects": [
     {
      "id": 20,
+     "name": "farol-camino-plaza",
+     "type": "",
+     "point": true,
+     "x": 80,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "name": "farol-camino-calles",
+     "type": "",
+     "point": true,
+     "x": 48,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 22,
      "name": "hoguera-sinpaga",
      "type": "",
      "point": true,
@@ -349,7 +427,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 23,
      "name": "farol-pozo",
      "type": "",
      "point": true,
@@ -388,7 +466,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 24,
      "name": "antorcha-bocamina",
      "type": "",
      "point": true,
@@ -450,7 +528,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 23,
+     "id": 25,
      "name": "aceite-carro",
      "type": "",
      "x": 384,
@@ -468,7 +546,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 26,
      "name": "balsa-escoria",
      "type": "",
      "x": 128,
@@ -486,7 +564,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 27,
      "name": "escombros-ladera-a",
      "type": "",
      "x": 288,
@@ -504,7 +582,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 28,
      "name": "escombros-ladera-b",
      "type": "",
      "x": 928,
@@ -534,7 +612,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 29,
      "name": "cuerda-aceite",
      "type": "",
      "x": 224,
@@ -572,7 +650,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 30,
      "name": "cepo-sinpaga",
      "type": "",
      "x": 704,
@@ -642,7 +720,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 29,
+     "id": 31,
      "name": "a-plaza",
      "type": "",
      "x": 96,
@@ -665,7 +743,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 32,
      "name": "a-calles",
      "type": "",
      "x": 0,
@@ -688,7 +766,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 33,
      "name": "pozo-del-ahorcado",
      "type": "",
      "x": 992,
@@ -721,7 +799,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 34,
      "name": "bocamina",
      "type": "",
      "x": 1024,
@@ -766,7 +844,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 33,
+     "id": 35,
      "name": "callado-pozo",
      "type": "",
      "x": 960,
@@ -794,7 +872,7 @@
      ]
     },
     {
-     "id": 34,
+     "id": 36,
      "name": "sinpaga-jefe",
      "type": "",
      "x": 32,

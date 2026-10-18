@@ -71,6 +71,9 @@ export default {
     'well-1': [31, 5],
   },
   lights: [
+    { name: 'farol-camino-plaza', at: [2, 1], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-camino-calles', at: [1, 10], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+
     { name: 'hoguera-sinpaga', at: [14, 21], radius: 5, color: '#ff9a4a', flicker: 0.2 },
     { name: 'farol-pozo', at: [30, 6], radius: 3.5, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
     { name: 'antorcha-bocamina', at: [31, 17], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },

@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 36,
+ "nextobjectid": 41,
  "properties": [
   {
    "name": "name",
@@ -36,10 +36,10 @@
    "opacity": 1,
    "visible": true,
    "data": [
-58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,43,43,43,43,58,57,58,57,
-57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,39,39,39,39,57,58,57,58,
-58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,39,39,39,39,58,57,58,57,
-57,58,57,58,57,58,57,58,59,59,59,59,57,58,57,58,57,58,57,58,57,58,35,35,35,35,57,58,57,58,
+58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,59,43,43,43,43,59,57,58,57,
+57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,59,39,39,39,39,59,58,57,58,
+58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,57,58,59,39,39,39,39,59,57,58,57,
+57,58,57,58,57,58,57,58,59,59,59,59,57,58,57,58,57,58,57,58,57,59,35,35,35,35,59,58,57,58,
 58,45,45,45,45,45,45,45,59,59,59,59,45,45,45,45,45,45,45,45,45,45,35,35,35,35,58,57,58,57,
 57,45,45,45,45,45,45,45,59,59,59,59,45,45,45,45,45,45,45,45,45,45,45,45,45,45,57,58,57,58,
 58,45,45,45,45,45,45,7,16,16,16,16,16,16,7,45,45,45,45,45,45,45,45,45,45,45,58,57,58,57,
@@ -360,6 +360,201 @@
    "objects": [
     {
      "id": 24,
+     "name": "farol-camino",
+     "type": "",
+     "point": true,
+     "x": 48,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "name": "farol-calles-1",
+     "type": "",
+     "point": true,
+     "x": 912,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "name": "farol-calles-2",
+     "type": "",
+     "point": true,
+     "x": 912,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "name": "farol-escorial-1",
+     "type": "",
+     "point": true,
+     "x": 368,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "name": "farol-escorial-2",
+     "type": "",
+     "point": true,
+     "x": 496,
+     "y": 592,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 29,
      "name": "brasero-cadalso-1",
      "type": "",
      "point": true,
@@ -398,7 +593,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 30,
      "name": "brasero-cadalso-2",
      "type": "",
      "point": true,
@@ -437,7 +632,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 31,
      "name": "antorcha-pico-roto",
      "type": "",
      "point": true,
@@ -476,7 +671,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 32,
      "name": "candil-mercado",
      "type": "",
      "point": true,
@@ -515,7 +710,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 33,
      "name": "farol-pozo",
      "type": "",
      "point": true,
@@ -554,7 +749,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 34,
      "name": "antorcha-abadia",
      "type": "",
      "point": true,
@@ -616,7 +811,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 30,
+     "id": 35,
      "name": "abrevadero",
      "type": "",
      "x": 512,
@@ -657,7 +852,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 31,
+     "id": 36,
      "name": "a-abadia",
      "type": "",
      "x": 704,
@@ -690,7 +885,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 37,
      "name": "a-calles",
      "type": "",
      "x": 928,
@@ -723,7 +918,7 @@
      ]
     },
     {
-     "id": 33,
+     "id": 38,
      "name": "a-escorial",
      "type": "",
      "x": 384,
@@ -756,7 +951,7 @@
      ]
     },
     {
-     "id": 34,
+     "id": 39,
      "name": "a-camino",
      "type": "",
      "x": 0,
@@ -791,7 +986,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 35,
+     "id": 40,
      "name": "juicio-anselmo",
      "type": "",
      "x": 0,

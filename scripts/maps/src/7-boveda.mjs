@@ -44,6 +44,7 @@ export default {
     'inscription-1': [7, 5], // the elvish carving: [Historia] CD 13 for an elf or dwarf
   },
   lights: [
+    { name: 'candil-salida', at: [2, 11], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.8, prop: 'oil_lamp' },
     { name: 'brillo-resonador-1', at: [11, 7], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
     { name: 'brillo-resonador-2', at: [20, 7], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
     { name: 'brillo-resonador-3', at: [11, 17], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },

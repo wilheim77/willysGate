@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 10,
- "nextobjectid": 29,
+ "nextobjectid": 30,
  "properties": [
   {
    "name": "name",
@@ -290,6 +290,45 @@
    "objects": [
     {
      "id": 18,
+     "name": "candil-salida",
+     "type": "",
+     "point": true,
+     "x": 80,
+     "y": 368,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.8
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.18
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
+      }
+     ]
+    },
+    {
+     "id": 19,
      "name": "brillo-resonador-1",
      "type": "",
      "point": true,
@@ -323,7 +362,7 @@
      ]
     },
     {
-     "id": 19,
+     "id": 20,
      "name": "brillo-resonador-2",
      "type": "",
      "point": true,
@@ -357,7 +396,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "brillo-resonador-3",
      "type": "",
      "point": true,
@@ -391,7 +430,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 22,
      "name": "brillo-resonador-4",
      "type": "",
      "point": true,
@@ -425,7 +464,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 23,
      "name": "brasero-brea",
      "type": "",
      "point": true,
@@ -464,7 +503,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 24,
      "name": "farol-polvorin",
      "type": "",
      "point": true,
@@ -526,7 +565,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 24,
+     "id": 25,
      "name": "escombros-sima",
      "type": "",
      "x": 256,
@@ -567,7 +606,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 25,
+     "id": 26,
      "name": "a-mina",
      "type": "",
      "x": 0,
@@ -602,7 +641,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 26,
+     "id": 27,
      "name": "brea-habla",
      "type": "",
      "x": 96,
@@ -642,7 +681,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 28,
      "name": "derrumbe",
      "type": "",
      "x": 416,
@@ -670,7 +709,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 29,
      "name": "derrumbe-borde",
      "type": "",
      "x": 576,

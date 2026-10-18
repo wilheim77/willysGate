@@ -67,6 +67,8 @@ export default {
     'barrel-1': [33, 14],
   },
   lights: [
+    { name: 'candil-bajada-boveda', at: [38, 12], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.8, prop: 'oil_lamp' },
+    { name: 'candil-pozo', at: [21, 1], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.8, prop: 'oil_lamp' },
     { name: 'candil-bocamina', at: [4, 13], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },
     { name: 'candil-torre', at: [17, 12], radius: 3.5, color: '#ffb050', flicker: 0.15, prop: 'oil_lamp' },
     { name: 'candil-repisa', at: [22, 5], radius: 4, color: '#ffb050', flicker: 0.15, prop: 'torch_wall' },

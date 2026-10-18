@@ -55,12 +55,12 @@ kkkkkkkssssskkkkkkkkkkksssssskkk   33322221111122222322222111111223
 kkksssssssssssssssskkkkksssssssk   32211111111111111112333211111112
 kksssssssssssss^ssskkGkksssssssk   32111111111111111112333211111112
 kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
-kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
-kffffffxsfffffsssssssssssffffffk   31111111111111111111111111111112
+kksssssssssssssssskkkkkksssss*sk   32111111111111111112333211111112
+kffffffxsfffffsssssssssssfffRRRE   31111111111111111111111111111111
 kssssssssssssRwwRRRRRRRRRRRRRRRE   21111111111111111111111111111111
 RRR@RRRRRRRRRRwwRRRRDRRRRRRRRARE   11111111111111111111111111111111
-RRBRRRRRRRRRRsssssssssFsssssssss   11111111111111111111111111111111
-sssssmmmmmmmmssssssssssxxosIssss   11111000000001111111111111111111
+RRBRRRRRRRRRRsssssssssFsssssRRRE   11111111111111111111111111111111
+sssssmmmmmmmmssssssssssxxosIs*ss   11111000000001111111111111111111
 sssssmmmmCmmmssssssssssss%%sssss   11111000000001111111111111111111
 kssssssssssssssssssssssss*ssssss   21111111111111111111111111111111
 kksssssssssssssssssssssssssssskk   22111111111111111111111111111122
@@ -68,7 +68,7 @@ kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   32222222222222222222222222222223
 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
 ^ cepo-furtivo (15,4) {"marker":"trap_beartrap","detect":10,"save":"dex","dc":11,"damage":"1d6","type":"piercing","condition":"restrained","disarmCheck":"sleight_of_hand","disarmDc":10}
-E a-hondonegra (31,8) -> plaza:entry-camino
+E a-hondonegra (31,7) -> plaza:entry-camino
 @ hero (3,9)
 A entry-plaza (29,9)
 B dorotea (2,10)
@@ -88,25 +88,25 @@ scenes mineros-cortan-el-paso (16,0 2x18) {"dialogue":"camino_mineros","speaker"
 
 ```
 == plaza: La plaza de Hondonegra (30x22, ambient 0.5)
-ghghghghghghghghghghghEEEEghgh   ######################3333####
-hghghghghghghghghghghgcccchghg   ######################2222####
-ghghghghghghghghghghghcBccghgh   ######################2222####
-hghghghgWWWWhghghghghgc*cchghg   ######################1111####
+ghghghghghghghghghghgWEEEEWhgh   ######################3333####
+hghghghghghghghghghghWccccWghg   ######################2222####
+ghghghghghghghghghghgWcBccWhgh   ######################2222####
+hghghghgWWWWhghghghghWc*ccWghg   ######################1111####
 gRRRRRRRWWWWRRRRRRRRRRcPccghgh   #0000000####00000000001111####
 hRRRRRRRWWWWRRRRRRRRRRRRRQhghg   #0000000####00000000000000####
 gRRRRRR==TF==G=RRRRRRRRRRRghgh   #0000001222222100000000000####
 hRRRRRR========RRRRRRRRRRRhghg   #0000001222222100000000000####
-gRRRRRK*RRRRRRRoRRRRRRRRRRRRRE   #00000000000000000000000000000
+gRRRRRK*RRRRRRRoRRRRRRRRRRRR*E   #00000000000000000000000000000
 hccc*cRRIRRRRJ*RRRRRRRRRRRRCRE   #11111000000000000000000000000
-gcxxccRRRRRRRRRRRRRRRRRRRRRRRE   #11111000000000000000000000000
+gcxxccRRRRRRRRRRRRRRRRRRRRRR*E   #11111000000000000000000000000
 hcucccRRRRRRRRRRRRRRRRRRRghghg   #111110000000000000000000#####
 gcccccRRRRRRRRRRROR*RRRLR*ghgh   #111110000000000000000000#####
-hRRRRRRRRRRRRRRRRRRuRRRRMghghg   #000000000000000000000000#####
+h*RRRRRRRRRRRRRRRRRuRRRRMghghg   #000000000000000000000000#####
 ERRRRRRRRRRRRRRRwwwRRRNRRhghgh   0000000000000000000000000#####
 ERARRRRRRRRRRRRRRRRRRRRRR/hghg   00000000000000000000000000####
 ERRRRRRRRRRRRRRRRRRRxRRROhghgh   0000000000000000000000000#####
 hRRRRRRRRRRRRRRRRRRRRRRRRghghg   #000000000000000000000000#####
-gRRRRRRRRRRRRRRRRRRRRRRRRhghgh   #000000000000000000000000#####
+gRRRRRRRRRR*RRR*RRRRRRRRRhghgh   #000000000000000000000000#####
 hghghghghghgIDIghghghghghghghg   ############000###############
 ghghghghghghIIIhghghghghghghgh   ############000###############
 hghghghghghgEEEghghghghghghghg   ############000###############
@@ -211,12 +211,12 @@ ghghghghgWWWWW..WWWWWhghg/ghghghgh   ##############00#########0########
 Eccccc*ccccccccccccc*ccccccc*ccccE   0000000000000000000000000000000000
 EcAccccccccccccccccccccccccccccccE   0000000000000000000000000000000000
 EccccccccccxcccccccccccccccccccBcE   0000000000000000000000000000000000
-EccccccccccccccccccxcccucccccccccE   0000000000000000000000000000000000
+E*cccccccccccccccccxcccucccccccc*E   0000000000000000000000000000000000
 ssssssssssssssss===========sbwwbss   0000000000000000111111111110000000
 sssWWWWW/WWWWWssgggggggggggsbwwbss   000#####0#####00###########0000000
 sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
-sssW===K==*==WssgggggggggggsGwwbss   000#000000000#00###########0000000
-sssW=========Wssgggggggggggsbw*bss   000#000000000#00###########0000000
+sssW===K==*==WssgggggggggggsGww*ss   000#000000000#00###########0000000
+sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
 sssWWWWWdWWWWWssgggggggggggsbwwIss   000###########00###########0000000
 sssW======^==Wssgggggggggggsbwwbss   000#000000000#00###########0000000
 sssW=======c=Wssssssssssssssbwwbss   000#000000000#00000000000000000000
@@ -246,7 +246,7 @@ scenes sermon (13,5 4x3) {"dialogue":"sermon_cirilo","speaker":"cirilo","once":t
 ```
 == escorial: El Escorial (36x26, ambient 0.6)
 kkkEEEkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   333000333333333333333333333333333333
-kSSIIISSSSSSSSSSSSSSSSSSSSSSSSSSSSSk   300000000000000000000000000000000003
+kS*IIISSSSSSSSSSSSSSSSSSSSSSSSSSSSSk   300000000000000000000000000000000003
 kSSIAISSS&&SSSSSSSSSSSSSSSSSSSSSSSSk   300000000111111111100000000000000003
 kSSIIISSS&&SSSSSSSSSSSSSSSSSSSSSSSSk   300000000122222222100000000000000003
 kSSIIISSS&&SSSSSSSSSSSSSSSSSSSWWWSSk   300000000122333322100000000000###003
@@ -255,7 +255,7 @@ kSSIIISSSSSSSSSSSSSSSSSSSSSSSS*ESSSk   300000000122333322100000000000000003
 kSSIIISSSSSSSSSSSSSSSSSSSSSSSSSISSSk   300000000122333322100000000000000003
 kSSIIISSSSSSxooSSSSSSSSSSSSSSSSCSSSk   300000000122333322100000000000000003
 kSSIIISSSSSS%%%%SSSSSSSSSSSSSSSMSSSk   300000000111111111100000000000000003
-kSSIIISSSSSS%%%%SSSSSSSSSSSSSSSISSSk   300000000000000000000000000000000003
+k*SIIISSSSSS%%%%SSSSSSSSSSSSSSSISSSk   300000000000000000000000000000000003
 ERRRRRR^RRRR%%%%RRRRRRRRRRRRRRRRRSSk   000000000000000000000000000000000003
 ERBRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRSSk   000000000000000000000000000000000003
 ERRRRRRRRRRRRRRRRRRRRR^RRRRRRRRRRSSk   000000000000000000000000000000000003
@@ -300,7 +300,7 @@ scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enm
 ```
 == mina: La mina (40x30, ambient 0.12)
 #####################E##################   #####################3##################
-####################...#################   ####################333#################
+####################.*.#################   ####################333#################
 ####################.B.#################   ####################333#################
 ####################...#################   ####################333#################
 ####################...#################   ####################333#################
@@ -311,7 +311,7 @@ scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enm
 ##############.......##......HH##..#####   ##############0000000##00000022##00#####
 ##############..HFH..##......^H#.......#   ##############0033300##00000022#0000000#
 ##############..H............HH#...f..O#   ##############00200000000000022#0000000#
-##############..H*...........HG#.......#   ##############00100000000000022#0000000#
+##############..H*...........HG#......*#   ##############00100000000000022#0000000#
 E.A.*..................o.......&.......E   0000000000000000000000000000000000000000
 E-------x----------x------x----&-u-*.D.E   0000000000000000000000000000000000000000
 E............................**&.......E   0000000000000000000000000000000000000000
@@ -372,7 +372,7 @@ scenes galeria-sellada (32,12 3x5) {"dialogue":"galeria_sellada","speaker":"garr
 ######vvvvvrvvvvvvvvrvvvvv######   ######22222222222222222222######
 ######vvvvvvvvvvvvvvvvvvvv######   ######22222222222222222222######
 ######vv#vvvvvCvvvvvvvv#vv######   ######22#22222222222222#22######
-Evvvvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
+Ev*vvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
 EvAvvvvvvvvvvvvvvvvIvvvvvv######   22222222222222222222222222######
 Evvvvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
 ######vv#vvvvvvvvvvvvvv#vv######   ######22#22222222222222#22######
