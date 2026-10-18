@@ -3,6 +3,7 @@ import { buildWilly, createCompanion, createWilly } from '../../rulesets/willy';
 import { FLOOR_COUNT, generateFloor } from './gen/floor';
 import type { RivalRecord } from './gen/rivals';
 import { MAPS } from './maps';
+import './show';
 
 /**
  * The game's start and the casting, without any client imports (so tests and a future server

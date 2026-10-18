@@ -19,7 +19,8 @@
       "entrega": "Fuera de combate: cae del techo en paracaídas junto a Willy. En combate: cae al final de la ronda (el público lo adora). En el Camerino: lo trae Xelda."
     },
     "carisma": "La afinidad ganada se multiplica por 1 + 0,05 × Carisma. La perdida no.",
-    "relevancia": "Un patrocinador solo mira (y suma o resta) si la audiencia actual supera su 'audienciaMinima'. Así aparecen poco a poco."
+    "relevancia": "Un patrocinador solo mira (y suma o resta) si la audiencia actual supera su 'audienciaMinima'. Así aparecen poco a poco.",
+    "contratos": { "texto": "Un patrocinador interesado ofrece un contrato al llegar al Camerino o la primera vez que se interesa por Willy. Como mucho 2 a la vez. Aceptado, dura hasta salir de la planta siguiente (o de la actual, si se firma en ella). Cumplido: su recompensa y +10 de afinidad. Roto o sin cumplir: la multa en fichas y −10 de afinidad. Nunca quita vida ni objetos.", "maxActivos": 2 }
   },
   "patrocinadores": [
     {
@@ -50,6 +51,35 @@
         { "caja": "plata", "peso": 2 }
       ],
       "regaloGrande": { "caja": "oro" },
+      "contratos": [
+        {
+          "id": "barbacoa-familiar",
+          "texto": "Barbacoa familiar: 3 cosas que exploten o ardan antes de salir de la próxima planta. Si usas un extintor, se rompe.",
+          "cuenta": [{"evento": "objectDestroyed", "donde": {"explota": true}}, {"evento": "entityDefeated", "donde": {"elemento": "fuego"}}, {"evento": "surfaceReacted", "donde": {"resultado": "llamas"}}],
+          "cantidad": 3,
+          "rompe": [{"evento": "itemUsed", "donde": {"item": "extintor"}}],
+          "recompensa": {"caja": "plata"},
+          "multa": 20,
+          "mensajes": {
+            "oferta": [{"id": "bp-con-1", "texto": "Sobrino, un trato: tres fueguitos en la próxima planta. Tú pones la chispa y nosotros ponemos la factura."}],
+            "cumplido": [{"id": "bp-cum-1", "texto": "¡Eso es calor de hogar! Te mandamos lo prometido. No lo dejes cerca de nada que quieras."}],
+            "roto": [{"id": "bp-rot-1", "texto": "Nos has apagado la ilusión, chaval. Te cobramos la bombona de cortesía. Y el disgusto, que va aparte."}]
+          }
+        },
+        {
+          "id": "demostracion-en-directo",
+          "texto": "Demostración en directo: haz el ganso 2 veces delante de un enemigo, con el logo de los Pérez bien a la vista.",
+          "cuenta": [{"evento": "showOff", "donde": {"adyacenteAEnemigo": true}}],
+          "cantidad": 2,
+          "recompensa": {"item": "petardo", "fichas": 15},
+          "multa": 15,
+          "mensajes": {
+            "oferta": [{"id": "bp-con-2", "texto": "Queremos un anuncio en directo. Tú, un monstruo y mucho salero. Si te muerde, sale en el anuncio igual."}],
+            "cumplido": [{"id": "bp-cum-2", "texto": "¡Qué naturalidad! Nos han llamado tres planetas para pedir bombonas. Uno de ellos no tiene oxígeno."}],
+            "roto": [{"id": "bp-rot-2", "texto": "Ni un anuncio. Hemos tenido que emitir la carta de ajuste con nuestro logo. Te lo descontamos."}]
+          }
+        }
+      ],
       "mensajes": {
         "interes": [
           { "id": "bp-int-1", "texto": "¡Hombre, un butanero! Aquí los Hermanos Pérez. Sigue así, chaval, que esto calienta." },
@@ -101,6 +131,36 @@
         { "caja": "plata", "peso": 2 }
       ],
       "regaloGrande": { "item": "capa-de-veterano" },
+      "contratos": [
+        {
+          "id": "poliza-todo-riesgo",
+          "texto": "Póliza Todo Riesgo (excepto todos): gana 2 combates perdiendo menos de un cuarto de tu vida. Caerte por un precipicio la anula.",
+          "cuenta": [{"evento": "combatEnded", "donde": {"resultado": "victoria", "vidaPerdidaPct": {"max": 25}}}],
+          "cantidad": 2,
+          "rompe": [{"evento": "fell", "donde": {"entidad.id": "willy"}}],
+          "recompensa": {"caja": "plata"},
+          "multa": 30,
+          "mensajes": {
+            "oferta": [{"id": "lp-con-1", "texto": "Le ofrecemos una póliza. Cubre todo, salvo lo que le pueda pasar. Firme aquí, aquí y en el reverso del reverso."}],
+            "cumplido": [{"id": "lp-cum-1", "texto": "Siniestralidad nula. Nuestros actuarios han llorado de emoción. Adjuntamos su bonificación, sujeta a impuestos galácticos."}],
+            "roto": [{"id": "lp-rot-1", "texto": "Póliza anulada por conducta temeraria. Le cobramos la franquicia, los gastos de gestión y el disgusto del perito."}]
+          }
+        },
+        {
+          "id": "plan-de-prevencion",
+          "texto": "Plan de prevención de riesgos: descubre 2 trampas antes de pisarlas. Pisar una anula el plan.",
+          "cuenta": [{"evento": "trapDetected", "donde": {"actor.id": "willy"}}],
+          "cantidad": 2,
+          "rompe": [{"evento": "trapTriggered", "donde": {"entidad.id": "willy"}}],
+          "recompensa": {"item": "casco-de-obra", "fichas": 10},
+          "multa": 25,
+          "mensajes": {
+            "oferta": [{"id": "lp-con-2", "texto": "Nos consta que la próxima planta tiene trampas. Nos consta porque las hemos asegurado. A ellas, no a usted."}],
+            "cumplido": [{"id": "lp-cum-2", "texto": "Dos riesgos identificados y evitados. Le enviamos un casco. Póngaselo. Por favor. Se lo pedimos por escrito."}],
+            "roto": [{"id": "lp-rot-2", "texto": "Ha pisado usted una trampa estando en plena formación de prevención. Lo usaremos en nuestros cursos. Como ejemplo negativo."}]
+          }
+        }
+      ],
       "mensajes": {
         "interes": [
           { "id": "lp-int-1", "texto": "Seguros La Prudente le saluda. Hemos observado que sigue usted con vida. Le animamos a continuar en esa línea." },
@@ -151,6 +211,36 @@
         { "caja": "oro", "peso": 1 }
       ],
       "regaloGrande": { "caja": "oro" },
+      "contratos": [
+        {
+          "id": "edicto-imperial",
+          "texto": "Edicto imperial: 3 enemigos eliminados por el vacío, una caída o un buen golpe contra la pared. Huir anula el edicto.",
+          "cuenta": [{"evento": "entityDefeated", "donde": {"causa": {"en": ["fueraDePlano", "caida", "choque", "decorado"]}}}],
+          "cantidad": 3,
+          "rompe": [{"evento": "combatEnded", "donde": {"resultado": "huida"}}],
+          "recompensa": {"caja": "plata", "fichas": 30},
+          "multa": 40,
+          "mensajes": {
+            "oferta": [{"id": "vx-con-1", "texto": "Lord Vórtax decreta: tres caídas con gracia. Lord Vórtax no acepta caídas sin gracia. Lord Vórtax lo notará."}],
+            "cumplido": [{"id": "vx-cum-1", "texto": "Lord Vórtax ha aplaudido. Dos veces. Los cortesanos se han desmayado de la impresión. Reciba su recompensa."}],
+            "roto": [{"id": "vx-rot-1", "texto": "Lord Vórtax le confisca unas fichas para financiar el olvido de su actuación. Es un olvido caro."}]
+          }
+        },
+        {
+          "id": "golpe-de-gracia",
+          "texto": "Golpe de gracia: 3 críticos antes de salir de la próxima planta. Quedarse un turno sin hacer nada anula el trato.",
+          "cuenta": [{"evento": "attackResolved", "donde": {"actor.id": "willy", "critico": true}}],
+          "cantidad": 3,
+          "rompe": [{"evento": "turnEnded", "donde": {"entityId": "willy", "esperar": true}}],
+          "recompensa": {"item": "megafono"},
+          "multa": 30,
+          "mensajes": {
+            "oferta": [{"id": "vx-con-2", "texto": "Lord Vórtax desea ver golpes perfectos. No buenos: perfectos. Lo bueno es para los plebeyos."}],
+            "cumplido": [{"id": "vx-cum-2", "texto": "Tres golpes dignos de un emperador. De un emperador menor, pero emperador. Le hace llegar un obsequio."}],
+            "roto": [{"id": "vx-rot-2", "texto": "¿Esperar? ¿Ante Lord Vórtax? Su multa servirá para pagar a quien borre esta grabación."}]
+          }
+        }
+      ],
       "mensajes": {
         "interes": [
           { "id": "vx-int-1", "texto": "Lord Vórtax ha levantado una ceja. Una. Considérese afortunado." },
@@ -201,6 +291,22 @@
         { "caja": "plata", "peso": 1 }
       ],
       "regaloGrande": { "item": "termo-sin-fondo" },
+      "contratos": [
+        {
+          "id": "tartera-limpia",
+          "texto": "Trato de la tartera: gana 3 combates sin que te dejen con menos de la mitad de la vida. Y nada de salir corriendo, que se enfría.",
+          "cuenta": [{"evento": "combatEnded", "donde": {"resultado": "victoria", "vidaPct": {"min": 50}}}],
+          "cantidad": 3,
+          "rompe": [{"evento": "combatEnded", "donde": {"resultado": "huida"}}],
+          "recompensa": {"item": "tartera-de-mama"},
+          "multa": 15,
+          "mensajes": {
+            "oferta": [{"id": "mc-con-1", "texto": "Cariño, hagamos un trato: tú vuelves enterito y yo te mando una tartera. Y no me pongas esa cara."}],
+            "cumplido": [{"id": "mc-cum-1", "texto": "¡Así me gusta, de una pieza! Te mando tu tartera. La quiero de vuelta lavada, que te conozco."}],
+            "roto": [{"id": "mc-rot-1", "texto": "No has cumplido. Te quito la paga de la semana. Y esta noche, sin postre. Y lo sabe todo el planeta."}]
+          }
+        }
+      ],
       "mensajes": {
         "interes": [
           { "id": "mc-int-1", "texto": "¡Ay, qué chico más majo! Pero estás muy delgado, cariño. ¿Has comido?" },
@@ -251,6 +357,34 @@
         { "caja": "plata", "peso": 2 }
       ],
       "regaloGrande": { "caja": "oro" },
+      "contratos": [
+        {
+          "id": "pacto-de-la-gravedad",
+          "texto": "PACTO DE LA GRAVEDAD: 5 CAÍDAS ANTES DE SALIR DE LA PRÓXIMA PLANTA. DE QUIEN SEA. NOSOTROS NO JUZGAMOS.",
+          "cuenta": [{"evento": "fell"}],
+          "cantidad": 5,
+          "recompensa": {"caja": "plata"},
+          "multa": 10,
+          "mensajes": {
+            "oferta": [{"id": "co-con-1", "texto": "NOSOTROS QUEREMOS CAÍDAS. NOSOTROS PAGAMOS CAÍDAS. TÚ HACES CAÍDAS. ES UN BUEN SISTEMA."}],
+            "cumplido": [{"id": "co-cum-1", "texto": "CINCO CAÍDAS. NOSOTROS HEMOS ZUMBADO DE ALEGRÍA. TODO EL PLANETA. A LA VEZ. HA HABIDO TERREMOTOS."}],
+            "roto": [{"id": "co-rot-1", "texto": "POCAS CAÍDAS. NOSOTROS TE QUITAMOS FICHAS. NOSOTROS NO SABEMOS QUÉ SON LAS FICHAS. PERO TE LAS QUITAMOS."}]
+          }
+        },
+        {
+          "id": "salto-de-fe",
+          "texto": "SALTO DE FE: TÚ. CAER. DOS VECES. DESDE ALTO. NOSOTROS LLORAREMOS DE ALEGRÍA.",
+          "cuenta": [{"evento": "fell", "donde": {"entidad.id": "willy"}}],
+          "cantidad": 2,
+          "recompensa": {"item": "monopatin-cohete"},
+          "multa": 10,
+          "mensajes": {
+            "oferta": [{"id": "co-con-2", "texto": "NOSOTROS HEMOS VISTO TUS PIERNAS. SON BUENAS PIERNAS PARA CAER. ÚSALAS."}],
+            "cumplido": [{"id": "co-cum-2", "texto": "HAS CAÍDO. DOS VECES. NOSOTROS TE AMAMOS. EN PLURAL. TE MANDAMOS UN MONOPATÍN PARA CAER MÁS DEPRISA."}],
+            "roto": [{"id": "co-rot-2", "texto": "SIEMPRE DE PIE. SIEMPRE EN EL SUELO. NOSOTROS NO LO ENTENDEMOS. NOSOTROS ESTAMOS DECEPCIONADOS. EN PLURAL."}]
+          }
+        }
+      ],
       "mensajes": {
         "interes": [
           { "id": "co-int-1", "texto": "NOSOTROS HEMOS VISTO ESA CAÍDA. NOSOTROS LA HEMOS SENTIDO EN LAS ANTENAS." },
@@ -300,6 +434,34 @@
         { "caja": "plata", "peso": 2 }
       ],
       "regaloGrande": { "item": "ancla-del-puerto" },
+      "contratos": [
+        {
+          "id": "economia-circular",
+          "texto": "Contrato de economía circular: 3 eliminaciones con el entorno (superficies, choques o caídas). Cero derroche.",
+          "cuenta": [{"evento": "entityDefeated", "donde": {"causa": {"en": ["superficie", "choque", "caida", "fueraDePlano"]}}}],
+          "cantidad": 3,
+          "recompensa": {"item": "rayo-embotellado"},
+          "multa": 20,
+          "mensajes": {
+            "oferta": [{"id": "gl-con-1", "texto": "Te proponemos una alianza estratégica sostenible: el entorno hace el trabajo y tú te llevas el mérito. Como en una startup."}],
+            "cumplido": [{"id": "gl-cum-1", "texto": "¡KPI superado! Tu huella de carbono es negativa porque has usado a los enemigos de abono. Te mandamos un rayo reutilizable."}],
+            "roto": [{"id": "gl-rot-1", "texto": "No has alcanzado los objetivos. Te aplicamos una tasa de sostenibilidad. Es verde, como tu futuro si sigues así."}]
+          }
+        },
+        {
+          "id": "sinergias",
+          "texto": "Sinergias: provoca 3 reacciones de superficie (agua con rayo, aceite con fuego, hielo...).",
+          "cuenta": [{"evento": "surfaceReacted"}],
+          "cantidad": 3,
+          "recompensa": {"caja": "plata"},
+          "multa": 15,
+          "mensajes": {
+            "oferta": [{"id": "gl-con-2", "texto": "Queremos sinergias. No sabemos muy bien lo que son, pero queremos tres. Con agua, a poder ser."}],
+            "cumplido": [{"id": "gl-cum-2", "texto": "¡Tres sinergias! Las hemos puesto en una diapositiva y los inversores han llorado. De alegría, creemos."}],
+            "roto": [{"id": "gl-rot-2", "texto": "Cero sinergias. Nuestra junta directiva ha pedido explicaciones y te las cobramos a ti, que eres más barato."}]
+          }
+        }
+      ],
       "mensajes": {
         "interes": [
           { "id": "gl-int-1", "texto": "¡Hola, eco-héroe! En Glorp nos encanta tu forma de optimizar los recursos del entorno. ¡Sinergias!" },

@@ -29,6 +29,7 @@ import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface,
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
+import { showAfterCommand, showCommands } from './show';
 
 /**
  * «El Reglamento del Concurso»: Willy's light d20 ruleset (docs/willy/RULESET.md).
@@ -285,6 +286,7 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
  * left by the one before; their effects and events are all appended to the command's.
  */
 export const afterCommandHooks: ((ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor) => ActionOutcome)[] = [];
+afterCommandHooks.push(showAfterCommand);
 
 function afterCommand(ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome {
   const out: ActionOutcome = { effects: [], events: [] };
@@ -319,7 +321,7 @@ export const willy: Ruleset = {
     habilidadAlMenos: (s, id, p) => skillLevel(s.entities[id]!, String(p.habilidad)) >= Number(p.min),
     rasgo: (s, id, p) => hasTrait(s.entities[id]!, String(p.is)),
   },
-  commands: {},
+  commands: { ...showCommands },
   rollInitiative: (state, id, rng) => {
     const e = state.entities[id]!;
     const agi = hasTag(e, 'criatura') ? Math.floor(stat(e, 'ataque', 3) / 2) : attr(e, 'agi');
@@ -363,3 +365,4 @@ export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progressi
 export { SURFACES } from './environment';
 export { HANDLERS, areaTiles } from './actions';
 export type { AttackRolledEvent, DamageDealtEvent, WillyEvent } from './resolve';
+export * as show from './show';
