@@ -270,6 +270,18 @@
     "foco-andante--elite": {
       "attack": "thrust",
       "cast": "#fff4c0"
+    },
+    "cangrejo-con-casco--elite": {
+      "attack": "slash"
+    },
+    "gaviota-de-lonja--elite": {
+      "attack": "thrust"
+    },
+    "rata-portuaria--elite": {
+      "attack": "thrust"
+    },
+    "bocarte-andante--elite": {
+      "attack": "thrust"
     }
   }
 }
