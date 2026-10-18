@@ -625,6 +625,24 @@ Paleta dorada calculada de forma determinista (sin ajuste a mano) a partir de la
 
 `bailarin-de-la-carpa` y `nube-de-vapor` no tienen habilidad propia con FX todavía (atacan cuerpo a cuerpo o con rasgos sin proyección visual); se puede añadir si el ruleset les da una.
 
+### FX de clases, compañeros y rivales (auditoría contra `rulesets/willy/data`)
+
+Comprobación de `content/willy/art/ninja/fx.json` contra todas las `habilidades` de `classes.json` (básicas y por clase) y `companions.json`, y los `kits[].acciones` de `content/willy/data/rival-generator.json`. Las puramente pasivas (`esquivar`, `pez`, `subasta`, `charanga`...) y las de movimiento puro (`trepar`, `escalera-imaginaria`, `gran-salto`, `retirarse`, `huir`, `bis`) se quedan sin entrada a propósito: no tienen un momento visible que animar, igual que ya pasaba con las básicas que sí tenían FX.
+
+El resto reutiliza props que ya existían: `fx-chispazo` (chispa eléctrica) para `soldadura`, `antena-repetidora` y `construir-automata`; `fx-arco-voltaico` para `descarga`; `fx-mate-impacto` para golpes genéricos (`empujar`, `bolsazo`, `mordisco-y-arrastre`, `robo-de-balon`, `susto-de-estatua`); `fx-vapor` para `pausa-del-cafe`; `fx-confeti` para `colaboracion`; `fx-sello` para `ventanilla-cerrada`; `fx-explosion-bombona`/`fx-bombona-volando` para `reparto-a-domicilio`; y `fx-foco-cegador` para `flash-del-selfie`. Más siete props genéricos nuevos (`scripts/art/willy-show-art.ts`), cada uno compartido por varias habilidades sin relación narrativa entre sí —igual que `mate`/`mate-del-concurso` ya compartían `fx-mate-impacto`, o `viral`/`@critical` compartían `fx-confeti`—:
+
+| Prop nuevo | Forma | Para qué habilidades (ejemplos) |
+|---|---|---|
+| `fx-estudio` | `impactBurst` blanco | Marcar objetivo: `esto-es-de-imitacion`, `ojo-clinico`, `primer-plano`; robo: `robar` (rival) |
+| `fx-bloqueo` | `groundPulse` gris | Inmovilizar/silenciar/petrificar: `caja-invisible`, `cancelacion`, `pared-invisible`, `pieza-de-museo`, `silencio-administrativo`, impacto de `grapadora`; `guardia` (rival) |
+| `fx-aura-curativa` | `groundPulse` dorado | Curas y buffs instantáneos o en anillo: `estribillo`, `rescate-canino`, `cafe-para-el-jefe`, `reanimacion`, `moneda-en-la-gorra`, `pasodoble`, `contraataque`, `actualizacion-de-firmware`, `tiempo-muerto`; `curarse` (rival) |
+| `fx-grito-aoe` | `groundPulse` rojo-salmón | Área de voz/ritmo: `do-de-pecho`, `orquesta-completa`, `paquito`, `reparto-urgente` |
+| `fx-ola` | `groundPulse` azul | `bandera-roja` (la ola del surfista) |
+| `fx-silbato` | `coneWash` amarillo | `silbatazo` |
+| `fx-cuerda` | `reachBeam` blanco/gris | Tirones invisibles: `cuerda-imaginaria`, `rescate`, `contra-el-viento` |
+
+Proyectiles genéricos reutilizan `fx-balon-estela` (objeto volando con estela): `lanzar`, `boya`, `carretillazo`, `golpe-de-valor`, `grapadora`, `foco-en-la-cara`, `disparo` y `lanzar-aceite` (rivales); `lanzar-canicas` (rival) usa `fx-corcho` (canica ≈ corcho pequeño). `cadena-de-reparto` y `bombona-de-camping` reutilizan el par bombona/explosión de `lanzar-bombona`. Vista previa: en [`art-previews/ninja-props.png`](art-previews/ninja-props.png), filas `fx-estudio` a `fx-cuerda`.
+
 ### Derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`)
 
 Arte para el reloj de derrumbe de planta (`floors.json` → `reloj.derrumbe`): la sala tiembla y se agrieta una ronda antes de caer, luego la casilla queda hundida e intransitable.

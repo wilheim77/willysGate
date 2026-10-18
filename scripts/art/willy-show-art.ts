@@ -1237,3 +1237,16 @@ export function makeupPuff(frame: number): Image { return groundPulse(frame, '#f
 export function clapperCall(frame: number): Image { return impactBurst(frame, '#ffe04f'); }
 export function blindingCone(frame: number): Image { return coneWash(frame, '#ffffff'); }
 export function perfumeCloud(frame: number): Image { return coneWash(frame, '#ff8fc8'); }
+
+// --- Generic FX for class/companion/rival abilities that had none (content/willy/art/ninja/fx.json
+// audit): a handful of shared shapes reused across many abilities by colour, the same way the
+// enemy ability FX above are built. Named after what they read as, not any one ability, since
+// several unrelated abilities share each one (same convention as `mate`/`mate-del-concurso`
+// sharing `fx-mate-impacto`, or `viral`/`@critical` sharing `fx-confeti`).
+export function studyFlash(frame: number): Image { return impactBurst(frame, '#f4f4f0'); }
+export function lockdownPulse(frame: number): Image { return groundPulse(frame, '#8a9098', '#d8dce2'); }
+export function healAura(frame: number): Image { return groundPulse(frame, '#ffe04f', '#fff4c0'); }
+export function rallyShout(frame: number): Image { return groundPulse(frame, '#ff6a40', '#ffc8a0'); }
+export function tidalWave(frame: number): Image { return groundPulse(frame, '#3a8fd9', '#a8dcff'); }
+export function whistleBlast(frame: number): Image { return coneWash(frame, '#ffe04f'); }
+export function invisibleTug(frame: number): Image { return reachBeam(frame, '#d8d8d8', '#ffffff'); }
