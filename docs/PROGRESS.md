@@ -202,6 +202,18 @@ Hay dos líneas en paralelo. Cada agente sigue su lista en orden y sube su rama 
 
 ## Decisiones abiertas
 
+- (2026-10-18) **Pausa general:** todo el trabajo de los agentes está parado a petición del usuario.
+  - Estado de los juegos:
+    - *Intereses*: el Acto I está completo.
+    - *Willy*: la temporada de 10 plantas está completa, con final, logros, botín, audiencia, rivales y jefe por fases. Las cifras de dificultad están en `willy/BALANCE.md`.
+  - Pendiente de decidir en Willy:
+    - ¿«Hacer el ganso» da audiencia solo en combate?
+    - ¿Se mantienen los contratos de patrocinadores?
+    - Si el jefe de la planta 8 se atasca, bajar su daño a 1d8.
+  - Faltan detalles menores:
+    - el despacho de Xelda en la Planta 5;
+    - la marca «en directo» en el perfil.
+
 - (2026-10-18) El Acto II de *Intereses* queda en espera: primero se termina *Willy el mazmorrero*. El esbozo está en `ACT2_OUTLINE.md`, con respuestas propuestas a sus preguntas abiertas: continuar desde el nivel 5 hasta el 7, Mirta como compañera fija e importar la partida del Acto I.
 
 - (2026-10-18, aprobado) Progresión y combates:
