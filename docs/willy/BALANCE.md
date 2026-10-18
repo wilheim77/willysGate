@@ -115,6 +115,21 @@ Con enemigos que usan sus habilidades especiales (IA de monstruos del agente met
 
 Antes de esta pasada (la misma temporada sin calibrar): los pisos de jefe (2, 4 y 6) se pasaban sin perder solo el 44-56 % de las veces, y el Tasador no terminaba ninguna temporada.
 
+### Segunda pasada (27 temporadas, 2026-10-18)
+
+Con todo junto: Golpe de valor, el piso 2 ajustado, las fases del Presentador y el final.
+
+| Piso | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Piso sin perder | 93 % | 89 % | 85 % | 96 % | 89 % | 93 % | 100 % | 85 % | 100 % | 76 % |
+| Jefe a la primera | 100 % | 96 % | 100 % | 96 % | 100 % | 96 % | 100 % | 85 % | 100 % | 76 % |
+
+**Temporadas terminadas:** 25 de 27 (93 %). El Bardo y el Funcionario terminaron 2 de 3; las demás clases, 3 de 3. El Tasador pasa de 2 de 3 a 3 de 3.
+
+**Curva de habilidades:** la principal llega a la Maestría en el piso 9. El 64 % de las temporadas la tienen al final.
+
+**El jefe del piso 8 (la Socorrista Mayor):** en el simulador de un solo piso, a nivel esperado, cae el 94 % de las veces. Pero en 4 de las 27 temporadas costó 10 repeticiones o más, y las dos temporadas perdidas se perdieron ahí. Es un muro para algunos grupos más que un jefe difícil en general. Si en partida real se nota, el primer ajuste es bajarle el daño en `jefes['8']` (1d10 → 1d8).
+
 ## Pendiente
 
 - **Las fases del Presentador, medidas (2026-10-18):** ya están todas (Ronda de preguntas, Pausa publicitaria, Gran final con la parrilla de focos y «Sin reflejo»).
