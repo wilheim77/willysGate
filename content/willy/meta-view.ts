@@ -54,7 +54,7 @@ function boxView(b: { id: string; nivel: Rarity; origen: string; motivo?: string
     color: loot.rarezas[b.nivel].color,
     description: def.descripcion,
     ...(b.motivo || origin[b.origen] ? { reason: [origin[b.origen.split(':')[0]!] ?? '', b.motivo && b.origen === 'logro' ? `«${b.motivo}»` : ''].filter(Boolean).join(': ') } : {}),
-    art: { closed: `caja-${b.nivel}-cerrada`, lid: [1, 2, 3].map((n) => `caja-${b.nivel}-tapa-${n}`), open: `caja-${b.nivel}-abierta` },
+    art: { closed: `caja-${b.nivel}-cerrada`, lid: [1, 2, 3].map((n) => `caja-${b.nivel}-tapa-${n}`), open: `caja-${b.nivel}-abierta`, ...(b.nivel === 'legendaria' ? { burst: 'caja-legendaria-estrellas' } : {}) },
   };
 }
 
