@@ -353,7 +353,9 @@ const scene = new MapScene(
     trapTriggered: combat.trapTriggered ?? '¡Trampa!',
     trapDisarmed: combat.trapDisarmed ?? 'Desactivada',
     trapDisarmFailed: combat.trapDisarmFailed ?? 'No hay manera',
+    eliminated: combat.eliminated ?? '¡ELIMINADO!',
   },
+  game.onDeath ?? 'corpse',
 );
 controller.scene = scene;
 

@@ -61,6 +61,8 @@ export interface MapSceneTexts {
   trapTriggered?: string;
   trapDisarmed?: string;
   trapDisarmFailed?: string;
+  /** 'vanish' onDeath mode only: the TV-gameshow flash text over a defeated enemy. */
+  eliminated?: string;
 }
 
 const STEP_MS = 160;
@@ -115,6 +117,8 @@ export class MapScene extends Phaser.Scene {
   private shadows = new Map<string, Phaser.GameObjects.Ellipse | Phaser.GameObjects.Sprite>();
   /** Ids currently showing a manifest corpse prop in place of their living sprite (see applyFate). */
   private corpseSprites = new Set<string>();
+  /** Ids currently hidden by the 'vanish' onDeath mode (see applyFate). */
+  private vanished = new Set<string>();
   private lighting: LightingLayer | null = null;
   private facing = new Map<string, Dir>();
   private breathing = new Map<string, Phaser.Tweens.Tween>();
@@ -144,6 +148,8 @@ export class MapScene extends Phaser.Scene {
     private theme: Theme,
     private hooks: MapSceneHooks,
     private texts: MapSceneTexts,
+    /** What a dead creature leaves behind; see GameDefinition.onDeath. Default: 'corpse'. */
+    private onDeath: 'corpse' | 'vanish' = 'corpse',
   ) {
     super('map');
     this.grid = new GridProjection(manifest.tile.size, manifest.tile.levelHeight);
@@ -566,10 +572,14 @@ export class MapScene extends Phaser.Scene {
       }
       case 'downed':
       case 'died':
+      // Willy's ruleset has no downed/dead distinction, just one terminal event with its own
+      // name (rulesets/willy/resolve.ts's defeat()) — handled the same as 'died' here.
+      case 'entityDefeated':
       case 'revived':
       case 'stabilized': {
         const s = sprite(e.entityId);
-        if (s && event.type === 'died') this.juice.burst(s.x, s.y, 0x5a0f0a, 16);
+        const defeated = event.type === 'died' || event.type === 'entityDefeated';
+        if (s && defeated) this.juice.burst(s.x, s.y, this.onDeath === 'vanish' ? 0xffe14d : 0x5a0f0a, 16);
         if (s && event.type === 'downed') void this.juice.floatText(s.x, s.y, this.texts.downed, '#ff8a8a', 0.5);
         this.applyFate(String(e.entityId), state, true);
         return;
@@ -691,10 +701,11 @@ export class MapScene extends Phaser.Scene {
 
   /**
    * Dead and fallen creatures lie down; the dead fade into the floor — or, when the art
-   * pack has a corpse for this spriteId (R?? "corpses for dead enemies"), are replaced by
-   * it outright. Downed-but-not-dead allies keep their current look unchanged. Floor depth
-   * either way, so a corpse never hides anyone still standing near it; `occupiesTile`
-   * already excludes the dead (rulesets/dnd5e/index.ts), so walking over one just works.
+   * pack has a corpse for this spriteId, are replaced by it outright. Downed-but-not-dead
+   * allies keep their current look unchanged. Floor depth either way, so a corpse never
+   * hides anyone still standing near it; `occupiesTile` already excludes the dead
+   * (rulesets/dnd5e/index.ts), so walking over one just works. With `onDeath: 'vanish'`
+   * (Willy's showier tone) the dead flash "¡ELIMINADO!" and disappear instead.
    */
   private applyFate(id: string, state: GameState, animate = false): void {
     const s = this.sprites.get(id);
@@ -715,6 +726,35 @@ export class MapScene extends Phaser.Scene {
         s.setVisible(!dead);
       }
       return;
+    }
+    if (this.onDeath === 'vanish') {
+      if (dead) {
+        this.stopBreathing(id);
+        s.stop();
+        this.shadows.get(id)?.setVisible(false);
+        this.vanished.add(id);
+        if (animate) {
+          void this.juice.floatText(s.x, s.y - this.grid.tile * 0.3, this.texts.eliminated ?? '¡ELIMINADO!', '#ffe14d', 0.9);
+          this.tweens.add({
+            targets: s,
+            alpha: 0,
+            scaleX: s.scaleX * 1.4,
+            scaleY: s.scaleY * 1.4,
+            duration: 350,
+            ease: 'Cubic.easeIn',
+            onComplete: () => s.setVisible(false),
+          });
+        } else {
+          s.setVisible(false).setAlpha(0);
+        }
+        return;
+      }
+      // Revived back from a vanish: pop back in (edge case, but cheap to handle right).
+      if (this.vanished.delete(id)) {
+        s.setVisible(true).setAlpha(1);
+        this.idle(id, this.facing.get(id) ?? 's');
+      }
+      // Down/alive fall through to the shared tint/angle logic below, same as corpse mode.
     }
     // A manifest corpse for this spriteId (or a pack-wide 'default') replaces the sprite
     // outright — its blood/ash pool is already baked into the art.

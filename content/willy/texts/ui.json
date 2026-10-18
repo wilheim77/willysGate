@@ -43,7 +43,8 @@
     "newGame": "Nueva temporada. El mundo se ha vuelto a acabar.",
     "confirmNew": "¿Empezar otra temporada? Se perderá lo que no hayas guardado.",
     "height": "altura",
-    "genericError": "Algo ha salido mal. Producción pide disculpas."
+    "genericError": "Algo ha salido mal. Producción pide disculpas.",
+    "credits": "Créditos"
   },
   "combat": {
     "miss": "Fallo",
@@ -54,6 +55,7 @@
     "combatStart": "¡Combate!",
     "victory": "¡Victoria!",
     "defeat": "Eliminado",
+    "eliminated": "¡ELIMINADO!",
     "endTurn": "Terminar turno",
     "confirm": "Confirmar",
     "cancel": "Cancelar",
