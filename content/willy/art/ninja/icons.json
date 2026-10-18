@@ -1,0 +1,1721 @@
+{
+ "$comment": "Item icons for Willy (16x16, auto-outlined, built by scripts/art/build-icons.ts into assets/ninja/icons.png and manifest ui `item-<id>`). 'shapes' are ASCII silhouettes with colour slots (A main, a its shade, B second colour, b its shade, W highlight, D dark detail, G metal, Y extra); each item picks a shape and fills the slots.",
+ "shapes": {
+  "bottle": [
+   "....DD....",
+   "....BB....",
+   "....AA....",
+   "...AAAA...",
+   "..AWAAAA..",
+   "..AWAAAa..",
+   "..ABBBBa..",
+   "..ABWBBa..",
+   "..ABBBBa..",
+   "..AAAAAa..",
+   "..AAAAAa..",
+   "...aaaa..."
+  ],
+  "vial": [
+   "...DD...",
+   "...WB...",
+   "...AA...",
+   "..AWAA..",
+   ".AWAAAa.",
+   ".AAAAAa.",
+   ".AAAAAa.",
+   "..aaaa.."
+  ],
+  "jug": [
+   "......DD..",
+   ".....BB...",
+   "..AAAAAA..",
+   ".AWAAAAAAD",
+   ".AWAAAAA.D",
+   ".AAABBAAAD",
+   ".AAABBAAa.",
+   ".AAAAAAAa.",
+   ".AAAAAAAa.",
+   "..aaaaaa.."
+  ],
+  "can": [
+   "..GGGGGG..",
+   ".GWWGGGGG.",
+   ".AAAAAAAA.",
+   ".AWBBBBAA.",
+   ".AWBDBBAa.",
+   ".AABBBBAa.",
+   ".AAAAAAAa.",
+   ".GGGGGGGG."
+  ],
+  "cup": [
+   "..W.W.W...",
+   "..........",
+   ".AAAAAAA..",
+   ".AWAAAAADD",
+   ".AWABBAAD.D",
+   ".AAABBAAD.D",
+   ".AAAAAAADD",
+   "..AAAAAa..",
+   "...aaaa..."
+  ],
+  "thermos": [
+   "...BBBB...",
+   "...GGGG...",
+   "..AAAAAA..",
+   "..AWAAAa..",
+   "..AWAAAa..",
+   "..ABBBBa..",
+   "..AWAAAa..",
+   "..AAAAAa..",
+   "..AAAAAa..",
+   "..AAAAAa..",
+   "...aaaa..."
+  ],
+  "sandwich": [
+   "...........",
+   "..BBBBBBB..",
+   ".BWBBBBBBB.",
+   "AAAAAAAAAAA",
+   "DADADADADAa",
+   ".bbbbbbbbb.",
+   "..bbbbbbb.."
+  ],
+  "loaf": [
+   "........AA..",
+   "......AWAa..",
+   "....AWAAa...",
+   "..AWAAAa....",
+   ".AWAAAa.....",
+   "AWAAAa......",
+   "AAAAa.......",
+   ".aa........."
+  ],
+  "slice": [
+   "....A.....",
+   "...AWA....",
+   "..AWBAA...",
+   ".AWBBBAA..",
+   "AABBDBBAA.",
+   "aaaaaaaaa."
+  ],
+  "tin": [
+   "..........",
+   ".AAAAAAAA.",
+   "AWWAAAAAAa",
+   "ABBBBBBBBa",
+   "ABWDBBDBBa",
+   "ABBBBBBBBa",
+   "AAAAAAAAAa",
+   ".aaaaaaaa."
+  ],
+  "lunchbox": [
+   "...DDDD...",
+   "...D..D...",
+   ".AAAAAAAA.",
+   "AWAAAAAAAa",
+   "GGGGGGGGGG",
+   "ABBBBBBBBa",
+   "ABBBBBBBBa",
+   ".aaaaaaaa."
+  ],
+  "wrench": [
+   "........AA.",
+   ".......A..A",
+   "......AWA..",
+   ".....AWA...",
+   "....AWA....",
+   "...AWA.....",
+   "..AWA......",
+   ".AAA.......",
+   "A..A.......",
+   ".AA........"
+  ],
+  "stick": [
+   ".........BB",
+   "........BWB",
+   ".........BB",
+   "........G..",
+   ".......G...",
+   "......G....",
+   ".....G.....",
+   "....G......",
+   "...A.......",
+   "..AA.......",
+   ".AA........"
+  ],
+  "ringlight": [
+   "...AAAA...",
+   "..A....A..",
+   ".A..WW..A.",
+   ".A.W..W.A.",
+   ".A.W..W.A.",
+   ".A..WW..A.",
+   "..A....A..",
+   "...AAAA...",
+   "....GG....",
+   "....GG....",
+   "...GGGG..."
+  ],
+  "keyboard": [
+   "AAAAAAAAAAAA",
+   "AWBBBBBBBBBa",
+   "ADWDWDWDWDWa",
+   "AWWWWWWWWWWa",
+   "AWWWWWWWWWWa",
+   ".aaaaaaaaaa."
+  ],
+  "tambourine": [
+   "...AAAA...",
+   "..AWBBBA..",
+   ".GABBBBAG.",
+   ".AWBBBBBA.",
+   ".ABBBBBBa.",
+   ".GABBBBAG.",
+   "..ABBBBa..",
+   "...aaaa..."
+  ],
+  "whistle": [
+   "..........",
+   "......D...",
+   "..AAAAAAD.",
+   ".AWAAAAA..",
+   "AWAADAAA..",
+   "AAAAAAAa..",
+   ".AAAAAa...",
+   "..aaaa...."
+  ],
+  "ring": [
+   "...AAAA...",
+   ".AABBBBAA.",
+   "AWBB..BBAa",
+   "AB......Ba",
+   "AB......Ba",
+   "ABB....BBa",
+   ".AABBBBAa.",
+   "...aaaa..."
+  ],
+  "tube": [
+   "........DD",
+   ".......GG.",
+   "......AA..",
+   ".....AWA..",
+   "....AWBA..",
+   "...AWBBa..",
+   "..AWBBa...",
+   ".AAAAa....",
+   "AAAa......",
+   ".a........"
+  ],
+  "magnifier": [
+   "..AAAA....",
+   ".AWWWBA...",
+   "AWWBBBBA..",
+   "AWBBBBBA..",
+   "ABBBBBBa..",
+   ".ABBBBa...",
+   "..aaaaDD..",
+   "......DDD.",
+   ".......DDD",
+   "........DD"
+  ],
+  "cane": [
+   "..WAA.....",
+   ".AA..A....",
+   ".A...A....",
+   ".....B....",
+   ".....B....",
+   ".....B....",
+   ".....B....",
+   ".....B....",
+   ".....B....",
+   ".....b....",
+   ".....b...."
+  ],
+  "pilltin": [
+   "..........",
+   ".GGGGGGGG.",
+   "GWWGGGGGGG",
+   "AAAAAAAAAa",
+   "AWBBBBBBAa",
+   "AABDBDBBAa",
+   "AAAAAAAAAa",
+   ".aaaaaaaa."
+  ],
+  "glove": [
+   "..A.A.A...",
+   "..A.A.A.A.",
+   "..AWAWAWA.",
+   "..AAAAAAA.",
+   ".AWAAAAAA.",
+   "AAAAAAAAa.",
+   ".AAAAAAa..",
+   "..BBBBB...",
+   "..BBBBB..."
+  ],
+  "palette": [
+   "..AAAAAA..",
+   ".AWWAAAAA.",
+   "AABAADDAAa",
+   "AAAAAAAAAa",
+   "AADAA..AAa",
+   ".AAAAAAAa.",
+   "..aaaaaa.."
+  ],
+  "iron": [
+   "........D.",
+   ".......DGD",
+   "......AGD.",
+   ".....AWA..",
+   "....AWA...",
+   "...AAA....",
+   "..BBb.....",
+   ".BBb......",
+   "BBb......."
+  ],
+  "antenna": [
+   "W....W....",
+   ".G..G.....",
+   "..GG......",
+   "..AA......",
+   ".AWAA.....",
+   ".AAAAa....",
+   "..aaa....."
+  ],
+  "bag": [
+   "....DD....",
+   "...ABBA...",
+   "..AAAAAA..",
+   ".AWAAAAAA.",
+   "AWAAGAGAAa",
+   "AAAGAAAGAa",
+   "AAAAAAAAAa",
+   ".aaaaaaaa."
+  ],
+  "stamp": [
+   "...BBB....",
+   "...BWB....",
+   "...BBB....",
+   "....b.....",
+   "..AAAAA...",
+   ".AWAAAAA..",
+   "DDDDDDDDD.",
+   "DADADADAD."
+  ],
+  "papers": [
+   ".BBBBBBBB.",
+   "BWWWWWWWBb",
+   "BWDDDDDWBb",
+   "BWWWWWWWBb",
+   "BWDDDDWWBb",
+   "BWWWWWWWBb",
+   "BWDDDWWWBb",
+   "BWWWWWWWBb",
+   ".bbbbbbbb."
+  ],
+  "notice": [
+   "....DD....",
+   ".AAAAAAAA.",
+   "AWWWWWWWWa",
+   "AWBBBBBBWa",
+   "AWWWWWWWWa",
+   "AWDDDDDWWa",
+   "AWDDDDWWWa",
+   "AWWWWWWWWa",
+   ".aaaaaaaa."
+  ],
+  "ball": [
+   "...AAAA...",
+   ".AAWDAAAA.",
+   ".AWADAAAA.",
+   "ADDDDDDDDa",
+   "AAAADAAAAa",
+   ".AAADAAAa.",
+   ".AADAAAAa.",
+   "...aaaa..."
+  ],
+  "shoe": [
+   "..BBBB....",
+   "..BWWB....",
+   "..BWWB....",
+   "..BWWBB...",
+   "..BWWWWBB.",
+   ".AAAAAAAAA",
+   ".DDDDDDDDD"
+  ],
+  "rod": [
+   "..........A",
+   ".........A.",
+   "........A.W",
+   ".......A..W",
+   "......A...W",
+   ".....A....W",
+   "....A.....D",
+   "...B.......",
+   "..BB.......",
+   ".BB........"
+  ],
+  "pin": [
+   "DD........",
+   "DAA.......",
+   ".AWA......",
+   "..AWA.....",
+   "...AWA....",
+   "....AWA...",
+   ".....AAA..",
+   "......AaDD",
+   ".......DDD"
+  ],
+  "plaster": [
+   "..AAAAAA..",
+   ".AWWBBWWA.",
+   "AWWBBBBWWA",
+   "AWWBDDBWWa",
+   "AWWBBBBWWa",
+   ".AWWBBWWa.",
+   "..aaaaaa.."
+  ],
+  "lighter": [
+   "...BB....",
+   "..BWB....",
+   "..GGGG...",
+   "..GGDG...",
+   ".AAAAAA..",
+   ".AWBBBAa.",
+   ".AWBDBAa.",
+   ".AWBBBAa.",
+   ".AAAAAAa.",
+   "..aaaaa.."
+  ],
+  "bucket": [
+   "..GGGGGG..",
+   ".G......G.",
+   "AAAAAAAAAA",
+   "ABBBBBBBBa",
+   ".AWAAAAAa.",
+   ".AWAAAAAa.",
+   "..AAAAAa..",
+   "..aaaaaa.."
+  ],
+  "net": [
+   "A.A.A.A.A",
+   ".A.A.A.A.",
+   "A.A.A.A.A",
+   ".A.A.A.A.",
+   "A.A.A.A.A",
+   ".A.A.A.A.",
+   "..BBBBB..",
+   "...b.b..."
+  ],
+  "map": [
+   "AA.AA.AA..",
+   "AWABWBAWA.",
+   "ABABDBABA.",
+   "ABDBABDBA.",
+   "ABABABABA.",
+   "AWABWBAWA.",
+   "AA.AA.AA.."
+  ],
+  "firecracker": [
+   "....W.....",
+   "...W......",
+   "...D......",
+   "..AAA.....",
+   "..AWA.....",
+   "..ABA.....",
+   "..AWA.....",
+   "..ABA.....",
+   "..AAa.....",
+   "..aaa....."
+  ],
+  "helmet": [
+   "...AAAA...",
+   ".AAWWAAAA.",
+   ".AWWAAAAA.",
+   "AAAAAAAAAa",
+   "AAAABBAAAa",
+   "aaaaaaaaaa"
+  ],
+  "hat": [
+   "....AAAA....",
+   "...AWAAAA...",
+   "...AWAAAA...",
+   "...BBBBBB...",
+   "AAAAAAAAAAAa",
+   ".aaaaaaaaaa."
+  ],
+  "cap": [
+   "..AAAAA....",
+   ".AWAAAAA...",
+   ".AWAAAAA...",
+   ".AAAAAAA...",
+   ".BBBBBBBBBB",
+   "..........."
+  ],
+  "crown": [
+   "A..A..A..A",
+   "AA.AA.AA.A",
+   "AWAAWAAAWA",
+   "ABAAAAAABa",
+   "AWABAABAWa",
+   "AAAAAAAAAa"
+  ],
+  "halo": [
+   "..WWWWWW..",
+   ".W......W.",
+   "W..AAAA..W",
+   ".W......W.",
+   "..WWWWWW.."
+  ],
+  "raincoat": [
+   "...AAAA...",
+   "..AWAAAA..",
+   ".AAWAGAAA.",
+   "AAAWAAAAAa",
+   "AAAWAGAAAa",
+   "AAAWAAAAAa",
+   "AAAWAAAAAa",
+   ".aaaaaaaa."
+  ],
+  "coin": [
+   "..AAAAA..",
+   ".AWWAAAA.",
+   "AWAAAAAAa",
+   "AWAA.AAAa",
+   "AWAAAAAAa",
+   ".AAAAAAa.",
+   "..aaaaa.."
+  ],
+  "umbrella": [
+   "...AAAA...",
+   ".AWBAAABA.",
+   "ABAAAAAAAB",
+   "....G.....",
+   "....G.....",
+   "....G.....",
+   "....G.....",
+   "....G.D...",
+   ".....DD..."
+  ],
+  "crossbow": [
+   "A.........",
+   ".A.......W",
+   "..A.....W.",
+   "BBBBBBBBGG",
+   "..A.....W.",
+   ".A.......W",
+   "A.........",
+   "...DD....."
+  ],
+  "torch": [
+   "...WY....",
+   "..YWYB...",
+   "..YBBY...",
+   "...BB....",
+   "...AA....",
+   "...AA....",
+   "...AA....",
+   "...AA....",
+   "...aa...."
+  ],
+  "oar": [
+   "........AA",
+   ".......AWA",
+   "......AWAa",
+   ".....AAaa.",
+   "....B.....",
+   "...B......",
+   "..B.......",
+   ".B........",
+   "B........."
+  ],
+  "stapler": [
+   "..........",
+   ".AAAAAAAA.",
+   "AWWWAAAAAa",
+   "AAAAAAAAAa",
+   ".GGGGGGGG.",
+   "BBBBBBBBBb",
+   ".bbbbbbbb."
+  ],
+  "boot": [
+   "..AAAA....",
+   "..AWAA....",
+   "..AWAA....",
+   "..AWAA....",
+   "..AAAAA...",
+   "..AAAAAAA.",
+   "..BBBBBBBB"
+  ],
+  "vest": [
+   "..A....A..",
+   ".AA....AA.",
+   "AWAA..AAAa",
+   "BBBBBBBBBB",
+   "AWAAAAAAAa",
+   "BBBBBBBBBB",
+   "AAAAAAAAAa",
+   ".aaaaaaaa."
+  ],
+  "headlamp": [
+   "..........",
+   ".BBBBBBBB.",
+   "B..AAAA..B",
+   "..AWWWWA..",
+   "..AWWWWa..",
+   "...aaaa..."
+  ],
+  "megaphone": [
+   ".........AA",
+   "......AAAWA",
+   "...AAAWAAAA",
+   "BBAAAAAAAAA",
+   "BBAAAAAAAAA",
+   "...AAAAAAAa",
+   "......AAAaa",
+   ".........aa"
+  ],
+  "shaker": [
+   "...DDD...",
+   "..GDGDG..",
+   "..GGGGG..",
+   "..AAAAA..",
+   ".AWAAAAa.",
+   ".AWABAAa.",
+   ".AAAAAAa.",
+   ".AAAAAAa.",
+   "..aaaaa.."
+  ],
+  "extinguisher": [
+   ".....DD...",
+   "....GG.D..",
+   "...AAA..D.",
+   "..AWAAA...",
+   "..AWAAA...",
+   "..ABBBA...",
+   "..AWAAA...",
+   "..AAAAA...",
+   "..AAAAA...",
+   "...aaa...."
+  ],
+  "book": [
+   ".AAAAAAAA.",
+   "AWBBBBBBAa",
+   "AWBWWWWBAa",
+   "AWBBBBBBAa",
+   "AWBWWWBBAa",
+   "AWBBBBBBAa",
+   "AAAAAAAAAa",
+   "WWWWWWWWW."
+  ],
+  "bell": [
+   "....D....",
+   "...AAA...",
+   "..AWAAA..",
+   "..AWAAA..",
+   ".AWAAAAA.",
+   "AAAAAAAAA",
+   "....D...."
+  ],
+  "earring": [
+   "...G...",
+   "..G.G..",
+   "...G...",
+   "..AAA..",
+   ".AWAAA.",
+   ".AWBAa.",
+   "..AAa..",
+   "...a..."
+  ],
+  "glasses": [
+   "..........",
+   "D........D",
+   ".DAAAADAAAAD",
+   ".AWAAA.AWAAA",
+   ".AAAAA.AAAAA",
+   "..aaa...aaa."
+  ],
+  "hammer": [
+   "...AAAA...",
+   "...AWAA...",
+   "..GGGGGG..",
+   "...BBBB...",
+   "....GG....",
+   "....GG....",
+   "....GG....",
+   "....GG....",
+   "...DDDD..."
+  ],
+  "skateboard": [
+   "...........",
+   "...WY.YW...",
+   "AAAAAAAAAAA",
+   "AWBBBBBBBBa",
+   ".aaaaaaaaa.",
+   "..DD...DD..",
+   "..DD...DD.."
+  ],
+  "cape": [
+   "..BBBBBB..",
+   ".AABBBBAA.",
+   ".AWAAAAAA.",
+   "AAWAAAAAAa",
+   "AAWAAAAAAa",
+   "AAAAAAAAAa",
+   "AaAaAaAaAa"
+  ],
+  "die": [
+   ".AAAAAAA.",
+   "AWWWWWWAa",
+   "AWDWWWDAa",
+   "AWWWDWWAa",
+   "AWDWWWDAa",
+   "AWWWWWWAa",
+   ".aaaaaaa."
+  ],
+  "anchor": [
+   "...AA....",
+   "..A..A...",
+   "...AA....",
+   "AAAAAAAA.",
+   "...AA....",
+   "...AA....",
+   "A..AA..A.",
+   "AA.AA.AA.",
+   ".AAAAAA..",
+   "..aaaa..."
+  ],
+  "backpack": [
+   "...AAAA...",
+   "..A....A..",
+   ".AAAAAAAA.",
+   "AWAAAAAAAa",
+   "AWABBBBAAa",
+   "AWABWBBAAa",
+   "AAABBBBAAa",
+   "AAAAAAAAAa",
+   ".aaaaaaaa."
+  ],
+  "trumpet": [
+   "........AA",
+   ".......AWA",
+   "AAAAAAAWAA",
+   "AWWWWWAAAA",
+   "AAAAAAAAAA",
+   ".D.D...AAa",
+   ".......aa."
+  ],
+  "trolley": [
+   "..........G",
+   "AAAAAAAAAG.",
+   "ABAbABAbAG.",
+   "AbABAbABA..",
+   "ABAbABAbA..",
+   ".AAAAAAAA..",
+   ".D......D.."
+  ],
+  "stopwatch": [
+   "...DD...",
+   "....G...",
+   "..AAAA..",
+   ".AWWWWA.",
+   "AWWDWWWa",
+   "AWWDDWWa",
+   ".AWWWWa.",
+   "..aaaa.."
+  ],
+  "mic": [
+   "..GGG.....",
+   ".GWGGG....",
+   ".GGGGG....",
+   "..GGG.....",
+   "...AA.....",
+   "...AA.....",
+   "...AA.....",
+   "...aa.....",
+   "..DDDD...."
+  ],
+  "sword": [
+   ".........W",
+   "........WA",
+   ".......WA.",
+   "......WA..",
+   ".....WA...",
+   "..D.WA....",
+   "..DDA.....",
+   ".BBDD.....",
+   "BB..D....."
+  ],
+  "keys": [
+   "...GGG....",
+   "..G...G...",
+   "...GGG....",
+   "....A.....",
+   "...AAA....",
+   "...A.A.B..",
+   "..AA.ABB..",
+   "..A..BB...",
+   "..A.BB....",
+   ".AA.B....."
+  ],
+  "shirt": [
+   "..AA..AA..",
+   ".AAAAAAAA.",
+   "AAAWWWWAAA",
+   "AA.WBBW.AA",
+   "...WWWW...",
+   "...WBBW...",
+   "...WWWW...",
+   "...aaaa..."
+  ],
+  "band": [
+   "..........",
+   "AAAAAAAAAA",
+   "ABWBWBWBWA",
+   "aaaaaaaaaa"
+  ],
+  "sleeves": [
+   "..AAAA..AAAA",
+   "..AWAA..AWAA",
+   "..AWAA..AWAA",
+   "..AAAA..AAAA",
+   "..BBBB..BBBB"
+  ],
+  "visor": [
+   "..........",
+   "..AAAAAA..",
+   ".AWWWWWWA.",
+   "AAAAAAAAAA",
+   "..DDDDDD.."
+  ],
+  "bottlebolt": [
+   "....DD....",
+   "....GG....",
+   "....AA....",
+   "...AAAA...",
+   "..AWAAAA..",
+   "..AW.BAa..",
+   "..A.BB.a..",
+   "..ABB..a..",
+   "..A.BB.a..",
+   "..A..B.a..",
+   "..AAAAAa..",
+   "...aaaa..."
+  ]
+ },
+ "items": {
+  "bombona-de-butano": {
+   "shape": "bottle",
+   "colors": {
+    "A": "#e86a2a",
+    "a": "#b04a1e",
+    "B": "#f4ece0",
+    "W": "#ffb080",
+    "D": "#5a5e66"
+   }
+  },
+  "llave-inglesa": {
+   "shape": "wrench",
+   "colors": {
+    "A": "#8a9098",
+    "a": "#5a5e66",
+    "W": "#e0e8f0"
+   }
+  },
+  "bocadillo-de-chorizo": {
+   "shape": "sandwich",
+   "colors": {
+    "A": "#c03030",
+    "a": "#8a1a1a",
+    "B": "#e8b860",
+    "b": "#b8843a",
+    "W": "#f4d890",
+    "D": "#f4e0c0"
+   }
+  },
+  "palo-de-selfie": {
+   "shape": "stick",
+   "colors": {
+    "A": "#1e1c24",
+    "B": "#3a3e46",
+    "W": "#80d8ff",
+    "G": "#8a9098"
+   }
+  },
+  "aro-de-luz": {
+   "shape": "ringlight",
+   "colors": {
+    "A": "#f4f4f0",
+    "W": "#fff4c0",
+    "G": "#5a5e66"
+   }
+  },
+  "batido-de-proteinas": {
+   "shape": "thermos",
+   "colors": {
+    "A": "#c8a080",
+    "a": "#8a6a50",
+    "B": "#e8d0b0",
+    "W": "#f4e4d0",
+    "G": "#5a5e66"
+   }
+  },
+  "teclado-casio": {
+   "shape": "keyboard",
+   "colors": {
+    "A": "#2e2e36",
+    "a": "#1e1c24",
+    "B": "#c03898",
+    "W": "#f4f4f0",
+    "D": "#1e1c24"
+   }
+  },
+  "pandereta": {
+   "shape": "tambourine",
+   "colors": {
+    "A": "#a07040",
+    "a": "#6a4a2a",
+    "B": "#f4e0c0",
+    "W": "#ffffff",
+    "G": "#e0c060"
+   }
+  },
+  "botella-de-kalimotxo": {
+   "shape": "bottle",
+   "colors": {
+    "A": "#5a1a2a",
+    "a": "#3a0e18",
+    "B": "#e8e0d0",
+    "W": "#a04060",
+    "D": "#2a2a2a"
+   }
+  },
+  "silbato-de-socorrista": {
+   "shape": "whistle",
+   "colors": {
+    "A": "#ff8a20",
+    "a": "#c05a10",
+    "W": "#ffc070",
+    "D": "#1e1c24"
+   }
+  },
+  "flotador-de-patito": {
+   "shape": "ring",
+   "colors": {
+    "A": "#ffe04f",
+    "a": "#c8a020",
+    "B": "#ff8a20",
+    "W": "#fff8b0"
+   }
+  },
+  "crema-solar": {
+   "shape": "tube",
+   "colors": {
+    "A": "#f4f4f0",
+    "a": "#c0c6ce",
+    "B": "#3a8fd9",
+    "W": "#ffffff",
+    "D": "#e07a2a",
+    "G": "#e07a2a"
+   }
+  },
+  "lupa-de-tasador": {
+   "shape": "magnifier",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "B": "#a8d8f0",
+    "W": "#e0f4ff",
+    "D": "#f4f0e8"
+   }
+  },
+  "baston-con-pomo": {
+   "shape": "cane",
+   "colors": {
+    "A": "#c9d1d9",
+    "B": "#5a3a24",
+    "b": "#3a2418",
+    "W": "#ffffff"
+   }
+  },
+  "pastillas-juanola": {
+   "shape": "pilltin",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "B": "#1e3a6a",
+    "W": "#fff0a0",
+    "G": "#c9d1d9",
+    "D": "#f4f0e8"
+   }
+  },
+  "guantes-blancos": {
+   "shape": "glove",
+   "colors": {
+    "A": "#f4f4f4",
+    "a": "#c0c6ce",
+    "B": "#d0d0d8",
+    "W": "#ffffff"
+   }
+  },
+  "maquillaje-de-mimo": {
+   "shape": "palette",
+   "colors": {
+    "A": "#f4f4f0",
+    "a": "#c0c6ce",
+    "B": "#1e1c24",
+    "W": "#ffffff",
+    "D": "#e02a2a"
+   }
+  },
+  "barra-de-pan": {
+   "shape": "loaf",
+   "colors": {
+    "A": "#d09a50",
+    "a": "#9a6a2a",
+    "W": "#f0c880"
+   }
+  },
+  "soldador-de-estano": {
+   "shape": "iron",
+   "colors": {
+    "A": "#8a9098",
+    "W": "#e0e8f0",
+    "B": "#e0c020",
+    "b": "#a08010",
+    "D": "#ff6020",
+    "G": "#c0c6ce"
+   }
+  },
+  "antena-plegable": {
+   "shape": "antenna",
+   "colors": {
+    "A": "#5a5e66",
+    "a": "#3a3e46",
+    "W": "#ff4040",
+    "G": "#c0c6ce"
+   }
+  },
+  "bolsa-de-tornillos": {
+   "shape": "bag",
+   "colors": {
+    "A": "#d0e0e8",
+    "a": "#a0b0b8",
+    "W": "#ffffff",
+    "G": "#5a5e66",
+    "D": "#3a3e46"
+   }
+  },
+  "sello-de-caucho": {
+   "shape": "stamp",
+   "colors": {
+    "A": "#a07040",
+    "a": "#6a4a2a",
+    "B": "#5a3a24",
+    "b": "#3a2418",
+    "W": "#c09060",
+    "D": "#d02020"
+   }
+  },
+  "taco-de-formularios": {
+   "shape": "papers",
+   "colors": {
+    "B": "#c8c0b0",
+    "b": "#8a8478",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  },
+  "termo-de-cafe-con-leche": {
+   "shape": "thermos",
+   "colors": {
+    "A": "#c03030",
+    "a": "#8a1a1a",
+    "B": "#f4f0e8",
+    "W": "#e06060",
+    "G": "#c0c6ce"
+   }
+  },
+  "balon-de-baloncesto": {
+   "shape": "ball",
+   "colors": {
+    "A": "#e87a2a",
+    "a": "#b04a1e",
+    "W": "#ffb070",
+    "D": "#5a2a10"
+   }
+  },
+  "zapatillas-de-baloncesto": {
+   "shape": "shoe",
+   "colors": {
+    "A": "#e02a2a",
+    "B": "#f4f4f4",
+    "W": "#d0d0d8",
+    "D": "#1e1c24"
+   }
+  },
+  "bebida-isotonica": {
+   "shape": "bottle",
+   "colors": {
+    "A": "#3a8fd9",
+    "a": "#1e5a9a",
+    "B": "#f4f4f4",
+    "W": "#9ad0ff",
+    "D": "#f4f4f4"
+   }
+  },
+  "cana-de-pescar": {
+   "shape": "rod",
+   "colors": {
+    "A": "#a07040",
+    "B": "#5a3a24",
+    "W": "#d0e0e8"
+   }
+  },
+  "rodillo-de-cocina": {
+   "shape": "pin",
+   "colors": {
+    "A": "#d0a060",
+    "a": "#9a6a30",
+    "W": "#f0c890",
+    "D": "#8a5a2a"
+   }
+  },
+  "share-embotellado": {
+   "shape": "vial",
+   "colors": {
+    "A": "#b45cff",
+    "a": "#7a2ac0",
+    "B": "#ffe04f",
+    "W": "#f0c0ff",
+    "D": "#e0c060"
+   }
+  },
+  "tirita-de-dibujos": {
+   "shape": "plaster",
+   "colors": {
+    "A": "#e8b088",
+    "a": "#c08a68",
+    "B": "#40c060",
+    "W": "#f4c8a8",
+    "D": "#e02a2a"
+   }
+  },
+  "cafe-de-maquina": {
+   "shape": "cup",
+   "colors": {
+    "A": "#f4f4f0",
+    "a": "#c0c6ce",
+    "B": "#6a3a1a",
+    "W": "#ffffff",
+    "D": "#a0a0a8"
+   }
+  },
+  "frasco-de-aceite": {
+   "shape": "bottle",
+   "colors": {
+    "A": "#b0a020",
+    "a": "#7a7010",
+    "B": "#40a040",
+    "W": "#f0e060",
+    "D": "#5a5e66"
+   }
+  },
+  "mechero-de-gasolinera": {
+   "shape": "lighter",
+   "colors": {
+    "A": "#e02a2a",
+    "a": "#a01818",
+    "B": "#f4e0c0",
+    "W": "#ff8080",
+    "G": "#c0c6ce",
+    "D": "#1e1c24"
+   }
+  },
+  "cubo-de-agua": {
+   "shape": "bucket",
+   "colors": {
+    "A": "#3a6ab0",
+    "a": "#1e3a6a",
+    "B": "#80c8f0",
+    "W": "#6a9ad0",
+    "G": "#8a9098"
+   }
+  },
+  "bolsa-de-canicas": {
+   "shape": "bag",
+   "colors": {
+    "A": "#c0a070",
+    "a": "#8a6a40",
+    "W": "#e0c090",
+    "G": "#40a0e0",
+    "D": "#e04040"
+   }
+  },
+  "red-de-pesca": {
+   "shape": "net",
+   "colors": {
+    "A": "#c8b890",
+    "B": "#5a3a24",
+    "b": "#3a2418"
+   }
+  },
+  "lata-de-bonito": {
+   "shape": "tin",
+   "colors": {
+    "A": "#c9d1d9",
+    "a": "#8a9098",
+    "B": "#d02020",
+    "W": "#ffffff",
+    "D": "#3a8fd9"
+   }
+  },
+  "pincho-de-tortilla": {
+   "shape": "slice",
+   "colors": {
+    "A": "#e8c050",
+    "a": "#b88a20",
+    "B": "#f4e0a0",
+    "W": "#fff0b0",
+    "D": "#8a5a20"
+   }
+  },
+  "mapa-de-planta": {
+   "shape": "map",
+   "colors": {
+    "A": "#3a8fd9",
+    "B": "#f4f0e0",
+    "W": "#ffffff",
+    "D": "#e02a2a"
+   }
+  },
+  "petardo": {
+   "shape": "firecracker",
+   "colors": {
+    "A": "#e02a2a",
+    "a": "#a01818",
+    "B": "#ffe04f",
+    "W": "#ffb040",
+    "D": "#5a5e66"
+   }
+  },
+  "casco-de-obra": {
+   "shape": "helmet",
+   "colors": {
+    "A": "#ffe04f",
+    "a": "#c8a020",
+    "B": "#3a3e46",
+    "W": "#fff8b0"
+   }
+  },
+  "guantes-de-fregar": {
+   "shape": "glove",
+   "colors": {
+    "A": "#ff80b0",
+    "a": "#c05080",
+    "B": "#ff80b0",
+    "W": "#ffc0d8"
+   }
+  },
+  "chubasquero": {
+   "shape": "raincoat",
+   "colors": {
+    "A": "#ffe04f",
+    "a": "#c8a020",
+    "W": "#fff8b0",
+    "G": "#3a3e46"
+   }
+  },
+  "moneda-de-cinco-duros": {
+   "shape": "coin",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "W": "#fff0a0"
+   }
+  },
+  "paraguas": {
+   "shape": "umbrella",
+   "colors": {
+    "A": "#3a6ab0",
+    "B": "#f4f4f0",
+    "W": "#6a9ad0",
+    "G": "#8a9098",
+    "D": "#5a3a24"
+   }
+  },
+  "ballesta-de-feria": {
+   "shape": "crossbow",
+   "colors": {
+    "A": "#5a3a24",
+    "B": "#a07040",
+    "W": "#e0e8f0",
+    "G": "#8a9098",
+    "D": "#3a2418"
+   }
+  },
+  "antorcha-de-verbena": {
+   "shape": "torch",
+   "colors": {
+    "A": "#a07040",
+    "a": "#6a4a2a",
+    "B": "#ff8a20",
+    "W": "#fff4c0",
+    "Y": "#ffe04f"
+   }
+  },
+  "remo-de-trainera": {
+   "shape": "oar",
+   "colors": {
+    "A": "#3a8fd9",
+    "a": "#1e5a9a",
+    "B": "#a07040",
+    "W": "#9ad0ff"
+   }
+  },
+  "grapadora-industrial": {
+   "shape": "stapler",
+   "colors": {
+    "A": "#e02a2a",
+    "a": "#a01818",
+    "B": "#3a3e46",
+    "b": "#1e1c24",
+    "W": "#ff8080",
+    "G": "#c0c6ce"
+   }
+  },
+  "botas-de-agua": {
+   "shape": "boot",
+   "colors": {
+    "A": "#3a7a3a",
+    "a": "#2a5a2a",
+    "B": "#1e1c24",
+    "W": "#6aaa5a"
+   }
+  },
+  "chaleco-reflectante": {
+   "shape": "vest",
+   "colors": {
+    "A": "#e8ff40",
+    "a": "#a0b020",
+    "B": "#c0c6ce",
+    "W": "#ffffa0"
+   }
+  },
+  "frontal-de-espeleologo": {
+   "shape": "headlamp",
+   "colors": {
+    "A": "#3a3e46",
+    "a": "#1e1c24",
+    "B": "#e02a2a",
+    "W": "#fff4c0"
+   }
+  },
+  "megafono": {
+   "shape": "megaphone",
+   "colors": {
+    "A": "#f4f4f0",
+    "a": "#c0c6ce",
+    "B": "#e02a2a",
+    "W": "#ffffff"
+   }
+  },
+  "bote-de-pimienta": {
+   "shape": "shaker",
+   "colors": {
+    "A": "#f4f0e8",
+    "a": "#c0b8a8",
+    "B": "#1e1c24",
+    "W": "#ffffff",
+    "G": "#c0c6ce",
+    "D": "#3a3e46"
+   }
+  },
+  "garrafa-de-lejia": {
+   "shape": "jug",
+   "colors": {
+    "A": "#f4f4f4",
+    "a": "#c0c6ce",
+    "B": "#3a8fd9",
+    "W": "#ffffff",
+    "D": "#e02a2a"
+   }
+  },
+  "extintor": {
+   "shape": "extinguisher",
+   "colors": {
+    "A": "#e02a2a",
+    "a": "#a01818",
+    "B": "#f4f4f0",
+    "W": "#ff8080",
+    "G": "#1e1c24",
+    "D": "#1e1c24"
+   }
+  },
+  "tartera-de-mama": {
+   "shape": "lunchbox",
+   "colors": {
+    "A": "#c0c6ce",
+    "a": "#8a9098",
+    "B": "#a05a20",
+    "W": "#ffffff",
+    "G": "#5a5e66",
+    "D": "#5a5e66"
+   }
+  },
+  "manual-de-prevencion": {
+   "shape": "book",
+   "colors": {
+    "A": "#ffe04f",
+    "a": "#c8a020",
+    "B": "#3a3e46",
+    "W": "#ffffff"
+   }
+  },
+  "cascabel-delator": {
+   "shape": "bell",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "W": "#fff0a0",
+    "D": "#5a3a24"
+   }
+  },
+  "pendiente-del-mimico": {
+   "shape": "earring",
+   "colors": {
+    "A": "#c07a45",
+    "a": "#8a5020",
+    "B": "#1e1c24",
+    "W": "#ffd090",
+    "G": "#e0c060"
+   }
+  },
+  "gafas-de-sol-nocturnas": {
+   "shape": "glasses",
+   "colors": {
+    "A": "#1e1c24",
+    "a": "#0e0c12",
+    "W": "#5a4488",
+    "D": "#3a3e46"
+   }
+  },
+  "martillo-neumatico": {
+   "shape": "hammer",
+   "colors": {
+    "A": "#ffe04f",
+    "a": "#c8a020",
+    "B": "#3a3e46",
+    "W": "#fff8b0",
+    "G": "#8a9098",
+    "D": "#1e1c24"
+   }
+  },
+  "monopatin-cohete": {
+   "shape": "skateboard",
+   "colors": {
+    "A": "#e02a2a",
+    "a": "#a01818",
+    "B": "#ffe04f",
+    "W": "#ffffff",
+    "Y": "#ff8a20",
+    "D": "#1e1c24"
+   }
+  },
+  "capa-de-veterano": {
+   "shape": "cape",
+   "colors": {
+    "A": "#8e1f3a",
+    "a": "#5a0e20",
+    "B": "#e0c060",
+    "W": "#c04060"
+   }
+  },
+  "termo-sin-fondo": {
+   "shape": "thermos",
+   "colors": {
+    "A": "#5a4488",
+    "a": "#3a2a5c",
+    "B": "#e0c060",
+    "W": "#8a6ac8",
+    "G": "#c0c6ce"
+   }
+  },
+  "dado-trucado": {
+   "shape": "die",
+   "colors": {
+    "A": "#f4f0e8",
+    "a": "#c0b8a8",
+    "W": "#ffffff",
+    "D": "#e02a2a"
+   }
+  },
+  "ancla-del-puerto": {
+   "shape": "anchor",
+   "colors": {
+    "A": "#5a5e66",
+    "a": "#3a3e46"
+   }
+  },
+  "mochila-sin-fondo": {
+   "shape": "backpack",
+   "colors": {
+    "A": "#3a6ab0",
+    "a": "#1e3a6a",
+    "B": "#b45cff",
+    "W": "#6a9ad0"
+   }
+  },
+  "rayo-embotellado": {
+   "shape": "bottlebolt",
+   "colors": {
+    "A": "#a8d8f0",
+    "a": "#5a8ab0",
+    "B": "#ffe04f",
+    "W": "#ffffff",
+    "D": "#5a5e66",
+    "G": "#8a9098"
+   }
+  },
+  "trompeta-de-charanga": {
+   "shape": "trumpet",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "W": "#fff0a0",
+    "D": "#5a5e66"
+   }
+  },
+  "carrito-de-maripuri": {
+   "shape": "trolley",
+   "colors": {
+    "A": "#c03050",
+    "B": "#2a5a3a",
+    "b": "#1e3a2a",
+    "G": "#8a9098",
+    "D": "#1e1c24"
+   }
+  },
+  "remo-de-la-castrena": {
+   "shape": "oar",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "B": "#a07040",
+    "W": "#fff0a0"
+   }
+  },
+  "cronometro-de-regidor": {
+   "shape": "stopwatch",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "W": "#f4f4f0",
+    "G": "#c0c6ce",
+    "D": "#1e1c24"
+   }
+  },
+  "cuaderno-de-quejas": {
+   "shape": "book",
+   "colors": {
+    "A": "#8e1f3a",
+    "a": "#5a0e20",
+    "B": "#e0c060",
+    "W": "#f4f0e8"
+   }
+  },
+  "microfono-de-oro": {
+   "shape": "mic",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "G": "#fff0a0",
+    "W": "#ffffff",
+    "D": "#5a5e66"
+   }
+  },
+  "espada-del-campeon-krell": {
+   "shape": "sword",
+   "colors": {
+    "A": "#b45cff",
+    "W": "#e0d0ff",
+    "B": "#e0c060",
+    "D": "#5a4488"
+   }
+  },
+  "llavero-de-produccion": {
+   "shape": "keys",
+   "colors": {
+    "A": "#c0c6ce",
+    "B": "#ffe04f",
+    "b": "#c8a020",
+    "G": "#e0c060"
+   }
+  },
+  "gorra-de-butanero": {
+   "shape": "cap",
+   "colors": {
+    "A": "#2b3a5c",
+    "a": "#1e2a44",
+    "B": "#2b3a5c",
+    "W": "#3f5580"
+   }
+  },
+  "casco-vikingo-de-carton": {
+   "shape": "helmet",
+   "colors": {
+    "A": "#c8a070",
+    "a": "#8a6a40",
+    "B": "#f4f0e0",
+    "W": "#e8c090"
+   }
+  },
+  "corona-de-roscon": {
+   "shape": "crown",
+   "colors": {
+    "A": "#e8b860",
+    "a": "#b88a30",
+    "B": "#e02a2a",
+    "W": "#40c060"
+   }
+  },
+  "tupe-de-presentador": {
+   "shape": "helmet",
+   "colors": {
+    "A": "#2a2228",
+    "a": "#141018",
+    "B": "#c8c8d0",
+    "W": "#4a3a44"
+   }
+  },
+  "camiseta-planta-1": {
+   "shape": "shirt",
+   "colors": {
+    "A": "#3a6ab0",
+    "a": "#1e3a6a",
+    "B": "#e86a2a",
+    "W": "#f4f4f0"
+   }
+  },
+  "aureola-de-favorito": {
+   "shape": "halo",
+   "colors": {
+    "A": "#ffe04f",
+    "W": "#fff4c0"
+   }
+  },
+  "gorro-de-papel-de-aluminio": {
+   "shape": "helmet",
+   "colors": {
+    "A": "#c0c6ce",
+    "a": "#8a9098",
+    "B": "#e0e8f0",
+    "W": "#ffffff"
+   }
+  },
+  "chaleco-de-operadora": {
+   "shape": "vest",
+   "colors": {
+    "A": "#ff8a20",
+    "a": "#c05a10",
+    "B": "#f4f4f0",
+    "W": "#ffc070"
+   }
+  },
+  "manguitos-de-oficina": {
+   "shape": "sleeves",
+   "colors": {
+    "A": "#1e1c24",
+    "a": "#0e0c12",
+    "B": "#5a5e66",
+    "W": "#3a3e46"
+   }
+  },
+  "visera-de-ventanilla": {
+   "shape": "visor",
+   "colors": {
+    "A": "#40a060",
+    "a": "#2a7040",
+    "W": "#a0f0c0",
+    "D": "#1e1c24"
+   }
+  },
+  "cinta-de-pelo-ochentera": {
+   "shape": "band",
+   "colors": {
+    "A": "#ff4fa0",
+    "a": "#c02a70",
+    "B": "#4fe8ff",
+    "W": "#ffffff"
+   }
+  },
+  "anillo-de-campeon": {
+   "shape": "ring",
+   "colors": {
+    "A": "#e0c060",
+    "a": "#a08030",
+    "B": "#b45cff",
+    "W": "#fff0a0"
+   }
+  },
+  "aviso-pausa-publicitaria": {
+   "shape": "notice",
+   "colors": {
+    "A": "#c8c0b0",
+    "a": "#8a8478",
+    "B": "#ff4fa0",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  },
+  "aviso-dia-de-la-luz": {
+   "shape": "notice",
+   "colors": {
+    "A": "#c8c0b0",
+    "a": "#8a8478",
+    "B": "#ffe04f",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  },
+  "aviso-huelga-de-figurantes": {
+   "shape": "notice",
+   "colors": {
+    "A": "#c8c0b0",
+    "a": "#8a8478",
+    "B": "#e02a2a",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  },
+  "aviso-especial-audiencia": {
+   "shape": "notice",
+   "colors": {
+    "A": "#c8c0b0",
+    "a": "#8a8478",
+    "B": "#4fe8ff",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  },
+  "aviso-paga-extra": {
+   "shape": "notice",
+   "colors": {
+    "A": "#c8c0b0",
+    "a": "#8a8478",
+    "B": "#40c060",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  },
+  "aviso-mudanza-de-trampas": {
+   "shape": "notice",
+   "colors": {
+    "A": "#c8c0b0",
+    "a": "#8a8478",
+    "B": "#ff8a20",
+    "W": "#f4f0e8",
+    "D": "#8a9098"
+   }
+  }
+ }
+}

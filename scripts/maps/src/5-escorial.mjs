@@ -56,7 +56,7 @@ export default {
     'sinpaga_cuchillero-4': [26, 18], // heap B peak, with a crossbow
     'sinpaga_cuchillero-1': [12, 20],
     'sinpaga_cuchillero-2': [20, 20],
-    'sinpaga_cuchillero-3': [18, 16], // lookout scaffold
+    'curandero_sinpaga-1': [18, 16], // the band's healer, on the lookout scaffold
     'sinpaga_bruto-1': [15, 19],
     // The first Callado, by the well. Not part of the fight: he just looks, and goes down.
     'callado-1': [31, 9],

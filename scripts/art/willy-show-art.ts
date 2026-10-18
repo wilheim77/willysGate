@@ -656,6 +656,21 @@ export function snowTop(seed: number): Image {
   return img;
 }
 
+/** Elite aura (16x8, under the feet): a golden ring with sparkles running round it. */
+export function eliteAura(frame: number): Image {
+  const img = blank(T, 8);
+  for (let y = 0; y < 8; y++) for (let x = 0; x < T; x++) {
+    const d = Math.hypot((x - 7.5) / 7.2, (y - 4) / 3.4);
+    if (d > 1.05 || d < 0.72) continue;
+    px(img, x, y, d > 0.92 ? '#a87a10' : '#ffc440', 220);
+  }
+  for (let k = 0; k < 3; k++) {
+    const a = ((frame + k * 4 / 3) / 4) * Math.PI * 2;
+    px(img, Math.round(7.5 + Math.cos(a) * 6.5), Math.round(4 + Math.sin(a) * 3), '#fff4c0');
+  }
+  return img;
+}
+
 /** Stair face for walkable one-level steps (Willy's palette): treads every 3 rows, lit nose. */
 export function stairFace(pal: [string, string, string, string]): Image {
   const img = blank(T, T);

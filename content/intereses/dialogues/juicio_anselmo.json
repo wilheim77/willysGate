@@ -524,7 +524,7 @@
         },
         {
           "type": "gainProgress",
-          "amount": 75,
+          "amount": 500,
           "id": "juicio"
         }
       ],
@@ -577,7 +577,7 @@
         },
         {
           "type": "gainProgress",
-          "amount": 75,
+          "amount": 500,
           "id": "juicio"
         }
       ],

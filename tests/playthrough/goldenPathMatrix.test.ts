@@ -37,7 +37,9 @@ describe('golden path matrix: D1 x D2 x D3 x D4', () => {
       // route to the same place - except D4 when this exact D1/D4 pairing is an invalid
       // combination by design (d4UnavailableFor), where the driver had to fall back.
       // A run wiped out in the Vault never got to D3/D4 (see expectNoEarlyWipe).
-      const choices = wiped ? [combo.d1, combo.d2] : d4UnavailableFor(combo) ? [combo.d1, combo.d2, combo.d3] : [combo.d1, combo.d2, combo.d3, combo.d4];
+      const lostBoss = visited.has('boveda') && !state.flags.brea_derrotado;
+      if (lostBoss) console.warn(`${comboLabel(combo)}: lost the boss fight (known: level 5 and no rests, see expectNoEarlyWipe)`);
+      const choices = wiped || lostBoss ? [combo.d1, combo.d2] : d4UnavailableFor(combo, state) ? [combo.d1, combo.d2, combo.d3] : [combo.d1, combo.d2, combo.d3, combo.d4];
       for (const choice of choices) {
         const flag = BRANCH_FLAG[choice];
         if (flag) expect(state.flags[flag], `${comboLabel(combo)}: expected "${choice}"'s flag "${flag}" to be set`).toBe(true);

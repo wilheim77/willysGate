@@ -5654,6 +5654,104 @@
       "loop": false,
       "anchor": "wall",
       "light": "#8ab0e8"
+    },
+    "corpse_human": {
+      "url": "assets/0x72/corpses.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 23,
+          "h": 19
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "corpse_miner": {
+      "url": "assets/0x72/corpses.png",
+      "frames": [
+        {
+          "x": 23,
+          "y": 1,
+          "w": 25,
+          "h": 18
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "corpse_skeleton": {
+      "url": "assets/0x72/corpses.png",
+      "frames": [
+        {
+          "x": 48,
+          "y": 6,
+          "w": 22,
+          "h": 13
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "corpse_zombie": {
+      "url": "assets/0x72/corpses.png",
+      "frames": [
+        {
+          "x": 70,
+          "y": 7,
+          "w": 20,
+          "h": 12
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "corpse_dog": {
+      "url": "assets/0x72/corpses.png",
+      "frames": [
+        {
+          "x": 90,
+          "y": 1,
+          "w": 20,
+          "h": 18
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "corpse_wolf": {
+      "url": "assets/0x72/corpses.png",
+      "frames": [
+        {
+          "x": 110,
+          "y": 1,
+          "w": 20,
+          "h": 18
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
+    },
+    "corpse_rat": {
+      "url": "assets/0x72/corpses.png",
+      "frames": [
+        {
+          "x": 130,
+          "y": 5,
+          "w": 20,
+          "h": 14
+        }
+      ],
+      "fps": 0,
+      "loop": false,
+      "anchor": "floor"
     }
   },
   "surfaces": {
@@ -6204,5 +6302,46 @@
       "kind": "instant",
       "fx": "fx_hit_spark"
     }
+  },
+  "corpses": {
+    "default": "corpse_human",
+    "hero": "corpse_human",
+    "orc": "corpse_human",
+    "skeleton": "corpse_skeleton",
+    "wizard": "corpse_human",
+    "dorotea": "corpse_human",
+    "anselmo": "corpse_human",
+    "garran": "corpse_human",
+    "bandit": "corpse_human",
+    "thug": "corpse_human",
+    "cobrador": "corpse_human",
+    "sinpaga_cuchillero": "corpse_human",
+    "sinpaga_enmascarado": "corpse_human",
+    "sinpaga_bruto": "corpse_human",
+    "guardia_baron": "corpse_miner",
+    "guardia_baron_sargento": "corpse_miner",
+    "minero_cuadrilla": "corpse_miner",
+    "callado": "corpse_miner",
+    "callado_palido": "corpse_zombie",
+    "absalon": "corpse_human",
+    "esqueleto_minero": "corpse_skeleton",
+    "ahogado": "corpse_zombie",
+    "mazo": "corpse_human",
+    "hilda": "corpse_human",
+    "cirilo": "corpse_human",
+    "fanatico_pala": "corpse_human",
+    "nella": "corpse_human",
+    "odda": "corpse_human",
+    "lisandro": "corpse_human",
+    "aldeano": "corpse_human",
+    "aldeana": "corpse_human",
+    "aldeano_viejo": "corpse_human",
+    "fiel_pala": "corpse_human",
+    "viuda": "corpse_human",
+    "ivo": "corpse_human",
+    "posadera": "corpse_human",
+    "perro": "corpse_dog",
+    "lobo": "corpse_wolf",
+    "rata": "corpse_rat"
   }
 }
