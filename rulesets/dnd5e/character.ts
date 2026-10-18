@@ -1,6 +1,6 @@
 import { type Entity, type Resource, type Vec2, hasTag, stat, tagValue } from '../../engine';
 import { ABILITIES, type Ability, abilityModifier, proficiencyBonus } from './abilities';
-import { ARMOR, CLASSES, MONSTERS, RACES, SPELL_SLOTS } from './data';
+import { ARMOR, CLASSES, ITEMS, MONSTERS, RACES, SPELL_SLOTS } from './data';
 
 /**
  * Builds 5e entities from data. Everything the rules need later lives on the entity as
@@ -161,9 +161,9 @@ export function mod(e: Entity, a: Ability): number {
   return abilityModifier(stat(e, a, 10));
 }
 
-/** Armour class including active conditions (Shield, Shield of Faith, Mage Armor). */
+/** Armour class including active conditions (Shield, Shield of Faith, Mage Armor) and equipped magic gear. */
 export function armorClass(e: Entity): number {
-  let ac = stat(e, 'ac', 10);
+  let ac = stat(e, 'ac', 10) + equipmentAcBonus(e);
   if (e.conditions.some((c) => c.id === 'mage_armor') && tagValue(e, 'armor') === 'none') ac = Math.max(ac, 13 + mod(e, 'dex'));
   if (e.conditions.some((c) => c.id === 'shield_of_faith')) ac += 2;
   if (e.conditions.some((c) => c.id === 'shielded')) ac += 5;
@@ -180,4 +180,35 @@ export function hasFeature(e: Entity, f: string): boolean {
 
 export function tagValues(e: Entity, prefix: string): string[] {
   return e.tags.filter((t) => t.startsWith(`${prefix}:`)).map((t) => t.slice(prefix.length + 1));
+}
+
+// --- Equipment (weapon/armour/ring/cloak items from loot, see loot.ts and data/magic-items.json) ---
+
+/** Mechanical item ids an entity currently has equipped (tag `item:<id>`, see the `equipItem` command). */
+export function equippedItems(e: Entity): string[] {
+  return tagValues(e, 'item');
+}
+
+/** Flat AC bonus from equipped magic armour, rings and cloaks. */
+export function equipmentAcBonus(e: Entity): number {
+  return equippedItems(e).reduce((sum, id) => sum + (ITEMS[id]?.acBonus ?? 0), 0);
+}
+
+/** Flat bonus to every saving throw from equipped rings and cloaks. */
+export function equipmentSaveBonus(e: Entity): number {
+  return equippedItems(e).reduce((sum, id) => sum + (ITEMS[id]?.saveBonus ?? 0), 0);
+}
+
+/** Attack and damage bonus a +N magic weapon gives when it matches the weapon being used. */
+export function equippedWeaponBonus(e: Entity, weaponId: string): { attack: number; damage: number } {
+  let attack = 0;
+  let damage = 0;
+  for (const id of equippedItems(e)) {
+    const item = ITEMS[id];
+    if (item?.kind === 'weapon' && item.baseWeapon === weaponId) {
+      attack += item.attackBonus ?? 0;
+      damage += item.damageBonus ?? 0;
+    }
+  }
+  return { attack, damage };
 }

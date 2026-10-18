@@ -21,8 +21,10 @@ import {
 import { listActions, performAction, previewAction } from './actions';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onSurface, triggerTrap } from './environment';
 import { setDnd5eRef } from './ref';
-import { profBonus } from './character';
-import { SPELLS } from './data';
+import { equippedItems, profBonus } from './character';
+import { ITEMS, SPELLS } from './data';
+import { rollLoot } from './loot';
+import { equipItem, useItem } from './commands';
 import { parseDice, rollDice, sum } from './dice';
 import { Resolver, canReact, chanceToSucceed, dealDamage, die, heal, resolveAttack, rollSave, spellDc, standing } from './resolve';
 import { d20Check, resolveRollMode } from '../common/d20';
@@ -236,7 +238,18 @@ function performActionOnce(ruleset: Ruleset, state: GameState, attackerId: strin
   return performAction(ruleset, { ...state, entities: { ...state.entities, [attackerId]: once } }, attackerId, actionId, { entityId: targetId }, rng);
 }
 
-/** After a fight the winners' fallen get back up with 1 hit point; nobody keeps an unspent surge. */
+/**
+ * After a fight the winners' fallen get back up with 1 hit point; nobody keeps an unspent
+ * surge; and the losing side's dead monsters drop loot straight into the party's bag (see
+ * loot.ts; there's no lootable-corpse entity yet, so this is the "toast" option DESIGN.md
+ * leaves open rather than a bag on the ground). `looted` keeps a corpse that outlives this
+ * one fight (it stays in state.entities) from rolling again in a later combat.
+ *
+ * Loot is rolled from its own seed (deriveSeed(state.seed, 'loot', corpseId), same pattern
+ * as content/willy/gen/random.ts) rather than the shared combat `rng`: a monster's drop
+ * must never change depending on how many dice the fight that killed it happened to use, or
+ * shift every roll afterwards for the rest of the playthrough.
+ */
 function onCombatEnd(ruleset: Ruleset, state: GameState, winner: string | null): ActionOutcome {
   const r = new Resolver(ruleset, state, null as never);
   for (const e of Object.values(state.entities)) {
@@ -244,6 +257,17 @@ function onCombatEnd(ruleset: Ruleset, state: GameState, winner: string | null):
     const keeps = e.tags.includes('essential') || e.tags.includes('noncombatant');
     if (hasCondition(e, 'downed') && !hasCondition(e, 'dead') && (e.factionId === winner || keeps)) heal(r, e.id, 1);
     if ((e.resources.extra_action?.current ?? 0) > 0) r.apply({ type: 'modifyResource', entityId: e.id, resource: 'extra_action', delta: -1 });
+  }
+  const fallen = Object.values(r.state.entities).filter(
+    (e) => hasCondition(e, 'dead') && e.factionId !== winner && !hasTag(e, 'looted') && tagValue(e, 'monster'),
+  );
+  if (fallen.length) {
+    const loot = rollLoot(r.state, fallen);
+    r.apply(
+      ...loot.effects,
+      ...fallen.map((e) => ({ type: 'setEntity' as const, entityId: e.id, addTags: ['looted'] })),
+    );
+    for (const ev of loot.events) r.emit(ev);
   }
   return r.outcome();
 }
@@ -273,7 +297,7 @@ export const dnd5e: Ruleset = {
     abilityAtLeast: (s, id, p) => stat(s.entities[id]!, String(p.ability), 10) >= Number(p.min),
     proficient: (s, id, p) => hasTag(s.entities[id]!, `prof:${String(p.skill)}`),
   },
-  commands: {},
+  commands: { equipItem, useItem },
 
   rollInitiative: (state, id, rng) => {
     const e = state.entities[id]!;
@@ -298,6 +322,12 @@ export const dnd5e: Ruleset = {
   noticeTrap,
   triggerTrap: (state, id, trap, rng) => triggerTrap(dnd5e, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { resources, conditions }),
+  itemSlot: (id) => {
+    const kind = ITEMS[id]?.kind;
+    return kind === 'weapon' || kind === 'armor' || kind === 'ring' || kind === 'cloak' ? kind : undefined;
+  },
+  equippedInSlot: (e, slot) => equippedItems(e).find((id) => ITEMS[id]?.kind === slot),
+  equippedItems: (e) => equippedItems(e),
 };
 setDnd5eRef(dnd5e);
 
