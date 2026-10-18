@@ -23,13 +23,15 @@ export interface AiProfile {
   focusWounded: number;
   /** Penalty per tile walked (lazy enemies stay put). */
   walking: number;
-  /** Penalty per point of surface hazard at the tile the AI would end on. */
+  /** Penalty per point of surface hazard (or ruleset `dangerAt`) at the tile the AI would end on. */
   hazard: number;
+  /** Weight of damage to its own side (collateral of an explosion or a shove), as a loss. */
+  friendlyFire: number;
   /** Resource that represents health; defaults to the ruleset's resource with role 'health'. */
   healthResource?: string;
 }
 
-export const DEFAULT_AI: AiProfile = { damage: 1, healing: 1.2, kill: 6, focusWounded: 3, walking: 0.15, hazard: 1.5 };
+export const DEFAULT_AI: AiProfile = { damage: 1, healing: 1.2, kill: 6, focusWounded: 3, walking: 0.15, hazard: 1.5, friendlyFire: 1.5 };
 
 export function healthResourceOf(ruleset: Ruleset): string | undefined {
   return Object.entries(ruleset.resources).find(([, r]) => r.role === 'health')?.[0];
@@ -76,6 +78,9 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
   const fallenFriends = Object.values(state.entities).filter(
     (e) => e.id !== actor.id && !ruleset.isStanding(e) && !e.tags.includes(OBJECT_TAG) && !isHostile(actor, e) && ruleset.occupiesTile?.(e) !== false,
   );
+  // Scenery that can be hit or shoved (an oil barrel): worth it only for what it does to others,
+  // which the ruleset reports as the preview's collateral.
+  const props = Object.values(state.entities).filter((e) => e.tags.includes(OBJECT_TAG) && ruleset.isStanding(e) && e.resources[profile.healthResource ?? ''] !== undefined);
   let best: Candidate | null = null;
 
   for (const action of affordable) {
@@ -85,8 +90,8 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
       action.target.kind === 'self'
         ? [actor]
         : action.target.kind === 'creature'
-          ? [...others, ...(action.tags.includes('heal') || action.tags.includes('support') ? fallenFriends : [])].filter((e) => matchesFilter(actor, e, action.target.filter))
-          : others.filter((e) => isHostile(actor, e));
+          ? [...others, ...props, ...(action.tags.includes('heal') || action.tags.includes('support') ? fallenFriends : [])].filter((e) => matchesFilter(actor, e, action.target.filter))
+          : [...others.filter((e) => isHostile(actor, e)), ...props];
     for (const target of targets) {
       // Try the tiles from which the target is in range, nearest first.
       const spots = reachable
@@ -98,7 +103,11 @@ function bestCandidate(ruleset: Ruleset, state: GameState, actor: Entity, reacha
         const ref: ActionTarget = action.target.kind === 'tile' ? { tile: { ...target.position } } : { entityId: target.id };
         const preview = ruleset.previewAction(hypothetical, actor.id, action.id, ref);
         if (!preview.valid) continue;
-        const score = scorePreview(preview, actor, target, profile) - spot.cost * profile.walking - hazardAt(ruleset, state, spot.pos) * profile.hazard;
+        const score =
+          scorePreview(preview, actor, target, profile) +
+          collateralScore(preview, actor, hypothetical, profile) -
+          spot.cost * profile.walking -
+          (hazardAt(ruleset, state, spot.pos) + (ruleset.dangerAt?.(hypothetical, actor.id, spot.pos) ?? 0)) * profile.hazard;
         if (!best || score > best.score) best = { position: spot.pos, pathCost: spot.cost, action, target: ref, score };
       }
     }
@@ -115,13 +124,28 @@ function scorePreview(
   const health = profile.healthResource ? target.resources[profile.healthResource] : undefined;
   const missing = health && health.max > 0 ? 1 - health.current / health.max : 0;
   let score = 0;
-  if (preview.expectedDamage && isHostile(actor, target)) {
+  // Damage to scenery is no gain in itself (see collateralScore).
+  if (preview.expectedDamage && isHostile(actor, target) && !target.tags.includes(OBJECT_TAG)) {
     score += preview.expectedDamage * profile.damage + missing * profile.focusWounded;
     if (health && preview.expectedDamage >= health.current) score += profile.kill * (preview.chance ?? 1);
   }
   if (preview.expectedHealing && !isHostile(actor, target)) {
     // Healing a healthy ally is worthless; healing a dying one is worth a lot.
     score += Math.min(preview.expectedHealing, health ? health.max - health.current : 0) * profile.healing * (0.5 + missing);
+  }
+  return score;
+}
+
+/** What an action does to everyone else (an explosion, a chain of shoves): foes gain, friends lose. */
+function collateralScore(preview: ReturnType<Ruleset['previewAction']>, actor: Entity, state: GameState, profile: AiProfile): number {
+  let score = 0;
+  for (const c of preview.collateral ?? []) {
+    const e = state.entities[c.entityId];
+    if (!e || e.tags.includes(OBJECT_TAG) || c.damage <= 0) continue;
+    if (e.id !== actor.id && isHostile(actor, e)) {
+      const health = profile.healthResource ? e.resources[profile.healthResource] : undefined;
+      score += c.damage * profile.damage + (health && c.damage >= health.current ? profile.kill * 0.5 : 0);
+    } else score -= c.damage * profile.friendlyFire;
   }
   return score;
 }
