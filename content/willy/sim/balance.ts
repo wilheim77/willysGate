@@ -1,8 +1,9 @@
-import { type BaseCommand, type Engine, type Entity, type GameState, type JsonValue, type MapZone, type Vec2, SYSTEM_ISSUER, createEngine, nextAiCommand, withLighting, withZones, zonesOf } from '../../../engine';
-import { CLASSES, createCompanion, createWilly, skillLevel, willy } from '../../../rulesets/willy';
+import { type BaseCommand, type Engine, type Entity, type GameState, type JsonValue, type MapZone, type Vec2, SYSTEM_ISSUER, applyEffects, createEngine, nextAiCommand, withLighting, withZones, zonesOf } from '../../../engine';
+import { CLASSES, createCompanion, createWilly, explorationHealing, skillLevel, willy } from '../../../rulesets/willy';
 import { FLOOR_COUNT, floorSpec, generateFloor } from '../gen/floor';
 // The show (audience, sponsors and the presenter's Share) runs in the sim as in the game.
 import { SHOW } from '../show';
+import { freshAudience } from '../../../rulesets/willy/show';
 
 /**
  * Balance simulator: Willy and his companion go through a generated floor, room by room in
@@ -43,6 +44,18 @@ export interface FloorRun {
 }
 
 const MAX_COMMANDS = 1500;
+
+// Out-of-combat regen (rulesets/willy/regen.ts): on by default, matching a real run; the
+// balance regression test and tuning probes can turn it off to see the harder floor.
+export const simOptions = { regen: true };
+
+/** Willy (and his companion) heal a little walking to the fight, as they would in a real run. */
+function walkTo(state: GameState, to: Vec2 | undefined): GameState {
+  const w = state.entities.willy;
+  if (!simOptions.regen || !w || !to) return state;
+  const steps = Math.max(Math.abs(w.position.x - to.x), Math.abs(w.position.y - to.y));
+  return applyEffects(willy, state, explorationHealing(state, steps)).state;
+}
 
 let sharedEngine: Engine | undefined;
 function engine(): Engine {
@@ -117,7 +130,7 @@ const audienceOf = (s: GameState) => (s.systems.audiencia as unknown as { valor?
 /** Starts the floor's show at `audiencia` viewers (a season's typical value there). */
 function withAudience(state: GameState, audiencia: number | undefined): GameState {
   if (audiencia === undefined) return state;
-  return { ...state, systems: { ...state.systems, audiencia: { ...((state.systems.audiencia as object | undefined) ?? {}), valor: audiencia, pico: audiencia } as unknown as JsonValue } };
+  return { ...state, systems: { ...state.systems, audiencia: { ...freshAudience(), valor: audiencia, pico: audiencia } as unknown as JsonValue } };
 }
 
 /** `audiencia`: viewers on arrival (default: the show's starting value, raised to the floor's minimum by the rules). */
@@ -149,6 +162,7 @@ export function simulateFloor(seed: number, floor: number, classId: string, audi
     if (!foes.length) continue;
     const party = standingIds(state, partyIds);
     const tiles = entryTiles(state, zone, foes.map((id) => state.entities[id]!), party.map((id) => state.entities[id]!));
+    state = walkTo(state, tiles[0]);
     const moved = { ...state.entities };
     party.forEach((id, i) => {
       if (tiles[i]) moved[id] = { ...moved[id]!, position: tiles[i]! };
@@ -200,6 +214,8 @@ export interface SeasonFloor {
   /** The boss (or guardian) fell at the first try. */
   bossFirstTry: boolean;
   fights: number;
+  /** The fight that took most retries: its foes' sprites. */
+  toughest?: string[];
   /** Audience when leaving the floor (carried over to the next, as in the game). */
   audiencia: number;
 }
@@ -257,6 +273,8 @@ export function simulateSeason(seed: number, classId: string, maxRetries = 15, f
     let bossWon = false;
     let bossFirstTry = false;
     let fights = 0;
+    let worst = 0;
+    let toughest: string[] | undefined;
     let failed = false;
     for (const zone of encounters) {
       const boss = rooms[Number(zone.name.split('-')[1])]!.role === 'jefe';
@@ -264,6 +282,7 @@ export function simulateSeason(seed: number, classId: string, maxRetries = 15, f
       if (!foes.length) continue;
       const party = standingIds(state, partyIds);
       const tiles = entryTiles(state, zone, foes.map((id) => state.entities[id]!), party.map((id) => state.entities[id]!));
+      state = walkTo(state, tiles[0]);
       const moved = { ...state.entities };
       party.forEach((id, i) => {
         if (tiles[i]) moved[id] = { ...moved[id]!, position: tiles[i]! };
@@ -284,6 +303,10 @@ export function simulateSeason(seed: number, classId: string, maxRetries = 15, f
         retries++;
       }
       fights++;
+      if (retries - retriesBefore > worst) {
+        worst = retries - retriesBefore;
+        toughest = foes.map((id) => before.entities[id]?.spriteId ?? id);
+      }
       if (!won) {
         failed = true;
         break;
@@ -296,7 +319,7 @@ export function simulateSeason(seed: number, classId: string, maxRetries = 15, f
     w = state.entities.willy!;
     mate = state.entities[mate.id] ?? mate;
     show = Object.fromEntries((['audiencia', 'patrocinadores'] as const).filter((k) => state.systems[k] !== undefined).map((k) => [k, state.systems[k]!]));
-    run.floors.push({ floor, retries, level: w.stats.nivel ?? 1, tiers: Object.fromEntries(abilities.map((id) => [id, skillLevel(w, id)])), uses: Object.fromEntries(abilities.map((id) => [id, w.resources[`uso:${id}`]?.current ?? 0])), bossWon, bossFirstTry, fights, audiencia: audienceOf(state) });
+    run.floors.push({ floor, retries, level: w.stats.nivel ?? 1, tiers: Object.fromEntries(abilities.map((id) => [id, skillLevel(w, id)])), uses: Object.fromEntries(abilities.map((id) => [id, w.resources[`uso:${id}`]?.current ?? 0])), bossWon, bossFirstTry, fights, ...(toughest ? { toughest } : {}), audiencia: audienceOf(state) });
     if (failed) return run;
   }
   run.finished = true;
