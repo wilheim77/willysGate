@@ -1,0 +1,1575 @@
+{
+ "compressionlevel": -1,
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "width": 32,
+ "height": 14,
+ "tilewidth": 32,
+ "tileheight": 32,
+ "infinite": false,
+ "nextlayerid": 9,
+ "nextobjectid": 25,
+ "properties": [
+  {
+   "name": "name",
+   "type": "string",
+   "value": "Túnel de los Callados"
+  },
+  {
+   "name": "ambientLight",
+   "type": "float",
+   "value": 0.12
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "ground",
+   "type": "tilelayer",
+   "width": 32,
+   "height": 14,
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
+64,64,64,64,64,64,64,64,64,64,64,3,3,3,3,3,3,3,3,3,64,64,64,64,64,64,64,64,64,64,64,64,
+64,64,64,64,64,64,64,64,64,64,64,3,3,3,3,3,3,3,3,3,64,64,64,64,64,64,64,64,64,64,64,64,
+64,64,3,64,64,64,64,64,64,64,64,2,1,1,1,1,1,1,1,1,64,64,64,64,64,64,64,64,64,64,64,64,
+64,3,3,3,3,64,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+64,3,3,3,3,64,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+64,3,3,3,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+64,3,3,3,3,64,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,
+64,3,3,3,3,64,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+64,64,64,64,64,64,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
+64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
+64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
+64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64
+]
+  },
+  {
+   "id": 2,
+   "name": "spawns",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 1,
+     "name": "entry-pozo",
+     "type": "",
+     "point": true,
+     "x": 80,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 2,
+     "name": "entry-mina",
+     "type": "",
+     "point": true,
+     "x": 976,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 3,
+     "name": "callado-14",
+     "type": "",
+     "point": true,
+     "x": 720,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 4,
+     "name": "callado-12",
+     "type": "",
+     "point": true,
+     "x": 688,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 5,
+     "name": "callado-13",
+     "type": "",
+     "point": true,
+     "x": 624,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 6,
+     "name": "rata_gigante-2",
+     "type": "",
+     "point": true,
+     "x": 496,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 7,
+     "name": "rata_gigante-3",
+     "type": "",
+     "point": true,
+     "x": 528,
+     "y": 272,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 8,
+     "name": "esqueleto_minero-1",
+     "type": "",
+     "point": true,
+     "x": 464,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 9,
+     "name": "esqueleto_minero-2",
+     "type": "",
+     "point": true,
+     "x": 592,
+     "y": 80,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 10,
+     "name": "mine_wagon-3",
+     "type": "",
+     "point": true,
+     "x": 624,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 11,
+     "name": "mine_wagon_ore-2",
+     "type": "",
+     "point": true,
+     "x": 816,
+     "y": 240,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 12,
+     "name": "rubble_pile-2",
+     "type": "",
+     "point": true,
+     "x": 528,
+     "y": 176,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 13,
+     "name": "rubble_pile_c-2",
+     "type": "",
+     "point": true,
+     "x": 432,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 14,
+     "name": "pillar_broken-2",
+     "type": "",
+     "point": true,
+     "x": 752,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 15,
+     "name": "barrel_oil-1",
+     "type": "",
+     "point": true,
+     "x": 720,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "lights",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 16,
+     "name": "luz-pozo",
+     "type": "",
+     "point": true,
+     "x": 80,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.6
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#c8d0e0"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.05
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "candil-galeria",
+     "type": "",
+     "point": true,
+     "x": 272,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.8
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.18
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "name": "candil-entibado",
+     "type": "",
+     "point": true,
+     "x": 784,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.8
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffb050"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.18
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "oil_lamp"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "brillo-plata",
+     "type": "",
+     "point": true,
+     "x": 848,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 2.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.5
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#b8c8ff"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.05
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "encounters",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 20,
+     "name": "callados-del-tunel",
+     "type": "",
+     "x": 320,
+     "y": 32,
+     "width": 512,
+     "height": 288,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "participants",
+       "type": "string",
+       "value": "callado-14,callado-12,callado-13,rata_gigante-2,rata_gigante-3,esqueleto_minero-1,esqueleto_minero-2"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "surfaces",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 21,
+     "name": "filtracion",
+     "type": "",
+     "x": 256,
+     "y": 288,
+     "width": 160,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "surface",
+       "type": "string",
+       "value": "water"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "traps",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": []
+  },
+  {
+   "id": 7,
+   "name": "exits",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 22,
+     "name": "a-escorial",
+     "type": "",
+     "x": 64,
+     "y": 96,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "escorial"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-pozo"
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "name": "a-mina",
+     "type": "",
+     "x": 992,
+     "y": 128,
+     "width": 32,
+     "height": 192,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "to",
+       "type": "string",
+       "value": "mina"
+      },
+      {
+       "name": "spawn",
+       "type": "string",
+       "value": "entry-pozo"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "arenas",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 24,
+     "name": "tunel",
+     "type": "",
+     "x": 192,
+     "y": 32,
+     "width": 704,
+     "height": 288,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  }
+ ],
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "name": "terrain-logic",
+   "tilewidth": 32,
+   "tileheight": 32,
+   "tilecount": 64,
+   "columns": 64,
+   "image": "terrain-logic.png",
+   "imagewidth": 2048,
+   "imageheight": 32,
+   "margin": 0,
+   "spacing": 0,
+   "tiles": [
+    {
+     "id": 0,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 1,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "planks"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scaffold"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 20,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_closed"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 21,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "door_open"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 22,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 23,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rails_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 25,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 26,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 27,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "vault"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 28,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 29,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 30,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 31,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 32,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 33,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 34,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 35,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 36,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 37,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 38,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 39,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 40,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "scrub"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 41,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 42,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cobble"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 43,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "slag_heap"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 44,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 45,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 46,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "mud"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 47,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 48,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "road_v"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 49,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "mud"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 50,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "river"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 51,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 52,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_s"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 53,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_e"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 54,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "riverbank_w"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 0
+      }
+     ]
+    },
+    {
+     "id": 55,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "fence"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 56,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "house"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 57,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "house_plain"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 58,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone_wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "low_wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 60,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 63,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 4
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

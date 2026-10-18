@@ -37,6 +37,8 @@ const BASE_RGB = {
   house: [52, 56, 66],
   house_plain: [52, 56, 66],
   stone_wall: [72, 70, 70],
+  low_wall: [82, 78, 74],
+  balcony: [100, 78, 54],
 };
 const TILES = LOGIC_TILES.map((t) => {
   const lift = t.walkable === false ? 0 : t.height * 15;

@@ -29,10 +29,12 @@ c.rect(32, 10, 7, 9, '.', 0);
 c.rect(31, 14, 5, 1, '-', 0);
 c.rect(33, 8, 2, 2, '.', 0).rect(36, 19, 2, 2, '.', 0);
 c.rect(39, 13, 1, 3, '.', 0); // the way down to the Bóveda
+c.rect(36, 12, 2, 2, '.', 1); // a mound of spoil in the Galería Sellada
 // The crypt tunnel from the abbey (south-west), winding up into the working.
 c.rect(0, 26, 6, 3, '.', 0);
 c.rect(6, 26, 11, 2, '.', 0);
 c.rect(15, 22, 2, 6, '.', 0);
+c.rect(15, 22, 2, 2, '.', 1); // a rubble step where the tunnel turns: height to hold
 
 export default {
   id: 'mina',
@@ -65,6 +67,11 @@ export default {
     'mine_wagon-2': [26, 14],
     'barrel_oil-2': [28, 20],
     'barrel-1': [33, 14],
+    'rubble_pile-1': [18, 18],
+    'ore_pile-1': [27, 10],
+    'rubble_pile_c-1': [34, 10],
+    'powder_keg-1': [33, 12], // what is left of the blasting powder
+    'barrel_oil-3': [12, 27], // lamp oil in the crypt tunnel
   },
   lights: [
     { name: 'candil-bajada-boveda', at: [38, 12], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.8, prop: 'oil_lamp' },
@@ -105,11 +112,17 @@ export default {
   ],
   exits: [
     { name: 'a-escorial-bocamina', rect: [0, 13, 1, 3], to: 'escorial', spawn: 'entry-bocamina' },
-    { name: 'a-escorial-pozo', rect: [21, 0, 1, 1], to: 'escorial', spawn: 'entry-pozo' },
+    { name: 'a-escorial-pozo', rect: [21, 0, 1, 1], to: 'tunel', spawn: 'entry-mina' },
     { name: 'a-abadia-cripta', rect: [0, 26, 1, 3], to: 'abadia', spawn: 'entry-cripta' },
     { name: 'a-boveda', rect: [39, 13, 1, 3], to: 'boveda', spawn: 'entry-mina' },
   ],
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'andamios', rect: [14, 5, 17, 17] },
+      { name: 'cripta', rect: [6, 22, 11, 6] },
+      { name: 'galeria-sellada', rect: [31, 8, 9, 13] },
+    ],
     scenes: [{ name: 'galeria-sellada', rect: [32, 12, 3, 5], props: { dialogue: 'galeria_sellada', speaker: 'garran', once: true } }],
   },
 };

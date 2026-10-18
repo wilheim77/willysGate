@@ -38,10 +38,15 @@ export const LOGIC_TILES = [
   { terrain: 'riverbank_s', height: 0 },
   { terrain: 'riverbank_e', height: 0 },
   { terrain: 'riverbank_w', height: 0 },
-  { terrain: 'fence', height: 1 },
+  { terrain: 'fence', height: 1, walkable: false }, // reads as a barrier, so it is one
   { terrain: 'house', height: 3, walkable: false },
   { terrain: 'house_plain', height: 3, walkable: false },
   { terrain: 'stone_wall', height: 3, walkable: false },
+  { terrain: 'low_wall', height: 1, walkable: false }, // waist-high cover: blocks, can be seen over
+  { terrain: 'balcony', height: 1 },
+  { terrain: 'balcony', height: 2 },
+  { terrain: 'balcony', height: 3 },
+  { terrain: 'rock', height: 4, walkable: false }, // cliff: paint as 'C' (height 4 = the unwalkable one)
 ];
 
 /** Tiled tile id for a terrain at a height (walls and closed doors ignore the height). */

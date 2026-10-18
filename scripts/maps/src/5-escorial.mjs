@@ -53,7 +53,7 @@ export default {
     'entry-bocamina': [32, 16],
     // The Sinpaga: shooters on the heights, knives in the camp, the brute by the fire.
     'sinpaga_enmascarado-1': [13, 5], // heap A peak, next to the oil cart
-    'sinpaga_enmascarado-2': [26, 18], // heap B peak
+    'sinpaga_cuchillero-4': [26, 18], // heap B peak, with a crossbow
     'sinpaga_cuchillero-1': [12, 20],
     'sinpaga_cuchillero-2': [20, 20],
     'sinpaga_cuchillero-3': [18, 16], // lookout scaffold
@@ -64,7 +64,10 @@ export default {
     'barrel_oil-1': [13, 8],
     'barrel_oil-2': [14, 8],
     'oil_cart-1': [12, 8],
-    'crate-3': [21, 17],
+    'cart-1': [21, 17],
+    'ore_pile-1': [19, 21],
+    'ore_pile-2': [10, 15],
+    'ore_pile-3': [27, 13],
     'barrel-1': [9, 21],
     'campfire-1': [14, 21],
     'door-bocamina': [32, 18],
@@ -101,6 +104,10 @@ export default {
   // The Sinpaga chief talks first (sinpaga_jefe); the fight, if any, is by faction. The band
   // covers both ways in from the town (plaza and streets), wall to wall.
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'escombreras', rect: [8, 2, 23, 21] },
+    ],
     scenes: [
       { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true } },
       { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },
@@ -110,7 +117,7 @@ export default {
     { name: 'a-plaza', rect: [3, 0, 3, 1], to: 'plaza', spawn: 'entry-escorial' },
     { name: 'a-calles', rect: [0, 11, 1, 3], to: 'calles', spawn: 'entry-escorial' },
     // The mine comes after the night of the torches (D1).
-    { name: 'pozo-del-ahorcado', rect: [31, 6, 1, 1], to: 'mina', spawn: 'entry-pozo', props: { requiresFlag: 'd1_resuelto', closedText: 'Los Sinpaga vigilan el pozo. No es momento.' } },
+    { name: 'pozo-del-ahorcado', rect: [31, 6, 1, 1], to: 'tunel', spawn: 'entry-pozo', props: { requiresFlag: 'd1_resuelto', closedText: 'Los Sinpaga vigilan el pozo. No es momento.' } },
     { name: 'bocamina', rect: [32, 21, 1, 1], to: 'mina', spawn: 'entry-bocamina', props: { requiresFlag: 'd1_resuelto', closedText: 'La bocamina está atrancada y vigilada. No es momento.' } },
   ],
 };

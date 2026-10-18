@@ -50,7 +50,7 @@ export default {
   ambientLight: 0.45,
   ...c.source(),
   spawns: {
-    'entry-plaza': [2, 10],
+    'entry-callejon': [2, 10],
     'entry-escorial': [31, 11],
     // Chapel of the Santa Pala.
     cirilo: [14, 2],
@@ -97,7 +97,7 @@ export default {
     },
   ],
   exits: [
-    { name: 'a-plaza', rect: [0, 9, 1, 4], to: 'plaza', spawn: 'entry-calles' },
+    { name: 'a-plaza', rect: [0, 9, 1, 4], to: 'callejon', spawn: 'entry-calles' },
     { name: 'a-escorial', rect: [33, 9, 1, 4], to: 'escorial', spawn: 'entry-calles', props: { requiresFlag: 'audiencia_hecha', closedText: 'Primero, la audiencia con el barón.' } },
   ],
   zones: {
