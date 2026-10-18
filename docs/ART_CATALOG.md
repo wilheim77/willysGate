@@ -531,3 +531,26 @@ Mismo criterio que en *Intereses*:
   - `escalon_plato`: `plato`, `moqueta` y `baldosa-*`, con el canto en neón cian.
 
 Antes y después (Camerino y las cinco plantas generadas con la semilla 7, esquina noroeste): `art-previews/ninja-camerino-legibilidad.png` y `art-previews/ninja-planta-<n>-legibilidad.png`.
+
+# Coberturas, alturas y bestias para los combates (*Intereses*)
+
+Los dibuja `scripts/art/cover-props.ts` con la paleta de 0x72. Cada uno lleva contorno oscuro y sombra de contacto en el suelo, para leerse como obstáculo a tamaño de móvil. Son `props` con `anchor: 'floor'` (la base en la fila inferior de la imagen); en el mapa se ponen como spawn `<id>-<n>`. Vista previa junto al Cobrador: [`art-previews/0x72-cover-props.png`](art-previews/0x72-cover-props.png).
+
+| Id | Tamaño | Qué es |
+|---|---|---|
+| `cart`, `cart_sacks` | 32×16 | Carro de dos ruedas con heno / con sacos |
+| `market_stall` | 16×24 | Puesto con toldo a rayas y mercancía |
+| `sacks` | 16×16 | Tres sacos de arpillera oscura apilados |
+| `rubble_pile`, `rubble_pile_b`, `rubble_pile_c` | 16×16 | Montón de cascotes sobre un túmulo de argamasa |
+| `pillar_broken` | 16×24 | Fuste estriado partido con un tambor caído |
+| `dead_tree`, `dead_tree_b`, `dead_tree_c` | 24×32 | Árbol seco: copa a la izquierda, a la derecha, o tronco tronchado |
+| `ore_pile` | 16×16 | Roca oscura con vetas de cobre y plata |
+| `tombstone` | 16×16 | Lápida con cruz y malas hierbas |
+| `sarcophagus` | 16×24 | Sarcófago con efigie, visto desde arriba con su cara frontal |
+
+Terrenos nuevos (`tiles.json`):
+
+- `low_wall`: muro bajo de piedra, para altura 1 y **no transitable**, con albardilla de piedras grandes y cara de mampostería.
+- `balcony`: tablones transitables con barandilla como `rim` (postes, pasamanos y sombra), cara de vigas con jabalcones y `stair` de madera.
+
+Bestias (`hand-sprites.json`, `idle`/`move`/`hit`, mirando a la derecha; los retratos de 32×32 se generan solos): `perro` (perro carroñero pardo y sarnoso, 16×14), `lobo` (gris oscuro con hocico claro, 16×14) y `rata` (rata gigante gris con cola rosa, 16×10). Vista previa: [`art-previews/0x72-beasts.png`](art-previews/0x72-beasts.png).
