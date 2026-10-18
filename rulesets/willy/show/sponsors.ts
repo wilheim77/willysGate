@@ -15,7 +15,7 @@ import { grantBox, grantCoins, grantItem } from './rewards';
  * when it crosses 0; it comes back at 30. Carisma multiplies the affinity won.
  *
  * Contratos (deals): an interested sponsor offers a concrete deal in the Camerino, or when it
- * first takes an interest. Accepted (`aceptarContrato`), it runs until the end of the next floor:
+ * first takes an interest. Accepted (`aceptarContrato`), it runs until Willy leaves the next floor:
  * met, it pays a box, an item or coins; broken or missed, a fine in coins, lost affinity and a
  * pointed message. Events:
  * - sponsorAffinityChanged { patrocinadorId, delta, afinidad }
@@ -267,12 +267,14 @@ export function runSponsors(r: Resolver, views: View[], events: { type: string }
     }
     if (d.progreso >= d.cantidad) closeDeal(r, s, d, true, 'cumplido');
   }
-  if (views.some((v) => v.evento === 'floorExited')) {
-    for (const d of [...s.contratos]) if (d.piso !== undefined) closeDeal(r, s, d, false, 'plazo');
+  const exit = views.find((v) => v.evento === 'floorExited');
+  if (exit) {
+    const left = Number(exit.planta ?? floor ?? 0);
+    for (const d of [...s.contratos]) if (d.piso !== undefined && d.piso <= left) closeDeal(r, s, d, false, 'plazo');
   }
 
   // Arriving at a Camerino: the interested sponsors put deals on the table.
-  if (events.some((e) => e.type === 'mapChanged') && r.state.map.id.startsWith('camerino')) {
+  if (events.some((e) => e.type === 'safeZoneEntered' || (e.type === 'mapChanged' && r.state.map.id.startsWith('camerino')))) {
     s.ofertas = [];
     for (const sp of cfg.patrocinadores) offer(r, s, sp);
   }
@@ -309,7 +311,8 @@ export const aceptarContrato: CommandHandler<DealCommand> = (state, cmd, ctx) =>
   return withResolver(state, ctx.ruleset, (r, st) => {
     st.ofertas = st.ofertas.filter((x) => x.patrocinadorId !== cmd.patrocinadorId);
     const floor = currentFloor(state);
-    st.contratos.push({ patrocinadorId: o.patrocinadorId, contratoId: o.contratoId, progreso: 0, cantidad: deal.cantidad, ...(floor !== undefined ? { piso: floor } : {}) });
+    // «Before leaving the next floor»: signed on a floor, that's the one after it.
+    st.contratos.push({ patrocinadorId: o.patrocinadorId, contratoId: o.contratoId, progreso: 0, cantidad: deal.cantidad, ...(floor !== undefined ? { piso: floor + 1 } : {}) });
     r.emit({ type: 'sponsorDealAccepted', patrocinadorId: o.patrocinadorId, contratoId: o.contratoId, cantidad: deal.cantidad } as unknown as WillyEvent);
   });
 };

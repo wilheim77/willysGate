@@ -303,8 +303,9 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
   // Leaving the planta's second floor: the end-of-planta bonus box.
   for (const v of views) {
     if (v.evento !== 'floorExited') continue;
-    const planta = currentPlanta(r.state);
-    if (a.primas.includes(planta) || !isLastFloorOfPlanta(r.state)) continue;
+    const piso = showConfig()!.pisos.find((p) => p.id === Number(v.planta));
+    const planta = piso?.planta ?? currentPlanta(r.state);
+    if (a.primas.includes(planta) || (piso ? piso.parte < 2 : !isLastFloorOfPlanta(r.state))) continue;
     a.primas.push(planta);
     const prima = [...cfg.prima].reverse().find((p) => a.valor >= p.audienciaMin);
     if (prima) {
