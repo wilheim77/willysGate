@@ -279,7 +279,7 @@ function registerItemHandlers(): void {
       perform: (r, actorId, target) => {
         const actor = r.entity(actorId);
         const before = actor.conditions.map((c) => c.id);
-        r.emit({ type: 'itemUsed', actorId, item: def.id, nombre: def.nombre, etiquetas: def.etiquetas ?? [], actor: { id: actorId, condiciones: before }, vidaLlena: (actor.resources.vida?.current ?? 0) >= (actor.resources.vida?.max ?? 0), enCombate: r.state.turn.mode === 'combat' } as unknown as WillyEvent);
+        r.emit({ type: 'itemUsed', actorId, item: def.id, nombre: def.nombre, etiquetas: def.etiquetas ?? [], actor: { id: actorId, condiciones: before }, vidaLlena: (actor.resources.vida?.current ?? 0) >= (actor.resources.vida?.max ?? 0), consumible: def.tipo === 'consumible' || def.tipo === 'chatarra', enCombate: r.state.turn.mode === 'combat' } as unknown as WillyEvent);
         if (def.tipo === 'consumible' || def.tipo === 'chatarra') r.apply({ type: 'giveItem', owner: BAG, item: def.id, count: -1 });
         if (def.etiquetas?.includes('curacion')) {
           const meta = cloneMeta(metaOf(r.state));

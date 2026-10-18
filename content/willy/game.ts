@@ -44,7 +44,7 @@ export const game: GameDefinition = {
   playerId: PLAYER,
   leaderId: 'willy',
   audio: audio as unknown as AudioManifest,
-  items: Object.fromEntries(itemsData.items.map((i) => [i.id, { label: i.nombre, text: i.descripcion }])),
+  items: Object.fromEntries(itemsData.items.map((i) => [i.id, { label: i.nombre, text: i.regla }])),
   creation: {
     spec: WILLY_CREATION,
     defaults: defaultCreation,

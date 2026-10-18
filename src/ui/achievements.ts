@@ -24,6 +24,7 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     const a = queue.shift();
     if (!a) {
       banner.hidden = true;
+      document.body.classList.remove('has-achievement');
       return;
     }
     const text = document.createElement('div');
@@ -44,6 +45,7 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     }
     banner.replaceChildren(uiIcon(manifest, a.icon ?? '', 48), text);
     banner.hidden = false;
+    document.body.classList.add('has-achievement');
     banner.classList.remove('pop');
     void banner.offsetWidth;
     banner.classList.add('pop');

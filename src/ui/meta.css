@@ -15,6 +15,8 @@
 .achievement-toast strong { font-weight: normal; font-size: var(--fs-l); line-height: 1; color: #fff; }
 .achievement-toast p { margin: 2px 0 0; font-size: var(--fs-s); line-height: 1.15; }
 .achievement-toast .reward, .meta-panel .reward { color: var(--gold); }
+/* The narrator's line moves down while a banner is up, so both read. */
+body.has-achievement #narrator { top: calc(var(--top-h, 48px) + var(--safe-top, 0px) + 112px); }
 
 /* --- Achievements list --- */
 .meta-panel[hidden] { display: none; }
