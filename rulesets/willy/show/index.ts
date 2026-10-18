@@ -25,11 +25,11 @@ export function showAfterCommand(ruleset: Ruleset, state: GameState, events: Gam
 
 const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
-  'meterChanged', 'shareCero', 'enAntena',
+  'meterChanged', 'shareCero', 'enAntena', 'turnEnded',
   'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
-  'boxDelivered', 'itemGranted', 'coinsGranted',
+  'boxDelivered', 'itemObtained', 'coinsGranted',
 ]);
 
 export const showCommands: Record<string, CommandHandler> = { aceptarContrato, rechazarContrato };

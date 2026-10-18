@@ -109,8 +109,9 @@ export function gainMultiplier(state: GameState): number {
 }
 
 export function isHardcore(state: GameState): boolean {
-  const run = state.systems.run as unknown as { modoEliminacion?: string } | undefined;
-  return run?.modoEliminacion === 'sinRepeticion' || state.flags.modoEliminacion === 'sinRepeticion';
+  // DESIGN.md §12: chosen when the season starts (the meta systems store it in state.settings).
+  const settings = (state as unknown as { settings?: { eliminationMode?: string } }).settings;
+  return settings?.eliminationMode === 'sinRepeticion';
 }
 
 /** Spectacular moments: the novelty key of a gain (rule + cause or object). */
@@ -214,9 +215,11 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
         if (!acted) {
           lost += -lose(r, a, ruleLoss('esperar'), 'esperar');
           views.push({ evento: 'turnEnded', entityId: WILLY_ID, esperar: true });
+          r.emit({ type: 'turnEnded', entityId: WILLY_ID, esperar: true } as unknown as WillyEvent);
         } else if (!a.turnoWilly.interesante) {
           lost += -lose(r, a, ruleLoss('turno-soso'), 'turno-soso');
           views.push({ evento: 'turnEnded', entityId: WILLY_ID, sinEfecto: true });
+          r.emit({ type: 'turnEnded', entityId: WILLY_ID, sinEfecto: true } as unknown as WillyEvent);
         }
         a.turnoWilly = { activo: false, actuo: false, interesante: false };
       }

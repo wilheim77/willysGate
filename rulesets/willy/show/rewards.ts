@@ -8,7 +8,7 @@ import { WILLY_ID as WILLY } from './config';
  *
  * - grantBox: emits boxDelivered { caja, origen } (the Narrador's «cajaLlega» bank); the box
  *   system turns it into a box to open.
- * - grantItem: puts the item in Willy's pack and emits itemGranted { item, origen }.
+ * - grantItem: puts the item in Willy's pack and emits itemObtained { item, origen }.
  * - grantCoins: fichas (the Camerino's money), positive or negative.
  */
 
@@ -19,7 +19,7 @@ export function grantBox(r: Resolver, caja: string, origen: string): void {
 export function grantItem(r: Resolver, item: string, origen: string): void {
   if (!r.state.entities[WILLY]) return;
   r.apply({ type: 'giveItem', owner: WILLY, item, count: 1 });
-  r.emit({ type: 'itemGranted', item, origen, entityId: WILLY } as unknown as WillyEvent);
+  r.emit({ type: 'itemObtained', item, origen, entityId: WILLY } as unknown as WillyEvent);
 }
 
 export function grantCoins(r: Resolver, amount: number, origen: string): number {
