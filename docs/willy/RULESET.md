@@ -356,7 +356,7 @@ Las 9 clases están completas, con invocaciones y barreras (`summons.ts`, sobre 
 | Qué | Por qué |
 |---|---|
 | Golpe de valor (Tasador) | Necesita el valor de los objetos de `content/willy/data/items.json`; lo conectará el juego |
-| Directo, Unboxing, Viral, Charanga, Necesita likes, Regateo, Peritaje, Subasta | Son de la audiencia, las cajas y el mercado (sistemas del juego); el ruleset emite los estados y eventos que necesitan |
+| Directo, Unboxing, Viral, Charanga, Regateo, Peritaje, Subasta | Son de la audiencia, las cajas y el mercado (sistemas del juego); el ruleset emite los estados y eventos que necesitan |
 | Maestrías muy vistosas (el fan que explota en confeti, la Torre de telefonía, la Versión beta) | Pendientes de una pasada de pulido |
 
 ### Invocaciones y barreras

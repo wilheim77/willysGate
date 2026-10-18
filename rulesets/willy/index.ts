@@ -36,6 +36,7 @@ import { achievementsHook } from './achievements';
 import { equipItem, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
 import { regenHook } from './regen';
+import { traitsAfterCommand } from './traits';
 
 /**
  * «El Reglamento del Concurso»: Willy's light d20 ruleset (docs/willy/RULESET.md).
@@ -333,6 +334,8 @@ registerAfterCommand(clockAfterCommand, 40);
 registerAfterCommand(showAfterCommand, 50);
 // Rival outcomes and their Narrador moments (rivals.ts).
 registerAfterCommand(rivalAfterCommand, 55);
+// Class traits that react to another subsystem (traits.ts), after the show computes audienceChanged.
+registerAfterCommand(traitsAfterCommand, 56);
 registerAfterCommand(regenHook, 60);
 registerAfterCommand(achievementsHook, 100);
 registerAfterCommand(showLateAfterCommand, 110);
