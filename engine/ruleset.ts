@@ -112,6 +112,12 @@ export interface Ruleset {
   /** Ruleset bookkeeping when a combat ends (e.g. downed allies get back up). */
   onCombatEnd?(state: GameState, winner: string | null): ActionOutcome;
 
+  /**
+   * Shared party progress (experience in 5e). Without it, points are still counted but
+   * nobody levels. The thresholds come from the game's content (EngineContent.progression).
+   */
+  progression?: ProgressionRules;
+
   /** Plain-language explanations for terms shown in the UI (CA, CD, ventaja...). Keys are `term` ids. */
   glossary: Record<string, GlossaryEntry>;
 
@@ -120,6 +126,18 @@ export interface Ruleset {
 
   /** Migrations of ruleset-owned data, from version N to N+1. */
   migrations?: Record<number, (state: Record<string, unknown>) => Record<string, unknown>>;
+}
+
+/** How a ruleset turns the party's shared points into levels. See engine/progression.ts. */
+export interface ProgressionRules {
+  /** Short label for the points, e.g. 'PX'. */
+  label: string;
+  /** Current level, or null for things that never level (monsters, props). */
+  levelOf(entity: Entity): number | null;
+  /** The same character rebuilt at `level` (same id, wounds and conditions kept). */
+  levelUp(state: GameState, entity: Entity, level: number): Entity;
+  /** Points the winners share for having defeated this creature (0 for scenery, summons...). */
+  rewardFor(entity: Entity): number;
 }
 
 /** A character sheet the ruleset fills and any client can show. */

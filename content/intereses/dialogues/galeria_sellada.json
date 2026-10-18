@@ -61,6 +61,11 @@
           "type": "setFlag",
           "flag": "d2_resuelta",
           "value": true
+        },
+        {
+          "type": "gainProgress",
+          "amount": 100,
+          "id": "d2"
         }
       ]
     },
@@ -135,6 +140,11 @@
           "type": "setFlag",
           "flag": "d2_resuelta",
           "value": true
+        },
+        {
+          "type": "gainProgress",
+          "amount": 100,
+          "id": "d2"
         }
       ],
       "next": "encubrir_2"
@@ -171,6 +181,11 @@
           "type": "setFlag",
           "flag": "d2_resuelta",
           "value": true
+        },
+        {
+          "type": "gainProgress",
+          "amount": 100,
+          "id": "d2"
         }
       ],
       "next": "confesar_2"
@@ -216,6 +231,11 @@
           "type": "setFlag",
           "flag": "d2_resuelta",
           "value": true
+        },
+        {
+          "type": "gainProgress",
+          "amount": 100,
+          "id": "d2"
         }
       ]
     }

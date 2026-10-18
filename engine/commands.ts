@@ -6,6 +6,7 @@ import { surfaceAt } from './surfaces';
 import { type Effect, applyEffects } from './effects';
 import { disarmTrap, trapsAfterStep, trapsOf } from './traps';
 import { travel } from './world';
+import { applyProgression } from './progression';
 import { type EngineContent, chooseOption, dialogueOf, endDialogue, interact, startDialogue } from './dialogue';
 import { RngCursor } from './rng';
 import type { Ruleset } from './ruleset';
@@ -255,8 +256,15 @@ export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCo
   const handler = ENGINE_COMMANDS[command.type] ?? ruleset.commands[command.type];
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
   const result = handler(state, command, { ruleset, ...(content ? { content } : {}) });
-  if (!result.ok || command.type === 'endTurn') return result;
-  return passTurnIfHelpless(ruleset, result, content);
+  if (!result.ok) return result;
+  return levelUpIfEarned(ruleset, command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content), content);
+}
+
+/** The party's shared points may have crossed a threshold: raise whoever is behind. */
+function levelUpIfEarned(ruleset: Ruleset, result: CommandResult, content?: EngineContent): CommandResult {
+  if (!result.ok || !content?.progression) return result;
+  const r = applyProgression(ruleset, result.state, content.progression);
+  return r.events.length ? { ok: true, state: r.state, events: [...result.events, ...r.events] } : result;
 }
 
 /**

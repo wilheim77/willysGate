@@ -488,6 +488,11 @@
           "addTags": [
             "dialogue:camino_mineros_despues"
           ]
+        },
+        {
+          "type": "gainProgress",
+          "amount": 175,
+          "id": "mineros"
         }
       ]
     },

@@ -345,6 +345,11 @@
           "type": "setFlag",
           "flag": "escorial_libre",
           "value": true
+        },
+        {
+          "type": "gainProgress",
+          "amount": 900,
+          "id": "sinpaga"
         }
       ]
     },

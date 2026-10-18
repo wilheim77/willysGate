@@ -338,6 +338,11 @@
           "type": "setFlag",
           "flag": "ruta_bocamina",
           "value": true
+        },
+        {
+          "type": "gainProgress",
+          "amount": 800,
+          "id": "d1"
         }
       ]
     },
