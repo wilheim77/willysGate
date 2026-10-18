@@ -63,6 +63,11 @@ function meters(state: GameState): MeterView[] {
 }
 
 function float(event: GameEvent, _state: GameState): FloatView | null {
+  const ev = event as unknown as { entityId?: string };
+  if (event.type === 'trapdoorOpened') return { ...(ev.entityId ? { entityId: ev.entityId } : {}), text: T.trampilla, color: '#ff9a4d' };
+  if (event.type === 'bossInDark') return { ...(ev.entityId ? { entityId: ev.entityId } : {}), text: T.aOscuras, color: '#9a9ac0' };
+  if (event.type === 'bossUnderSpotlight') return { ...(ev.entityId ? { entityId: ev.entityId } : {}), text: T.bajoFoco, color: '#fff6a0' };
+  if (event.type === 'spotlightOn') return { ...(ev.entityId ? { entityId: ev.entityId } : {}), text: T.focoEncendido, color: '#fff6a0' };
   if (event.type !== 'audienceChanged') return null;
   const e = event as unknown as { delta: number; entityId?: string };
   if (!e.delta) return null;
@@ -92,6 +97,12 @@ function toast(event: GameEvent, _state: GameState): ToastView | null {
       if (!n) return null;
       const sp = show.sponsorData(String(e.patrocinadorId));
       return { title: `${T.contratoRoto} · ${sp?.nombre ?? ''}`, text: fill(T.multa, { n }), color: sp?.color ?? '#ff5577', badge: '−' };
+    }
+    case 'bossLine':
+      return { title: cast.presentador.nombre, text: String(e.texto), color: '#c0406a', badge: '🎤' };
+    case 'bossQuestion': {
+      const opciones = (e.opciones as { colorNombre: string; respuesta: string }[]).map((o) => fill(T.opcion, { color: o.colorNombre, respuesta: o.respuesta })).join(' · ');
+      return { title: fill(T.preguntaTitulo, { presentador: cast.presentador.corto }), text: fill(T.preguntaTexto, { texto: String(e.texto), opciones }), color: '#ffd24a', badge: '?' };
     }
     case 'audienceMilestone':
       return { title: T.hitoTitulo, text: fill(T.hitoTexto, { valor: viewers(Number(e.espectadores)), caja: boxName(String(e.caja)) }), color: '#ffd24a', badge: '📺' };

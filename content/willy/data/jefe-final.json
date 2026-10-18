@@ -1,0 +1,31 @@
+{
+  "$comment": "Mecánica de las fases del jefe final (floors.json → jefe-presentador → fases). Las preguntas y las frases del presentador están en floors.json; aquí van los números de la Ronda de preguntas y de la Pausa publicitaria. La Gran final (votación y Share) está en content/willy/show.ts. Código: rulesets/willy/show/boss.ts.",
+  "version": 1,
+  "rondaDePreguntas": {
+    "$comment": "Cada 'cadencia' rondas, el presentador hace una pregunta: tres baldosas de colores se iluminan cerca de Willy (a 'distancia' casillas como mucho). Al final de la ronda siguiente, quien esté en una baldosa falsa cae por la trampilla ('dano' y Tumbado). Si alguien del equipo está en la buena, el presentador queda bajo un foco 'rondasFoco' rondas.",
+    "cadencia": 2,
+    "distancia": 4,
+    "dano": "1d4",
+    "rondasFoco": 1,
+    "colores": [
+      { "id": "roja", "nombre": "Roja", "color": "#ff4d4d" },
+      { "id": "verde", "nombre": "Verde", "color": "#4dff7a" },
+      { "id": "azul", "nombre": "Azul", "color": "#4d9dff" }
+    ]
+  },
+  "pausaPublicitaria": {
+    "$comment": "Se apagan las luces (luz ambiente 'ambiente'). En la sala hay 'focos' focos apagados (una luz tenue roja); el equipo puede encender uno a su lado (1 acción) durante 'rondasFoco' rondas. Además, cada ronda el foco móvil barre la sala: con 'probJefe' cae sobre el presentador. Solo se le puede dañar con 'umbralLuz' de luz o más. Su golpe a Willy es el «mordisco de share»: 'mordiscoPct' % de la audiencia pasa a su Share. Cada 'azafatosCada' rondas aparecen 'azafatos' azafatos.",
+    "ambiente": 0.08,
+    "focos": 3,
+    "radioFoco": 2,
+    "intensidadFoco": 0.95,
+    "rondasFoco": 3,
+    "focoMovil": { "probJefe": 0.85, "radio": 1, "intensidad": 0.9 },
+    "umbralLuz": 0.25,
+    "mordiscoPct": 5,
+    "azafatosCada": 2,
+    "azafatos": 1,
+    "azafato": { "nombre": "Azafato con bandeja", "sprite": "figurante", "vida": 8, "def": 11, "ataque": 3, "dano": "1d4", "movimiento": 5, "xp": 0 }
+  },
+  "alergiaALosFocos": 1.5
+}

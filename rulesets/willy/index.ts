@@ -33,7 +33,7 @@ import { antennaShots } from './summons';
 import { rivalAfterCommand } from './rivals';
 import { describeEntity } from './sheet';
 import { clockAfterCommand } from './clock';
-import { showAfterCommand, showCommands, showLateAfterCommand } from './show';
+import { bossAfterCommand, showAfterCommand, showCommands, showLateAfterCommand } from './show';
 import { achievementsHook } from './achievements';
 import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
@@ -334,6 +334,7 @@ registerAfterCommand(dropsHook, 10);
 registerAfterCommand(itemsHook, 20);
 // The floor clock and the collapse (clock.ts), before the show reacts to the turn.
 registerAfterCommand(clockAfterCommand, 40);
+registerAfterCommand(bossAfterCommand, 45);
 registerAfterCommand(showAfterCommand, 50);
 // Rival outcomes and their Narrador moments (rivals.ts).
 registerAfterCommand(rivalAfterCommand, 55);

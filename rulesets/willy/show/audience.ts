@@ -189,7 +189,7 @@ function perField(rule: AudienceRule, v: View): number {
 export function runAudience(r: Resolver, events: GameEvent[]): { gained: number; lost: number; views: View[] } {
   const cfg = showConfig()!.audience;
   const state = r.state;
-  const a: AudienceState = clone(audienceOf(state) ?? freshAudience());
+  const a: AudienceState = { ...freshAudience(), ...clone(audienceOf(state) ?? {}) };
   let gained = 0;
   let lost = 0;
   const willy = state.entities[WILLY_ID];

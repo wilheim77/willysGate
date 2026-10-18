@@ -45,6 +45,7 @@ const LATE_EVENTS = new Set(['achievementUnlocked', 'npcHelped']);
 const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
   'meterChanged', 'shareCero', 'enAntena', 'turnEnded', 'audienceVote',
+  'bossPhase', 'bossLine', 'bossQuestion', 'bossInDark', 'bossUnderSpotlight', 'trapdoorOpened', 'spotlightOn',
   'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
@@ -59,4 +60,5 @@ export { configureShow, showConfig, currentPlanta, type ShowConfig } from './con
 export { audienceOf, floorMinimum, freshAudience, type AudienceState } from './audience';
 export { sponsorsOf, sponsorData, dealData, MAX_ACTIVE_DEALS, type SponsorsState } from './sponsors';
 export { shareOf, type ShareState } from './share';
+export { bossAfterCommand, bossFightOf, bossLit, type BossConfig, type BossFight } from './boss';
 export { eventViews, matchPattern, type Pattern, type View } from './patterns';
