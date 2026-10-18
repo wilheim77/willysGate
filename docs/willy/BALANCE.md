@@ -56,6 +56,27 @@ Antes de los compañeros y los ajustes (Willy solo, mismo simulador): planta 1, 
 
 **Por clase** (las 5 plantas juntas, planta entera): Socorrista 97 %, Jugador de basket 93 %, Ingeniero 93 %, Butanero 87 %, Mimo 70 %, Bardo 63 %, Influencer 60 %, Funcionario 57 %, Tasador 43 %. La diferencia es sobre todo de la IA: las clases de apoyo y de control (Tasador, Funcionario) dependen de combos que la IA no prepara. Si en las partidas de prueba el Tasador se nota duro, el siguiente paso es darle más daño propio (Golpe de valor) antes que tocar a los enemigos.
 
+## Curación fuera de combate (2026-10-18)
+
+Regla (`willy.json → regeneracion`): fuera de combate, 5 % de la vida máxima por cada 4 casillas que anda Willy, para él y para su compañero si sigue en pie. Al llegar al Camerino, vida completa. La Pausa publicitaria (25 %) se mantiene.
+
+Medida con el simulador de 10 plantas, en una copia local con un parche: al pasar de una sala a la siguiente, el grupo se cura lo que andaría (distancia de Chebyshev hasta la entrada de la sala). La configuración: 9 clases × 3 semillas × 10 plantas, con y sin la regla. El parche está en manos del agente de Willy, que está reescribiendo `balance.ts`.
+
+| Planta | Planta entera sin → con | Llega al jefe sin → con | Vida al final sin → con |
+|---|---|---|---|
+| 1 | 70 → 74 % | 78 → 78 % | 67 → 70 % |
+| 2 | 22 → 26 % | 59 → 63 % | 19 → 22 % |
+| 3 | 56 → 67 % | 67 → 78 % | 46 → 57 % |
+| 4 | 44 → 63 % | 70 → 81 % | 33 → 50 % |
+| 5 | 89 → 89 % | 96 → 96 % | 78 → 79 % |
+| 6 | 44 → 59 % | 74 → 89 % | 36 → 47 % |
+| 7 | 52 → 59 % | 70 → 81 % | 38 → 49 % |
+| 8 | 48 → 59 % | 59 → 93 % | 33 → 48 % |
+| 9 | 74 → 85 % | 78 → 85 % | 69 → 78 % |
+| 10 | 67 → 70 % | 89 → 100 % | 52 → 53 % |
+
+Resultado: de media, de 57 % a 65 % de plantas enteras. Se nota sobre todo en las plantas largas: se llega con más vida a las últimas salas. Ninguna planta se vuelve un paseo: la 2 sigue en el 26 % y los jefes siguen ganando entre un 5 % y un 59 % de las veces. Con la regla, las plantas siguen siendo difíciles, y sin ella estaban por debajo del objetivo de llegar al jefe (85-90 %). No hace falta bajar la Pausa publicitaria. Si sobra facilidad cuando la IA use objetos y cajas, la primera palanca es `regeneracion.vida` (5 % → 3 %).
+
 ## Pendiente
 
 - La IA de Willy no empuja a propósito ni usa barriles: cuando lo haga, volver a medir (seguramente sobrará dificultad y se podrá subir el presupuesto).
