@@ -487,7 +487,7 @@ body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h,
 /* --- Countdown (state.systems.clock) --- */
 #clock-hud[hidden] { display: none; }
 #clock-hud {
-  position: fixed; left: 50%; transform: translateX(-50%); top: calc(var(--top-h, 48px) + 8px); z-index: 4; padding: 4px 10px;
+  position: fixed; right: 6px; top: calc(var(--top-h, 48px) + var(--safe-top, 0px) + var(--gap, 6px)); z-index: 4; padding: 4px 10px;
   background: rgba(20, 12, 30, 0.9); border: 2px solid var(--iron-light, #6d5f9a); box-shadow: 3px 3px 0 #000;
   color: var(--text, #fff4e0); font-size: 24px; letter-spacing: 1px; pointer-events: none;
 }
@@ -502,6 +502,7 @@ body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h,
   position: fixed; right: 6px; z-index: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
   top: calc(var(--top-h) + var(--safe-top) + var(--gap));
 }
+body:has(#clock-hud:not([hidden])) #meters { top: calc(var(--top-h) + var(--safe-top) + var(--gap) + 44px); }
 body:has(#combat:not([hidden])) #meters { top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap) + 34px); }
 #meters .meter {
   --meter: var(--gold);
