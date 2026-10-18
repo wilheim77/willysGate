@@ -50,6 +50,10 @@ function npc(id: string, name: string, position: Vec2): Entity {
   return createCreature({ id, name, controllerId: AI, factionId: 'camerino', position, spriteId: id, vida: 20, def: 10, ataque: 0, dano: '1d2', movimiento: 0, tags: ['noncombatant', 'pnj'] });
 }
 
+function withDialogue(e: Entity, treeId: string): Entity {
+  return { ...e, tags: [...e.tags, `dialogue:${treeId}`] };
+}
+
 // --- El Camerino -----------------------------------------------------------------------------------
 
 /**
@@ -90,7 +94,8 @@ export function camerino(after = 0): MapSetup {
     entities: [
       npc('maripuri', 'Maripuri', { x: 2, y: 2 }),
       npc('paco', 'Paco', { x: 6, y: 2 }),
-      npc('xelda', 'Xelda', { x: 10, y: 2 }),
+      // In the last planta's Camerinos Xelda shows you the contract (the secret ending needs it).
+      after >= LAST_FLOOR - 2 ? withDialogue(npc('xelda', 'Xelda', { x: 10, y: 2 }), 'xelda-contrato') : npc('xelda', 'Xelda', { x: 10, y: 2 }),
       npc('koldo', 'Koldo', { x: 11, y: 5 }),
       prop('mostrador', 'Ultramarinos Maripuri', 'mostrador-maripuri', { x: 2, y: 1 }),
       prop('barra', 'Bar Paco', 'barra-paco', { x: 6, y: 1 }),
