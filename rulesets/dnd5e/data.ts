@@ -1,6 +1,7 @@
 import armorJson from './data/armor.json';
 import classesJson from './data/classes.json';
 import monsterActionsJson from './data/monster-actions.json';
+import magicItemsJson from './data/magic-items.json';
 import monstersJson from './data/monsters.json';
 import racesJson from './data/races.json';
 import spellsJson from './data/spells.json';
@@ -139,6 +140,29 @@ export interface SpellData {
   text: string;
 }
 
+/**
+ * Mechanical behaviour for an item id (what inventory.ts tracks). Display label/text is
+ * content data (content/<game>/items.json); this is only what the ruleset needs to make
+ * it *do* something: a potion heals, a scroll/wand casts a spell, a weapon/armor/ring/cloak
+ * gives a bonus once equipped (see character.ts's armorClass, resolve.ts's saveBonus and
+ * actions.ts's weaponAttackSpec). 'misc' items (trade goods, ammo) are flavour only.
+ */
+export interface ItemData {
+  kind: 'potion' | 'scroll' | 'wand' | 'weapon' | 'armor' | 'ring' | 'cloak' | 'misc';
+  /** potion: dice healed when drunk. */
+  heal?: string;
+  /** scroll/wand: the spell it casts (by SPELLS id). */
+  spell?: string;
+  /** weapon: which WEAPONS entry it enhances once equipped, and by how much. */
+  baseWeapon?: string;
+  attackBonus?: number;
+  damageBonus?: number;
+  /** armor/ring/cloak: flat bonus to AC once equipped. */
+  acBonus?: number;
+  /** ring/cloak: flat bonus to every saving throw once equipped. */
+  saveBonus?: number;
+}
+
 const entries = <T>(json: Record<string, unknown>): Record<string, T> =>
   Object.fromEntries(Object.entries(json).filter(([k]) => !k.startsWith('$'))) as Record<string, T>;
 
@@ -151,3 +175,7 @@ export const SPELLS = entries<SpellData>(spellsJson);
 const { spellSlots, ...classes } = entries<unknown>(classesJson) as Record<string, unknown>;
 export const CLASSES = classes as Record<string, ClassData>;
 export const SPELL_SLOTS = Object.fromEntries(Object.entries(spellSlots as Record<string, unknown>).filter(([k]) => !k.startsWith('$'))) as Record<string, number[]>;
+export const ITEMS = entries<ItemData>(magicItemsJson);
+
+/** Equippable/usable items an entity carries, tagged `item:<id>` once equipped (gear) or just counted in the party bag (consumables). */
+export const EQUIP_PREFIX = 'item:';

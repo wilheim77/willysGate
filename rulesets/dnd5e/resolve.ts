@@ -19,7 +19,7 @@ import {
 } from '../../engine';
 import { type RollMode, d20Check, resolveRollMode } from '../common/d20';
 import { ABILITY_LABELS, type Ability } from './abilities';
-import { armorClass, hasFeature, mod, profBonus } from './character';
+import { armorClass, equipmentSaveBonus, hasFeature, mod, profBonus } from './character';
 import { type DiceExpr, averageOf, rollDice, sum } from './dice';
 import { coverBetween } from './cover';
 
@@ -154,7 +154,7 @@ export function chanceToSucceed(bonus: number, dc: number, mode: RollMode = 'nor
 }
 
 export function saveBonus(e: Entity, ability: Ability): number {
-  return mod(e, ability) + (hasTag(e, `prof:save:${ability}`) ? profBonus(e) : 0);
+  return mod(e, ability) + (hasTag(e, `prof:save:${ability}`) ? profBonus(e) : 0) + equipmentSaveBonus(e);
 }
 
 export function spellAttackBonus(e: Entity, ability: Ability): number {

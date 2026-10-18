@@ -117,6 +117,14 @@ export interface Ruleset {
    * nobody levels. The thresholds come from the game's content (EngineContent.progression).
    */
   progression?: ProgressionRules;
+  // --- Equipment (optional: only rulesets with gear slots need these) ---
+
+  /** The equip slot an item id belongs to (e.g. 'weapon', 'ring'), or undefined if it's not equippable (a potion, coin, trade good...). */
+  itemSlot?(itemId: string): string | undefined;
+  /** The item id `entity` currently has equipped in `slot`, if any. */
+  equippedInSlot?(entity: Entity, slot: string): string | undefined;
+  /** Every item id `entity` currently has equipped, across all slots (for a "manage gear" UI). */
+  equippedItems?(entity: Entity): string[];
 
   /** Plain-language explanations for terms shown in the UI (CA, CD, ventaja...). Keys are `term` ids. */
   glossary: Record<string, GlossaryEntry>;

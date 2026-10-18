@@ -6,5 +6,19 @@
   "libro_cuentas_lisandro": { "label": "Libro de cuentas de Lisandro", "text": "Letra preciosa y paciente. Cuarenta libras de plata por semana, de «A. B.», por el Pozo. Y una última hoja con el sello de la Casa: embargo preferente. Comprador previsto: A. B." },
   "llave_cripta": { "label": "Llave de la cripta", "text": "Se la dio el barón «por los servicios prestados». Abre la escalera de los monjes, que bajaron a la mina «por motivos»." },
   "sello_baron": { "label": "Sello del barón", "text": "El sello de los Mazo, con su escudo de un mazo, por si quedaba alguna duda. Hace falta para el embargo. Vale exactamente una comisión." },
-  "collera": { "label": "Collera de plata viva", "text": "Zumba. Una vez por combate, ordena a un enemigo y te obedece un turno. Desde que la llevas, el canto no se calla, y las curas de Anselmo te sanan la mitad." }
+  "collera": { "label": "Collera de plata viva", "text": "Zumba. Una vez por combate, ordena a un enemigo y te obedece un turno. Desde que la llevas, el canto no se calla, y las curas de Anselmo te sanan la mitad." },
+
+  "$comment2": "Botín de combate (ids usados por el agente de loot en rulesets/dnd5e/loot.ts). Lo mecánico vive en rulesets/dnd5e/data/magic-items.json; aquí solo el nombre y el texto.",
+  "potion_curacion": { "label": "Poción de curación", "text": "Sabe a sidra con limaduras. Cura 2d4+2 puntos de golpe al bebérsela." },
+  "potion_curacion_mayor": { "label": "Poción de curación mayor", "text": "Más espesa y más cara. Cura 4d4+4 puntos de golpe." },
+  "pergamino_manos_ardientes": { "label": "Pergamino de manos ardientes", "text": "Tinta que huele a quemado. Léelo y un cono de fuego sale de tus manos." },
+  "pergamino_bendicion": { "label": "Pergamino de bendición", "text": "Oraciones copiadas con prisa. Léelo para bendecir a tus aliados cercanos." },
+  "vara_proyectiles_magicos": { "label": "Vara de proyectiles mágicos", "text": "Tres dardos de fuerza que nunca fallan, uno por uso." },
+  "espada_mas1": { "label": "Espada larga +1", "text": "El filo brilla un poco más de lo que debería. Pega mejor y más fuerte." },
+  "armadura_mas1": { "label": "Armadura +1", "text": "Reforzada con algo que no es solo acero. Para quien ya lleve armadura." },
+  "anillo_proteccion": { "label": "Anillo de protección", "text": "Un anillo sencillo, frío al tacto. Mejora la CA y todas las salvaciones." },
+  "capa_proteccion": { "label": "Capa de protección", "text": "Pesa menos de lo que parece. Mejora la CA y todas las salvaciones." },
+  "saco_sinfondo": { "label": "Saco sin fondo", "text": "Cabe más de lo que debería caber. Rareza de anticuario; no pesa nada." },
+  "flechas": { "label": "Flechas", "text": "Un puñado de flechas aprovechables. Ni una está torcida de más." },
+  "virotes": { "label": "Virotes de ballesta", "text": "Munición de ballesta, recogida del suelo tras la refriega." }
 }

@@ -11,6 +11,7 @@ import {
   gridDistance,
   hasCondition,
   hasLineOfSight,
+  itemCount,
   OBJECT_TAG,
   simulatePush,
   surfaceAt,
@@ -22,11 +23,11 @@ import {
   targetIds,
 } from '../../engine';
 import { ABILITY_LABELS, type Ability } from './abilities';
-import { armorClass, castingAbility, hasFeature, mod, monsterOf, profBonus, tagValues } from './character';
+import { armorClass, castingAbility, equippedWeaponBonus, hasFeature, mod, monsterOf, profBonus, tagValues } from './character';
 import { SKILLS } from './abilities';
 import { SURFACES } from './environment';
 import { dnd5eRef } from './ref';
-import { MONSTER_ACTIONS, type MonsterActionData, type Rider, SPELLS, type SpellData, WEAPONS } from './data';
+import { ITEMS, MONSTER_ACTIONS, type MonsterActionData, type Rider, SPELLS, type SpellData, WEAPONS } from './data';
 import { type DiceExpr, averageOf, parseDice, rollDice, sum } from './dice';
 import {
   type AttackSpec,
@@ -107,6 +108,41 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
     const cost: Record<string, number> = power.cast === 'bonus_action' ? { bonus_action: 1 } : { ...main };
     cost[`use_${id}`] = 1;
     actions.push(castableAction(`ability:${id}`, power, cost, ['ability', ...(power.recharge ? ['recharge'] : [])]));
+  }
+
+  // Consumables from the party's bag: Potions of Healing (drink, bonus action) and scrolls/wands
+  // (cast their spell, same action economy a spell would cost). Flavour label/text is content
+  // data (content/<game>/items.json); this layer only knows the mechanics (data/magic-items.json).
+  for (const [itemId, item] of Object.entries(ITEMS)) {
+    if (itemCount(state, 'party', itemId) <= 0) continue;
+    if (item.kind === 'potion') {
+      const avg = Math.round(averageOf(parseDice(item.heal ?? '0')));
+      actions.push({
+        id: `item:${itemId}`,
+        label: 'Beber poción',
+        description: `Recupera ~${avg} puntos de golpe.`,
+        cost: { bonus_action: 1 },
+        target: { kind: 'self', range: 0 },
+        tags: ['item', 'heal', 'consumable'],
+      });
+    } else if ((item.kind === 'scroll' || item.kind === 'wand') && item.spell) {
+      const spell = SPELLS[item.spell];
+      if (!spell) continue;
+      const cost: Record<string, number> = spell.cast === 'bonus_action' ? { bonus_action: 1 } : { ...main };
+      actions.push({
+        id: `item:${itemId}`,
+        label: `${item.kind === 'scroll' ? 'Leer pergamino' : 'Usar vara'}: ${spell.label}`,
+        description: spell.text,
+        cost,
+        target: {
+          kind: spell.target,
+          range: spell.range,
+          ...(spell.filter ? { filter: spell.filter } : {}),
+          ...(spell.maxTargets ? { maxTargets: spell.maxTargets } : spell.multi && !spell.area ? { maxTargets: spell.multi, allowRepeat: true } : {}),
+        },
+        tags: ['item', 'spell', 'consumable', ...(spell.damage ? ['damage'] : []), ...(spell.heal ? ['heal'] : []), ...(spell.area ? ['area'] : [])],
+      });
+    }
   }
 
   if (hasFeature(e, 'second_wind')) {
@@ -337,6 +373,7 @@ function weaponAttackSpec(state: GameState, attacker: Entity, weaponId: string, 
   const damage = hasTag(attacker, 'brute') && !ranged ? { ...base, count: base.count + 1 } : base;
   const abilityMod = mod(attacker, ability);
   const damageMod = weapon.properties.includes('no_mod') ? 0 : abilityMod;
+  const magic = equippedWeaponBonus(attacker, weaponId);
   const extra: AttackSpec['extra'] = [];
   if (sneak) extra.push({ label: 'Ataque furtivo', dice: { count: Math.ceil(stat(attacker, 'level', 1) / 2), sides: 6, bonus: 0 }, type: weapon.type });
   return {
@@ -346,8 +383,9 @@ function weaponAttackSpec(state: GameState, attacker: Entity, weaponId: string, 
     modifiers: [
       { label: ABILITY_LABELS[ability], value: abilityMod },
       { label: 'Competencia', value: profBonus(attacker), term: 'proficiency' },
+      ...(magic.attack ? [{ label: 'Objeto mágico', value: magic.attack }] : []),
     ],
-    damage: { ...damage, bonus: damage.bonus + damageMod },
+    damage: { ...damage, bonus: damage.bonus + damageMod + magic.damage },
     damageType: weapon.type,
     melee: !ranged,
     critOn: hasFeature(attacker, 'improved_critical') ? 19 : 20,
@@ -483,6 +521,14 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   const [kind, id] = actionId.split(':') as [string, string];
   const firstId = target.entityId ?? target.entityIds?.[0];
   const targetEntity = firstId ? state.entities[firstId] : undefined;
+
+  if (kind === 'item') {
+    const item = ITEMS[id];
+    if (!item) return { valid: false, reason: 'Objeto desconocido.' };
+    if (item.kind === 'potion') return { valid: true, chance: 1, expectedHealing: Math.round(averageOf(parseDice(item.heal ?? '0'))) };
+    if (item.spell) return previewAction(state, actorId, `spell:${item.spell}`, target);
+    return { valid: false, reason: 'Este objeto no hace nada.' };
+  }
 
   if (kind === 'attack') {
     if (!targetEntity || !standing(targetEntity)) return { valid: false, reason: 'No hay a quién atacar ahí.' };
@@ -745,6 +791,18 @@ export function performAction(ruleset: Ruleset, state: GameState, actorId: strin
 
   if (kind === 'spell' || kind === 'ability') {
     castSpell(r, actorId, castableOf(kind, id)!, id, target);
+    return r.outcome();
+  }
+
+  if (kind === 'item') {
+    const item = ITEMS[id]!;
+    if (item.kind === 'potion') {
+      const dice = parseDice(item.heal ?? '0');
+      heal(r, target.entityId ?? actorId, sum(rollDice(rng, dice.count, dice.sides)) + dice.bonus);
+    } else if (item.spell) {
+      castSpell(r, actorId, SPELLS[item.spell]!, item.spell, target);
+    }
+    r.apply({ type: 'giveItem', owner: 'party', item: id, count: -1 });
     return r.outcome();
   }
 

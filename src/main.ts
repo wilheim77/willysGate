@@ -84,6 +84,100 @@ controller.onTrapReached = (trap, candidates) => {
   );
 };
 
+// Loot from a fight: coin/potions/scrolls already land straight in the shared bag (see
+// rulesets/dnd5e/loot.ts and the combat log), but gear with a slot (weapon/armour/ring/
+// cloak) asks who gets it, and - if that person already had something in that slot - who
+// keeps the old one, chaining until someone takes it or it's left in the shared bag.
+{
+  const partyMemberIds = () => Object.values(store.state.entities).filter((e) => e.controllerId === game.playerId).map((e) => e.id);
+
+  const offerReplaced = (oldItem: string, justEquippedTo: string, onDone: () => void) => {
+    const ruleset = store.engine.ruleset;
+    const slot = ruleset.itemSlot?.(oldItem);
+    const def = game.items?.[oldItem];
+    const others = partyMemberIds().filter((id) => id !== justEquippedTo);
+    const options = others.map((id) => {
+      const current = slot ? ruleset.equippedInSlot?.(store.state.entities[id]!, slot) : undefined;
+      const name = store.state.entities[id]!.name;
+      return {
+        label: current ? `${name} (lleva ${game.items?.[current]?.label ?? current})` : name,
+        onPick: () => {
+          const r = store.dispatch({ type: 'equipItem', issuer: game.playerId, entityId: id, item: oldItem } as never);
+          if (!r.ok) return onDone();
+          const ev = r.events.find((e) => e.type === 'itemEquipped') as { replaced?: string } | undefined;
+          if (ev?.replaced) offerReplaced(ev.replaced, id, onDone);
+          else onDone();
+        },
+      };
+    });
+    options.push({ label: 'Guardarlo en la mochila', onPick: onDone });
+    dialogue.ask(`¿Quién se queda con ${def?.label ?? oldItem}?`, options, false);
+  };
+
+  const offerEquip = (item: string, onDone: () => void, excludeId?: string) => {
+    const def = game.items?.[item];
+    const text = [def?.label ?? item, def?.text].filter(Boolean).join('\n');
+    const candidates = partyMemberIds().filter((id) => id !== excludeId);
+    if (candidates.length === 0) return onDone();
+    dialogue.ask(
+      text,
+      candidates.map((id) => ({
+        label: `Dárselo a ${store.state.entities[id]!.name}`,
+        onPick: () => {
+          const r = store.dispatch({ type: 'equipItem', issuer: game.playerId, entityId: id, item } as never);
+          if (!r.ok) return onDone();
+          const ev = r.events.find((e) => e.type === 'itemEquipped') as { replaced?: string } | undefined;
+          if (ev?.replaced) offerReplaced(ev.replaced, id, onDone);
+          else onDone();
+        },
+      })),
+      false,
+    );
+  };
+
+  let lootBusy = false;
+  const lootQueue: string[] = [];
+  const pumpLootQueue = () => {
+    if (lootBusy) return;
+    const item = lootQueue.shift();
+    if (!item) return;
+    lootBusy = true;
+    offerEquip(item, () => {
+      lootBusy = false;
+      pumpLootQueue();
+    });
+  };
+
+  store.subscribe((change) => {
+    if (change.kind !== 'events') return;
+    for (const ev of change.events) {
+      if (ev.type !== 'lootDropped') continue;
+      const item = (ev as unknown as { item: string }).item;
+      // Consumables and misc goods have no slot: they're already in the shared bag (see the
+      // combat log line for them), nothing to ask.
+      if (!store.engine.ruleset.itemSlot?.(item)) continue;
+      lootQueue.push(item);
+    }
+    pumpLootQueue();
+  });
+}
+
+// Changing gear later from the sheet re-runs the same assignment flow for that one item.
+sheet.onChangeGear = (item: string) => {
+  const def = game.items?.[item];
+  const options = Object.values(store.state.entities)
+    .filter((e) => e.controllerId === game.playerId)
+    .map((e) => ({
+      label: store.engine.ruleset.equippedInSlot?.(e, store.engine.ruleset.itemSlot?.(item) ?? '') === item ? `${e.name} (lo lleva)` : e.name,
+      onPick: () => {
+        const r = store.dispatch({ type: 'equipItem', issuer: game.playerId, entityId: e.id, item } as never);
+        if (!r.ok) return;
+      },
+    }));
+  options.push({ label: 'Guardarlo en la mochila', onPick: () => undefined });
+  dialogue.ask(`¿Quién lleva ${def?.label ?? item}?`, options, false);
+};
+
 // Defeat: the leader can't get up once the fight is over (the party lost, or the leader bled
 // out while the others won). Without this the game just sat there. Offer to replay the fight
 // from the moment before it started.
