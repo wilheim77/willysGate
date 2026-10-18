@@ -49,7 +49,11 @@ c.put(25, 15, '/', 0); // the door of El Pico Roto
 // Exterior art: packed earth for the square, cobbles up the abbey road and on the terrace,
 // timber houses alternating, the Torre del Cepo in stone.
 c.retile((t, h, x, y) => {
-  if (t === '#') return x >= 8 && x <= 11 && y >= 3 && y <= 5 ? 'W' : (x + y) % 2 ? 'h' : 'g';
+  if (t === '#') {
+    if (x >= 8 && x <= 11 && y >= 3 && y <= 5) return 'W'; // the Torre del Cepo
+    if ((x === 21 || x === 26) && y <= 3) return 'W'; // the abbey gate's posts
+    return (x + y) % 2 ? 'h' : 'g';
+  }
   if (t === '.') return 'c';
   if (t === ',') return y >= 19 ? 'I' : 'R';
   return t;
@@ -63,7 +67,7 @@ export default {
   spawns: {
     'entry-camino': [2, 15],
     'entry-abadia': [23, 2],
-    'entry-calles': [27, 9],
+    'entry-callejon': [27, 9],
     'entry-escorial': [13, 19],
     // The trial (scene 1).
     anselmo: [10, 6],
@@ -81,15 +85,25 @@ export default {
     guardia_abadia: [23, 4],
     'guardia_baron-1': [25, 5],
     // Scenery: market stalls on the terrace, lamp oil by the gallows, the well's bucket barrel.
-    'crate-1': [2, 10],
-    'crate-2': [3, 10],
+    'market_stall-1': [2, 10],
+    'market_stall-2': [4, 10],
     'barrel-1': [2, 11],
     'barrel_oil-1': [15, 8],
     'well-1': [17, 12],
     'barrel-2': [19, 13],
     'crate-3': [20, 16],
+    // A cart unloaded by the gallows: cover between the crowd and the fanatics.
+    'cart_sacks-1': [12, 11],
+    'sacks-1': [13, 11],
+    'barrel-3': [11, 11],
   },
   lights: [
+    { name: 'farol-camino', at: [1, 13], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-calles-1', at: [28, 8], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-calles-2', at: [28, 10], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-escorial-1', at: [11, 18], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+    { name: 'farol-escorial-2', at: [15, 18], radius: 3.5, color: '#ffc070', flicker: 0.12, intensity: 0.85, prop: 'lantern' },
+
     { name: 'brasero-cadalso-1', at: [7, 8], radius: 4.5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
     { name: 'brasero-cadalso-2', at: [14, 9], radius: 4.5, color: '#ff9a4a', flicker: 0.18, prop: 'brazier' },
     { name: 'antorcha-pico-roto', at: [25, 12], radius: 4, color: '#ffb050', flicker: 0.12, prop: 'torch_wall' },
@@ -100,11 +114,15 @@ export default {
   surfaces: [{ name: 'abrevadero', rect: [16, 14, 3, 1], surface: 'water' }],
   exits: [
     { name: 'a-abadia', rect: [22, 0, 4, 1], to: 'abadia', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_concedida', closedText: 'La guardia no os deja subir sin audiencia.' } },
-    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'calles', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto', closedText: 'Medio pueblo se agolpa ante el cadalso. Hasta que acabe el juicio, no se pasa.' } },
+    { name: 'a-calles', rect: [29, 8, 1, 3], to: 'callejon', spawn: 'entry-plaza', props: { requiresFlag: 'juicio_resuelto', closedText: 'Medio pueblo se agolpa ante el cadalso. Hasta que acabe el juicio, no se pasa.' } },
     { name: 'a-escorial', rect: [12, 21, 3, 1], to: 'escorial', spawn: 'entry-plaza', props: { requiresFlag: 'audiencia_hecha', closedText: 'Primero, la audiencia con el barón.' } },
     { name: 'a-camino', rect: [0, 14, 1, 3], to: 'camino', spawn: 'entry-plaza' },
   ],
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'juicio', rect: [1, 4, 16, 10] },
+    ],
     scenes: [
       // D1 (noche_antorchas, d1_horca) is opened by content/intereses/triggers.json.
       {

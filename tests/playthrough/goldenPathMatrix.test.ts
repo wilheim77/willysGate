@@ -67,7 +67,7 @@ const D4_ROUTES: Record<string, number> = { embargo: 0, cuadrilla_firma: 1, refi
 // baron's key" and doesn't try to pick a 400-year-old monastery lock instead.
 const SKIP_INTERACTS = new Set(['door_cripta']);
 
-const MAP_ORDER = ['camino', 'plaza', 'abadia', 'calles', 'escorial', 'mina', 'boveda'];
+const MAP_ORDER = ['camino', 'barranco', 'plaza', 'callejon', 'abadia', 'calles', 'escorial', 'tunel', 'mina', 'boveda'];
 
 function criticalFlags(): string[] {
   const raw = JSON.parse(readFileSync(join(import.meta.dirname, '..', '..', 'content', 'intereses', 'flags.json'), 'utf8')) as Record<string, unknown>;
@@ -259,6 +259,8 @@ describe('golden path matrix: D1 x D2 x D3 x D4', () => {
       );
       expect(wiped, `${comboLabel(combo)}: the party was wiped out before settling - see the console log above for how far it got`).toBe(false);
       expect(visited.size, `${comboLabel(combo)}: only visited ${visited.size} map(s)`).toBeGreaterThanOrEqual(2);
+      // The in-between maps on the main road (plaza -> calles, escorial -> mine) and their fights.
+      for (const m of ['callejon', 'tunel']) expect(visited.has(m), `${comboLabel(combo)}: never walked through "${m}"`).toBe(true);
       // Confirm the run actually took the scripted branch at each decision, not some other
       // route to the same place - except D4 when this exact D1/D4 pairing is an invalid
       // combination by design (d4UnavailableFor), where the driver had to fall back.

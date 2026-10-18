@@ -96,6 +96,8 @@ export interface WillyEvent extends GameEvent {
     | 'showOff'
     | 'saltoCompleto'
     | 'companeroCae'
+    | 'xpGained'
+    | 'levelUp'
     | 'cinta'
     | 'marea'
     | 'mareaAviso'

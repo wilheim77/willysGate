@@ -18,10 +18,11 @@ import {
   surfaceAt,
 } from '../../engine';
 import { d20Check, resolveRollMode } from '../common/d20';
-import { listActions, performAction, previewAction, setWillyRef } from './actions';
+import { BARREL_BLAST, listActions, performAction, previewAction, setWillyRef } from './actions';
 import './more-classes';
 import './summons';
 import { syncCompanions } from './companions';
+import './xp';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
@@ -343,6 +344,9 @@ export const willy: Ruleset = {
   onCollision: (state, id, hit, push, rng) => onCollision(willy, state, id, hit, push, rng),
   onVoid: (state, id, rng) => onVoid(willy, state, id, rng),
   onRoundEnd: (state, round, rng) => onRoundEnd(willy, state, round, rng),
+  // For the AI: standing next to a gas barrel is asking for it (someone may blow it up).
+  dangerAt: (state, _id, p) =>
+    Object.values(state.entities).filter((e) => hasTag(e, 'explosivo') && standing(e) && Math.max(Math.abs(e.position.x - p.x), Math.abs(e.position.y - p.y)) <= 1).length * BARREL_BLAST * 0.35,
   noticeTrap: (state, id, trap) => noticeTrap(state, id, trap),
   triggerTrap: (state, id, trap, rng) => triggerTrap(willy, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),

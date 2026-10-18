@@ -67,8 +67,8 @@ export const CAMERINO_ROWS = [
   '######EE######',
 ];
 
-/** Floors in a season; after the last one the lift has nowhere to go (the ending, W5). */
-export const LAST_FLOOR = 5;
+/** Floors in a season (floors.json → pisos); after the last one the lift has nowhere to go (the ending, W5). */
+export const LAST_FLOOR = 10;
 
 /**
  * The Camerino after floor `after` (0: before the first). Each one is its own map, so its lift

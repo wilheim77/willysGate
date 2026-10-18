@@ -41,45 +41,111 @@
   - las caídas útiles son de 2 o más niveles (h3 sobre h1, o h2 sobre h0);
   - las salas oscuras tienen luz ambiente baja y candiles.
 
+## Combates tácticos (lista de comprobación)
+
+Cada zona de combate se declara en la capa `arenas` (rectángulo; `tutorial: true` para el tutorial). El test `tests/content/maps.test.ts` exige que todo encuentro o escena con `fight` caiga en una arena, y que cada arena tenga al menos 4 casillas que bloqueen (muros, rocas, props obstáculo), algún desnivel y, salvo el tutorial, un peligro (barril de aceite o de pólvora, aceite o agua, o una caída de 2 niveles). Al diseñar:
+
+1. **Cobertura.** De 3 a 6 obstáculos que corten paso y visión (muros bajos, carros, cajas, escombros, columnas, árboles, pozos), agrupados en posiciones legibles y con pasillos entre ellos.
+2. **Altura.** Al menos una posición elevada (cornisa, andamio, balcón, escalera, rocas, escombrera), a la que se suba por escalera o rampa, de modo que cueste movimiento. En 5e, atacar desde arriba da ventaja (`resolve.ts`, «desde arriba»). Los tiradores enemigos van arriba, y el jugador tiene una ruta para flanquearlos.
+3. **Paso estrecho y flanco.** Una puerta, un puente o la boca de un callejón que se pueda sostener, y una ruta más larga que lo rodee.
+4. **Peligros cerca de los enemigos.** Barriles de aceite (estallan con 1 de daño), braseros, cornisas desde las que empujar, agua o fosos. Entre 1 y 3 por combate, puestos a propósito.
+5. **Posiciones iniciales.** Los cuerpo a cuerpo delante; los tiradores detrás o en alto. El grupo entra por un lado que le deja elegir, no en línea recta.
+6. **Legibilidad.** Lo que bloquea tiene que parecer que bloquea: las vallas y los acantilados (`C` con altura 4) no son transitables, y las escaleras usan las caras nuevas de escalón.
+
 ## Mapas
 
 ### `camino`
 
-**P · El camino.** El último tramo del camino al valle, al atardecer. El grupo empieza al oeste con Dorotea, y el camino va elevado (h1). Al sur está la cuneta (h0) donde espera Garrán. Al este, los mineros hambrientos (ids de `cast.json`) cortan el paso junto a un carro volcado: cajas, un barril de aceite y aceite derramado. Hay una hoguera (`campfire`). Un vigía sube a un peñasco de escoria (h3); quien lo empuje por su cara sur lo hace caer 2 niveles. Para el tutorial hay un charco en el camino, una caja que hace de primera cobertura y un cepo de furtivo fácil (detección 10). Dos franjas `scenes` de lado a lado del mapa (`gate`) hacen inevitables a Garrán (`camino_garran`) y a los mineros (`camino_mineros`); el combate se puede evitar hablando. La salida este lleva a la plaza y exige `prologo_mineros_resuelto`.
+**P · El camino.** El último tramo del camino al valle, al atardecer (40×20). Primero viene el **combate tutorial**: dos perros carroñeros y una rata sobre una mula muerta, con el carro roto y un muro de piedra como cobertura y un altozano como posición elevada; la franja va de lado a lado, así que siempre ocurre. El grupo empieza al oeste con Dorotea, y el camino va elevado (h1). Al sur está la cuneta (h0) donde espera Garrán. Al este, los mineros hambrientos (ids de `cast.json`) cortan el paso junto a un carro volcado: cajas, un barril de aceite y aceite derramado. Hay una hoguera (`campfire`). Un vigía sube a un peñasco de escoria (h3); quien lo empuje por su cara sur lo hace caer 2 niveles. Para el tutorial hay un charco en el camino, una caja que hace de primera cobertura y un cepo de furtivo fácil (detección 10). Dos franjas `scenes` de lado a lado del mapa (`gate`) hacen inevitables a Garrán (`camino_garran`) y a los mineros (`camino_mineros`); el combate se puede evitar hablando. La salida este lleva a la plaza y exige `prologo_mineros_resuelto`.
 
 ```
-== camino: El camino (32x18, ambient 0.6)
-kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
-kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333322222233333333332222222333
-kkkkkkkssssskkkkkkkkkkksssssskkk   33322221111122222322222111111223
-kkksssssssssssssssskkkkksssssssk   32211111111111111112333211111112
-kksssssssssssss^ssskkGkksssssssk   32111111111111111112333211111112
-kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
-kksssssssssssssssskkkkkksssssssk   32111111111111111112333211111112
-kffffffxsfffffsssssssssssffffffk   31111111111111111111111111111112
-kssssssssssssRwwRRRRRRRRRRRRRRRE   21111111111111111111111111111111
-RRR@RRRRRRRRRRwwRRRRDRRRRRRRRARE   11111111111111111111111111111111
-RRBRRRRRRRRRRsssssssssFsssssssss   11111111111111111111111111111111
-sssssmmmmmmmmssssssssssxxosIssss   11111000000001111111111111111111
-sssssmmmmCmmmssssssssssss%%sssss   11111000000001111111111111111111
-kssssssssssssssssssssssss*ssssss   21111111111111111111111111111111
-kksssssssssssssssssssssssssssskk   22111111111111111111111111111122
-kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   32222222222222222222222222222223
-kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
-kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   33333333333333333333333333333333
-^ cepo-furtivo (15,4) {"marker":"trap_beartrap","detect":10,"save":"dex","dc":11,"damage":"1d6","type":"piercing","condition":"restrained","disarmCheck":"sleight_of_hand","disarmDc":10}
-E a-hondonegra (31,8) -> plaza:entry-camino
-@ hero (3,9)
-A entry-plaza (29,9)
-B dorotea (2,10)
-C garran (9,12)
-D minero_cabecilla (20,9)
-F minero_hambriento_1 (22,10)
-G minero_hambriento_2 (21,4)
-I minero_hambriento_3 (27,11)
-props: crate-1, crate-2, barrel_oil-1, crate-3, campfire-1
-scenes garran-en-la-cuneta (6,0 1x18) {"dialogue":"camino_garran","speaker":"garran","once":true,"gate":true,"protects":"a-hondonegra"}
-scenes mineros-cortan-el-paso (16,0 2x18) {"dialogue":"camino_mineros","speaker":"minero_cabecilla","once":true,"gate":true,"protects":"a-hondonegra","fight":"minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3"}
+== camino: El camino (40x20, ambient 0.6)
+kkkkkkkkkkkkkkkkkkkEEkkkkkkkkkkkkkkkkkkk   ###################22###################
+ssssssssssssssssssssssssssssssssssssssss   2222222222222222222222222222222222222222
+ssssssssssssssssssssssssssssssssssssssss   1111111111111111111111111111111111111111
+sssssssssssssssssssCs*ssskkkkkksssssssss   1111111111111111111111111233332111111111
+ssssssssssssssssssssssssskkkkkksssssssss   1111122221111111111111111233332111111111
+ssssssssssssssssssssss^sskkQkkksssssssss   1111122221111111111111111233332111111111
+sssssssssssssssssssssKssskkkkkksssssssss   1111122221111111111111111233332111111111
+ssssssssxsssskksssssssssskkkkkkssLLLss*s   111111111111133111111111123333211###1111
+ssssssssIsDssssssssssssssssssssssssRRRRE   1111111111111111111111111111111111111111
+RR@RRRRRRbbRRRRRRRRRRRwwRRRRRRNRRRRRRBRE   1111111111111111111111111111111111111111
+RRARRRRRRRRFRRRRRRRRRRwwRRRRRRRORRRRRRRE   1111111111111111111111111111111111111111
+sssssssssGsssssssssssssssssssssssssRRRRE   1111111111111111111111111111111111111111
+sssssssssssLLLsmmmmmmmssssssxxsxPsssss*s   11111111111###10000000111111111111111111
+ssssJssssssssssmmmMmmmsskssss%o%ssssssss   1111111111111110000000113111111111111111
+sssssssssssssssmmmmmmmssskssssssss*sssss   1111111111111110000000111311111111111111
+ssssssssssssssssssssssssssmmmmssssssssss   1111111111111111111111111100001111111111
+ssssssssssssssssssssssssssmmmmsssssLssss   1111111111111111111111111100001111111111
+ssssssssssssssssssssssssssssssssssssssss   1111111111111111111111111111111111111111
+ssssssssssssssssssssssssssssssssssssssss   2222222222222222222222222222222222222222
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ########################################
+^ cepo-furtivo (22,5) {"marker":"trap_beartrap","detect":10,"save":"dex","dc":11,"damage":"1d6","type":"piercing","condition":"restrained","disarmCheck":"sleight_of_hand","disarmDc":10}
+E a-hondonegra (39,8) -> plaza:entry-camino
+E a-barranco (19,0) -> barranco:entry-camino
+@ hero (2,9)
+A dorotea (2,10)
+B entry-plaza (37,9)
+C entry-barranco (19,3)
+D perro_carronero-1 (10,8)
+F perro_carronero-2 (11,10)
+G rata_gigante-1 (9,11)
+I sacks-1 (8,8)
+J dead_tree-1 (4,13)
+K dead_tree_b-1 (21,6)
+L dead_tree_c-1 (35,16)
+M garran (18,13)
+N minero_cabecilla (30,9)
+O minero_hambriento_3 (31,10)
+P minero_hambriento_1 (32,12)
+Q minero_hambriento_2 (27,5)
+props: crate-1, oil_cart-1, crate-3, crate-4, barrel_oil-1, campfire-1
+encounter perros-carroneros: perro_carronero-1,perro_carronero-2,rata_gigante-1
+scenes garran-en-la-cuneta (15,1 1x18) {"dialogue":"camino_garran","speaker":"garran","once":true,"gate":true,"protects":"a-hondonegra"}
+scenes mineros-cortan-el-paso (23,1 1x18) {"dialogue":"camino_mineros","speaker":"minero_cabecilla","once":true,"gate":true,"protects":"a-hondonegra","fight":"minero_cabecilla,minero_hambriento_1,minero_hambriento_2,minero_hambriento_3"}
+arenas perros-carroneros (5,4 10x9) {"tutorial":true}
+arenas mineros (23,2 15x16) {}
+```
+
+### `barranco`
+
+**P · Barranco de las Cabras (opcional).** Sale del camino por una senda de cabras al norte. Es un barranco seco que sube hasta una hondonada donde una manada de lobos ha arrastrado a un viajero (su cofre sigue allí). Hay dos maneras de subir: el cuello estrecho del cauce, que los lobos pueden sostener, o la cornisa larga del este (h2), que pasa por un espolón h3 justo encima del cuello; desde el espolón se puede empujar a un lobo. En la hondonada cruza un arroyo (agua).
+
+```
+== barranco: Barranco de las Cabras (28x20, ambient 0.45)
+kkkkkkkkkkkkkkkkkkkkkkkkkkkk   ############################
+kkkkkksssssssssssssssskkkkkk   ######1111111111111111######
+kkkkkksc*Dsssssskssssskkkkkk   ######1111111111#11111######
+kkkkkksswwwwwwwwwwwssskkkkkk   ######1100000000000111######
+kkkkkksssssssssssssssskkkkkk   ######1111111111111111######
+kkkkkkssKssksssssssJsskkkkkk   ######11111#1111221111######
+kkkkkksssssBssCssssssskkkkkk   ######1111111111221111######
+kkkkkkkkkkkksskkkkkkkkkkkkkk   ############11##33##########
+kkkkkkkkkkkkssssFkkkkkkkkkkk   ############111133##########
+kkkkkkkksssssskkkkkkkkkkkkkk   ########111111##33##########
+kkkkkkkksssssskksskkkkkkkkkk   ########111111##22##########
+kkkkkkkksGsssskk&&kkkkkkkkkk   ########111111##22##########
+kkkkkkkksssssskk&&kkkkkkkkkk   ########111111##22##########
+kkkkkkkksssssskksskkkkkkkkkk   ########111111##22##########
+kkkkkkkkkksssssssskkkkkkkkkk   ##########11111122##########
+kkkkkkkkkkssssIskkkkkkkkkkkk   ##########111111############
+kkkkkkkkkksssssskkkkkkkkkkkk   ##########111111############
+kkkkkkkkkkssAssskkkkkkkkkkkk   ##########111111############
+kkkkkkkkkkkksskkkkkkkkkkkkkk   ############11##############
+kkkkkkkkkkkkEEkkkkkkkkkkkkkk   ############11##############
+E a-camino (12,19) -> camino:entry-barranco
+A entry-camino (12,17)
+B lobo-1 (11,6)
+C lobo-2 (14,6)
+D lobo-3 (9,2)
+F lobo-4 (16,8)
+G dead_tree-1 (9,11)
+I dead_tree_b-1 (14,15)
+J rubble_pile-1 (19,5)
+K rubble_pile_b-1 (8,5)
+props: chest-viajero
+encounter lobos: lobo-1,lobo-2,lobo-3,lobo-4
+arenas lobos (6,1 16x14) {}
 ```
 
 ### `plaza`
@@ -88,35 +154,35 @@ scenes mineros-cortan-el-paso (16,0 2x18) {"dialogue":"camino_mineros","speaker"
 
 ```
 == plaza: La plaza de Hondonegra (30x22, ambient 0.5)
-ghghghghghghghghghghghEEEEghgh   ######################3333####
-hghghghghghghghghghghgcccchghg   ######################2222####
-ghghghghghghghghghghghcBccghgh   ######################2222####
-hghghghgWWWWhghghghghgc*cchghg   ######################1111####
+ghghghghghghghghghghgWEEEEWhgh   ######################3333####
+hghghghghghghghghghghWccccWghg   ######################2222####
+ghghghghghghghghghghgWcBccWhgh   ######################2222####
+hghghghgWWWWhghghghghWc*ccWghg   ######################1111####
 gRRRRRRRWWWWRRRRRRRRRRcPccghgh   #0000000####00000000001111####
 hRRRRRRRWWWWRRRRRRRRRRRRRQhghg   #0000000####00000000000000####
 gRRRRRR==TF==G=RRRRRRRRRRRghgh   #0000001222222100000000000####
 hRRRRRR========RRRRRRRRRRRhghg   #0000001222222100000000000####
-gRRRRRK*RRRRRRRoRRRRRRRRRRRRRE   #00000000000000000000000000000
+gRRRRRK*RRRRRRRoRRRRRRRRRRRR*E   #00000000000000000000000000000
 hccc*cRRIRRRRJ*RRRRRRRRRRRRCRE   #11111000000000000000000000000
-gcxxccRRRRRRRRRRRRRRRRRRRRRRRE   #11111000000000000000000000000
-hcucccRRRRRRRRRRRRRRRRRRRghghg   #111110000000000000000000#####
+gcRcScRRRRRRRRRRRRRRRRRRRRRR*E   #11111000000000000000000000000
+hcucccRRRRRuTURRRRRRRRRRRghghg   #111110000000000000000000#####
 gcccccRRRRRRRRRRROR*RRRLR*ghgh   #111110000000000000000000#####
-hRRRRRRRRRRRRRRRRRRuRRRRMghghg   #000000000000000000000000#####
+h*RRRRRRRRRRRRRRRRRuRRRRMghghg   #000000000000000000000000#####
 ERRRRRRRRRRRRRRRwwwRRRNRRhghgh   0000000000000000000000000#####
 ERARRRRRRRRRRRRRRRRRRRRRR/hghg   00000000000000000000000000####
 ERRRRRRRRRRRRRRRRRRRxRRROhghgh   0000000000000000000000000#####
 hRRRRRRRRRRRRRRRRRRRRRRRRghghg   #000000000000000000000000#####
-gRRRRRRRRRRRRRRRRRRRRRRRRhghgh   #000000000000000000000000#####
+gRRRRRRRRRR*RRR*RRRRRRRRRhghgh   #000000000000000000000000#####
 hghghghghghgIDIghghghghghghghg   ############000###############
 ghghghghghghIIIhghghghghghghgh   ############000###############
 hghghghghghgEEEghghghghghghghg   ############000###############
 E a-abadia (22,0) -> abadia:entry-plaza
-E a-calles (29,8) -> calles:entry-plaza
+E a-calles (29,8) -> callejon:entry-plaza
 E a-escorial (12,21) -> escorial:entry-plaza
 E a-camino (0,14) -> camino:entry-plaza
 A entry-camino (2,15)
 B entry-abadia (23,2)
-C entry-calles (27,9)
+C entry-callejon (27,9)
 D entry-escorial (13,19)
 F anselmo (10,6)
 G cirilo (13,6)
@@ -129,8 +195,50 @@ N minero_cuadrilla-1 (22,14)
 O posadera (24,16)
 P guardia_abadia (23,4)
 Q guardia_baron-1 (25,5)
-props: gallows-1, crate-1, crate-2, barrel-1, barrel_oil-1, well-1, barrel-2, crate-3
+R market_stall-1 (2,10)
+S market_stall-2 (4,10)
+T cart_sacks-1 (12,11)
+U sacks-1 (13,11)
+props: gallows-1, barrel-1, barrel_oil-1, well-1, barrel-2, crate-3, barrel-3
+arenas juicio (1,4 16x10) {}
 scenes juicio-anselmo (0,8 16x11) {"dialogue":"juicio_anselmo","speaker":"cirilo","once":true,"gate":true,"protects":"a-calles,a-escorial,a-abadia","fight":"fanatico_pala-1,fanatico_pala-2,fanatico_pala-3"}
+```
+
+### `callejon`
+
+**1-3 · Callejón del Pagaré.** Une la plaza con la calle mayor. A mitad del callejón, en un patio, los cobradores de Lisandro (dos matones y dos ganzúas) le han arrancado la puerta a una viuda. La boca del callejón es un paso de dos casillas; un pasaje trasero por una casa en ruinas permite flanquearlos desde abajo. Un ballestero ocupa el balcón de madera (h2) sobre el patio, con una caída de 2 niveles debajo, y hay un barril de aceite junto a la escalera del balcón.
+
+```
+== callejon: Callejón del Pagaré (30x14, ambient 0.4)
+ghghghghghghghghghghghghghghgh   ##############################
+hghghghghghghghghghghghghghghg   ##############################
+ghghghghghghghghghghghghghghgh   ##############################
+hghghghghgcyyyFyyycchghghghghg   ##########0122222200##########
+ghghghghgh*cccccccccghghghghgh   ##########0000000000##########
+hghghghghgcocccccLGchghghghghg   ##########0000000#00##########
+EAcccccccccccccCcLcccccccccc*E   00000000000000000#000000000000
+E*ccccccccccccccccccwwwwccccBE   000000000000000000000000000000
+ghgcchghghccIJcDccccghghgcchgh   ###00#####0000000000#####00###
+hghccghghgccccccccxchghghccghg   ###00#####0000000000#####00###
+ghgcccKcccccccccccccccccccchgh   ###000000000000000000000000###
+hghcccccccccccccccccccLccccghg   ###000000000000000000000000###
+ghghghghghghghghghghghghghghgh   ##############################
+hghghghghghghghghghghghghghghg   ##############################
+E a-plaza (0,6) -> plaza:entry-callejon
+E a-calles (29,6) -> calles:entry-callejon
+A entry-plaza (1,6)
+B entry-calles (28,7)
+C cobrador-1 (15,6)
+D cobrador-2 (15,8)
+F ganzua-1 (14,3)
+G ganzua-2 (18,5)
+I cart_sacks-1 (12,8)
+J sacks-1 (13,8)
+K rubble_pile-1 (6,10)
+L rubble_pile_b-1 (22,11)
+props: crate-1, barrel_oil-1
+encounter cobradores: cobrador-1,cobrador-2,ganzua-1,ganzua-2
+arenas cobradores (8,2 14x10) {}
 ```
 
 ### `abadia`
@@ -150,16 +258,16 @@ W....x#================#...W   #00000#0000000000000000#000#
 W##/##########//#########d#W   ###0##########00############
 W......*............*......W   #00000000000000000000000000#
 W..........................W   #00000000000000000000000000#
-W....ssssssssssssssssss....W   #00000000000000000000000000#
-W....ssssxssssssssussss....W   #00000000000000000000000000#
-W....ssssssMssssNssssss....W   #00000000000000000000000000#
+W....sPssssssssssssssQs....W   #00000000000000000000000000#
+W....ssssxsssussssussss....W   #00000000000000000000000000#
+W....ssssssMRssSNssssss....W   #00000000000000000000000000#
 W............J.............W   #00000000000000000000000000#
 W.===GK======..======LI===.W   #12222222222200222222222221#
 WWWWWWWWWWWWW//WWWWWWWWWWWWW   #############00#############
 RRRRRRRRRRRR*RR*RRRRRRRRRRRR   0000000000000000000000000000
-RRRRRRRURRRxRRRRRxRRVRRRRRRR   0000000000000000000000000000
-WRRRRRRRPRRRRARaRRZQRRRRRRRW   #00000000000000000000000000#
-WWRRRRRRRYSRXRRRRTRRRRRRRRWW   ##000000000000000000000000##
+RRRRRRRZRRRxRRRRRxRRaRRRRRRR   0000000000000000000000000000
+WRRRRRRRTRRRRARfRReURRRRRRRW   #00000000000000000000000000#
+WWRRRRRRRdXRbRVRRYRRRRRRRRWW   ##000000000000000000000000##
 WWWWWWWWWWWEEEEEEWWWWWWWWWWW   ###########000000###########
 E a-plaza (11,21) -> plaza:entry-abadia
 E escalera-cripta (26,1) -> mina:entry-cripta
@@ -176,20 +284,25 @@ L guardia_baron-6 (21,15)
 M guardia_baron-7 (11,13)
 N guardia_baron-8 (16,13)
 O entry-cripta (25,3)
-P minero_cuadrilla-1 (8,19)
-Q minero_cuadrilla-2 (19,19)
-R minero_cuadrilla-3 (14,20)
-S hulla-1 (10,20)
-T hulla-2 (17,20)
-U minero_cuadrilla-4 (7,18)
-V minero_cuadrilla-5 (20,18)
-X minero_cuadrilla-6 (12,20)
-Y hulla-3 (9,20)
-Z hulla-4 (18,19)
-a odda_noche (15,19)
-props: tapestry_crossbow-1, tapestry-1, door-cripta, barrel_oil-1, barrel_oil-2, crate-1, crate-2, barrel-1, crate-3, crate-4
+P sacks-1 (6,11)
+Q sacks-2 (21,11)
+R tombstone-1 (12,13)
+S tombstone-2 (15,13)
+T minero_cuadrilla-1 (8,19)
+U minero_cuadrilla-2 (19,19)
+V minero_cuadrilla-3 (14,20)
+X hulla-1 (10,20)
+Y hulla-2 (17,20)
+Z minero_cuadrilla-4 (7,18)
+a minero_cuadrilla-5 (20,18)
+b minero_cuadrilla-6 (12,20)
+d hulla-3 (9,20)
+e hulla-4 (18,19)
+f odda_noche (15,19)
+props: tapestry_crossbow-1, tapestry-1, door-cripta, barrel_oil-1, barrel_oil-2, crate-1, crate-2, barrel-2, barrel-1, crate-3, crate-4
 encounter d1-asalto: guardia_baron-1,guardia_baron-2,guardia_baron-3,guardia_baron-4,guardia_baron_sargento-1,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2
 encounter d1-defensa: odda_noche,minero_cuadrilla-4,minero_cuadrilla-5,minero_cuadrilla-6,hulla-3,hulla-4,guardia_baron-5,guardia_baron-6,guardia_baron-7,guardia_baron-8
+arenas d1-puerta-y-claustro (0,9 28x13) {}
 scenes audiencia (12,4 4x3) {"dialogue":"audiencia_abadia","speaker":"mazo","once":true}
 ```
 
@@ -211,22 +324,22 @@ ghghghghgWWWWW..WWWWWhghg/ghghghgh   ##############00#########0########
 Eccccc*ccccccccccccc*ccccccc*ccccE   0000000000000000000000000000000000
 EcAccccccccccccccccccccccccccccccE   0000000000000000000000000000000000
 EccccccccccxcccccccccccccccccccBcE   0000000000000000000000000000000000
-EccccccccccccccccccxcccucccccccccE   0000000000000000000000000000000000
+E*cccccccccccccccccxcccucccccccc*E   0000000000000000000000000000000000
 ssssssssssssssss===========sbwwbss   0000000000000000111111111110000000
 sssWWWWW/WWWWWssgggggggggggsbwwbss   000#####0#####00###########0000000
 sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
-sssW===K==*==WssgggggggggggsGwwbss   000#000000000#00###########0000000
-sssW=========Wssgggggggggggsbw*bss   000#000000000#00###########0000000
+sssW===K==*==WssgggggggggggsGww*ss   000#000000000#00###########0000000
+sssW=========Wssgggggggggggsbwwbss   000#000000000#00###########0000000
 sssWWWWWdWWWWWssgggggggggggsbwwIss   000###########00###########0000000
 sssW======^==Wssgggggggggggsbwwbss   000#000000000#00###########0000000
 sssW=======c=Wssssssssssssssbwwbss   000#000000000#00000000000000000000
 sssWWdWWWWWWWWsssossxxssssssbwwbss   000###########00000000000000000000
-ssssss*sssssssfffffssffffffsbwwbss   0000000000000011111001111110000000
+ssssss*sssssssfffffssffffffsbwwbss   00000000000000#####00######0000000
 ssssssssssssssssssssssssssssbwwbss   0000000000000000000000000000000000
 ^ dardo-trastienda (10,19) {"marker":"trap_dart","detect":14,"save":"con","dc":13,"damage":"2d4","type":"poison","condition":"poisoned","turns":3,"disarmCheck":"sleight_of_hand","disarmDc":13}
-E a-plaza (0,9) -> plaza:entry-calles
+E a-plaza (0,9) -> callejon:entry-calles
 E a-escorial (33,9) -> escorial:entry-calles
-A entry-plaza (2,10)
+A entry-callejon (2,10)
 B entry-escorial (31,11)
 C cirilo (14,2)
 D fiel_pala-1 (12,3)
@@ -246,7 +359,7 @@ scenes sermon (13,5 4x3) {"dialogue":"sermon_cirilo","speaker":"cirilo","once":t
 ```
 == escorial: El Escorial (36x26, ambient 0.6)
 kkkEEEkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   333000333333333333333333333333333333
-kSSIIISSSSSSSSSSSSSSSSSSSSSSSSSSSSSk   300000000000000000000000000000000003
+kS*IIISSSSSSSSSSSSSSSSSSSSSSSSSSSSSk   300000000000000000000000000000000003
 kSSIAISSS&&SSSSSSSSSSSSSSSSSSSSSSSSk   300000000111111111100000000000000003
 kSSIIISSS&&SSSSSSSSSSSSSSSSSSSSSSSSk   300000000122222222100000000000000003
 kSSIIISSS&&SSSSSSSSSSSSSSSSSSSWWWSSk   300000000122333322100000000000###003
@@ -255,18 +368,18 @@ kSSIIISSSSSSSSSSSSSSSSSSSSSSSS*ESSSk   300000000122333322100000000000000003
 kSSIIISSSSSSSSSSSSSSSSSSSSSSSSSISSSk   300000000122333322100000000000000003
 kSSIIISSSSSSxooSSSSSSSSSSSSSSSSCSSSk   300000000122333322100000000000000003
 kSSIIISSSSSS%%%%SSSSSSSSSSSSSSSMSSSk   300000000111111111100000000000000003
-kSSIIISSSSSS%%%%SSSSSSSSSSSSSSSISSSk   300000000000000000000000000000000003
+k*SIIISSSSSS%%%%SSSSSSSSSSSSSSSISSSk   300000000000000000000000000000000003
 ERRRRRR^RRRR%%%%RRRRRRRRRRRRRRRRRSSk   000000000000000000000000000000000003
 ERBRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRSSk   000000000000000000000000000000000003
-ERRRRRRRRRRRRRRRRRRRRR^RRRRRRRRRRSSk   000000000000000000000000000000000003
+ERRRRRRRRRRRRRRRRRRRRR^RRRRQRRRRRSSk   000000000000000000000000000000000003
 kSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSISSk   300000000000000000000000000000000003
-kSSSSSSSSmmmmmmm====mmSSSSSSS&&SISSk   300000000000000011110001111111100003
+kSSSSSSSSmPmmmmm====mmSSSSSSS&&SISSk   300000000000000011110001111111100003
 kSSSSSSSSmgggmmm==K=mmSSSSSSS&&SDSSk   3000000000###00011210001222222100003
-kSSSSSSSSmgggmmm====mxSSSSSSS&&*ISSk   3000000000###00011110001233332100003
+kSSSSSSSSmgggmmm====mNSSSSSSS&&*ISSk   3000000000###00011110001233332100003
 kSSSwwwSSmgggmmmmmmmmmSSSSGSSSWWdWWk   3000000000###00000000001233332#####3
 kSSSwwwSSmmmmmmLmmmmmmSSSSSSSSWW.WWk   300000000000000000000001233332##0##3
 kSSSwwwSSmmmImmmmmmmJmSSSSSSSSWW.WWk   300000000000000000000001233332##0##3
-kSSSSSSSSummmm*mmmmmmmSSSSSSSSWWEWWk   300000000000000000000001222222##0##3
+kSSSSSSSSummmm*mmmmOmmSSSSSSSSWWEWWk   300000000000000000000001222222##0##3
 kSSSSSSSSmmmmmmmmmmmmmSSSSSSSSWWWWWk   300000000000000000000001111111#####3
 kSSSSSSSSSSSSSSSSSSSSSSSSSSSSSWWWWWk   300000000000000000000000000000#####3
 kSSSSSSSSSSSSSSSSSSSSSSSSSSSSSWWWWWk   300000000000000000000000000000#####3
@@ -275,22 +388,66 @@ kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   333333333333333333333333333333333333
 ^ cepo-sinpaga (22,13) {"marker":"trap_beartrap","detect":12,"save":"dex","dc":13,"damage":"2d6","type":"piercing","condition":"restrained","disarmCheck":"sleight_of_hand","disarmDc":12}
 E a-plaza (3,0) -> plaza:entry-escorial
 E a-calles (0,11) -> calles:entry-escorial
-E pozo-del-ahorcado (31,6) -> mina:entry-pozo
+E pozo-del-ahorcado (31,6) -> tunel:entry-pozo
 E bocamina (32,21) -> mina:entry-bocamina
 A entry-plaza (4,2)
 B entry-calles (2,12)
 C entry-pozo (31,8)
 D entry-bocamina (32,16)
 F sinpaga_enmascarado-1 (13,5)
-G sinpaga_enmascarado-2 (26,18)
+G sinpaga_cuchillero-4 (26,18)
 I sinpaga_cuchillero-1 (12,20)
 J sinpaga_cuchillero-2 (20,20)
 K sinpaga_cuchillero-3 (18,16)
 L sinpaga_bruto-1 (15,19)
 M callado-1 (31,9)
-props: barrel_oil-1, barrel_oil-2, oil_cart-1, crate-3, barrel-1, campfire-1, door-bocamina, well-1
+N cart-1 (21,17)
+O ore_pile-1 (19,21)
+P ore_pile-2 (10,15)
+Q ore_pile-3 (27,13)
+props: barrel_oil-1, barrel_oil-2, oil_cart-1, barrel-1, campfire-1, door-bocamina, well-1
+arenas escombreras (8,2 23x21) {}
 scenes callado-pozo (30,7 3x4) {"dialogue":"callado_pozo","speaker":"callado-1","once":true}
 scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enmascarado-1","once":true,"gate":true,"protects":"pozo-del-ahorcado,bocamina"}
+```
+
+### `tunel`
+
+**4-5 · Túnel de los Callados.** La galería de contrabando de Brea entre el Pozo del Ahorcado y la mina (después de D1). El grupo baja por la cuerda a un rellano (h2) y luego por una rampa. Los Callados acarrean plata por los raíles, y hay ratas entre los escombros. Dos esqueletos de mineros con arco guardan una repisa lateral (h2) con una caída de 2 niveles. Hay aceite de candil junto al entibado y una filtración de agua.
+
+```
+== tunel: Túnel de los Callados (32x14, ambient 0.12)
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ################################
+kkkkkkkkkkk...J.....kkkkkkkkkkkk   ###########222222222############
+kkkkkkkkkkk.......K.kkkkkkkkkkkk   ###########222222222############
+kkEkkkkkkkk.........kkkkkkkkkkkk   ##2########100000000############
+k.*..k..*..........F...N.......E   #2222#00000000000000000000000000
+k.A..k..........L..............E   #2222#00000000000000000000000000
+k..............G......C...*...BE   #2222100000000000000000000000000
+k....k-------------x-----x-----E   #2222#00000000000000000000000000
+k....k..........I....D.........E   #2222#00000000000000000000000000
+kkkkkk..wwwwwM........o.*......E   ######00000000000000000000000000
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ################################
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ################################
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ################################
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk   ################################
+E a-escorial (2,3) -> escorial:entry-pozo
+E a-mina (31,4) -> mina:entry-pozo
+A entry-pozo (2,5)
+B entry-mina (30,6)
+C callado-14 (22,6)
+D callado-12 (21,8)
+F callado-13 (19,4)
+G rata_gigante-2 (15,6)
+I rata_gigante-3 (16,8)
+J esqueleto_minero-1 (14,1)
+K esqueleto_minero-2 (18,2)
+L rubble_pile-2 (16,5)
+M rubble_pile_c-2 (13,9)
+N pillar_broken-2 (23,4)
+props: mine_wagon-3, mine_wagon_ore-2, barrel_oil-1
+encounter callados-del-tunel: callado-14,callado-12,callado-13,rata_gigante-2,rata_gigante-3,esqueleto_minero-1,esqueleto_minero-2
+arenas tunel (6,1 22x9) {}
 ```
 
 ### `mina`
@@ -300,7 +457,7 @@ scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enm
 ```
 == mina: La mina (40x30, ambient 0.12)
 #####################E##################   #####################3##################
-####################...#################   ####################333#################
+####################.*.#################   ####################333#################
 ####################.B.#################   ####################333#################
 ####################...#################   ####################333#################
 ####################...#################   ####################333#################
@@ -309,30 +466,30 @@ scenes sinpaga-jefe (1,1 7x24) {"dialogue":"sinpaga_jefe","speaker":"sinpaga_enm
 ##############...............H.#########   ##############00000000000000020#########
 ##############...............HH##M.#####   ##############00000000000000022##00#####
 ##############.......##......HH##..#####   ##############0000000##00000022##00#####
-##############..HFH..##......^H#.......#   ##############0033300##00000022#0000000#
+##############..HFH..##....Q.^H#..R....#   ##############0033300##00000022#0000000#
 ##############..H............HH#...f..O#   ##############00200000000000022#0000000#
-##############..H*...........HG#.......#   ##############00100000000000022#0000000#
-E.A.*..................o.......&.......E   0000000000000000000000000000000000000000
+##############..H*...........HG#.o....*#   ##############00100000000000022#0000110#
+E.A.*..................o.......&.......E   0000000000000000000000000000000000001100
 E-------x----------x------x----&-u-*.D.E   0000000000000000000000000000000000000000
 E............................**&.......E   0000000000000000000000000000000000000000
 ##############...........#...HH#..k.&&.#   ##############00000000000#00022#0000000#
 ##############...........#...HH#....&&.#   ##############00000000000#00022#0000000#
-##############......wwww.....HH#.......#   ##############00000000000000022#0000000#
+##############....P.wwww.....HH#.......#   ##############00000000000000022#0000000#
 ##############......wwww.....H######..##   ##############0000000000000001######00##
 ##############......wwww...Jo..#####.N##   ##############00000000000000000#####00##
 ##############.................#########   ##############00000000000000000#########
-###############..#######################   ###############00#######################
-###############..#######################   ###############00#######################
+###############..#######################   ###############11#######################
+###############..#######################   ###############11#######################
 ###############L.#######################   ###############00#######################
 ###############*.#######################   ###############00#######################
 E..*.....^...K...#######################   00000000000000000#######################
-E.C..............#######################   00000000000000000#######################
+E.C.........o....#######################   00000000000000000#######################
 E.....##################################   000000##################################
 ########################################   ########################################
 ^ tablon-podrido (29,10) {"marker":"trap_rotten_plank","detect":14,"save":"dex","dc":12,"damage":"2d6","type":"bludgeoning","condition":"prone","disarmCheck":"athletics","disarmDc":12}
 ^ cable-derrumbe (9,26) {"marker":"trap_tripwire","detect":13,"save":"dex","dc":13,"damage":"2d8","type":"bludgeoning","half":true,"surface":"rubble","disarmCheck":"sleight_of_hand","disarmDc":13}
 E a-escorial-bocamina (0,13) -> escorial:entry-bocamina
-E a-escorial-pozo (21,0) -> escorial:entry-pozo
+E a-escorial-pozo (21,0) -> tunel:entry-mina
 E a-abadia-cripta (0,26) -> abadia:entry-cripta
 E a-boveda (39,13) -> boveda:entry-mina
 A entry-bocamina (2,13)
@@ -348,10 +505,16 @@ L callado-6 (15,24)
 M callado-7 (33,8)
 N callado-8 (37,20)
 O callado_palido-2 (38,11)
-props: fuse_charges-1, remains_forty-1, mine_wagon-1, mine_wagon_ore-1, barrel_oil-1, mine_wagon-2, barrel_oil-2, barrel-1
+P rubble_pile-1 (18,18)
+Q ore_pile-1 (27,10)
+R rubble_pile_c-1 (34,10)
+props: fuse_charges-1, remains_forty-1, mine_wagon-1, mine_wagon_ore-1, barrel_oil-1, mine_wagon-2, barrel_oil-2, barrel-1, powder_keg-1, barrel_oil-3
 encounter callados-andamios: callado-2,callado-3,callado-4,callado_palido-1
 encounter callados-cripta: callado-5,callado-6
 encounter emboscada-sellada: callado-7,callado-8,callado_palido-2
+arenas andamios (14,5 17x17) {}
+arenas cripta (6,22 11x6) {}
+arenas galeria-sellada (31,8 9x13) {}
 scenes galeria-sellada (32,12 3x5) {"dialogue":"galeria_sellada","speaker":"garran","once":true}
 ```
 
@@ -369,15 +532,15 @@ scenes galeria-sellada (32,12 3x5) {"dialogue":"galeria_sellada","speaker":"garr
 ######vivvvvvvvvvvvvvvvvvv######   ######22222222222222222222######
 ######vvvDvvvvvvvvvvvvFvvv######   ######22222222222222222222######
 ######vvvvv*vvvvvvvv*vvvvv######   ######22222222222222222222######
-######vvvvvrvvvvvvvvrvvvvv######   ######22222222222222222222######
+######vJvvvrvvvvvvvvrvvvvv######   ######22222222222222222222######
 ######vvvvvvvvvvvvvvvvvvvv######   ######22222222222222222222######
 ######vv#vvvvvCvvvvvvvv#vv######   ######22#22222222222222#22######
-Evvvvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
-EvAvvvvvvvvvvvvvvvvIvvvvvv######   22222222222222222222222222######
+Ev*vvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
+EvAvvvvvvvLvvvvvvvvIvvvvvv######   22222222222222222222222222######
 Evvvvvvvvvvvvvvvvvvvvvvvvv######   22222222222222222222222222######
 ######vv#vvvvvvvvvvvvvv#vv######   ######22#22222222222222#22######
 ######vvvvvvvvvvvvvvvvvvov######   ######22222222222222223333######
-######vvvvvrvvvvvvvvrvvovv######   ######22222222222222223333######
+######vKvvvrvvvvvvvvrvvovv######   ######22222222222222223333######
 ######vvvvv*vvvvvvvv*vvvov######   ######22222222222222223333######
 ######vvvvGvvvvvvvvvvvvvv*######   ######22222222222222223333######
 ######vvvvvvvvvvvvvvvvvvvv######   ######22222222222222222222######
@@ -393,7 +556,11 @@ D callado-9 (9,6)
 F callado-10 (22,6)
 G callado-11 (10,18)
 I callado_palido-3 (19,12)
+J sarcophagus-1 (7,8)
+K sarcophagus-2 (7,16)
+L pillar_broken-1 (10,12)
 props: resonator-1, resonator-2, resonator-3, resonator-4, powder_keg-1, powder_keg-2, powder_keg-3, lever-polea, pulley-1, inscription-1
+arenas boveda (3,1 25x21) {}
 scenes brea-habla (3,10 4x5) {"dialogue":"boveda_brea","speaker":"absalon","once":true}
 collapse derrumbe (13,9 5x6) {"height":0,"terrain":"vault","trigger":"brea_vuela_polvorin"}
 collapse derrumbe-borde (18,9 1x6) {"height":1,"terrain":"vault","trigger":"brea_vuela_polvorin"}

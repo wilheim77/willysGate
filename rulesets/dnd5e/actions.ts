@@ -14,6 +14,7 @@ import {
   OBJECT_TAG,
   simulatePush,
   surfaceAt,
+  trapAt,
   hasTag,
   isHostile,
   stat,
@@ -313,10 +314,12 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
     const sneak = sneakApplies(state, e, id, targetEntity);
     const p = attackPreview(state, weaponAttackSpec(state, e, id, targetEntity.id, sneak));
     const n = attacksPerAction(e);
+    const collateral = oilBarrelCollateral(state, targetEntity, 1 - Math.pow(1 - p.chance, n));
     return {
       valid: true,
       chance: p.chance,
       expectedDamage: p.expected * n,
+      ...(collateral.length ? { collateral } : {}),
       breakdown: attackBreakdown(p, n, sneak),
     };
   }
@@ -429,6 +432,17 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   return { valid: false, reason: 'Acción desconocida.' };
 }
 
+/** An oil barrel's burst (3d6 fire, DEX save for half: ~7.5 each), for previews and the AI. */
+export const OIL_BLAST = 7.5;
+
+/** Who an oil barrel would burn if this attack breaks it (one hit does): everyone within 1 tile. */
+export function oilBarrelCollateral(state: GameState, barrel: Entity, breakChance: number): { entityId: string; damage: number }[] {
+  if (!hasTag(barrel, 'explosive_oil')) return [];
+  return Object.values(state.entities)
+    .filter((o) => o.id !== barrel.id && !o.tags.includes(OBJECT_TAG) && standing(o) && gridDistance(o.position, barrel.position) <= 1)
+    .map((o) => ({ entityId: o.id, damage: breakChance * OIL_BLAST }));
+}
+
 /** Prediction of a push away from `from`: where it lands and whether it falls (for previews). */
 function describePush(state: GameState, target: Entity, from: Vec2, distance: number): { to: Vec2; lines: NonNullable<ActionPreview['breakdown']>; expected: number } {
   const sim = simulatePush(dnd5eRef(), state, target.id, Math.sign(target.position.x - from.x), Math.sign(target.position.y - from.y), distance);
@@ -437,8 +451,13 @@ function describePush(state: GameState, target: Entity, from: Vec2, distance: nu
   else if (sim.collidedWith) lines.push({ label: 'Choca contra algo', value: sim.to.x === target.position.x && sim.to.y === target.position.y ? 'no se mueve' : '' });
   const surface = surfaceAt(state, sim.to);
   if (surface) lines.push({ label: 'Acaba sobre', value: SURFACES[surface.type]?.label ?? surface.type, term: 'surface' });
+  // An armed trap where it lands goes off under it.
+  const trap = trapAt(state, sim.to);
+  const moved = sim.to.x !== target.position.x || sim.to.y !== target.position.y;
+  const trapDamage = trap?.armed && moved && trap.params.damage ? averageOf(parseDice(String(trap.params.damage))) : 0;
+  if (trapDamage > 0) lines.push({ label: 'Cae en una trampa', value: `~${trapDamage.toFixed(1).replace('.', ',')} de daño`, term: 'trap' });
   // What the shove is worth in hit points, so the AI (and the numbers) value a good push.
-  const expected = (sim.dropped > 1 ? (sim.dropped - 1) * 3.5 : 0) + (surface ? (SURFACES[surface.type]?.hazard ?? 0) : 0);
+  const expected = (sim.dropped > 1 ? (sim.dropped - 1) * 3.5 : 0) + (surface ? (SURFACES[surface.type]?.hazard ?? 0) : 0) + trapDamage;
   return { to: sim.to, lines, expected };
 }
 

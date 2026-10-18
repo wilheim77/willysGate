@@ -41,9 +41,13 @@ export default {
     'powder_keg-3': [24, 15],
     'lever-polea': [21, 1], // pulley and chains: drops the ore bucket on the trench (dialogue pulley_polea / lever_polea)
     'pulley-1': [20, 1],
+    'sarcophagus-1': [7, 8],
+    'sarcophagus-2': [7, 16],
+    'pillar_broken-1': [10, 12],
     'inscription-1': [7, 5], // the elvish carving: [Historia] CD 13 for an elf or dwarf
   },
   lights: [
+    { name: 'candil-salida', at: [2, 11], radius: 3, color: '#ffb050', flicker: 0.18, intensity: 0.8, prop: 'oil_lamp' },
     { name: 'brillo-resonador-1', at: [11, 7], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
     { name: 'brillo-resonador-2', at: [20, 7], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
     { name: 'brillo-resonador-3', at: [11, 17], radius: 3, color: '#b8c8ff', flicker: 0.05, intensity: 0.7 },
@@ -56,6 +60,10 @@ export default {
   // brea_derrotado on victory.
   exits: [{ name: 'a-mina', rect: [0, 11, 1, 3], to: 'mina', spawn: 'entry-boveda' }],
   zones: {
+    // Fight areas (docs/MAPS.md, «Combates tácticos»): checked for cover, height and hazards.
+    arenas: [
+      { name: 'boveda', rect: [3, 1, 25, 21] },
+    ],
     scenes: [{ name: 'brea-habla', rect: [3, 10, 4, 5], props: { dialogue: 'boveda_brea', speaker: 'absalon', once: true } }],
     // Proposed layer (I5): Brea's blast sinks the centre. Pit at h0, a shallow edge at h1.
     collapse: [

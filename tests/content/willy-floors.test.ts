@@ -3,7 +3,7 @@ import { type BaseCommand, type GameState, OBSTACLE_TAG, SYSTEM_ISSUER, createEn
 import { willy } from '../../rulesets/willy';
 import ninja from '../../content/willy/assets/ninja.json';
 import floorsData from '../../content/willy/data/floors.json';
-import { BIOMES, generateFloor, reachable, usableSides } from '../../content/willy/gen/floor';
+import { BIOMES, floorSpec, generateFloor, reachable, usableSides } from '../../content/willy/gen/floor';
 import { type RivalRecord, generateRival, rivalEntity, rivalKeys, rivalLine } from '../../content/willy/gen/rivals';
 import { buildFloor, maps, newWillyGame, rivalsOf } from '../../content/willy/setup';
 
@@ -41,9 +41,14 @@ describe('Willy: procedural floors', () => {
     [3, deep ? 150 : 40],
     [4, deep ? 150 : 40],
     [5, deep ? 150 : 40],
+    [6, deep ? 150 : 20],
+    [7, deep ? 150 : 20],
+    [8, deep ? 150 : 20],
+    [9, deep ? 150 : 20],
+    [10, deep ? 150 : 20],
   ])('floor %i, %i seeds: every floor generates and keeps its guarantees', (floor, seeds) => {
     let rivals = 0;
-    const spec = floorsData.plantas[floor - 1]!;
+    const spec = floorSpec(floor);
     for (let seed = 1; seed <= seeds; seed++) {
       const f = generateFloor(seed, floor);
       const { map, entities, spawns, systems } = f.setup;
@@ -67,8 +72,8 @@ describe('Willy: procedural floors', () => {
       for (const e of entities) expect((ninja.sprites as Record<string, unknown>)[e.spriteId], e.spriteId).toBeDefined();
       if (f.rival) rivals++;
     }
-    // A rival room half of the time on floor 1, 80 % below.
-    const p = floor === 1 ? 0.5 : 0.8;
+    // A rival room half of the time in the first planta (floors 1-2), 80 % below.
+    const p = spec.plantaId === 1 ? 0.5 : 0.8;
     expect(rivals).toBeGreaterThan(seeds * (p - 0.2));
     expect(rivals).toBeLessThan(seeds * (p + 0.2));
   });
@@ -119,7 +124,7 @@ describe('Willy: procedural floors', () => {
   it('down the stairs to the next Camerino, whose lift goes one floor further', () => {
     const engine = createEngine(willy, 'willy', { dialogues: {}, maps });
     let s = newWillyGame(engine, 4, { start: 'planta-1' });
-    for (let n = 1; n <= 5; n++) {
+    for (let n = 1; n <= 10; n++) {
       expect(s.map.id).toBe(`planta-${n}`);
       const stairs = zonesOf(s, 'exits')[0]!;
       s = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, position: { x: stairs.x, y: stairs.y } } } };
@@ -127,7 +132,7 @@ describe('Willy: procedural floors', () => {
       if (!up.ok) throw new Error(up.error.message);
       expect(up.state.entities.maripuri).toBeDefined();
       const lift = zonesOf(up.state, 'exits')[0];
-      if (n === 5) {
+      if (n === 10) {
         expect(lift).toBeUndefined();
         break;
       }
@@ -202,11 +207,11 @@ describe('Willy: procedural rivals', () => {
 });
 
 describe('Willy: floor mechanics on the generated floors', () => {
-  it('floor 1 has a tide in the boss room; floor 2 has conveyor belts', () => {
+  it('floor 1 has a tide in the boss room; the hypermarket (floor 3) has conveyor belts', () => {
     const f1 = generateFloor(3, 1).setup;
     expect(zonesOf({ systems: f1.systems } as unknown as GameState, 'marea').length).toBeGreaterThan(0);
     let belts = 0;
-    for (let seed = 1; seed <= 10; seed++) belts += zonesOf({ systems: generateFloor(seed, 2).setup.systems } as unknown as GameState, 'cintas').length;
+    for (let seed = 1; seed <= 10; seed++) belts += zonesOf({ systems: generateFloor(seed, 3).setup.systems } as unknown as GameState, 'cintas').length;
     expect(belts).toBeGreaterThan(0);
   });
 });

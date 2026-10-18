@@ -92,6 +92,12 @@ export interface Ruleset {
   /** A creature dropped `levels` levels in one go (pushed off a ledge). */
   onFall?(state: GameState, entityId: string, levels: number, rng: RngCursor): ActionOutcome;
 
+  /**
+   * For the AI: expected damage of ending a turn on `p` beyond its surface (next to a barrel
+   * that may blow up, under a falling rock). 0 or omitted means nothing to fear.
+   */
+  dangerAt?(state: GameState, entityId: string, p: Vec2): number;
+
   /** Passive chance to spot a hidden trap nearby (no dice: e.g. 5e passive Perception). */
   noticeTrap?(state: GameState, entityId: string, trap: Trap): boolean;
   /** What a trap does to whoever sets it off. */
@@ -184,6 +190,11 @@ export interface ActionPreview {
   breakdown?: { label: string; value?: string; term?: string }[];
   /** Tiles an area effect would cover, for the UI to paint before confirming. */
   affectedTiles?: Vec2[];
+  /**
+   * Expected damage to others than the target (a barrel's explosion, a chain of shoves).
+   * The AI counts it as a gain against foes and a loss against friends, itself included.
+   */
+  collateral?: { entityId: string; damage: number }[];
 }
 
 export interface ActionOutcome {

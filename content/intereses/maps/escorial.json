@@ -10,8 +10,8 @@
  "tilewidth": 32,
  "tileheight": 32,
  "infinite": false,
- "nextlayerid": 9,
- "nextobjectid": 35,
+ "nextlayerid": 10,
+ "nextobjectid": 41,
  "properties": [
   {
    "name": "name",
@@ -136,7 +136,7 @@
     },
     {
      "id": 6,
-     "name": "sinpaga_enmascarado-2",
+     "name": "sinpaga_cuchillero-4",
      "type": "",
      "point": true,
      "x": 848,
@@ -244,7 +244,7 @@
     },
     {
      "id": 15,
-     "name": "crate-3",
+     "name": "cart-1",
      "type": "",
      "point": true,
      "x": 688,
@@ -256,6 +256,42 @@
     },
     {
      "id": 16,
+     "name": "ore_pile-1",
+     "type": "",
+     "point": true,
+     "x": 624,
+     "y": 688,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 17,
+     "name": "ore_pile-2",
+     "type": "",
+     "point": true,
+     "x": 336,
+     "y": 496,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 18,
+     "name": "ore_pile-3",
+     "type": "",
+     "point": true,
+     "x": 880,
+     "y": 432,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 19,
      "name": "barrel-1",
      "type": "",
      "point": true,
@@ -267,7 +303,7 @@
      "visible": true
     },
     {
-     "id": 17,
+     "id": 20,
      "name": "campfire-1",
      "type": "",
      "point": true,
@@ -279,7 +315,7 @@
      "visible": true
     },
     {
-     "id": 18,
+     "id": 21,
      "name": "door-bocamina",
      "type": "",
      "point": true,
@@ -291,7 +327,7 @@
      "visible": true
     },
     {
-     "id": 19,
+     "id": 22,
      "name": "well-1",
      "type": "",
      "point": true,
@@ -315,7 +351,85 @@
    "y": 0,
    "objects": [
     {
-     "id": 20,
+     "id": 23,
+     "name": "farol-camino-plaza",
+     "type": "",
+     "point": true,
+     "x": 80,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 24,
+     "name": "farol-camino-calles",
+     "type": "",
+     "point": true,
+     "x": 48,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "radius",
+       "type": "float",
+       "value": 3.5
+      },
+      {
+       "name": "intensity",
+       "type": "float",
+       "value": 0.85
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#ffc070"
+      },
+      {
+       "name": "flicker",
+       "type": "float",
+       "value": 0.12
+      },
+      {
+       "name": "prop",
+       "type": "string",
+       "value": "lantern"
+      }
+     ]
+    },
+    {
+     "id": 25,
      "name": "hoguera-sinpaga",
      "type": "",
      "point": true,
@@ -349,7 +463,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 26,
      "name": "farol-pozo",
      "type": "",
      "point": true,
@@ -388,7 +502,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 27,
      "name": "antorcha-bocamina",
      "type": "",
      "point": true,
@@ -450,7 +564,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 23,
+     "id": 28,
      "name": "aceite-carro",
      "type": "",
      "x": 384,
@@ -468,7 +582,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 29,
      "name": "balsa-escoria",
      "type": "",
      "x": 128,
@@ -486,7 +600,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 30,
      "name": "escombros-ladera-a",
      "type": "",
      "x": 288,
@@ -504,7 +618,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 31,
      "name": "escombros-ladera-b",
      "type": "",
      "x": 928,
@@ -534,7 +648,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 27,
+     "id": 32,
      "name": "cuerda-aceite",
      "type": "",
      "x": 224,
@@ -572,7 +686,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 33,
      "name": "cepo-sinpaga",
      "type": "",
      "x": 704,
@@ -642,7 +756,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 29,
+     "id": 34,
      "name": "a-plaza",
      "type": "",
      "x": 96,
@@ -665,7 +779,7 @@
      ]
     },
     {
-     "id": 30,
+     "id": 35,
      "name": "a-calles",
      "type": "",
      "x": 0,
@@ -688,7 +802,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 36,
      "name": "pozo-del-ahorcado",
      "type": "",
      "x": 992,
@@ -701,7 +815,7 @@
       {
        "name": "to",
        "type": "string",
-       "value": "mina"
+       "value": "tunel"
       },
       {
        "name": "spawn",
@@ -721,7 +835,7 @@
      ]
     },
     {
-     "id": 32,
+     "id": 37,
      "name": "bocamina",
      "type": "",
      "x": 1024,
@@ -757,6 +871,29 @@
   },
   {
    "id": 8,
+   "name": "arenas",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "opacity": 1,
+   "visible": true,
+   "x": 0,
+   "y": 0,
+   "objects": [
+    {
+     "id": 38,
+     "name": "escombreras",
+     "type": "",
+     "x": 256,
+     "y": 64,
+     "width": 736,
+     "height": 672,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": 9,
    "name": "scenes",
    "type": "objectgroup",
    "draworder": "topdown",
@@ -766,7 +903,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 33,
+     "id": 39,
      "name": "callado-pozo",
      "type": "",
      "x": 960,
@@ -794,7 +931,7 @@
      ]
     },
     {
-     "id": 34,
+     "id": 40,
      "name": "sinpaga-jefe",
      "type": "",
      "x": 32,
@@ -840,10 +977,10 @@
    "name": "terrain-logic",
    "tilewidth": 32,
    "tileheight": 32,
-   "tilecount": 59,
-   "columns": 59,
+   "tilecount": 64,
+   "columns": 64,
    "image": "terrain-logic.png",
-   "imagewidth": 1888,
+   "imagewidth": 2048,
    "imageheight": 32,
    "margin": 0,
    "spacing": 0,
@@ -1695,6 +1832,11 @@
        "name": "height",
        "type": "int",
        "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
       }
      ]
     },
@@ -1750,6 +1892,91 @@
        "name": "height",
        "type": "int",
        "value": 3
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 59,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "low_wall"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      },
+      {
+       "name": "walkable",
+       "type": "bool",
+       "value": false
+      }
+     ]
+    },
+    {
+     "id": 60,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 61,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 62,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "balcony"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 63,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "rock"
+      },
+      {
+       "name": "height",
+       "type": "int",
+       "value": 4
       },
       {
        "name": "walkable",
