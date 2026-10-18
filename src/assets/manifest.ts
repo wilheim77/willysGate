@@ -41,6 +41,25 @@ export interface Rect {
   h: number;
 }
 
+/**
+ * How to play one ability/spell's VFX props (`fx_*` ids into this manifest's own `props`),
+ * keyed by whatever id the game's events carry (dnd5e's `spellId`, or a game's own ability
+ * id). See docs/ART_CATALOG.md "Efectos de conjuros y habilidades" for the Intereses set.
+ */
+export type SpellFx =
+  /** From the caster to the target, rotated to the travel angle; `count` > 1 staggers several (Magic Missile). */
+  | { kind: 'projectile'; fx: string; impactFx?: string; tilesPerSec?: number; count?: number; staggerMs?: number }
+  /** A beam stretched along the caster-target line for a fixed time, then an impact. */
+  | { kind: 'ray'; fx: string; impactFx?: string; durationMs?: number }
+  /** Once, at the target (or the caster if there is none) — a touch spell or a single mote. */
+  | { kind: 'instant'; fx: string }
+  /** One flare per tile of the event's `tiles` (computed by the engine/ruleset), staggered by distance from the caster. */
+  | { kind: 'cone'; fx: string; delayPerTileMs?: number }
+  /** A bead flies to the target, then the burst plays there (Fireball). */
+  | { kind: 'burst'; beadFx: string; fx: string; tilesPerSec?: number }
+  /** Centred on the caster (Thunderwave; Turn Undead also flashes `extraFx` on the caster). */
+  | { kind: 'ring'; fx: string; extraFx?: string };
+
 export type SpriteArt =
   /** 4-direction character sheet built by scripts/art/build-characters.ts from LPC layers. */
   | { kind: 'lpc'; url: string; animations: Record<string, LpcAnimation> }
@@ -63,6 +82,15 @@ export interface AssetManifest {
   surfaces?: Record<string, { url: string; frames: Rect[]; fps: number; loop: boolean }>;
   /** Hand-made HUD portraits by spriteId; otherwise the HUD crops the sprite's idle frame. */
   portraits?: Record<string, Rect & { url: string }>;
+  /** VFX per spell/ability id (see `SpellFx`). Missing ids fall back to a generic ring flourish. */
+  fx?: Record<string, SpellFx>;
+  /**
+   * Which engine event triggers the 'cast' animation + `fx` lookup, and which of its fields
+   * hold the caster, the ability/spell id, the target and (for area effects) the tiles —
+   * defaults to dnd5e's `spellCast` shape (casterId/spellId/target/tiles) when omitted, so
+   * existing content needs nothing extra.
+   */
+  castEvent?: { type: string; casterField: string; idField: string; targetField: string; tilesField?: string };
 }
 
 export const tilesetKey = (id: string): string => `tileset:${id}`;

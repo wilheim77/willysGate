@@ -9971,5 +9971,11 @@
       "kind": "instant",
       "fx": "fx-confeti"
     }
+  },
+  "castEvent": {
+    "type": "skillUsed",
+    "casterField": "entityId",
+    "idField": "habilidad",
+    "targetField": "target"
   }
 }
