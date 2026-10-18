@@ -168,7 +168,7 @@
     },
     {
      "id": 9,
-     "name": "fanatico_pala-3",
+     "name": "predicador_pala-1",
      "type": "",
      "point": true,
      "x": 208,
@@ -1083,7 +1083,7 @@
       {
        "name": "fight",
        "type": "string",
-       "value": "fanatico_pala-1,fanatico_pala-2,fanatico_pala-3"
+       "value": "fanatico_pala-1,fanatico_pala-2,predicador_pala-1"
       }
      ]
     }
