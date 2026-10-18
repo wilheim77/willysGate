@@ -498,3 +498,19 @@ Vista previa de todos los efectos de *Willy*: [`art-previews/ninja-ability-fx.pn
 ## Animaciones de acción de *Willy* (`actions.json`)
 
 Las mismas `attack`, `cast` y `hurt` que en *Intereses* (ver «Animaciones de acción»), derivadas con `build-action-anims.ts` para las 9 clases de Willy, los 8 compañeros, Chencho, los enemigos de la Planta 1 (`gaviota-de-lonja`, `rata-portuaria`, `cangrejo-con-casco`, `bocarte-andante`, `mimico`) y los jefes (`jefe-centollo`, `jefe-encargada`, `jefe-giganton`, `jefe-socorrista`, `jefe-presentador`). Sus frames pasan a `assets/ninja/actors.png`. Vista previa: [`art-previews/ninja-actions.png`](art-previews/ninja-actions.png).
+
+# Legibilidad de los mapas: qué se pisa y qué no (*Intereses*)
+
+Tres cambios para que se distinga a tamaño de móvil, sumados al tinte y al borde negro que el cliente ya pone en las casillas bloqueadas:
+
+1. **Tejados** (`house`, `house_plain`): teja árabe de barro (`roof_clay_1/2`) en lugar de pizarra oscura, que se confundía con el suelo. Llevan **alero** como `rim` (`rim_eaves`): remates redondos de teja, sofito oscuro y la sombra sobre la fachada de entramado.
+2. **Muros y roca maciza** (`wall`, `stone_wall`): sillares grandes y oscuros con una trama diagonal tenue. Ya no repiten en cada casilla el borde de ladrillo iluminado, que convertía las masas de muro en un suelo a rayas.
+3. **Escalones** (nuevo campo `stair` del terreno): la cara que se dibuja en lugar de `face` cuando una casilla transitable está un nivel por encima de otra transitable al sur. Tiene huellas cada 3 filas (dos peldaños por nivel), así que no se confunde con un muro. Hay cuatro tipos:
+   - `stair_stone`: `stone`, `cobble`, `vault`, `rails*` y `door_open`.
+   - `stair_wood`: `planks` y `scaffold`.
+   - `stair_earth`: con travesaños de troncos, para `road*`, `mud`, `scrub`, `dirt`, `riverbank*` y `slag_heap`.
+   - `stair_rock`: `rock` y `slag`.
+
+   **Petición al cliente:** en `buildWorld`, si la casilla es escalón y `art.stair` existe, usar ese frame en el `tileSprite` de la cara en lugar de `art.face` y no dibujar las líneas de huella. Hay que añadir `stair?: number` al tipo del terreno en `src/assets/manifest.ts`.
+
+Antes y después, simulando el render del cliente: `art-previews/0x72-<mapa>-legibilidad.png` para `camino`, `plaza`, `abadia`, `calles`, `escorial`, `mina` y `boveda`, y la puerta del barón en la plaza a 4×: [`art-previews/0x72-plaza-puerta-baron-legibilidad.png`](art-previews/0x72-plaza-puerta-baron-legibilidad.png).

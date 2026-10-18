@@ -1,5 +1,5 @@
 {
-  "$comment": "Terrain art for the 0x72 preset: dungeon from 0x72 (sprite names from tile_list_v1.7), outdoor ground from Ninja Adventure ({atlas, cell}), and tiles drawn by scripts/art/build-extra-art.ts ({atlas: generated/..., sprite}). 'rim' is an optional lip strip for the renderer (see docs/ART_CATALOG.md). Build with `npm run art`.",
+  "$comment": "Terrain art for the 0x72 preset: dungeon from 0x72 (sprite names from tile_list_v1.7), outdoor ground from Ninja Adventure ({atlas, cell}), and tiles drawn by scripts/art/build-extra-art.ts ({atlas: generated/..., sprite}). 'rim' is an optional lip strip for the renderer (houses use it for the eaves), 'stair' an optional face for walkable one-level steps (see docs/ART_CATALOG.md). Build with `npm run art`.",
   "atlas": "0x72-dungeontileset-ii/0x72_DungeonTilesetII_v1.7.png",
   "tileList": "0x72-dungeontileset-ii/tile_list_v1.7",
   "tileSize": 16,
@@ -16,6 +16,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "stone_face_lip"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_stone"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -71,6 +75,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "dirt_face"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
@@ -85,6 +93,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "slag_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_rock"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -123,6 +135,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "planks_face"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_wood"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_wood"
@@ -150,6 +166,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "door_open_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_stone"
       }
     },
     "scaffold": {
@@ -166,6 +186,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "scaffold_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_wood"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -187,6 +211,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "stone_face_lip"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_stone"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_stone"
@@ -202,6 +230,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "stone_face_lip"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_stone"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -226,6 +258,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "vault_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_stone"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -254,6 +290,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -312,6 +352,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
@@ -336,6 +380,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
@@ -359,6 +407,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -417,6 +469,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rock_face"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_rock"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_stone"
@@ -440,6 +496,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "masonry_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_stone"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -487,32 +547,40 @@
       "top": [
         {
           "atlas": "generated/intereses-0x72-extra.png",
-          "sprite": "roof_1"
+          "sprite": "roof_clay_1"
         },
         {
           "atlas": "generated/intereses-0x72-extra.png",
-          "sprite": "roof_2"
+          "sprite": "roof_clay_2"
         }
       ],
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "timber_face_window"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_eaves"
       }
     },
     "house_plain": {
       "top": [
         {
           "atlas": "generated/intereses-0x72-extra.png",
-          "sprite": "roof_1"
+          "sprite": "roof_clay_1"
         },
         {
           "atlas": "generated/intereses-0x72-extra.png",
-          "sprite": "roof_2"
+          "sprite": "roof_clay_2"
         }
       ],
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "timber_face"
+      },
+      "rim": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "rim_eaves"
       }
     },
     "stone_wall": {
@@ -573,6 +641,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -635,6 +707,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "slag_face"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_stone"
@@ -691,6 +767,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
@@ -749,6 +829,10 @@
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
       },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
+      },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "rim_dirt"
@@ -801,6 +885,10 @@
       "face": {
         "atlas": "generated/intereses-0x72-extra.png",
         "sprite": "earth_face"
+      },
+      "stair": {
+        "atlas": "generated/intereses-0x72-extra.png",
+        "sprite": "stair_earth"
       },
       "rim": {
         "atlas": "generated/intereses-0x72-extra.png",
