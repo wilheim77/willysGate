@@ -21,8 +21,8 @@ import {
 import { OIL_BLAST, listActions, performAction, previewAction } from './actions';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onSurface, triggerTrap } from './environment';
 import { setDnd5eRef } from './ref';
-import { profBonus } from './character';
-import { SPELLS } from './data';
+import { profBonus, tagValues } from './character';
+import { MONSTER_ACTIONS, SPELLS } from './data';
 import { parseDice, rollDice, sum } from './dice';
 import { Resolver, canReact, chanceToSucceed, dealDamage, die, heal, resolveAttack, rollSave, spellDc, standing } from './resolve';
 import { d20Check, resolveRollMode } from '../common/d20';
@@ -59,6 +59,12 @@ const resources: Record<string, ResourceDef> = {
   channel_divinity: { label: 'Canalizar divinidad', refresh: 'shortRest' },
   relentless: { label: 'Aguante incansable', refresh: 'longRest' },
   bleed: { label: 'Turnos antes de morir', refresh: 'never' },
+  drained: { label: 'Vida drenada', refresh: 'never' },
+  // Monsters: innate spells (x/day) and their own powers (recharge or x/day).
+  ...Object.fromEntries(Object.entries(SPELLS).map(([id, sp]) => [`innate_${id}`, { label: `${sp.label} (innato)`, refresh: 'longRest' } as ResourceDef])),
+  ...Object.fromEntries(
+    Object.entries(MONSTER_ACTIONS).map(([id, a]) => [`use_${id}`, { label: a.recharge ? `${a.label} (recarga ${a.recharge}-6)` : `${a.label} (${a.perDay ?? 1}/día)`, refresh: a.recharge ? 'never' : 'longRest' } as ResourceDef]),
+  ),
 };
 
 const conditions: Record<string, ConditionDef> = {
@@ -70,7 +76,7 @@ const conditions: Record<string, ConditionDef> = {
   paralyzed: { label: 'Paralizado', description: 'No puede moverse ni actuar. Los ataques cuerpo a cuerpo contra él son críticos.' },
   poisoned: { label: 'Envenenado', description: 'Desventaja en tiradas de ataque y pruebas de característica.' },
   prone: { label: 'Derribado' },
-  restrained: { label: 'Apresado', description: 'Velocidad 0.' },
+  restrained: { label: 'Apresado', description: 'Velocidad 0. Los ataques contra él tienen ventaja; los suyos, desventaja.' },
   stunned: { label: 'Aturdido' },
   unconscious: { label: 'Inconsciente' },
   deafened: { label: 'Ensordecido' },
@@ -91,6 +97,7 @@ const conditions: Record<string, ConditionDef> = {
   disengaged: { label: 'Retirándose', description: 'No provoca ataques de oportunidad.' },
   turned: { label: 'Expulsado', description: 'Se acobarda y pierde sus turnos hasta que algo le hace daño.' },
   spirit_guardians: { label: 'Espíritus guardianes', description: 'Los enemigos que empiezan su turno cerca reciben daño radiante.' },
+  stench_immune: { label: 'Hecho al hedor', description: 'Ya ha resistido el hedor de un ghast.' },
 };
 
 const glossary: Record<string, GlossaryEntry> = {
@@ -177,7 +184,7 @@ function difficulty(state: GameState, entityId: string, source: string): number 
   const e = state.entities[entityId];
   if (!e) throw new Error(`dnd5e: unknown entity "${entityId}"`);
   if (source === 'spell') {
-    const ability = CASTING_ABILITY[tagValue(e, 'class') ?? ''];
+    const ability = CASTING_ABILITY[tagValue(e, 'class') ?? ''] ?? (tagValue(e, 'casting') as Ability | undefined);
     if (!ability) return 10;
     return 8 + proficiencyBonus(stat(e, 'level', 1)) + abilityModifier(stat(e, ability, 10));
   }
@@ -186,10 +193,20 @@ function difficulty(state: GameState, entityId: string, source: string): number 
 
 const isAlive = (e: Entity) => !hasCondition(e, 'dead');
 
-/** Start of turn: bleeding out, and damage from enemies' Spirit Guardians. */
+/** Start of turn: bleeding out, recharging powers, Spirit Guardians and a ghast's stench. */
 function onTurnStart(ruleset: Ruleset, state: GameState, id: string, rng: RngCursor): ActionOutcome {
   const r = new Resolver(ruleset, state, rng);
   const e = state.entities[id]!;
+  // Recharge 5-6: a spent power may come back.
+  for (const a of tagValues(e, 'action')) {
+    const power = MONSTER_ACTIONS[a];
+    const pool = e.resources[`use_${a}`];
+    if (!power?.recharge || !pool || pool.current >= pool.max) continue;
+    if (rng.die(6) >= power.recharge) {
+      r.apply({ type: 'modifyResource', entityId: id, resource: `use_${a}`, delta: pool.max - pool.current });
+      r.emit({ type: 'reactionUsed', entityId: id, detail: `${power.label}: recargada` } as never);
+    }
+  }
   if (hasCondition(e, 'downed') && !hasCondition(e, 'stable')) {
     r.apply({ type: 'modifyResource', entityId: id, resource: 'bleed', delta: -1 });
     const left = (e.resources.bleed?.current ?? 1) - 1;
@@ -205,6 +222,18 @@ function onTurnStart(ruleset: Ruleset, state: GameState, id: string, rng: RngCur
       const total = sum(rollDice(rng, damage.count, damage.sides));
       const saved = rollSave(r, id, 'wis', spellDc(guardian, 'wis'));
       dealDamage(r, id, saved ? Math.floor(total / 2) : total, 'radiant');
+    }
+    // Stench: starting next to a hostile ghast means a CON save or being poisoned this turn.
+    for (const o of Object.values(r.state.entities)) {
+      const dc = Number(tagValue(o, 'stench') ?? 0);
+      const self = r.entity(id);
+      if (!dc || !standing(o) || !isHostile(o, self) || gridDistance(o.position, self.position) > 1) continue;
+      if (!standing(self) || hasCondition(self, 'stench_immune') || hasCondition(self, 'poisoned') || hasTag(self, 'condimmune:poisoned')) continue;
+      if (rollSave(r, id, 'con', dc, 'poison', 'poisoned')) r.apply({ type: 'applyCondition', entityId: id, condition: 'stench_immune' });
+      else {
+        r.apply({ type: 'applyCondition', entityId: id, condition: 'poisoned', remainingTurns: 1 });
+        r.emit({ type: 'reactionUsed', entityId: id, detail: 'Hedor' } as never);
+      }
     }
   }
   return r.outcome();
@@ -232,7 +261,7 @@ function onLeaveReach(ruleset: Ruleset, state: GameState, reactorId: string, mov
 /** A single weapon attack (reactions never get Extra Attack). */
 function performActionOnce(ruleset: Ruleset, state: GameState, attackerId: string, actionId: string, targetId: string, rng: RngCursor): ActionOutcome {
   const attacker = state.entities[attackerId]!;
-  const once = { ...attacker, stats: { ...attacker.stats, multiattack: 1 }, tags: attacker.tags.filter((t) => t !== 'feature:extra_attack') };
+  const once = { ...attacker, stats: { ...attacker.stats, multiattack: 1, single_attack: 1 }, tags: attacker.tags.filter((t) => t !== 'feature:extra_attack') };
   return performAction(ruleset, { ...state, entities: { ...state.entities, [attackerId]: once } }, attackerId, actionId, { entityId: targetId }, rng);
 }
 
@@ -240,6 +269,20 @@ function performActionOnce(ruleset: Ruleset, state: GameState, attackerId: strin
 function onCombatEnd(ruleset: Ruleset, state: GameState, winner: string | null): ActionOutcome {
   const r = new Resolver(ruleset, state, null as never);
   for (const e of Object.values(state.entities)) {
+    // Drained hit points come back once the fight is over (the act has no long rests).
+    const drained = e.resources.drained?.max ?? 0;
+    if (drained > 0 && !hasCondition(e, 'dead')) {
+      r.apply(
+        { type: 'modifyResourceMax', entityId: e.id, resource: 'hp', delta: drained },
+        { type: 'modifyResource', entityId: e.id, resource: 'hp', delta: -drained },
+        { type: 'modifyResourceMax', entityId: e.id, resource: 'drained', delta: -drained },
+      );
+    }
+    // Recharge powers start every fight ready.
+    for (const a of tagValues(e, 'action')) {
+      const pool = e.resources[`use_${a}`];
+      if (MONSTER_ACTIONS[a]?.recharge && pool && pool.current < pool.max) r.apply({ type: 'modifyResource', entityId: e.id, resource: `use_${a}`, delta: pool.max - pool.current });
+    }
     // The winners get their fallen up; story characters (and bystanders) always come round.
     const keeps = e.tags.includes('essential') || e.tags.includes('noncombatant');
     if (hasCondition(e, 'downed') && !hasCondition(e, 'dead') && (e.factionId === winner || keeps)) heal(r, e.id, 1);
@@ -286,6 +329,11 @@ export const dnd5e: Ruleset = {
   // A fallen companion still lies there; only the dead and smashed scenery free the tile.
   occupiesTile: (e) => !hasCondition(e, 'dead') && (e.tags.includes('object') ? standing(e) && e.tags.includes('obstacle') : true),
   onTurnStart: (state, id, rng) => onTurnStart(dnd5e, state, id, rng),
+  // Spellcasters with a preferred distance (from the stat block) keep it.
+  aiProfile: (state, id) => {
+    const keepAway = stat(state.entities[id]!, 'keep_away', 0);
+    return keepAway > 0 ? { keepAway } : undefined;
+  },
   listActions,
   previewAction,
   performAction: (state, actorId, actionId, target, rng) => performAction(dnd5e, state, actorId, actionId, target, rng),
