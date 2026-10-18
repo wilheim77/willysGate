@@ -1,0 +1,74 @@
+{
+  "$comment": "Mina. Investigation DC 13 finds a +1 sword.",
+  "id": "chest_capataz",
+  "start": "cofre",
+  "nodes": {
+    "cofre": {
+      "text": "La caja de caudales del antiguo capataz, atornillada a la roca. La cerradura cedió hace años; el miedo a abrirla, no tanto.",
+      "choices": [
+        {
+          "text": "Abrirlo.",
+          "next": "abierto"
+        },
+        {
+          "text": "Dejarlo."
+        }
+      ]
+    },
+    "abierto": {
+      "text": "Pagarés mojados, dos pociones y una bolsa de monedas que pesa menos de lo que promete.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "chest-capataz",
+          "removeTags": [
+            "dialogue:chest_capataz"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 22
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "potion_curacion",
+          "count": 2
+        }
+      ],
+      "choices": [
+        {
+          "text": "Buscar un doble fondo.",
+          "check": {
+            "check": "investigation",
+            "dc": 13,
+            "success": "doble_fondo",
+            "failure": "nada"
+          }
+        },
+        {
+          "text": "Cerrarlo y seguir."
+        }
+      ]
+    },
+    "doble_fondo": {
+      "text": "Cosida al forro de la tapa, una espada corta envuelta en grasa, con el filo intacto y un brillo que no viene de la lámpara.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "espada_mas1",
+          "count": 1
+        }
+      ]
+    },
+    "nada": {
+      "text": "Solo papeles. Deudas de muertos a otros muertos."
+    }
+  }
+}

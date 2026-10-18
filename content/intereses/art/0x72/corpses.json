@@ -1,0 +1,21 @@
+{
+  "$comment": "Corpse props built by scripts/art/build-corpses.ts from each type's idle frame (pose: side = lying on its side, back = feet up, heap = collapsed bones; pool: blood, ichor or dust). 'rules' map creature spriteIds to a corpse type (first regex that matches); anything else leaves 'default'. The result lands in the manifest as props <corpseId> and corpses { spriteId: corpseId }.",
+  "types": {
+    "corpse_human": { "from": "sinpaga_cuchillero", "pose": "side", "pool": "blood" },
+    "corpse_miner": { "from": "minero_cuadrilla", "pose": "side", "pool": "blood" },
+    "corpse_skeleton": { "from": "esqueleto_minero", "pose": "heap", "pool": "dust" },
+    "corpse_zombie": { "from": "ahogado", "pose": "side", "pool": "ichor" },
+    "corpse_dog": { "from": "perro", "pose": "back", "pool": "blood" },
+    "corpse_wolf": { "from": "lobo", "pose": "back", "pool": "blood" },
+    "corpse_rat": { "from": "rata", "pose": "back", "pool": "blood" }
+  },
+  "rules": [
+    ["skelet|esqueleto", "corpse_skeleton"],
+    ["ahogado|zombie|ghoul|callado_palido", "corpse_zombie"],
+    ["minero|callado|guardia", "corpse_miner"],
+    ["^perro", "corpse_dog"],
+    ["^lobo", "corpse_wolf"],
+    ["^rata", "corpse_rat"]
+  ],
+  "default": "corpse_human"
+}

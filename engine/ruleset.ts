@@ -1,3 +1,4 @@
+import type { AiProfile } from './ai';
 import type { CommandHandler, GameEvent } from './commands';
 import type { Effect } from './effects';
 import type { Vec2 } from './grid';
@@ -64,6 +65,11 @@ export interface Ruleset {
    * damage. The UI shows it ("72 % de acierto") and the AI ranks options with it.
    */
   previewAction(state: GameState, actorId: string, actionId: string, target: ActionTarget): ActionPreview;
+  /**
+   * Per-creature tuning of the generic AI (a spellcaster keeps its distance), merged
+   * over the profile the caller passes. Values are AiProfile fields.
+   */
+  aiProfile?(state: GameState, entityId: string): Partial<AiProfile> | undefined;
   /** Resolves an action. The engine has already checked turn, cost, range and target filter. */
   performAction(state: GameState, actorId: string, actionId: string, target: ActionTarget, rng: RngCursor): ActionOutcome;
   /**
@@ -104,6 +110,12 @@ export interface Ruleset {
   triggerTrap?(state: GameState, entityId: string, trap: Trap, rng: RngCursor): ActionOutcome;
 
   /**
+   * The party rests (a dialogue effect `rest`). `kind` is the ruleset's own word for it
+   * (5e: 'short' / 'long'); the engine only passes it through and applies the outcome.
+   */
+  onRest?(state: GameState, partyIds: string[], kind: string, rng: RngCursor): ActionOutcome;
+
+  /**
    * Runs once after every successful command, with all the events it produced (achievements,
    * statistics, a clock charged by what happened, healing while walking). Its own events are
    * appended to the command's; it does not see them itself.
@@ -113,6 +125,20 @@ export interface Ruleset {
   /** Ruleset bookkeeping when a combat ends (e.g. downed allies get back up). */
   onCombatEnd?(state: GameState, winner: string | null): ActionOutcome;
 
+  /**
+   * Shared party progress (experience in 5e). Without it, points are still counted but
+   * nobody levels. The thresholds come from the game's content (EngineContent.progression).
+   */
+  progression?: ProgressionRules;
+  // --- Equipment (optional: only rulesets with gear slots need these) ---
+
+  /** The equip slot an item id belongs to (e.g. 'weapon', 'ring'), or undefined if it's not equippable (a potion, coin, trade good...). */
+  itemSlot?(itemId: string): string | undefined;
+  /** The item id `entity` currently has equipped in `slot`, if any. */
+  equippedInSlot?(entity: Entity, slot: string): string | undefined;
+  /** Every item id `entity` currently has equipped, across all slots (for a "manage gear" UI). */
+  equippedItems?(entity: Entity): string[];
+
   /** Plain-language explanations for terms shown in the UI (CA, CD, ventaja...). Keys are `term` ids. */
   glossary: Record<string, GlossaryEntry>;
 
@@ -121,6 +147,18 @@ export interface Ruleset {
 
   /** Migrations of ruleset-owned data, from version N to N+1. */
   migrations?: Record<number, (state: Record<string, unknown>) => Record<string, unknown>>;
+}
+
+/** How a ruleset turns the party's shared points into levels. See engine/progression.ts. */
+export interface ProgressionRules {
+  /** Short label for the points, e.g. 'PX'. */
+  label: string;
+  /** Current level, or null for things that never level (monsters, props). */
+  levelOf(entity: Entity): number | null;
+  /** The same character rebuilt at `level` (same id, wounds and conditions kept). */
+  levelUp(state: GameState, entity: Entity, level: number): Entity;
+  /** Points the winners share for having defeated this creature (0 for scenery, summons...). */
+  rewardFor(entity: Entity): number;
 }
 
 /** A character sheet the ruleset fills and any client can show. */
@@ -186,6 +224,11 @@ export interface ActionPreview {
   chance?: number;
   expectedDamage?: number;
   expectedHealing?: number;
+  /**
+   * Worth of everything that is neither damage nor healing (a condition imposed, a buff,
+   * a creature held in place), in health-equivalent points. Only the AI reads it.
+   */
+  utility?: number;
   /** Lines for the tooltip, each optionally linked to a glossary term. */
   breakdown?: { label: string; value?: string; term?: string }[];
   /** Tiles an area effect would cover, for the UI to paint before confirming. */

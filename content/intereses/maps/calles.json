@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 35,
+ "nextobjectid": 36,
  "properties": [
   {
    "name": "name",
@@ -170,6 +170,18 @@
     },
     {
      "id": 9,
+     "name": "campfire-5",
+     "type": "",
+     "point": true,
+     "x": 880,
+     "y": 208,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 10,
      "name": "lisandro",
      "type": "",
      "point": true,
@@ -181,7 +193,7 @@
      "visible": true
     },
     {
-     "id": 10,
+     "id": 11,
      "name": "door-trastienda",
      "type": "",
      "point": true,
@@ -193,7 +205,7 @@
      "visible": true
     },
     {
-     "id": 11,
+     "id": 12,
      "name": "door-patio_lisandro",
      "type": "",
      "point": true,
@@ -205,7 +217,7 @@
      "visible": true
     },
     {
-     "id": 12,
+     "id": 13,
      "name": "chest-libro_cuentas",
      "type": "",
      "point": true,
@@ -217,7 +229,7 @@
      "visible": true
     },
     {
-     "id": 13,
+     "id": 14,
      "name": "crate-1",
      "type": "",
      "point": true,
@@ -229,7 +241,7 @@
      "visible": true
     },
     {
-     "id": 14,
+     "id": 15,
      "name": "crate-2",
      "type": "",
      "point": true,
@@ -241,7 +253,7 @@
      "visible": true
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "barrel-1",
      "type": "",
      "point": true,
@@ -253,7 +265,7 @@
      "visible": true
     },
     {
-     "id": 16,
+     "id": 17,
      "name": "barrel_oil-1",
      "type": "",
      "point": true,
@@ -265,7 +277,7 @@
      "visible": true
     },
     {
-     "id": 17,
+     "id": 18,
      "name": "crate-3",
      "type": "",
      "point": true,
@@ -277,7 +289,7 @@
      "visible": true
     },
     {
-     "id": 18,
+     "id": 19,
      "name": "crate-4",
      "type": "",
      "point": true,
@@ -301,7 +313,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 19,
+     "id": 20,
      "name": "farol-salida-plaza",
      "type": "",
      "point": true,
@@ -340,7 +352,7 @@
      ]
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "farol-salida-escorial",
      "type": "",
      "point": true,
@@ -379,7 +391,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 22,
      "name": "farol-1",
      "type": "",
      "point": true,
@@ -418,7 +430,7 @@
      ]
     },
     {
-     "id": 22,
+     "id": 23,
      "name": "farol-2",
      "type": "",
      "point": true,
@@ -457,7 +469,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 24,
      "name": "farol-3",
      "type": "",
      "point": true,
@@ -496,7 +508,7 @@
      ]
     },
     {
-     "id": 24,
+     "id": 25,
      "name": "velas-capilla-1",
      "type": "",
      "point": true,
@@ -535,7 +547,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 26,
      "name": "velas-capilla-2",
      "type": "",
      "point": true,
@@ -574,7 +586,7 @@
      ]
     },
     {
-     "id": 26,
+     "id": 27,
      "name": "candil-viudas",
      "type": "",
      "point": true,
@@ -613,7 +625,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 28,
      "name": "candil-patio",
      "type": "",
      "point": true,
@@ -652,7 +664,7 @@
      ]
     },
     {
-     "id": 28,
+     "id": 29,
      "name": "candil-lloro",
      "type": "",
      "point": true,
@@ -691,7 +703,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 30,
      "name": "lampara-empenos",
      "type": "",
      "point": true,
@@ -753,7 +765,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 30,
+     "id": 31,
      "name": "el-lloro",
      "type": "",
      "x": 928,
@@ -783,7 +795,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 31,
+     "id": 32,
      "name": "dardo-trastienda",
      "type": "",
      "x": 320,
@@ -858,7 +870,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 32,
+     "id": 33,
      "name": "a-plaza",
      "type": "",
      "x": 0,
@@ -881,7 +893,7 @@
      ]
     },
     {
-     "id": 33,
+     "id": 34,
      "name": "a-escorial",
      "type": "",
      "x": 1056,
@@ -926,7 +938,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 34,
+     "id": 35,
      "name": "sermon",
      "type": "",
      "x": 416,

@@ -197,7 +197,7 @@
   },
   "absalon": {
     "name": "Absalón Brea",
-    "monsterId": "gladiator",
+    "monsterId": "foreman",
     "spriteId": "absalon",
     "faction": "callados",
     "noncombatant": false,
@@ -208,7 +208,7 @@
   },
   "ivo": {
     "name": "Ivo",
-    "monsterId": "thug",
+    "monsterId": "zombie",
     "spriteId": "callado",
     "faction": "callados",
     "noncombatant": false,

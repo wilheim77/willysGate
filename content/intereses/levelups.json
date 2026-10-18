@@ -1,5 +1,9 @@
 {
-  "$comment": "Flavour shown when the party levels up (to 4 after the investigation, 5 after D1, 6 before the Vault). Per level: a narration line and one line per companion (speaker = entity id; skipped if not in the party).",
+  "$comment": "Levelling by experience (PX). The party starts at level 3 and shares one pool: fights won (SRD XP of the foes brought down) and conflicts settled by talking (gainProgress in the dialogues) add to it. `thresholds` = total PX the party needs for each level: retune here only (docs/DESIGN.md, «Progresión»; tests/playthrough/progression.test.ts checks the curve). Level 6 keeps its flavour but has no threshold: the act ends at level 5. Per level: a narration line and one line per companion (speaker = entity id; skipped if not in the party).",
+  "thresholds": {
+    "4": 1000,
+    "5": 1500
+  },
   "4": {
     "narration": "Sabes más de este valle que hace tres días. No es un consuelo, pero cuenta como experiencia.",
     "dorotea": "Ha mejorado usted, cobrador. Le apunto en la columna del haber. Es una columna muy corta.",
@@ -7,7 +11,7 @@
     "anselmo": "Siento algo nuevo. Puede ser un don divino. Puede ser el vino de Remedios. Se lo confirmo mañana."
   },
   "5": {
-    "narration": "Una noche de antorchas enseña más que un año de academia. Sobre todo a los que sobreviven.",
+    "narration": "Este valle enseña más que un año de academia. Sobre todo a los que sobreviven.",
     "dorotea": "Lo que no la mata la encarece. Su tarifa sube, cobrador. La de la Casa, también.",
     "garran": "Ya no tiembla la mano. Eso es malo, por cierto.",
     "anselmo": "El que me contesta cuando rezo me contesta más alto. No sé si eso es bueno. Sigo rezando."
@@ -17,33 +21,5 @@
     "dorotea": "Si muere ahí abajo, al menos morirá con el expediente al día.",
     "garran": "Ahora sí. Ahora bajo a por Ivo.",
     "anselmo": "Estoy listo. Es mentira, pero lo digo con mucho aplomo. Eso también es un don."
-  },
-  "$rules": "levels: the party reaches each level when its condition holds (STORY §7).",
-  "levels": [
-    {
-      "level": 4,
-      "when": {
-        "all": [
-          {
-            "flag": "pista_plata_nueva"
-          },
-          {
-            "flag": "pista_pozo"
-          }
-        ]
-      }
-    },
-    {
-      "level": 5,
-      "when": {
-        "flag": "d1_resuelto"
-      }
-    },
-    {
-      "level": 6,
-      "when": {
-        "flag": "d2_resuelta"
-      }
-    }
-  ]
+  }
 }

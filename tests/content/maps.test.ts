@@ -33,6 +33,13 @@ function factionOf(parsed: ParsedMap, name: string): string | undefined {
   const dash = name.lastIndexOf('-');
   return TEMPLATES[dash > 0 ? name.slice(0, dash) : name]?.faction;
 }
+/** Bystander by default (cast or template), unless the spawn sets its own faction. */
+function noncombatant(parsed: ParsedMap, name: string): boolean {
+  if (parsed.spawnProperties?.[name]?.faction) return false;
+  if (CAST[name]) return !!(CAST[name] as { noncombatant?: boolean }).noncombatant;
+  const dash = name.lastIndexOf('-');
+  return !!(TEMPLATES[dash > 0 ? name.slice(0, dash) : name] as { noncombatant?: boolean } | undefined)?.noncombatant;
+}
 /** Is a spawn present when exactly these flags are set? (requiresFlag / unlessFlag / requiresAnyFlag) */
 function presentWith(parsed: ParsedMap, name: string, flags: Set<string>): boolean {
   const p = parsed.spawnProperties?.[name] ?? {};
@@ -205,7 +212,8 @@ describe('Intereses maps', () => {
         for (const e of parsed.zones.filter((z) => z.layer === 'encounters')) {
           const flags = new Set([e.properties.requiresFlag].filter(Boolean).map(String));
           const present = String(e.properties.participants ?? '').split(',').filter((id) => parsed.spawns[id] && presentWith(parsed, id, flags));
-          const hostile = present.filter((id) => factionOf(parsed, id) !== 'party');
+          // Hostile = another faction and not a bystander (a spawn's own `faction` makes it a fighter).
+          const hostile = present.filter((id) => factionOf(parsed, id) !== 'party' && !noncombatant(parsed, id));
           expect(hostile.length, `${e.name}: nobody hostile among ${present.join(',')}`).toBeGreaterThan(0);
           for (const id of present) expect(factionOf(parsed, id), `${e.name}: ${id} has no faction`).toBeDefined();
         }
@@ -309,6 +317,32 @@ describe('Intereses maps', () => {
         const text = readFileSync(existsSync(file) ? file : join(dialoguesDir, 'door_default.json'), 'utf8');
         const opens = /"type":\s*"setTile"[^}]*"walkable":\s*true/.test(text.replace(/\n/g, ' '));
         expect(opens, `${mapId}/${name}: ${existsSync(file) ? script : 'door_default'} never makes the door tile walkable`).toBe(true);
+      }
+    }
+  });
+
+  it('every chest and lever has a script, or it can never be used (playtest: the ravine chest)', () => {
+    const dialoguesDir = join(content, 'dialogues');
+    for (const [mapId, parsed] of Object.entries(maps)) {
+      if (mapId === 'test') continue;
+      for (const name of Object.keys(parsed.spawns).filter((n) => kindOf(n) === 'chest' || kindOf(n) === 'lever')) {
+        const kind = kindOf(name);
+        const script = `${kind}_${name.slice(kind.length + 1).replace(/-/g, '_')}`;
+        expect(existsSync(join(dialoguesDir, `${script}.json`)), `${mapId}/${name} needs dialogues/${script}.json`).toBe(true);
+      }
+    }
+  });
+
+  it('every gate scene can settle through its own dialogue, or it replays on every return (playtest: the trial)', () => {
+    const dialoguesDir = join(content, 'dialogues');
+    for (const [mapId, parsed] of Object.entries(maps)) {
+      for (const z of parsed.zones.filter((x) => x.layer === 'scenes' && x.properties.gate)) {
+        const text = readFileSync(join(dialoguesDir, `${String(z.properties.dialogue)}.json`), 'utf8');
+        const sets = (flag: unknown) => new RegExp(`"flag":\\s*"${String(flag)}"`).test(text);
+        const joins = /"type":\s*"setController"/.test(text);
+        const exits = String(z.properties.protects ?? '').split(',').map((n) => parsed.zones.find((e) => e.layer === 'exits' && e.name === n.trim()));
+        const allOpened = exits.every((e) => e && (!e.properties.requiresFlag || sets(e.properties.requiresFlag)));
+        expect(joins || allOpened || (z.properties.settledFlag && sets(z.properties.settledFlag)), `${mapId}/${z.name}: its dialogue never settles it (add settledFlag)`).toBeTruthy();
       }
     }
   });

@@ -11,7 +11,7 @@
  "tileheight": 32,
  "infinite": false,
  "nextlayerid": 9,
- "nextobjectid": 25,
+ "nextobjectid": 27,
  "properties": [
   {
    "name": "name",
@@ -64,6 +64,18 @@
    "objects": [
     {
      "id": 1,
+     "name": "chest-taquilla",
+     "type": "",
+     "point": true,
+     "x": 48,
+     "y": 144,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 2,
      "name": "entry-pozo",
      "type": "",
      "point": true,
@@ -75,7 +87,7 @@
      "visible": true
     },
     {
-     "id": 2,
+     "id": 3,
      "name": "entry-mina",
      "type": "",
      "point": true,
@@ -87,7 +99,7 @@
      "visible": true
     },
     {
-     "id": 3,
+     "id": 4,
      "name": "callado-14",
      "type": "",
      "point": true,
@@ -99,7 +111,7 @@
      "visible": true
     },
     {
-     "id": 4,
+     "id": 5,
      "name": "callado-12",
      "type": "",
      "point": true,
@@ -111,7 +123,7 @@
      "visible": true
     },
     {
-     "id": 5,
+     "id": 6,
      "name": "callado-13",
      "type": "",
      "point": true,
@@ -123,7 +135,7 @@
      "visible": true
     },
     {
-     "id": 6,
+     "id": 7,
      "name": "rata_gigante-2",
      "type": "",
      "point": true,
@@ -135,7 +147,7 @@
      "visible": true
     },
     {
-     "id": 7,
+     "id": 8,
      "name": "rata_gigante-3",
      "type": "",
      "point": true,
@@ -147,7 +159,7 @@
      "visible": true
     },
     {
-     "id": 8,
+     "id": 9,
      "name": "esqueleto_minero-1",
      "type": "",
      "point": true,
@@ -159,7 +171,7 @@
      "visible": true
     },
     {
-     "id": 9,
+     "id": 10,
      "name": "esqueleto_minero-2",
      "type": "",
      "point": true,
@@ -171,7 +183,7 @@
      "visible": true
     },
     {
-     "id": 10,
+     "id": 11,
      "name": "mine_wagon-3",
      "type": "",
      "point": true,
@@ -183,7 +195,7 @@
      "visible": true
     },
     {
-     "id": 11,
+     "id": 12,
      "name": "mine_wagon_ore-2",
      "type": "",
      "point": true,
@@ -195,7 +207,7 @@
      "visible": true
     },
     {
-     "id": 12,
+     "id": 13,
      "name": "rubble_pile-2",
      "type": "",
      "point": true,
@@ -207,7 +219,7 @@
      "visible": true
     },
     {
-     "id": 13,
+     "id": 14,
      "name": "rubble_pile_c-2",
      "type": "",
      "point": true,
@@ -219,7 +231,7 @@
      "visible": true
     },
     {
-     "id": 14,
+     "id": 15,
      "name": "pillar_broken-2",
      "type": "",
      "point": true,
@@ -231,12 +243,24 @@
      "visible": true
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "barrel_oil-1",
      "type": "",
      "point": true,
      "x": 720,
      "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 17,
+     "name": "campfire-2",
+     "type": "",
+     "point": true,
+     "x": 912,
+     "y": 272,
      "width": 0,
      "height": 0,
      "rotation": 0,
@@ -255,7 +279,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 16,
+     "id": 18,
      "name": "luz-pozo",
      "type": "",
      "point": true,
@@ -289,7 +313,7 @@
      ]
     },
     {
-     "id": 17,
+     "id": 19,
      "name": "candil-galeria",
      "type": "",
      "point": true,
@@ -328,7 +352,7 @@
      ]
     },
     {
-     "id": 18,
+     "id": 20,
      "name": "candil-entibado",
      "type": "",
      "point": true,
@@ -367,7 +391,7 @@
      ]
     },
     {
-     "id": 19,
+     "id": 21,
      "name": "brillo-plata",
      "type": "",
      "point": true,
@@ -413,7 +437,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 20,
+     "id": 22,
      "name": "callados-del-tunel",
      "type": "",
      "x": 320,
@@ -427,6 +451,11 @@
        "name": "participants",
        "type": "string",
        "value": "callado-14,callado-12,callado-13,rata_gigante-2,rata_gigante-3,esqueleto_minero-1,esqueleto_minero-2"
+      },
+      {
+       "name": "setFlag",
+       "type": "string",
+       "value": "tunel_despejado"
       }
      ]
     }
@@ -443,7 +472,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 21,
+     "id": 23,
      "name": "filtracion",
      "type": "",
      "x": 256,
@@ -484,7 +513,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 22,
+     "id": 24,
      "name": "a-escorial",
      "type": "",
      "x": 64,
@@ -507,7 +536,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 25,
      "name": "a-mina",
      "type": "",
      "x": 992,
@@ -542,7 +571,7 @@
    "y": 0,
    "objects": [
     {
-     "id": 24,
+     "id": 26,
      "name": "tunel",
      "type": "",
      "x": 192,

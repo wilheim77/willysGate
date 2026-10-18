@@ -1,6 +1,11 @@
 {
-  "$comment": "Dialogues for specific spawns that aren't cast entries (a generic Callado who talks, a well you can use). Key: <mapId>:<spawn name>.",
+  "$comment": "Dialogues for specific spawns that aren't cast entries (a generic Callado who talks, a well you can use), or a cast member whose cast script doesn't fit that map (Cirilo in the streets, after the trial, must not reopen it). Key: <mapId>:<spawn name>.",
   "escorial:callado-1": "callado_pozo",
   "escorial:well-1": "pozo_ahorcado",
-  "boveda:inscription-1": "inscripcion_boveda"
+  "boveda:inscription-1": "inscripcion_boveda",
+  "calles:cirilo": "cirilo",
+  "tunel:campfire-2": "descanso_tunel",
+  "abadia:campfire-3": "descanso_abadia",
+  "mina:campfire-4": "descanso_mina",
+  "calles:campfire-5": "descanso_calles"
 }

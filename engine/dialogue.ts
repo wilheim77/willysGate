@@ -1,6 +1,7 @@
 import { type StartCombatCommand, applyOutcome, startCombat } from './combat';
 import { type BaseCommand, type CommandHandler, type CommandResult, type GameEvent, SYSTEM_ISSUER, fail, requireControlled } from './command-types';
 import { type Effect, applyEffects } from './effects';
+import type { ProgressionContent } from './progression';
 import { gridDistance } from './grid';
 import { itemCount } from './inventory';
 import { RngCursor } from './rng';
@@ -69,7 +70,9 @@ export type DialogueEffect =
   /** Start a fight with everyone of these factions on the map; optional consequences by outcome. */
   | { type: 'startCombat'; factions: string[]; onVictory?: Effect[]; onDefeat?: Effect[] }
   /** The party leaves for another map (a cart ride, a cave-in, "follow me"). */
-  | { type: 'travel'; mapId: string; spawn: string };
+  | { type: 'travel'; mapId: string; spawn: string }
+  /** The party rests; what that restores is the ruleset's business (Ruleset.onRest). */
+  | { type: 'rest'; kind: string };
 
 export interface DialogueEvent extends GameEvent {
   type: 'dialogueStarted' | 'dialogueNode' | 'dialogueChoice' | 'dialogueEnded';
@@ -92,6 +95,8 @@ export interface EngineContent {
   dialogues: Record<string, DialogueTree>;
   /** Builders for the game's maps, by id, used the first time the party travels there. */
   maps?: Record<string, MapBuilder>;
+  /** Points needed per level for the party's shared progress (engine/progression.ts). */
+  progression?: ProgressionContent;
 }
 
 export const EMPTY_CONTENT: EngineContent = { dialogues: {} };
@@ -238,7 +243,7 @@ function enterNode(
 
 function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: DialogueEffect[], rng: RngCursor, content: EngineContent): CommandResult {
   const plain = effects
-    .filter((e): e is Effect => e.type !== 'startCombat' && e.type !== 'travel')
+    .filter((e): e is Effect => e.type !== 'startCombat' && e.type !== 'travel' && e.type !== 'rest')
     .map((e) => bindPartner(state, e))
     .filter((e): e is Effect => e !== null);
   // Through applyOutcome, so a cave-in or a shove from a dialogue still hurts (falls, surfaces).
@@ -246,6 +251,19 @@ function applyDialogueEffects(ruleset: Ruleset, state: GameState, effects: Dialo
   let next = applied.state;
   const events: GameEvent[] = [...applied.events];
   for (const e of effects) {
+    if (e.type === 'rest') {
+      const d = dialogueOf(next);
+      const issuer = d ? next.entities[d.actorId]?.controllerId : undefined;
+      const party = Object.values(next.entities).filter((x) => issuer && x.controllerId === issuer).map((x) => x.id);
+      if (!ruleset.onRest || party.length === 0) continue;
+      const kind = (e as { kind: string }).kind;
+      const outcome = ruleset.onRest(next, party, kind, rng);
+      const r = applyOutcome(ruleset, next, outcome, rng);
+      next = r.state;
+      // After the rest's own events: the client checkpoints the game on 'rested'.
+      events.push(...r.events, { type: 'rested', kind, party } as GameEvent);
+      continue;
+    }
     if (e.type === 'travel') {
       const t = e as { mapId: string; spawn: string };
       const d = dialogueOf(next);

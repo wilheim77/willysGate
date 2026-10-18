@@ -1,0 +1,26 @@
+{
+  "$comment": "Short rest at the Callados' campfire in the tunel, once the tunnel fight is over (trigger 'descanso_tunel', also on the campfire spawn: spawn-dialogues.json). Once per game (flag descanso_tunel). Map agent.",
+  "id": "descanso_tunel",
+  "start": "hoguera",
+  "nodes": {
+    "hoguera": {
+      "text": "La hoguera de los Callados todavía está tibia. Alguien ha dejado una lata de judías a medio comer y una pala clavada en el suelo, como si fuera a volver a por ella. No va a volver.",
+      "choices": [
+        { "id": "descansar", "text": "Descansar un rato junto al fuego. (Descanso corto)", "when": { "not": { "flag": "descanso_tunel" } }, "next": "descanso" },
+        { "id": "seguir", "text": "Seguir adelante." }
+      ]
+    },
+    "descanso": {
+      "text": "Os sentáis. Nadie habla. Desde el fondo de la galería llega el ruido de los picos, constante, como un reloj que no se para por nadie. Os vendáis lo que se puede vendar.",
+      "effects": [
+        { "type": "rest", "kind": "short" },
+        { "type": "setFlag", "flag": "descanso_tunel", "value": true }
+      ],
+      "next": "despues"
+    },
+    "despues": {
+      "speaker": "dorotea",
+      "text": "Una hora. Le apunto la hora a la mina, cobrador. Todo lo que perdemos aquí abajo, alguien lo va a pagar."
+    }
+  }
+}

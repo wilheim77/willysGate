@@ -60,6 +60,11 @@ export type Effect =
   | { type: 'replaceEntity'; entity: Entity }
   /** Raise or lower a stat (levelling up, a curse): stats are the ruleset's numbers. */
   | { type: 'modifyStat'; entityId: string; stat: string; delta: number }
+  /**
+   * Points into the party's shared progress pool (experience in 5e). See progression.ts.
+   * With an `id`, it pays out only once per game (a conversation that can be replayed).
+   */
+  | { type: 'gainProgress'; amount: number; reason?: string; id?: string }
   | { type: 'setEntity'; entityId: string; spriteId?: string; name?: string; addTags?: string[]; removeTags?: string[] };
 
 export interface ResourceChangedEvent extends GameEvent {
@@ -163,7 +168,16 @@ export interface EntityDespawnedEvent extends GameEvent {
   entityId: string;
 }
 
+/** The party gained progress points (a fight won, a conversation that settled one...). */
+export interface ProgressGainedEvent extends GameEvent {
+  type: 'progressGained';
+  amount: number;
+  total: number;
+  reason?: string;
+}
+
 export type EffectEvent =
+  | ProgressGainedEvent
   | EntitySpawnedEvent
   | EntityDespawnedEvent
   | StatChangedEvent
@@ -456,6 +470,15 @@ export function applyEffects(ruleset: Ruleset, state: GameState, effects: Effect
       case 'setFlag': {
         next = { ...next, flags: { ...next.flags, [effect.flag]: effect.value } };
         events.push({ type: 'flagChanged', flag: effect.flag, value: effect.value });
+        break;
+      }
+      case 'gainProgress': {
+        const pool = (next.systems.progress as { points?: number; awarded?: string[] } | undefined) ?? {};
+        if (!(effect.amount > 0) || (effect.id && pool.awarded?.includes(effect.id))) break;
+        const total = (pool.points ?? 0) + effect.amount;
+        const awarded = effect.id ? [...(pool.awarded ?? []), effect.id] : pool.awarded;
+        next = { ...next, systems: { ...next.systems, progress: { points: total, ...(awarded ? { awarded } : {}) } } };
+        events.push({ type: 'progressGained', amount: effect.amount, total, ...(effect.reason ? { reason: effect.reason } : {}) });
         break;
       }
       case 'setSystem': {

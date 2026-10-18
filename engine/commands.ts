@@ -6,6 +6,7 @@ import { surfaceAt } from './surfaces';
 import { type Effect, applyEffects } from './effects';
 import { disarmTrap, trapsAfterStep, trapsOf } from './traps';
 import { travel } from './world';
+import { applyProgression } from './progression';
 import { type EngineContent, chooseOption, dialogueOf, endDialogue, interact, startDialogue } from './dialogue';
 import { RngCursor } from './rng';
 import type { Ruleset } from './ruleset';
@@ -64,6 +65,9 @@ export function gateSettled(state: GameState, z: StoryZone): boolean {
   // Someone who has joined the party (Garrán in the ditch) no longer blocks anything.
   const speaker = z.properties.speaker ? state.entities[String(z.properties.speaker)] : undefined;
   if (speaker?.controllerId.startsWith('player')) return true;
+  // The scene's own outcome (the trial is over) settles it, even if other exits it guards wait
+  // on later story beats; otherwise it would replay every time the party walks back in.
+  if (z.properties.settledFlag && state.flags[String(z.properties.settledFlag)]) return true;
   const zones = (state.systems.zones as unknown as StoryZone[] | undefined) ?? [];
   const names = String(z.properties.protects ?? '').split(',').map((n) => n.trim()).filter(Boolean);
   const exits = zones.filter((e) => e.layer === 'exits' && names.includes(e.name));
@@ -256,7 +260,7 @@ export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCo
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
   const result = handler(state, command, { ruleset, ...(content ? { content } : {}) });
   if (!result.ok) return result;
-  return afterCommand(ruleset, command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content));
+  return levelUpIfEarned(ruleset, afterCommand(ruleset, command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content)), content);
 }
 
 /** The ruleset's look at everything a command did (Ruleset.afterCommand). */
@@ -267,6 +271,13 @@ function afterCommand(ruleset: Ruleset, result: CommandResult): CommandResult {
   if (!outcome.effects.length && !outcome.events.length && rng.state === result.state.rng) return result;
   const r = applyOutcome(ruleset, { ...result.state, rng: rng.state }, outcome, rng);
   return { ok: true, state: { ...r.state, rng: rng.state }, events: [...result.events, ...r.events] };
+}
+
+/** The party's shared points may have crossed a threshold: raise whoever is behind. */
+function levelUpIfEarned(ruleset: Ruleset, result: CommandResult, content?: EngineContent): CommandResult {
+  if (!result.ok || !content?.progression) return result;
+  const r = applyProgression(ruleset, result.state, content.progression);
+  return r.events.length ? { ok: true, state: r.state, events: [...result.events, ...r.events] } : result;
 }
 
 /**

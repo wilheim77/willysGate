@@ -18,15 +18,8 @@ import {
   type StartDialogueCommand,
   isHostile,
 } from '../../engine';
-import { dnd5e, levelUpCharacter } from '../../rulesets/dnd5e';
-import levelupsJson from '../../content/intereses/levelups.json';
+import { dnd5e } from '../../rulesets/dnd5e';
 import type { makeEngine } from './setup';
-
-interface LevelRule {
-  level: number;
-  when: DialogueWhen;
-}
-const LEVEL_RULES = (levelupsJson as { levels: LevelRule[] }).levels;
 
 /**
  * A DOM-free replica of src/game/controller.ts's `onIdle` (encounters -> scenes ->
@@ -162,23 +155,6 @@ function checkScenes(state: GameState, engine: Engine, ctx: DriverCtx): GameStat
     if (r.ok) return r.state;
   }
   return null;
-}
-
-/** controller.ts:365-381: the story says the party has grown; rebuild everyone below the
- *  level it has earned (class characters only - companions and the leader, not monsters). */
-function checkLevels(engine: Engine, state: GameState, ctx: DriverCtx): GameState | null {
-  const leader = state.entities[ctx.leaderId];
-  if (!leader || dialogueOf(state)) return null;
-  const earned = Math.max(0, ...LEVEL_RULES.filter((r) => evaluateCondition(dnd5e, state, leader.id, r.when)).map((r) => r.level));
-  if (!earned) return null;
-  const behind = Object.values(state.entities).filter((e) => e.controllerId === 'player:1' && e.tags.some((t) => t.startsWith('class:')) && (e.stats.level ?? 1) < earned);
-  if (!behind.length) return null;
-  const r = engine.apply(state, {
-    type: 'script',
-    issuer: SYSTEM_ISSUER,
-    effects: behind.map((e) => ({ type: 'replaceEntity', entity: levelUpCharacter(e, earned) })),
-  } as unknown as BaseCommand);
-  return r.ok ? r.state : null;
 }
 
 /** controller.ts:361-376: no zone, pure flag condition, offered once per visit while it holds. */
@@ -356,7 +332,8 @@ export function driveDialogue(engine: Engine, state: GameState, ctx: DriverCtx, 
   return s;
 }
 
-/** One `onIdle` pass, minus `checkExits` (that one needs the caller to have already picked
+/** One `onIdle` pass (levelling is no longer here: the engine applies it after every command,
+ *  see engine/progression.ts), minus `checkExits` (that one needs the caller to have already picked
  *  *which* exit via route planning - see `goldenPathMatrix.test.ts`): encounters -> scenes
  *  -> triggers, same order and same early-return as controller.ts. Returns the new state
  *  if something fired (any dialogue it opened is still open: drive it before calling this
@@ -366,8 +343,6 @@ export function idleStep(engine: Engine, state: GameState, ctx: DriverCtx, trigg
   if (encountered) return resolveCombat(engine, encountered).state;
   const scened = checkScenes(state, engine, ctx);
   if (scened) return scened;
-  const leveled = checkLevels(engine, state, ctx);
-  if (leveled) return leveled;
   return checkTriggers(state, engine, ctx, triggers);
 }
 

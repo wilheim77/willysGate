@@ -11,6 +11,7 @@ import {
   gridDistance,
   hasCondition,
   hasLineOfSight,
+  itemCount,
   OBJECT_TAG,
   simulatePush,
   surfaceAt,
@@ -22,11 +23,11 @@ import {
   targetIds,
 } from '../../engine';
 import { ABILITY_LABELS, type Ability } from './abilities';
-import { castingAbility, hasFeature, mod, profBonus, tagValues } from './character';
+import { armorClass, castingAbility, equippedWeaponBonus, hasFeature, mod, monsterOf, profBonus, tagValues } from './character';
 import { SKILLS } from './abilities';
 import { SURFACES } from './environment';
 import { dnd5eRef } from './ref';
-import { SPELLS, type SpellData, WEAPONS } from './data';
+import { ITEMS, MONSTER_ACTIONS, type MonsterActionData, type Rider, SPELLS, type SpellData, WEAPONS } from './data';
 import { type DiceExpr, averageOf, parseDice, rollDice, sum } from './dice';
 import {
   type AttackSpec,
@@ -37,6 +38,7 @@ import {
   concentrationSource,
   dealDamage,
   endConcentration,
+  adjustForType,
   heal,
   resolveAttack,
   rollSave,
@@ -49,7 +51,8 @@ import {
 } from './resolve';
 
 /**
- * Action ids: "attack:<weapon>", "spell:<id>", "feature:<id>", "basic:<id>".
+ * Action ids: "attack:<weapon>", "spell:<id>", "ability:<id>" (a monster's own power),
+ * "feature:<id>", "basic:<id>".
  * Everything is derived from the entity's tags and the SRD data, so new spells or
  * weapons are data changes.
  */
@@ -81,7 +84,7 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
     actions.push({
       id: `attack:${w}`,
       label: `Atacar: ${weapon.label}`,
-      description: `${weapon.damage} de daño ${DAMAGE_LABELS[weapon.type] ?? weapon.type}${attacksPerAction(e) > 1 ? ` · ${attacksPerAction(e)} ataques` : ''}.`,
+      description: `${weapon.damage} de daño ${DAMAGE_LABELS[weapon.type] ?? weapon.type}${attackSequence(e, w).length > 1 ? ` · ${attackSequence(e, w).length} ataques` : ''}${riderText(e, w)}.`,
       cost: main,
       target: { kind: 'creature', range: weapon.range, filter: 'hostile' },
       tags: ['attack', melee ? 'melee' : 'ranged', 'weapon'],
@@ -93,21 +96,53 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
     if (!spell || spell.cast === 'reaction') continue;
     const slot = spell.level === 0 ? 0 : lowestSlot(e, spell.level);
     const cost: Record<string, number> = spell.cast === 'bonus_action' ? { bonus_action: 1 } : { ...main };
-    if (spell.level > 0) cost[`spell_slot_${slot ?? spell.level}`] = 1;
-    actions.push({
-      id: `spell:${id}`,
-      label: spell.label,
-      description: spell.text,
-      cost,
-      target: {
-        kind: spell.target,
-        range: spell.range,
-        ...(spell.filter ? { filter: spell.filter } : {}),
-        // Bless/Aid pick several creatures; Magic Missile/Scorching Ray spread darts or rays.
-        ...(spell.maxTargets ? { maxTargets: spell.maxTargets } : spell.multi && !spell.area ? { maxTargets: spell.multi, allowRepeat: true } : {}),
-      },
-      tags: ['spell', spell.level === 0 ? 'cantrip' : `level${spell.level}`, ...(spell.damage ? ['damage'] : []), ...(spell.heal ? ['heal'] : []), ...(spell.area ? ['area'] : [])],
-    });
+    // Innate spells (x/day) spend their own uses instead of slots.
+    if (spell.level > 0) cost[e.resources[`innate_${id}`] ? `innate_${id}` : `spell_slot_${slot ?? spell.level}`] = 1;
+    actions.push(castableAction(`spell:${id}`, spell, cost, ['spell', spell.level === 0 ? 'cantrip' : `level${spell.level}`]));
+  }
+
+  // A monster's own powers: recharge (5-6) or a few uses a day.
+  for (const id of tagValues(e, 'action')) {
+    const power = MONSTER_ACTIONS[id];
+    if (!power) continue;
+    const cost: Record<string, number> = power.cast === 'bonus_action' ? { bonus_action: 1 } : { ...main };
+    cost[`use_${id}`] = 1;
+    actions.push(castableAction(`ability:${id}`, power, cost, ['ability', ...(power.recharge ? ['recharge'] : [])]));
+  }
+
+  // Consumables from the party's bag: Potions of Healing (drink, bonus action) and scrolls/wands
+  // (cast their spell, same action economy a spell would cost). Flavour label/text is content
+  // data (content/<game>/items.json); this layer only knows the mechanics (data/magic-items.json).
+  for (const [itemId, item] of Object.entries(ITEMS)) {
+    if (itemCount(state, 'party', itemId) <= 0) continue;
+    if (item.kind === 'potion') {
+      const avg = Math.round(averageOf(parseDice(item.heal ?? '0')));
+      actions.push({
+        id: `item:${itemId}`,
+        label: 'Beber poción',
+        description: `Recupera ~${avg} puntos de golpe.`,
+        cost: { bonus_action: 1 },
+        target: { kind: 'self', range: 0 },
+        tags: ['item', 'heal', 'consumable'],
+      });
+    } else if ((item.kind === 'scroll' || item.kind === 'wand') && item.spell) {
+      const spell = SPELLS[item.spell];
+      if (!spell) continue;
+      const cost: Record<string, number> = spell.cast === 'bonus_action' ? { bonus_action: 1 } : { ...main };
+      actions.push({
+        id: `item:${itemId}`,
+        label: `${item.kind === 'scroll' ? 'Leer pergamino' : 'Usar vara'}: ${spell.label}`,
+        description: spell.text,
+        cost,
+        target: {
+          kind: spell.target,
+          range: spell.range,
+          ...(spell.filter ? { filter: spell.filter } : {}),
+          ...(spell.maxTargets ? { maxTargets: spell.maxTargets } : spell.multi && !spell.area ? { maxTargets: spell.multi, allowRepeat: true } : {}),
+        },
+        tags: ['item', 'spell', 'consumable', ...(spell.damage ? ['damage'] : []), ...(spell.heal ? ['heal'] : []), ...(spell.area ? ['area'] : [])],
+      });
+    }
   }
 
   if (hasFeature(e, 'second_wind')) {
@@ -138,6 +173,35 @@ export function listActions(state: GameState, actorId: string): ActionDef[] {
   return actions;
 }
 
+function castableAction(id: string, spell: SpellData, cost: Record<string, number>, tags: string[]): ActionDef {
+  return {
+    id,
+    label: spell.label,
+    description: spell.text,
+    cost,
+    target: {
+      kind: spell.target,
+      range: spell.range,
+      ...(spell.filter ? { filter: spell.filter } : {}),
+      // Bless/Aid pick several creatures; Magic Missile/Scorching Ray spread darts or rays.
+      ...(spell.maxTargets ? { maxTargets: spell.maxTargets } : spell.multi && !spell.area ? { maxTargets: spell.multi, allowRepeat: true } : {}),
+    },
+    tags: [...tags, ...(spell.damage ? ['damage'] : []), ...(spell.heal ? ['heal'] : []), ...(spell.area ? ['area'] : [])],
+  };
+}
+
+type Castable = SpellData & Partial<MonsterActionData>;
+
+/** A spell or a monster's power, by action kind. */
+function castableOf(kind: string, id: string): Castable | undefined {
+  return kind === 'spell' ? SPELLS[id] : kind === 'ability' ? MONSTER_ACTIONS[id] : undefined;
+}
+
+/** Save DC: a power's fixed one, or the caster's spell DC. */
+function castDc(caster: Entity, spell: Castable): number {
+  return spell.dc ?? spellDc(caster, castingAbility(caster) ?? 'int');
+}
+
 export const DAMAGE_LABELS: Record<string, string> = {
   slashing: 'cortante',
   piercing: 'perforante',
@@ -156,14 +220,160 @@ export function attacksPerAction(e: Entity): number {
   return Math.max(stat(e, 'multiattack', 1), hasFeature(e, 'extra_attack') ? 2 : 1);
 }
 
+/**
+ * The weapons one Attack action swings, in order: the same one per attack, or a stat
+ * block's mix (a wight's Life Drain then a longsword). Reactions get a single swing.
+ */
+export function attackSequence(e: Entity, weaponId: string): string[] {
+  if (stat(e, 'single_attack', 0) > 0) return [weaponId];
+  const combo = monsterOf(e)?.combos?.[weaponId];
+  if (combo) return combo.filter((w) => WEAPONS[w]);
+  return Array.from({ length: attacksPerAction(e) }, () => weaponId);
+}
+
+function riderOf(e: Entity, weaponId: string): Rider | undefined {
+  return monsterOf(e)?.riders?.[weaponId];
+}
+
+function riderText(e: Entity, weaponId: string): string {
+  const rider = riderOf(e, weaponId);
+  if (!rider) return '';
+  const save = rider.save ? ` (${ABILITY_LABELS[rider.save.ability]} CD ${rider.save.dc})` : '';
+  return ` · ${rider.label}${save}`;
+}
+
+/** Condition immunities from the stat block (undead don't get poisoned). */
+export function conditionImmune(e: Entity, condition: string): boolean {
+  return hasTag(e, `condimmune:${condition}`);
+}
+
+function riderReaches(rider: Rider, target: Entity): boolean {
+  return isCreature(target) && !(rider.immuneTags ?? []).some((t) => hasTag(target, t));
+}
+
+/** Expected worth of a weapon's rider on one hit: extra damage and conditions (in health points). */
+function riderPreview(state: GameState, attacker: Entity, weaponId: string, target: Entity): { damage: number; utility: number } {
+  const rider = riderOf(attacker, weaponId);
+  if (!rider || !riderReaches(rider, target)) return { damage: 0, utility: 0 };
+  const fail = rider.save
+    ? 1 - chanceToSucceed(saveBonus(target, rider.save.ability) + (hasCondition(target, 'blessed') ? 2.5 : 0), rider.save.dc, saveMode(target, rider.save.ability, rider.damage?.type, rider.condition?.id))
+    : 1;
+  let damage = 0;
+  if (rider.damage) {
+    const avg = adjustForType(target, averageOf(parseDice(rider.damage.dice)), rider.damage.type);
+    damage = fail * avg + (1 - fail) * (rider.save?.half ? avg / 2 : 0);
+  }
+  let utility = 0;
+  if (rider.condition) utility += fail * conditionUtility(state, attacker, target, rider.condition.id, rider.condition.turns);
+  if (rider.drain) utility += fail * 2;
+  return { damage, utility };
+}
+
+/** What a rider does once its weapon has hit (and dealt `damage`). */
+function applyRider(r: Resolver, attackerId: string, weaponId: string, targetId: string, damage: number): void {
+  const rider = riderOf(r.entity(attackerId), weaponId);
+  const target = r.entity(targetId);
+  if (!rider || !riderReaches(rider, target) || !standing(target)) return;
+  const saved = rider.save ? rollSave(r, targetId, rider.save.ability, rider.save.dc, rider.damage?.type, rider.condition?.id) : false;
+  if (rider.damage) {
+    const d = parseDice(rider.damage.dice);
+    const rolled = sum(rollDice(r.rng, d.count, d.sides)) + d.bonus;
+    const amount = saved ? (rider.save?.half ? Math.floor(rolled / 2) : 0) : rolled;
+    if (amount > 0) dealDamage(r, targetId, amount, rider.damage.type);
+  }
+  if (saved || !standing(r.entity(targetId))) return;
+  if (rider.condition && !conditionImmune(target, rider.condition.id)) {
+    r.apply({ type: 'applyCondition', entityId: targetId, condition: rider.condition.id, remainingTurns: rider.condition.turns });
+  }
+  if (rider.drain && damage > 0) {
+    // The maximum drops by the damage taken; the current hit points stay where the hit left them.
+    r.apply(
+      { type: 'modifyResourceMax', entityId: targetId, resource: 'hp', delta: -damage },
+      { type: 'modifyResource', entityId: targetId, resource: 'hp', delta: damage },
+      { type: 'modifyResourceMax', entityId: targetId, resource: 'drained', delta: damage },
+    );
+    r.emit({ type: 'reactionUsed', entityId: targetId, detail: `Vida drenada: −${damage} PG máximos` } as never);
+  }
+}
+
+// --- What a condition is worth (for the AI) ------------------------------------------
+
+/** Rough damage a creature deals per turn: what holding it down saves, or what a buff multiplies. */
+function threat(e: Entity): number {
+  let best = 2;
+  for (const w of tagValues(e, 'weapon')) {
+    const weapon = WEAPONS[w];
+    if (!weapon) continue;
+    const ranged = weapon.properties.includes('ranged');
+    const m = ranged ? mod(e, 'dex') : weapon.properties.includes('finesse') ? Math.max(mod(e, 'dex'), mod(e, 'str')) : mod(e, 'str');
+    best = Math.max(best, (averageOf(parseDice(weapon.damage)) + m) * attackSequence(e, w).length);
+  }
+  if (tagValues(e, 'spell').some((s) => SPELLS[s]?.damage)) best = Math.max(best, 8);
+  return best * 0.65;
+}
+
+const BUFFS = new Set(['blessed', 'shield_of_faith', 'mage_armor', 'guided_check', 'spirit_guardians']);
+
+/**
+ * Health-equivalent worth of putting `condition` on `target` for `turns`, from the
+ * caster's side: positive for a debuff on a foe or a buff on a friend, negative the other way.
+ */
+export function conditionUtility(state: GameState, caster: Entity, target: Entity, condition: string, turns: number): number {
+  if (!isCreature(target) || hasCondition(target, condition) || conditionImmune(target, condition)) return 0;
+  const t = threat(target);
+  const rounds = Math.min(turns, 2);
+  let value = 0;
+  switch (condition) {
+    case 'paralyzed':
+      value = t * rounds + 4;
+      break;
+    case 'restrained':
+      value = t * 0.4 + 3;
+      break;
+    case 'prone':
+      value = t * 0.25 + 2;
+      break;
+    case 'frightened':
+    case 'poisoned':
+      value = t * 0.35 * rounds;
+      break;
+    case 'slowed':
+      value = 1;
+      break;
+    case 'no_reactions':
+      value = 0.5;
+      break;
+    case 'guided':
+      value = 2;
+      break;
+    case 'blessed':
+      value = t * 0.12 * Math.min(turns, 3) + 1;
+      break;
+    case 'shield_of_faith':
+      value = 3;
+      break;
+    case 'mage_armor':
+      value = 13 + mod(target, 'dex') > armorClass(target) ? 3 : 0;
+      break;
+  }
+  void state;
+  const friendly = !isHostile(caster, target);
+  if (BUFFS.has(condition)) return friendly ? value : -value;
+  return friendly ? -value * 1.5 : value;
+}
+
 // --- Weapon attacks ----------------------------------------------------------------
 
 function weaponAttackSpec(state: GameState, attacker: Entity, weaponId: string, targetId: string, sneak: boolean): AttackSpec {
   const weapon = WEAPONS[weaponId]!;
   const ranged = weapon.properties.includes('ranged');
   const ability: Ability = ranged ? 'dex' : weapon.properties.includes('finesse') && mod(attacker, 'dex') > mod(attacker, 'str') ? 'dex' : 'str';
-  const damage = parseDice(weapon.damage);
+  const base = parseDice(weapon.damage);
+  // Brute: a melee weapon deals one extra die.
+  const damage = hasTag(attacker, 'brute') && !ranged ? { ...base, count: base.count + 1 } : base;
   const abilityMod = mod(attacker, ability);
+  const damageMod = weapon.properties.includes('no_mod') ? 0 : abilityMod;
+  const magic = equippedWeaponBonus(attacker, weaponId);
   const extra: AttackSpec['extra'] = [];
   if (sneak) extra.push({ label: 'Ataque furtivo', dice: { count: Math.ceil(stat(attacker, 'level', 1) / 2), sides: 6, bonus: 0 }, type: weapon.type });
   return {
@@ -173,8 +383,9 @@ function weaponAttackSpec(state: GameState, attacker: Entity, weaponId: string, 
     modifiers: [
       { label: ABILITY_LABELS[ability], value: abilityMod },
       { label: 'Competencia', value: profBonus(attacker), term: 'proficiency' },
+      ...(magic.attack ? [{ label: 'Objeto mágico', value: magic.attack }] : []),
     ],
-    damage: { ...damage, bonus: damage.bonus + abilityMod },
+    damage: { ...damage, bonus: damage.bonus + damageMod + magic.damage },
     damageType: weapon.type,
     melee: !ranged,
     critOn: hasFeature(attacker, 'improved_critical') ? 19 : 20,
@@ -199,7 +410,7 @@ function sneakApplies(state: GameState, attacker: Entity, weaponId: string, targ
 function spellDamage(caster: Entity, spell: SpellData): DiceExpr | null {
   if (!spell.damage) return null;
   const d = parseDice(spell.damage.dice);
-  const level = stat(caster, 'level', 1);
+  const level = stat(caster, 'caster_level', stat(caster, 'level', 1));
   const scale = spell.damage.scale ? (level >= 11 ? 3 : level >= 5 ? 2 : 1) : 1;
   return { ...d, count: d.count * scale };
 }
@@ -246,6 +457,9 @@ function areaVictims(state: GameState, caster: Entity, spell: SpellData, target:
   const sculpt = hasFeature(caster, 'sculpt_spells');
   return Object.values(state.entities).filter((e) => {
     if (!standing(e) || !tiles.has(`${e.position.x},${e.position.y}`)) return false;
+    // A rallying cry or a war shout picks its listeners.
+    if (spell.areaFilter === 'ally' && (isHostile(caster, e) || !isCreature(e))) return false;
+    if (spell.areaFilter === 'hostile' && !isHostile(caster, e)) return false;
     // Cones, lines and self-centred bursts (Thunderwave) spare the caster.
     if ((spell.area!.shape !== 'sphere' || spell.range === 0) && e.id === caster.id) return false;
     // Evocation wizards carve safe pockets for their friends.
@@ -283,8 +497,8 @@ function dartTargets(spell: SpellData, target: ActionTarget): string[] {
   return Array.from({ length: n }, (_, i) => picks[i % picks.length]!);
 }
 
-function spellAttackSpec(caster: Entity, spell: SpellData, targetId: string): AttackSpec {
-  const ability = castingAbility(caster) ?? 'int';
+function spellAttackSpec(caster: Entity, spell: Castable, targetId: string): AttackSpec {
+  const ability = spell.attackAbility ?? castingAbility(caster) ?? 'int';
   return {
     attackerId: caster.id,
     targetId,
@@ -293,8 +507,8 @@ function spellAttackSpec(caster: Entity, spell: SpellData, targetId: string): At
       { label: ABILITY_LABELS[ability], value: mod(caster, ability) },
       { label: 'Competencia', value: profBonus(caster), term: 'proficiency' },
     ],
-    damage: spellDamage(caster, spell)!,
-    damageType: spell.damage!.type,
+    damage: spellDamage(caster, spell) ?? { count: 0, sides: 0, bonus: 0 },
+    damageType: spell.damage?.type ?? 'none',
     melee: spell.attack === 'melee',
     critOn: 20,
   };
@@ -308,25 +522,54 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
   const firstId = target.entityId ?? target.entityIds?.[0];
   const targetEntity = firstId ? state.entities[firstId] : undefined;
 
+  if (kind === 'item') {
+    const item = ITEMS[id];
+    if (!item) return { valid: false, reason: 'Objeto desconocido.' };
+    if (item.kind === 'potion') return { valid: true, chance: 1, expectedHealing: Math.round(averageOf(parseDice(item.heal ?? '0'))) };
+    if (item.spell) return previewAction(state, actorId, `spell:${item.spell}`, target);
+    return { valid: false, reason: 'Este objeto no hace nada.' };
+  }
+
   if (kind === 'attack') {
     if (!targetEntity || !standing(targetEntity)) return { valid: false, reason: 'No hay a quién atacar ahí.' };
     if (!hasLineOfSight(state, e.position, targetEntity.position)) return { valid: false, reason: 'No lo ves: hay algo en medio.' };
     const sneak = sneakApplies(state, e, id, targetEntity);
     const p = attackPreview(state, weaponAttackSpec(state, e, id, targetEntity.id, sneak));
-    const n = attacksPerAction(e);
+    const sequence = attackSequence(e, id);
+    const n = sequence.length;
+    // Each swing of the sequence (Sneak Attack only once), plus what its rider adds on a hit.
+    let expected = 0;
+    let utility = 0;
+    let bestRider = 0;
+    sequence.forEach((w, i) => {
+      const pw = i === 0 ? p : attackPreview(state, weaponAttackSpec(state, e, w, targetEntity.id, false));
+      const rider = riderPreview(state, e, w, targetEntity);
+      expected += pw.expected + pw.chance * rider.damage;
+      utility += pw.chance * rider.utility;
+      bestRider = Math.max(bestRider, rider.utility);
+    });
+    // A second paralysis on the same target is worth little: cap at one rider's worth.
+    utility = Math.min(utility, bestRider);
     const collateral = oilBarrelCollateral(state, targetEntity, 1 - Math.pow(1 - p.chance, n));
+    const rider = sequence.map((w) => riderOf(e, w)).find((x) => x && riderReaches(x, targetEntity));
     return {
       valid: true,
       chance: p.chance,
-      expectedDamage: p.expected * n,
+      expectedDamage: expected,
+      ...(utility ? { utility } : {}),
       ...(collateral.length ? { collateral } : {}),
-      breakdown: attackBreakdown(p, n, sneak),
+      breakdown: [
+        ...(attackBreakdown(p, n, sneak) ?? []),
+        ...(rider ? [{ label: rider.label, value: rider.save ? `salvación de ${ABILITY_LABELS[rider.save.ability]} CD ${rider.save.dc}` : 'al impactar', term: 'saving_throw' }] : []),
+      ],
     };
   }
 
-  if (kind === 'spell') {
-    const spell = SPELLS[id]!;
-    const ability = castingAbility(e) ?? 'int';
+  if (kind === 'spell' || kind === 'ability') {
+    const spell = castableOf(kind, id);
+    if (!spell) return { valid: false, reason: 'Acción desconocida.' };
+    // Already holding a spell up: the AI won't swap it for another (the player still may).
+    const swapsConcentration = !!spell.concentration && hasCondition(e, 'concentrating');
     const chosen = targetIds(target).map((t) => state.entities[t]).filter((t): t is Entity => !!t);
     if (spell.requiresTag && chosen.some((t) => !hasTag(t, spell.requiresTag!))) return { valid: false, reason: 'Este conjuro no afecta a esa criatura.' };
     if (spell.special === 'revivify') {
@@ -355,22 +598,25 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
         chance = Math.max(chance, p.chance);
       }
       const p = attackPreview(state, spellAttackSpec(e, spell, targetEntity.id));
-      return { valid: true, chance, expectedDamage: expected, breakdown: attackBreakdown(p, shots.length, false) };
+      const utility = spell.condition && !swapsConcentration ? p.chance * conditionUtility(state, e, targetEntity, spell.condition.id, spell.condition.turns) : 0;
+      return { valid: true, chance, expectedDamage: expected, ...(utility ? { utility } : {}), breakdown: attackBreakdown(p, shots.length, false) };
     }
     if (spell.autoHit && spell.damage) {
       const d = spellDamage(e, spell)!;
       return { valid: true, chance: 1, expectedDamage: averageOf(d) * shots.length, breakdown: [{ label: 'Impacta siempre', value: '100 %', term: 'hit_chance' }, { label: 'Dardos', value: String(shots.length) }] };
     }
     if (spell.save) {
-      const dc = spellDc(e, ability);
+      const dc = castDc(e, spell);
       const dmg = spellDamage(e, spell);
       let expected = 0;
       let chance = 0;
+      let utility = 0;
       for (const v of victims.filter(isCreature)) {
-        const fail = 1 - chanceToSucceed(saveBonus(v, spell.save.ability) + (hasCondition(v, 'blessed') ? 2.5 : 0), dc, saveMode(v, spell.save.ability));
+        const fail = 1 - chanceToSucceed(saveBonus(v, spell.save.ability) + (hasCondition(v, 'blessed') ? 2.5 : 0), dc, saveMode(v, spell.save.ability, spell.damage?.type, spell.condition?.id));
         chance = Math.max(chance, fail);
+        if (spell.condition && spell.special !== 'spirit_guardians' && !swapsConcentration) utility += fail * conditionUtility(state, e, v, spell.condition.id, spell.condition.turns);
         if (dmg) {
-          const avg = averageOf(dmg);
+          const avg = adjustForType(v, averageOf(dmg), spell.damage!.type);
           const value = fail * avg + (1 - fail) * (spell.save.half ? avg / 2 : hasFeature(e, 'potent_cantrip') && spell.level === 0 ? avg / 2 : 0);
           // Friendly fire counts against the plan.
           expected += isHostile(e, v) ? value : -value * 1.5;
@@ -382,11 +628,14 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
       if (spell.area && victims.filter((v) => isCreature(v) && isHostile(e, v)).length === 0) {
         return { valid: true, chance: 0, expectedDamage: 0, breakdown: [{ label: 'No alcanza a ningún enemigo' }], ...(affectedTiles ? { affectedTiles } : {}) };
       }
+      // Spirit Guardians already up (or another spell held): recasting gains nothing.
+      if (swapsConcentration || (spell.special === 'spirit_guardians' && hasCondition(e, 'spirit_guardians'))) expected = 0;
       return {
         ...(affectedTiles ? { affectedTiles } : {}),
         valid: true,
         chance,
         expectedDamage: Math.max(0, expected),
+        ...(utility ? { utility } : {}),
         breakdown: [
           { label: `CD ${dc} (${ABILITY_LABELS[spell.save.ability]})`, term: 'dc' },
           { label: 'Probabilidad de que falle la salvación', value: pct(chance), term: 'saving_throw' },
@@ -400,7 +649,15 @@ export function previewAction(state: GameState, actorId: string, actionId: strin
       const amount = healAmount(e, spell, slot);
       return { valid: true, chance: 1, expectedHealing: amount * victims.length, breakdown: [{ label: `Cura ~${amount} por objetivo` }, { label: 'Objetivos', value: String(victims.length) }] };
     }
-    return { valid: true, chance: 1, ...(spell.maxTargets ? { breakdown: [{ label: 'Objetivos', value: String(victims.length) }] } : {}) };
+    // Buffs and other plain conditions (Bless, Shield of Faith, a knight's Leadership).
+    const utility = spell.condition && !swapsConcentration ? victims.reduce((n, v) => n + conditionUtility(state, e, v, spell.condition!.id, spell.condition!.turns), 0) : 0;
+    return {
+      valid: true,
+      chance: 1,
+      ...(utility ? { utility } : {}),
+      ...(spell.maxTargets || spell.area ? { breakdown: [{ label: 'Objetivos', value: String(victims.length) }] } : {}),
+      ...(spell.area ? { affectedTiles: areaTiles(state, e, spell, target.tile ?? e.position) } : {}),
+    };
   }
 
   if (kind === 'feature' || kind === 'basic') {
@@ -521,18 +778,31 @@ export function performAction(ruleset: Ruleset, state: GameState, actorId: strin
   const targetId = target.entityId;
 
   if (kind === 'attack') {
-    for (let i = 0; i < attacksPerAction(e); i++) {
+    for (const w of attackSequence(e, id)) {
       const t = r.entity(targetId!);
       if (!standing(t)) break;
-      const sneak = sneakApplies(r.state, r.entity(actorId), id, t);
-      const { hit } = resolveAttack(r, weaponAttackSpec(r.state, r.entity(actorId), id, t.id, sneak));
+      const sneak = sneakApplies(r.state, r.entity(actorId), w, t);
+      const { hit, damage } = resolveAttack(r, weaponAttackSpec(r.state, r.entity(actorId), w, t.id, sneak));
       if (hit && sneak) r.apply({ type: 'modifyResource', entityId: actorId, resource: 'sneak_attack', delta: -1 });
+      if (hit) applyRider(r, actorId, w, t.id, damage);
     }
     return r.outcome();
   }
 
-  if (kind === 'spell') {
-    castSpell(r, actorId, SPELLS[id]!, id, target);
+  if (kind === 'spell' || kind === 'ability') {
+    castSpell(r, actorId, castableOf(kind, id)!, id, target);
+    return r.outcome();
+  }
+
+  if (kind === 'item') {
+    const item = ITEMS[id]!;
+    if (item.kind === 'potion') {
+      const dice = parseDice(item.heal ?? '0');
+      heal(r, target.entityId ?? actorId, sum(rollDice(rng, dice.count, dice.sides)) + dice.bonus);
+    } else if (item.spell) {
+      castSpell(r, actorId, SPELLS[item.spell]!, item.spell, target);
+    }
+    r.apply({ type: 'giveItem', owner: 'party', item: id, count: -1 });
     return r.outcome();
   }
 
@@ -591,7 +861,7 @@ function stabilize(r: Resolver, id: string): void {
   r.emit({ type: 'stabilized', entityId: id } as never);
 }
 
-function castSpell(r: Resolver, casterId: string, spell: SpellData, spellId: string, target: ActionTarget): void {
+function castSpell(r: Resolver, casterId: string, spell: Castable, spellId: string, target: ActionTarget): void {
   const caster = r.entity(casterId);
   const ability = castingAbility(caster) ?? 'int';
   const slot = spell.level === 0 ? 0 : (lowestSlot(caster, spell.level) ?? spell.level);
@@ -606,7 +876,7 @@ function castSpell(r: Resolver, casterId: string, spell: SpellData, spellId: str
     r.apply({ type: 'applyCondition', entityId: casterId, condition: 'concentrating' });
   }
   const conditionFor = (id: string) =>
-    spell.condition
+    spell.condition && !conditionImmune(r.entity(id), spell.condition.id)
       ? [{ type: 'applyCondition' as const, entityId: id, condition: spell.condition.id, remainingTurns: spell.condition.turns, ...(spell.concentration ? { sourceId: concentrationSource(casterId) } : {}) }]
       : [];
 
@@ -658,11 +928,11 @@ function touchedTiles(state: GameState, caster: Entity, spell: SpellData, target
   return tiles.length ? tiles : target.tile ? [target.tile] : [];
 }
 
-function resolveSpellOnCreatures(r: Resolver, casterId: string, spell: SpellData, target: ActionTarget, slot: number): void {
+function resolveSpellOnCreatures(r: Resolver, casterId: string, spell: Castable, target: ActionTarget, slot: number): void {
   const caster = r.entity(casterId);
   const ability = castingAbility(caster) ?? 'int';
   const conditionFor = (id: string) =>
-    spell.condition
+    spell.condition && !conditionImmune(r.entity(id), spell.condition.id)
       ? [{ type: 'applyCondition' as const, entityId: id, condition: spell.condition.id, remainingTurns: spell.condition.turns, ...(spell.concentration ? { sourceId: concentrationSource(casterId) } : {}) }]
       : [];
   const victims = spellTargets(r.state, caster, spell, target);
@@ -681,11 +951,11 @@ function resolveSpellOnCreatures(r: Resolver, casterId: string, spell: SpellData
     return;
   }
   if (spell.save) {
-    const dc = spellDc(caster, ability);
+    const dc = castDc(caster, spell);
     const d = spellDamage(caster, spell);
     const damage = d ? sum(rollDice(r.rng, d.count, d.sides)) + d.bonus : 0;
     for (const v of victims) {
-      const saved = rollSave(r, v.id, spell.save.ability, dc, spell.damage?.type);
+      const saved = rollSave(r, v.id, spell.save.ability, dc, spell.damage?.type, spell.condition?.id);
       if (d) {
         const half = spell.save.half || (spell.level === 0 && hasFeature(caster, 'potent_cantrip'));
         const amount = saved ? (half ? Math.floor(damage / 2) : 0) : damage;

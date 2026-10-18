@@ -260,7 +260,17 @@ Son sistemas reutilizables por los tres juegos, con la configuración en `conten
   - Caer y desangrarse (3 turnos), estabilizar, muerte, curación y Aguante incansable.
   - Reacciones automáticas: Escudo y Esquiva asombrosa.
   - Áreas (esfera, cono y línea) con Esculpir conjuros, Espíritus guardianes, Expulsar muertos vivientes y Preservar la vida.
-- **Ajustes conscientes:** los conjuros multiobjetivo eligen automáticamente a los aliados más heridos. Las reacciones se usan solas cuando convienen (en el futuro, con una opción para preguntar). Las subidas de nivel interactivas (mejora de característica y elección de conjuros) llegan en la Fase 5.
+- **Ajustes conscientes:** los conjuros multiobjetivo eligen automáticamente a los aliados más heridos. Las reacciones se usan solas cuando convienen (en el futuro, con una opción para preguntar). Las subidas de nivel interactivas (mejora de característica y elección de conjuros) llegan en la Fase 5; el nivel ya sale de la experiencia (ver «Progresión por experiencia»).
+
+## Progresión por experiencia
+
+- **Motor (genérico, `engine/progression.ts`).** El grupo comparte una bolsa de puntos en `state.systems.progress`. La llenan:
+  - los combates ganados: al acabar, el motor suma `ruleset.progression.rewardFor` de cada enemigo del orden de turnos que haya caído (solo si gana el bando de un jugador);
+  - el efecto `gainProgress { amount, id? }`, que usan los diálogos que resuelven un conflicto sin pelear. Con `id` solo paga una vez por partida.
+- **Umbrales:** son contenido (`EngineContent.progression.thresholds`, nivel → puntos). Tras cada comando, fuera de combate y de diálogo, el motor reconstruye con `ruleset.progression.levelUp` a cada personaje de un jugador por debajo del nivel ganado y emite `leveledUp { level, from, entityIds }`. Un compañero que se une tarde se pone al día en el siguiente comando. El arnés de QA ve lo mismo que el jugador.
+- **Ruleset:** `progression` declara la etiqueta («PX»), `levelOf` (null para lo que no sube de nivel), `levelUp` y `rewardFor`. En 5e son los PX del SRD de `monsters.json` y `levelUpCharacter`.
+- **Cliente:** no decide nada. Cuando ve `leveledUp` del líder, espera a un momento tranquilo y narra cada nivel (`levels.texts`). El registro muestra los PX ganados y la ficha, «PX actual / siguiente nivel».
+- **Intereses** (`content/intereses/levelups.json`): bolsa de grupo, nivel 4 a 1000 PX y nivel 5 a 1500 (unos 250 y 375 por personaje en un grupo de cuatro). No hay umbral de nivel 6. Las resoluciones habladas pagan lo mismo que el combate que evitan: mineros 175, juicio 500, Sinpaga 900, tregua de D1 800 y D2 100 (hito). `tests/playthrough/progression.test.ts` comprueba la curva en cada ruta.
 
 ## Cliente de combate
 

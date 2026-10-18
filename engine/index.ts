@@ -19,4 +19,5 @@ export * from './jump';
 export * from './checks';
 export * from './save';
 export * from './tiled';
+export * from './progression';
 export * from './engine';

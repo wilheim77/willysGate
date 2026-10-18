@@ -1,0 +1,65 @@
+{
+  "$comment": "Barranco (optional map). What the wolves left of a traveller: map spawn chest-viajero. A healing potion, some coins and a Cloak of Protection, as the reward for the optional fight.",
+  "id": "chest_viajero",
+  "start": "cofre",
+  "nodes": {
+    "cofre": {
+      "text": "Un baúl de viaje volcado entre las rocas, con las correas mordidas. De su dueño queda una bota y poco más. Los lobos no tienen interés en la propiedad privada.",
+      "choices": [
+        {
+          "text": "Abrirlo.",
+          "next": "abierto"
+        },
+        {
+          "text": "Dejarlo."
+        }
+      ]
+    },
+    "abierto": {
+      "text": "Ropa buena empapada, una carta sin terminar a una tal Mirta y, debajo de todo, una cota ligera que no se ha oxidado. Ni una mancha. Eso, en este valle, ya es magia.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "chest-viajero",
+          "removeTags": [
+            "dialogue:chest_viajero"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 18
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "potion_curacion",
+          "count": 1
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "armadura_mas1",
+          "count": 1
+        }
+      ],
+      "next": "carta"
+    },
+    "carta": {
+      "speaker": "dorotea",
+      "text": "Dieciocho coronas, una poción y una cota. Lo apunto como herencia sin reclamar. Si Mirta aparece, que lo pida por escrito.",
+      "choices": [
+        {
+          "text": "Guardar la carta también."
+        },
+        {
+          "text": "Dejar la carta en el baúl."
+        }
+      ]
+    }
+  }
+}

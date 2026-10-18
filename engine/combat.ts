@@ -137,6 +137,18 @@ function refreshTurnResources(ruleset: Ruleset, entity: Entity): Effect[] {
     .map(([id, r]) => ({ type: 'modifyResource', entityId: entity.id, resource: id, delta: r.max - r.current }));
 }
 
+/**
+ * Points a won fight is worth to the party: the ruleset's reward for every fighter hostile to
+ * a player-controlled winner who ended the fight down. Zero if the party didn't win.
+ */
+export function combatReward(ruleset: Ruleset, state: GameState, winner: string | null): number {
+  if (!ruleset.progression || winner === null) return 0;
+  const fighters = state.turn.order.map((id) => state.entities[id]).filter((e): e is Entity => !!e);
+  const party = fighters.find((e) => e.factionId === winner && e.controllerId.startsWith('player'));
+  if (!party) return 0;
+  return fighters.filter((e) => !ruleset.isStanding(e) && isHostile(party, e)).reduce((sum, e) => sum + Math.max(0, ruleset.progression!.rewardFor(e)), 0);
+}
+
 /** Ends combat when at most one faction still has someone standing. */
 export function checkCombatEnd(ruleset: Ruleset, state: GameState): { state: GameState; events: GameEvent[] } {
   if (state.turn.mode !== 'combat') return { state, events: [] };
@@ -153,6 +165,13 @@ export function checkCombatEnd(ruleset: Ruleset, state: GameState): { state: Gam
   const events: GameEvent[] = [ended];
   if (ruleset.onCombatEnd) {
     const r = applyOutcome(ruleset, next, ruleset.onCombatEnd(next, winner));
+    next = r.state;
+    events.push(...r.events);
+  }
+  // The party won: it shares what the foes it brought down were worth (engine/progression.ts).
+  const reward = combatReward(ruleset, state, winner);
+  if (reward > 0) {
+    const r = applyEffects(ruleset, next, [{ type: 'gainProgress', amount: reward, reason: 'combat' }]);
     next = r.state;
     events.push(...r.events);
   }

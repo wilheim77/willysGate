@@ -1,0 +1,18 @@
+{
+  "$comment": "Bóveda: the old pulley and chains over the trench (map spawn lever-polea). Flavour for now; a later pass may make it drop the ore bucket on whoever stands below.",
+  "id": "lever_polea",
+  "start": "polea",
+  "nodes": {
+    "polea": {
+      "text": "Una polea de mina con su cadena, oxidada hasta parecer de barro. Del otro extremo cuelga un cubo de mineral, quieto sobre la zanja, como si esperara a alguien debajo.",
+      "choices": [
+        { "text": "Tirar de la cadena.", "once": true, "next": "tirar" },
+        { "text": "Dejarla." }
+      ]
+    },
+    "tirar": {
+      "text": "La cadena cede un palmo con un chirrido que recorre la Bóveda entera. El cubo baja, se balancea y vuelve a quedarse quieto. Abajo no había nadie. Esta vez.",
+      "effects": [{ "type": "setFlag", "flag": "polea_probada", "value": true }]
+    }
+  }
+}

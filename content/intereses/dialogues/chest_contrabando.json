@@ -1,0 +1,80 @@
+{
+  "$comment": "Escorial: the Sinpaga stash. Investigation DC 15 finds a Wand of Magic Missiles.",
+  "id": "chest_contrabando",
+  "start": "cofre",
+  "nodes": {
+    "cofre": {
+      "text": "Un arcón medio enterrado entre la escoria, con un candado nuevo en una madera vieja. Los Sinpaga guardan aquí lo que no declaran.",
+      "choices": [
+        {
+          "text": "Abrirlo.",
+          "next": "abierto"
+        },
+        {
+          "text": "Dejarlo."
+        }
+      ]
+    },
+    "abierto": {
+      "text": "Monedas sin ceca, una poción de curación mayor y un saco de virotes. Dorotea lo anota todo sin que nadie se lo pida.",
+      "effects": [
+        {
+          "type": "setEntity",
+          "entityId": "chest-contrabando",
+          "removeTags": [
+            "dialogue:chest_contrabando"
+          ],
+          "addTags": [
+            "pose:open"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "coronas",
+          "count": 30
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "potion_curacion_mayor",
+          "count": 1
+        },
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "virotes",
+          "count": 20
+        }
+      ],
+      "choices": [
+        {
+          "text": "Buscar un doble fondo.",
+          "check": {
+            "check": "investigation",
+            "dc": 15,
+            "success": "doble_fondo",
+            "failure": "nada"
+          }
+        },
+        {
+          "text": "Cerrarlo y seguir."
+        }
+      ]
+    },
+    "doble_fondo": {
+      "text": "En un compartimento forrado de fieltro: una varita de madera negra que zumba al tocarla. Contrabando de primera.",
+      "effects": [
+        {
+          "type": "giveItem",
+          "owner": "party",
+          "item": "vara_proyectiles_magicos",
+          "count": 1
+        }
+      ]
+    },
+    "nada": {
+      "text": "Hay un doble fondo, sí. Vacío. Alguien llegó antes, o alguien no se fía ni de sus propios escondites."
+    }
+  }
+}

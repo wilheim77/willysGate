@@ -1,0 +1,56 @@
+{
+  "$comment": "Monsters' own powers (SRD 5.1 mechanics; foreman_roar and powder_bomb are Intereses-flavoured uses of SRD frightful-presence and grenade rules). Same fields as spells.json, plus recharge (comes back on a d6 >= value at the start of the monster's turn), perDay (uses per day), dc (fixed save DC) and attackAbility. Monsters list them in monsters.json → actions.",
+  "web": {
+    "label": "Telaraña",
+    "level": 0,
+    "cast": "action",
+    "range": 6,
+    "target": "creature",
+    "filter": "hostile",
+    "attack": "ranged",
+    "attackAbility": "dex",
+    "condition": { "id": "restrained", "turns": 1 },
+    "recharge": 5,
+    "text": "Lanza una red pegajosa (recarga 5-6). Si acierta, el objetivo queda apresado: no se mueve y los ataques contra él tienen ventaja."
+  },
+  "leadership": {
+    "label": "Liderazgo",
+    "level": 0,
+    "cast": "action",
+    "range": 0,
+    "target": "self",
+    "area": { "shape": "sphere", "size": 6 },
+    "areaFilter": "ally",
+    "condition": { "id": "blessed", "turns": 10 },
+    "perDay": 1,
+    "text": "Una arenga (1/día): sus aliados a 6 casillas suman 1d4 a ataques y salvaciones durante un minuto."
+  },
+  "foreman_roar": {
+    "label": "Grito del capataz",
+    "level": 0,
+    "cast": "action",
+    "range": 0,
+    "target": "self",
+    "area": { "shape": "sphere", "size": 6 },
+    "areaFilter": "hostile",
+    "save": { "ability": "wis", "half": false },
+    "dc": 13,
+    "condition": { "id": "frightened", "turns": 2 },
+    "perDay": 1,
+    "text": "Un grito que ha doblegado a cuarenta hombres (1/día). Los enemigos a 6 casillas que fallen una salvación de Sabiduría (CD 13) quedan asustados: desventaja al atacar durante dos turnos."
+  },
+  "powder_bomb": {
+    "label": "Bomba de pólvora",
+    "level": 0,
+    "cast": "action",
+    "range": 8,
+    "target": "tile",
+    "area": { "shape": "sphere", "size": 1 },
+    "save": { "ability": "dex", "half": true },
+    "dc": 15,
+    "damage": { "dice": "4d6", "type": "fire" },
+    "element": "fire",
+    "recharge": 5,
+    "text": "Lanza un saquete de pólvora de voladura con la mecha corta (recarga 5-6). Salvación de Destreza CD 15: 4d6 de fuego, la mitad si se supera. Prende el aceite."
+  }
+}

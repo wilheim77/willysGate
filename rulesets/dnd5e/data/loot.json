@@ -1,0 +1,46 @@
+{
+  "$comment": "Weighted drop tables by monster tier (see loot.ts for how a monster id maps to a tier). Each entry has a `weight` out of the table's total; an entry with no `item` means nothing drops. `count` is an inclusive [min, max] rolled with the seeded RNG. Item ids are mechanical ids from data/magic-items.json; their Spanish label/text lives in content/<game>/items.json.",
+  "tables": {
+    "none": [{ "weight": 1 }],
+    "beast": [
+      { "weight": 700 },
+      { "item": "coronas", "count": [1, 4], "weight": 300 }
+    ],
+    "minion": [
+      { "weight": 550 },
+      { "item": "coronas", "count": [2, 7], "weight": 300 },
+      { "item": "potion_curacion", "count": [1, 1], "weight": 130 },
+      { "item": "espada_mas1", "count": [1, 1], "weight": 4 },
+      { "item": "armadura_mas1", "count": [1, 1], "weight": 4 },
+      { "item": "anillo_proteccion", "count": [1, 1], "weight": 4 },
+      { "item": "capa_proteccion", "count": [1, 1], "weight": 4 },
+      { "item": "vara_proyectiles_magicos", "count": [1, 1], "weight": 4 }
+    ],
+    "caster": [
+      { "weight": 400 },
+      { "item": "coronas", "count": [2, 8], "weight": 300 },
+      { "item": "pergamino_manos_ardientes", "count": [1, 1], "weight": 150 },
+      { "item": "pergamino_bendicion", "count": [1, 1], "weight": 150 }
+    ],
+    "leader": [
+      { "weight": 300 },
+      { "item": "coronas", "count": [4, 16], "weight": 250 },
+      { "item": "potion_curacion_mayor", "count": [1, 1], "weight": 250 },
+      { "item": "espada_mas1", "count": [1, 1], "weight": 50 },
+      { "item": "armadura_mas1", "count": [1, 1], "weight": 40 },
+      { "item": "anillo_proteccion", "count": [1, 1], "weight": 40 },
+      { "item": "capa_proteccion", "count": [1, 1], "weight": 40 },
+      { "item": "vara_proyectiles_magicos", "count": [1, 1], "weight": 30 }
+    ],
+    "boss": [
+      { "item": "coronas", "count": [8, 24], "weight": 100 },
+      { "item": "potion_curacion_mayor", "count": [1, 2], "weight": 150 },
+      { "item": "espada_mas1", "count": [1, 1], "weight": 200 },
+      { "item": "armadura_mas1", "count": [1, 1], "weight": 150 },
+      { "item": "anillo_proteccion", "count": [1, 1], "weight": 150 },
+      { "item": "capa_proteccion", "count": [1, 1], "weight": 150 },
+      { "item": "saco_sinfondo", "count": [1, 1], "weight": 20 },
+      { "item": "vara_proyectiles_magicos", "count": [1, 1], "weight": 80 }
+    ]
+  }
+}

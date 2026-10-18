@@ -168,7 +168,7 @@
     },
     {
      "id": 9,
-     "name": "fanatico_pala-3",
+     "name": "predicador_pala-1",
      "type": "",
      "point": true,
      "x": 208,
@@ -1081,9 +1081,14 @@
        "value": "a-calles,a-escorial,a-abadia"
       },
       {
+       "name": "settledFlag",
+       "type": "string",
+       "value": "juicio_resuelto"
+      },
+      {
        "name": "fight",
        "type": "string",
-       "value": "fanatico_pala-1,fanatico_pala-2,fanatico_pala-3"
+       "value": "fanatico_pala-1,fanatico_pala-2,predicador_pala-1"
       }
      ]
     }

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition } from '../engine';
+import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition, inventoriesOf } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -22,7 +22,7 @@ import { setupBarks } from './ui/barks';
 document.title = game.title;
 applyTheme(game.theme);
 
-const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {}, maps: game.maps ?? {} });
+const engine = createEngine(game.ruleset, game.id, { dialogues: game.dialogues ?? {}, maps: game.maps ?? {}, ...(game.levels ? { progression: game.levels.progression } : {}) });
 const startMap = new URLSearchParams(location.search).get('mapa') ?? undefined;
 const store = new GameStore(engine, game.newGame(engine, randomSeed(), startMap ? { start: startMap } : undefined));
 const hud = new Hud(store, game);
@@ -84,20 +84,178 @@ controller.onTrapReached = (trap, candidates) => {
   );
 };
 
-// Defeat: the leader can't get up once the fight is over (the party lost, or the leader bled
-// out while the others won). Without this the game just sat there. Offer to replay the fight
-// from the moment before it started.
+// Loot from a fight: coin/potions/scrolls already land straight in the shared bag (see
+// rulesets/dnd5e/loot.ts and the combat log), but gear with a slot (weapon/armour/ring/
+// cloak) asks who gets it, and - if that person already had something in that slot - who
+// keeps the old one, chaining until someone takes it or it's left in the shared bag.
 {
-  let beforeFight = store.state;
+  const partyMemberIds = () => Object.values(store.state.entities).filter((e) => e.controllerId === game.playerId).map((e) => e.id);
+
+  const offerReplaced = (oldItem: string, justEquippedTo: string, onDone: () => void) => {
+    const ruleset = store.engine.ruleset;
+    const slot = ruleset.itemSlot?.(oldItem);
+    const def = game.items?.[oldItem];
+    const others = partyMemberIds().filter((id) => id !== justEquippedTo);
+    const options = others.map((id) => {
+      const current = slot ? ruleset.equippedInSlot?.(store.state.entities[id]!, slot) : undefined;
+      const name = store.state.entities[id]!.name;
+      return {
+        label: current ? `${name} (lleva ${game.items?.[current]?.label ?? current})` : name,
+        onPick: () => {
+          const r = store.dispatch({ type: 'equipItem', issuer: game.playerId, entityId: id, item: oldItem } as never);
+          if (!r.ok) return onDone();
+          const ev = r.events.find((e) => e.type === 'itemEquipped') as { replaced?: string } | undefined;
+          if (ev?.replaced) offerReplaced(ev.replaced, id, onDone);
+          else onDone();
+        },
+      };
+    });
+    options.push({ label: 'Guardarlo en la mochila', onPick: onDone });
+    dialogue.ask(`¿Quién se queda con ${def?.label ?? oldItem}?`, options, false);
+  };
+
+  const offerEquip = (item: string, onDone: () => void, excludeId?: string) => {
+    const def = game.items?.[item];
+    const text = [def?.label ?? item, def?.text].filter(Boolean).join('\n');
+    const candidates = partyMemberIds().filter((id) => id !== excludeId);
+    if (candidates.length === 0) return onDone();
+    dialogue.ask(
+      text,
+      candidates.map((id) => ({
+        label: `Dárselo a ${store.state.entities[id]!.name}`,
+        onPick: () => {
+          const r = store.dispatch({ type: 'equipItem', issuer: game.playerId, entityId: id, item } as never);
+          if (!r.ok) return onDone();
+          const ev = r.events.find((e) => e.type === 'itemEquipped') as { replaced?: string } | undefined;
+          if (ev?.replaced) offerReplaced(ev.replaced, id, onDone);
+          else onDone();
+        },
+      })),
+      false,
+    );
+  };
+
+  let lootBusy = false;
+  const lootQueue: string[] = [];
+  const pumpLootQueue = () => {
+    if (lootBusy) return;
+    const item = lootQueue.shift();
+    if (!item) return;
+    lootBusy = true;
+    offerEquip(item, () => {
+      lootBusy = false;
+      pumpLootQueue();
+    });
+  };
+
+  store.subscribe((change) => {
+    if (change.kind !== 'events') return;
+    const dropped = new Set(change.events.filter((e) => e.type === 'lootDropped').map((e) => (e as unknown as { item: string }).item));
+    for (const ev of change.events) {
+      // Gear found in a chest or handed over in a conversation gets the same "who wears it?" question.
+      const found = ev as unknown as { owner?: string; item?: string; from?: number; to?: number };
+      const fromChest = ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
+      if (ev.type !== 'lootDropped' && !fromChest) continue;
+      const item = (ev as unknown as { item: string }).item;
+      // Consumables and misc goods have no slot: they're already in the shared bag (see the
+      // combat log line for them), nothing to ask.
+      if (!store.engine.ruleset.itemSlot?.(item)) continue;
+      lootQueue.push(item);
+    }
+    pumpLootQueue();
+  });
+
+  // The shared bag, one tap away (🎒 in the top bar): what you carry, what it does, and the
+  // obvious things to do with it - drink a potion out of combat, put on gear left in the bag.
+  const openBag = () => {
+    const ruleset = store.engine.ruleset;
+    const entries = Object.entries(inventoriesOf(store.state).party ?? {}).filter(([, n]) => n > 0);
+    const worn = new Set(partyMemberIds().flatMap((id) => ruleset.equippedItems?.(store.state.entities[id]!) ?? []));
+    const lines = entries.map(([item, n]) => {
+      const def = game.items?.[item];
+      return `• ${def?.label ?? item}${n > 1 ? ` ×${n}` : ''}${def?.text ? ` — ${def.text}` : ''}`;
+    });
+    const options: { label: string; onPick: () => void }[] = [];
+    const fighting = store.state.turn.mode === 'combat';
+    for (const [item] of entries) {
+      const def = game.items?.[item];
+      const name = def?.label ?? item;
+      if (!fighting && /^potion_/.test(item)) {
+        options.push({
+          label: `Beber ${name}`,
+          onPick: () =>
+            dialogue.ask(
+              `¿Quién bebe ${name}?`,
+              partyMemberIds().map((id) => {
+                const e = store.state.entities[id]!;
+                const hp = e.resources.hp;
+                return { label: `${e.name}${hp ? ` (${hp.current}/${hp.max} PG)` : ''}`, onPick: () => {
+                  const r = store.dispatch({ type: 'useItem', issuer: game.playerId, entityId: id, item } as never);
+                  if (!r.ok) hud.say(r.error.message, true);
+                } };
+              }),
+            ),
+        });
+      } else if (ruleset.itemSlot?.(item) && !worn.has(item)) {
+        options.push({ label: `Equipar ${name}`, onPick: () => offerEquip(item, () => undefined) });
+      }
+    }
+    const empty = game.texts.combat?.emptyBag ?? 'Nada. Ni una corona.';
+    const hint = fighting ? '\n\nEn combate, las pociones y pergaminos se usan desde la barra de acciones.' : '';
+    dialogue.ask(`🎒 ${game.texts.combat?.inventory ?? 'Mochila del grupo'}\n\n${lines.length ? lines.join('\n') : empty}${hint}`, options, game.texts.combat?.ok ?? 'Vale');
+  };
+  const bagButton = document.createElement('button');
+  bagButton.textContent = '🎒';
+  bagButton.title = game.texts.combat?.inventory ?? 'Mochila del grupo';
+  bagButton.setAttribute('aria-label', bagButton.title);
+  bagButton.addEventListener('click', openBag);
+  document.querySelector('.hud-top nav')!.prepend(bagButton);
+
+  // Picking things up says so: "+2 Poción de curación".
+  store.subscribe((change) => {
+    if (change.kind !== 'events') return;
+    const gained = change.events
+      .filter((e) => e.type === 'itemsChanged')
+      .map((e) => e as unknown as { owner: string; item: string; from: number; to: number })
+      .filter((e) => e.owner === 'party' && e.to > e.from);
+    if (!gained.length) return;
+    hud.say(`🎒 ${gained.map((g) => `+${g.to - g.from} ${game.items?.[g.item]?.label ?? g.item}`).join(', ')}`);
+  });
+}
+
+// Changing gear later from the sheet re-runs the same assignment flow for that one item.
+sheet.onChangeGear = (item: string) => {
+  const def = game.items?.[item];
+  const options = Object.values(store.state.entities)
+    .filter((e) => e.controllerId === game.playerId)
+    .map((e) => ({
+      label: store.engine.ruleset.equippedInSlot?.(e, store.engine.ruleset.itemSlot?.(item) ?? '') === item ? `${e.name} (lo lleva)` : e.name,
+      onPick: () => {
+        const r = store.dispatch({ type: 'equipItem', issuer: game.playerId, entityId: e.id, item } as never);
+        if (!r.ok) return;
+      },
+    }));
+  options.push({ label: 'Guardarlo en la mochila', onPick: () => undefined });
+  dialogue.ask(`¿Quién lleva ${def?.label ?? item}?`, options, false);
+};
+
+// Defeat: the leader can't get up once the fight is over (the party lost, or the leader bled
+// out while the others won). Play starts again from the last campfire: the state saved by the
+// last rest (`rested` event), or the start of the game / the last loaded save if there was none.
+{
+  let checkpoint = store.state;
   let offered = false;
   store.subscribe((change, state) => {
-    if (change.kind === 'reset') offered = false;
+    if (change.kind === 'reset') {
+      offered = false;
+      checkpoint = state;
+      return;
+    }
+    if (change.events.some((e) => e.type === 'rested')) checkpoint = state;
     if (state.turn.mode === 'combat') return;
     const leader = state.entities[game.leaderId];
     if (!leader || engine.ruleset.isStanding(leader)) {
-      // Calm: this is where a lost fight would start over from.
       offered = false;
-      beforeFight = state;
       return;
     }
     // A story defeat may carry on in a conversation (captured, dragged off): let it.
@@ -105,9 +263,9 @@ controller.onTrapReached = (trap, candidates) => {
     if (offered) return;
     offered = true;
     const t = game.texts.combat ?? {};
-    const retry = beforeFight;
+    const back = checkpoint;
     setTimeout(() => {
-      dialogue.ask(t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: t.retryFight ?? 'Volver a intentarlo', onPick: () => store.load(retry) }], false);
+      dialogue.ask(t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: t.retryFight ?? 'Volver a la última hoguera', onPick: () => store.load(back) }], false);
     }, 1200);
   });
 }

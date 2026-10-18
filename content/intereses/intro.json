@@ -1,0 +1,18 @@
+{
+  "$comment": "Narration shown after character creation, before the opening dialogue. {nombre} is the protagonist's name. byClass adds one page right after the first, keyed by the class tag.",
+  "title": "Intereses",
+  "pages": [
+    "Eres {nombre}, cobrador a comisión de la Casa Valcárcel, la banca más respetada del Ducado. Respetada porque nadie que le debiera dinero ha vivido lo bastante para hablar mal de ella.",
+    "El encargo: el barón Ulric Mazo, señor de Hondonegra, debe al banco cuatro mil coronas, más intereses. Si cobras, te quedas el diez por ciento. Si no cobras, te quedas el viaje.",
+    "Te acompaña Dorotea Vane, contable de la Casa. Viene a comprobar que la plata llega entera. Y a vigilarte a ti, aunque eso no figura en el contrato.",
+    "Hondonegra vive de una mina de plata que ya casi no da plata. Os quedan unas horas de camino, y el camino, últimamente, cobra peaje."
+  ],
+  "byClass": {
+    "fighter": "Antes eras mercenario. Tu última compañía se disolvió el día que el patrón dejó de pagar. Conoces el oficio desde el otro lado: sabes lo que se siente al ser la deuda.",
+    "rogue": "Antes le robabas a la banca. Ahora cobras para ella. Te pagan algo mejor y te persiguen bastante menos.",
+    "wizard": "La Academia te expulsó y Valcárcel te pagó los estudios. Desde entonces, tu deuda devenga intereses en forma de encargos como este.",
+    "cleric": "Tu orden está en bancarrota, y el prior te ha «prestado» al banco como garantía. Rezas por que alguien salde la cuenta antes de que te ejecuten a ti."
+  },
+  "next": "Siguiente",
+  "start": "Al camino"
+}

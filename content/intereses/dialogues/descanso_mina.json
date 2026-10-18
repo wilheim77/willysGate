@@ -1,0 +1,21 @@
+{
+  "$comment": "Long rest at the foot of the way down to the Bóveda, once D2 is settled (trigger 'descanso_mina'; also on the campfire spawn: spawn-dialogues.json). Once per game (flag descanso_mina). Map agent.",
+  "id": "descanso_mina",
+  "start": "rescoldo",
+  "nodes": {
+    "rescoldo": {
+      "text": "Al final de la galería, alguien encendió un fuego con las tablas de una vagoneta. Las brasas siguen vivas. Más abajo, la roca canta: no se oye, se nota en los dientes.",
+      "choices": [
+        { "id": "descansar", "text": "Recuperar el aliento antes de bajar. (Descanso largo)", "when": { "not": { "flag": "descanso_mina" } }, "next": "descanso" },
+        { "id": "seguir", "text": "Bajar ya." }
+      ]
+    },
+    "descanso": {
+      "text": "Dormís por turnos, con la espalda contra la roca y las armas en el regazo. Nadie propone volver. Nadie lo dice, pero todos lo habéis pensado.",
+      "effects": [
+        { "type": "rest", "kind": "long" },
+        { "type": "setFlag", "flag": "descanso_mina", "value": true }
+      ]
+    }
+  }
+}

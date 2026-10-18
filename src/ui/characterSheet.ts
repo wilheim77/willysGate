@@ -1,4 +1,4 @@
-import { type GameState, type Ruleset, inventoriesOf } from '../../engine';
+import { type GameState, type Ruleset, inventoriesOf, nextLevel, progressOf } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { GameDefinition } from '../game/definition';
 import { portrait } from './portraits';
@@ -10,6 +10,8 @@ import { portrait } from './portraits';
 export class CharacterSheet {
   private root = document.querySelector<HTMLElement>('#sheet')!;
   private openId: string | null = null;
+  /** Tapping "Cambiar" on an equipped item (weapon/armour/ring/cloak): re-run the give-it-to-someone flow. */
+  onChangeGear: ((item: string) => void) | null = null;
 
   constructor(
     private game: GameDefinition,
@@ -48,6 +50,18 @@ export class CharacterSheet {
     const scrollTop = this.openId === id ? (this.root.querySelector('.body')?.scrollTop ?? 0) : 0;
     this.openId = id;
     const sheet = this.ruleset.describeEntity?.(state, id) ?? { sections: [] };
+    // The party's shared points: «PX 450 / 900» (current / next level), on every member's sheet.
+    const progression = this.ruleset.progression;
+    const content = this.game.levels?.progression;
+    const level = progression?.levelOf(e);
+    if (progression && content && level != null && e.controllerId === this.game.playerId) {
+      const next = nextLevel(content, level);
+      const points = progressOf(state);
+      const row = { label: progression.label, value: next ? `${points} / ${next.points}` : `${points} (${this.game.texts.combat?.maxLevel ?? 'nivel máximo'})`, term: 'xp' };
+      const first = sheet.sections[0];
+      if (first) sheet.sections = [{ ...first, rows: [...(first.rows ?? []), row] }, ...sheet.sections.slice(1)];
+      else sheet.sections = [{ title: progression.label, rows: [row] }];
+    }
     // The party's shared bag (and the character's own), shown on any party member's sheet.
     if (e.controllerId === this.game.playerId) {
       const bags = inventoriesOf(state);
@@ -122,6 +136,42 @@ export class CharacterSheet {
           div.append(p);
         }
         sec.append(div);
+      }
+      body.append(sec);
+    }
+    // Equipped gear (weapon/armour/ring/cloak): shown separately from the shared bag, each
+    // with a "Cambiar" button that reopens the give-it-to-someone flow (src/main.ts).
+    if (e.controllerId === this.game.playerId && this.ruleset.equippedItems) {
+      const equipped = this.ruleset.equippedItems(e);
+      const sec = document.createElement('section');
+      const h = document.createElement('h3');
+      h.textContent = this.game.texts.combat?.equipment ?? 'Equipo';
+      sec.append(h);
+      if (equipped.length) {
+        for (const itemId of equipped) {
+          const def = this.game.items?.[itemId];
+          const div = document.createElement('div');
+          div.className = 'item';
+          const label = document.createElement('strong');
+          label.textContent = def?.label ?? itemId;
+          div.append(label);
+          if (def?.text) {
+            const p = document.createElement('p');
+            p.textContent = def.text;
+            div.append(p);
+          }
+          if (this.onChangeGear) {
+            const btn = document.createElement('button');
+            btn.textContent = this.game.texts.combat?.changeGear ?? 'Cambiar';
+            btn.addEventListener('click', () => this.onChangeGear!(itemId));
+            div.append(btn);
+          }
+          sec.append(div);
+        }
+      } else {
+        const p = document.createElement('p');
+        p.textContent = this.game.texts.combat?.noGear ?? 'Nada equipado.';
+        sec.append(p);
       }
       body.append(sec);
     }

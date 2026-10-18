@@ -98,6 +98,10 @@
 - [x] Interactuables como diálogos sobre objetos: cofre con aguja envenenada (verla con Investigación, abrir con Juego de manos o con la llave del viejo, sin tirada), puerta atrancada (Atletismo) y palanca que la abre sin tirada. Nuevo efecto `setEntity` (cambiar sprite, nombre y etiquetas). Los objetos solo ocupan casilla si son obstáculo.
 - [x] Revisión 3 aplicada: fuera de combate solo caducan los estados a punto de acabar (la Armadura de mago ya no se pierde al andar); un intento de desactivar por trampa y personaje; los enemigos no revelan trampas al jugador; empujar o teletransportar sobre una trampa la dispara; pisar trampa y superficie aplica las dos; `buildProtagonist` normaliza las características; `endDialogue` funciona aunque el hablante ya no exista.
 - [x] Objetos con nombre y descripción (`items.json`) y «Mochila del grupo» en la ficha.
+- [x] **Botín al matar enemigos** (agente de loot, 2026-10-18, rama `botin`): tablas de botín por nivel de monstruo (`rulesets/dnd5e/data/loot.json`, con el acceso al nivel de cada id en `loot.ts`: jefe/líder/lanzador de conjuros/bestia/esbirro, a partir de los `tags` de `monsters.json`, sin tocarlo). Al ganar un combate, `onCombatEnd` reparte el botín de los monstruos muertos del bando perdedor directamente a la mochila del grupo (marca `looted` para no repetirlo si el cadáver sigue en la partida). Cada baja tira con su propia semilla (`deriveSeed(state.seed, 'loot', id)`), nunca con el RNG del combate, para no desviar las tiradas del resto de la partida. La mayoría son monedas, munición y Pociones de curación; rara vez (mejor tirada para líderes y el jefe final) cae un objeto mágico del SRD: arma o armadura +1, Anillo o Capa de protección, Vara de proyectiles mágicos, o un pergamino (temático: solo lanzadores de conjuros). Las bestias nunca dan magia.
+  - 5e: `+1` de arma suma al ataque y al daño (`equippedWeaponBonus`); anillo/capa suman a la CA y a todas las salvaciones (`equipmentAcBonus`/`equipmentSaveBonus`); pociones, pergaminos y varas son objetos consumibles de la barra de acciones en combate (`item:<id>`, coste de acción o adicional) y, las pociones, también fuera de combate (comando `useItem`). Equipar un arma/armadura/anillo/capa es el comando `equipItem` (una prenda por «hueco»; nunca dos personajes con el mismo objeto a la vez).
+  - Cliente: al caer un objeto equipable, un diálogo modal pregunta a quién se le da (y, si ese hueco ya estaba ocupado, quién se queda con el objeto desplazado, encadenando hasta la mochila); los consumibles van directos a la mochila con una línea en el registro de combate. La ficha tiene una sección «Equipo» con botón «Cambiar» para reabrir el mismo reparto más tarde.
+  - Tests: `tests/rulesets/dnd5e-items.test.ts` (equipar, comandos, bonus) y `tests/playthrough/lootBalance.test.ts` (simulación sobre el elenco de monstruos del recorrido típico del acto, 200 semillas: ~1,8 objetos mágicos y ~5,3 pociones de media por partida).
 - [ ] `flags.json` con marcas críticas + tests (marca crítica alcanzable sin tiradas, marcas leídas y nunca escritas, PNJ esenciales).
 - [x] El acto carga sus mapas reales (`content/intereses/world.ts`): camino, plaza, abadía, calles, Escorial, mina y Bóveda; reparto (`cast.json`), plantillas (`templates.json`), objetos, puertas/cofres/palancas con su diálogo, trampas, superficies y luces. La partida empieza en «El camino» con la conversación de Dorotea; `?mapa=<id>` empieza en otro mapa y `?mapa=test` abre la arena de pruebas.
 - [x] Guion (agente guionista): prólogo, escena 1 (llegada y juicio de Anselmo), escena 2 (audiencia) y escena 3 (hilos sueltos), con `flags.json` y pistas críticas con varias fuentes sin tirada.
@@ -111,7 +115,8 @@
 - [x] *Willy el mazmorrero* jugable por primera vez: reglas completas de las 9 clases, casting, Camerino y un piso 1 de prueba (`/willysGate/willy/`).
 - [ ] Terreno exterior para el acto (encargado al artista).
 - [x] R10 cambio de mapa (`engine/world.ts`): varios mapas en una partida; el que se deja queda guardado tal cual (cadáveres, puertas abiertas), el nuevo se construye la primera vez con `EngineContent.maps`. Comando `travel` desde zonas `exits` (propiedades `to`, `spawn`) y efecto de diálogo `travel`. El grupo viaja junto y se lleva la linterna.
-- [x] Mapas del acto (agente de mapas, rama `mapas`): `camino`, `plaza`, `abadia`, `calles`, `escorial`, `mina` y `boveda`, generados desde `scripts/maps/src/`, con un test de validación (`tests/content/maps.test.ts`) y su documentación en [`MAPS.md`](MAPS.md). Las peticiones pendientes (resonadores, polea, marcas que faltan) están en `ENGINE_REQUESTS_INTERESES.md`.
+- [x] Mapas del acto (agente de mapas, rama `mapas`): `camino`, `barranco`, `plaza`, `callejon`, `abadia`, `calles`, `escorial`, `tunel`, `mina` y `boveda`, generados desde `scripts/maps/src/`, con un test de validación (`tests/content/maps.test.ts`) y su documentación en [`MAPS.md`](MAPS.md). Combates y PX en [`ENCOUNTERS.md`](ENCOUNTERS.md).
+- [x] Descansos (2026-10-18): efecto genérico `rest` con el gancho `Ruleset.onRest` y el evento `rested` (el cliente guarda ahí el punto de control); 5e con dados de golpe y Recuperación arcana. Cinco hogueras en el acto (calles, túnel, abadía tras D1, mina antes de la Bóveda y la Bóveda tras el jefe). La matriz completa (`QA_DEEP=1`, 144 rutas) llega al final sin aniquilaciones.
 - [x] R12 `deriveSeed`, R14 capa `markers` (y puntos de Tiled como zonas 1×1, propiedades del mapa), R19 efecto `modifyStat`.
 - [ ] Peticiones de Willy al motor: causa en eventos (R11), invocaciones (R13), salto (R15), generador (R16), choques (R17), vacío (R18), `modifyStat` (R19), `blocksSight`/`onRoundEnd` (R20).
 
@@ -130,6 +135,11 @@
     - Los escalones se dibujan como escalera (`stair`).
   - Efectos: los efectos visuales salen de `manifest.fx`, en los dos juegos.
   - QA: el driver ya no tapa los turnos atascados del jugador.
+- [x] **Bestiario** (rama `bestiario`, 2026-10-18):
+  - Los monstruos pueden lanzar conjuros del SRD (espacios o «x/día»), usar poderes propios con recarga 5-6 o «1/día» (`monster-actions.json`) y llevar efectos al impactar: parálisis del necrófago, derribo del lobo, drenar vida del tumulario (baja los PG máximos hasta el final del combate), veneno de la araña. Rasgos: parada, bruto, hedor, devoción oscura, valiente, inmunidades a estados.
+  - Nuevos: sectario, fanático sectario, acólito, sacerdote, mago, aprendiz de mago, espectro, araña gigante y el capataz de voladuras (Absalón Brea: bomba de pólvora con recarga 5-6 y grito 1/día). Mejorados los del agente de mapas (veterano, caballero, gladiador, ogro, necrófago, ghast, tumulario, mastín, lobo).
+  - IA (genérica): valora estados y mejoras (`utility` en la vista previa), no gasta espacios ni recargas si no compensa (`scarcity`) y los lanzadores guardan la distancia (`keepAway`, por criatura vía `Ruleset.aiProfile`).
+  - Intereses: un predicador entre los fanáticos de la plaza, un curandero con los Sinpaga y un capellán con la guardia del barón.
 
 ## Prioridades de los agentes (2026-10-18)
 
@@ -162,6 +172,16 @@ Hay dos líneas en paralelo. Cada agente sigue su lista en orden y sube su rama 
 - **Cliente:** la pregunta de trampa como ventana modal y una prueba automática en el navegador real.
 - **QA:** el arnés de partida completa de Willy, que activa cada comprobación cuando llega su rama.
 - **Revisor:** primero la revisión 11, una partida real de Intereses en el navegador, luego revisar cada rama al integrarla.
+
+## Progresión por experiencia (2026-10-18, agente de progresión, rama `progresion`)
+
+- [x] El nivel sale de la experiencia y lo aplica el **motor** tras cada comando (antes lo decidía el cliente con marcas de historia, y QA jugaba todo el acto a nivel 3). Ver `DESIGN.md`, «Progresión por experiencia».
+- [x] Intereses: de nivel 3 a 5. Umbrales de grupo: nivel 4 a 1000 PX (tras el callejón) y nivel 5 a 1500 (tras los Sinpaga, antes de D1 y la mina).
+- [x] PX por hablar en los conflictos que se resuelven sin pelea (mineros, juicio, Sinpaga, tregua de D1) y por resolver D2.
+- [x] Ficha: «PX actual / siguiente nivel». Registro: PX ganados y subidas.
+- [x] Arreglado: Cirilo en las calles reabría el juicio (se podía volver a pagar por Anselmo).
+- [ ] **Pendiente (equilibrio):** sin descansos, el jefe a nivel 5 tumba a veces al grupo del arnés (sobre todo sin Garrán). La matriz lo avisa sin fallar hasta que lleguen los descansos (`onRest`, agente de mapas).
+- [ ] **Pendiente (mapas):** en D1, los guardias del asalto siguen `noncombatant` y el combate de la zona `d1-asalto` no empieza. El arnés no recorre las zonas de combate (callejón, andamios, barranco), así que cobra menos PX que un jugador.
 
 ## Planificado para más adelante
 

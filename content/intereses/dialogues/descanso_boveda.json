@@ -1,0 +1,21 @@
+{
+  "$comment": "Short rest in the Bóveda once Brea has fallen, before the collar (trigger 'descanso_boveda', before 'collera'). Once per game (flag descanso_boveda). Map agent.",
+  "id": "descanso_boveda",
+  "start": "silencio",
+  "nodes": {
+    "silencio": {
+      "text": "Brea está en el suelo. Los Callados se han quedado quietos, mirando a ninguna parte. La roca ha dejado de cantar, o canta tan bajo que ya no se nota. Por primera vez en días, nadie os está intentando matar.",
+      "choices": [
+        { "id": "descansar", "text": "Sentarse en las losas y respirar. (Descanso corto)", "when": { "not": { "flag": "descanso_boveda" } }, "next": "descanso" },
+        { "id": "seguir", "text": "Todavía no ha terminado." }
+      ]
+    },
+    "descanso": {
+      "text": "Os vendáis con lo que queda. Alguien se ríe sin motivo y nadie se lo reprocha. Arriba esperan el banco, el barón y el pueblo, y ninguno de los tres os va a dar las gracias.",
+      "effects": [
+        { "type": "rest", "kind": "short" },
+        { "type": "setFlag", "flag": "descanso_boveda", "value": true }
+      ]
+    }
+  }
+}

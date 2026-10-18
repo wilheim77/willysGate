@@ -1,5 +1,5 @@
 import { type Entity, type GameState, type TiledMapJson, type Trap, parseTiledMap, withLighting, withTraps, withZones } from '../../engine';
-import { DND5E_CREATION, SURFACES, buildProtagonist, levelUpCharacter, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
+import { DND5E_CREATION, SURFACES, buildProtagonist, createCharacter, createMonster, createProp, defaultCreation, dnd5e } from '../../rulesets/dnd5e';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import art0x72 from './assets/0x72.json';
@@ -14,6 +14,7 @@ import levelups from './levelups.json';
 import objectives from './objectives.json';
 import tutorial from './tutorial.json';
 import barks from './barks.json';
+import intro from './intro.json';
 import texts from './texts/ui.json';
 import viejoMinero from './dialogues/viejo_minero.json';
 import cofrePrueba from './dialogues/cofre_prueba.json';
@@ -75,11 +76,11 @@ export const game: GameDefinition = {
   maps: Object.fromEntries(Object.keys(ACT_MAPS).map((id) => [id, () => buildMap(id, DIALOGUES)])),
   // The act opens on the road: Dorotea talks first.
   opening: { dialogue: 'camino_dorotea', partner: 'dorotea' },
+  intro,
   triggers: triggers.triggers as NonNullable<GameDefinition['triggers']>,
   objectives: objectives.objectives as NonNullable<GameDefinition['objectives']>,
   levels: {
-    rules: levelups.levels as NonNullable<GameDefinition['levels']>['rules'],
-    levelUp: levelUpCharacter,
+    progression: { thresholds: levelups.thresholds },
     texts: Object.fromEntries(Object.entries(levelups).filter(([k]) => /^\d+$/.test(k))) as Record<string, Record<string, string>>,
   },
   tutorial: tutorial.steps as NonNullable<GameDefinition['tutorial']>,

@@ -5080,6 +5080,3644 @@
      ]
     ]
    }
+  },
+  "percebeiro-ahogado": {
+   "extends": "willy",
+   "note": "Percebeiro ahogado: neopreno negro con algas, piel azulada, lanza percebes",
+   "legend": {
+    "C": "#1e1c24",
+    "c": "#2e2e36",
+    "s": "#9ab8b0",
+    "S": "#6a8a88",
+    "h": "#9ab8b0",
+    "m": "#6a8a88",
+    "O": "#1e1c24",
+    "o": "#2e2e36",
+    "w": "#1e1c24",
+    "L": "#3a7a40",
+    "l": "#58a04a",
+    "Q": "#1e1c24",
+    "q": "#121016",
+    "R": "#1e1c24",
+    "r": "#121016",
+    "b": "#121016",
+    "G": "#3a7a40",
+    "P": "#d8c8a8"
+   },
+   "parts": {
+    "perc_body": [
+     "....kkkkkkk.....",
+     "...kCCCCCCCk....",
+     "..kCCcCCCCCCk...",
+     "..kCkkkkkkkCk...",
+     "..kCssssssskk...",
+     "..kCseksseksk...",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSsmmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "algas": [
+     "G..G.G",
+     ".G.GG.",
+     "..G..."
+    ],
+    "percebe": [
+     "kkk",
+     "kPk",
+     "kkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "perc_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "algas",
+     4,
+     -1,
+     "perc_body"
+    ],
+    [
+     "percebe",
+     13,
+     14,
+     "perc_body"
+    ]
+   ]
+  },
+  "dependienta-de-perfumeria": {
+   "extends": "willy",
+   "note": "Dependienta de perfumería: peinado cardado, uniforme rosa y un vaporizador en cada mano",
+   "legend": {
+    "C": "#e8c050",
+    "c": "#fff0a0",
+    "m": "#d02040",
+    "O": "#e890b0",
+    "o": "#c06888",
+    "w": "#e890b0",
+    "L": "#f4f4f4",
+    "l": "#f4f4f4",
+    "P": "#e890b0",
+    "p": "#c06888",
+    "R": "#e8b088",
+    "b": "#1e1c24",
+    "V": "#c8e8ff",
+    "G": "#c0c6ce"
+   },
+   "parts": {
+    "perf_body": [
+     "..kkkkkkkkk.....",
+     ".kCCcCCcCCCk....",
+     "kCCcCCCCcCCCk...",
+     "kCCkkkkkkkCCk...",
+     "kCksssssssCk....",
+     "kCksesssesCk....",
+     ".kkSsssssSk.....",
+     "...ksssssssk....",
+     "...kSsmmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "spray": [
+     ".G.",
+     "kkk",
+     "kVk",
+     "kVk",
+     "kkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "perf_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "spray",
+     13,
+     11,
+     "perf_body"
+    ],
+    [
+     "spray",
+     -1,
+     11,
+     "perf_body"
+    ]
+   ]
+  },
+  "encargado-de-seccion": {
+   "extends": "willy",
+   "note": "Encargado de sección: camisa blanca, corbata, portapapeles y walkie (cura y anima)",
+   "legend": {
+    "C": "#5a3a24",
+    "c": "#7a5236",
+    "O": "#f0f0f4",
+    "o": "#c8c8d4",
+    "w": "#f0f0f4",
+    "L": "#3a6ab0",
+    "l": "#3a6ab0",
+    "Q": "#3a3a44",
+    "q": "#2a2a30",
+    "R": "#3a3a44",
+    "r": "#2a2a30",
+    "W": "#f4f0e0",
+    "X": "#e0302a",
+    "G": "#5a5e66",
+    "E": "#40e060"
+   },
+   "parts": {
+    "enc_body": [
+     ".....kkkkk......",
+     "...kkCcCCCkk....",
+     "..kCCCCcCCCCk...",
+     "..kCCkkkkkCCk...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "clipboard": [
+     "kkkk",
+     "kWWk",
+     "kWXk",
+     "kWWk",
+     "kkkk"
+    ],
+    "walkie": [
+     "k..",
+     "kkk",
+     "kGk",
+     "kEk",
+     "kkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "enc_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "tie",
+     6,
+     10,
+     "enc_body"
+    ],
+    [
+     "clipboard",
+     12,
+     12,
+     "enc_body"
+    ],
+    [
+     "walkie",
+     -1,
+     12,
+     "enc_body"
+    ]
+   ]
+  },
+  "guardia-de-seguridad": {
+   "extends": "willy",
+   "note": "Guardia de seguridad: grandullón de uniforme azul marino con gorra y brazos abiertos para el placaje",
+   "legend": {
+    "C": "#1e2a44",
+    "c": "#2b3a5c",
+    "O": "#2a3458",
+    "o": "#1e2a44",
+    "w": "#2a3458",
+    "L": "#e0c060",
+    "l": "#e0c060",
+    "Q": "#1e2a44",
+    "q": "#141c30",
+    "R": "#1e2a44",
+    "r": "#141c30",
+    "b": "#121016"
+   },
+   "parts": {
+    "guard_body": [
+     "....kkkkkkk.....",
+     "...kCCcCCCCk....",
+     "...kCCCCCCCCk...",
+     "...kkkkkkkkkkkk.",
+     "...ksssssssk....",
+     "...kseksseksk...",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSsmmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "guard_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "arms2",
+     0,
+     15,
+     "guard_body"
+    ]
+   ]
+  },
+  "tirador-de-feria": {
+   "extends": "willy",
+   "note": "Feriante de la caseta de tiro: chaleco a rayas, gorra de paja y escopeta de corcho",
+   "legend": {
+    "C": "#d8b860",
+    "c": "#f0d890",
+    "O": "#d02020",
+    "o": "#a01818",
+    "w": "#f4f0e8",
+    "L": "#f4f0e8",
+    "l": "#f4f0e8",
+    "Q": "#3a3a44",
+    "q": "#2a2a30",
+    "R": "#3a3a44",
+    "r": "#2a2a30",
+    "T": "#8e5e34",
+    "G": "#5a5e66"
+   },
+   "parts": {
+    "tir_body": [
+     "....kkkkkkk.....",
+     "...kCCcCCCCk....",
+     "...kCCCCCCCCk...",
+     "...kkkkkkkkkkkk.",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOLOLOLOLOwk..",
+     "kwwOLOLOLOLOwwk.",
+     "kwwOLOLOLOLOwwk.",
+     "kwwOLOLOLOLOwwk.",
+     "kwwOLOLOLOLOwwk.",
+     "khhOLOLOLOLOhhk.",
+     ".kkOLOLOLOLOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "rifle": [
+     "kkkkkkkkk.",
+     "kGGGTTTTkk",
+     ".kk.kTk..."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "tir_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "rifle",
+     7,
+     13,
+     "tir_body"
+    ]
+   ]
+  },
+  "abuela-del-bingo": {
+   "extends": "maripuri",
+   "note": "Abuela del bingo: rizos canos, rebeca morada, cartón de bingo y rotulador gordo",
+   "legend": {
+    "P": "#7a3a98",
+    "p": "#5a2470",
+    "F": "#c890e0",
+    "W": "#f4f0e8",
+    "X": "#e0302a",
+    "D": "#1e1c24"
+   },
+   "parts": {
+    "carton": [
+     "kkkkkk",
+     "kWXWWk",
+     "kWWDWk",
+     "kXWWWk",
+     "kkkkkk"
+    ],
+    "rotu": [
+     "X",
+     "k",
+     "k"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "mari_legs",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "mari_legs_b",
+       0,
+       23
+      ],
+      [
+       "mari_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "carton",
+     11,
+     13,
+     "mari_body"
+    ],
+    [
+     "rotu",
+     0,
+     13,
+     "mari_body"
+    ]
+   ]
+  },
+  "dj-de-la-carpa": {
+   "extends": "willy",
+   "note": "DJ de la carpa: gorra del revés, camiseta neón, cascos y tocadiscos colgado",
+   "legend": {
+    "C": "#1e1c24",
+    "c": "#3a3a44",
+    "O": "#40e060",
+    "o": "#2aa040",
+    "w": "#40e060",
+    "L": "#ff4fa0",
+    "l": "#ff4fa0",
+    "Q": "#2a2a40",
+    "q": "#1a1a2a",
+    "R": "#2a2a40",
+    "r": "#1a1a2a",
+    "G": "#c0c6ce",
+    "X": "#ff4fa0"
+   },
+   "parts": {
+    "dj_body": [
+     ".....kkkkkkk....",
+     "....kCcCCCCCk...",
+     "...kCCCCCCCCk...",
+     ".kkkkkkkkkkkk...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "headset": [
+     "k.......k",
+     "kk.....kk"
+    ],
+    "deck": [
+     "kkkkkkkkk",
+     "kGGkkkGGk",
+     "kGkXkkkGk",
+     "kkkkkkkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "dj_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "headset",
+     3,
+     5,
+     "dj_body"
+    ],
+    [
+     "deck",
+     3,
+     15,
+     "dj_body"
+    ]
+   ]
+  },
+  "bailarin-de-la-carpa": {
+   "extends": "willy",
+   "note": "Bailarín de la carpa: camiseta neón empapada de sudor, gotas al aire",
+   "legend": {
+    "C": "#3a2418",
+    "c": "#5a3a24",
+    "O": "#4fe8ff",
+    "o": "#2aa0c0",
+    "w": "#e8b088",
+    "L": "#ffe04f",
+    "l": "#ffe04f",
+    "Q": "#ff4fa0",
+    "q": "#c02a70",
+    "R": "#ff4fa0",
+    "r": "#c02a70",
+    "D": "#a8d8f0"
+   },
+   "parts": {
+    "bail_body": [
+     ".....kkkkk......",
+     "...kkCcCCCkk....",
+     "..kCCCCcCCCCk...",
+     "..kCCkkkkkCCk...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "sudor": [
+     "D...D",
+     ".....",
+     "..D.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "bail_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "sudor",
+     3,
+     -2,
+     "bail_body"
+    ]
+   ]
+  },
+  "masajista-implacable": {
+   "extends": "willy",
+   "note": "Masajista implacable: uniforme blanco y unas manos enormes",
+   "legend": {
+    "C": "#3a2418",
+    "c": "#5a3a24",
+    "O": "#f4f8fa",
+    "o": "#c8d4dc",
+    "w": "#f4f8fa",
+    "L": "#3a8fd9",
+    "l": "#3a8fd9",
+    "Q": "#f4f8fa",
+    "q": "#c8d4dc",
+    "R": "#f4f8fa",
+    "r": "#c8d4dc",
+    "b": "#f4f8fa"
+   },
+   "parts": {
+    "mas_body": [
+     ".....kkkkk......",
+     "...kkCcCCCkk....",
+     "..kCCCCcCCCCk...",
+     "..kCCkkkkkCCk...",
+     "...ksssssssk....",
+     "...kseksseksk...",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSsmmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "manos": [
+     "kkk",
+     "khhk",
+     "khhhk",
+     "khhhk",
+     "kkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "mas_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "manos",
+     -2,
+     13,
+     "mas_body"
+    ],
+    [
+     "manos",
+     12,
+     13,
+     "mas_body"
+    ]
+   ]
+  },
+  "terapeuta-de-lodos": {
+   "extends": "willy",
+   "note": "Terapeuta de lodos: delantal pardo manchado y un cubo de barro (cura a los suyos, ciega con barro)",
+   "legend": {
+    "C": "#f4f8fa",
+    "c": "#c8d4dc",
+    "O": "#7a5236",
+    "o": "#5a3a24",
+    "w": "#f4f8fa",
+    "L": "#5a3a24",
+    "l": "#4a2e20",
+    "Q": "#3a3a44",
+    "q": "#2a2a30",
+    "R": "#3a3a44",
+    "r": "#2a2a30",
+    "M": "#6a4a2a",
+    "G": "#8a9098"
+   },
+   "parts": {
+    "lodo_body": [
+     ".....kkkkk......",
+     "...kkCcCCCkk....",
+     "..kCCCCcCCCCk...",
+     "..kCCkkkkkCCk...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "cubo": [
+     "G..G",
+     ".GG.",
+     "kkkkk",
+     "kMMMk",
+     "kGGGk",
+     "kkkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "lodo_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "cubo",
+     12,
+     12,
+     "lodo_body"
+    ]
+   ]
+  },
+  "presentador-suplente": {
+   "extends": "willy",
+   "note": "Presentador suplente: traje brillante de saldo, tupé y tarjeta con la pregunta trampa",
+   "legend": {
+    "C": "#2a2228",
+    "c": "#4a3a44",
+    "O": "#7a5ac0",
+    "o": "#5a3a98",
+    "w": "#7a5ac0",
+    "L": "#f4f4f4",
+    "l": "#e0302a",
+    "Q": "#5a3a98",
+    "q": "#3a2470",
+    "R": "#5a3a98",
+    "r": "#3a2470",
+    "W": "#f4f0e0",
+    "X": "#e0302a"
+   },
+   "parts": {
+    "sup_body": [
+     "....kkkkkkk.....",
+     "...kCcCCCCCk....",
+     "...kCCCCCCCCk...",
+     "...kCCkkkkkkk...",
+     "...ksssssssk....",
+     "...ksesssesk....",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSssmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "tarjeta": [
+     "kkkkk",
+     "kWWWk",
+     "kWXWk",
+     "kWWWk",
+     "kkkkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "sup_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "tie",
+     6,
+     10,
+     "sup_body"
+    ],
+    [
+     "tarjeta",
+     12,
+     12,
+     "sup_body"
+    ]
+   ]
+  },
+  "maquilladora": {
+   "extends": "willy",
+   "note": "Maquilladora: ropa negra de trabajo, brocha en una mano y borla de polvos en la otra",
+   "legend": {
+    "C": "#c03050",
+    "c": "#e05070",
+    "m": "#d02040",
+    "O": "#1e1c24",
+    "o": "#121016",
+    "w": "#1e1c24",
+    "L": "#ff80b0",
+    "l": "#ff80b0",
+    "Q": "#1e1c24",
+    "q": "#121016",
+    "R": "#1e1c24",
+    "r": "#121016",
+    "T": "#a07040",
+    "F": "#ffc0d8"
+   },
+   "parts": {
+    "maq_body": [
+     "..kkkkkkkkk.....",
+     ".kCCcCCcCCCk....",
+     "kCCcCCCCcCCCk...",
+     "kCCkkkkkkkCCk...",
+     "kCksssssssCk....",
+     "kCksesssesCk....",
+     ".kkSsssssSk.....",
+     "...ksssssssk....",
+     "...kSsmmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "brocha": [
+     "kFk",
+     "kFk",
+     ".T.",
+     ".T."
+    ],
+    "borla": [
+     ".kk.",
+     "kFFk",
+     "kFFk",
+     ".kk."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "maq_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "brocha",
+     13,
+     10,
+     "maq_body"
+    ],
+    [
+     "borla",
+     -1,
+     13,
+     "maq_body"
+    ]
+   ]
+  },
+  "productor-ejecutivo": {
+   "extends": "willy",
+   "note": "Productor ejecutivo: traje gris, cascos con micro y el móvil pegado a la oreja",
+   "legend": {
+    "C": "#8a8a90",
+    "c": "#a8a8b0",
+    "O": "#5a5e66",
+    "o": "#3a3e46",
+    "w": "#5a5e66",
+    "L": "#f4f4f4",
+    "l": "#8e1f3a",
+    "Q": "#3a3e46",
+    "q": "#2a2a30",
+    "R": "#3a3e46",
+    "r": "#2a2a30",
+    "X": "#e0302a",
+    "P": "#80d8ff"
+   },
+   "parts": {
+    "prod_body": [
+     "....kkkkkkk.....",
+     "...kCcCCCCCk....",
+     "...kCCCCCCCCk...",
+     "...kCCkkkkkkk...",
+     "...ksssssssk....",
+     "...kseksseksk...",
+     "...kSsssssSk....",
+     "...ksssssssk....",
+     "...kSsmmmsSk....",
+     "....kSSSSSk.....",
+     "..kkwwwwwwwkk...",
+     ".kwOOwwwwwOOwk..",
+     "kwwOOOOOOOOOwwk.",
+     "kwwOOOLLlOOOwwk.",
+     "kwwOOOLlLOOOwwk.",
+     "kwwOOOOOOOOOwwk.",
+     "khhOOOOOOOOOhhk.",
+     ".kkOOOOOOOOOkk..",
+     "..kOOOOOOOOOk..."
+    ],
+    "headset": [
+     "k.......k",
+     "kk.....kk",
+     ".......kX"
+    ],
+    "movil": [
+     "kkk",
+     "kPk",
+     "kPk",
+     "kkk"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_c",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       23
+      ],
+      [
+       "prod_body",
+       0,
+       5
+      ]
+     ]
+    ]
+   },
+   "over": [
+    [
+     "tie",
+     6,
+     10,
+     "prod_body"
+    ],
+    [
+     "headset",
+     3,
+     4,
+     "prod_body"
+    ],
+    [
+     "movil",
+     12,
+     4,
+     "prod_body"
+    ]
+   ]
+  },
+  "pulpo-de-bajura": {
+   "note": "Pulpo de bajura: pulpo morado con gorra de pescador; tentáculos que agarran",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "P": "#a050c0",
+    "p": "#7a3098",
+    "W": "#f4f4f4",
+    "e": "#1e1c24",
+    "C": "#2b3a5c",
+    "c": "#3f5580",
+    "S": "#e0a0f0"
+   },
+   "parts": {
+    "body": [
+     "....kkkkkk......",
+     "...kCCcCCCk.....",
+     "..kkkkkkkkkk....",
+     "...kPPPPPPk.....",
+     "..kPWePWePPk....",
+     "..kPPPPPPPPk....",
+     "..kPPpPPpPPk....",
+     "...kPPPPPPk....."
+    ],
+    "legs_a": [
+     ".kPk.kPk.kPk.kPk",
+     "kSk..kPk..kPk.kS",
+     ".k....k....k..k."
+    ],
+    "legs_b": [
+     "..kPkkPk.kPkkPk.",
+     "..kSk.kPkkPk.kSk",
+     "...k...k..k...k."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ]
+    ]
+   }
+  },
+  "anguila-electrica": {
+   "note": "Anguila eléctrica: anguila gorda en un charco, con chispas",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#3a7a5a",
+    "g": "#2a5a40",
+    "Y": "#ffe04f",
+    "e": "#ff3040",
+    "A": "#2e7a88",
+    "a": "#4aa0a8",
+    "W": "#ffffff"
+   },
+   "parts": {
+    "body": [
+     "..........kkk...",
+     ".........kGGGk..",
+     "....kkkk.kGeGGk.",
+     "...kGGGGkkGGGGk.",
+     "..kGGggGGGGGkk..",
+     "..kGGGGGGGGk....",
+     "...kkkkkkkk....."
+    ],
+    "legs_a": [
+     "..aAAAAAAAAAAa..",
+     ".aAAAAAAAAAAAAa.",
+     "..aaaaaaaaaaaa.."
+    ],
+    "legs_b": [
+     "..aAAAAAAAAAAa..",
+     ".aAAWAAAAAAWAAa.",
+     "..aaaaaaaaaaaa.."
+    ],
+    "fx": [
+     "Y.......Y.......",
+     ".Y...........Y.."
+    ],
+    "fx2": [
+     ".....Y......Y...",
+     "....Y........Y.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "fx2",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       5
+      ],
+      [
+       "fx",
+       0,
+       0
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "fx2",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       5
+      ],
+      [
+       "fx",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       4
+      ],
+      [
+       "fx2",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       5
+      ],
+      [
+       "fx",
+       0,
+       0
+      ]
+     ]
+    ]
+   }
+  },
+  "lata-de-bonito": {
+   "note": "Lata de bonito andante: abollada, siseando, a punto de reventar",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#c9d1d9",
+    "g": "#8a9098",
+    "R": "#d02020",
+    "B": "#3a8fd9",
+    "e": "#1e1c24",
+    "W": "#ffffff"
+   },
+   "parts": {
+    "body": [
+     "...kkkkkkkkk....",
+     "..kGGGGGGGGGk...",
+     "..kRRRRRRRRRk...",
+     "..kRWWRRRRRRk...",
+     "..kBBeBBBeBBk...",
+     "..kRRRRRRRRRk...",
+     "..kRRRkkkRRRk...",
+     "..kGGGGGGGGGk...",
+     "...kkkkkkkkk...."
+    ],
+    "legs_a": [
+     "...kGk...kGk....",
+     "...kk....kk....."
+    ],
+    "legs_b": [
+     "....kGk.kGk.....",
+     "....kk..kk......"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ]
+    ]
+   }
+  },
+  "lata-de-fabada": {
+   "note": "Lata de fabada caducada: hinchada, con vapores verdes; revienta en una nube de veneno",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#c9d1d9",
+    "g": "#8a9098",
+    "Y": "#e8c040",
+    "R": "#a02020",
+    "V": "#7ad040",
+    "v": "#4a9a20",
+    "e": "#1e1c24"
+   },
+   "parts": {
+    "body": [
+     "..V..v...V......",
+     "...kkkkkkkkk....",
+     "..kGGGGGGGGGk...",
+     ".kYYYYYYYYYYYk..",
+     ".kYRRRRRRRRRYk..",
+     ".kYYeYYYYeYYYk..",
+     ".kYYYYkkkYYYYk..",
+     ".kYYYYYYYYYYYk..",
+     "..kGGGGGGGGGk...",
+     "...kkkkkkkkk...."
+    ],
+    "legs_a": [
+     "...kGk...kGk....",
+     "...kk....kk....."
+    ],
+    "legs_b": [
+     "....kGk.kGk.....",
+     "....kk..kk......"
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ]
+    ]
+   }
+  },
+  "petardo-andante": {
+   "note": "Petardo andante: cartucho rojo con la mecha encendida",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "R": "#e0302a",
+    "r": "#a01818",
+    "Y": "#ffe04f",
+    "W": "#fff4c0",
+    "e": "#1e1c24",
+    "G": "#5a5e66"
+   },
+   "parts": {
+    "body": [
+     "......Y.........",
+     ".....YW.........",
+     "......G.........",
+     ".....kkkk.......",
+     "....kRRRrk......",
+     "....kReeRk......",
+     "....kRRRrk......",
+     "....kYYYYk......",
+     "....kRRRrk......",
+     "....kRRRrk......",
+     ".....kkkk......."
+    ],
+    "legs_a": [
+     "....kGk.kGk.....",
+     "....kk..kk......"
+    ],
+    "legs_b": [
+     "...kGk...kGk....",
+     "...kk....kk....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "nube-de-vapor": {
+   "note": "Nube de vapor: bocanada de vapor viva con ojos enfadados",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#8a9aa8",
+    "W": "#f4f8fa",
+    "w": "#d0dce4",
+    "e": "#1e1c24"
+   },
+   "parts": {
+    "body": [
+     "....kkkk..kkk...",
+     "..kkWWWWkkWWWk..",
+     ".kWWWWWWWWWWWWk.",
+     "kWWWWwWWWWWwWWWk",
+     "kWWkeeWWWWeekWWk",
+     "kWWWWWWkkWWWWWWk",
+     ".kWwWWWWWWWWwWk.",
+     "..kkWWkkkkWWkk..",
+     "....kk....kk...."
+    ],
+    "legs_a": [
+     "....w.....w.....",
+     "......w.....w..."
+    ],
+    "legs_b": [
+     "......w.....w...",
+     "....w.....w....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       3
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       12
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ]
+    ]
+   }
+  },
+  "pastilla-efervescente": {
+   "note": "Pastilla efervescente gigante: bomba de baño que burbujea; revienta en vapor",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "P": "#e890b0",
+    "p": "#c06888",
+    "W": "#ffffff",
+    "B": "#a8d8f0",
+    "e": "#1e1c24"
+   },
+   "parts": {
+    "body": [
+     "...W....B.......",
+     ".....kkkkkk.....",
+     "...kkPPPPPPkk...",
+     "..kPPWPPpPPPPk..",
+     "..kPPePPPPePPk..",
+     "..kPpPPPPPPpPk..",
+     "..kPPPPkkPPPPk..",
+     "...kkPPPPPPkk...",
+     ".....kkkkkk....."
+    ],
+    "legs_a": [
+     "..B..........B..",
+     "................"
+    ],
+    "legs_b": [
+     "................",
+     "...B.......B...."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       13
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       13
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       13
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       13
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       13
+      ],
+      [
+       "body",
+       0,
+       4
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       13
+      ],
+      [
+       "body",
+       0,
+       5
+      ]
+     ]
+    ]
+   }
+  },
+  "foco-andante": {
+   "note": "Foco andante: foco de plató sobre trípode con patas; cono de luz cegadora",
+   "size": [
+    16,
+    16
+   ],
+   "legend": {
+    "k": "#1e1c24",
+    "M": "#3a3e46",
+    "m": "#5a5e66",
+    "Y": "#fff4c0",
+    "W": "#ffffff",
+    "G": "#8a9098"
+   },
+   "parts": {
+    "body": [
+     "...kkkkkk.......",
+     "..kMMMMMMkkk....",
+     "..kMmMMMMkYYk...",
+     "..kMMMMMMkWYk...",
+     "..kMmMMMMkYYk...",
+     "..kMMMMMMkkk....",
+     "...kkkkkk.......",
+     "....kGGk........",
+     "....kGGk........"
+    ],
+    "legs_a": [
+     "...kGk.kGk......",
+     "..kGk...kGk.....",
+     ".kk.......kk...."
+    ],
+    "legs_b": [
+     "....kGkkGk......",
+     "...kGk..kGk.....",
+     "...kk....kk....."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       10
+      ],
+      [
+       "body",
+       0,
+       2
+      ]
+     ]
+    ]
+   }
+  },
+  "percebeiro-ahogado--elite": {
+   "extends": "percebeiro-ahogado",
+   "note": "Élite de percebeiro-ahogado: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#1e1c24",
+    "c": "#655431",
+    "s": "#c3ba7c",
+    "S": "#9c9763",
+    "e": "#1e1c24",
+    "m": "#9c9763",
+    "w": "#1e1c24",
+    "h": "#c3ba7c",
+    "O": "#1e1c24",
+    "o": "#655431",
+    "L": "#79883a",
+    "l": "#92a341",
+    "Q": "#1e1c24",
+    "q": "#121016",
+    "R": "#1e1c24",
+    "r": "#121016",
+    "b": "#121016",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#ecc87a",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "G": "#79883a"
+   }
+  },
+  "dependienta-de-perfumeria--elite": {
+   "extends": "dependienta-de-perfumeria",
+   "note": "Élite de dependienta-de-perfumeria: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#f2c249",
+    "c": "#ffe578",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#c95439",
+    "w": "#eea47c",
+    "h": "#f2b867",
+    "O": "#eea47c",
+    "o": "#cd8664",
+    "L": "#ffe9a7",
+    "l": "#ffe9a7",
+    "Q": "#e19131",
+    "q": "#c27928",
+    "R": "#f2b867",
+    "r": "#c27928",
+    "b": "#1e1c24",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#eea47c",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "p": "#cd8664",
+    "V": "#eadfab",
+    "G": "#dec68e"
+   }
+  },
+  "encargado-de-seccion--elite": {
+   "extends": "encargado-de-seccion",
+   "note": "Élite de encargado-de-seccion: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#825e28",
+    "c": "#9b7034",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#ffe6a6",
+    "h": "#f2b867",
+    "O": "#ffe6a6",
+    "o": "#e3c892",
+    "L": "#7a7f77",
+    "l": "#7a7f77",
+    "Q": "#6f5d39",
+    "q": "#62502d",
+    "R": "#6f5d39",
+    "r": "#62502d",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe69b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#d5602e",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "G": "#8a784e",
+    "E": "#8ecd50"
+   }
+  },
+  "guardia-de-seguridad--elite": {
+   "extends": "guardia-de-seguridad",
+   "note": "Élite de guardia-de-seguridad: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#5b5038",
+    "c": "#665c46",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#655844",
+    "h": "#f2b867",
+    "O": "#655844",
+    "o": "#5b5038",
+    "L": "#eec252",
+    "l": "#eec252",
+    "Q": "#5b5038",
+    "q": "#52462c",
+    "R": "#5b5038",
+    "r": "#52462c",
+    "b": "#121016",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#b8873b",
+    "H": "#f69835"
+   }
+  },
+  "tirador-de-feria--elite": {
+   "extends": "tirador-de-feria",
+   "note": "Élite de tirador-de-feria: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#e8bc51",
+    "c": "#fdd46e",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#ffe6a0",
+    "h": "#f2b867",
+    "O": "#c85427",
+    "o": "#a94b21",
+    "L": "#ffe6a0",
+    "l": "#ffe6a0",
+    "Q": "#6f5d39",
+    "q": "#62502d",
+    "R": "#6f5d39",
+    "r": "#62502d",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#a97a33",
+    "H": "#f69835",
+    "G": "#8a784e"
+   }
+  },
+  "abuela-del-bingo--elite": {
+   "extends": "abuela-del-bingo",
+   "note": "Élite de abuela-del-bingo: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#665c46",
+    "c": "#78715c",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#b19d6c",
+    "h": "#f2b867",
+    "O": "#e19131",
+    "o": "#c27928",
+    "L": "#ffe49b",
+    "l": "#7a7f77",
+    "Q": "#e19131",
+    "q": "#c27928",
+    "R": "#f2b867",
+    "r": "#c27928",
+    "b": "#c25f42",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#bea575",
+    "W": "#ffe6a0",
+    "P": "#9a6369",
+    "Y": "#6f5d39",
+    "X": "#d5602e",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "G": "#e3c890",
+    "M": "#c56943",
+    "p": "#815152",
+    "F": "#dba397",
+    "D": "#1e1c24"
+   }
+  },
+  "dj-de-la-carpa--elite": {
+   "extends": "dj-de-la-carpa",
+   "note": "Élite de dj-de-la-carpa: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#1e1c24",
+    "c": "#6f5d39",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#8ecd50",
+    "h": "#f2b867",
+    "O": "#8ecd50",
+    "o": "#75a03b",
+    "L": "#f17971",
+    "l": "#f17971",
+    "Q": "#625136",
+    "q": "#1a1a2a",
+    "R": "#625136",
+    "r": "#1a1a2a",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#f17971",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "G": "#dec68e"
+   }
+  },
+  "bailarin-de-la-carpa--elite": {
+   "extends": "bailarin-de-la-carpa",
+   "note": "Élite de bailarin-de-la-carpa: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#6a4d20",
+    "c": "#825e28",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#f2b867",
+    "h": "#f2b867",
+    "O": "#9dd7a9",
+    "o": "#79a382",
+    "L": "#ffd94a",
+    "l": "#ffd94a",
+    "Q": "#f17971",
+    "q": "#c25b54",
+    "R": "#f17971",
+    "r": "#c25b54",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "D": "#d3d2a2"
+   }
+  },
+  "masajista-implacable--elite": {
+   "extends": "masajista-implacable",
+   "note": "Élite de masajista-implacable: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#6a4d20",
+    "c": "#825e28",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#ffecaa",
+    "h": "#f2b867",
+    "O": "#ffecaa",
+    "o": "#e6d197",
+    "L": "#819990",
+    "l": "#819990",
+    "Q": "#ffecaa",
+    "q": "#e6d197",
+    "R": "#ffecaa",
+    "r": "#e6d197",
+    "b": "#ffecaa",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#b8873b",
+    "H": "#f69835"
+   }
+  },
+  "terapeuta-de-lodos--elite": {
+   "extends": "terapeuta-de-lodos",
+   "note": "Élite de terapeuta-de-lodos: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#ffecaa",
+    "c": "#e6d197",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#ffecaa",
+    "h": "#f2b867",
+    "O": "#9b7034",
+    "o": "#825e28",
+    "L": "#825e28",
+    "l": "#765525",
+    "Q": "#6f5d39",
+    "q": "#62502d",
+    "R": "#6f5d39",
+    "r": "#62502d",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "M": "#8f6a2c",
+    "G": "#b29d6d"
+   }
+  },
+  "presentador-suplente--elite": {
+   "extends": "presentador-suplente",
+   "note": "Élite de presentador-suplente: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#2a2228",
+    "c": "#795e3a",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#a07981",
+    "h": "#f2b867",
+    "O": "#a07981",
+    "o": "#866169",
+    "L": "#ffe9a7",
+    "l": "#d5602e",
+    "Q": "#866169",
+    "q": "#6d4f51",
+    "R": "#866169",
+    "r": "#6d4f51",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe69b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#d5602e",
+    "T": "#b8873b",
+    "H": "#f69835"
+   }
+  },
+  "maquilladora--elite": {
+   "extends": "maquilladora",
+   "note": "Élite de maquilladora: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#c25f42",
+    "c": "#dd7756",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#c95439",
+    "w": "#1e1c24",
+    "h": "#f2b867",
+    "O": "#1e1c24",
+    "o": "#121016",
+    "L": "#fa9a7c",
+    "l": "#fa9a7c",
+    "Q": "#1e1c24",
+    "q": "#121016",
+    "R": "#1e1c24",
+    "r": "#121016",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#c85427",
+    "T": "#b8873b",
+    "H": "#f69835",
+    "F": "#ffc695"
+   }
+  },
+  "productor-ejecutivo--elite": {
+   "extends": "productor-ejecutivo",
+   "note": "Élite de productor-ejecutivo: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#b09968",
+    "c": "#c9b07c",
+    "s": "#f2b867",
+    "S": "#d19c53",
+    "e": "#1e1c24",
+    "m": "#765525",
+    "w": "#8a784e",
+    "h": "#f2b867",
+    "O": "#8a784e",
+    "o": "#705f3b",
+    "L": "#ffe9a7",
+    "l": "#9f5034",
+    "Q": "#705f3b",
+    "q": "#62502d",
+    "R": "#705f3b",
+    "r": "#62502d",
+    "b": "#6b5125",
+    "A": "#e48730",
+    "a": "#bb6e27",
+    "g": "#b19d6c",
+    "W": "#ffe49b",
+    "P": "#bad0a9",
+    "Y": "#eec252",
+    "X": "#d5602e",
+    "T": "#b8873b",
+    "H": "#f69835"
+   }
+  },
+  "pulpo-de-bajura--elite": {
+   "extends": "pulpo-de-bajura",
+   "note": "Élite de pulpo-de-bajura: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "P": "#b77581",
+    "p": "#985c69",
+    "W": "#ffe9a7",
+    "e": "#1e1c24",
+    "C": "#665c46",
+    "c": "#78715c",
+    "S": "#edb0a1"
+   }
+  },
+  "anguila-electrica--elite": {
+   "extends": "anguila-electrica",
+   "note": "Élite de anguila-electrica: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#7a8848",
+    "g": "#6a7138",
+    "Y": "#ffd94a",
+    "e": "#ea623b",
+    "A": "#748961",
+    "a": "#8ca575",
+    "W": "#fff2ad"
+   }
+  },
+  "lata-de-bonito--elite": {
+   "extends": "lata-de-bonito",
+   "note": "Élite de lata-de-bonito: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#e6cf95",
+    "g": "#b29d6d",
+    "R": "#c85427",
+    "B": "#819990",
+    "e": "#1e1c24",
+    "W": "#fff2ad"
+   }
+  },
+  "lata-de-fabada--elite": {
+   "extends": "lata-de-fabada",
+   "note": "Élite de lata-de-fabada: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "G": "#e6cf95",
+    "g": "#b29d6d",
+    "Y": "#f2c240",
+    "R": "#aa5126",
+    "V": "#afc53e",
+    "v": "#879d29",
+    "e": "#1e1c24"
+   }
+  },
+  "petardo-andante--elite": {
+   "extends": "petardo-andante",
+   "note": "Élite de petardo-andante: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "R": "#d5602e",
+    "r": "#a94b21",
+    "Y": "#ffd94a",
+    "W": "#ffe98a",
+    "e": "#1e1c24",
+    "G": "#8a784e"
+   }
+  },
+  "nube-de-vapor--elite": {
+   "extends": "nube-de-vapor",
+   "note": "Élite de nube-de-vapor: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#b4a476",
+    "W": "#ffecaa",
+    "w": "#ecd79c",
+    "e": "#1e1c24"
+   }
+  },
+  "pastilla-efervescente--elite": {
+   "extends": "pastilla-efervescente",
+   "note": "Élite de pastilla-efervescente: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "P": "#eea47c",
+    "p": "#cd8664",
+    "W": "#fff2ad",
+    "B": "#d3d2a2",
+    "e": "#1e1c24"
+   }
+  },
+  "foco-andante--elite": {
+   "extends": "foco-andante",
+   "note": "Élite de foco-andante: recolor dorado (el aura la pone el prop aura-elite)",
+   "legend": {
+    "k": "#1e1c24",
+    "M": "#705f3b",
+    "m": "#8a784e",
+    "Y": "#ffe98a",
+    "W": "#fff2ad",
+    "G": "#b29d6d"
+   }
   }
  }
 }

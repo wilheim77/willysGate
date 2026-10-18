@@ -1,0 +1,21 @@
+{
+  "$comment": "Short rest in the widows' kitchen, once Lisandro's collectors have been seen off in the callejón (trigger 'descanso_calles'; also on the hearth spawn: spawn-dialogues.json). Once per game (flag descanso_calles). Map agent.",
+  "id": "descanso_calles",
+  "start": "cocina",
+  "nodes": {
+    "cocina": {
+      "text": "La puerta de la casa de las viudas sigue sin bisagras. Dentro hay un fogón con cuatro brasas y una olla de algo que una vez fue sopa. Os han visto echar a los cobradores de Lisandro. Nadie os da las gracias, pero os acercan un taburete.",
+      "choices": [
+        { "id": "descansar", "text": "Sentarse junto al fogón un rato. (Descanso corto)", "when": { "not": { "flag": "descanso_calles" } }, "next": "descanso" },
+        { "id": "seguir", "text": "No hay tiempo." }
+      ]
+    },
+    "descanso": {
+      "text": "La sopa no sabe a nada y quema la lengua. Una de las viudas os cose la manga sin preguntar de quién es la sangre. Cuando os levantáis, os dice el precio del hilo.",
+      "effects": [
+        { "type": "rest", "kind": "short" },
+        { "type": "setFlag", "flag": "descanso_calles", "value": true }
+      ]
+    }
+  }
+}

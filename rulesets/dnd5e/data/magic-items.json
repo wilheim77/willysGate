@@ -1,0 +1,15 @@
+{
+  "$comment": "Mechanical data for SRD 5.1 consumables and magic gear (and plain ammo/trade goods, kind: misc, which do nothing mechanically). Display label/text lives in content/<game>/items.json; this file only has what the ruleset needs to make an item id *do* something. kind: potion|scroll|wand|weapon|armor|ring|cloak|misc.",
+  "potion_curacion": { "kind": "potion", "heal": "2d4+2" },
+  "potion_curacion_mayor": { "kind": "potion", "heal": "4d4+4" },
+  "pergamino_manos_ardientes": { "kind": "scroll", "spell": "burning_hands" },
+  "pergamino_bendicion": { "kind": "scroll", "spell": "bless" },
+  "vara_proyectiles_magicos": { "kind": "wand", "spell": "magic_missile" },
+  "espada_mas1": { "kind": "weapon", "baseWeapon": "longsword", "attackBonus": 1, "damageBonus": 1 },
+  "armadura_mas1": { "kind": "armor", "acBonus": 1 },
+  "anillo_proteccion": { "kind": "ring", "acBonus": 1, "saveBonus": 1 },
+  "capa_proteccion": { "kind": "cloak", "acBonus": 1, "saveBonus": 1 },
+  "saco_sinfondo": { "kind": "misc" },
+  "flechas": { "kind": "misc" },
+  "virotes": { "kind": "misc" }
+}

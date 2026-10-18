@@ -47,6 +47,7 @@ export default {
   ambientLight: 0.6,
   ...c.source(),
   spawns: {
+    'chest-contrabando': [13, 19], // the Sinpaga stash, by their shack: potions, coin and a chance of a magic item
     'entry-plaza': [4, 2],
     'entry-calles': [2, 12],
     'entry-pozo': [31, 8],
@@ -56,7 +57,7 @@ export default {
     'sinpaga_cuchillero-4': [26, 18], // heap B peak, with a crossbow
     'sinpaga_cuchillero-1': [12, 20],
     'sinpaga_cuchillero-2': [20, 20],
-    'sinpaga_cuchillero-3': [18, 16], // lookout scaffold
+    'curandero_sinpaga-1': [18, 16], // the band's healer, on the lookout scaffold
     'sinpaga_bruto-1': [15, 19],
     // The first Callado, by the well. Not part of the fight: he just looks, and goes down.
     'callado-1': [31, 9],
@@ -109,8 +110,8 @@ export default {
       { name: 'escombreras', rect: [8, 2, 23, 21] },
     ],
     scenes: [
-      { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true } },
-      { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina' } },
+      { name: 'callado-pozo', rect: [30, 7, 3, 4], props: { dialogue: 'callado_pozo', speaker: 'callado-1', once: true, requiresFlag: 'escorial_libre' } },
+      { name: 'sinpaga-jefe', rect: [1, 1, 7, 24], props: { dialogue: 'sinpaga_jefe', speaker: 'sinpaga_enmascarado-1', once: true, gate: true, protects: 'pozo-del-ahorcado,bocamina', settledFlag: 'escorial_libre' } },
     ],
   },
   exits: [
