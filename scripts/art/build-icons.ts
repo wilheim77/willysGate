@@ -183,6 +183,15 @@ function lootBox(kind: string, lid: number): Image {
 type Entry = { id: string; img: Image };
 const entries: Entry[] = [];
 for (const id of Object.keys(spec.items)) entries.push({ id: `item-${id}`, img: itemIcon(id) });
+// Items that have no icon yet get a placeholder (a crate with a "?") so `item-<id>` always exists.
+const itemIds = (JSON.parse(readFileSync(join(gameDir, 'data', 'items.json'), 'utf8')) as { items: { id: string }[] }).items.map((i) => i.id);
+const missing = itemIds.filter((id) => !spec.items[id]);
+for (const id of missing) {
+  const img = blank(16, 16);
+  ascii(img, 2, 3, ['AAAAAAAAAAAA', 'AWWWWWWWWWWa', 'AW...DD...Wa', 'AW..D..D..Wa', 'AW....D...Wa', 'AW...D....Wa', 'AW........Wa', 'AW...D....Wa', 'Aaaaaaaaaaaa'], { A: '#a8743e', a: '#7a4a20', W: '#d09a5a', D: '#1e1c24' });
+  entries.push({ id: `item-${id}`, img: outline(img) });
+}
+if (missing.length) console.warn(`icons: ${missing.length} items without an icon in icons.json (placeholder used): ${missing.join(', ')}`);
 for (const cat of Object.keys(achievements.categorias)) {
   const g = GLYPHS[cat];
   if (!g) throw new Error(`no badge glyph for achievement category "${cat}"`);

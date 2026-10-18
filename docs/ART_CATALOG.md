@@ -559,7 +559,7 @@ Bestias (`hand-sprites.json`, `idle`/`move`/`hit`, mirando a la derecha; los ret
 
 Los genera `scripts/art/build-icons.ts`, que corre después de `build-willy-art.ts` y añade sus entradas a `ui` sin borrar las demás. Vista previa: [`art-previews/ninja-icons.png`](art-previews/ninja-icons.png).
 
-- **`item-<id>`** (16×16): un icono por cada objeto de `data/items.json`. Salen de una biblioteca de 79 siluetas ASCII (botella, lata, bocadillo, llave inglesa, balón, casco, libro, aviso…) en `content/willy/art/ninja/icons.json`, con los colores propios de cada objeto. Un objeto nuevo es una línea más en `items` de ese fichero; el build falla si a algún objeto le falta icono.
+- **`item-<id>`** (16×16): un icono por cada objeto de `data/items.json` (los que aún no tienen silueta salen con una caja con «?» y un aviso en el build). Salen de una biblioteca de 79 siluetas ASCII (botella, lata, bocadillo, llave inglesa, balón, casco, libro, aviso…) en `content/willy/art/ninja/icons.json`, con los colores propios de cada objeto. Un objeto nuevo es una línea más en `items` de ese fichero; el build falla si a algún objeto le falta icono.
 - **`logro-cat-<categoria>`** (24×24): una medalla por categoría de `achievements.json` con su glifo: huella, espadas, barril, cara, caja, ojo, moneda, reloj, flecha, calavera, interrogación, antena, sello y balón. Más `logro-bloqueado` (gris con interrogación).
 - **`marco-<rareza>`** (18×18): marcos finos para los iconos (bronce, plata, oro, legendaria), además de las `carta-*` que ya había.
 - **Cajas para la apertura** (64×64, dibujadas a 32 y escaladas ×2), para `<nivel>` = bronce, plata, oro, legendaria:
