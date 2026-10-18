@@ -12,7 +12,8 @@ import { narrate, narrateEvents } from './narrator';
 import { announce } from './announce';
 import { willyHud } from './hud';
 import { achievements, rewardBoxes } from './meta-view';
-import { defeat, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
+import { defeat, ending, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
+import cast from './data/cast.json';
 import texts from './texts/ui.json';
 
 /**
@@ -66,6 +67,10 @@ export const game: GameDefinition = {
   savePolicy,
   onRestoredCopy,
   defeat,
+  ending,
+  // The season's end: once the final boss is down (rulesets/willy/ending.ts), out of combat.
+  triggers: [{ id: 'final-temporada', when: { all: [{ flag: 'willy:presentadorDerrotado', is: true }, { notFlag: 'willy:final' }] }, dialogue: 'final-temporada' }],
+  cast: { xelda: { name: 'Xelda', spriteId: 'xelda' }, presentador: { name: cast.presentador.nombre, spriteId: 'jefe-presentador' } },
   announce,
   hud: willyHud,
   // The service lift needs the engine to know the floors (travel builds them on arrival).

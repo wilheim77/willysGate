@@ -247,6 +247,12 @@ export interface GameDefinition {
    * (the state at the last `rested` event), optionally changed by `prepare`; `summary` ends the run.
    */
   defeat?(state: GameState): { text: string; retry?: { label: string; prepare?(checkpoint: GameState): GameState }; summary?: { title: string; lines: string[]; button: string } };
+  /**
+   * A finished run (won, ending seen): when it returns something, out of combat and with no
+   * conversation open, the client shows this summary once, with the credits, and the button
+   * starts a new run.
+   */
+  ending?(state: GameState): { title: string; lines: string[]; button: string } | null;
   /** Extra HUD pieces (counters, floating texts, message bubbles, a panel). */
   hud?: HudExtension;
   /**

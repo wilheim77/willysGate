@@ -33,6 +33,7 @@ import { antennaShots } from './summons';
 import { rivalAfterCommand } from './rivals';
 import { describeEntity } from './sheet';
 import { clockAfterCommand } from './clock';
+import { endingAfterCommand } from './ending';
 import { bossAfterCommand, showAfterCommand, showCommands, showLateAfterCommand } from './show';
 import { achievementsHook } from './achievements';
 import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
@@ -335,6 +336,8 @@ registerAfterCommand(itemsHook, 20);
 // The floor clock and the collapse (clock.ts), before the show reacts to the turn.
 registerAfterCommand(clockAfterCommand, 40);
 registerAfterCommand(bossAfterCommand, 45);
+// The final boss down and the ending chosen (ending.ts): the season is over.
+registerAfterCommand(endingAfterCommand, 46);
 registerAfterCommand(showAfterCommand, 50);
 // Rival outcomes and their Narrador moments (rivals.ts).
 registerAfterCommand(rivalAfterCommand, 55);
@@ -435,6 +438,7 @@ export { COMPANIONS, companionOfClass, companionStats, createCompanion, syncComp
 export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
 export * from './meta';
+export * from './ending';
 export { BAG, itemActionId, itemActions, slotOf, startingItemEffects } from './items';
 export { grantItem, grantLootBox, rollBox } from './loot';
 export { explorationHealing } from './regen';

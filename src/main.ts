@@ -23,6 +23,7 @@ import { setupRewardBoxes } from './ui/rewardBoxes';
 import './ui/meta.css';
 import { SetupScreen } from './ui/setupScreen';
 import { PermadeathSlot } from './game/permadeath';
+import { CreditsScreen } from './ui/creditsScreen';
 import { setupShowHud } from './ui/showHud';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
@@ -313,6 +314,29 @@ const newRun = () => {
       const retry = policy?.retry;
       dialogue.ask(policy?.text ?? t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: retry?.label ?? t.retryFight ?? 'Volver a la última hoguera', onPick: () => store.load(retry?.prepare ? retry.prepare(back) : back) }], false);
     }, 1200);
+  });
+}
+
+// A won run: once the ending's conversation is over, the summary, the credits and a new run.
+if (game.ending) {
+  const credits = new CreditsScreen(game);
+  let shown = false;
+  store.subscribe((change, state) => {
+    if (change.kind === 'reset') {
+      shown = false;
+      return;
+    }
+    if (shown || state.turn.mode === 'combat' || dialogueOfState(state)) return;
+    const summary = game.ending!(state);
+    if (!summary) return;
+    shown = true;
+    if (game.savePolicy?.(state) === 'permadeath') permadeath.clear();
+    const show = () =>
+      dialogue.ask(`${summary.title}\n${summary.lines.map((l: string) => `• ${l}`).join('\n')}`, [
+        { label: (game.texts.ui as Record<string, string>).credits ?? 'Créditos', onPick: () => { credits.open(); setTimeout(show, 0); } },
+        { label: summary.button, onPick: () => newRun() },
+      ], false);
+    setTimeout(show, 800);
   });
 }
 

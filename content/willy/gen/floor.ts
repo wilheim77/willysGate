@@ -703,11 +703,11 @@ function scaleXp(entities: Entity[], total: number): Entity[] {
   return entities.map((e) => (base(e) ? { ...e, tags: [...e.tags.filter((t) => !t.startsWith('xp:')), `xp:${Math.max(1, Math.round((base(e) * total) / sum))}`] } : e));
 }
 
-/** The planta's boss, at the end of its second floor. */
+/** The planta's boss, at the end of its second floor. The last floor's ends the season (rulesets/willy/ending.ts). */
 function planetBoss(spec: FloorSpec, at: Vec2): Entity {
   const b = spec.jefe;
   const tune = BALANCE.jefes[spec.piso] ?? {};
-  return createCreature({ id: b.id, name: b.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: b.id, vida: Math.round(b.vida * (tune.multVida ?? 1)), def: b.def, ataque: b.ataque, dano: tune.dano ?? b.dano, movimiento: b.movimiento, fue: 12, tags: ['jefe', `tamano:${b.tamano}`, ...b.etiquetas, `xp:${b.xp}`] });
+  return createCreature({ id: b.id, name: b.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: b.id, vida: Math.round(b.vida * (tune.multVida ?? 1)), def: b.def, ataque: b.ataque, dano: tune.dano ?? b.dano, movimiento: b.movimiento, fue: 12, tags: ['jefe', `tamano:${b.tamano}`, ...b.etiquetas, `xp:${b.xp}`, ...(spec.piso === FLOOR_COUNT ? ['jefe-final'] : [])] });
 }
 
 /** The first floor's guardian: the planta's toughest ordinary enemy, elite and with a boss's two actions. */
