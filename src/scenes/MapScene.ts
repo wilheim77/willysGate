@@ -43,6 +43,8 @@ export interface MapSceneHooks {
   controlledEntityId(): string;
   /** All queued events have finished animating. */
   onIdle?(): void;
+  /** Extra floating text for an event as it plays (the game's HudExtension.float). */
+  floatFor?(event: GameEvent, state: GameState): { entityId?: string; text: string; color?: string } | null;
 }
 
 /** Texts the event player shows over the map (Spanish, from the game's ui texts). */
@@ -468,6 +470,11 @@ export class MapScene extends Phaser.Scene {
     // Which event means "cast an ability" is configurable per game (AssetManifest.castEvent);
     // dnd5e's spellCast is the default. Not a `case` label since the type isn't a literal here.
     const castEvent = this.manifest.castEvent ?? DEFAULT_CAST_EVENT;
+    const extra = this.hooks.floatFor?.(event, state);
+    if (extra) {
+      const s = sprite(extra.entityId) ?? sprite(this.hooks.controlledEntityId());
+      if (s) void this.juice.floatText(s.x, s.y - T * 0.9, extra.text, extra.color ?? '#ffd24a', 0.5);
+    }
     if (event.type === castEvent.type) return this.playCastEvent(e, castEvent, state, T);
     switch (event.type) {
       case 'entityMoved': {
