@@ -667,11 +667,11 @@
             "acciones": 1,
             "energia": 1
           },
-          "texto": "Lanzas un objeto de tu mochila (que se pierde). Daño: su valor en fichas dividido entre 5 (mínimo 1d4).",
+          "texto": "Lanzas un objeto de tu mochila (alcance 4), que se pierde. Daño: 1d6 más la mitad de su valor en fichas. Primero la chatarra, luego lo que no cura y lo que cura al final; el oro y lo legendario, solo si llevas otro igual. Lo equipado no se lanza.",
           "niveles": {
-            "2": "Valor / 4",
+            "2": "1d8 más la mitad del valor",
             "3": "Alcance 6",
-            "4": "Valor / 3",
+            "4": "Suma el valor entero",
             "5": "Maestría: el objeto no se pierde si es de bronce"
           }
         },

@@ -20,6 +20,7 @@ import {
 import { d20Check, resolveRollMode } from '../common/d20';
 import { BARREL_BLAST, listActions, performAction, previewAction, setWillyRef } from './actions';
 import './more-classes';
+export { throwableItem } from './more-classes';
 import './summons';
 import { syncCompanions } from './companions';
 import './xp';

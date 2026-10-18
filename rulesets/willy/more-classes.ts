@@ -1,4 +1,5 @@
-import { type ActionTarget, type Entity, type GameState, type Vec2, gridDistance, hasCondition, isHostile, surfaceAt, tileAt } from '../../engine';
+import { type ActionTarget, type Entity, type GameState, type Vec2, gridDistance, hasCondition, inventoriesOf, isHostile, surfaceAt, tileAt } from '../../engine';
+import { type ItemDef, itemDef } from './meta';
 import {
   HANDLERS,
   type Handler,
@@ -325,8 +326,29 @@ Object.assign(HANDLERS, {
       countUse(r, id, 'ojo-clinico');
     },
   },
-  // Needs item values from the game's items.json (the ruleset never reads content/): wired in by the game later.
-  'hab:golpe-de-valor': pending(['attack', 'ranged']),
+  'hab:golpe-de-valor': {
+    target: (a: Entity) => ({ kind: 'creature', range: skillLevel(a, 'golpe-de-valor') >= 3 ? 6 : 4, filter: 'hostile' }),
+    tags: ['attack', 'ranged'],
+    preview: (s: GameState, a: Entity, t: ActionTarget) => {
+      const target = targetEntity(s, t);
+      if (!target) return invalid('¿A quién se lo tiras?');
+      const item = throwableItem(s);
+      if (!item) return invalid('No llevas nada en la mochila que se pueda tasar y lanzar.');
+      const keeps = keepsThrown(a, item);
+      const p = attackPreviewOf(s, appraisalSpec(a, target.id, item));
+      return { ...p, breakdown: [{ label: 'Lanzas', value: `${item.nombre} (${item.valor} fichas)${keeps ? ', y vuelve' : ', y se pierde'}` }, ...(p.breakdown ?? [])] };
+    },
+    perform: (r: Resolver, id: string, t: ActionTarget) => {
+      const me = r.entity(id);
+      const item = throwableItem(r.state);
+      if (!item) return;
+      // Thrown is thrown: the item is gone whether it hits or not (bronze comes back at Maestría).
+      if (!keepsThrown(me, item)) r.apply({ type: 'giveItem', owner: 'party', item: item.id, count: -1 });
+      r.emit({ type: 'itemThrown', actorId: id, item: item.id, nombre: item.nombre, valor: item.valor, rareza: item.rareza } as unknown as WillyEvent);
+      resolveAttack(r, appraisalSpec(me, t.entityId!, item));
+      countUse(r, id, 'golpe-de-valor');
+    },
+  },
   'hab:pieza-de-museo': {
     target: { kind: 'creature', range: 6, filter: 'hostile' },
     tags: ['control'],
@@ -453,6 +475,31 @@ Object.assign(HANDLERS, {
 function whistleDif(a: Entity): number {
   const lvl = skillLevel(a, 'silbatazo');
   return lvl >= 4 ? 17 : lvl >= 2 ? 15 : 13;
+}
+
+/**
+ * «Golpe de valor»: what the Tasador throws. From the party's bag (equipped things aren't in it):
+ * never cosmetics or notices, gold and legendary only when there's a spare copy. Junk first, then
+ * anything that doesn't heal, then healing; the most valuable within each group.
+ */
+export function throwableItem(state: GameState): ItemDef | undefined {
+  const bag = inventoriesOf(state)['party'] ?? {};
+  const group = (d: ItemDef) => (d.tipo === 'chatarra' ? 0 : d.etiquetas?.includes('curacion') ? 2 : 1);
+  return Object.entries(bag)
+    .filter(([, n]) => n > 0)
+    .map(([id, n]) => ({ def: itemDef(id), n }))
+    .filter((c): c is { def: ItemDef; n: number } => !!c.def && c.def.valor > 0 && c.def.tipo !== 'cosmetico' && c.def.tipo !== 'aviso')
+    .filter((c) => (c.def.rareza !== 'oro' && c.def.rareza !== 'legendaria') || c.n > 1)
+    .sort((x, y) => group(x.def) - group(y.def) || y.def.valor - x.def.valor || x.def.id.localeCompare(y.def.id))[0]?.def;
+}
+
+const keepsThrown = (a: Entity, item: ItemDef) => item.rareza === 'bronce' && skillLevel(a, 'golpe-de-valor') >= 5;
+
+/** Damage: 1d6 + half the item's value (1d8 from level 2; the whole value from level 4). */
+function appraisalSpec(a: Entity, targetId: string, item: ItemDef): AttackSpec {
+  const lvl = skillLevel(a, 'golpe-de-valor');
+  const bonus = lvl >= 4 ? item.valor : Math.ceil(item.valor / 2);
+  return { attackerId: a.id, targetId, label: 'Golpe de valor', melee: false, dice: dice(lvl >= 2 ? '1d8' : '1d6'), element: 'golpe', extraDamage: bonus };
 }
 
 function buoySpec(a: Entity, targetId: string): AttackSpec {
