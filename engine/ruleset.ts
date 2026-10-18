@@ -1,5 +1,5 @@
 import type { AiProfile } from './ai';
-import type { CommandHandler, GameEvent } from './commands';
+import type { BaseCommand, CommandHandler, GameEvent } from './commands';
 import type { Effect } from './effects';
 import type { Vec2 } from './grid';
 import type { MovementRules } from './pathfinding';
@@ -138,6 +138,11 @@ export interface Ruleset {
   equippedInSlot?(entity: Entity, slot: string): string | undefined;
   /** Every item id `entity` currently has equipped, across all slots (for a "manage gear" UI). */
   equippedItems?(entity: Entity): string[];
+  /**
+   * How the bag UI uses an item outside combat ("Beber", "Usar"), as the command to send for
+   * the party member who takes it; null if it can't be used that way (thrown at enemies...).
+   */
+  itemUse?(state: GameState, itemId: string): { verb: string; command(entityId: string, issuer: string): BaseCommand } | null;
 
   /** Plain-language explanations for terms shown in the UI (CA, CD, ventaja...). Keys are `term` ids. */
   glossary: Record<string, GlossaryEntry>;

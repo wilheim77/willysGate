@@ -334,10 +334,11 @@
       "desventaja": {
         "id": "necesita-likes",
         "nombre": "Necesita likes",
-        "texto": "Si la audiencia baja del mínimo de la planta, tienes un bajón: −2 a todas las tiradas hasta que se recupere.",
+        "texto": "Si la audiencia se estanca (pierde por aburrimiento o monotonía), tienes un bajón: mareado 2 turnos.",
         "mecanica": {
-          "si": "audiencia<minimoPlanta",
-          "aplicar": "mareado"
+          "si": "audienceChanged.causa en [aburrimiento, monotonia]",
+          "aplicar": "mareado",
+          "turnos": 2
         }
       },
       "ventajas": [

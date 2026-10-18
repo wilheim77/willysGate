@@ -124,7 +124,7 @@ function matches(view: Record<string, unknown>, conds?: Record<string, unknown>)
   return show.matchPattern(view as show.View, { evento: String(view.evento), donde: conds });
 }
 
-export function narrate(event: GameEvent, state: GameState): string | null {
+function pick(event: GameEvent, state: GameState): { text: string; priority: number } | null {
   for (const view of viewsOf(event, state)) {
     const banks = BANKS.filter((b) => b.evento === view.evento && matches(view, b.donde)).sort((a, b) => (b.prioridad ?? 0) - (a.prioridad ?? 0));
     const ctx = context(view, state);
@@ -138,11 +138,42 @@ export function narrate(event: GameEvent, state: GameState): string | null {
       const top = Math.max(...eligible.map(score));
       const best = eligible.filter((l) => score(l) === top);
       const line = best[Math.floor(Math.random() * best.length)]!;
-      const text = fill(line.texto, ctx);
+      let text = fill(line.texto, ctx);
       if (!text) continue;
+      // An achievement: the generic header, then its own line (achievements.json → narrador),
+      // naming what the unlocking event was about (its `contexto`).
+      if (event.type === 'achievementUnlocked' && typeof view.frase === 'string') {
+        const own = fill(view.frase, { ...ctx, ...achievementContext(view.contexto) });
+        if (own) text = `${text} ${own}`;
+      }
       if (bank.memoria) recent.set(bank.id, [...seen, line.id].slice(-bank.memoria));
-      return text;
+      return { text, priority: bank.prioridad ?? 0 };
     }
   }
   return null;
+}
+
+/** An unlock carries the names of what triggered it: {enemigo} with its gender, {objeto}, {habilidad}. */
+function achievementContext(raw: unknown): Record<string, Named | string | number> {
+  const c = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
+  const out: Record<string, Named | string | number> = {};
+  if (typeof c.enemigo === 'string') out.enemigo = { name: c.enemigo, gender: c.enemigoGenero === 'f' ? 'f' : 'm' };
+  const obj = itemNamed(c.objeto);
+  if (obj) out.objeto = obj;
+  if (typeof c.habilidad === 'string') out.habilidad = c.habilidad;
+  return out;
+}
+
+export function narrate(event: GameEvent, state: GameState): string | null {
+  return pick(event, state)?.text ?? null;
+}
+
+/** One line for a whole command: the highest-priority bank wins (an achievement beats a hit). */
+export function narrateEvents(events: GameEvent[], state: GameState): string | null {
+  let best: { text: string; priority: number } | null = null;
+  for (const e of events) {
+    const p = pick(e, state);
+    if (p && (!best || p.priority > best.priority)) best = p;
+  }
+  return best?.text ?? null;
 }

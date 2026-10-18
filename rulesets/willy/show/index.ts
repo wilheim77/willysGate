@@ -38,7 +38,9 @@ export function showLateAfterCommand(ruleset: Ruleset, state: GameState, events:
   return r.outcome();
 }
 
-const LATE_EVENTS = new Set(['achievementUnlocked']);
+// npcHelped: rivalAfterCommand (order 55, rivals.ts) runs before the show (order 50), so a
+// pacted-with or let-go rival's npcHelped would otherwise never reach a sponsor's taste.
+const LATE_EVENTS = new Set(['achievementUnlocked', 'npcHelped']);
 
 const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
@@ -48,7 +50,7 @@ const SHOW_EVENTS = new Set([
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
   'boxDelivered', 'itemObtained', 'coinsGranted',
   // Handled by the late pass, after the achievements.
-  'achievementUnlocked',
+  'achievementUnlocked', 'npcHelped',
 ]);
 
 export const showCommands: Record<string, CommandHandler> = { aceptarContrato, rechazarContrato };

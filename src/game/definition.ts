@@ -20,6 +20,53 @@ export interface UiTexts {
   creation?: Record<string, string>;
 }
 
+export interface AchievementView {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  unlocked: boolean;
+  hidden: boolean;
+  hint?: string;
+  /** "Caja de plata", shown under the name. */
+  reward?: string;
+  /** UI art id for its badge (manifest `ui`). */
+  icon?: string;
+}
+
+export interface RewardBoxView {
+  id: string;
+  tier: string;
+  name: string;
+  color: string;
+  description?: string;
+  reason?: string;
+  /** UI art ids: closed, lid frames, open. */
+  art?: { closed: string; lid: string[]; open: string; /** Drawn behind the open box (a legendary's star burst). */ burst?: string };
+}
+
+export interface RewardBoxResult {
+  tier: string;
+  items: { id: string; label: string; rarity: string; rarityLabel: string; color: string; rule?: string; icon?: string; frame?: string }[];
+  coins: number;
+  coinsLabel?: string;
+}
+
+export interface SetupQuestion {
+  id: string;
+  title: string;
+  options: {
+    id: string;
+    label: string;
+    text: string;
+    recommended?: boolean;
+    /** Shown in red under the option when chosen. */
+    warning?: string;
+    /** Not available when an earlier answer is one of these; `reason` says why. */
+    unavailableIf?: { question: string; is: string[]; reason: string };
+  }[];
+}
+
 /** Visual identity of a game: CSS custom properties applied to the HUD, plus the UI font. */
 export interface Theme {
   /** Keys are CSS custom property names without the leading dashes (bg, panel, iron, text, accent...). */
@@ -145,6 +192,8 @@ export interface GameDefinition {
   objectives?: { when?: DialogueWhen; text: string }[];
   /** A narrator's line for an engine event, if any (Willy's Narrador). Cosmetic. */
   narrate?(event: GameEvent, state: GameState): string | null;
+  /** One narrator line for all of a command's events (the most important one), if any. */
+  narrateEvents?(events: GameEvent[], state: GameState): string | null;
   /**
    * A short on-screen announcement for an event (an ability levelling up...), if any.
    * `big` shows it large in the middle of the screen. Cosmetic.
@@ -161,6 +210,43 @@ export interface GameDefinition {
   tutorial?: TutorialStep[];
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */
   barks?: BarksData;
+  /** Achievements: a toast when one unlocks and a list from the top bar (Willy). */
+  achievements?: {
+    categories: Record<string, string>;
+    list(state: GameState): AchievementView[];
+    /** The achievement an event announces, if it is an unlock. */
+    unlocked(event: GameEvent): AchievementView | null;
+  };
+  /** Reward boxes waiting to be opened (Willy's loot boxes): a 🎁 counter and the opening moment. */
+  rewardBoxes?: {
+    pending(state: GameState): RewardBoxView[];
+    /** The command that opens one. */
+    open(boxId: string, issuer: string): { type: string; issuer: string; [k: string]: unknown };
+    /** What came out, read from the opening command's events. */
+    result(events: GameEvent[]): RewardBoxResult | null;
+    /** Exact odds, shown on request (no hidden numbers). */
+    odds(tier: string): string[];
+  };
+  /**
+   * Questions before character creation (difficulty, elimination mode...), one screen each.
+   * An option can be unavailable given an earlier answer; `apply` writes the answers into the state.
+   */
+  newGameSetup?: {
+    questions: SetupQuestion[];
+    apply(state: GameState, answers: Record<string, string>): GameState;
+  };
+  /**
+   * How this run may be saved: 'free' (save, load, export by hand) or 'permadeath' (one slot of its
+   * own, saved after every command, no loading by hand, deleted when the run is lost).
+   */
+  savePolicy?(state: GameState): 'free' | 'permadeath';
+  /** A permadeath slot turned out to be an older copy than the browser's profile: what changes. */
+  onRestoredCopy?(state: GameState): GameState;
+  /**
+   * What happens when the leader is down after a fight. `retry` goes back to the last checkpoint
+   * (the state at the last `rested` event), optionally changed by `prepare`; `summary` ends the run.
+   */
+  defeat?(state: GameState): { text: string; retry?: { label: string; prepare?(checkpoint: GameState): GameState }; summary?: { title: string; lines: string[]; button: string } };
   /** Extra HUD pieces (counters, floating texts, message bubbles, a panel). */
   hud?: HudExtension;
   /**

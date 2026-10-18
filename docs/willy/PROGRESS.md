@@ -16,6 +16,26 @@
 - **Compañeros (2026-10-18):** uno por clase, se une tras el cásting, lo controla el jugador, sube con Willy y vuelve en la planta siguiente si cae (`RULESET.md` → «Compañeros»). Pausa publicitaria: 25 % de vida al acabar cada combate.
 - **Equilibrio:** simulador con IA en plantas generadas (`content/willy/sim/balance.ts`), palancas en `floors.json → equilibrio` y tabla en `BALANCE.md`. Resultado: llegar al jefe 85-100 %, ganarle 76-83 %. Test barato de la planta 1 en `npm test`; las cinco con `QA_DEEP=1`.
 - **FX:** los `skillUsed` llevan `target` y van antes de las tiradas.
+- **Meta (2026-10-18, rama `willy-meta`):**
+  - **Logros:** se evalúan en el ruleset tras cada comando (`Ruleset.afterCommand`, `rulesets/willy/achievements.ts`). Traduce los eventos del motor al vocabulario de `achievements.json` (`attackResolved`, `objectDestroyed`, `entityPushed`…) y aplica el lenguaje de condiciones con contadores por partida, planta, combate o turno, disparadores `al` y datos vivos (`dato`).
+    - Se guardan en la partida (`systems.willyMeta`): «siempre» cuenta como «partida».
+    - Al desbloquearse, aparece un aviso arriba, suena la frase del Narrador (cabecera + frase propia) y llega la caja. Hay una lista 🏆 en la barra superior, por categorías, con los ocultos como «???» y su pista.
+    - 158 logros, 23 de ellos nuevos: primera victoria, primer barril, empujón final, intocable, planta limpia, primer jefe, probar todas las habilidades, dos críticos, racha de fallos, remontada, una sola ronda, cinco en un combate, 15 de daño de un golpe…
+    - Las muertes del compañero cuentan para el grupo. Las recompensas de XP pasan a ser cajas: la XP es del agente de Willy.
+  - **Cajas:** se ganan con logros, jefes (tabla `fuentes.jefes`), élites, rivales y plantas limpias. El botón 🎁 cuenta las pendientes.
+    - La apertura sigue DESIGN §8: caída, sacudida según el nivel de la caja, tapa, haz de la mejor rareza y cartas boca abajo, más «Ver probabilidades».
+    - Se tira con el RNG de la partida, con garantía, piedad, sin repetir en la caja, únicos y como mucho 2 copias.
+  - **Objetos:** son acciones `obj:<id>` dentro y fuera de combate, con los macros de `items.json` interpretados en `rulesets/willy/items.ts`.
+    - El equipo cambia atributos mientras se lleva, aplica inmunidades y da luz.
+    - La mochila 🎒 (la misma que en *Intereses*) permite beber, comer, usar y equipar.
+    - El kit de clase se reparte en el cásting.
+    - 12 objetos nuevos: pociones (Gaseosa, Caldo, Agua de la Fuente Santa, Orujo), granadas (Bomba fétida, Bengala), una bebida energética y chatarra de patrocinadores.
+    - Los que necesitan sistemas que aún no existen quedan fuera de las cajas (`loot-tables.json → fueraDeCajas`).
+  - **Botín de enemigos:** fichas, a veces un consumible y, raramente, un objeto mágico, mejor en élites y jefes (`loot-tables.json → enemigos`). Avisa con un toast y una frase.
+  - **Curación fuera de combate:** 5 % de la vida máxima por cada 4 casillas que anda Willy, para él y su compañero, y vida completa al llegar al Camerino (`willy.json → regeneracion`). La Pausa publicitaria (25 %) se queda.
+  - **Modo de eliminación:** antes del cásting se elige la dificultad y luego Con o Sin repetición; Sin repetición no está disponible en Turista.
+    - Con repetición: se vuelve al último `rested` y las plantas siguientes se recolocan (`willy:intento`).
+    - Sin repetición: una ranura propia con autoguardado y contador de escrituras compartido con el perfil, sin guardar, cargar ni exportar a mano. Se borra al caer y sale el resumen de la temporada.
 - **El show (2026-10-18, rama `willy-show`):** audiencia, patrocinadores, contratos y el Share del presentador funcionan en partida (`rulesets/willy/show/`, datos en `content/willy/show.ts`). Un gancho `afterCommand` (orden 50, y otro tras los logros, orden 110) traduce los eventos a las «vistas» de los datos (`show/patterns.ts`) y aplica `audience.json`, `sponsors.json` y el `medidorShare`. Las cajas e items van por `loot.grantLootBox` / `loot.grantItem`. **Contratos** (nuevo, no estaba en DESIGN.md): 11 en `sponsors.json → contratos`, se ofrecen en el Camerino o al interesarse un patrocinador, máximo 2 a la vez; premio o multa en fichas. **Cliente:** `GameDefinition.hud` (genérico, `src/ui/showHud.ts`): contador de audiencia arriba a la derecha (tocar abre el panel de patrocinadores con gustos legibles, `gustosTexto`, y los contratos), «+N audiencia» flotando, bocadillos de patrocinador y de hitos. El Narrador ya casa sus bancos con esas vistas y rellena los filtros de concordancia (`{enemigo:el:Mayus}`). Pendiente de diseño: «Necesita likes» del Influencer nunca salta (la audiencia no baja del mínimo); Mamá Clementina depende de eventos de diálogo que aún no existen.
 
 ## Hecho (W0)
@@ -82,7 +102,10 @@ W0 **aprobada** con estos cambios, ya aplicados en los documentos y los datos:
 ## Siguiente paso
 
 - Después: mecánicas de planta (marea, cintas: R20 `onRoundEnd`), salas fijas de historia, cajas de botín al abrirlas, reloj de planta, audiencia y patrocinadores, Narrador y valor de los objetos (Golpe de valor).
-- Pendiente de detalle del encuentro con rivales: línea de «vuelve como aliado»/«traición» en el Narrador se anuncia en `mapChanged`/`combatStarted` (aproximado, no exactamente al entrar en la sala); si se nota raro en el juego real, afinarlo. `entrarPlanta` (banco del Narrador) solo tenía una línea de llegada por bioma del modelo de 5 plantas; esta sesión la ha extendido a las 10 plantas actuales (dos pisos por bioma) usando la variable `{planta}` y una línea nueva por piso par, pero las variantes de «visita repetida» (`ep-*b/-*c`) siguen solo en los pisos impares.
+- Pendiente de detalle del encuentro con rivales: línea de «vuelve como aliado»/«traición» en el Narrador se anuncia en `mapChanged`/`combatStarted` (aproximado, no exactamente al entrar en la sala); si se nota raro en el juego real, afinarlo. `entrarPlanta` (banco del Narrador) ya tiene una línea de llegada y una de visita repetida por cada una de las 10 plantas (dos pisos por bioma, variable `{planta}`).
+- **Patrocinadores y audiencia enganchados al encuentro con rivales (2026-10-18):** `engine/dialogue.ts` añade `DialogueChoice.tags` (genérico: etiquetas de sabor para que otros sistemas reaccionen a una elección, p. ej. «amable»/«grosero»), llevadas al evento `dialogueChoice`; `rulesets/willy/show/patterns.ts` las traduce a `etiquetas` (como ya hace con `item.etiquetas`). Las elecciones Pactar y Dejar ir del árbol del rival llevan `tags:["amable"]`. `rulesets/willy/rivals.ts` emite además `npcHelped { entityId, metodo }` en un pacto o una huida (perdonar a cualquier NPC, no solo a rivales); como `rivalAfterCommand` corre después del show en la cadena de `afterCommand`, `npcHelped` se añadió a `LATE_EVENTS` de `showLateAfterCommand` (igual que `achievementUnlocked`) para que le llegue a los patrocinadores en el mismo comando. Mamá Clementina ya tenía gustos para `dialogueChoice.etiquetas:amable` y `npcHelped`, pero nunca se disparaban; ahora sí. Se le añadió además un gusto por `safeZoneEntered` (visitar el Camerino).
+- **«Necesita likes» del Influencer, arreglado:** estaba escrito contra «la audiencia baja del mínimo de la planta», algo que el diseño hizo imposible (la audiencia nunca baja de ese mínimo). Nuevo disparador real: `rulesets/willy/traits.ts` (`traitsAfterCommand`, hook 56) aplica `mareado` 2 turnos cuando la audiencia pierde por aburrimiento o monotonía (`audienceChanged` con esa `causa`, que sí se dispara). `classes.json` y `RULESET.md` actualizados.
+- Tests: `tests/content/willy-rivals-show.test.ts`.
 
 ## Notas para retomar
 

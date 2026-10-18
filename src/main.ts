@@ -18,6 +18,11 @@ import { applyTheme } from './ui/theme';
 import { setupClockHud } from './ui/clockHud';
 import { setupTutorial } from './ui/tutorialToasts';
 import { setupBarks } from './ui/barks';
+import { setupAchievements } from './ui/achievements';
+import { setupRewardBoxes } from './ui/rewardBoxes';
+import './ui/meta.css';
+import { SetupScreen } from './ui/setupScreen';
+import { PermadeathSlot } from './game/permadeath';
 import { setupShowHud } from './ui/showHud';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
@@ -40,6 +45,8 @@ const controller = new GameController(store, game, combatHud);
 const requestedArt = new URLSearchParams(location.search).get('arte');
 const manifest = game.art.presets[requestedArt ?? ''] ?? game.art.presets[game.art.default]!;
 setupBarks(store, game, manifest);
+setupAchievements(store, game, manifest);
+setupRewardBoxes(store, game, manifest);
 
 // Party portraits and character sheets (tap a portrait or an initiative chip).
 const sheet = new CharacterSheet(game, engine.ruleset, manifest);
@@ -183,17 +190,19 @@ controller.onTrapReached = (trap, candidates) => {
     for (const [item] of entries) {
       const def = game.items?.[item];
       const name = def?.label ?? item;
-      if (!fighting && /^potion_/.test(item)) {
+      const use = ruleset.itemUse ? ruleset.itemUse(store.state, item) : !fighting && /^potion_/.test(item) ? { verb: 'Beber', command: (entityId: string, issuer: string) => ({ type: 'useItem', issuer, entityId, item }) as never } : null;
+      if (use) {
         options.push({
-          label: `Beber ${name}`,
+          label: `${use.verb} ${name}`,
           onPick: () =>
             dialogue.ask(
-              `¿Quién bebe ${name}?`,
+              `¿Quién? (${name})`,
               partyMemberIds().map((id) => {
                 const e = store.state.entities[id]!;
-                const hp = e.resources.hp;
-                return { label: `${e.name}${hp ? ` (${hp.current}/${hp.max} PG)` : ''}`, onPick: () => {
-                  const r = store.dispatch({ type: 'useItem', issuer: game.playerId, entityId: id, item } as never);
+                const healthKey = Object.entries(ruleset.resources).find(([, r]) => r.role === 'health')?.[0] ?? 'hp';
+                const hp = e.resources[healthKey];
+                return { label: `${e.name}${hp ? ` (${hp.current}/${hp.max} ${ruleset.resources[healthKey]?.label ?? 'PG'})` : ''}`, onPick: () => {
+                  const r = store.dispatch(use.command(id, game.playerId));
                   if (!r.ok) hud.say(r.error.message, true);
                 } };
               }),
@@ -242,6 +251,31 @@ sheet.onChangeGear = (item: string) => {
   dialogue.ask(`¿Quién lleva ${def?.label ?? item}?`, options, false);
 };
 
+// Permadeath runs (GameDefinition.savePolicy): saved after every command in their own slot, and
+// no saving, loading or exporting by hand while one is going.
+const permadeath = new PermadeathSlot(engine);
+const newRun = () => {
+  store.load(game.newGame(engine, randomSeed(), hud.startOptions));
+  startNew();
+};
+{
+  const manual = ['save', 'load', 'export', 'import'];
+  const apply = () => {
+    const hard = game.savePolicy?.(store.state) === 'permadeath';
+    for (const b of document.querySelectorAll<HTMLElement>('.hud-top nav button[data-action]')) if (manual.includes(b.dataset.action ?? '')) b.hidden = hard;
+    return hard;
+  };
+  store.subscribe((change, state) => {
+    if (apply() && change.kind === 'events') {
+      const leader = state.entities[game.leaderId];
+      // A lost run is not saved again (its slot is cleared with the summary).
+      if (leader && engine.ruleset.isStanding(leader)) permadeath.save(state);
+    }
+    if (change.kind === 'reset' && apply()) permadeath.save(state);
+  });
+  apply();
+}
+
 // Defeat: the leader can't get up once the fight is over (the party lost, or the leader bled
 // out while the others won). Play starts again from the last campfire: the state saved by the
 // last rest (`rested` event), or the start of the game / the last loaded save if there was none.
@@ -267,8 +301,17 @@ sheet.onChangeGear = (item: string) => {
     offered = true;
     const t = game.texts.combat ?? {};
     const back = checkpoint;
+    const policy = game.defeat?.(state);
     setTimeout(() => {
-      dialogue.ask(t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: t.retryFight ?? 'Volver a la última hoguera', onPick: () => store.load(back) }], false);
+      if (policy?.summary) {
+        // The run is over (permadeath): the slot goes in the same moment, then the summary.
+        if (game.savePolicy?.(state) === 'permadeath') permadeath.clear();
+        const s = policy.summary;
+        dialogue.ask(`${policy.text}\n\n${s.title}\n${s.lines.map((l: string) => `• ${l}`).join('\n')}`, [{ label: s.button, onPick: () => newRun() }], false);
+        return;
+      }
+      const retry = policy?.retry;
+      dialogue.ask(policy?.text ?? t.defeatText ?? 'Todo se vuelve negro. Así acaban las deudas mal cobradas.', [{ label: retry?.label ?? t.retryFight ?? 'Volver a la última hoguera', onPick: () => store.load(retry?.prepare ? retry.prepare(back) : back) }], false);
     }, 1200);
   });
 }
@@ -291,14 +334,12 @@ if (game.narrate) {
   let timer = 0;
   store.subscribe((change, state) => {
     if (change.kind !== 'events') return;
-    for (const e of change.events) {
-      const line = game.narrate!(e, state);
-      if (!line) continue;
+    const line = game.narrateEvents ? game.narrateEvents(change.events, state) : (change.events.map((e) => game.narrate!(e, state)).find((l) => l) ?? null);
+    if (line) {
       box.textContent = line;
       box.hidden = false;
       clearTimeout(timer);
       timer = window.setTimeout(() => (box.hidden = true), 3500 + line.length * 40);
-      break;
     }
   });
   box.addEventListener('click', () => (box.hidden = true));
@@ -351,9 +392,28 @@ if (game.objectives?.length) {
 setupShowHud(store, game, (code) => hud.sayError(code));
 
 const creation = new CreationScreen(store, game);
-hud.onNewGame = () => creation.open();
+// A new game: the game's questions (difficulty, elimination mode...), then character creation.
+const setupScreen = new SetupScreen(store, game);
+const startNew = () => setupScreen.open(() => creation.open());
+hud.onNewGame = startNew;
 // The title screen first; a new game goes on to character creation.
-new TitleScreen(store, game, () => creation.open()).open();
+new TitleScreen(store, game, startNew).open();
+// A permadeath run in progress: «Continuar» resumes it exactly where it was (no other way in).
+{
+  const saved = permadeath.load();
+  const buttons = document.querySelector('#title .buttons');
+  if (saved && buttons) {
+    const cont = document.createElement('button');
+    cont.className = 'confirm';
+    cont.textContent = game.texts.ui && (game.texts.ui as Record<string, string>).continueHardcore ? (game.texts.ui as Record<string, string>).continueHardcore! : 'Continuar (sin repetición)';
+    cont.addEventListener('click', () => {
+      store.load(saved.restored && game.onRestoredCopy ? game.onRestoredCopy(saved.state) : saved.state);
+      document.querySelector<HTMLElement>('#title')!.hidden = true;
+      if (saved.restored) hud.say('Esta copia es más antigua que la última partida: sigue, pero ya con repetición.', true);
+    });
+    buttons.prepend(cont);
+  }
+}
 
 const combat = game.texts.combat ?? {};
 const scene = new MapScene(

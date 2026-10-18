@@ -416,7 +416,9 @@ export function achievementsHook(_ruleset: Ruleset, state: GameState, events: Ga
   meta.iniciado = true;
   const outEvents: GameEvent[] = [];
   const queue: MetaEvent[] = [];
-  if (fresh) queue.push({ type: 'runStarted' });
+  const mode = String(state.flags.modoEliminacion ?? 'repeticion');
+  const started: MetaEvent = { type: 'runStarted', modoEliminacion: mode, dificultad: String(state.flags.dificultad ?? 'concursante') };
+  if (fresh) queue.push(started);
 
   // Combat bookkeeping (the stats feed `dato` and the end-of-fight rewards).
   let endedWith: { combat: CombatStats; result: string } | undefined;
@@ -431,6 +433,9 @@ export function achievementsHook(_ruleset: Ruleset, state: GameState, events: Ga
   if (ended && meta.combate) {
     endedWith = { combat: meta.combate, result: ended.winner === w.factionId ? 'victoria' : 'derrota' };
   }
+  // Willy down when the fight is over: the season ends (Sin repetición) or he goes back (Con repetición).
+  let eliminated: MetaEvent | undefined;
+  if (ended && !standing(w)) eliminated = { type: 'runEnded', resultado: 'eliminado', modoEliminacion: mode, planta: Number(state.map.id.match(/planta-(\d+)/)?.[1] ?? 0) };
   // Abilities used (for «Probador oficial»).
   for (const raw of events as unknown as Record<string, unknown>[]) {
     if (raw.type === 'actionPerformed' && raw.actorId === WILLY_ID && String(raw.actionId).startsWith('hab:')) {
@@ -440,6 +445,10 @@ export function achievementsHook(_ruleset: Ruleset, state: GameState, events: Ga
   }
 
   queue.push(...translate(state, events));
+  if (eliminated) {
+    queue.push(eliminated);
+    outEvents.push(eliminated as unknown as GameEvent);
+  }
   // Fight rewards: elites, rivals and bosses leave a box.
   if (endedWith?.result === 'victoria') {
     const fights = content.loot.combates ?? {};
@@ -494,5 +503,5 @@ export function achievementsHook(_ruleset: Ruleset, state: GameState, events: Ga
   }
   if (endedWith) meta.combate = null;
   void rng;
-  return { effects: [setMeta(meta)], events: fresh ? [{ type: 'runStarted' } as GameEvent, ...outEvents] : outEvents };
+  return { effects: [setMeta(meta)], events: fresh ? [started as unknown as GameEvent, ...outEvents] : outEvents };
 }

@@ -160,11 +160,12 @@ Hay dos líneas en paralelo. Cada agente sigue su lista en orden y sube su rama 
   2. Partida más larga: más plantas y más grandes, curva de niveles y habilidades que suben por uso hasta el máximo en el jefe final.
   3. Variedad de enemigos con habilidades.
   4. IA que empuja y usa barriles.
-- **Meta:**
-  1. Logros.
-  2. Cajas de botín, objetos, pociones e inventario.
-  3. Curación fuera de combate.
-  4. Elegir el modo, con o sin repetición.
+- **Meta** (hecho en `willy-meta`, detalle en `docs/willy/PROGRESS.md`):
+  1. ~~Logros~~: aviso, lista y Narrador.
+  2. ~~Cajas de botín, objetos, pociones e inventario~~, y botín de enemigos.
+  3. ~~Curación fuera de combate~~.
+  4. ~~Elegir el modo, con o sin repetición~~. Política de derrota y de guardado configurable por juego.
+  - Motor: `Ruleset.afterCommand` y el efecto `setSystem`; `Ruleset.itemUse` para la mochila.
 - **Show:** audiencia y seguidores, patrocinadores y el medidor Share del jefe.
 
 **Transversales**

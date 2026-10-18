@@ -34,9 +34,11 @@ import { describeEntity } from './sheet';
 import { clockAfterCommand } from './clock';
 import { showAfterCommand, showCommands, showLateAfterCommand } from './show';
 import { achievementsHook } from './achievements';
-import { equipItem, itemsHook, unequipItem } from './items';
+import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
 import { regenHook } from './regen';
+import { monsterAiProfile } from './monsters';
+import { traitsAfterCommand } from './traits';
 
 /**
  * «El Reglamento del Concurso»: Willy's light d20 ruleset (docs/willy/RULESET.md).
@@ -334,6 +336,8 @@ registerAfterCommand(clockAfterCommand, 40);
 registerAfterCommand(showAfterCommand, 50);
 // Rival outcomes and their Narrador moments (rivals.ts).
 registerAfterCommand(rivalAfterCommand, 55);
+// Class traits that react to another subsystem (traits.ts), after the show computes audienceChanged.
+registerAfterCommand(traitsAfterCommand, 56);
 registerAfterCommand(regenHook, 60);
 registerAfterCommand(achievementsHook, 100);
 registerAfterCommand(showLateAfterCommand, 110);
@@ -402,7 +406,11 @@ export const willy: Ruleset = {
   onVoid: (state, id, rng) => onVoid(willy, state, id, rng),
   onRoundEnd: (state, round, rng) => onRoundEnd(willy, state, round, rng),
   // Ranged enemies that keep their distance (tag 'kite'): the AI backs off to 4 tiles before shooting.
-  aiProfile: (state, id) => (state.entities[id] && hasTag(state.entities[id]!, 'kite') ? { keepAway: 4 } : undefined),
+  aiProfile: (state, id) => {
+    const kite = state.entities[id] && hasTag(state.entities[id]!, 'kite') ? { keepAway: 4 } : undefined;
+    const abilities = monsterAiProfile(state, id);
+    return kite || abilities ? { ...kite, ...abilities } : undefined;
+  },
   // For the AI: standing next to a gas barrel is asking for it (someone may blow it up).
   dangerAt: (state, _id, p) =>
     Object.values(state.entities).filter((e) => hasTag(e, 'explosivo') && standing(e) && Math.max(Math.abs(e.position.x - p.x), Math.abs(e.position.y - p.y)) <= 1).length * BARREL_BLAST * 0.35,
@@ -410,6 +418,10 @@ export const willy: Ruleset = {
   triggerTrap: (state, id, trap, rng) => triggerTrap(willy, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
   afterCommand: (state, events, rng) => afterCommand(willy, state, events, rng),
+  itemSlot: itemSlotOf,
+  equippedInSlot: equippedInSlotOf,
+  equippedItems: equippedOnEntity,
+  itemUse: itemUseOf as Ruleset['itemUse'],
 };
 
 setWillyRef(willy);
