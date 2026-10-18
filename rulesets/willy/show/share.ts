@@ -50,7 +50,8 @@ function setShare(r: Resolver, s: ShareState, value: number, bossId: string): vo
 export function runShare(r: Resolver, events: GameEvent[], emitted: GameEvent[]): void {
   const cfg = showConfig()!.share;
   const boss = bossOf(r.state);
-  if (!boss) return;
+  // Only during his fight: walking about the floor before it doesn't touch his Share.
+  if (!boss || r.state.turn.mode !== 'combat' || !r.state.turn.order.includes(boss.id)) return;
   const s: ShareState = clone(shareOf(r.state) ?? { valor: cfg.inicial, max: cfg.max });
   const fresh = !shareOf(r.state);
   let value = s.valor;

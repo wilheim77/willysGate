@@ -138,9 +138,12 @@ describe('Willy show: the presenter\'s Share', () => {
     expect(r0.events.some((e) => e.type === 'entityDefeated')).toBe(true);
   });
 
-  it('spectacle drains his Share', () => {
+  it('spectacle drains his Share, but only during his fight', () => {
     let s = game([W('willy', 'butanero', 1, 0), rat('r', 2, 0, { vida: 30 }), presenter()], ['...~....']);
     s = withSystem(s, 'share', { valor: 50, max: 100 });
+    // Out of his fight nothing changes.
+    expect(shareOf(pushIntoVoid(s).state)!.valor).toBe(50);
+    s = withSystem(inCombat(s, 'willy'), 'share', { valor: 50, max: 100 });
     const { state, events } = pushIntoVoid(s);
     expect(shareOf(state)!.valor).toBeLessThan(50);
     expect(of(events, 'meterChanged')[0]).toMatchObject({ medidor: 'share', de: 50 });
