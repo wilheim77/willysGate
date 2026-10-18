@@ -109,5 +109,9 @@ export function levelUpCharacter(e: Entity, level: number): Entity {
   const oldHp = e.resources.hp;
   const hp = rebuilt.resources.hp!;
   if (oldHp) hp.current = Math.max(1, Math.min(hp.max, hp.max - (oldHp.max - oldHp.current)));
+  // One more hit die per level; the ones already spent stay spent until a long rest.
+  const oldDice = e.resources.hit_dice;
+  const dice = rebuilt.resources.hit_dice;
+  if (oldDice && dice) dice.current = Math.max(0, Math.min(dice.max, dice.max - (oldDice.max - oldDice.current)));
   return { ...rebuilt, conditions: e.conditions };
 }
