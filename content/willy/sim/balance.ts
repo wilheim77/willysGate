@@ -1,6 +1,8 @@
 import { type BaseCommand, type Engine, type Entity, type GameState, type JsonValue, type MapZone, type Vec2, SYSTEM_ISSUER, createEngine, nextAiCommand, withLighting, withZones, zonesOf } from '../../../engine';
 import { CLASSES, createCompanion, createWilly, skillLevel, willy } from '../../../rulesets/willy';
 import { FLOOR_COUNT, floorSpec, generateFloor } from '../gen/floor';
+// The show (audience, sponsors and the presenter's Share) runs in the sim as in the game.
+import { SHOW } from '../show';
 
 /**
  * Balance simulator: Willy and his companion go through a generated floor, room by room in
@@ -33,6 +35,11 @@ export interface FloorRun {
   hpLeft: number;
   /** Per fight: the foes, and Willy's health before and after. */
   log: { foes: string[]; before: number; after: number; boss: boolean }[];
+  /** Audience when the floor ends. */
+  audiencia: number;
+  /** The presenter's Share when his fight ends (floor 10), and how often it kept him at 1 health. */
+  share?: number;
+  enAntena?: number;
 }
 
 const MAX_COMMANDS = 1500;
@@ -84,25 +91,37 @@ function standingIds(state: GameState, ids: string[]): string[] {
 }
 
 /** One fight to the end. Returns the state after it and whether it ended normally. */
-function fight(state: GameState, party: string[], foes: string[]): { state: GameState; stalled: boolean } {
+function fight(state: GameState, party: string[], foes: string[]): { state: GameState; stalled: boolean; enAntena: number } {
   const e = engine();
   const started = e.apply(state, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants: [...party, ...foes] } as BaseCommand);
-  if (!started.ok) return { state, stalled: false };
+  if (!started.ok) return { state, stalled: false, enAntena: 0 };
   let s = started.state;
+  let enAntena = 0;
   for (let i = 0; i < MAX_COMMANDS && s.turn.mode === 'combat'; i++) {
     const id = s.turn.activeEntityId!;
     const r = e.apply(s, nextAiCommand(willy, s, id));
-    if (r.ok) s = r.state;
-    else {
+    if (r.ok) {
+      s = r.state;
+      enAntena += r.events.filter((ev) => ev.type === 'enAntena').length;
+    } else {
       const skip = e.apply(s, { type: 'endTurn', issuer: SYSTEM_ISSUER, entityId: id } as BaseCommand);
       if (!skip.ok) break;
       s = skip.state;
     }
   }
-  return { state: s, stalled: s.turn.mode === 'combat' };
+  return { state: s, stalled: s.turn.mode === 'combat', enAntena };
 }
 
-export function simulateFloor(seed: number, floor: number, classId: string): FloorRun {
+const audienceOf = (s: GameState) => (s.systems.audiencia as unknown as { valor?: number } | undefined)?.valor ?? SHOW.audience.inicial;
+
+/** Starts the floor's show at `audiencia` viewers (a season's typical value there). */
+function withAudience(state: GameState, audiencia: number | undefined): GameState {
+  if (audiencia === undefined) return state;
+  return { ...state, systems: { ...state.systems, audiencia: { ...((state.systems.audiencia as object | undefined) ?? {}), valor: audiencia, pico: audiencia } as unknown as JsonValue } };
+}
+
+/** `audiencia`: viewers on arrival (default: the show's starting value, raised to the floor's minimum by the rules). */
+export function simulateFloor(seed: number, floor: number, classId: string, audiencia?: number): FloorRun {
   const built = generateFloor(seed, floor).setup;
   const lvl = EXPECTED_LEVEL[floor] ?? 1;
   const arrival = built.spawns.llegada!;
@@ -114,7 +133,7 @@ export function simulateFloor(seed: number, floor: number, classId: string): Flo
   if (systems.zones) state = withZones(state, systems.zones as never);
   const spot = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }, { x: 1, y: 1 }, { x: -1, y: 1 }].map((d) => ({ x: arrival.x + d.x, y: arrival.y + d.y })).find((p) => free(state, p, new Set()))!;
   const mate = createCompanion(classId, w, spot)!;
-  state = { ...state, entities: { ...state.entities, [mate.id]: mate } };
+  state = withAudience({ ...state, entities: { ...state.entities, [mate.id]: mate } }, audiencia);
 
   const rooms = (systems.planta as unknown as { salas: { role: string; depth: number }[] }).salas;
   const encounters = zonesOf(state, 'encounters').sort((a, b) => {
@@ -122,7 +141,7 @@ export function simulateFloor(seed: number, floor: number, classId: string): Flo
     const rb = rooms[Number(b.name.split('-')[1])]!;
     return Number(ra.role === 'jefe') - Number(rb.role === 'jefe') || ra.depth - rb.depth;
   });
-  const run: FloorRun = { floor, seed, classId, cleared: false, reachedBoss: false, bossWon: false, companionDowns: 0, fights: 0, stalled: false, hpLeft: 0, log: [] };
+  const run: FloorRun = { floor, seed, classId, cleared: false, reachedBoss: false, bossWon: false, companionDowns: 0, fights: 0, stalled: false, hpLeft: 0, log: [], audiencia: 0 };
   const partyIds = ['willy', mate.id];
   for (const zone of encounters) {
     const boss = rooms[Number(zone.name.split('-')[1])]!.role === 'jefe';
@@ -145,6 +164,10 @@ export function simulateFloor(seed: number, floor: number, classId: string): Flo
     const result = fight({ ...state, entities: inRoom }, party, foes);
     state = { ...result.state, entities: { ...aside, ...result.state.entities } };
     run.log.push({ foes: foes.map((id) => state.entities[id]!.spriteId), before, after: state.entities.willy!.resources.vida!.current, boss });
+    if (foes.includes(SHOW.share.jefeId)) {
+      run.share = (state.systems.share as unknown as { valor?: number } | undefined)?.valor;
+      run.enAntena = result.enAntena;
+    }
     run.fights++;
     if (mateUp && !willy.isStanding(state.entities[mate.id]!)) run.companionDowns++;
     if (result.stalled) {
@@ -157,6 +180,7 @@ export function simulateFloor(seed: number, floor: number, classId: string): Flo
   const wv = state.entities.willy!.resources.vida!;
   run.cleared = willy.isStanding(state.entities.willy!) && !run.stalled && run.bossWon;
   run.hpLeft = wv.current / wv.max;
+  run.audiencia = audienceOf(state);
   return run;
 }
 
@@ -176,6 +200,8 @@ export interface SeasonFloor {
   /** The boss (or guardian) fell at the first try. */
   bossFirstTry: boolean;
   fights: number;
+  /** Audience when leaving the floor (carried over to the next, as in the game). */
+  audiencia: number;
 }
 
 export interface SeasonRun {
@@ -196,6 +222,8 @@ export function simulateSeason(seed: number, classId: string, maxRetries = 15, f
   let w = willyAt(classId, 1, { x: 0, y: 0 });
   let mate: Entity | undefined;
   let retriesLeft = maxRetries;
+  // The show carries over from floor to floor (the Share is per boss fight).
+  let show: Record<string, JsonValue> = {};
   const abilities = (CLASSES[classId]!.habilidades as { id: string; pasiva?: boolean }[]).filter((h) => !h.pasiva).map((h) => h.id);
   for (let floor = 1; floor <= floors; floor++) {
     const built = generateFloor(seed, floor).setup;
@@ -216,7 +244,7 @@ export function simulateSeason(seed: number, classId: string, maxRetries = 15, f
     if (systems.zones) state = withZones(state, systems.zones as never);
     const spot = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }, { x: 1, y: 1 }, { x: -1, y: 1 }].map((d) => ({ x: arrival.x + d.x, y: arrival.y + d.y })).find((p) => free(state, p, new Set()))!;
     mate = mate ? heal(mate, spot) : createCompanion(classId, w, spot)!;
-    state = { ...state, entities: { ...state.entities, [mate.id]: mate } };
+    state = { ...state, entities: { ...state.entities, [mate.id]: mate }, systems: { ...state.systems, ...show } };
 
     const rooms = (systems.planta as unknown as { salas: { role: string; depth: number }[] }).salas;
     const encounters = zonesOf(state, 'encounters').sort((a, b) => {
@@ -267,7 +295,8 @@ export function simulateSeason(seed: number, classId: string, maxRetries = 15, f
     }
     w = state.entities.willy!;
     mate = state.entities[mate.id] ?? mate;
-    run.floors.push({ floor, retries, level: w.stats.nivel ?? 1, tiers: Object.fromEntries(abilities.map((id) => [id, skillLevel(w, id)])), uses: Object.fromEntries(abilities.map((id) => [id, w.resources[`uso:${id}`]?.current ?? 0])), bossWon, bossFirstTry, fights });
+    show = Object.fromEntries((['audiencia', 'patrocinadores'] as const).filter((k) => state.systems[k] !== undefined).map((k) => [k, state.systems[k]!]));
+    run.floors.push({ floor, retries, level: w.stats.nivel ?? 1, tiers: Object.fromEntries(abilities.map((id) => [id, skillLevel(w, id)])), uses: Object.fromEntries(abilities.map((id) => [id, w.resources[`uso:${id}`]?.current ?? 0])), bossWon, bossFirstTry, fights, audiencia: audienceOf(state) });
     if (failed) return run;
   }
   run.finished = true;
