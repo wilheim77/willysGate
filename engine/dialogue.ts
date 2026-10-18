@@ -7,7 +7,7 @@ import { itemCount } from './inventory';
 import { RngCursor } from './rng';
 import type { CheckResult, Ruleset } from './ruleset';
 import { type MapBuilder, changeMap } from './world';
-import { type FlagValue, type GameState, type JsonValue, OBJECT_TAG } from './state';
+import { type FlagValue, type GameState, type JsonValue, OBJECT_TAG, tagValue } from './state';
 
 /**
  * Branching conversations as data (content/<game>/dialogues/*.json). The engine walks the
@@ -43,8 +43,13 @@ export interface DialogueChoice {
   when?: DialogueWhen;
   /** Shown greyed out with this hint instead of hidden when `when` fails (e.g. "[Elfo]"). */
   lockedHint?: string;
-  /** Roll before branching. The actor is whoever speaks for the party unless given. */
-  check?: { check: string; dc: number; actor?: string; situational?: string[]; success: string; failure: string };
+  /**
+   * Roll before branching. The actor is whoever speaks for the party unless given. `dc` is
+   * either a fixed number, or read off a numeric tag of whoever we're talking to (e.g. a
+   * procedurally generated NPC whose difficulty varies per instance: `{ partnerTag: 'pacto' }`
+   * reads the "pacto:14" tag). Missing or unparsable falls back to `partnerTagFallback` (20).
+   */
+  check?: { check: string; dc: number | { partnerTag: string; fallback?: number }; actor?: string; situational?: string[]; success: string; failure: string };
   effects?: DialogueEffect[];
   /** Next node; omitted ends the conversation. */
   next?: string;
@@ -179,6 +184,15 @@ export function nextTargets(next: DialogueNode['next']): string[] {
   return next.flatMap((b) => (b.next ? [b.next] : []));
 }
 
+/** Resolves a choice's DC: a fixed number, or a tag read off whoever the party is talking to. */
+export function resolveDc(state: GameState, partnerId: string | undefined, dc: NonNullable<DialogueChoice['check']>['dc']): number {
+  if (typeof dc === 'number') return dc;
+  const partner = partnerId ? state.entities[partnerId] : undefined;
+  const raw = partner && tagValue(partner, dc.partnerTag);
+  const n = raw !== undefined ? Number(raw) : NaN;
+  return Number.isFinite(n) ? n : dc.fallback ?? 20;
+}
+
 /** A choice as the UI shows it. */
 export interface ChoiceView {
   index: number;
@@ -204,7 +218,7 @@ export function dialogueChoices(ruleset: Ruleset, state: GameState, tree: Dialog
         text: c.text,
         available,
         ...(c.lockedHint && !available ? { lockedHint: c.lockedHint } : {}),
-        ...(c.check ? { check: { check: c.check.check, dc: c.check.dc, actorId: c.check.actor ?? d.actorId } } : {}),
+        ...(c.check ? { check: { check: c.check.check, dc: resolveDc(state, d.partnerId, c.check.dc), actorId: c.check.actor ?? d.actorId } } : {}),
       },
     ];
   });
@@ -382,7 +396,7 @@ export const chooseOption: CommandHandler<ChooseOptionCommand> = (state, cmd, { 
     if (choice.check) {
       const actorId = choice.check.actor ?? d.actorId;
       if (!next.entities[actorId]) return fail('unknown_entity', `No entity "${actorId}" to roll`);
-      lastCheck = ruleset.resolveCheck(next, { actorId, check: choice.check.check, target: choice.check.dc, ...(choice.check.situational ? { situational: choice.check.situational } : {}) }, rng);
+      lastCheck = ruleset.resolveCheck(next, { actorId, check: choice.check.check, target: resolveDc(next, d.partnerId, choice.check.dc), ...(choice.check.situational ? { situational: choice.check.situational } : {}) }, rng);
       events.push({ type: 'dialogueCheck', actorId, result: lastCheck } as DialogueCheckEvent);
       target = lastCheck.success ? choice.check.success : choice.check.failure;
     }

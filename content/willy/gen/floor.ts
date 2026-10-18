@@ -8,7 +8,7 @@ import plato from '../data/rooms/plato.json';
 import verbena from '../data/rooms/verbena.json';
 import { prop, zone } from '../maps';
 import { Gen } from './random';
-import { RIVAL_RULES, type RivalRecord, generateRival, legendaryById, legendaryEntity, legendaryFor, rebuildProfiles, rivalEntity, rivalKeys } from './rivals';
+import { RIVAL_RULES, type RivalRecord, generateRival, legendaryById, legendaryEntity, legendaryFor, rebuildProfiles, rivalEntity, rivalKeys, traicionChance } from './rivals';
 
 /**
  * Procedural floors (docs/willy/DESIGN.md §3) assembled from hand-made room chunks
@@ -530,7 +530,10 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
         foesByRoom[i]!.push(boss.id);
       }
     }
-    // A rival instead of the room's enemies.
+    // A rival instead of the room's enemies. Fresh ones and those who fled before wait for Willy
+    // to talk to them (the encounter dialogue offers derrotar/pactar/dejar ir); someone who was
+    // pacted with before comes back straight into the fight, as a temporary ally (docs/willy/DESIGN.md §17) —
+    // unless they're a tramposo who betrays it.
     const enemySlots = slots(i, 'e');
     if (room.role === 'rival' && rivalRoom && enemySlots.length) {
       const at = enemySlots.shift()!;
@@ -539,10 +542,23 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       const returning = g.shuffle(earlier.filter((r) => r.desenlace === 'pacto' || r.desenlace === 'huida'));
       const back = returning.length && g.chance(RIVAL_RULES.returnChance) ? returning[0] : undefined;
       let e: Entity;
+      let ambush = false;
       if (back) {
         const legend = back.legendario ? legendaryById(back.legendario) : undefined;
-        e = legend ? legendaryEntity(legend, spec.plantaId, at) : rivalEntity(profiles.get(back.id)!, spec.plantaId, at);
-        e = { ...e, tags: [...e.tags, `vuelta:${back.desenlace}`] };
+        const profile = legend ? undefined : profiles.get(back.id)!;
+        if (back.desenlace === 'pacto') {
+          const betrays = !legend && g.chance(traicionChance(profile!.comportamiento));
+          e = legend ? legendaryEntity(legend, spec.plantaId, at) : rivalEntity(profile!, spec.plantaId, at);
+          // The party's own faction, matching setup.ts's FACTION ('concursantes'): a loyal ally fights
+          // at Willy's side, standing in the room without a fight to join. A tramposo may instead
+          // betray the pact: a plain hostile ambush, same as any other enemy.
+          e = { ...e, factionId: betrays ? e.factionId : 'concursantes', tags: [...e.tags, 'vuelta:pacto', `traicion:${betrays ? 'si' : 'no'}`] };
+          ambush = betrays;
+        } else {
+          e = legend ? legendaryEntity(legend, spec.plantaId, at, 'vueltaHuida') : rivalEntity(profile!, spec.plantaId, at, 'vueltaHuida');
+          e = { ...e, tags: [...e.tags, 'vuelta:huida', 'dialogue:rivalEncuentro'] };
+          ambush = false;
+        }
         rival = { ...back, plantas: [...back.plantas, n] };
       } else {
         const usedLegendaries = new Set(earlier.map((r) => r.legendario).filter((x): x is string => !!x));
@@ -556,9 +572,13 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
           e = rivalEntity(profile, spec.plantaId, at);
           rival = { id: e.id, planta: n, ranura: i, plantas: [n] };
         }
+        e = { ...e, tags: [...e.tags, 'dialogue:rivalEncuentro'] };
+        ambush = false;
       }
       entities.push({ ...e, tags: [...e.tags, 'xp:30'] });
-      foesByRoom[i]!.push(e.id);
+      // Only an ambush (a hostile pact-return, or a betrayer) joins the room's auto-fight zone;
+      // everyone else waits to be talked to (interact), so the dialogue offers its three outcomes.
+      if (ambush) foesByRoom[i]!.push(e.id);
       enemySlots.length = 0;
     }
     // Enemies bought with the room's budget.

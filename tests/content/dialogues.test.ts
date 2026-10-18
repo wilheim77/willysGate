@@ -40,7 +40,7 @@ describe('dialogue content', () => {
           }
           for (const c of node.choices ?? []) {
             for (const r of c.when ? rules(c.when) : []) expect(dnd5e.dialogueConditions[r], `${id}: rule ${r}`).toBeDefined();
-            if (c.check) expect(() => dnd5e.describeCheck!(state, { actorId: 'hero', check: c.check!.check, target: c.check!.dc }), `${id}: check ${c.check.check}`).not.toThrow();
+            if (c.check) expect(() => dnd5e.describeCheck!(state, { actorId: 'hero', check: c.check!.check, target: typeof c.check!.dc === 'number' ? c.check!.dc : c.check!.dc.fallback ?? 20 }), `${id}: check ${c.check.check}`).not.toThrow();
           }
         }
         // Every node can reach the end of the conversation.
