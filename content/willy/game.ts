@@ -9,6 +9,7 @@ import meta from './meta.json';
 import { PLAYER, applyCasting, maps, newWillyGame } from './setup';
 import { announce } from './announce';
 import { narrate } from './narrator';
+import { willyHud } from './hud';
 import texts from './texts/ui.json';
 
 /**
@@ -43,6 +44,8 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'willy',
+  // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
+  onDeath: 'vanish',
   audio: audio as unknown as AudioManifest,
   items: Object.fromEntries(itemsData.items.map((i) => [i.id, { label: i.nombre, text: i.descripcion }])),
   creation: {
@@ -53,6 +56,7 @@ export const game: GameDefinition = {
   titleImage: 'assets/title/title.png',
   narrate,
   announce,
+  hud: willyHud,
   // The service lift needs the engine to know the floors (travel builds them on arrival).
   maps,
   newGame: newWillyGame,

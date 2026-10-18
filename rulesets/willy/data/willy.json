@@ -67,5 +67,11 @@
   "pausaPublicitaria": {
     "$comment": "Al acabar cada combate, Willy y su compañero (si sigue en pie) recuperan esta parte de su vida máxima: el equipo de maquillaje aprovecha los anuncios. Palanca de equilibrio (docs/willy/BALANCE.md).",
     "vida": 0.25
+  },
+  "regeneracion": {
+    "$comment": "Fuera de combate, cada 'pasos' casillas que anda Willy, él y su compañero (si sigue en pie) recuperan 'vida' de su vida máxima (mínimo 1). Al llegar a un Camerino, el equipo de maquillaje les devuelve esta parte de lo que les falta ('camerino': 1 = a tope). Palanca de equilibrio (docs/willy/BALANCE.md).",
+    "pasos": 4,
+    "vida": 0.05,
+    "camerino": 1
   }
 }

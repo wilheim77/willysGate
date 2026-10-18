@@ -297,7 +297,12 @@ export function defeat(r: Resolver, id: string, sourceId: string | undefined, ca
     r.apply({ type: 'modifyResource', entityId: id, resource: 'vida', delta: 1 - (r.entity(id).resources.vida?.current ?? 0) });
     return;
   }
-  r.apply({ type: 'applyCondition', entityId: id, condition: 'eliminado' });
+  // 'eliminado' drives Willy's own rules (standing(), NO_ACT…); 'dead' is the cross-ruleset
+  // condition id the generic engine/client already use for "this is a corpse" (see
+  // engine/dialogue.ts and src/scenes/MapScene.ts's applyFate, written against dnd5e's
+  // condition of the same name) — applied alongside it so defeated Willy entities get the
+  // same corpse/vanish-on-death handling there, not just dnd5e's.
+  r.apply({ type: 'applyCondition', entityId: id, condition: 'eliminado' }, { type: 'applyCondition', entityId: id, condition: 'dead' });
   for (const hook of defeatHooks) hook(r, id);
   const fallen = r.entity(id);
   // Automatons blow up when destroyed (Construir autómata, level 4).

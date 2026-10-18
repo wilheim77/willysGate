@@ -41,7 +41,8 @@
     "confirmNew": "¿Empezar de nuevo? Lo que no hayas guardado se pierde. Como todo.",
     "height": "altura",
     "genericError": "Algo ha salido mal. Esta vez no es culpa de nadie del valle.",
-    "closedWay": "Por ahí no se pasa. Todavía."
+    "closedWay": "Por ahí no se pasa. Todavía.",
+    "credits": "Créditos"
   },
   "combat": {
     "miss": "Fallo",

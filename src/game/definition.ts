@@ -1,4 +1,4 @@
-import type { CreationChoices, CreationSpec, DialogueTree, DialogueWhen, Entity, GameEvent, Engine, GameState, MapBuilder, ProgressionContent, Ruleset } from '../../engine';
+import type { BaseCommand, CreationChoices, CreationSpec, DialogueTree, DialogueWhen, Entity, GameEvent, Engine, GameState, MapBuilder, ProgressionContent, Ruleset } from '../../engine';
 import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
 import type { BarksData } from '../ui/barks';
@@ -34,6 +34,67 @@ export interface Theme {
   colorGrade?: { saturation: number; brightness: number; tint?: string };
   /** Optional stylesheet URL for the font (Google Fonts). */
   fontUrl?: string;
+}
+
+/** A small always-visible counter in the HUD (Willy's audience, a boss's meter...). */
+export interface MeterView {
+  id: string;
+  icon: string;
+  /** The number or short text, already formatted («12,4 mil»). */
+  value: string;
+  /** A second, smaller line («Audiencia local»). */
+  label?: string;
+  /** 0..1 to draw a bar under the value. */
+  fill?: number;
+  color?: string;
+  /** Tooltip / accessible description. */
+  title?: string;
+  /** Tapping it opens the game's panel. */
+  opensPanel?: boolean;
+}
+
+/** Text that floats over an entity on the map when an event plays («+1,2 mil»). */
+export interface FloatView {
+  entityId?: string;
+  text: string;
+  color?: string;
+}
+
+/** A message bubble that does not pause the game (a sponsor writing in). */
+export interface ToastView {
+  title: string;
+  text: string;
+  color?: string;
+  /** Short badge drawn instead of a portrait (initials or an emoji). */
+  badge?: string;
+}
+
+/** One block of the game's panel: a title, an optional bar, lines and buttons that send commands. */
+export interface PanelSection {
+  title: string;
+  subtitle?: string;
+  color?: string;
+  badge?: string;
+  bar?: { fill: number; label: string; color?: string };
+  lines?: string[];
+  actions?: { label: string; command: BaseCommand; primary?: boolean }[];
+}
+
+/**
+ * Game-specific HUD pieces built from plain views over the state, so the client stays
+ * generic: counters, floating texts, message bubbles and one panel with actions.
+ */
+export interface HudExtension {
+  meters?(state: GameState): MeterView[];
+  float?(event: GameEvent, state: GameState): FloatView | null;
+  toast?(event: GameEvent, state: GameState): ToastView | null;
+  panel?: {
+    icon: string;
+    title: string;
+    sections(state: GameState, issuer: string): PanelSection[];
+    /** A number on the panel's button (offers waiting...). */
+    badge?(state: GameState): number;
+  };
 }
 
 /**
@@ -100,6 +161,15 @@ export interface GameDefinition {
   tutorial?: TutorialStep[];
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */
   barks?: BarksData;
+  /** Extra HUD pieces (counters, floating texts, message bubbles, a panel). */
+  hud?: HudExtension;
+  /**
+   * What a dead creature leaves behind: 'corpse' (default) lies it flat on the floor —
+   * manifest art if the pack has one for its spriteId, a generic darkened fallback
+   * otherwise. 'vanish' instead plays a TV-gameshow "¡ELIMINADO!" flash and removes the
+   * sprite — Willy's showier tone; Intereses keeps 'corpse'.
+   */
+  onDeath?: 'corpse' | 'vanish';
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

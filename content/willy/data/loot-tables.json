@@ -2,10 +2,26 @@
   "$comment": "Cajas de botín, tablas de botín, cofres de planta, botín de enemigos y tienda de Maripuri. Borrador pendiente de aprobación; algoritmo en docs/willy/DESIGN.md → «Cajas de botín». Solo dentro del juego: ninguna caja se compra, ni con dinero real ni con fichas. Pesos relativos (no tienen que sumar 100). Las probabilidades se muestran al jugador tal cual en «Ver probabilidades».",
   "version": 1,
   "rarezas": {
-    "bronce": { "nombre": "Bronce", "color": "#c07a45", "orden": 0 },
-    "plata": { "nombre": "Plata", "color": "#c9d1d9", "orden": 1 },
-    "oro": { "nombre": "Oro", "color": "#f2c14e", "orden": 2 },
-    "legendaria": { "nombre": "Legendaria", "color": "#b45cff", "orden": 3 }
+    "bronce": {
+      "nombre": "Bronce",
+      "color": "#c07a45",
+      "orden": 0
+    },
+    "plata": {
+      "nombre": "Plata",
+      "color": "#c9d1d9",
+      "orden": 1
+    },
+    "oro": {
+      "nombre": "Oro",
+      "color": "#f2c14e",
+      "orden": 2
+    },
+    "legendaria": {
+      "nombre": "Legendaria",
+      "color": "#b45cff",
+      "orden": 3
+    }
   },
   "cajas": {
     "bronce": {
@@ -13,8 +29,16 @@
       "descripcion": "Cartón reforzado con el logo de Canal Abismo. Huele a almacén.",
       "objetos": 2,
       "garantia": null,
-      "pesosRareza": { "bronce": 80, "plata": 18, "oro": 2, "legendaria": 0 },
-      "fichas": [5, 15],
+      "pesosRareza": {
+        "bronce": 80,
+        "plata": 18,
+        "oro": 2,
+        "legendaria": 0
+      },
+      "fichas": [
+        5,
+        15
+      ],
       "tabla": "botin-general"
     },
     "plata": {
@@ -22,8 +46,16 @@
       "descripcion": "Metálica, con remaches y un lazo azul que nadie sabe atar igual.",
       "objetos": 3,
       "garantia": "plata",
-      "pesosRareza": { "bronce": 55, "plata": 38, "oro": 6.5, "legendaria": 0.5 },
-      "fichas": [15, 30],
+      "pesosRareza": {
+        "bronce": 55,
+        "plata": 38,
+        "oro": 6.5,
+        "legendaria": 0.5
+      },
+      "fichas": [
+        15,
+        30
+      ],
       "tabla": "botin-general"
     },
     "oro": {
@@ -31,8 +63,16 @@
       "descripcion": "Dorada, pesada y con música propia al abrirse. El público aplaude solo de verla.",
       "objetos": 3,
       "garantia": "oro",
-      "pesosRareza": { "bronce": 30, "plata": 45, "oro": 22, "legendaria": 3 },
-      "fichas": [30, 60],
+      "pesosRareza": {
+        "bronce": 30,
+        "plata": 45,
+        "oro": 22,
+        "legendaria": 3
+      },
+      "fichas": [
+        30,
+        60
+      ],
       "tabla": "botin-general"
     },
     "legendaria": {
@@ -40,17 +80,34 @@
       "descripcion": "Flota sola, zumba y tiene un brillo morado que no viene de ningún sitio. Producción no se hace responsable.",
       "objetos": 4,
       "garantia": "legendaria",
-      "pesosRareza": { "bronce": 0, "plata": 40, "oro": 45, "legendaria": 15 },
-      "fichas": [80, 150],
+      "pesosRareza": {
+        "bronce": 0,
+        "plata": 40,
+        "oro": 45,
+        "legendaria": 15
+      },
+      "fichas": [
+        80,
+        150
+      ],
       "tabla": "botin-general"
     }
   },
   "piedad": {
     "$comment": "Contadores por partida, guardados en el GameState y visibles en la pantalla de apertura («Garantía de oro: 5/8»).",
-    "oro": { "cajasSin": 8, "texto": "Cada 8 cajas seguidas sin ningún objeto de oro o mejor, la siguiente trae uno seguro." },
-    "legendaria": { "cajasSin": 20, "texto": "Cada 20 cajas seguidas sin ningún objeto legendario, la siguiente trae uno seguro." },
+    "oro": {
+      "cajasSin": 8,
+      "texto": "Cada 8 cajas seguidas sin ningún objeto de oro o mejor, la siguiente trae uno seguro."
+    },
+    "legendaria": {
+      "cajasSin": 20,
+      "texto": "Cada 20 cajas seguidas sin ningún objeto legendario, la siguiente trae uno seguro."
+    },
     "sinRepetirEnCaja": true,
-    "maxCopiasPorPartida": { "herramienta": 2, "equipo": 2 },
+    "maxCopiasPorPartida": {
+      "herramienta": 2,
+      "equipo": 2
+    },
     "unicos": "Un objeto 'unico' no vuelve a salir en la partida si ya lo tienes o lo vendiste; se tira otro de la misma rareza.",
     "rarezaVacia": "Si no queda ningún objeto válido de la rareza tirada, se baja una rareza; si no queda ninguno, se dan fichas por el valor medio de esa rareza."
   },
@@ -58,144 +115,584 @@
     "$comment": "De dónde salen las cajas. El balance de cada partida NO cuenta con las cajas de logros: los logros son por navegador y solo dan su caja la primera vez.",
     "logros": "La caja que indique el logro, la primera vez que se desbloquea en este navegador.",
     "hitosAudiencia": [
-      { "espectadores": 5000, "caja": "bronce" },
-      { "espectadores": 25000, "caja": "bronce" },
-      { "espectadores": 100000, "caja": "plata" },
-      { "espectadores": 500000, "caja": "plata" },
-      { "espectadores": 2000000, "caja": "oro" },
-      { "espectadores": 10000000, "caja": "oro" },
-      { "espectadores": 50000000, "caja": "legendaria" }
+      {
+        "espectadores": 5000,
+        "caja": "bronce"
+      },
+      {
+        "espectadores": 25000,
+        "caja": "bronce"
+      },
+      {
+        "espectadores": 100000,
+        "caja": "plata"
+      },
+      {
+        "espectadores": 500000,
+        "caja": "plata"
+      },
+      {
+        "espectadores": 2000000,
+        "caja": "oro"
+      },
+      {
+        "espectadores": 10000000,
+        "caja": "oro"
+      },
+      {
+        "espectadores": 50000000,
+        "caja": "legendaria"
+      }
     ],
     "primaFinDePlanta": [
-      { "audienciaMin": 0, "caja": "bronce" },
-      { "audienciaMin": 100000, "caja": "plata" },
-      { "audienciaMin": 2000000, "caja": "oro" }
+      {
+        "audienciaMin": 0,
+        "caja": "bronce"
+      },
+      {
+        "audienciaMin": 100000,
+        "caja": "plata"
+      },
+      {
+        "audienciaMin": 2000000,
+        "caja": "oro"
+      }
     ],
-    "jefes": { "1": "plata", "2": "plata", "3": "oro", "4": "oro", "5": "legendaria" },
+    "jefes": {
+      "1": "plata",
+      "2": "plata",
+      "3": "oro",
+      "4": "oro",
+      "5": "legendaria"
+    },
     "patrocinadores": "Ver sponsors.json → regalos.",
-    "salidaConPocoReloj": { "relojRestanteMaxPct": 10, "caja": "bronce", "texto": "Prima «Al filo»: salir de la planta con menos del 10 % del reloj." }
+    "salidaConPocoReloj": {
+      "relojRestanteMaxPct": 10,
+      "caja": "bronce",
+      "texto": "Prima «Al filo»: salir de la planta con menos del 10 % del reloj."
+    }
   },
   "tablas": {
     "botin-general": {
       "$comment": "Se tira primero la rareza (pesosRareza de la caja) y luego la categoría; dentro de la categoría solo cuentan los objetos de esa rareza.",
       "entradas": [
-        { "tabla": "consumibles", "peso": 50 },
-        { "tabla": "herramientas", "peso": 20 },
-        { "tabla": "equipo", "peso": 22 },
-        { "tabla": "avisos", "peso": 8 }
+        {
+          "tabla": "consumibles",
+          "peso": 50
+        },
+        {
+          "tabla": "herramientas",
+          "peso": 20
+        },
+        {
+          "tabla": "equipo",
+          "peso": 22
+        },
+        {
+          "tabla": "avisos",
+          "peso": 8
+        },
+        {
+          "tabla": "patrocinio",
+          "peso": 10
+        }
       ]
     },
     "consumibles": {
       "entradas": [
-        { "item": "tirita-de-dibujos", "peso": 10 },
-        { "item": "cafe-de-maquina", "peso": 8 },
-        { "item": "frasco-de-aceite", "peso": 9 },
-        { "item": "mechero-de-gasolinera", "peso": 8 },
-        { "item": "cubo-de-agua", "peso": 8 },
-        { "item": "bolsa-de-canicas", "peso": 6 },
-        { "item": "red-de-pesca", "peso": 6 },
-        { "item": "lata-de-bonito", "peso": 7 },
-        { "item": "pincho-de-tortilla", "peso": 8 },
-        { "item": "mapa-de-planta", "peso": 5 },
-        { "item": "petardo", "peso": 7 },
-        { "item": "megafono", "peso": 6 },
-        { "item": "bote-de-pimienta", "peso": 7 },
-        { "item": "garrafa-de-lejia", "peso": 6 },
-        { "item": "extintor", "peso": 6 },
-        { "item": "tartera-de-mama", "peso": 7 },
-        { "item": "rayo-embotellado", "peso": 5 },
-        { "item": "trompeta-de-charanga", "peso": 5 },
-        { "item": "share-embotellado", "peso": 2 }
+        {
+          "item": "tirita-de-dibujos",
+          "peso": 10
+        },
+        {
+          "item": "cafe-de-maquina",
+          "peso": 8
+        },
+        {
+          "item": "frasco-de-aceite",
+          "peso": 9
+        },
+        {
+          "item": "mechero-de-gasolinera",
+          "peso": 8
+        },
+        {
+          "item": "cubo-de-agua",
+          "peso": 8
+        },
+        {
+          "item": "bolsa-de-canicas",
+          "peso": 6
+        },
+        {
+          "item": "red-de-pesca",
+          "peso": 6
+        },
+        {
+          "item": "lata-de-bonito",
+          "peso": 7
+        },
+        {
+          "item": "pincho-de-tortilla",
+          "peso": 8
+        },
+        {
+          "item": "mapa-de-planta",
+          "peso": 5
+        },
+        {
+          "item": "petardo",
+          "peso": 7
+        },
+        {
+          "item": "megafono",
+          "peso": 6
+        },
+        {
+          "item": "bote-de-pimienta",
+          "peso": 7
+        },
+        {
+          "item": "garrafa-de-lejia",
+          "peso": 6
+        },
+        {
+          "item": "extintor",
+          "peso": 6
+        },
+        {
+          "item": "tartera-de-mama",
+          "peso": 7
+        },
+        {
+          "item": "rayo-embotellado",
+          "peso": 5
+        },
+        {
+          "item": "trompeta-de-charanga",
+          "peso": 5
+        },
+        {
+          "item": "share-embotellado",
+          "peso": 2
+        },
+        {
+          "item": "gaseosa-la-revoltosa",
+          "peso": 10
+        },
+        {
+          "item": "caldo-de-la-abuela",
+          "peso": 7
+        },
+        {
+          "item": "agua-de-la-fuente-santa",
+          "peso": 3
+        },
+        {
+          "item": "chupito-de-orujo",
+          "peso": 6
+        },
+        {
+          "item": "bebida-energetica-vortax",
+          "peso": 5
+        },
+        {
+          "item": "bomba-fetida-glorp",
+          "peso": 6
+        },
+        {
+          "item": "bengala-de-puerto",
+          "peso": 7
+        }
       ]
     },
     "herramientas": {
       "entradas": [
-        { "item": "paraguas", "peso": 8 },
-        { "item": "cana-de-pescar", "peso": 8 },
-        { "item": "rodillo-de-cocina", "peso": 8 },
-        { "item": "ballesta-de-feria", "peso": 8 },
-        { "item": "antorcha-de-verbena", "peso": 8 },
-        { "item": "remo-de-trainera", "peso": 7 },
-        { "item": "grapadora-industrial", "peso": 7 },
-        { "item": "martillo-neumatico", "peso": 5 },
-        { "item": "monopatin-cohete", "peso": 5 },
-        { "item": "carrito-de-maripuri", "peso": 5 },
-        { "item": "remo-de-la-castrena", "peso": 2 },
-        { "item": "espada-del-campeon-krell", "peso": 2 }
+        {
+          "item": "paraguas",
+          "peso": 8
+        },
+        {
+          "item": "cana-de-pescar",
+          "peso": 8
+        },
+        {
+          "item": "rodillo-de-cocina",
+          "peso": 8
+        },
+        {
+          "item": "ballesta-de-feria",
+          "peso": 8
+        },
+        {
+          "item": "antorcha-de-verbena",
+          "peso": 8
+        },
+        {
+          "item": "remo-de-trainera",
+          "peso": 7
+        },
+        {
+          "item": "grapadora-industrial",
+          "peso": 7
+        },
+        {
+          "item": "martillo-neumatico",
+          "peso": 5
+        },
+        {
+          "item": "monopatin-cohete",
+          "peso": 5
+        },
+        {
+          "item": "carrito-de-maripuri",
+          "peso": 5
+        },
+        {
+          "item": "remo-de-la-castrena",
+          "peso": 2
+        },
+        {
+          "item": "espada-del-campeon-krell",
+          "peso": 2
+        }
       ]
     },
     "equipo": {
       "entradas": [
-        { "item": "casco-de-obra", "peso": 8 },
-        { "item": "guantes-de-fregar", "peso": 7 },
-        { "item": "chubasquero", "peso": 7 },
-        { "item": "moneda-de-cinco-duros", "peso": 6 },
-        { "item": "botas-de-agua", "peso": 6 },
-        { "item": "chaleco-reflectante", "peso": 6 },
-        { "item": "frontal-de-espeleologo", "peso": 6 },
-        { "item": "manual-de-prevencion", "peso": 5 },
-        { "item": "cascabel-delator", "peso": 4 },
-        { "item": "pendiente-del-mimico", "peso": 3 },
-        { "item": "gafas-de-sol-nocturnas", "peso": 3 },
-        { "item": "capa-de-veterano", "peso": 4 },
-        { "item": "termo-sin-fondo", "peso": 4 },
-        { "item": "dado-trucado", "peso": 4 },
-        { "item": "ancla-del-puerto", "peso": 4 },
-        { "item": "mochila-sin-fondo", "peso": 4 },
-        { "item": "cronometro-de-regidor", "peso": 2 },
-        { "item": "cuaderno-de-quejas", "peso": 2 },
-        { "item": "microfono-de-oro", "peso": 2 },
-        { "item": "llavero-de-produccion", "peso": 2 }
+        {
+          "item": "casco-de-obra",
+          "peso": 8
+        },
+        {
+          "item": "guantes-de-fregar",
+          "peso": 7
+        },
+        {
+          "item": "chubasquero",
+          "peso": 7
+        },
+        {
+          "item": "moneda-de-cinco-duros",
+          "peso": 6
+        },
+        {
+          "item": "botas-de-agua",
+          "peso": 6
+        },
+        {
+          "item": "chaleco-reflectante",
+          "peso": 6
+        },
+        {
+          "item": "frontal-de-espeleologo",
+          "peso": 6
+        },
+        {
+          "item": "manual-de-prevencion",
+          "peso": 5
+        },
+        {
+          "item": "cascabel-delator",
+          "peso": 4
+        },
+        {
+          "item": "pendiente-del-mimico",
+          "peso": 3
+        },
+        {
+          "item": "gafas-de-sol-nocturnas",
+          "peso": 3
+        },
+        {
+          "item": "capa-de-veterano",
+          "peso": 4
+        },
+        {
+          "item": "termo-sin-fondo",
+          "peso": 4
+        },
+        {
+          "item": "dado-trucado",
+          "peso": 4
+        },
+        {
+          "item": "ancla-del-puerto",
+          "peso": 4
+        },
+        {
+          "item": "mochila-sin-fondo",
+          "peso": 4
+        },
+        {
+          "item": "cronometro-de-regidor",
+          "peso": 2
+        },
+        {
+          "item": "cuaderno-de-quejas",
+          "peso": 2
+        },
+        {
+          "item": "microfono-de-oro",
+          "peso": 2
+        },
+        {
+          "item": "llavero-de-produccion",
+          "peso": 2
+        }
       ]
     },
     "avisos": {
       "entradas": [
-        { "item": "aviso-dia-de-la-luz", "peso": 10 },
-        { "item": "aviso-mudanza-de-trampas", "peso": 10 },
-        { "item": "aviso-pausa-publicitaria", "peso": 8 },
-        { "item": "aviso-huelga-de-figurantes", "peso": 6 },
-        { "item": "aviso-especial-audiencia", "peso": 6 },
-        { "item": "aviso-paga-extra", "peso": 4 }
+        {
+          "item": "aviso-dia-de-la-luz",
+          "peso": 10
+        },
+        {
+          "item": "aviso-mudanza-de-trampas",
+          "peso": 10
+        },
+        {
+          "item": "aviso-pausa-publicitaria",
+          "peso": 8
+        },
+        {
+          "item": "aviso-huelga-de-figurantes",
+          "peso": 6
+        },
+        {
+          "item": "aviso-especial-audiencia",
+          "peso": 6
+        },
+        {
+          "item": "aviso-paga-extra",
+          "peso": 4
+        }
+      ]
+    },
+    "patrocinio": {
+      "$comment": "Chatarra de los patrocinadores: merchandising que no sirve para casi nada. Para reírse (y venderla a Maripuri por una ficha).",
+      "entradas": [
+        {
+          "item": "folleto-la-prudente",
+          "peso": 5
+        },
+        {
+          "item": "iman-de-mama-clementina",
+          "peso": 5
+        },
+        {
+          "item": "pegatina-yo-cai",
+          "peso": 5
+        },
+        {
+          "item": "llavero-butanos-perez",
+          "peso": 5
+        },
+        {
+          "item": "poster-firmado-de-vortax",
+          "peso": 5
+        }
       ]
     }
   },
   "cofresDePlanta": {
     "$comment": "Cofres normales repartidos por la planta procedural (no son cajas de botín: no hay animación especial). 1 objeto + fichas. Pueden ser mímicos (mimicosPct).",
     "porPlanta": {
-      "1": { "pesosRareza": { "bronce": 90, "plata": 10, "oro": 0, "legendaria": 0 }, "fichas": [3, 8], "mimicosPct": 0 },
-      "2": { "pesosRareza": { "bronce": 75, "plata": 22, "oro": 3, "legendaria": 0 }, "fichas": [5, 12], "mimicosPct": 8 },
-      "3": { "pesosRareza": { "bronce": 60, "plata": 32, "oro": 8, "legendaria": 0 }, "fichas": [8, 16], "mimicosPct": 10 },
-      "4": { "pesosRareza": { "bronce": 45, "plata": 40, "oro": 14, "legendaria": 1 }, "fichas": [10, 20], "mimicosPct": 12 },
-      "5": { "pesosRareza": { "bronce": 35, "plata": 42, "oro": 20, "legendaria": 3 }, "fichas": [12, 25], "mimicosPct": 15 }
+      "1": {
+        "pesosRareza": {
+          "bronce": 90,
+          "plata": 10,
+          "oro": 0,
+          "legendaria": 0
+        },
+        "fichas": [
+          3,
+          8
+        ],
+        "mimicosPct": 0
+      },
+      "2": {
+        "pesosRareza": {
+          "bronce": 75,
+          "plata": 22,
+          "oro": 3,
+          "legendaria": 0
+        },
+        "fichas": [
+          5,
+          12
+        ],
+        "mimicosPct": 8
+      },
+      "3": {
+        "pesosRareza": {
+          "bronce": 60,
+          "plata": 32,
+          "oro": 8,
+          "legendaria": 0
+        },
+        "fichas": [
+          8,
+          16
+        ],
+        "mimicosPct": 10
+      },
+      "4": {
+        "pesosRareza": {
+          "bronce": 45,
+          "plata": 40,
+          "oro": 14,
+          "legendaria": 1
+        },
+        "fichas": [
+          10,
+          20
+        ],
+        "mimicosPct": 12
+      },
+      "5": {
+        "pesosRareza": {
+          "bronce": 35,
+          "plata": 42,
+          "oro": 20,
+          "legendaria": 3
+        },
+        "fichas": [
+          12,
+          25
+        ],
+        "mimicosPct": 15
+      }
     },
     "tabla": "botin-general"
   },
   "enemigos": {
-    "$comment": "Botín al eliminar. 'consumible' es la probabilidad de soltar un consumible de bronce.",
-    "normal": { "fichas": [1, 4], "consumible": 0.08 },
-    "elite": { "fichas": [6, 12], "consumible": 0.35 },
-    "jefe": { "fichas": [40, 60], "consumible": 1 }
+    "$comment": "Botín al eliminar a un enemigo: fichas, a veces un consumible (de bronce; de plata en jefes) y, rara vez, un objeto mágico (equipo o herramienta) con la rareza tirada con pesosRareza.",
+    "normal": {
+      "fichas": [
+        1,
+        4
+      ],
+      "consumible": 0.12,
+      "magico": 0.02,
+      "pesosRareza": {
+        "bronce": 85,
+        "plata": 15
+      }
+    },
+    "elite": {
+      "fichas": [
+        6,
+        12
+      ],
+      "consumible": 0.4,
+      "magico": 0.15,
+      "pesosRareza": {
+        "bronce": 40,
+        "plata": 50,
+        "oro": 10
+      }
+    },
+    "jefe": {
+      "fichas": [
+        40,
+        60
+      ],
+      "consumible": 1,
+      "magico": 0.6,
+      "pesosRareza": {
+        "plata": 50,
+        "oro": 45,
+        "legendaria": 5
+      }
+    }
   },
   "mercado": {
     "$comment": "Ultramarinos Maripuri, en el Camerino. El surtido se tira con el RNG de la partida al llegar y no cambia hasta la siguiente planta.",
     "huecos": [
-      { "tabla": "consumibles", "cantidad": 4 },
-      { "tabla": "herramientas", "cantidad": 1 },
-      { "tabla": "equipo", "cantidad": 2 }
+      {
+        "tabla": "consumibles",
+        "cantidad": 4
+      },
+      {
+        "tabla": "herramientas",
+        "cantidad": 1
+      },
+      {
+        "tabla": "equipo",
+        "cantidad": 2
+      }
     ],
     "pesosRarezaPorPlanta": {
-      "1": { "bronce": 85, "plata": 15, "oro": 0, "legendaria": 0 },
-      "2": { "bronce": 65, "plata": 30, "oro": 5, "legendaria": 0 },
-      "3": { "bronce": 45, "plata": 42, "oro": 13, "legendaria": 0 },
-      "4": { "bronce": 30, "plata": 48, "oro": 22, "legendaria": 0 },
-      "5": { "bronce": 20, "plata": 50, "oro": 28, "legendaria": 2 }
+      "1": {
+        "bronce": 85,
+        "plata": 15,
+        "oro": 0,
+        "legendaria": 0
+      },
+      "2": {
+        "bronce": 65,
+        "plata": 30,
+        "oro": 5,
+        "legendaria": 0
+      },
+      "3": {
+        "bronce": 45,
+        "plata": 42,
+        "oro": 13,
+        "legendaria": 0
+      },
+      "4": {
+        "bronce": 30,
+        "plata": 48,
+        "oro": 22,
+        "legendaria": 0
+      },
+      "5": {
+        "bronce": 20,
+        "plata": 50,
+        "oro": 28,
+        "legendaria": 2
+      }
     },
     "precioCompra": 1.0,
     "precioVenta": 0.4,
     "fijos": [
-      { "item": "pincho-de-tortilla", "precio": 6, "texto": "Siempre hay tortilla. Maripuri no concibe un mundo sin tortilla." },
-      { "item": "cubo-de-agua", "precio": 4 }
+      {
+        "item": "pincho-de-tortilla",
+        "precio": 6,
+        "texto": "Siempre hay tortilla. Maripuri no concibe un mundo sin tortilla."
+      },
+      {
+        "item": "cubo-de-agua",
+        "precio": 4
+      }
     ],
-    "nuncaEnVenta": ["avisos", "cajas"]
+    "nuncaEnVenta": [
+      "avisos",
+      "cajas"
+    ]
+  },
+  "fueraDeCajas": [
+    "mapa-de-planta",
+    "cronometro-de-regidor",
+    "cascabel-delator",
+    "llavero-de-produccion",
+    "pendiente-del-mimico",
+    "mochila-sin-fondo",
+    "aviso-dia-de-la-luz",
+    "aviso-mudanza-de-trampas",
+    "aviso-pausa-publicitaria",
+    "aviso-huelga-de-figurantes",
+    "aviso-especial-audiencia",
+    "aviso-paga-extra"
+  ],
+  "$fueraDeCajas": "Objetos que todavía no salen en las cajas porque necesitan sistemas que aún no existen (niebla de guerra, mímicos, reloj, avisos de Producción).",
+  "combates": {
+    "$comment": "Cajas por ganar combates: con élite, con rival y por dejar la planta limpia (los jefes, en fuentes.jefes).",
+    "elite": "bronce",
+    "rival": "plata",
+    "plantaLimpia": "bronce"
   }
 }
