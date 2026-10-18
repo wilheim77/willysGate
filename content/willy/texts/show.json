@@ -42,5 +42,12 @@
   "contratoCumplido": "Contrato cumplido",
   "contratoRoto": "Contrato roto",
   "multa": "Multa: {n} fichas.",
-  "flotaAudiencia": "{delta} audiencia"
+  "flotaAudiencia": "{delta} audiencia",
+  "preguntaTitulo": "Pregunta de {presentador}",
+  "preguntaTexto": "{texto} {opciones}. Ponte en la baldosa buena antes de que acabe la ronda.",
+  "opcion": "{color}: {respuesta}",
+  "trampilla": "¡Trampilla!",
+  "aOscuras": "A oscuras: no le haces nada",
+  "focoEncendido": "¡Foco!",
+  "bajoFoco": "¡Bajo el foco!"
 }

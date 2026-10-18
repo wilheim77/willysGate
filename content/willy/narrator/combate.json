@@ -240,28 +240,28 @@
           "id": "pz-04",
           "texto": "Se ha comido un trozo de tu audiencia. Así es como se mantiene tan joven. No es cremas: es share.",
           "si": {
-            "evento": "mordisco"
+            "momento": "mordisco"
           }
         },
         {
           "id": "pz-05",
           "texto": "Bajo el foco. Le humea el traje. Llevo once mil años queriendo ver esto.",
           "si": {
-            "evento": "bajoFoco"
+            "momento": "bajoFoco"
           }
         },
         {
           "id": "pz-06",
           "texto": "Uno de vida y sigue sonriendo. Mientras alguien le mire, no se apaga. Hay que dejarle sin público. Haz algo tan bestia que hasta su audiencia se pase a la tuya.",
           "si": {
-            "evento": "vidaUno"
+            "momento": "vidaUno"
           }
         },
         {
           "id": "pz-07",
           "texto": "Share a cero. Por primera vez en once mil años, nadie le está mirando a él. Le tiembla la sonrisa. Ahora sí.",
           "si": {
-            "evento": "shareCero"
+            "momento": "shareCero"
           }
         }
       ]

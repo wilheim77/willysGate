@@ -1,4 +1,5 @@
 import type { GameState } from '../../../engine';
+import type { BossConfig } from './boss';
 import type { Pattern } from './patterns';
 
 /**
@@ -91,8 +92,8 @@ export interface ShareConfig {
   jefeId: string;
   inicial: number;
   max: number;
-  /** He heals Share ÷ this at the start of his turn. */
-  curacionDivisor: number;
+  /** At the start of his turn he heals this % of his maximum health at full Share (scaled by Share/100). */
+  curacionPctVida: number;
   /** Share he wins each time Willy loses audience. */
   subePorPerdida: number;
   /** Share he wins each time he hits Willy. */
@@ -112,6 +113,8 @@ export interface ShowConfig {
   pisos: { id: number; planta: number; parte: number }[];
   audience: AudienceData;
   share: ShareConfig;
+  /** The final boss's phases (absent: the boss is a plain fight with his Share). */
+  boss?: BossConfig;
   sponsors: { reglas: SponsorRules; patrocinadores: SponsorData[] };
 }
 
