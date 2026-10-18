@@ -87,12 +87,20 @@ export function resolveCombat(engine: Engine, state: GameState, maxCommands = 60
   while (s.turn.mode === 'combat' && guard++ < maxCommands) {
     const activeId = s.turn.activeEntityId;
     if (!activeId) break;
+    // The client waits for the player's input on their own fighters: one who can't act can't
+    // end the turn either, so that would hang the real game (playtest: trap / downed Cobrador).
+    const active = s.entities[activeId];
+    if (active?.controllerId.startsWith('player') && !dnd5e.canAct(active)) {
+      throw new Error(`resolveCombat: softlock, it's ${activeId}'s turn but they cannot act (the client would wait forever)`);
+    }
     const cmd = nextAiCommand(dnd5e, s, activeId);
     const r = engine.apply(s, cmd);
     if (r.ok) s = r.state;
     else {
-      // "A plan the engine refuses must never stall the fight" (controller.ts:328-329).
-      const skip = engine.apply(s, { type: 'endTurn', issuer: SYSTEM_ISSUER, entityId: activeId } as BaseCommand & { entityId: string });
+      // "A plan the engine refuses must never stall the fight" (controller.ts:328-329). The
+      // player's own fighters end their turn as the player would (the button), not by fiat.
+      const issuer = active?.controllerId.startsWith('player') ? active.controllerId : SYSTEM_ISSUER;
+      const skip = engine.apply(s, { type: 'endTurn', issuer, entityId: activeId } as BaseCommand & { entityId: string });
       if (skip.ok) s = skip.state;
       else break;
     }

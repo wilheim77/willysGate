@@ -82,3 +82,26 @@ describe('traps', () => {
     expect(pushed.events.some((e) => e.type === 'trapTriggered')).toBe(true);
   });
 });
+
+describe('a fighter who goes down on their own turn', () => {
+  it('passes the turn instead of leaving the fight waiting (playtest: hang on a trap)', () => {
+    let s = engine.newGame({
+      seed: 3,
+      map: asciiMap(['.......', '.......']),
+      entities: [
+        makeEntity({ id: 'hero', factionId: 'hunters', stats: { will: 0, stride: 9 }, resources: { blood: pool(2), action: pool(1), reaction: pool(1) } }),
+        makeEntity({ id: 'squire', factionId: 'hunters', position: { x: 0, y: 1 }, stats: { stride: 3 }, resources: { blood: pool(5), action: pool(1), reaction: pool(1) } }),
+        makeEntity({ id: 'ghoul', factionId: 'dead', controllerId: 'ai', position: { x: 6, y: 1 }, stats: { stride: 3 }, resources: { blood: pool(5), action: pool(1), reaction: pool(1) } }),
+      ],
+    });
+    s = withTraps(s, [trap()]);
+    const fight = engine.apply(s, { type: 'startCombat', issuer: 'system', participants: ['hero', 'squire', 'ghoul'] } as BaseCommand);
+    if (!fight.ok) throw new Error(fight.error.code);
+    s = { ...fight.state, turn: { ...fight.state.turn, activeEntityId: 'hero', activeIndex: fight.state.turn.order.indexOf('hero') } };
+    const r = move(s, 6);
+    if (!r.ok) throw new Error(r.error.code);
+    expect(r.state.entities.hero!.resources.blood!.current).toBe(0);
+    expect(r.state.turn.mode).toBe('combat');
+    expect(r.state.turn.activeEntityId).not.toBe('hero');
+  });
+});
