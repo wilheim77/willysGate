@@ -337,14 +337,19 @@ canvas.portrait { image-rendering: pixelated; display: block; }
   #action-bar .actions button { font-size: var(--fs-s); }
 }
 
-/* --- Dialogue --- */
+/* --- Dialogue (modal: a backdrop blocks the map and the combat HUD underneath it) --- */
 #dialogue[hidden] { display: none; }
 #dialogue {
-  position: fixed; left: 0; right: 0; bottom: calc(var(--bottom-h, 40px) + var(--safe-bottom, 0px)); z-index: 4;
-  display: flex; justify-content: center; padding: 0 8px 8px; pointer-events: none;
+  position: fixed; inset: 0; z-index: 6;
+  background: rgba(6, 5, 8, 0.6);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 8px 8px calc(var(--bottom-h, 40px) + var(--safe-bottom, 0px) + 8px);
 }
+/* In combat the action bar is much taller than the plain bottom strip: clear it too,
+   so a question (e.g. who disarms the trap) doesn't land on top of "Terminar turno". */
+body:has(#combat:not([hidden])) #dialogue { padding-bottom: calc(var(--bottom-h, 40px) + var(--safe-bottom, 0px) + 170px); }
 #dialogue .panel {
-  pointer-events: auto; width: min(640px, 100%); max-height: 62vh; overflow-y: auto;
+  width: min(640px, 100%); max-height: 62vh; overflow-y: auto;
   background: var(--panel); border: 3px solid var(--iron); box-shadow: 4px 4px 0 #000; padding: 10px 12px;
 }
 #dialogue .line { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: start; }
