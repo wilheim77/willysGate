@@ -568,3 +568,15 @@ Los genera `scripts/art/build-icons.ts`, que corre después de `build-willy-art.
   - `caja-<nivel>-abierta`: tapa echada atrás, haces de luz y confeti.
   - El ojo de Canal Abismo va en el frontal. La caída, el temblor y el confeti grande los anima el cliente con CSS.
 - `icono-reloj` (cuenta atrás del derrumbe) ya existía entre los iconos de estado.
+
+## Enemigos nuevos de *Willy* y élites (en pausa)
+
+En `hand-sprites.json` (con `attack`, `cast` y `hurt` derivados vía `actions.json`, y retrato de 32×32), según la lista del agente de *Willy*:
+
+- **Castro:** `pulpo-de-bajura`, `percebeiro-ahogado`, `anguila-electrica` y `lata-de-bonito`.
+- **Híper:** `dependienta-de-perfumeria`, `encargado-de-seccion`, `guardia-de-seguridad` y `lata-de-fabada`.
+- **Verbena:** `tirador-de-feria`, `abuela-del-bingo`, `dj-de-la-carpa`, `bailarin-de-la-carpa` y `petardo-andante`.
+- **Balneario:** `masajista-implacable`, `terapeuta-de-lodos`, `nube-de-vapor` y `pastilla-efervescente`.
+- **Plató:** `presentador-suplente`, `maquilladora`, `productor-ejecutivo` y `foco-andante`.
+
+Cada uno tiene su `<id>--elite`: el mismo sprite con la paleta dorada que calcula el generador, más el prop `aura-elite` (aro dorado animado bajo los pies). Vista previa: [`art-previews/ninja-enemigos-nuevos.png`](art-previews/ninja-enemigos-nuevos.png). **Pendiente (Willy en pausa):** los efectos de sus habilidades y el derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`).
