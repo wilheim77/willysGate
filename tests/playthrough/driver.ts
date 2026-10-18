@@ -308,9 +308,15 @@ export function driveDialogue(engine: Engine, state: GameState, ctx: DriverCtx, 
     if (!tree) throw new Error(`dialogue points at unknown tree "${d.treeId}"`);
     const node = tree.nodes[d.nodeId];
     const key = `${d.treeId}@${d.nodeId}`;
-    const scripted = policy.choices?.[key];
     const tried = triedAt.get(key) ?? new Set<number>();
     triedAt.set(key, tried);
+    // A scripted choice can legitimately not be on offer this run (e.g. el_cobro's
+    // "cuadrilla_firma"/"refinanciar" both require `not: {flag: baron_muerto}`, which the
+    // "nada" D1 route sets) - some combinations of decisions are invalid by design (review-
+    // 8 §2). Fall back to the default policy for just this node rather than treat it as a
+    // failure.
+    const scriptedRaw = policy.choices?.[key];
+    const scripted = scriptedRaw !== undefined && node?.choices?.length && dialogueChoices(dnd5e, s, tree).some((c) => c.index === scriptedRaw && c.available) ? scriptedRaw : undefined;
 
     let index: number;
     let autoForceSuccess = false;

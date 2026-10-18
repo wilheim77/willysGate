@@ -1621,7 +1621,7 @@
             "acciones": 1,
             "energia": 2
           },
-          "texto": "Pides tiempo muerto y aparece Chencho, el base, en una casilla adyacente durante 3 turnos. Lo controlas tú; puede pasarte el balón.",
+          "texto": "Pides tiempo muerto. Si Chencho, tu base, está en pista, le das la charla: recupera vida (1d6 + 2 por nivel de la habilidad) y toda la energía, y queda Animado. Si no está (o ha caído), sale un Chencho suplente en una casilla adyacente durante 3 turnos; lo controlas tú y puede pasarte el balón.",
           "efectos": [
             {
               "type": "spawnEntity",

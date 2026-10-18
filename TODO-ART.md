@@ -40,6 +40,7 @@ Preset por defecto: **0x72** (ver `docs/ART_OPTIONS.md`). Catálogo de ids y pet
 | Compañeros de *Willy* | willy | Nueve compañeros (uno por clase) con sprite y busto de 48×48; sin animaciones de ataque propias (usan las de efectos existentes) |
 | Combate de *Willy* | willy | `attack`/`cast`/`hurt` derivadas para clases, compañeros, Planta 1 y jefes; seis efectos nuevos y tabla `fx` en el manifiesto; falta que el cliente lea `manifest.fx` |
 | Legibilidad de los mapas | intereses, willy | Tejados de teja con alero, muros macizos con trama, caras de escalón (`stair`) en las dos partidas, marcadores de salida |
+| Coberturas y bestias de combate | intereses | 14 props de cobertura, terrenos `low_wall` y `balcony`, bestias `perro`, `lobo` y `rata`; falta darlos de alta en `ART_PROPS` (world.ts) y colocarlos |
 | Pulido del HUD | intereses | Barra superior en una fila, fichas de iniciativa con retrato, barra de acciones en dos filas, botones de 44 px, paneles de hierro biselado |
 | Objetos interactivos (Fase 4) | intereses | `chest`, `chest_trapped`, `lever`, terrenos `door_closed`/`door_open`, props `trap_armed`/`trap_disarmed` |
 | PNJ de Hondonegra | intereses | `mazo`, `hilda`, `cirilo`, `fanatico_pala`, `nella`, `odda`, `lisandro`, aldeanos; atrezo `tapestry`, `tapestry_crossbow`, `gallows` |

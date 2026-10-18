@@ -151,6 +151,10 @@ describe('Jugador de basket', () => {
     expect(p.breakdown?.some((b) => String(b.label).startsWith('Cubierto'))).toBe(false);
     const { state, events } = until(s, 'b', 'hab:pase-picado', { entityId: 'r' }, (st) => st.entities.r!.resources.vida!.current < 40);
     expect(events).toContainEqual(expect.objectContaining({ type: 'bounced' }));
+    // skillUsed carries the target (the client's projectile FX) and comes before the roll.
+    const used = events.findIndex((e) => e.type === 'skillUsed');
+    expect(events[used]).toMatchObject({ habilidad: 'pase-picado', target: { entityId: 'r' } });
+    expect(used).toBeLessThan(events.findIndex((e) => e.type === 'attackRolled'));
     // The push comes from where the ball bounced, not from the thrower.
     expect(state.entities.r!.position).not.toEqual({ x: 5, y: 2 });
     // Nowhere to bounce: out.

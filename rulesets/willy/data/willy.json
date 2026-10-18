@@ -63,5 +63,9 @@
     "cabezoneria": "+2 a resistir empujones y a liberarte de Enredado.",
     "de-toda-la-vida": "+1 a todos los atributos que estén por debajo de 6.",
     "conozco-a-alguien": "Maripuri te hace un 15 % de descuento."
+  },
+  "pausaPublicitaria": {
+    "$comment": "Al acabar cada combate, Willy y su compañero (si sigue en pie) recuperan esta parte de su vida máxima: el equipo de maquillaje aprovecha los anuncios. Palanca de equilibrio (docs/willy/BALANCE.md).",
+    "vida": 0.25
   }
 }

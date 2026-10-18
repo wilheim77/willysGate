@@ -627,6 +627,481 @@
      ]
     ]
    }
+  },
+  "perro": {
+   "note": "Perro carroñero: flaco y sarnoso, pardo grisáceo, costillas marcadas y ojo amarillo",
+   "size": [
+    16,
+    14
+   ],
+   "legend": {
+    "k": "#222222",
+    "B": "#7a6a56",
+    "b": "#5a4a3c",
+    "e": "#e8c040",
+    "N": "#222222"
+   },
+   "parts": {
+    "body": [
+     "...........kk...",
+     "..........kBk...",
+     ".........kBBBk..",
+     "........kBBeBBkk",
+     "........kBBBBBBN",
+     ".kk.....kbBBBkk.",
+     "kBk..kkkBBBBk...",
+     ".kBkkBBBBBBBk...",
+     "..kBBbBbBbBBk...",
+     "..kBBBBBBBBBk...",
+     "...kkkkkkkkk...."
+    ],
+    "legs_stand": [
+     "...kBkBk..kBkBk.",
+     "...kBkBk..kBkBk.",
+     "...kkkkk..kkkkk."
+    ],
+    "legs_a": [
+     "..kBk..kBkkBk...",
+     ".kBk....kBk.kBk.",
+     ".kk.....kk...kk."
+    ],
+    "legs_b": [
+     "....kBkBkkBkBk..",
+     "....kBkBkkBkBk..",
+     "....kkkkkkkkkk.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ]
+    ],
+    "hit": [
+     [
+      [
+       "legs_stand",
+       -1,
+       11
+      ],
+      [
+       "body",
+       -1,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "lobo": {
+   "note": "Lobo del barranco: gris oscuro, flaco, orejas tiesas y hocico claro",
+   "size": [
+    16,
+    14
+   ],
+   "legend": {
+    "k": "#222222",
+    "B": "#4a4c56",
+    "b": "#34363e",
+    "W": "#9a9aa4",
+    "e": "#e8e0a0",
+    "N": "#111111"
+   },
+   "parts": {
+    "body": [
+     ".........k.k....",
+     ".........kBkk...",
+     "........kBBBBk..",
+     "........kBeBBBkk",
+     "........kBBBBWWN",
+     "kk......kBBBWkk.",
+     "kBk...kkkBBBBk..",
+     "kBBkkkBBBBBBBk..",
+     ".kBBBBBBbBBBBk..",
+     "..kBBbBBBBBBBk..",
+     "...kWWWWWWWWk..."
+    ],
+    "legs_stand": [
+     "...kBkBk..kBkBk.",
+     "...kBkBk..kBkBk.",
+     "...kkkkk..kkkkk."
+    ],
+    "legs_a": [
+     "..kBk..kBkkBk...",
+     ".kBk....kBk.kBk.",
+     ".kk.....kk...kk."
+    ],
+    "legs_b": [
+     "....kBkBkkBkBk..",
+     "....kBkBkkBkBk..",
+     "....kkkkkkkkkk.."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       11
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ]
+    ],
+    "hit": [
+     [
+      [
+       "legs_stand",
+       -1,
+       11
+      ],
+      [
+       "body",
+       -1,
+       1
+      ]
+     ]
+    ]
+   }
+  },
+  "rata": {
+   "note": "Rata gigante de las cloacas: gorda, gris sucio, cola y orejas rosadas",
+   "size": [
+    16,
+    10
+   ],
+   "legend": {
+    "k": "#222222",
+    "G": "#6a6a70",
+    "g": "#4e4e56",
+    "P": "#c08a8a",
+    "e": "#d02a2a"
+   },
+   "parts": {
+    "body": [
+     "...........kk...",
+     "..........kPk...",
+     "....kkkkkkkGGk..",
+     "...kGGGGGGGGeGk.",
+     "..kGGGgGGGGGGGPk",
+     "..kGGGGgGGGGGkk.",
+     "kPkGGGGGGGGGk...",
+     ".kPkkkkkkkkk...."
+    ],
+    "legs_stand": [
+     "...kGk.kGk.kGk..",
+     "...kk..kk..kk..."
+    ],
+    "legs_a": [
+     "..kGk..kGk..kGk.",
+     "..kk...kk...kk.."
+    ],
+    "legs_b": [
+     "....kGkGk.kGk...",
+     "....kkkkk.kk...."
+    ]
+   },
+   "animations": {
+    "idle": [
+     [
+      [
+       "legs_stand",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_stand",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ]
+    ],
+    "move": [
+     [
+      [
+       "legs_a",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       "legs_a",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       "legs_b",
+       0,
+       8
+      ],
+      [
+       "body",
+       0,
+       1
+      ]
+     ]
+    ],
+    "hit": [
+     [
+      [
+       "legs_stand",
+       -1,
+       8
+      ],
+      [
+       "body",
+       -1,
+       1
+      ]
+     ]
+    ]
+   }
   }
  }
 }

@@ -1,5 +1,5 @@
 import { type CreationChoices, type Engine, type Entity, type GameState, type JsonValue, type MapBuilder, type MapSetup, type Vec2, withLighting, withZones } from '../../engine';
-import { buildWilly, createWilly } from '../../rulesets/willy';
+import { buildWilly, createCompanion, createWilly } from '../../rulesets/willy';
 import { generateFloor } from './gen/floor';
 import type { RivalRecord } from './gen/rivals';
 import { MAPS } from './maps';
@@ -71,5 +71,22 @@ export function newWillyGame(engine: Engine, seed: number, options?: { start?: s
 export function applyCasting(state: GameState, choices: CreationChoices): GameState {
   const w = state.entities.willy!;
   const built = buildWilly(choices, { id: w.id, controllerId: w.controllerId, factionId: w.factionId, position: w.position });
-  return { ...state, entities: { ...state.entities, willy: built } };
+  // The class's companion joins at the Camerino (a new casting replaces the old one).
+  const entities = Object.fromEntries(Object.entries(state.entities).filter(([, e]) => !e.tags.includes(`companero-de:${w.id}`)));
+  entities.willy = built;
+  const classId = built.tags.find((t) => t.startsWith('clase:'))?.slice('clase:'.length) ?? '';
+  const spot = freeNeighbour(state, w.position, entities);
+  const mate = spot ? createCompanion(classId, built, spot) : undefined;
+  if (mate) entities[mate.id] = mate;
+  return { ...state, entities };
+}
+
+function freeNeighbour(state: GameState, at: Vec2, entities: Record<string, Entity>): Vec2 | undefined {
+  const taken = new Set(Object.values(entities).map((e) => `${e.position.x},${e.position.y}`));
+  for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1], [2, 0], [-2, 0]] as const) {
+    const p = { x: at.x + dx, y: at.y + dy };
+    const t = state.map.tiles[p.y * state.map.width + p.x];
+    if (p.x >= 0 && p.y >= 0 && p.x < state.map.width && p.y < state.map.height && t?.walkable && !taken.has(`${p.x},${p.y}`)) return p;
+  }
+  return undefined;
 }
