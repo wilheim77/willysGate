@@ -62,7 +62,7 @@ export default {
     'guardia_baron-1': { at: [8, 4], unlessFlag: 'd1_abadia' },
     'guardia_baron-2': { at: [21, 4], unlessFlag: 'd1_abadia' },
     'guardia_baron-3': { at: [5, 15], unlessFlag: 'd1_abadia' }, // wall-walk
-    'guardia_baron-4': { at: [22, 15], unlessFlag: 'd1_abadia' },
+    'capellan_abadia-1': { at: [22, 15], unlessFlag: 'd1_abadia' }, // the baron's chaplain heals the guard
     'guardia_baron_sargento-1': { at: [13, 14], unlessFlag: 'd1_abadia' },
     'guardia_baron-5': { at: [6, 15], requiresFlag: 'd1_abadia', faction: 'party' },
     'guardia_baron-6': { at: [21, 15], requiresFlag: 'd1_abadia', faction: 'party' },
@@ -123,7 +123,7 @@ export default {
     {
       name: 'd1-asalto',
       rect: [0, 9, 28, 13],
-      participants: ['guardia_baron-1', 'guardia_baron-2', 'guardia_baron-3', 'guardia_baron-4', 'guardia_baron_sargento-1', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
+      participants: ['guardia_baron-1', 'guardia_baron-2', 'guardia_baron-3', 'capellan_abadia-1', 'guardia_baron_sargento-1', 'minero_cuadrilla-1', 'minero_cuadrilla-2', 'minero_cuadrilla-3', 'hulla-1', 'hulla-2'],
       props: { requiresFlag: 'd1_cuadrilla', setFlag: 'd1_asalto_terminado' },
     },
     {

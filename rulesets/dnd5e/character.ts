@@ -1,6 +1,6 @@
 import { type Entity, type Resource, type Vec2, hasTag, stat, tagValue } from '../../engine';
 import { ABILITIES, type Ability, abilityModifier, proficiencyBonus } from './abilities';
-import { ARMOR, CLASSES, MONSTERS, RACES, SPELL_SLOTS } from './data';
+import { ARMOR, CLASSES, MONSTER_ACTIONS, MONSTERS, type MonsterData, RACES, SPELL_SLOTS } from './data';
 
 /**
  * Builds 5e entities from data. Everything the rules need later lives on the entity as
@@ -97,6 +97,8 @@ export function createCharacter(spec: CharacterSpec): Entity {
 
   const tags = [
     'pc',
+    // Every playable SRD race is humanoid (Hold Person can target them).
+    'type:humanoid',
     `class:${spec.classId}`,
     `race:${spec.raceId}`,
     `armor:${cls.armor}`,
@@ -140,6 +142,24 @@ function defaultSpells(classId: string, level: number, override?: string[]): str
 export function createMonster(spec: MonsterSpec): Entity {
   const m = MONSTERS[spec.monsterId];
   if (!m) throw new Error(`dnd5e: unknown monster "${spec.monsterId}"`);
+  const resources: Record<string, Resource> = { hp: pool(m.hp), ...actionEconomy() };
+  const stats: Record<string, number> = { ...m.abilities, level: 1, speed: m.speed, ac: m.ac, prof: m.prof, multiattack: m.multiattack };
+  const tags = [`monster:${spec.monsterId}`, ...m.weapons.map((w) => `weapon:${w}`), ...m.tags];
+  const sc = m.spellcasting;
+  if (sc) {
+    stats.caster_level = sc.level;
+    tags.push(`casting:${sc.ability}`, ...sc.spells.map((s) => `spell:${s}`), ...Object.keys(sc.innate ?? {}).map((s) => `spell:${s}`));
+    (sc.slots ?? []).forEach((n, i) => {
+      if (n > 0) resources[`spell_slot_${i + 1}`] = pool(n);
+    });
+    for (const [s, n] of Object.entries(sc.innate ?? {})) resources[`innate_${s}`] = pool(n);
+  }
+  for (const a of m.actions ?? []) {
+    if (!MONSTER_ACTIONS[a]) throw new Error(`dnd5e: monster "${spec.monsterId}" has unknown action "${a}"`);
+    tags.push(`action:${a}`);
+    resources[`use_${a}`] = pool(MONSTER_ACTIONS[a]!.perDay ?? 1);
+  }
+  if (m.keepAway) stats.keep_away = m.keepAway;
   return {
     id: spec.id,
     name: spec.name ?? m.label,
@@ -147,11 +167,16 @@ export function createMonster(spec: MonsterSpec): Entity {
     factionId: spec.factionId,
     position: spec.position,
     spriteId: spec.spriteId,
-    stats: { ...m.abilities, level: 1, speed: m.speed, ac: m.ac, prof: m.prof, multiattack: m.multiattack },
-    resources: { hp: pool(m.hp), ...actionEconomy() },
-    conditions: [],
-    tags: [`monster:${spec.monsterId}`, ...m.weapons.map((w) => `weapon:${w}`), ...m.tags, ...(spec.extraTags ?? [])],
+    stats,
+    resources,
+    conditions: (m.startConditions ?? []).map((id) => ({ id })),
+    tags: [...new Set([...tags, ...(spec.extraTags ?? [])])],
   };
+}
+
+/** The SRD stat block an entity was built from, if it is a monster. */
+export function monsterOf(e: Entity): MonsterData | undefined {
+  return MONSTERS[tagValue(e, 'monster') ?? ''];
 }
 
 // --- Derived values ------------------------------------------------------------
@@ -174,7 +199,7 @@ export function armorClass(e: Entity): number {
 }
 
 export function castingAbility(e: Entity): Ability | undefined {
-  return CLASSES[tagValue(e, 'class') ?? '']?.spellcasting?.ability;
+  return CLASSES[tagValue(e, 'class') ?? '']?.spellcasting?.ability ?? (tagValue(e, 'casting') as Ability | undefined);
 }
 
 export function hasFeature(e: Entity, f: string): boolean {

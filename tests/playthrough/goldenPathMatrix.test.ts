@@ -224,8 +224,10 @@ const BRANCH_FLAG: Record<string, string> = {
 // D4 choice IS available (see driver.ts), so this combo's branch flag just won't match -
 // skip the branch-taken assertion for it rather than fail on something the content means
 // to disallow.
-function d4UnavailableFor(combo: Combo): boolean {
-  return combo.d1 === 'nada' && (combo.d4 === 'cuadrilla_firma' || combo.d4 === 'refinanciar');
+// A failed mediation (D1=mediar loses its Persuasion roll) hangs him too, so it depends on the dice.
+function d4UnavailableFor(combo: Combo, state?: GameState): boolean {
+  const needsBaron = combo.d4 === 'cuadrilla_firma' || combo.d4 === 'refinanciar';
+  return needsBaron && (combo.d1 === 'nada' || !!state?.flags.baron_muerto);
 }
 
 // Heavy run: `QA_DEEP=1 npm run test:qa`. Plain `npm test`/`npm run check` only runs 4 smoke
@@ -264,7 +266,7 @@ describe('golden path matrix: D1 x D2 x D3 x D4', () => {
       // Confirm the run actually took the scripted branch at each decision, not some other
       // route to the same place - except D4 when this exact D1/D4 pairing is an invalid
       // combination by design (d4UnavailableFor), where the driver had to fall back.
-      const choices = d4UnavailableFor(combo) ? [combo.d1, combo.d2, combo.d3] : [combo.d1, combo.d2, combo.d3, combo.d4];
+      const choices = d4UnavailableFor(combo, state) ? [combo.d1, combo.d2, combo.d3] : [combo.d1, combo.d2, combo.d3, combo.d4];
       for (const choice of choices) {
         const flag = BRANCH_FLAG[choice];
         if (flag) expect(state.flags[flag], `${comboLabel(combo)}: expected "${choice}"'s flag "${flag}" to be set`).toBe(true);

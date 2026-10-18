@@ -1,8 +1,8 @@
 import { type EntitySheet, type GameState, type SheetSection, hasTag, stat, tagValue } from '../../engine';
 import { ABILITIES, ABILITY_LABELS, SKILLS } from './abilities';
 import { DAMAGE_LABELS } from './actions';
-import { armorClass, mod, profBonus, tagValues } from './character';
-import { CLASSES, MONSTERS, RACES, SPELLS, WEAPONS } from './data';
+import { armorClass, mod, monsterOf, profBonus, tagValues } from './character';
+import { CLASSES, MONSTER_ACTIONS, MONSTERS, RACES, SPELLS, WEAPONS } from './data';
 
 /** Features and racial traits in plain Spanish, for the character sheet. */
 export const FEATURES: Record<string, { label: string; text: string }> = {
@@ -40,7 +40,18 @@ export const FEATURES: Record<string, { label: string; text: string }> = {
 };
 
 /** Resources shown on the sheet (the per-turn economy and bookkeeping stay out). */
-const SHOWN_RESOURCES = /^(spell_slot_\d|second_wind|action_surge|channel_divinity|relentless)$/;
+const SHOWN_RESOURCES = /^(spell_slot_\d|second_wind|action_surge|channel_divinity|relentless|use_.+|innate_.+|drained)$/;
+
+/** Monster traits shown on the sheet (tags from the stat block). */
+const MONSTER_TRAITS: Record<string, { label: string; text: string }> = {
+  pack_tactics: { label: 'Tácticas de manada', text: 'Ventaja al atacar si un aliado está pegado al objetivo.' },
+  brute: { label: 'Bruto', text: 'Sus armas cuerpo a cuerpo hacen un dado de daño más.' },
+  brave: { label: 'Valiente', text: 'Ventaja en las salvaciones contra el miedo.' },
+  dark_devotion: { label: 'Devoción oscura', text: 'Ventaja en las salvaciones contra el miedo y los hechizos.' },
+  undead_fortitude: { label: 'Fortaleza de no muerto', text: 'Puede quedarse en pie con 1 PG si supera una salvación de Constitución.' },
+  parry: { label: 'Parada', text: 'Con su reacción, suma a su CA contra un ataque cuerpo a cuerpo que lo alcanzaría.' },
+  stench: { label: 'Hedor', text: 'Quien empieza su turno a su lado puede quedar envenenado (salvación de Constitución).' },
+};
 
 const signed = (n: number) => `${n >= 0 ? '+' : ''}${n}`;
 
@@ -137,6 +148,21 @@ export function describeEntity(state: GameState, id: string, labels: { resources
       }),
     });
   }
+
+  // A monster's own powers, weapon riders and traits.
+  const powers = [
+    ...tagValues(e, 'action')
+      .filter((a) => MONSTER_ACTIONS[a])
+      .map((a) => ({ label: MONSTER_ACTIONS[a]!.label, text: MONSTER_ACTIONS[a]!.text })),
+    ...Object.entries(monsterOf(e)?.riders ?? {}).map(([w, rider]) => ({
+      label: `${WEAPONS[w]?.label ?? w}: ${rider.label}`,
+      text: rider.save ? `Al impactar, salvación de ${ABILITY_LABELS[rider.save.ability]} CD ${rider.save.dc}.` : 'Al impactar.',
+    })),
+    ...Object.entries(MONSTER_TRAITS)
+      .filter(([t]) => e.tags.some((x) => x === t || x.startsWith(`${t}:`)))
+      .map(([, trait]) => trait),
+  ];
+  if (powers.length) sections.push({ title: 'Poderes', items: powers });
 
   const features = tagValues(e, 'feature').filter((f) => FEATURES[f] && f !== 'asi');
   if (features.length) sections.push({ title: 'Rasgos', items: features.map((f) => ({ label: FEATURES[f]!.label, text: FEATURES[f]!.text })) });

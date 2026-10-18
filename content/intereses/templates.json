@@ -52,7 +52,7 @@
   },
   "fanatico_pala": {
     "name": "Fanático de la Santa Pala",
-    "monsterId": "bandit",
+    "monsterId": "cultist",
     "spriteId": "fanatico_pala",
     "faction": "fanaticos"
   },
@@ -159,5 +159,24 @@
     "monsterId": "bandit",
     "spriteId": "sinpaga_cuchillero",
     "faction": "cobradores"
+  },
+  "predicador_pala": {
+    "name": "Predicador de la Santa Pala",
+    "monsterId": "cult_fanatic",
+    "spriteId": "fanatico_pala",
+    "faction": "fanaticos"
+  },
+  "curandero_sinpaga": {
+    "name": "Curandero de los Sinpaga",
+    "monsterId": "acolyte",
+    "spriteId": "sinpaga_cuchillero",
+    "faction": "sinpaga"
+  },
+  "capellan_abadia": {
+    "name": "Capellán del barón",
+    "monsterId": "acolyte",
+    "spriteId": "guardia_baron",
+    "faction": "abadia",
+    "noncombatant": true
   }
 }

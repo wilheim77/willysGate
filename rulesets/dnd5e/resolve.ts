@@ -14,6 +14,7 @@ import {
   hasCondition,
   hasTag,
   isHostile,
+  tagValue,
   tileAt,
 } from '../../engine';
 import { type RollMode, d20Check, resolveRollMode } from '../common/d20';
@@ -112,7 +113,7 @@ export function attackMode(state: GameState, attacker: Entity, target: Entity, m
   if (hasCondition(target, 'guided')) adv.push('saeta guía');
   if (hasCondition(target, 'prone')) (melee ? adv : dis).push('objetivo derribado');
   if (hasCondition(target, 'dodging')) dis.push('el objetivo esquiva');
-  if (['poisoned', 'frightened', 'blinded', 'prone'].some((c) => hasCondition(attacker, c))) dis.push('atacante afectado');
+  if (['poisoned', 'frightened', 'blinded', 'prone', 'restrained'].some((c) => hasCondition(attacker, c))) dis.push('atacante afectado');
   if (!melee && Object.values(state.entities).some((e) => isCreature(e) && isHostile(e, attacker) && standing(e) && gridDistance(e.position, attacker.position) === 1)) {
     dis.push('enemigo pegado');
   }
@@ -166,12 +167,18 @@ export function spellDc(e: Entity, ability: Ability): number {
 
 // --- Saving throws -------------------------------------------------------------
 
-export function saveMode(target: Entity, ability: Ability, damageType?: string): RollMode {
-  const adv = (hasFeature(target, 'dwarven_resilience') && damageType === 'poison') || hasCondition(target, 'dodging') && ability === 'dex';
-  return resolveRollMode(!!adv, false);
+/** `against`: the condition the save would avoid (Dark Devotion and Brave help against fear). */
+export function saveMode(target: Entity, ability: Ability, damageType?: string, against?: string): RollMode {
+  const adv =
+    (hasFeature(target, 'dwarven_resilience') && damageType === 'poison') ||
+    (hasCondition(target, 'dodging') && ability === 'dex') ||
+    (hasTag(target, 'dark_devotion') && (against === 'frightened' || against === 'charmed')) ||
+    (hasTag(target, 'brave') && against === 'frightened');
+  const dis = hasCondition(target, 'restrained') && ability === 'dex';
+  return resolveRollMode(!!adv, dis);
 }
 
-export function rollSave(r: Resolver, entityId: string, ability: Ability, dc: number, damageType?: string): boolean {
+export function rollSave(r: Resolver, entityId: string, ability: Ability, dc: number, damageType?: string, against?: string): boolean {
   const target = r.entity(entityId);
   if ((hasCondition(target, 'paralyzed') || hasCondition(target, 'stunned')) && (ability === 'str' || ability === 'dex')) {
     r.emit({ type: 'saveRolled', entityId, roll: autoFail(ability, dc) } as SaveRolledEvent);
@@ -183,7 +190,7 @@ export function rollSave(r: Resolver, entityId: string, ability: Ability, dc: nu
   const roll = d20Check(r.rng, {
     check: `save:${ability}`,
     label: `Salvación de ${ABILITY_LABELS[ability]}`,
-    mode: saveMode(target, ability, damageType),
+    mode: saveMode(target, ability, damageType, against),
     modifiers,
     target: dc,
   });
@@ -357,15 +364,17 @@ export function attackPreview(state: GameState, spec: AttackSpec) {
   return { chance: chance.hit, crit: object ? 0 : crit, expected, mode, reasons, bonus, ac, cover, object };
 }
 
-export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; crit: boolean } {
+/** `damage` is what the target actually lost (Life Drain needs it). */
+export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; crit: boolean; damage: number } {
   const attacker = r.entity(spec.attackerId);
   const target = r.entity(spec.targetId);
-  if (!standing(target) && !hasCondition(target, 'downed')) return { hit: false, crit: false };
+  const harmless = spec.damage.count === 0 && spec.damage.bonus === 0 && !(spec.extra ?? []).length;
+  if (!standing(target) && !hasCondition(target, 'downed')) return { hit: false, crit: false, damage: 0 };
   if (target.tags.includes(OBJECT_TAG)) {
     // Barrels and crates don't dodge: the attack always lands, never as a critical.
     r.emit({ type: 'attackRolled', attackerId: attacker.id, targetId: target.id, label: spec.label, hit: true, crit: false } as AttackRolledEvent);
-    dealDamage(r, target.id, Math.max(1, sum(rollDice(r.rng, spec.damage.count, spec.damage.sides)) + spec.damage.bonus), spec.damageType);
-    return { hit: true, crit: false };
+    const damage = harmless ? 0 : dealDamage(r, target.id, Math.max(1, sum(rollDice(r.rng, spec.damage.count, spec.damage.sides)) + spec.damage.bonus), spec.damageType);
+    return { hit: true, crit: false, damage };
   }
   const { mode } = attackMode(r.state, attacker, target, spec.melee);
   const modifiers = [...spec.modifiers];
@@ -398,11 +407,22 @@ export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; cr
     hit = false;
     crit = false;
   }
+  // Reaction: Parry (gladiators, knights) adds to AC against one melee hit it can turn.
+  const parry = Number(tagValue(target, 'parry') ?? 0);
+  if (hit && parry > 0 && spec.melee && kept < spec.critOn && canReact(target) && roll.total < ac + parry) {
+    r.apply({ type: 'modifyResource', entityId: target.id, resource: 'reaction', delta: -1 });
+    r.emit({ type: 'reactionUsed', entityId: target.id, detail: 'Parada' } as FateEvent);
+    ac += parry;
+    hit = false;
+    crit = false;
+  }
   roll.target = ac;
   roll.success = hit;
   if (crit) roll.outcome = 'critical';
   r.emit({ type: 'attackRolled', attackerId: attacker.id, targetId: target.id, label: spec.label, roll, hit, crit } as AttackRolledEvent);
-  if (!hit) return { hit, crit };
+  if (!hit) return { hit, crit, damage: 0 };
+  // A web or a net: the hit itself is the effect.
+  if (harmless) return { hit, crit, damage: 0 };
 
   const times = crit ? 2 : 1;
   let total = sum(rollDice(r.rng, spec.damage.count * times, spec.damage.sides)) + spec.damage.bonus;
@@ -416,8 +436,8 @@ export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; cr
     r.emit({ type: 'reactionUsed', entityId: target.id, detail: 'Esquiva asombrosa' } as FateEvent);
     total = Math.floor(total / 2);
   }
-  dealDamage(r, target.id, total, spec.damageType, crit);
-  return { hit, crit };
+  const damage = dealDamage(r, target.id, total, spec.damageType, crit);
+  return { hit, crit, damage };
 }
 
 export function canReact(e: Entity): boolean {

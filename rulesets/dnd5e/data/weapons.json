@@ -24,5 +24,13 @@
   "bite": { "label": "Mordisco", "damage": "2d6", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
   "fangs": { "label": "Colmillos", "damage": "1d6", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
   "rat_bite": { "label": "Mordisco", "damage": "1d4", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
-  "wolf_bite": { "label": "Dentellada", "damage": "2d4", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 }
+  "wolf_bite": { "label": "Dentellada", "damage": "2d4", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
+  "club": { "label": "Garrote corto", "damage": "1d4", "type": "bludgeoning", "properties": ["light"], "range": 1 },
+  "javelin": { "label": "Jabalina", "damage": "1d6", "type": "piercing", "properties": ["ranged", "thrown"], "range": 6 },
+  "ghast_claws": { "label": "Garras", "damage": "2d6", "type": "slashing", "properties": ["natural", "finesse"], "range": 1 },
+  "ghast_bite": { "label": "Mordisco", "damage": "2d8", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
+  "life_drain": { "label": "Drenar vida", "damage": "1d6", "type": "necrotic", "properties": ["natural", "finesse"], "range": 1 },
+  "specter_drain": { "label": "Drenar vida", "damage": "3d6", "type": "necrotic", "properties": ["natural", "finesse", "no_mod"], "range": 1 },
+  "spider_bite": { "label": "Mordisco venenoso", "damage": "1d8", "type": "piercing", "properties": ["natural", "finesse"], "range": 1 },
+  "shield_bash": { "label": "Golpe de escudo", "damage": "1d4", "type": "bludgeoning", "properties": [], "range": 1 }
 }

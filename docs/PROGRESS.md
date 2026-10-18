@@ -130,6 +130,11 @@
     - Los escalones se dibujan como escalera (`stair`).
   - Efectos: los efectos visuales salen de `manifest.fx`, en los dos juegos.
   - QA: el driver ya no tapa los turnos atascados del jugador.
+- [x] **Bestiario** (rama `bestiario`, 2026-10-18):
+  - Los monstruos pueden lanzar conjuros del SRD (espacios o «x/día»), usar poderes propios con recarga 5-6 o «1/día» (`monster-actions.json`) y llevar efectos al impactar: parálisis del necrófago, derribo del lobo, drenar vida del tumulario (baja los PG máximos hasta el final del combate), veneno de la araña. Rasgos: parada, bruto, hedor, devoción oscura, valiente, inmunidades a estados.
+  - Nuevos: sectario, fanático sectario, acólito, sacerdote, mago, aprendiz de mago, espectro, araña gigante y el capataz de voladuras (Absalón Brea: bomba de pólvora con recarga 5-6 y grito 1/día). Mejorados los del agente de mapas (veterano, caballero, gladiador, ogro, necrófago, ghast, tumulario, mastín, lobo).
+  - IA (genérica): valora estados y mejoras (`utility` en la vista previa), no gasta espacios ni recargas si no compensa (`scarcity`) y los lanzadores guardan la distancia (`keepAway`, por criatura vía `Ruleset.aiProfile`).
+  - Intereses: un predicador entre los fanáticos de la plaza, un curandero con los Sinpaga y un capellán con la guardia del barón.
 
 ## Prioridades de los agentes (2026-10-18)
 

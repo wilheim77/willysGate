@@ -165,7 +165,7 @@
     },
     {
      "id": 7,
-     "name": "guardia_baron-4",
+     "name": "capellan_abadia-1",
      "type": "",
      "point": true,
      "x": 720,
@@ -1063,7 +1063,7 @@
       {
        "name": "participants",
        "type": "string",
-       "value": "guardia_baron-1,guardia_baron-2,guardia_baron-3,guardia_baron-4,guardia_baron_sargento-1,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2"
+       "value": "guardia_baron-1,guardia_baron-2,guardia_baron-3,capellan_abadia-1,guardia_baron_sargento-1,minero_cuadrilla-1,minero_cuadrilla-2,minero_cuadrilla-3,hulla-1,hulla-2"
       },
       {
        "name": "requiresFlag",
