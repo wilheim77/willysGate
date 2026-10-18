@@ -58,6 +58,8 @@ export interface WillyTraits {
   puntosLibres: number;
   ventajas: { id: string; nombre: string; texto: string }[];
   desventaja: { id: string; nombre: string; texto: string };
+  /** Health back at the end of each fight, as a share of the maximum (balance lever). */
+  pausaPublicitaria: { vida: number };
 }
 export const WILLY = willyJson as unknown as WillyTraits;
 

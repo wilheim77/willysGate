@@ -88,6 +88,9 @@ const BIOME_PROPS: Record<string, { sprite: string; nombre: string; tags?: strin
 /** Marker characters: always base-height floor of the biome's '.' terrain. */
 const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X']);
 const MAX_ATTEMPTS = 20;
+
+/** Difficulty levers (floors.json → equilibrio), tuned with the balance simulations. */
+const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; jefes: Record<string, { multVida?: number; dano?: string }> };
 const SAFE_DISTANCE = 6;
 
 type FloorSpec = (typeof floorsData.plantas)[number];
@@ -482,7 +485,7 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       const at = slots(i, 'J')[0];
       const b = spec.jefe;
       if (at) {
-        const boss = createCreature({ id: b.id, name: b.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: b.id, vida: b.vida, def: b.def, ataque: b.ataque, dano: b.dano, movimiento: b.movimiento, fue: 12, tags: ['jefe', `tamano:${b.tamano}`, ...b.etiquetas] });
+        const boss = createCreature({ id: b.id, name: b.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: b.id, vida: Math.round(b.vida * (BALANCE.jefes[n]?.multVida ?? 1)), def: b.def, ataque: b.ataque, dano: BALANCE.jefes[n]?.dano ?? b.dano, movimiento: b.movimiento, fue: 12, tags: ['jefe', `tamano:${b.tamano}`, ...b.etiquetas] });
         entities.push(boss);
         foesByRoom[i]!.push(boss.id);
       }
@@ -520,7 +523,7 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
     }
     // Enemies bought with the room's budget.
     const mult = budgetSpec.multRol[room.role === 'rival' ? 'combate' : room.role] ?? 0;
-    let budget = Math.floor((budgetSpec.base + budgetSpec.porProfundidad * room.depth) * mult);
+    let budget = Math.floor((budgetSpec.base + budgetSpec.porProfundidad * room.depth) * mult * (BALANCE.presupuesto[n] ?? 1));
     if (room.role === 'inicio' || room.role === 'jefe') budget = 0;
     while (budget >= cheapest && enemySlots.length) {
       const pick = g.weighted(enemies.filter(([, e]) => e.coste <= budget), () => 1);
@@ -528,6 +531,8 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       const [id, def] = pick;
       const at = enemySlots.shift()!;
       const e = createCreature({ id: `${prefix}-${id}-${foesByRoom[i]!.length}`, name: def.nombre, controllerId: 'ai', factionId: 'monstruos', position: at, spriteId: id, vida: def.vida, def: def.def, ataque: def.ataque, dano: def.dano, movimiento: def.movimiento, fue: Math.max(3, def.coste * 3), tags: [...def.etiquetas, `xp:${def.xp}`] });
+      // Ordinary enemies act less than Willy (floors.json → equilibrio.accionesEnemigo).
+      e.resources.acciones = { current: BALANCE.accionesEnemigo, max: BALANCE.accionesEnemigo };
       entities.push(e);
       foesByRoom[i]!.push(e.id);
       budget -= def.coste;

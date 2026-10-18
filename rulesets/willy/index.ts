@@ -21,7 +21,7 @@ import './more-classes';
 import './summons';
 import { syncCompanions } from './companions';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
-import { type Attr, CLASSES, allAbilityIds } from './data';
+import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
@@ -262,6 +262,11 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
   const r = new Resolver(ruleset, state, null as never);
   for (const e of Object.values(state.entities)) {
     if (!standing(e)) continue;
+    // «Pausa publicitaria»: makeup patches up Willy and his companion during the ads.
+    const vida = e.resources.vida;
+    if (vida && (hasTag(e, 'pc') || hasTag(e, 'companero')) && vida.current < vida.max) {
+      r.apply({ type: 'modifyResource', entityId: e.id, resource: 'vida', delta: Math.min(vida.max - vida.current, Math.ceil(vida.max * WILLY.pausaPublicitaria.vida)) });
+    }
     const en = e.resources.energia;
     if (en && en.current < en.max) r.apply({ type: 'modifyResource', entityId: e.id, resource: 'energia', delta: en.max - en.current });
     for (const c of ['cafe-tomado', 'corriendo', 'salto']) if (hasCondition(e, c)) r.apply({ type: 'removeCondition', entityId: e.id, condition: c });
