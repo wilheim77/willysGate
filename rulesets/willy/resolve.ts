@@ -269,8 +269,9 @@ export function adjustDamage(target: Entity, amount: number, element: string): n
 export const damageHooks: ((r: Resolver, targetId: string, amount: number, element: string) => void)[] = [];
 
 export function dealDamage(r: Resolver, targetId: string, raw: number, element: string, sourceId?: string, cause = 'golpe', crit = false): number {
-  const target = r.entity(targetId);
-  if (!standing(target)) return 0;
+  // Someone may have left play earlier in the same action (a summon whose owner fell, a collapsed room).
+  const target = r.state.entities[targetId];
+  if (!target || !standing(target)) return 0;
   const amount = adjustDamage(target, raw, element);
   if (amount <= 0) return 0;
   const hp = target.resources.vida?.current ?? 0;
