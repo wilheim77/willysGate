@@ -255,8 +255,18 @@ export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCo
   const handler = ENGINE_COMMANDS[command.type] ?? ruleset.commands[command.type];
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
   const result = handler(state, command, { ruleset, ...(content ? { content } : {}) });
-  if (!result.ok || command.type === 'endTurn') return result;
-  return passTurnIfHelpless(ruleset, result, content);
+  if (!result.ok) return result;
+  return afterCommand(ruleset, command.type === 'endTurn' ? result : passTurnIfHelpless(ruleset, result, content));
+}
+
+/** The ruleset's look at everything a command did (Ruleset.afterCommand). */
+function afterCommand(ruleset: Ruleset, result: CommandResult): CommandResult {
+  if (!result.ok || !ruleset.afterCommand) return result;
+  const rng = new RngCursor(result.state.rng);
+  const outcome = ruleset.afterCommand(result.state, result.events, rng);
+  if (!outcome.effects.length && !outcome.events.length && rng.state === result.state.rng) return result;
+  const r = applyOutcome(ruleset, { ...result.state, rng: rng.state }, outcome, rng);
+  return { ok: true, state: { ...r.state, rng: rng.state }, events: [...result.events, ...r.events] };
 }
 
 /**

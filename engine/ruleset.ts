@@ -103,6 +103,13 @@ export interface Ruleset {
   /** What a trap does to whoever sets it off. */
   triggerTrap?(state: GameState, entityId: string, trap: Trap, rng: RngCursor): ActionOutcome;
 
+  /**
+   * Runs once after every successful command, with all the events it produced (achievements,
+   * statistics, a clock charged by what happened, healing while walking). Its own events are
+   * appended to the command's; it does not see them itself.
+   */
+  afterCommand?(state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome;
+
   /** Ruleset bookkeeping when a combat ends (e.g. downed allies get back up). */
   onCombatEnd?(state: GameState, winner: string | null): ActionOutcome;
 

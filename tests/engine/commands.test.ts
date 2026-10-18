@@ -99,3 +99,25 @@ describe('command routing', () => {
     expect(() => createEngine(bad, 'g')).toThrow(/move/);
   });
 });
+
+describe('Ruleset.afterCommand', () => {
+  it('sees every successful command and its events, and its effects and events are appended', () => {
+    const seen: string[][] = [];
+    const ruleset = extendRuleset(toyRuleset, {
+      id: 'toy-after',
+      afterCommand: (state, events) => {
+        seen.push(events.map((e) => e.type));
+        const steps = Number((state.systems.walked as number | undefined) ?? 0) + 1;
+        return { effects: [{ type: 'setSystem', system: 'walked', value: steps }], events: [{ type: 'counted', steps } as never] };
+      },
+    });
+    const e = createEngine(ruleset, 'toy-game');
+    const r1 = e.apply(setup(), move({ x: 3, y: 0 }));
+    expect(r1.ok).toBe(true);
+    if (!r1.ok) return;
+    expect(r1.state.systems.walked).toBe(1);
+    expect(r1.events.map((x) => x.type)).toEqual(['entityMoved', 'counted']);
+    expect(e.apply(r1.state, move({ x: 9, y: 9 })).ok).toBe(false);
+    expect(seen).toEqual([['entityMoved']]);
+  });
+});
