@@ -936,8 +936,20 @@ export class MapScene extends Phaser.Scene {
     const dist = Phaser.Math.Distance.Between(from.x, from.y, to.x, to.y);
     const duration = Math.max(80, (dist / this.grid.tile / tilesPerSec) * 1000);
     s.setRotation(Phaser.Math.Angle.Between(from.x, from.y, to.x, to.y));
-    await tween(this, { targets: s, x: to.x, y: to.y, duration, ease: 'Linear' });
-    s.destroy();
+    // Settles exactly once: Phaser drops a tween silently (no onComplete) if its target is
+    // destroyed mid-flight, so a watchdog backs up the tween's own completion.
+    await new Promise<void>((resolve) => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      s.once(Phaser.GameObjects.Events.DESTROY, finish);
+      this.time.delayedCall(duration + 500, finish);
+      this.tweens.add({ targets: s, x: to.x, y: to.y, duration, ease: 'Linear', onComplete: finish });
+    });
+    if (s.active) s.destroy();
     if (impactFxId) this.playProp(impactFxId, to.x, to.y, 2_050_000);
   }
 
@@ -1294,8 +1306,19 @@ export class MapScene extends Phaser.Scene {
     if (!s || !art || art.kind !== 'frames' || !art.animations[name]) return Promise.resolve(false);
     const id = this.spriteIdOf(entityId);
     return new Promise((resolve) => {
+      // Settles exactly once: on the animation's own complete, if the sprite dies mid-play
+      // (a rebuild), or by a watchdog — same reasoning as animateMove's `moveFinish`, since a
+      // dead sprite never fires ANIMATION_COMPLETE and would otherwise stall the whole queue.
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve(true);
+      };
+      s.once(Phaser.Animations.Events.ANIMATION_COMPLETE, finish);
+      s.once(Phaser.GameObjects.Events.DESTROY, finish);
+      this.time.delayedCall(1500, finish);
       s.play(`${id}:${name}`, true);
-      s.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => resolve(true));
     });
   }
 
