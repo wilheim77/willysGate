@@ -4,10 +4,12 @@ import type { AudioManifest } from '../../src/audio/types';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
 import audio from './assets/audio.json';
 import ninja from './assets/ninja.json';
+import { DIALOGUES } from './dialogues';
 import itemsData from './data/items.json';
 import meta from './meta.json';
 import { PLAYER, applyCasting, maps, newWillyGame } from './setup';
 import { narrate, narrateEvents } from './narrator';
+import { willyHud } from './hud';
 import { achievements, rewardBoxes } from './meta-view';
 import { defeat, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
 import texts from './texts/ui.json';
@@ -44,8 +46,11 @@ export const game: GameDefinition = {
   },
   playerId: PLAYER,
   leaderId: 'willy',
+  // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
+  onDeath: 'vanish',
   audio: audio as unknown as AudioManifest,
   items: Object.fromEntries(itemsData.items.map((i) => [i.id, { label: i.nombre, text: i.regla }])),
+  dialogues: DIALOGUES,
   creation: {
     spec: WILLY_CREATION,
     defaults: defaultCreation,
@@ -60,6 +65,7 @@ export const game: GameDefinition = {
   savePolicy,
   onRestoredCopy,
   defeat,
+  hud: willyHud,
   // The service lift needs the engine to know the floors (travel builds them on arrival).
   maps,
   newGame: newWillyGame,

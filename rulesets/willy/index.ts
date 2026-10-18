@@ -28,8 +28,10 @@ import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
 import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDamage, heal, onCollision, onVoid, pushEntity, rollSave, standing } from './resolve';
 import { antennaShots } from './summons';
+import { rivalAfterCommand } from './rivals';
 import { describeEntity } from './sheet';
-import { showAfterCommand, showCommands } from './show';
+import { clockAfterCommand } from './clock';
+import { showAfterCommand, showCommands, showLateAfterCommand } from './show';
 import { achievementsHook } from './achievements';
 import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
@@ -105,6 +107,10 @@ const conditions: Record<string, ConditionDef> = {
   encajado: { label: 'En una caja invisible', description: 'No puede moverse ni actuar, ni nadie le puede tocar.' },
   pena: { label: 'Qué pena', description: 'Ha roto algo de época: pierde 1 acción.' },
   eliminado: { label: 'Eliminado', description: 'Fuera del concurso. O de esta planta, al menos.' },
+  // Applied alongside 'eliminado' (rulesets/willy/resolve.ts's defeat()) so the generic
+  // client's cross-ruleset death handling (engine/dialogue.ts, MapScene.applyFate) works
+  // for Willy too; same label so it reads the same if a badge ever shows both.
+  dead: { label: 'Eliminado' },
 };
 
 const glossary: Record<string, GlossaryEntry> = {
@@ -322,9 +328,14 @@ export function registerAfterCommand(hook: AfterCommandHook, order = 50): void {
 
 registerAfterCommand(dropsHook, 10);
 registerAfterCommand(itemsHook, 20);
+// The floor clock and the collapse (clock.ts), before the show reacts to the turn.
+registerAfterCommand(clockAfterCommand, 40);
 registerAfterCommand(showAfterCommand, 50);
+// Rival outcomes and their Narrador moments (rivals.ts).
+registerAfterCommand(rivalAfterCommand, 55);
 registerAfterCommand(regenHook, 60);
 registerAfterCommand(achievementsHook, 100);
+registerAfterCommand(showLateAfterCommand, 110);
 
 /**
  * Runs the hooks in order. Each sees the state left by the ones before and the command's events

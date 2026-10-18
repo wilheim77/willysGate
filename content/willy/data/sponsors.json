@@ -32,6 +32,7 @@
       "color": "#ff7a1a",
       "retrato": "sponsor-butanos",
       "audienciaMinima": 0,
+      "gustosTexto": { "gusta": ["El fuego y las explosiones", "Que algo arda o reviente", "Usar las habilidades de bombona y gas"], "disgusta": ["Apagar fuegos con agua o frío", "Usar el extintor"] },
       "tutorial": true,
       "gusta": [
         { "patron": { "evento": "entityDefeated", "donde": { "elemento": "fuego" } }, "afinidad": 6 },
@@ -111,6 +112,7 @@
       "color": "#3a8fd9",
       "retrato": "sponsor-prudente",
       "audienciaMinima": 2000,
+      "gustosTexto": { "gusta": ["Ganar un combate casi sin heridas", "Curarse a tiempo", "Descubrir trampas", "Descansar"], "disgusta": ["Que te caigas", "Empezar el turno con muy poca vida", "Pisar trampas", "Hacer el ganso pegado a un enemigo"] },
       "gusta": [
         { "patron": { "evento": "combatEnded", "donde": { "resultado": "victoria", "vidaPerdidaPct": { "max": 10 } } }, "afinidad": 10 },
         { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "curacion" }, "actor.vidaPct": { "max": 50 } } }, "afinidad": 4 },
@@ -192,6 +194,7 @@
       "color": "#8e1f3a",
       "retrato": "sponsor-vortax",
       "audienciaMinima": 50000,
+      "gustosTexto": { "gusta": ["Eliminar enemigos por el vacío, por caídas o contra la pared", "Los críticos", "Rematar a un enemigo sin un rasguño", "Derrotar jefes"], "disgusta": ["Huir", "La piedad en los diálogos", "Esperar sin hacer nada"] },
       "gusta": [
         { "patron": { "evento": "entityDefeated", "donde": { "causa": { "en": ["fueraDePlano", "caida", "choque", "decorado"] } } }, "afinidad": 8 },
         { "patron": { "evento": "attackResolved", "donde": { "actor.id": "willy", "critico": true } }, "afinidad": 5 },
@@ -272,6 +275,7 @@
       "color": "#f28ab2",
       "retrato": "sponsor-clementina",
       "audienciaMinima": 500,
+      "gustosTexto": { "gusta": ["Comer, y más aún en mitad de una pelea", "Ser amable en los diálogos", "Ayudar a la gente"], "disgusta": ["Ser grosero", "Vender comida", "Pegar a las crías"] },
       "gusta": [
         { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "comida" } } }, "afinidad": 5 },
         { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "comida" }, "enCombate": true } }, "afinidad": 3 },
@@ -338,6 +342,7 @@
       "color": "#c9b000",
       "retrato": "sponsor-colmena",
       "audienciaMinima": 0,
+      "gustosTexto": { "gusta": ["Cualquier caída, incluidas las tuyas", "Eliminar enemigos tirándolos abajo", "Atacar desde lo alto", "Que la planta se derrumbe contigo dentro"], "disgusta": ["Combates largos sin una sola caída", "Llevar el ancla del puerto"] },
       "gusta": [
         { "patron": { "evento": "fell" }, "afinidad": 5 },
         { "patron": { "evento": "fell", "donde": { "entidad.id": "willy" } }, "afinidad": 4 },
@@ -416,6 +421,7 @@
       "color": "#3fbf6a",
       "retrato": "sponsor-glorp",
       "audienciaMinima": 10000,
+      "gustosTexto": { "gusta": ["Hielo, vapor y agua electrificada", "Eliminar con el entorno", "Ganar sin gastar consumibles"], "disgusta": ["Gastar consumibles", "Incendios grandes", "Los charcos tóxicos"] },
       "gusta": [
         { "patron": { "evento": "surfaceReacted", "donde": { "resultado": { "en": ["hielo", "vapor", "electrificada"] } } }, "afinidad": 7 },
         { "patron": { "evento": "entityDefeated", "donde": { "causa": { "en": ["superficie", "choque", "caida", "fueraDePlano"] } } }, "afinidad": 4 },

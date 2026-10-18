@@ -202,6 +202,8 @@ Hay dos líneas en paralelo. Cada agente sigue su lista en orden y sube su rama 
 
 ## Decisiones abiertas
 
+- (2026-10-18) El Acto II de *Intereses* queda en espera: primero se termina *Willy el mazmorrero*. El esbozo está en `ACT2_OUTLINE.md`, con respuestas propuestas a sus preguntas abiertas: continuar desde el nivel 5 hasta el 7, Mirta como compañera fija e importar la partida del Acto I.
+
 - (2026-10-18, aprobado) Progresión y combates:
   - **Combate tutorial:** una pelea fácil al empezar el camino.
   - **Niveles por PX:** se empieza en nivel 3 y hay que llegar a nivel 5 antes del combate final. Las subidas se aplican en el motor.

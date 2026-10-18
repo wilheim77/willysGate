@@ -1,106 +1,167 @@
-import type { GameEvent, GameState } from '../../engine';
+import type { Entity, GameEvent, GameState } from '../../engine';
+import { show } from '../../rulesets/willy';
+import cast from './data/cast.json';
+import floors from './data/floors.json';
+import itemsData from './data/items.json';
 import combate from './narrator/combate.json';
 import logros from './narrator/logros-y-cajas.json';
 import miscelanea from './narrator/miscelanea.json';
 import plantas from './narrator/plantas.json';
-import cast from './data/cast.json';
+import { viewers } from './format';
 
 /**
  * The Narrador: picks a line for an engine event from the banks in narrator/*.json.
- * A bank matches an event type (`evento`) and its `donde` fields; a line may add its own
- * `si` conditions. Cosmetic only (it never changes the game), so plain Math.random is fine.
+ * Banks and lines are written against the show's event views (rulesets/willy/show/patterns.ts):
+ * `attackResolved` with `actor.id` and `critico`, `entityDefeated` with `objetivo.tipo`... so a
+ * bank's `evento`/`donde` and a line's `si` use the same pattern language as audience rules,
+ * sponsor tastes and achievements. Cosmetic only (it never changes the game), so Math.random
+ * is fine.
+ *
+ * Variables (DESIGN.md → «Narrador»): {enemigo}, {objeto}, {patrocinador}, {espectadores},
+ * {dano}, {presentador}... with agreement filters: {x:el} el/la, {x:un} un/una, {x:del},
+ * {x:al}, {x:o} o/a ending, {x:Mayus} capital first letter. A line whose variables can't all be
+ * filled is skipped.
  */
-type Cond = string | number | boolean | { min?: number; max?: number } | { en: (string | number)[] } | { existe: boolean } | { tiene: string };
-interface Line { id: string; texto: string; si?: Record<string, Cond>; prioridadExtra?: number }
-interface Bank { id: string; evento: string; donde?: Record<string, Cond>; probabilidad?: number; prioridad?: number; memoria?: number; lineas: Line[] }
+interface Line { id: string; texto: string; si?: Record<string, unknown>; prioridadExtra?: number }
+interface Bank { id: string; evento: string; donde?: Record<string, unknown>; probabilidad?: number; prioridad?: number; memoria?: number; lineas: Line[] }
 
 const BANKS: Bank[] = [combate, logros, miscelanea, plantas].flatMap((f) => (f as unknown as { bancos: Bank[] }).bancos);
 const recent = new Map<string, string[]>();
-const CAST: Record<string, string> = { presentador: cast.presentador.nombre, presentadorCorto: cast.presentador.corto, presentadorApodo: cast.presentador.apodo };
 
-function lookup(fields: Record<string, unknown>, path: string): unknown {
-  let v: unknown = fields;
-  for (const part of path.split('.')) {
-    if (v === null || v === undefined || typeof v !== 'object') return undefined;
-    v = (v as Record<string, unknown>)[part];
-  }
-  return v;
+/** Grammatical gender of things the Narrador names: enemies from floors.json; the rest guessed. */
+const GENDER: Record<string, 'm' | 'f'> = {};
+for (const p of floors.plantas as unknown as { enemigos?: Record<string, { genero?: string }> }[]) {
+  for (const [id, e] of Object.entries(p.enemigos ?? {})) if (e.genero === 'f' || e.genero === 'm') GENDER[id] = e.genero;
+}
+const ITEMS: Record<string, { nombre: string; genero?: string }> = Object.fromEntries(itemsData.items.map((i) => [i.id, i as { nombre: string; genero?: string }]));
+
+interface Named { name: string; gender: 'm' | 'f' }
+
+function guessGender(name: string): 'm' | 'f' {
+  const first = name.trim().split(/\s+/)[0]!.toLowerCase();
+  return /a$/.test(first) && !/ma$/.test(first) ? 'f' : 'm';
 }
 
-function matches(fields: Record<string, unknown>, conds?: Record<string, Cond>): boolean {
-  if (!conds) return true;
-  return Object.entries(conds).every(([k, c]) => {
-    const v = lookup(fields, k);
-    if (c !== null && typeof c === 'object') {
-      if ('en' in c) return c.en.includes(v as string | number);
-      if ('existe' in c) return (v !== undefined && v !== null) === c.existe;
-      if ('tiene' in c) return Array.isArray(v) && v.includes(c.tiene);
-      const r = c as { min?: number; max?: number };
-      return typeof v === 'number' && (r.min === undefined || v >= r.min) && (r.max === undefined || v <= r.max);
-    }
-    return v === c;
-  });
+function entityNamed(e: Entity | undefined): Named | undefined {
+  if (!e) return undefined;
+  const tag = e.tags.find((t) => t.startsWith('genero:'))?.slice('genero:'.length);
+  const gender = tag === 'f' || tag === 'm' ? tag : (GENDER[e.spriteId] ?? guessGender(e.name));
+  return { name: e.name, gender };
 }
 
-/** Spanish agreement for {x:el}, {x:un}, {x:del}, {x:al}, {x:o} and {x:Mayus}. */
-function inflect(value: string, gender: string, filters: string[]): string {
-  const f = gender === 'f';
-  let out = value;
-  for (const flt of filters) {
-    if (flt === 'el') out = `${f ? 'la' : 'el'} ${out}`;
-    else if (flt === 'un') out = `${f ? 'una' : 'un'} ${out}`;
-    else if (flt === 'del') out = `${f ? 'de la' : 'del'} ${out}`;
-    else if (flt === 'al') out = `${f ? 'a la' : 'al'} ${out}`;
-    else if (flt === 'o') out = f ? 'a' : 'o';
-    else if (flt === 'Mayus') out = out.charAt(0).toUpperCase() + out.slice(1);
-  }
-  return out;
+function itemNamed(id: unknown): Named | undefined {
+  if (typeof id !== 'string') return undefined;
+  const it = ITEMS[id];
+  const name = it?.nombre ?? id;
+  return { name, gender: it?.genero === 'f' || it?.genero === 'm' ? it.genero : guessGender(name) };
 }
 
-/** A guess for item names, which carry no gender: «Gaseosa…» is feminine, «Petardo…» is not. */
-const guessGender = (name: string) => (/^[^\s]*a\b/i.test(name) && !/^(mapa|sistema|planeta)\b/i.test(name) ? 'f' : 'm');
+/** Everything a line may name for this event. */
+function context(view: Record<string, unknown>, state: GameState): Record<string, Named | string | number> {
+  const ctx: Record<string, Named | string | number> = {};
+  for (const [k, v] of Object.entries(view)) if (typeof v === 'string' || typeof v === 'number') ctx[k] = v;
+  const idOf = (x: unknown) => (x && typeof x === 'object' ? (x as { id?: string }).id : typeof x === 'string' ? x : undefined);
+  const foeId = idOf(view.objetivo) ?? idOf(view.targetId) ?? idOf(view.entidad) ?? (typeof view.entityId === 'string' && view.entityId !== 'willy' ? view.entityId : undefined);
+  const foe = entityNamed(foeId ? state.entities[foeId] : undefined);
+  if (foe) ctx.enemigo = foe;
+  const obj = itemNamed(view.item ?? view.objeto) ?? entityNamed(idOf(view.objeto) ? state.entities[idOf(view.objeto)!] : undefined);
+  if (obj) ctx.objeto = obj;
+  if (typeof view.amount === 'number') ctx.dano = view.amount;
+  if (typeof view.espectadores === 'number') ctx.espectadores = viewers(Number(view.espectadores));
+  if (typeof view.patrocinador === 'string') ctx.patrocinador = view.patrocinador;
+  if (typeof view.logro === 'string') ctx.logro = view.logro;
+  ctx.presentador = { name: cast.presentador.nombre, gender: cast.presentador.genero === 'f' ? 'f' : 'm' };
+  ctx.presentadorCorto = { name: cast.presentador.corto, gender: cast.presentador.genero === 'f' ? 'f' : 'm' };
+  ctx.presentadorApodo = cast.presentador.apodo;
+  const willy = state.entities.willy;
+  if (willy?.resources.vida) ctx.vida = willy.resources.vida.current;
+  // Rival variables travel on the event already (rivalNombre...); {rival:o} needs its gender.
+  if (typeof view.rivalGenero === 'string') ctx.rival = { name: String(view.rivalNombre ?? ''), gender: view.rivalGenero === 'f' ? 'f' : 'm' };
+  return ctx;
+}
 
-/** Fills {variables} (with agreement filters) from the event, its context and the cast; null if any stays empty. */
-function fill(text: string, fields: Record<string, unknown>, state: GameState): string | null {
+const ARTICLES = {
+  el: { m: 'el', f: 'la' },
+  un: { m: 'un', f: 'una' },
+  del: { m: 'del', f: 'de la' },
+  al: { m: 'al', f: 'a la' },
+};
+
+function fill(text: string, ctx: Record<string, Named | string | number>): string | null {
   let missing = false;
-  const ctx = (fields.contexto as Record<string, unknown> | undefined) ?? {};
-  const out = text.replace(/\{(\w+)((?::\w+)*)\}/g, (_, k: string, flt: string) => {
-    const filters = flt ? flt.slice(1).split(':') : [];
-    const id = fields[`${k}Id`];
-    const v = fields[k] ?? ctx[k] ?? CAST[k] ?? (typeof id === 'string' ? state.entities[id]?.name : undefined);
-    if (v === undefined || v === null || typeof v === 'object') {
+  const out = text.replace(/\{([\wÁÉÍÓÚáéíóúñ]+)((?::\w+)*)\}/g, (_, key: string, filters: string) => {
+    const v = ctx[key];
+    if (v === undefined || v === '') {
       missing = true;
       return '';
     }
-    const gender = String(fields[`${k}Genero`] ?? ctx[`${k}Genero`] ?? (k === 'presentador' ? cast.presentador.genero : guessGender(String(v))));
-    return inflect(String(v), gender, filters);
+    const named: Named = typeof v === 'object' ? v : { name: String(v), gender: 'm' };
+    let s = named.name;
+    let capital = false;
+    for (const f of filters.split(':').filter(Boolean)) {
+      if (f === 'Mayus') capital = true;
+      else if (f === 'o') s = named.gender === 'f' ? 'a' : 'o';
+      else if (f in ARTICLES) s = `${ARTICLES[f as keyof typeof ARTICLES][named.gender]} ${s}`;
+    }
+    return capital ? s.charAt(0).toUpperCase() + s.slice(1) : s;
   });
   return missing ? null : out;
 }
 
+/** The event as the data sees it: its show view(s), plus its own raw fields. */
+function viewsOf(event: GameEvent, state: GameState): Record<string, unknown>[] {
+  const raw = event as unknown as Record<string, unknown>;
+  const views = show.eventViews([event], state).map((v) => ({ ...raw, ...v }));
+  if (event.type === 'combatEnded') {
+    const winner = (raw as { winner?: string | null }).winner;
+    views.push({ ...raw, evento: 'combatEnded', resultado: winner === state.entities.willy?.factionId ? 'victoria' : winner ? 'derrota' : 'huida' });
+  }
+  return views.length ? views : [{ ...raw, evento: event.type }];
+}
+
+function matches(view: Record<string, unknown>, conds?: Record<string, unknown>): boolean {
+  if (!conds) return true;
+  return show.matchPattern(view as show.View, { evento: String(view.evento), donde: conds });
+}
+
 function pick(event: GameEvent, state: GameState): { text: string; priority: number } | null {
-  const fields = event as unknown as Record<string, unknown>;
-  const banks = BANKS.filter((b) => b.evento === event.type && matches(fields, b.donde)).sort((a, b) => (b.prioridad ?? 0) - (a.prioridad ?? 0));
-  for (const bank of banks) {
-    if (Math.random() > (bank.probabilidad ?? 1)) continue;
-    const seen = recent.get(bank.id) ?? [];
-    const eligible = bank.lineas.filter((l) => matches(fields, l.si) && !seen.includes(l.id));
-    if (!eligible.length) continue;
-    const top = Math.max(...eligible.map((l) => l.prioridadExtra ?? 0));
-    const best = eligible.filter((l) => (l.prioridadExtra ?? 0) === top);
-    const line = best[Math.floor(Math.random() * best.length)]!;
-    let text = fill(line.texto, fields, state);
-    if (!text) continue;
-    // An achievement: the generic header, then its own line (achievements.json → narrador).
-    if (event.type === 'achievementUnlocked' && typeof fields.frase === 'string') {
-      const own = fill(fields.frase, fields, state);
-      if (own) text = `${text} ${own}`;
+  for (const view of viewsOf(event, state)) {
+    const banks = BANKS.filter((b) => b.evento === view.evento && matches(view, b.donde)).sort((a, b) => (b.prioridad ?? 0) - (a.prioridad ?? 0));
+    const ctx = context(view, state);
+    for (const bank of banks) {
+      if (Math.random() > (bank.probabilidad ?? 1)) continue;
+      const seen = recent.get(bank.id) ?? [];
+      const eligible = bank.lineas.filter((l) => matches(view, l.si) && !seen.includes(l.id));
+      if (!eligible.length) continue;
+      // The most specific line wins (more `si` conditions), then prioridadExtra.
+      const score = (l: Line) => (l.prioridadExtra ?? 0) * 100 + Object.keys(l.si ?? {}).length;
+      const top = Math.max(...eligible.map(score));
+      const best = eligible.filter((l) => score(l) === top);
+      const line = best[Math.floor(Math.random() * best.length)]!;
+      let text = fill(line.texto, ctx);
+      if (!text) continue;
+      // An achievement: the generic header, then its own line (achievements.json → narrador),
+      // naming what the unlocking event was about (its `contexto`).
+      if (event.type === 'achievementUnlocked' && typeof view.frase === 'string') {
+        const own = fill(view.frase, { ...ctx, ...achievementContext(view.contexto) });
+        if (own) text = `${text} ${own}`;
+      }
+      if (bank.memoria) recent.set(bank.id, [...seen, line.id].slice(-bank.memoria));
+      return { text, priority: bank.prioridad ?? 0 };
     }
-    recent.set(bank.id, [...seen, line.id].slice(-(bank.memoria ?? 0) || -1));
-    if (!bank.memoria) recent.delete(bank.id);
-    return { text, priority: bank.prioridad ?? 0 };
   }
   return null;
+}
+
+/** An unlock carries the names of what triggered it: {enemigo} with its gender, {objeto}, {habilidad}. */
+function achievementContext(raw: unknown): Record<string, Named | string | number> {
+  const c = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
+  const out: Record<string, Named | string | number> = {};
+  if (typeof c.enemigo === 'string') out.enemigo = { name: c.enemigo, gender: c.enemigoGenero === 'f' ? 'f' : 'm' };
+  const obj = itemNamed(c.objeto);
+  if (obj) out.objeto = obj;
+  if (typeof c.habilidad === 'string') out.habilidad = c.habilidad;
+  return out;
 }
 
 export function narrate(event: GameEvent, state: GameState): string | null {
