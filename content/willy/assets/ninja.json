@@ -8354,6 +8354,951 @@
       "y": 1419,
       "w": 12,
       "h": 12
+    },
+    "item-bombona-de-butano": {
+      "url": "assets/ninja/icons.png",
+      "x": 0,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-llave-inglesa": {
+      "url": "assets/ninja/icons.png",
+      "x": 16,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-bocadillo-de-chorizo": {
+      "url": "assets/ninja/icons.png",
+      "x": 32,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-palo-de-selfie": {
+      "url": "assets/ninja/icons.png",
+      "x": 48,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-aro-de-luz": {
+      "url": "assets/ninja/icons.png",
+      "x": 64,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-batido-de-proteinas": {
+      "url": "assets/ninja/icons.png",
+      "x": 80,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-teclado-casio": {
+      "url": "assets/ninja/icons.png",
+      "x": 96,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-pandereta": {
+      "url": "assets/ninja/icons.png",
+      "x": 112,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-botella-de-kalimotxo": {
+      "url": "assets/ninja/icons.png",
+      "x": 128,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-silbato-de-socorrista": {
+      "url": "assets/ninja/icons.png",
+      "x": 144,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-flotador-de-patito": {
+      "url": "assets/ninja/icons.png",
+      "x": 160,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-crema-solar": {
+      "url": "assets/ninja/icons.png",
+      "x": 176,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-lupa-de-tasador": {
+      "url": "assets/ninja/icons.png",
+      "x": 192,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-baston-con-pomo": {
+      "url": "assets/ninja/icons.png",
+      "x": 208,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-pastillas-juanola": {
+      "url": "assets/ninja/icons.png",
+      "x": 224,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-guantes-blancos": {
+      "url": "assets/ninja/icons.png",
+      "x": 240,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-maquillaje-de-mimo": {
+      "url": "assets/ninja/icons.png",
+      "x": 256,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-barra-de-pan": {
+      "url": "assets/ninja/icons.png",
+      "x": 272,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-soldador-de-estano": {
+      "url": "assets/ninja/icons.png",
+      "x": 288,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-antena-plegable": {
+      "url": "assets/ninja/icons.png",
+      "x": 304,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-bolsa-de-tornillos": {
+      "url": "assets/ninja/icons.png",
+      "x": 320,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-sello-de-caucho": {
+      "url": "assets/ninja/icons.png",
+      "x": 336,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-taco-de-formularios": {
+      "url": "assets/ninja/icons.png",
+      "x": 352,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-termo-de-cafe-con-leche": {
+      "url": "assets/ninja/icons.png",
+      "x": 368,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-balon-de-baloncesto": {
+      "url": "assets/ninja/icons.png",
+      "x": 384,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-zapatillas-de-baloncesto": {
+      "url": "assets/ninja/icons.png",
+      "x": 400,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-bebida-isotonica": {
+      "url": "assets/ninja/icons.png",
+      "x": 416,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-cana-de-pescar": {
+      "url": "assets/ninja/icons.png",
+      "x": 432,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-rodillo-de-cocina": {
+      "url": "assets/ninja/icons.png",
+      "x": 448,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-share-embotellado": {
+      "url": "assets/ninja/icons.png",
+      "x": 464,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-tirita-de-dibujos": {
+      "url": "assets/ninja/icons.png",
+      "x": 480,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-cafe-de-maquina": {
+      "url": "assets/ninja/icons.png",
+      "x": 496,
+      "y": 0,
+      "w": 16,
+      "h": 16
+    },
+    "item-frasco-de-aceite": {
+      "url": "assets/ninja/icons.png",
+      "x": 0,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-mechero-de-gasolinera": {
+      "url": "assets/ninja/icons.png",
+      "x": 16,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-cubo-de-agua": {
+      "url": "assets/ninja/icons.png",
+      "x": 32,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-bolsa-de-canicas": {
+      "url": "assets/ninja/icons.png",
+      "x": 48,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-red-de-pesca": {
+      "url": "assets/ninja/icons.png",
+      "x": 64,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-lata-de-bonito": {
+      "url": "assets/ninja/icons.png",
+      "x": 80,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-pincho-de-tortilla": {
+      "url": "assets/ninja/icons.png",
+      "x": 96,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-mapa-de-planta": {
+      "url": "assets/ninja/icons.png",
+      "x": 112,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-petardo": {
+      "url": "assets/ninja/icons.png",
+      "x": 128,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-casco-de-obra": {
+      "url": "assets/ninja/icons.png",
+      "x": 144,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-guantes-de-fregar": {
+      "url": "assets/ninja/icons.png",
+      "x": 160,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-chubasquero": {
+      "url": "assets/ninja/icons.png",
+      "x": 176,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-moneda-de-cinco-duros": {
+      "url": "assets/ninja/icons.png",
+      "x": 192,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-paraguas": {
+      "url": "assets/ninja/icons.png",
+      "x": 208,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-ballesta-de-feria": {
+      "url": "assets/ninja/icons.png",
+      "x": 224,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-antorcha-de-verbena": {
+      "url": "assets/ninja/icons.png",
+      "x": 240,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-remo-de-trainera": {
+      "url": "assets/ninja/icons.png",
+      "x": 256,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-grapadora-industrial": {
+      "url": "assets/ninja/icons.png",
+      "x": 272,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-botas-de-agua": {
+      "url": "assets/ninja/icons.png",
+      "x": 288,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-chaleco-reflectante": {
+      "url": "assets/ninja/icons.png",
+      "x": 304,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-frontal-de-espeleologo": {
+      "url": "assets/ninja/icons.png",
+      "x": 320,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-megafono": {
+      "url": "assets/ninja/icons.png",
+      "x": 336,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-bote-de-pimienta": {
+      "url": "assets/ninja/icons.png",
+      "x": 352,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-garrafa-de-lejia": {
+      "url": "assets/ninja/icons.png",
+      "x": 368,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-extintor": {
+      "url": "assets/ninja/icons.png",
+      "x": 384,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-tartera-de-mama": {
+      "url": "assets/ninja/icons.png",
+      "x": 400,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-manual-de-prevencion": {
+      "url": "assets/ninja/icons.png",
+      "x": 416,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-cascabel-delator": {
+      "url": "assets/ninja/icons.png",
+      "x": 432,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-pendiente-del-mimico": {
+      "url": "assets/ninja/icons.png",
+      "x": 448,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-gafas-de-sol-nocturnas": {
+      "url": "assets/ninja/icons.png",
+      "x": 464,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-martillo-neumatico": {
+      "url": "assets/ninja/icons.png",
+      "x": 480,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-monopatin-cohete": {
+      "url": "assets/ninja/icons.png",
+      "x": 496,
+      "y": 16,
+      "w": 16,
+      "h": 16
+    },
+    "item-capa-de-veterano": {
+      "url": "assets/ninja/icons.png",
+      "x": 0,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-termo-sin-fondo": {
+      "url": "assets/ninja/icons.png",
+      "x": 16,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-dado-trucado": {
+      "url": "assets/ninja/icons.png",
+      "x": 32,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-ancla-del-puerto": {
+      "url": "assets/ninja/icons.png",
+      "x": 48,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-mochila-sin-fondo": {
+      "url": "assets/ninja/icons.png",
+      "x": 64,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-rayo-embotellado": {
+      "url": "assets/ninja/icons.png",
+      "x": 80,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-trompeta-de-charanga": {
+      "url": "assets/ninja/icons.png",
+      "x": 96,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-carrito-de-maripuri": {
+      "url": "assets/ninja/icons.png",
+      "x": 112,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-remo-de-la-castrena": {
+      "url": "assets/ninja/icons.png",
+      "x": 128,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-cronometro-de-regidor": {
+      "url": "assets/ninja/icons.png",
+      "x": 144,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-cuaderno-de-quejas": {
+      "url": "assets/ninja/icons.png",
+      "x": 160,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-microfono-de-oro": {
+      "url": "assets/ninja/icons.png",
+      "x": 176,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-espada-del-campeon-krell": {
+      "url": "assets/ninja/icons.png",
+      "x": 192,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-llavero-de-produccion": {
+      "url": "assets/ninja/icons.png",
+      "x": 208,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-gorra-de-butanero": {
+      "url": "assets/ninja/icons.png",
+      "x": 224,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-casco-vikingo-de-carton": {
+      "url": "assets/ninja/icons.png",
+      "x": 240,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-corona-de-roscon": {
+      "url": "assets/ninja/icons.png",
+      "x": 256,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-tupe-de-presentador": {
+      "url": "assets/ninja/icons.png",
+      "x": 272,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-camiseta-planta-1": {
+      "url": "assets/ninja/icons.png",
+      "x": 288,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-aureola-de-favorito": {
+      "url": "assets/ninja/icons.png",
+      "x": 304,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-gorro-de-papel-de-aluminio": {
+      "url": "assets/ninja/icons.png",
+      "x": 320,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-chaleco-de-operadora": {
+      "url": "assets/ninja/icons.png",
+      "x": 336,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-manguitos-de-oficina": {
+      "url": "assets/ninja/icons.png",
+      "x": 352,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-visera-de-ventanilla": {
+      "url": "assets/ninja/icons.png",
+      "x": 368,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-cinta-de-pelo-ochentera": {
+      "url": "assets/ninja/icons.png",
+      "x": 384,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-anillo-de-campeon": {
+      "url": "assets/ninja/icons.png",
+      "x": 400,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-aviso-pausa-publicitaria": {
+      "url": "assets/ninja/icons.png",
+      "x": 416,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-aviso-dia-de-la-luz": {
+      "url": "assets/ninja/icons.png",
+      "x": 432,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-aviso-huelga-de-figurantes": {
+      "url": "assets/ninja/icons.png",
+      "x": 448,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-aviso-especial-audiencia": {
+      "url": "assets/ninja/icons.png",
+      "x": 464,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-aviso-paga-extra": {
+      "url": "assets/ninja/icons.png",
+      "x": 480,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "item-aviso-mudanza-de-trampas": {
+      "url": "assets/ninja/icons.png",
+      "x": 496,
+      "y": 32,
+      "w": 16,
+      "h": 16
+    },
+    "logro-cat-primeros-pasos": {
+      "url": "assets/ninja/icons.png",
+      "x": 0,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-combate": {
+      "url": "assets/ninja/icons.png",
+      "x": 24,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-entorno": {
+      "url": "assets/ninja/icons.png",
+      "x": 48,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-estupideces": {
+      "url": "assets/ninja/icons.png",
+      "x": 72,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-cajas": {
+      "url": "assets/ninja/icons.png",
+      "x": 96,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-audiencia": {
+      "url": "assets/ninja/icons.png",
+      "x": 120,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-patrocinadores": {
+      "url": "assets/ninja/icons.png",
+      "x": 144,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-plantas": {
+      "url": "assets/ninja/icons.png",
+      "x": 168,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-progresion": {
+      "url": "assets/ninja/icons.png",
+      "x": 192,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-desafio": {
+      "url": "assets/ninja/icons.png",
+      "x": 216,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-secretos": {
+      "url": "assets/ninja/icons.png",
+      "x": 240,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-ingeniero": {
+      "url": "assets/ninja/icons.png",
+      "x": 264,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-funcionario": {
+      "url": "assets/ninja/icons.png",
+      "x": 288,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-cat-basket": {
+      "url": "assets/ninja/icons.png",
+      "x": 312,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "logro-bloqueado": {
+      "url": "assets/ninja/icons.png",
+      "x": 336,
+      "y": 48,
+      "w": 24,
+      "h": 24
+    },
+    "marco-bronce": {
+      "url": "assets/ninja/icons.png",
+      "x": 360,
+      "y": 48,
+      "w": 18,
+      "h": 18
+    },
+    "marco-plata": {
+      "url": "assets/ninja/icons.png",
+      "x": 378,
+      "y": 48,
+      "w": 18,
+      "h": 18
+    },
+    "marco-oro": {
+      "url": "assets/ninja/icons.png",
+      "x": 396,
+      "y": 48,
+      "w": 18,
+      "h": 18
+    },
+    "marco-legendaria": {
+      "url": "assets/ninja/icons.png",
+      "x": 414,
+      "y": 48,
+      "w": 18,
+      "h": 18
+    },
+    "caja-bronce-cerrada": {
+      "url": "assets/ninja/icons.png",
+      "x": 432,
+      "y": 48,
+      "w": 64,
+      "h": 64
+    },
+    "caja-bronce-tapa-1": {
+      "url": "assets/ninja/icons.png",
+      "x": 0,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-bronce-tapa-2": {
+      "url": "assets/ninja/icons.png",
+      "x": 64,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-bronce-tapa-3": {
+      "url": "assets/ninja/icons.png",
+      "x": 128,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-bronce-abierta": {
+      "url": "assets/ninja/icons.png",
+      "x": 192,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-plata-cerrada": {
+      "url": "assets/ninja/icons.png",
+      "x": 256,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-plata-tapa-1": {
+      "url": "assets/ninja/icons.png",
+      "x": 320,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-plata-tapa-2": {
+      "url": "assets/ninja/icons.png",
+      "x": 384,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-plata-tapa-3": {
+      "url": "assets/ninja/icons.png",
+      "x": 448,
+      "y": 112,
+      "w": 64,
+      "h": 64
+    },
+    "caja-plata-abierta": {
+      "url": "assets/ninja/icons.png",
+      "x": 0,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-oro-cerrada": {
+      "url": "assets/ninja/icons.png",
+      "x": 64,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-oro-tapa-1": {
+      "url": "assets/ninja/icons.png",
+      "x": 128,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-oro-tapa-2": {
+      "url": "assets/ninja/icons.png",
+      "x": 192,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-oro-tapa-3": {
+      "url": "assets/ninja/icons.png",
+      "x": 256,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-oro-abierta": {
+      "url": "assets/ninja/icons.png",
+      "x": 320,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-legendaria-cerrada": {
+      "url": "assets/ninja/icons.png",
+      "x": 384,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-legendaria-tapa-1": {
+      "url": "assets/ninja/icons.png",
+      "x": 448,
+      "y": 176,
+      "w": 64,
+      "h": 64
+    },
+    "caja-legendaria-tapa-2": {
+      "url": "assets/ninja/icons.png",
+      "x": 0,
+      "y": 240,
+      "w": 64,
+      "h": 64
+    },
+    "caja-legendaria-tapa-3": {
+      "url": "assets/ninja/icons.png",
+      "x": 64,
+      "y": 240,
+      "w": 64,
+      "h": 64
+    },
+    "caja-legendaria-abierta": {
+      "url": "assets/ninja/icons.png",
+      "x": 128,
+      "y": 240,
+      "w": 64,
+      "h": 64
     }
   },
   "surfaces": {

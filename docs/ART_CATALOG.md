@@ -554,3 +554,17 @@ Terrenos nuevos (`tiles.json`):
 - `balcony`: tablones transitables con barandilla como `rim` (postes, pasamanos y sombra), cara de vigas con jabalcones y `stair` de madera.
 
 Bestias (`hand-sprites.json`, `idle`/`move`/`hit`, mirando a la derecha; los retratos de 32×32 se generan solos): `perro` (perro carroñero pardo y sarnoso, 16×14), `lobo` (gris oscuro con hocico claro, 16×14) y `rata` (rata gigante gris con cola rosa, 16×10). Vista previa: [`art-previews/0x72-beasts.png`](art-previews/0x72-beasts.png).
+
+## Inventario, logros y cajas de botín de *Willy* (`ui`, `assets/ninja/icons.png`)
+
+Los genera `scripts/art/build-icons.ts`, que corre después de `build-willy-art.ts` y añade sus entradas a `ui` sin borrar las demás. Vista previa: [`art-previews/ninja-icons.png`](art-previews/ninja-icons.png).
+
+- **`item-<id>`** (16×16): un icono por cada objeto de `data/items.json`. Salen de una biblioteca de 79 siluetas ASCII (botella, lata, bocadillo, llave inglesa, balón, casco, libro, aviso…) en `content/willy/art/ninja/icons.json`, con los colores propios de cada objeto. Un objeto nuevo es una línea más en `items` de ese fichero; el build falla si a algún objeto le falta icono.
+- **`logro-cat-<categoria>`** (24×24): una medalla por categoría de `achievements.json` con su glifo: huella, espadas, barril, cara, caja, ojo, moneda, reloj, flecha, calavera, interrogación, antena, sello y balón. Más `logro-bloqueado` (gris con interrogación).
+- **`marco-<rareza>`** (18×18): marcos finos para los iconos (bronce, plata, oro, legendaria), además de las `carta-*` que ya había.
+- **Cajas para la apertura** (64×64, dibujadas a 32 y escaladas ×2), para `<nivel>` = bronce, plata, oro, legendaria:
+  - `caja-<nivel>-cerrada`: caja de cartón con cinta, de metal con remaches, dorada con notas, o morada con estrellas.
+  - `caja-<nivel>-tapa-1..3`: la tapa se levanta y empieza a salir luz.
+  - `caja-<nivel>-abierta`: tapa echada atrás, haces de luz y confeti.
+  - El ojo de Canal Abismo va en el frontal. La caída, el temblor y el confeti grande los anima el cliente con CSS.
+- `icono-reloj` (cuenta atrás del derrumbe) ya existía entre los iconos de estado.
