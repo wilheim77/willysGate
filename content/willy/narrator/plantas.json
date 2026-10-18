@@ -146,6 +146,56 @@
             "planta": 10
           },
           "texto": "Planta {planta}: el plató principal. Las cámaras ya están encendidas. Esto es en directo. Sonríe, o no, da igual: lo emiten de todas formas."
+        },
+        {
+          "id": "ep-1b2",
+          "si": {
+            "planta": 2,
+            "visita": {
+              "min": 2
+            }
+          },
+          "texto": "Otra vez por la lonja de Castro Sumergido. Las gaviotas te reconocen. No es un cumplido."
+        },
+        {
+          "id": "ep-2b2",
+          "si": {
+            "planta": 4,
+            "visita": {
+              "min": 2
+            }
+          },
+          "texto": "La trastienda, de nuevo. Las ofertas que nadie quiso siguen sin querer que nadie las quiera."
+        },
+        {
+          "id": "ep-3b2",
+          "si": {
+            "planta": 6,
+            "visita": {
+              "min": 2
+            }
+          },
+          "texto": "La plaza mayor, otra vez. La orquesta ha cambiado de canción. Es peor."
+        },
+        {
+          "id": "ep-4b2",
+          "si": {
+            "planta": 8,
+            "visita": {
+              "min": 2
+            }
+          },
+          "texto": "Las termas, de vuelta. El agua sigue helada. Nadie se ha relajado aquí la segunda vez tampoco."
+        },
+        {
+          "id": "ep-5b2",
+          "si": {
+            "planta": 10,
+            "visita": {
+              "min": 2
+            }
+          },
+          "texto": "El plató principal, otra vez. Las cámaras nunca se apagan. Ni para comer. Sobre todo no para comer."
         }
       ]
     },

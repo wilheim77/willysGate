@@ -119,6 +119,11 @@ export function eventViews(events: GameEvent[], state: GameState, extra: { first
       case 'turnStarted':
         out.push({ evento: 'turnStarted', entityId: f.entityId, actor: ent(f.entityId) });
         break;
+      case 'dialogueChoice':
+        // A choice's own DialogueChoice.tags (engine/dialogue.ts), renamed like item.etiquetas
+        // above: a sponsor's taste reads "amable"/"grosero" off donde.etiquetas.
+        out.push({ evento: 'dialogueChoice', treeId: f.treeId, nodeId: f.nodeId, etiquetas: (f.tags as string[] | undefined) ?? [], actor: ent(actorId) });
+        break;
       default:
         // Ruleset and show events already speak the data's language (showOff, skillLevelUp,
         // floorExited, achievementUnlocked, boxOpened, combatEnded is built by the caller...).

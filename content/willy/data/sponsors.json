@@ -275,12 +275,13 @@
       "color": "#f28ab2",
       "retrato": "sponsor-clementina",
       "audienciaMinima": 500,
-      "gustosTexto": { "gusta": ["Comer, y más aún en mitad de una pelea", "Ser amable en los diálogos", "Ayudar a la gente"], "disgusta": ["Ser grosero", "Vender comida", "Pegar a las crías"] },
+      "gustosTexto": { "gusta": ["Comer, y más aún en mitad de una pelea", "Ser amable en los diálogos", "Ayudar a la gente", "Pasar por el Camerino"], "disgusta": ["Ser grosero", "Vender comida", "Pegar a las crías"] },
       "gusta": [
         { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "comida" } } }, "afinidad": 5 },
         { "patron": { "evento": "itemUsed", "donde": { "item.etiquetas": { "tiene": "comida" }, "enCombate": true } }, "afinidad": 3 },
         { "patron": { "evento": "dialogueChoice", "donde": { "etiquetas": { "tiene": "amable" } } }, "afinidad": 6 },
-        { "patron": { "evento": "npcHelped" }, "afinidad": 8 }
+        { "patron": { "evento": "npcHelped" }, "afinidad": 8 },
+        { "patron": { "evento": "safeZoneEntered" }, "afinidad": 2 }
       ],
       "disgusta": [
         { "patron": { "evento": "dialogueChoice", "donde": { "etiquetas": { "tiene": "grosero" } } }, "afinidad": -6 },

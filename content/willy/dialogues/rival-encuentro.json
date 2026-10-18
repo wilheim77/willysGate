@@ -15,11 +15,13 @@
         {
           "id": "pactar",
           "text": "Pactar",
+          "tags": ["amable"],
           "check": { "check": "car", "dc": { "partnerTag": "pacto", "fallback": 14 }, "success": "pactoExito", "failure": "pactoFallo" }
         },
         {
           "id": "dejar",
           "text": "Dejar ir",
+          "tags": ["amable"],
           "next": "huidaOk"
         }
       ]
@@ -45,6 +47,7 @@
         {
           "id": "dejarTrasFallo",
           "text": "Dejar ir",
+          "tags": ["amable"],
           "next": "huidaOk"
         }
       ]
