@@ -305,7 +305,7 @@ function passiveEffects(def: ItemDef, entity: Entity, sign: 1 | -1): Effect[] {
     if (p.stat === 'vidaMax') fx.push({ type: 'modifyResourceMax', entityId: entity.id, resource: 'vida', delta: sign * p.delta });
     else fx.push({ type: 'modifyStat', entityId: entity.id, stat: p.stat, delta: sign * p.delta });
   }
-  const tags = (def.inmunidades ?? []).filter((i) => i.efecto === 'push').map(() => 'inmune:empuje');
+  const tags = [...(def.inmunidades ?? []).filter((i) => i.efecto === 'push').map(() => 'inmune:empuje'), `equipado:${slotOf(def) ?? 'mano'}:${def.id}`];
   if (tags.length) fx.push({ type: 'setEntity', entityId: entity.id, ...(sign > 0 ? { addTags: tags } : { removeTags: tags }) });
   return fx;
 }
@@ -347,7 +347,7 @@ export const equipItem: CommandHandler<EquipCommand> = (state, cmd, { ruleset })
     effects.push({ type: 'modifyResource', entityId: e.id, resource: 'acciones', delta: -1 });
   }
   const applied = applyEffects(ruleset, state, effects);
-  return { ok: true, state: withItemLights(applied.state), events: [{ type: 'itemEquipped', entityId: e.id, item: def.id, nombre: def.nombre, objeto: def.nombre, ranura: slot, maldito: !!def.maldito } as GameEvent, ...applied.events] };
+  return { ok: true, state: withItemLights(applied.state), events: [{ type: 'itemEquipped', entityId: e.id, item: def.id, nombre: def.nombre, objeto: def.nombre, ranura: slot, maldito: !!def.maldito, ...(old ? { replaced: old.id } : {}) } as GameEvent, ...applied.events] };
 };
 
 export const unequipItem: CommandHandler<EquipCommand> = (state, cmd, { ruleset }) => {
@@ -447,4 +447,33 @@ export function startingItemEffects(state: GameState, entity: Entity, itemIds: s
   }
   void state;
   return { effects, equipo };
+}
+
+// --- Bag UI hooks (Ruleset.itemSlot / equippedInSlot / equippedItems / itemUse) ---------------------
+
+export function itemSlotOf(itemId: string): string | undefined {
+  const def = itemDef(itemId);
+  return def ? slotOf(def) : undefined;
+}
+
+export function equippedOnEntity(e: Entity): string[] {
+  return e.tags.filter((t) => t.startsWith('equipado:')).map((t) => t.split(':')[2]!);
+}
+
+export function equippedInSlotOf(e: Entity, slot: string): string | undefined {
+  return e.tags.find((t) => t.startsWith(`equipado:${slot}:`))?.split(':')[2];
+}
+
+/** Out of combat the bag offers potions, food and junk on oneself; thrown things wait for a fight. */
+export function itemUseOf(state: GameState, itemId: string): { verb: string; command(entityId: string, issuer: string): { type: string; issuer: string } } | null {
+  const def = itemDef(itemId);
+  const u = def?.usar;
+  if (!def || !u || (def.tipo !== 'consumible' && def.tipo !== 'chatarra')) return null;
+  if (u.objetivo !== 'self' && u.objetivo !== 'aliado') return null;
+  if (state.turn.mode === 'combat') return null;
+  const verb = def.etiquetas?.includes('pocion') || def.etiquetas?.includes('bebida') ? 'Beber' : def.etiquetas?.includes('comida') ? 'Comer' : 'Usar';
+  return {
+    verb,
+    command: (entityId, issuer) => ({ type: 'act', issuer, entityId, actionId: itemActionId(def.id), target: { entityId } }) as never,
+  };
 }

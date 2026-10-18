@@ -17,6 +17,9 @@ import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
 import { setupTutorial } from './ui/tutorialToasts';
 import { setupBarks } from './ui/barks';
+import { setupAchievements } from './ui/achievements';
+import { setupRewardBoxes } from './ui/rewardBoxes';
+import './ui/meta.css';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
 document.title = game.title;
@@ -37,6 +40,8 @@ const controller = new GameController(store, game, combatHud);
 const requestedArt = new URLSearchParams(location.search).get('arte');
 const manifest = game.art.presets[requestedArt ?? ''] ?? game.art.presets[game.art.default]!;
 setupBarks(store, game, manifest);
+setupAchievements(store, game, manifest);
+setupRewardBoxes(store, game, manifest);
 
 // Party portraits and character sheets (tap a portrait or an initiative chip).
 const sheet = new CharacterSheet(game, engine.ruleset, manifest);
@@ -180,17 +185,19 @@ controller.onTrapReached = (trap, candidates) => {
     for (const [item] of entries) {
       const def = game.items?.[item];
       const name = def?.label ?? item;
-      if (!fighting && /^potion_/.test(item)) {
+      const use = ruleset.itemUse ? ruleset.itemUse(store.state, item) : !fighting && /^potion_/.test(item) ? { verb: 'Beber', command: (entityId: string, issuer: string) => ({ type: 'useItem', issuer, entityId, item }) as never } : null;
+      if (use) {
         options.push({
-          label: `Beber ${name}`,
+          label: `${use.verb} ${name}`,
           onPick: () =>
             dialogue.ask(
-              `¿Quién bebe ${name}?`,
+              `¿Quién? (${name})`,
               partyMemberIds().map((id) => {
                 const e = store.state.entities[id]!;
-                const hp = e.resources.hp;
-                return { label: `${e.name}${hp ? ` (${hp.current}/${hp.max} PG)` : ''}`, onPick: () => {
-                  const r = store.dispatch({ type: 'useItem', issuer: game.playerId, entityId: id, item } as never);
+                const healthKey = Object.entries(ruleset.resources).find(([, r]) => r.role === 'health')?.[0] ?? 'hp';
+                const hp = e.resources[healthKey];
+                return { label: `${e.name}${hp ? ` (${hp.current}/${hp.max} ${ruleset.resources[healthKey]?.label ?? 'PG'})` : ''}`, onPick: () => {
+                  const r = store.dispatch(use.command(id, game.playerId));
                   if (!r.ok) hud.say(r.error.message, true);
                 } };
               }),
@@ -288,14 +295,12 @@ if (game.narrate) {
   let timer = 0;
   store.subscribe((change, state) => {
     if (change.kind !== 'events') return;
-    for (const e of change.events) {
-      const line = game.narrate!(e, state);
-      if (!line) continue;
+    const line = game.narrateEvents ? game.narrateEvents(change.events, state) : (change.events.map((e) => game.narrate!(e, state)).find((l) => l) ?? null);
+    if (line) {
       box.textContent = line;
       box.hidden = false;
       clearTimeout(timer);
       timer = window.setTimeout(() => (box.hidden = true), 3500 + line.length * 40);
-      break;
     }
   });
   box.addEventListener('click', () => (box.hidden = true));

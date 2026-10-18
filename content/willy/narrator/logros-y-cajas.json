@@ -414,6 +414,162 @@
           "texto": "Maldito y equipado. Esto es lo que yo llamo vivir peligrosamente. O vivir tontamente."
         }
       ]
+    },
+    {
+      "id": "botinEnemigo",
+      "evento": "itemObtained",
+      "donde": {
+        "origen": "enemigo"
+      },
+      "probabilidad": 0.9,
+      "prioridad": 3,
+      "memoria": 6,
+      "lineas": [
+        {
+          "id": "be-01",
+          "texto": "Llevaba {objeto:un} en el bolsillo. Ya no lo necesita. Ni el bolsillo."
+        },
+        {
+          "id": "be-02",
+          "texto": "¡Botín! {objeto:el:Mayus}, recién sacad{objeto:o} del cadáver. Bueno, del figurante desmayado."
+        },
+        {
+          "id": "be-03",
+          "texto": "Se le ha caído {objeto:un}. Producción dice que es atrezo. Producción miente."
+        },
+        {
+          "id": "be-04",
+          "texto": "{objeto:el:Mayus}, de oferta: gratis, con solo derrotar a su dueño."
+        },
+        {
+          "id": "be-05",
+          "texto": "¡Ojo, que brilla! {objeto:el:Mayus}. Esto es material de concurso, no de mercadillo.",
+          "si": {
+            "rareza": {
+              "en": [
+                "plata",
+                "oro",
+                "legendaria"
+              ]
+            }
+          }
+        },
+        {
+          "id": "be-06",
+          "texto": "¡Un objeto de los buenos! {objeto:el:Mayus}. El público pide repetición de la jugada, y de la mochila.",
+          "si": {
+            "rareza": {
+              "en": [
+                "oro",
+                "legendaria"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "plantaLimpia",
+      "evento": "floorCleared",
+      "probabilidad": 1,
+      "prioridad": 4,
+      "memoria": 4,
+      "lineas": [
+        {
+          "id": "pl-01",
+          "texto": "¡Planta limpia! Ni un figurante en pie. El equipo de limpieza ya está afilando las fregonas."
+        },
+        {
+          "id": "pl-02",
+          "texto": "Ya no queda nadie. Producción tendrá que pedir más monstruos a la ETT galáctica."
+        },
+        {
+          "id": "pl-03",
+          "texto": "Planta despejada. Willy se queda solo con el eco y el olor a marisco."
+        }
+      ]
+    },
+    {
+      "id": "maquillajeCamerino",
+      "evento": "partyPatchedUp",
+      "probabilidad": 0.7,
+      "prioridad": 2,
+      "memoria": 4,
+      "lineas": [
+        {
+          "id": "mc-01",
+          "texto": "Maquillaje entra en tromba: tiritas, base y un poco de pegamento. Como nuevos."
+        },
+        {
+          "id": "mc-02",
+          "texto": "El Camerino cura todo menos la dignidad. La vida, sí: a tope."
+        },
+        {
+          "id": "mc-03",
+          "texto": "Una ducha, un café de máquina y un retoque de maquillaje. Listos para volver a sufrir."
+        }
+      ]
+    },
+    {
+      "id": "objetoUsado",
+      "evento": "itemUsed",
+      "probabilidad": 0.35,
+      "prioridad": 1,
+      "memoria": 8,
+      "lineas": [
+        {
+          "id": "ou-01",
+          "texto": "Se lo toma de un trago. El patrocinador lo agradece. El hígado, no tanto.",
+          "si": {
+            "etiquetas": {
+              "tiene": "bebida"
+            }
+          }
+        },
+        {
+          "id": "ou-02",
+          "texto": "Poción al cuerpo. Sabe a jarabe de fresa y a esperanza.",
+          "si": {
+            "etiquetas": {
+              "tiene": "pocion"
+            }
+          }
+        },
+        {
+          "id": "ou-03",
+          "texto": "¿Con la vida llena? Bueno. Por si acaso, como los paraguas en agosto.",
+          "si": {
+            "vidaLlena": true
+          }
+        },
+        {
+          "id": "ou-04",
+          "texto": "Merchandising oficial en acción. No sirve para nada, pero queda precioso en cámara.",
+          "si": {
+            "etiquetas": {
+              "tiene": "chatarra"
+            }
+          }
+        },
+        {
+          "id": "ou-05",
+          "texto": "¡A comer, que se enfría! Mamá Clementina aprueba este momento.",
+          "si": {
+            "etiquetas": {
+              "tiene": "comida"
+            }
+          }
+        },
+        {
+          "id": "ou-06",
+          "texto": "Granada lanzada. Producción recuerda que el seguro no cubre «granadas lanzadas».",
+          "si": {
+            "etiquetas": {
+              "tiene": "granada"
+            }
+          }
+        }
+      ]
     }
   ]
 }

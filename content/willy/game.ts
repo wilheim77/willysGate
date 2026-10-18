@@ -7,7 +7,8 @@ import ninja from './assets/ninja.json';
 import itemsData from './data/items.json';
 import meta from './meta.json';
 import { PLAYER, applyCasting, maps, newWillyGame } from './setup';
-import { narrate } from './narrator';
+import { narrate, narrateEvents } from './narrator';
+import { achievements, rewardBoxes } from './meta-view';
 import texts from './texts/ui.json';
 
 /**
@@ -51,6 +52,9 @@ export const game: GameDefinition = {
   },
   titleImage: 'assets/title/title.png',
   narrate,
+  narrateEvents,
+  achievements,
+  rewardBoxes,
   // The service lift needs the engine to know the floors (travel builds them on arrival).
   maps,
   newGame: newWillyGame,

@@ -20,6 +20,38 @@ export interface UiTexts {
   creation?: Record<string, string>;
 }
 
+export interface AchievementView {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  unlocked: boolean;
+  hidden: boolean;
+  hint?: string;
+  /** "Caja de plata", shown under the name. */
+  reward?: string;
+  /** UI art id for its badge (manifest `ui`). */
+  icon?: string;
+}
+
+export interface RewardBoxView {
+  id: string;
+  tier: string;
+  name: string;
+  color: string;
+  description?: string;
+  reason?: string;
+  /** UI art ids: closed, lid frames, open. */
+  art?: { closed: string; lid: string[]; open: string };
+}
+
+export interface RewardBoxResult {
+  tier: string;
+  items: { id: string; label: string; rarity: string; rarityLabel: string; color: string; rule?: string; icon?: string; frame?: string }[];
+  coins: number;
+  coinsLabel?: string;
+}
+
 /** Visual identity of a game: CSS custom properties applied to the HUD, plus the UI font. */
 export interface Theme {
   /** Keys are CSS custom property names without the leading dashes (bg, panel, iron, text, accent...). */
@@ -84,6 +116,8 @@ export interface GameDefinition {
   objectives?: { when?: DialogueWhen; text: string }[];
   /** A narrator's line for an engine event, if any (Willy's Narrador). Cosmetic. */
   narrate?(event: GameEvent, state: GameState): string | null;
+  /** One narrator line for all of a command's events (the most important one), if any. */
+  narrateEvents?(events: GameEvent[], state: GameState): string | null;
   /** A conversation that opens as soon as the protagonist is created. */
   opening?: { dialogue: string; partner?: string };
   /**
@@ -95,6 +129,23 @@ export interface GameDefinition {
   tutorial?: TutorialStep[];
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */
   barks?: BarksData;
+  /** Achievements: a toast when one unlocks and a list from the top bar (Willy). */
+  achievements?: {
+    categories: Record<string, string>;
+    list(state: GameState): AchievementView[];
+    /** The achievement an event announces, if it is an unlock. */
+    unlocked(event: GameEvent): AchievementView | null;
+  };
+  /** Reward boxes waiting to be opened (Willy's loot boxes): a 🎁 counter and the opening moment. */
+  rewardBoxes?: {
+    pending(state: GameState): RewardBoxView[];
+    /** The command that opens one. */
+    open(boxId: string, issuer: string): { type: string; issuer: string; [k: string]: unknown };
+    /** What came out, read from the opening command's events. */
+    result(events: GameEvent[]): RewardBoxResult | null;
+    /** Exact odds, shown on request (no hidden numbers). */
+    odds(tier: string): string[];
+  };
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

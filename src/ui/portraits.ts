@@ -90,3 +90,33 @@ export function portrait(manifest: AssetManifest, spriteId: string, size = 44): 
     .catch(() => undefined);
   return canvas;
 }
+
+/** One piece of UI art (manifest `ui`: icons, badges, box frames), whole-pixel scaled; empty if missing. */
+export function uiIcon(manifest: AssetManifest | null, id: string, size = 32): HTMLCanvasElement {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  canvas.className = 'ui-icon';
+  const entry = (manifest as unknown as { ui?: Record<string, Rect & { url: string }> } | null)?.ui?.[id];
+  if (!entry) {
+    canvas.classList.add('missing');
+    return canvas;
+  }
+  void load(entry.url)
+    .then((img) => {
+      const ctx = canvas.getContext('2d')!;
+      ctx.imageSmoothingEnabled = false;
+      const side = Math.max(entry.w, entry.h);
+      const scale = size >= side ? Math.floor(size / side) : size / side;
+      const w = entry.w * scale;
+      const h = entry.h * scale;
+      ctx.drawImage(img, entry.x, entry.y, entry.w, entry.h, Math.round((size - w) / 2), Math.round((size - h) / 2), w, h);
+    })
+    .catch(() => canvas.classList.add('missing'));
+  return canvas;
+}
+
+/** Whether the art preset has this UI piece. */
+export function hasUiArt(manifest: AssetManifest | null, id: string): boolean {
+  return !!(manifest as unknown as { ui?: Record<string, unknown> } | null)?.ui?.[id];
+}

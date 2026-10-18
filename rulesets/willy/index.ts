@@ -31,7 +31,7 @@ import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
 import { showAfterCommand, showCommands } from './show';
 import { achievementsHook } from './achievements';
-import { equipItem, itemsHook, unequipItem } from './items';
+import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
 import { regenHook } from './regen';
 
@@ -396,6 +396,10 @@ export const willy: Ruleset = {
   triggerTrap: (state, id, trap, rng) => triggerTrap(willy, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
   afterCommand: (state, events, rng) => afterCommand(willy, state, events, rng),
+  itemSlot: itemSlotOf,
+  equippedInSlot: equippedInSlotOf,
+  equippedItems: equippedOnEntity,
+  itemUse: itemUseOf as Ruleset['itemUse'],
 };
 
 setWillyRef(willy);
