@@ -290,6 +290,22 @@ export class CombatHud {
         case 'reactionUsed':
           this.push(`${name(e.entityId)}: ${String(e.detail)}.`);
           break;
+        case 'lootDropped': {
+          const def = this.game.items?.[String(e.item)];
+          const count = Number(e.count) > 1 ? ` ×${e.count}` : '';
+          this.push(`Botín de ${name(e.entityId)}: ${def?.label ?? String(e.item)}${count}.`);
+          break;
+        }
+        case 'itemUsed': {
+          const def = this.game.items?.[String(e.item)];
+          this.push(`${name(e.entityId)} usa ${def?.label ?? String(e.item)}${Number(e.amount) > 0 ? ` (recupera ${e.amount} PG)` : ''}.`);
+          break;
+        }
+        case 'itemEquipped': {
+          const def = this.game.items?.[String(e.item)];
+          this.push(`${name(e.entityId)} equipa ${def?.label ?? String(e.item)}.`);
+          break;
+        }
         case 'combatStarted':
           this.lines = [];
           break;
