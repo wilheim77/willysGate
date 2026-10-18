@@ -18,7 +18,7 @@ import {
   stat,
   tagValue,
 } from '../../engine';
-import { listActions, performAction, previewAction } from './actions';
+import { OIL_BLAST, listActions, performAction, previewAction } from './actions';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onSurface, triggerTrap } from './environment';
 import { setDnd5eRef } from './ref';
 import { profBonus } from './character';
@@ -296,6 +296,9 @@ export const dnd5e: Ruleset = {
   onSurface: (state, id, surface, trigger, rng) => onSurface(dnd5e, state, id, surface, trigger, rng),
   onFall: (state, id, levels, rng) => onFall(dnd5e, state, id, levels, rng),
   noticeTrap,
+  // For the AI: standing next to an oil barrel is asking for it.
+  dangerAt: (state, _id, p) =>
+    Object.values(state.entities).filter((e) => e.tags.includes('explosive_oil') && (e.resources.hp?.current ?? 0) > 0 && Math.max(Math.abs(e.position.x - p.x), Math.abs(e.position.y - p.y)) <= 1).length * OIL_BLAST * 0.3,
   triggerTrap: (state, id, trap, rng) => triggerTrap(dnd5e, state, id, trap, rng),
   describeEntity: (state, id) => describeEntity(state, id, { resources, conditions }),
 };
