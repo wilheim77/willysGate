@@ -132,8 +132,13 @@ export interface RunResult {
 /** Drives Willy from wherever `state` starts (the Camerino, fresh) to the last floor's own
  *  exit (or until nothing more can be done): resolve every encounter on the current map,
  *  then take its one exit. No chest-opening, achievements or clock yet - see
- *  fullRun.test.ts's `it.todo`s for those. */
-export function runFullGame(engine: Engine, state: GameState, leaderId = 'willy', maxSteps = 4000): RunResult {
+ *  fullRun.test.ts's `it.todo`s for those.
+ *
+ *  `maxFloorsCleared` stops the run once that many "planta-*" floors have been left (right
+ *  after taking that floor's exit, before touching the next one) - a smoke run's step budget
+ *  alone isn't a reliable stand-in for "the first two floors": a build that clears floors
+ *  fast and survives just keeps going to MAX_STEPS or death, not after two floors. */
+export function runFullGame(engine: Engine, state: GameState, leaderId = 'willy', maxSteps = 4000, maxFloorsCleared = Infinity): RunResult {
   let s = state;
   const visited: string[] = [s.map.id];
   const events: GameEvent[] = [];
@@ -141,6 +146,7 @@ export function runFullGame(engine: Engine, state: GameState, leaderId = 'willy'
   let steps = 0;
   for (; steps < maxSteps; steps++) {
     if (willy.isStanding(s.entities[leaderId]!) === false) break; // Willy himself is out: the run ends here, not a bug to assert against (see fullRun.test.ts).
+    if (floorsCleared >= maxFloorsCleared) break;
     const fought = resolveNextEncounter(engine, s, leaderId);
     if (fought) {
       s = fought.state;

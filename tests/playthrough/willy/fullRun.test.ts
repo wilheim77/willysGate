@@ -47,13 +47,15 @@ function startRun(seed: number, classId: string): ReturnType<typeof applyCasting
 const DEEP = process.env.QA_DEEP === '1';
 const CLASSES_TO_RUN = DEEP ? CLASS_IDS : [CLASS_IDS[0]!];
 const MAX_STEPS = DEEP ? 4000 : 1500;
+// "First two floors" has to be enforced by floor count, not just a step budget: a build that
+// clears floors fast and survives otherwise just keeps going to MAX_STEPS or death (reported
+// by the Willy agent once a companion buff let the smoke seed survive well past floor 2).
+const MAX_FLOORS_CLEARED = DEEP ? Infinity : 2;
 // Combat got noticeably heavier with the expansion's bigger floors/rosters (and the AI's own
 // environment awareness) - individual fights now routinely take 1-4s of AI "thinking" alone,
-// so a two-floor smoke run and a ten-floor deep run both need generous budgets. The smoke
-// budget in particular needs real headroom: run inside the full `npm test` suite (dozens of
-// files competing for CPU across workers) it took ~90s vs. ~35s standalone. The final floor's
-// boss (jefe-presentador, kept above 0 HP by Share) can make a full 10-floor run take several
-// minutes for some classes - "jugador-de-basket" took ~410s against a 180s budget.
+// so a two-floor smoke run and a ten-floor deep run both need generous budgets. The final
+// floor's boss (jefe-presentador, kept above 0 HP by Share) can make a full 10-floor run take
+// several minutes for some classes - "jugador-de-basket" took ~300-410s against a 180s budget.
 const TEST_TIMEOUT = DEEP ? 600_000 : 120_000;
 
 const MAX_SKILL_LEVEL = SKILL_THRESHOLDS.length;
@@ -65,7 +67,7 @@ function runFor(classId: string): ReturnType<typeof runFullGame> {
   let result = runCache.get(classId);
   if (!result) {
     const state = startRun(1, classId);
-    result = runFullGame(engine, state, 'willy', MAX_STEPS);
+    result = runFullGame(engine, state, 'willy', MAX_STEPS, MAX_FLOORS_CLEARED);
     runCache.set(classId, result);
   }
   return result;
