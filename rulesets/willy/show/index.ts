@@ -44,7 +44,7 @@ const LATE_EVENTS = new Set(['achievementUnlocked', 'npcHelped']);
 
 const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
-  'meterChanged', 'shareCero', 'enAntena', 'turnEnded',
+  'meterChanged', 'shareCero', 'enAntena', 'turnEnded', 'audienceVote',
   'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
@@ -56,7 +56,7 @@ const SHOW_EVENTS = new Set([
 export const showCommands: Record<string, CommandHandler> = { aceptarContrato, rechazarContrato };
 
 export { configureShow, showConfig, currentPlanta, type ShowConfig } from './config';
-export { audienceOf, floorMinimum, type AudienceState } from './audience';
+export { audienceOf, floorMinimum, freshAudience, type AudienceState } from './audience';
 export { sponsorsOf, sponsorData, dealData, MAX_ACTIVE_DEALS, type SponsorsState } from './sponsors';
 export { shareOf, type ShareState } from './share';
 export { eventViews, matchPattern, type Pattern, type View } from './patterns';
