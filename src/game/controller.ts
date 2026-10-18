@@ -3,6 +3,7 @@ import {
   type ActionTarget,
   type GameEvent,
   type GameState,
+  type LeveledUpEvent,
   type MoveCommand,
   SYSTEM_ISSUER,
   type Vec2,
@@ -68,6 +69,7 @@ export class GameController {
       if (change.kind === 'reset') {
         this.trail = [];
         this.selected = null;
+        this.pendingLevels = [];
       } else {
         this.track(change.events);
         this.hud.logEvents(change.events, state);
@@ -281,6 +283,11 @@ export class GameController {
 
   private track(events: GameEvent[]): void {
     for (const e of events) {
+      if (e.type === 'leveledUp') {
+        const up = e as LeveledUpEvent;
+        // Narrated once per level the leader gains (a big haul can skip one: 3 -> 5).
+        if (up.entityIds.includes(this.game.leaderId)) for (let l = up.from + 1; l <= up.level; l++) this.pendingLevels.push(l);
+      }
       if (e.type === 'entityMoved' && (e as never as { entityId: string }).entityId === this.game.leaderId) {
         const ev = e as never as { from: Vec2; path: Vec2[] };
         this.trail.push(ev.from, ...ev.path.slice(0, -1));
@@ -391,22 +398,18 @@ export class GameController {
   /** Shown when the party levels up (the client puts up the narration and companions' lines). */
   onLevelUp: (level: number) => void = () => undefined;
 
-  /** The story says the party has grown: rebuild everyone below the level it has earned. */
+  /** Levels the engine has raised the leader to and the client hasn't narrated yet. */
+  private pendingLevels: number[] = [];
+
+  /**
+   * The engine levels the party when its shared points cross a threshold (leveledUp); the
+   * client only waits for a quiet moment (no conversation, animations done) to say so.
+   */
   private checkLevels(): boolean {
-    const levels = this.game.levels;
-    const leader = this.state.entities[this.game.leaderId];
-    if (!levels || !leader || dialogueOf(this.state)) return false;
-    const ruleset = this.store.engine.ruleset;
-    const earned = Math.max(0, ...levels.rules.filter((r) => evaluateCondition(ruleset, this.state, leader.id, r.when)).map((r) => r.level));
-    if (!earned) return false;
-    const behind = Object.values(this.state.entities).filter(
-      (e) => e.controllerId === this.game.playerId && e.tags.some((t) => t.startsWith('class:')) && (e.stats.level ?? 1) < earned,
-    );
-    if (!behind.length) return false;
-    const leaderUp = (leader.stats.level ?? 1) < earned;
-    const r = this.store.dispatch({ type: 'script', issuer: SYSTEM_ISSUER, effects: behind.map((e) => ({ type: 'replaceEntity', entity: levels.levelUp(e, earned) })) } as never);
-    if (r.ok && leaderUp) this.onLevelUp(earned);
-    return r.ok;
+    if (!this.pendingLevels.length || dialogueOf(this.state)) return false;
+    const level = this.pendingLevels.shift()!;
+    this.onLevelUp(level);
+    return true;
   }
 
   /** Story beats the game opens itself (the epilogue once the last decision is made). */
