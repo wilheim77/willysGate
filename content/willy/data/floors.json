@@ -277,7 +277,7 @@
           "nombre": "Pulpo de bajura",
           "genero": "m",
           "tipo": "normal",
-          "coste": 2,
+          "coste": 3,
           "vida": 10,
           "def": 12,
           "ataque": 3,
@@ -298,7 +298,7 @@
           "nombre": "Percebeiro ahogado",
           "genero": "m",
           "tipo": "normal",
-          "coste": 2,
+          "coste": 3,
           "vida": 9,
           "def": 11,
           "ataque": 3,
@@ -356,9 +356,9 @@
             "objeto-vivo"
           ],
           "habilidades": [
-            "autodestruccion"
+            "autodestruccion-lata"
           ],
-          "estalla": "autodestruccion"
+          "estalla": "autodestruccion-lata"
         }
       },
       "jefe": {
@@ -2037,32 +2037,33 @@
     "accionesEnemigo": 1,
     "jefes": {
       "2": {
-        "multVida": 0.5,
-        "dano": "1d10"
+        "multVida": 0.3,
+        "dano": "1d6"
       },
       "4": {
-        "multVida": 0.45
+        "multVida": 0.25,
+        "dano": "1d8"
       },
       "6": {
-        "multVida": 0.5,
-        "dano": "2d6"
+        "multVida": 0.32,
+        "dano": "1d10"
       },
       "8": {
-        "multVida": 0.45,
-        "dano": "2d6"
+        "multVida": 0.33,
+        "dano": "1d10"
       },
       "10": {
-        "multVida": 0.32,
-        "dano": "2d6+1"
+        "multVida": 0.27,
+        "dano": "2d6"
       }
     },
     "presupuesto": {
-      "1": 0.9,
-      "2": 0.9,
+      "1": 0.6,
+      "2": 0.45,
       "3": 1,
-      "4": 1,
+      "4": 0.7,
       "5": 0.75,
-      "6": 0.75,
+      "6": 0.65,
       "7": 0.8,
       "8": 0.8,
       "9": 0.55,
@@ -2074,10 +2075,10 @@
       "$comment": "La primera sala de combate del camino crítico de la Planta 1 es una pelea de aprendizaje: como mucho este presupuesto (dos ratas)."
     },
     "vidaEnemigos": {
-      "1": 1,
-      "2": 1.25,
+      "1": 0.8,
+      "2": 0.8,
       "3": 1,
-      "4": 1.25,
+      "4": 1.0,
       "5": 1,
       "6": 1.25,
       "7": 1,
@@ -2086,9 +2087,9 @@
       "10": 1.25
     },
     "guardian": {
-      "multVida": 3,
-      "bonoAtaque": 2,
-      "bonoDef": 2,
+      "multVida": 2.0,
+      "bonoAtaque": 1,
+      "bonoDef": 0,
       "xp": 3
     },
     "elites": {

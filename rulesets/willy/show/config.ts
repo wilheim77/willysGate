@@ -97,6 +97,14 @@ export interface ShareConfig {
   subePorPerdida: number;
   /** Share he wins each time he hits Willy. */
   subePorGolpe: number;
+  /**
+   * The audience votes at the start of each of his turns (floors.json → Gran final): Willy's
+   * audience over the planta's minimum, times this, comes off his Share (at most ×4 the minimum).
+   * A season with a big audience leaves him defenceless.
+   */
+  votoPorRonda: number;
+  /** Share each blow drains while he is «en antena» (at 1 health); the blow that empties it beats him. */
+  drenajeEnAntena: number;
 }
 
 export interface ShowConfig {

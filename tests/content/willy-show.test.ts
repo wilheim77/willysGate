@@ -125,7 +125,7 @@ describe('Willy show: the presenter\'s Share', () => {
 
   it('while he has Share he stays at 1 health; at 0 he can be beaten', () => {
     let s = game([W('willy', 'butanero', 0, 0), presenter()], ['........']);
-    s = withSystem(s, 'share', { valor: 10, max: 100 });
+    s = withSystem(s, 'share', { valor: 30, max: 100 });
     const r = new Resolver(willy, s, new RngCursor(s.rng));
     dealDamage(r, 'jefe-presentador', 999, 'golpe', 'willy');
     expect(r.state.entities['jefe-presentador']!.resources.vida!.current).toBe(1);
