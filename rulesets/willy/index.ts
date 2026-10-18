@@ -30,6 +30,10 @@ import { Resolver, type WillyEvent, automatonSignal, canAct, chanceD20, dealDama
 import { antennaShots } from './summons';
 import { describeEntity } from './sheet';
 import { showAfterCommand, showCommands } from './show';
+import { achievementsHook } from './achievements';
+import { equipItem, itemsHook, unequipItem } from './items';
+import { dropsHook, openBox } from './loot';
+import { regenHook } from './regen';
 
 /**
  * «El Reglamento del Concurso»: Willy's light d20 ruleset (docs/willy/RULESET.md).
@@ -43,6 +47,21 @@ const stats: Record<string, StatDef> = {
   armadura: { label: 'Armadura' },
   ataque: { label: 'Ataque' },
   movimiento: { label: 'Movimiento' },
+  // Worn items' bonuses (items.json → pasivo); most are read by the systems they name.
+  bonoGanso: { label: 'Bonus de «Hacer el ganso»' },
+  defEnAgua: { label: 'DEF en agua' },
+  defDistancia: { label: 'DEF a distancia' },
+  verVida: { label: 'Ver la vida de los enemigos' },
+  alcanceSenal: { label: 'Alcance de la señal' },
+  alcanceSalto: { label: 'Alcance de salto' },
+  bonoFichas: { label: 'Bonus de fichas' },
+  reduccionTrampas: { label: 'Daño de trampas reducido' },
+  deteccion: { label: 'Detección' },
+  objetosPorCofre: { label: 'Objetos por cofre' },
+  mimicosPct: { label: 'Mímicos' },
+  radioLuz: { label: 'Radio de luz' },
+  huecos: { label: 'Huecos de mochila' },
+  multAudiencia: { label: 'Multiplicador de audiencia' },
 };
 
 const resources: Record<string, ResourceDef> = {
@@ -285,14 +304,38 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
  * walking, the floor clock. Each registers here and they run in order, each seeing the state
  * left by the one before; their effects and events are all appended to the command's.
  */
-export const afterCommandHooks: ((ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor) => ActionOutcome)[] = [];
-afterCommandHooks.push(showAfterCommand);
+type AfterCommandHook = (ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor) => ActionOutcome;
 
+/** Registered hooks; `order` puts them in sequence (lower first). Plain pushes count as order 50. */
+export const afterCommandHooks: AfterCommandHook[] = [];
+const hookOrder = new Map<AfterCommandHook, number>();
+
+/**
+ * Register a look at every command (Ruleset.afterCommand). Order used so far: item drops 10,
+ * worn items 20, the show (audience, sponsors) 50, health while exploring 60, achievements 100
+ * (last, so they see everything the others announced).
+ */
+export function registerAfterCommand(hook: AfterCommandHook, order = 50): void {
+  hookOrder.set(hook, order);
+  afterCommandHooks.push(hook);
+}
+
+registerAfterCommand(dropsHook, 10);
+registerAfterCommand(itemsHook, 20);
+registerAfterCommand(showAfterCommand, 50);
+registerAfterCommand(regenHook, 60);
+registerAfterCommand(achievementsHook, 100);
+
+/**
+ * Runs the hooks in order. Each sees the state left by the ones before and the command's events
+ * plus theirs; all their effects and events are appended to the command's.
+ */
 function afterCommand(ruleset: Ruleset, state: GameState, events: GameEvent[], rng: RngCursor): ActionOutcome {
   const out: ActionOutcome = { effects: [], events: [] };
   let current = state;
-  for (const hook of afterCommandHooks) {
-    const o = hook(ruleset, current, events, rng);
+  const hooks = [...afterCommandHooks].sort((a, b) => (hookOrder.get(a) ?? 50) - (hookOrder.get(b) ?? 50));
+  for (const hook of hooks) {
+    const o = hook(ruleset, current, [...events, ...out.events], rng);
     if (!o.effects.length && !o.events.length) continue;
     current = applyEffects(ruleset, current, o.effects).state;
     out.effects.push(...o.effects);
@@ -321,7 +364,7 @@ export const willy: Ruleset = {
     habilidadAlMenos: (s, id, p) => skillLevel(s.entities[id]!, String(p.habilidad)) >= Number(p.min),
     rasgo: (s, id, p) => hasTrait(s.entities[id]!, String(p.is)),
   },
-  commands: { ...showCommands },
+  commands: { ...showCommands, openBox: openBox as never, equipItem: equipItem as never, unequipItem: unequipItem as never },
   rollInitiative: (state, id, rng) => {
     const e = state.entities[id]!;
     const agi = hasTag(e, 'criatura') ? Math.floor(stat(e, 'ataque', 3) / 2) : attr(e, 'agi');
@@ -363,6 +406,10 @@ export { WILLY_CREATION, buildWilly, defaultCreation } from './creation';
 export { COMPANIONS, companionOfClass, companionStats, createCompanion, syncCompanions } from './companions';
 export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
+export * from './meta';
+export { BAG, itemActionId, itemActions, slotOf, startingItemEffects } from './items';
+export { grantItem, grantLootBox, rollBox } from './loot';
+export { explorationHealing } from './regen';
 export { HANDLERS, areaTiles } from './actions';
 export type { AttackRolledEvent, DamageDealtEvent, WillyEvent } from './resolve';
 export * as show from './show';

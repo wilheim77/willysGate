@@ -1,9 +1,10 @@
-import { type CreationChoices, type Engine, type Entity, type GameState, type JsonValue, type MapBuilder, type MapSetup, type Vec2, withLighting, withZones } from '../../engine';
-import { buildWilly, createCompanion, createWilly } from '../../rulesets/willy';
+import { type CreationChoices, type Engine, applyEffects, type Entity, type GameState, type JsonValue, type MapBuilder, type MapSetup, type Vec2, withLighting, withZones } from '../../engine';
+import { CLASSES, buildWilly, cloneMeta, createCompanion, createWilly, metaOf, setMeta, startingItemEffects, willy } from '../../rulesets/willy';
 import { FLOOR_COUNT, generateFloor } from './gen/floor';
 import type { RivalRecord } from './gen/rivals';
 import { MAPS } from './maps';
 import './show';
+import './meta-content';
 
 /**
  * The game's start and the casting, without any client imports (so tests and a future server
@@ -79,7 +80,20 @@ export function applyCasting(state: GameState, choices: CreationChoices): GameSt
   const spot = freeNeighbour(state, w.position, entities);
   const mate = spot ? createCompanion(classId, built, spot) : undefined;
   if (mate) entities[mate.id] = mate;
-  return { ...state, entities };
+  return withStartingItems({ ...state, entities }, built.id, classId);
+}
+
+/**
+ * The class's starting items (classes.json → objetosIniciales): tools in hand and equipment worn,
+ * consumables in the party's bag. A new casting takes back the previous class's kit first.
+ */
+function withStartingItems(state: GameState, willyId: string, classId: string): GameState {
+  const ids = CLASSES[classId]?.objetosIniciales ?? [];
+  const meta = cloneMeta(metaOf(state));
+  const cleared: GameState = { ...state, systems: { ...state.systems, inventory: { ...((state.systems.inventory as Record<string, JsonValue> | undefined) ?? {}), party: {} } as unknown as JsonValue } };
+  const { effects, equipo } = startingItemEffects(cleared, cleared.entities[willyId]!, ids);
+  meta.equipo = { ...meta.equipo, [willyId]: equipo };
+  return applyEffects(willy, cleared, [...effects, setMeta(meta)]).state;
 }
 
 function freeNeighbour(state: GameState, at: Vec2, entities: Record<string, Entity>): Vec2 | undefined {
