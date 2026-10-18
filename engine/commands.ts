@@ -1,5 +1,5 @@
-import { act, applyOutcome, checkCombatEnd, endTurn, inCombat, isAdjacent, isHostile, startCombat } from './combat';
-import { type BaseCommand, type CommandHandler, type GameEvent, fail, requireControlled } from './command-types';
+import { type EndTurnCommand, act, applyOutcome, checkCombatEnd, endTurn, inCombat, isAdjacent, isHostile, startCombat } from './combat';
+import { type BaseCommand, type CommandHandler, type CommandResult, type GameEvent, SYSTEM_ISSUER, fail, requireControlled } from './command-types';
 import { type Vec2, inBounds, posKey } from './grid';
 import { type PathResult, findPath } from './pathfinding';
 import { surfaceAt } from './surfaces';
@@ -254,5 +254,23 @@ export const ENGINE_COMMANDS: Readonly<Record<string, CommandHandler>> = { move,
 export function applyCommand(ruleset: Ruleset, state: GameState, command: BaseCommand, content?: EngineContent): ReturnType<CommandHandler> {
   const handler = ENGINE_COMMANDS[command.type] ?? ruleset.commands[command.type];
   if (!handler) return fail('unknown_command', `Unknown command type "${command.type}"`);
-  return handler(state, command, { ruleset, ...(content ? { content } : {}) });
+  const result = handler(state, command, { ruleset, ...(content ? { content } : {}) });
+  if (!result.ok || command.type === 'endTurn') return result;
+  return passTurnIfHelpless(ruleset, result, content);
+}
+
+/**
+ * Someone who goes down during their own turn (a trap under their feet, an opportunity
+ * attack, their own fireball) can't end it themselves: the turn passes on its own, or the
+ * fight would wait forever for a command that can't come.
+ */
+function passTurnIfHelpless(ruleset: Ruleset, result: CommandResult, content?: EngineContent): CommandResult {
+  if (!result.ok) return result;
+  const { turn } = result.state;
+  const active = turn.mode === 'combat' && turn.activeEntityId ? result.state.entities[turn.activeEntityId] : undefined;
+  if (!turn.activeEntityId || turn.mode !== 'combat') return result;
+  if (active && ruleset.canAct(active)) return result;
+  const passed = endTurn(result.state, { type: 'endTurn', issuer: SYSTEM_ISSUER, entityId: turn.activeEntityId } as EndTurnCommand, { ruleset, ...(content ? { content } : {}) });
+  if (!passed.ok) return result;
+  return { ok: true, state: passed.state, events: [...result.events, ...passed.events] };
 }

@@ -86,7 +86,19 @@ function freeTileNear(map: GridMap, from: Vec2, taken: Set<string>): Vec2 {
 }
 
 /** One act map, built exactly like content/intereses/game.ts's real newGame(). */
-export function buildActWorld(engine: Engine, seed: number, mapId: string = START_MAP): GameState {
+export interface ProtagonistSpec {
+  classId: string;
+  raceId: string;
+  abilities: { str: number; dex: number; con: number; int: number; wis: number; cha: number };
+}
+
+/** The default protagonist (the shipped intro's human wizard). Pass a different
+ *  ProtagonistSpec to buildActWorld to drive the same act with another build, e.g. an elf
+ *  rogue - useful for exercising `rule: race`/`rule: class` dialogue branches. */
+export const DEFAULT_PROTAGONIST: ProtagonistSpec = { classId: 'wizard', raceId: 'human', abilities: { str: 8, dex: 14, con: 13, int: 15, wis: 12, cha: 10 } };
+export const ELF_ROGUE_PROTAGONIST: ProtagonistSpec = { classId: 'rogue', raceId: 'elf', abilities: { str: 8, dex: 15, con: 12, int: 13, wis: 10, cha: 14 } };
+
+export function buildActWorld(engine: Engine, seed: number, mapId: string = START_MAP, protagonist: ProtagonistSpec = DEFAULT_PROTAGONIST): GameState {
   const dialogues = engine.content.dialogues;
   const setup = buildMap(mapId, dialogues);
   const at = (name: string) => setup.spawns[name] ?? setup.spawns[Object.keys(setup.spawns).find((k) => k.startsWith('entry-')) ?? ''] ?? { x: 1, y: 1 };
@@ -95,7 +107,7 @@ export function buildActWorld(engine: Engine, seed: number, mapId: string = STAR
   taken.add(posKey(heroPos));
   const doroteaPos = setup.spawns.dorotea ?? freeTileNear(setup.map, at('dorotea'), taken);
   const party: Entity[] = [
-    createCharacter({ id: 'hero', name: 'Cobrador', controllerId: PLAYER, factionId: 'party', position: heroPos, spriteId: 'cobrador', classId: 'wizard', raceId: 'human', level: 3, abilities: { str: 8, dex: 14, con: 13, int: 15, wis: 12, cha: 10 } }),
+    createCharacter({ id: 'hero', name: 'Cobrador', controllerId: PLAYER, factionId: 'party', position: heroPos, spriteId: 'cobrador', level: 3, ...protagonist }),
     companion('dorotea', 'Dorotea', doroteaPos, PLAYER, 'party', dialogues.dorotea ? ['dialogue:dorotea'] : []),
   ];
   let state = engine.newGame({ seed, map: setup.map, entities: [...party, ...setup.entities] });

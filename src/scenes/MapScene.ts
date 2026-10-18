@@ -62,6 +62,12 @@ export interface MapSceneTexts {
 }
 
 const STEP_MS = 160;
+/** Out of combat walking is brisker: exploring shouldn't feel like wading. */
+const EXPLORE_STEP_MS = 95;
+/** Darkens tiles nobody can walk on (walls, roofs, rubble) so they stand apart from floors. */
+const BLOCKED_TINT = 0x8a8a8a;
+/** Longest any one event may animate before playback moves on regardless. */
+const EVENT_WATCHDOG_MS = 10_000;
 const TAP_SLOP = 8;
 /** Zoom limits and defaults are expressed as on-screen pixels per tile, whatever the art's tile size. */
 const MIN_TILE_PX = 24;
@@ -108,6 +114,8 @@ export class MapScene extends Phaser.Scene {
   private breathing = new Map<string, Phaser.Tweens.Tween>();
   private pathPreview!: Phaser.GameObjects.Graphics;
   private animating = 0;
+  /** Settles the walk in flight per entity (see animateMove). */
+  private moveFinish = new Map<string, () => void>();
   private queue: GameEvent[] = [];
   private playing = false;
   /** A spellCast immediately followed by its own attackRolled should skip the plain 'attack' animation. */
@@ -230,12 +238,30 @@ export class MapScene extends Phaser.Scene {
           .setDepth(depth);
         this.worldObjects.push(face);
       }
-      if (h > 0 && art.rim !== undefined) {
+      // One walkable level above walkable ground to the south: that's a stair, not a ledge.
+      // Draw treads on its face and no stone lip, so it reads as "you can go up here".
+      const south = tileAt(map, { x: pos.x, y: pos.y + 1 });
+      const stair = h > 0 && tile.walkable && south?.walkable === true && south.terrain !== 'void' && h - south.height === 1;
+      if (stair) {
+        const treads = this.add.graphics().setDepth(depth + 0.5);
+        const faceTop = c.y + T / 2;
+        for (let i = 0; i < 3; i++) {
+          const y = faceTop + ((i + 0.5) * LH) / 3;
+          treads.fillStyle(0xd8c8a8, 0.35).fillRect(c.x - T / 2, y - 1, T, 1);
+          treads.fillStyle(0x000000, 0.35).fillRect(c.x - T / 2, y, T, 1);
+        }
+        this.worldObjects.push(treads);
+      }
+      if (h > 0 && art.rim !== undefined && !stair) {
         // A single lip at the platform's south edge (the rest of the frame is transparent).
         this.worldObjects.push(this.add.image(c.x, c.y + T, key, art.rim).setDepth(depth + 0.5));
       }
       const frame = art.frames[variantHash(pos.x, pos.y) % art.frames.length]!;
-      this.worldObjects.push(this.add.image(c.x, c.y, key, frame).setDepth(depth + 1));
+      const surface = this.add.image(c.x, c.y, key, frame).setDepth(depth + 1);
+      // Where you can't walk must read as such at a glance (playtest: "is that a wall or the
+      // floor?"): blocked tiles are darker, with a hard edge facing the walkable ground.
+      if (!tile.walkable) surface.setTint(BLOCKED_TINT);
+      this.worldObjects.push(surface);
       this.drawFringes(map, pos, tile, c, depth);
 
       // Readability of elevation: dark rims where the ground drops, soft shadows where it rises.
@@ -257,6 +283,14 @@ export class MapScene extends Phaser.Scene {
       if (west !== null && west > h) {
         const s = Math.min(T, (west - h) * LH);
         g.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.4, 0, 0.4, 0).fillRect(left, top, s, T);
+      }
+      if (!tile.walkable) {
+        const open = (x: number, y: number) => tileAt(map, { x, y })?.walkable === true;
+        g.fillStyle(0x000000, 0.8);
+        if (open(pos.x, pos.y + 1)) g.fillRect(left, top + T - 2, T, 2);
+        if (open(pos.x, pos.y - 1)) g.fillRect(left, top, T, 2);
+        if (open(pos.x - 1, pos.y)) g.fillRect(left, top, 2, T);
+        if (open(pos.x + 1, pos.y)) g.fillRect(left + T - 2, top, 2, T);
       }
       this.worldObjects.push(g);
       this.tiles.push({ pos, bounds: new Phaser.Geom.Rectangle(left, top, T, T + h * LH) });
@@ -337,13 +371,17 @@ export class MapScene extends Phaser.Scene {
     return this.grid.tileCentre(p.x, p.y, tile?.height ?? 0);
   }
 
-  private animateMove(event: EntityMovedEvent, state: GameState): Promise<void> {
+  private animateMove(event: EntityMovedEvent, state: GameState, blocking = true): Promise<void> {
     const sprite = this.sprites.get(event.entityId);
     if (!sprite) return Promise.resolve();
-    this.animating++;
+    // A walk still in flight for this sprite is cut short (and settled) before the next starts.
+    this.moveFinish.get(event.entityId)?.();
+    this.tweens.killTweensOf(sprite);
+    if (blocking) this.animating++;
     this.pathPreview.clear();
     this.stopBreathing(event.entityId);
-    this.cameras.main.startFollow(sprite, true, 0.12, 0.12);
+    if (blocking) this.cameras.main.startFollow(sprite, true, 0.12, 0.12);
+    const stepMs = state.turn.mode === 'combat' ? STEP_MS : EXPLORE_STEP_MS;
 
     let prev = event.from;
     const tweens = event.path.map((step) => {
@@ -355,7 +393,7 @@ export class MapScene extends Phaser.Scene {
       return {
         x: c.x,
         y: c.y,
-        duration: STEP_MS,
+        duration: stepMs,
         onStart: () => {
           // While crossing two tiles, draw in front of both.
           sprite.setDepth(Math.max(this.grid.depth(from.y, fromTile.height, 5), this.grid.depth(step.y, tile.height, 5)));
@@ -365,15 +403,21 @@ export class MapScene extends Phaser.Scene {
       };
     });
     return new Promise((resolve) => {
-      this.tweens.chain({
-        targets: sprite,
-        tweens,
-        onComplete: () => {
-          this.animating--;
-          this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
-          resolve();
-        },
-      });
+      // Settles exactly once: when the walk ends, when another walk replaces it, or by a
+      // watchdog if the tween dies with its sprite (a rebuild mid-walk). Otherwise `busy`
+      // would stay true and the game would stop taking input and AI turns for good.
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        if (blocking) this.animating--;
+        if (this.moveFinish.get(event.entityId) === finish) this.moveFinish.delete(event.entityId);
+        if (sprite.active) this.idle(event.entityId, this.facing.get(event.entityId) ?? 's');
+        resolve();
+      };
+      this.moveFinish.set(event.entityId, finish);
+      this.time.delayedCall(event.path.length * stepMs + 1000, finish);
+      this.tweens.chain({ targets: sprite, tweens, onComplete: finish });
     });
   }
 
@@ -392,7 +436,10 @@ export class MapScene extends Phaser.Scene {
     while (this.queue.length > 0) {
       const event = this.queue.shift()!;
       try {
-        await this.play(event);
+        // No single event may hold the game: an animation whose tween died (its sprite was
+        // rebuilt mid-way) would otherwise leave input and AI waiting forever.
+        const stuck = new Promise<'stuck'>((r) => setTimeout(() => r('stuck'), EVENT_WATCHDOG_MS));
+        if ((await Promise.race([this.play(event), stuck])) === 'stuck') console.warn('event playback timed out', event.type);
       } catch (err) {
         console.error('event playback failed', event, err);
       }
@@ -417,8 +464,15 @@ export class MapScene extends Phaser.Scene {
     const castEvent = this.manifest.castEvent ?? DEFAULT_CAST_EVENT;
     if (event.type === castEvent.type) return this.playCastEvent(e, castEvent, state, T);
     switch (event.type) {
-      case 'entityMoved':
-        return this.animateMove(event as EntityMovedEvent, state);
+      case 'entityMoved': {
+        const ev = event as EntityMovedEvent;
+        // Exploring: companions catch up in the background; only the leader's walk holds input.
+        if (state.turn.mode !== 'combat' && ev.entityId !== this.hooks.controlledEntityId()) {
+          void this.animateMove(ev, state, false);
+          return;
+        }
+        return this.animateMove(ev, state);
+      }
       case 'entityTeleported': {
         const ev = event as EntityTeleportedEvent;
         const s = sprite(ev.entityId);
@@ -499,9 +553,13 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       case 'mapChanged': {
-        // A new place: rebuild everything and look at the party.
+        // A new place: rebuild everything and put the camera on the leader (not on a sprite
+        // of the map we just left, which the camera might still be following).
+        this.cameras.main.stopFollow();
         this.buildWorld(state);
         this.focusOn(this.hooks.controlledEntityId());
+        const lead = this.sprites.get(this.hooks.controlledEntityId());
+        if (lead) this.cameras.main.startFollow(lead, true, 0.12, 0.12);
         return;
       }
       case 'controllerChanged':
@@ -574,9 +632,18 @@ export class MapScene extends Phaser.Scene {
       case 'combatStarted':
         // Bystanders pulled into the fight change rings.
         this.refreshRings(state);
+        // Show who you're up against before the first turn takes the camera elsewhere.
+        const foes = this.markFoes(state);
+        if (foes.length) {
+          this.cameras.main.stopFollow();
+          const cx = foes.reduce((a, f) => a + f.x, 0) / foes.length;
+          const cy = foes.reduce((a, f) => a + f.y, 0) / foes.length;
+          this.cameras.main.pan(cx, cy, 350, 'Sine.easeInOut');
+        }
         await this.juice.banner(this.texts.combatStart);
         return;
       case 'combatEnded': {
+        this.refreshRings(state);
         const won = e.winner && Object.values(state.entities).some((x) => x.factionId === e.winner && x.controllerId.startsWith('player'));
         await this.juice.banner(won ? this.texts.victory : this.texts.defeat, won ? '#e8d6b0' : '#ff7a6a');
         return;
@@ -763,11 +830,35 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** Which foot ring an entity wears, seen from the side of the character the player controls. */
+  /** Fight starts: every foe flashes red with a "!" over the head, so nobody wonders who's who. */
+  private markFoes(state: GameState): Vec2[] {
+    const me = state.entities[this.hooks.controlledEntityId()];
+    const at: Vec2[] = [];
+    if (!me) return at;
+    for (const id of state.turn.order) {
+      const foe = state.entities[id];
+      const s = this.sprites.get(id);
+      if (!foe || !s || !isHostile(me, foe)) continue;
+      at.push({ x: s.x, y: s.y });
+      s.setTint(0xff5040);
+      this.time.delayedCall(1400, () => s.active && s.clearTint());
+      const mark = this.add
+        .text(s.x, s.y - this.grid.tile * 1.1, '!', { fontFamily: 'VT323, monospace', fontSize: `${Math.round(this.grid.tile * 0.7)}px`, color: '#ff5a40', stroke: '#000', strokeThickness: Math.max(2, Math.round(this.grid.tile / 8)) })
+        .setOrigin(0.5, 1)
+        .setResolution(4)
+        .setDepth(2_000_000);
+      this.tweens.add({ targets: mark, y: mark.y - 10, alpha: 0, delay: 1400, duration: 500, onComplete: () => mark.destroy() });
+    }
+    return at;
+  }
+
   private factionRing(entity: Entity, state: GameState): string | null {
     const me = state.entities[this.hooks.controlledEntityId()];
     if (!me || entity.tags.includes('object')) return null;
     if (entity.controllerId === me.controllerId) return 'marker_party';
     if (entity.tags.includes('noncombatant')) return 'marker_neutral';
+    // Mid-fight, whoever isn't in it is scenery (the guards watching don't look like foes).
+    if (state.turn.mode === 'combat' && !state.turn.order.includes(entity.id)) return 'marker_neutral';
     return isHostile(me, entity) ? 'marker_enemy' : 'marker_ally';
   }
 
