@@ -40,6 +40,8 @@ export function configureTutorial(data: TutorialData): void {
 export const tutorialFlag = (id: string) => `tutorial:${id}`;
 /** Steps fired by the previous command, for `tutorialDone` triggers. */
 const LAST_FLAG = 'tutorial:ultimo';
+/** What makes a card wait for the next command. */
+const BUSY_EVENTS = new Set(['roomCollapsing', 'clockExpired', 'willyFueraDeCombate', 'runEnded']);
 /** Steps already done whose card hasn't been shown yet (one per command). */
 const QUEUE_FLAG = 'tutorial:cola';
 
@@ -94,7 +96,9 @@ export function tutorialAfterCommand(_ruleset: Ruleset, state: GameState, events
     effects.push({ type: 'setFlag', flag: tutorialFlag(step.id), value: true });
   }
   const cards = [...queued, ...fired];
-  const show = cards.shift();
+  // A card waits for a calm moment: not while a room is falling or Willy has just gone down.
+  const busy = events.some((e) => BUSY_EVENTS.has(e.type));
+  const show = busy ? undefined : cards.shift();
   if (show) {
     const step = DATA.pasos.find((p) => p.id === show);
     effects.push({ type: 'setFlag', flag: LAST_FLAG, value: show });

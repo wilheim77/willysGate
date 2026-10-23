@@ -44,4 +44,25 @@ describe('Willy: the tutorial', () => {
     const c = clockAfterCommand(willy, s, won, new RngCursor(s.rng));
     expect((c.effects.find((e) => e.type === 'setSystem') as unknown as { value: { hidden?: boolean } }).value.hidden).toBe(false);
   });
+
+  it('the tide and the belts get a card the first time they matter, and cards wait out a collapse', () => {
+    const f = onFloor1();
+    // Past the chained opening cards: nothing else waiting.
+    const s = { ...f, flags: { ...f.flags, 'tutorial:ultimo': '', 'tutorial:cola': '' } };
+    const tide = tutorialAfterCommand(willy, s, [{ type: 'mareaAviso', zone: 'marea-3' } as GameEvent], new RngCursor(s.rng));
+    expect(tide.events).toContainEqual(expect.objectContaining({ type: 'tutorialStep', id: 't28-marea' }));
+    const belt = tutorialAfterCommand(willy, s, [{ type: 'cinta', entityId: 'willy' } as GameEvent], new RngCursor(s.rng));
+    expect(belt.events).toContainEqual(expect.objectContaining({ type: 'tutorialStep', id: 't29-cintas' }));
+    // A room falling: the step is done, but its card waits.
+    const busy = tutorialAfterCommand(willy, s, [{ type: 'cinta', entityId: 'willy' } as GameEvent, { type: 'roomCollapsing', fase: 'caida' } as GameEvent], new RngCursor(s.rng));
+    expect(busy.events.filter((e) => e.type === 'tutorialStep')).toHaveLength(0);
+    const later = engine.applyEffects(s, busy.effects).state;
+    expect(tutorialAfterCommand(willy, later, [], new RngCursor(later.rng)).events).toContainEqual(expect.objectContaining({ type: 'tutorialStep', id: 't29-cintas' }));
+  });
+
+  it('an achievement in the first Camerino does not jump ahead of the first card', () => {
+    const s = newWillyGame(engine, 3);
+    const t = tutorialAfterCommand(willy, s, [{ type: 'achievementUnlocked', logro: 'x' } as GameEvent], new RngCursor(s.rng));
+    expect(t.events.filter((e) => e.type === 'tutorialStep')).toHaveLength(0);
+  });
 });
