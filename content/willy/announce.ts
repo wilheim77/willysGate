@@ -25,6 +25,13 @@ export function announce(event: GameEvent, state: GameState): { text: string; bi
   if (e.type === 'roomCollapsing' && e.fase === 'caida' && e.willyDentro) {
     return { text: '¡Derrumbe! Producción te saca a rastras hasta la escalera: −30 % de vida y Tumbado. Levántate y baja.', big: true };
   }
+  if (e.type === 'chestOpened') {
+    const item = typeof e.nombre === 'string' ? e.nombre : '';
+    const fichas = Number(e.fichas ?? 0);
+    return { text: `Caja de botín: ${[item, fichas ? `${fichas} fichas` : ''].filter(Boolean).join(' y ') || 'vacía. Qué decepción'}` };
+  }
+  // Willy down mid-fight: the fight ends (companions.ts), and the defeat screen follows.
+  if (e.type === 'willyFueraDeCombate') return { text: '¡Willy está fuera de combate! Corten. Tu compañero se retira con él.', big: true };
   if (e.type === 'clockExpired') return { text: '¡Se acabó el reloj! Las salas empiezan a caer, de la más lejana a la escalera.', big: true };
   return null;
 }

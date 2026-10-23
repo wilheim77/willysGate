@@ -117,6 +117,11 @@ function spent(state: GameState, clock: ClockState, events: GameEvent[], p: Plan
       const mover = state.entities[(e as unknown as { entityId: string }).entityId];
       if (mover && hasTag(mover, 'pc')) seconds += ((e as unknown as { path: Vec2[] }).path?.length ?? 0) * p.reloj.pasoExploracion;
     }
+    // Opening a chest or talking to someone: 3 s (the Funcionario's opening hours: 1 s more).
+    if (e.type === 'dialogueStarted' && state.turn.mode !== 'combat') {
+      const who = state.entities[(e as unknown as { actorId: string }).actorId];
+      seconds += 3 + (who && who.tags.includes('clase:funcionario') ? 1 : 0);
+    }
     if (e.type === 'turnStarted') {
       const round = Number((e as unknown as { round?: number }).round ?? 0);
       if (round > ronda) {
