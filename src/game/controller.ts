@@ -33,6 +33,10 @@ import type { GameDefinition } from './definition';
 import type { GameStore } from './store';
 
 const AI_STEP_MS = 380;
+/** A fight starts with the party within this many tiles of the leader. */
+const REGROUP_IN_COMBAT = 2;
+/** Out of combat, a companion this far behind catches up at once. */
+const REGROUP_CATCH_UP = 8;
 /** Commands one AI fighter may issue in a single turn before it is ended for it. */
 const AI_MAX_STEPS_PER_TURN = 40;
 
@@ -261,6 +265,8 @@ export class GameController {
     const target = this.state.entities[targetId]!;
     if (gridDistance(leader.position, target.position) <= INTERACT_RANGE) {
       this.pendingInteract = null;
+      // A conversation can turn into a fight (a rival, a gate scene): have the party at hand.
+      this.regroup(REGROUP_IN_COMBAT);
       this.report(this.store.dispatch({ type: 'interact', issuer: this.game.playerId, entityId: leader.id, targetId } as never));
       return;
     }
@@ -401,6 +407,7 @@ export class GameController {
       const speaker = z.properties.speaker ? this.state.entities[String(z.properties.speaker)] : undefined;
       if (z.properties.speaker && (!speaker || !this.store.engine.ruleset.isStanding(speaker))) continue;
       if (z.properties.gate) this.scenesInside.add(z.name);
+      this.regroup(REGROUP_IN_COMBAT);
       const r = this.store.dispatch({ type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: dialogue, actorId: leader.id, ...(z.properties.gate ? {} : { markFlag: seen }), ...(speaker ? { partnerId: speaker.id } : {}) } as never);
       if (r.ok) return true;
     }
@@ -480,6 +487,9 @@ export class GameController {
       const hooks = zone.properties.setFlag || zone.properties.winFlag
         ? { side: leader.factionId, ...(zone.properties.winFlag ? { onVictory: [flag(zone.properties.winFlag)] } : {}), ...(zone.properties.setFlag ? { onEnd: [flag(zone.properties.setFlag)] } : {}) }
         : undefined;
+      // The party fights together: anyone left behind (the walk stopped at the zone's edge before
+      // they caught up) regroups next to the leader first. Playtest: the companion started fights far away.
+      this.regroup(REGROUP_IN_COMBAT);
       this.store.dispatch({ type: 'startCombat', issuer: SYSTEM_ISSUER, participants: [...party, ...foes], ...(hooks ? { hooks } : {}) } as never);
       return true;
     }
@@ -491,7 +501,23 @@ export class GameController {
    * footstep can't be reached (a ledge too high, someone in the way), they try the free
    * tiles nearest the leader instead of standing still.
    */
+  /** Companions farther than `beyond` tiles from the leader are placed on free tiles beside them. */
+  private regroup(beyond: number): void {
+    const leader = this.state.entities[this.game.leaderId];
+    if (!leader) return;
+    const ruleset = this.store.engine.ruleset;
+    const far = Object.values(this.state.entities).filter(
+      (e) => e.id !== leader.id && e.factionId === leader.factionId && this.isPlayer(e.id) && ruleset.isStanding(e) && gridDistance(e.position, leader.position) > beyond,
+    );
+    if (far.length === 0) return;
+    const spots = this.freeAround(leader.position).filter((p) => gridDistance(p, leader.position) <= 2);
+    const effects = far.flatMap((e, i) => (spots[i] ? [{ type: 'setPosition', entityId: e.id, position: spots[i] }] : []));
+    if (effects.length) this.store.dispatch({ type: 'script', issuer: SYSTEM_ISSUER, effects } as never);
+  }
+
   private followLeader(): void {
+    // Someone left far behind (a long walk, a jump, a lift) catches up at once instead of trekking.
+    this.regroup(REGROUP_CATCH_UP);
     const leader = this.state.entities[this.game.leaderId];
     if (!leader) return;
     const ruleset = this.store.engine.ruleset;
