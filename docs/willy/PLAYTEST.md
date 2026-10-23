@@ -26,7 +26,7 @@ deleted, season summary).
    `MapScene.setOverlays` throws (`this.overlay` undefined) inside `controller.refresh`; "A la mazmorra" lands on a
    blank map and the player never sees the casting screen (Butanero by default). Workaround on qa: `?canvas` forces
    the 2D renderer. Real fix: automatic Canvas fallback + guard `setOverlays`.
-4. **[C/W] No tutorial at all, and the HUD is not gated.** FIXED on main, RE-TESTED: toasts show, floor-1 HUD gating works (audience and bag hidden until their step). Left: the first card in a new run is the achievements one (t10) in the Camerino, before "moverse"; the "atributos" card popped up in the middle of a clock collapse and covered the collapse banner (tutorial cards should wait for a calm moment); the clock HUD shows "Reloj 34:30" on floor 1 before its step. Original report: `content/willy/tutorial.json` (pasos with
+4. **[C/W] No tutorial at all, and the HUD is not gated.** FIXED on main, RE-TESTED: toasts show, floor-1 HUD gating works (audience and bag hidden until their step). Left: the first card in a new run is the achievements one (t10) in the Camerino, before "moverse"; the "atributos" card popped up in the middle of a clock collapse and covered the collapse banner (tutorial cards should wait for a calm moment); the clock HUD shows "Reloj 34:30" on floor 1 before its step. **[W] FIXED on willy:** t10 waits for t01; cards wait while a room falls or Willy is down; the clock is born hidden on floor 1 until the first win. Original report: `content/willy/tutorial.json` (pasos with
    `disparador`/`texto[]`, `bloqueosIniciales`) has another shape than the client's `TutorialStep`; `game.tutorial`
    is not set in `content/willy/game.ts`. A new player gets zero guidance (no "tap to move", no combat explanation)
    and everything the design says is hidden at the start (audience, clock, bag, boxes, sponsors) is visible from the
@@ -40,12 +40,12 @@ deleted, season summary).
 
 ## Confusing
 
-6. **[W] Chests do nothing.** `cofre` props (`botin:planta-N`, 6 hp objects) ignore taps; DESIGN.md says opening
+6. **[W] Chests do nothing.** **FIXED on willy (6c9f96b):** tapping one opens it (item + chips, banner), 3 s of clock. `cofre` props (`botin:planta-N`, 6 hp objects) ignore taps; DESIGN.md says opening
    costs 3 s and gives 1 item + chips. No feedback either.
 7. **[M] Box reveal spoils itself, and the gear prompt can't always be skipped.** Opening a box immediately opens the
    "Guantes de fregar - Dárselo a Willy / a Jonatan" prompt under the reveal (item name faintly visible). Some
    prompts have "Guardarlo en la mochila", the ones from box/sponsor gifts have no "Luego" option.
-8. **[W] The floor intro narrator uses the floor number as the planta.** Entering floor 2 says "Planta 2: el
+8. **[W] The floor intro narrator uses the floor number as the planta.** **Already right on willy** (test `willy-floor-intro`: floors 1-6 name their biome); probably an older build. Entering floor 2 says "Planta 2: el
    Hipermercado Eterno" while the floor is still Castro (floors 1-2 Castro, 3-4 Hipermercado).
 9. **[C] Camerino NPCs (Maripuri, Paco, Xelda, Koldo) do nothing when tapped; fichas have no sink** (304 chips by
    floor 3, nothing to buy). At least answer with a line.
@@ -55,8 +55,8 @@ deleted, season summary).
 11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/ **FIXED on main** (client): the bar fits, Guardar/Cargar on screen and Exportar peeks out as a swipe cue (re-tested).
     Nueva/sound reachable only by swiping, no hint). Save is hard to find on a phone.
 12. **[C] Initiative strip overlapped by the clock/audience widgets** at 375 px once there are 5+ combatants. **FIXED on main** (client): the clock sits below the strip (re-tested with 5 combatants, no overlap).
-13. **[W] Rival dialogue says "CD 15", the roll log says "DIF 15"** (and the attack preview says "Defensa"). Pick one.
-14. **[W] When Willy goes down mid-fight nothing happens** for 10+ rounds: the fight continues with the companion
+13. **[W] Rival dialogue says "CD 15", the roll log says "DIF 15"** **FIXED on willy:** Willy's texts set `dcShort: DIF`. (and the attack preview says "Defensa"). Pick one.
+14. **[W] When Willy goes down mid-fight nothing happens** **FIXED on willy:** the fight ends at once (the companion falls back), banner «¡Willy está fuera de combate!», then the defeat screen. for 10+ rounds: the fight continues with the companion
     only, the player gets no message, and the defeat prompt only appears after Jonatan falls too (or wins). A one-line
     "Willy está fuera de combate" would help.
 15. **[S] Sponsor contract feasibility.** "Descubre 2 trampas" is offered on floor 1 for floor 2; floor 3 can have 0
