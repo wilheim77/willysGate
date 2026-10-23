@@ -71,6 +71,8 @@ export interface SponsorDeal {
   recompensa: SponsorGift & { fichas?: number };
   /** Coins taken when it is broken or missed («penalización por incumplimiento»). */
   multa: number;
+  /** What the floor must have for the deal to be fair ('trampas'); without it the deal is void. */
+  requiere?: string;
   mensajes: { oferta: SponsorLine[]; cumplido: SponsorLine[]; roto: SponsorLine[] };
 }
 

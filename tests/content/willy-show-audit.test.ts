@@ -134,3 +134,16 @@ describe('Show audit: hooks for the Willy agent\'s rules', () => {
     expect(gain(perk) / gain(plain)).toBeCloseTo(1.1, 1);
   });
 });
+
+describe('Show audit: playtest fixes', () => {
+  it('a «descubre trampas» deal on a floor with no traps is void, with no fine', () => {
+    let s = game([W('willy', 'butanero', 0, 0)]);
+    s = { ...s, map: { ...s.map, id: 'planta-2' } };
+    const base = applied(s, run(s, [{ type: 'noop' } as GameEvent]).effects);
+    const sp = sponsorsOf(base)!;
+    const withDeal = withSystem(base, 'patrocinadores', { ...sp, contratos: [{ patrocinadorId: 'la-prudente', contratoId: 'plan-de-prevencion', progreso: 0, cantidad: 2, piso: 2 }] });
+    const out = run(withDeal, [{ type: 'floorExited', metodo: 'escalera', relojRestantePct: 50, planta: 2 } as GameEvent]);
+    expect(of(out.events, 'sponsorDealVoided')).toHaveLength(1);
+    expect(of(out.events, 'sponsorDealBroken')).toHaveLength(0);
+  });
+});
