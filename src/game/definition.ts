@@ -83,6 +83,9 @@ export interface Theme {
   fontUrl?: string;
 }
 
+/** A narrator line: plain text, or text with a priority (higher wins; the top ones queue). */
+export type NarratorLine = string | { text: string; priority?: number };
+
 /** A small always-visible counter in the HUD (Willy's audience, a boss's meter...). */
 export interface MeterView {
   id: string;
@@ -193,7 +196,7 @@ export interface GameDefinition {
   /** A narrator's line for an engine event, if any (Willy's Narrador). Cosmetic. */
   narrate?(event: GameEvent, state: GameState): string | null;
   /** One narrator line for all of a command's events (the most important one), if any. */
-  narrateEvents?(events: GameEvent[], state: GameState): string | null;
+  narrateEvents?(events: GameEvent[], state: GameState): NarratorLine | null;
   /**
    * A short on-screen announcement for an event (an ability levelling up...), if any.
    * `big` shows it large in the middle of the screen. Cosmetic.
