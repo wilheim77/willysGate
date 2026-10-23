@@ -163,6 +163,8 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
     // Turista ×1,5, Prime time ×0,8 (difficulty.ts).
     const segundos = Math.round(p.reloj.segundos * difficultyOf(state).reloj);
     clock = { label: 'Reloj', remaining: segundos, total: segundos, mapa: p.mapa, planta: p.numero, ultimaRonda: 0, avisados: [], pasado: 0, agrietadas: [], caidas: [], expulsado: false };
+    // Born hidden and paused if the tutorial hasn't introduced it yet (the check below keeps it so).
+    if (!tutorialUnlocked(state, 'sistema.reloj')) clock = { ...clock, hidden: true };
     effects.push({ type: 'setFlag', flag: visitFlag(p.mapa), value: visitas });
     out.push({ type: 'floorEntered', planta: p.numero, nombrePlanta: p.nombre, visita: visitas } as GameEvent);
     out.push({ type: 'clockStarted', planta: p.numero, nombrePlanta: p.nombre, reloj: mmss(clock.remaining) } as GameEvent);

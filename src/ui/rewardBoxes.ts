@@ -88,6 +88,8 @@ export function setupRewardBoxes(store: GameStore, game: GameDefinition, manifes
       row.addEventListener('click', () => openOne(b));
       list.append(row);
     }
+    // Many boxes at once: open them all and see everything on one screen.
+    if (boxes.length > 1) panel.append(button2(`Abrir todas (${boxes.length})`, () => openAll(boxes), 'primary'));
     panel.append(list, button2('Cerrar', close));
     overlay.replaceChildren(panel);
     overlay.hidden = false;
@@ -106,6 +108,42 @@ export function setupRewardBoxes(store: GameStore, game: GameDefinition, manifes
     }
     panel.append(h, ul, button2('Volver', back));
     overlay.replaceChildren(panel);
+  };
+
+  /** Every waiting box at once: all the cards face up, everything into the bag. */
+  const openAll = (boxes: RewardBoxView[]) => {
+    const results: RewardBoxResult[] = [];
+    for (const b of boxes) {
+      const r = store.dispatch(rb.open(b.id, game.playerId) as never);
+      const res = r.ok ? rb.result(r.events) : null;
+      if (res) results.push(res);
+    }
+    const panel = document.createElement('div');
+    panel.className = 'box-panel box-all';
+    const h = document.createElement('h2');
+    h.textContent = `${results.length} cajas abiertas`;
+    const grid = document.createElement('div');
+    grid.className = 'all-items';
+    for (const it of results.flatMap((r) => r.items)) {
+      const row = document.createElement('div');
+      row.className = 'all-item';
+      row.style.setProperty('--rar', it.color);
+      const t = document.createElement('span');
+      t.innerHTML = '<strong></strong><small></small>';
+      t.querySelector('strong')!.textContent = it.label;
+      t.querySelector('small')!.textContent = `${it.rarityLabel}${it.rule ? ` · ${it.rule}` : ''}`;
+      row.append(uiIcon(manifest, it.icon ?? '', 32), t);
+      grid.append(row);
+    }
+    const coins = results.reduce((s, r) => s + r.coins, 0);
+    const p = document.createElement('p');
+    p.className = 'coins';
+    p.textContent = coins ? `+${coins} ${results[0]?.coinsLabel ?? ''}` : '';
+    // Opening may have earned more (an achievement for boxes opened).
+    const more = rb.pending(store.state);
+    panel.append(h, grid, p, button2('A la mochila', close, 'primary'), ...(more.length ? [button2(`Abrir las nuevas (${more.length})`, () => (more.length > 1 ? openAll(more) : openOne(more[0]!)))] : []));
+    overlay.replaceChildren(panel);
+    overlay.hidden = false;
   };
 
   /** The moment: drop, tap to open, shake, lid, cards. */

@@ -3,7 +3,7 @@
 /* --- Achievement banner (top, like the narrator box, in gold) --- */
 .achievement-toast[hidden] { display: none; }
 .achievement-toast {
-  position: fixed; left: 50%; transform: translateX(-50%); top: calc(var(--top-h, 48px) + var(--safe-top, 0px) + 8px); z-index: 7;
+  position: fixed; left: 50%; transform: translateX(-50%); top: calc(var(--top-h, 48px) + var(--safe-top, 0px) + 8px); z-index: 5; /* under #dialogue (6): a defeat/season summary is a modal and must not be covered by a toast */
   display: flex; align-items: center; gap: 10px; width: min(480px, calc(100vw - 16px)); padding: 8px 12px;
   background: rgba(20, 12, 30, 0.96); border: 3px solid var(--gold); box-shadow: 4px 4px 0 #000; cursor: pointer; color: #f3e6c8;
 }
@@ -71,18 +71,18 @@ body.has-achievement #narrator { top: calc(var(--top-h, 48px) + var(--safe-top, 
   background: radial-gradient(ellipse at 50% 70%, var(--beam) 0%, transparent 70%); opacity: 0.75; animation: beam 1.4s ease-in-out infinite alternate;
 }
 @keyframes beam { from { opacity: 0.45; } to { opacity: 0.9; } }
-.box-stage .cards { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-.box-stage .card { position: relative; width: 104px; height: 156px; padding: 0; border: 3px solid var(--rar); background: #120c1c; animation: card-in 0.4s ease-out backwards; animation-delay: calc(var(--i) * 0.12s); }
+.box-stage .cards { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: flex-start; }
+.box-stage .card { position: relative; width: 104px; min-height: 156px; padding: 0; border: 3px solid var(--rar); background: #120c1c; animation: card-in 0.4s ease-out backwards; animation-delay: calc(var(--i) * 0.12s); }
 @keyframes card-in { from { transform: translateY(-40px) scale(0.6); opacity: 0; } }
 .box-stage .card .back { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 48px; color: var(--rar); background: repeating-linear-gradient(45deg, #1d1430 0 8px, #241a3a 8px 16px); }
-.box-stage .card .face { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; }
+.box-stage .card .face { position: relative; min-height: 156px; box-sizing: border-box; display: none; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; }
 .box-stage .card.flipped .back { display: none; }
 .box-stage .card.flipped .face { display: flex; }
 .box-stage .card.flipped { animation: card-flip 0.3s ease-out; box-shadow: 0 0 14px var(--rar); }
 @keyframes card-flip { 0% { transform: rotateY(90deg); } 100% { transform: rotateY(0); } }
 .box-stage .card strong { font-weight: normal; font-size: var(--fs-s); line-height: 1; color: #fff; }
 .box-stage .card em { font-style: normal; font-size: var(--fs-xs); color: var(--rar); }
-.box-stage .card small { font-size: 13px; line-height: 1.05; color: #d8cdb8; overflow: hidden; }
+.box-stage .card small { font-size: 13px; line-height: 1.05; color: #d8cdb8; }
 .box-stage .coins { margin: 0; color: var(--gold); font-size: var(--fs-l); min-height: 1em; }
 canvas.ui-icon { image-rendering: pixelated; }
 @media (prefers-reduced-motion: reduce) {
@@ -106,3 +106,21 @@ canvas.ui-icon { image-rendering: pixelated; }
 .box-art canvas.burst { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: -1; pointer-events: none; animation: burst-spin 6s linear infinite; }
 @keyframes burst-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .box-art canvas.burst { animation: none; } }
+
+/* --- Profile and records --- */
+.profile-panel dl { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; margin: 0; font-size: var(--fs-s); }
+.profile-panel dt { color: var(--muted); }
+.profile-panel dd { margin: 0; text-align: right; color: var(--text); }
+#title .profile-badge { margin: 8px 0 0; text-align: center; color: #ff4a4a; font-size: var(--fs-l); letter-spacing: 2px; text-shadow: 0 0 8px rgba(255, 60, 60, 0.7); animation: blink 1.6s step-end infinite; }
+.meta-panel .achievement.earlier { opacity: 0.8; }
+.meta-panel .achievement .earlier-note { color: var(--muted); font-size: var(--fs-xs); }
+
+.achievement-toast .said { color: #f3e6c8; font-style: italic; margin-top: 4px; }
+
+/* --- «Abrir todas» --- */
+.box-all .all-items { display: flex; flex-direction: column; gap: 4px; max-height: 60dvh; overflow-y: auto; }
+.box-all .all-item { display: flex; align-items: center; gap: 8px; border-left: 4px solid var(--rar); padding: 2px 6px; }
+.box-all .all-item span { display: flex; flex-direction: column; min-width: 0; }
+.box-all .all-item strong { font-weight: normal; font-size: var(--fs-s); color: #fff; }
+.box-all .all-item small { font-size: var(--fs-xs); color: var(--muted); }
+.box-panel .primary { border-color: var(--gold); color: var(--gold); }

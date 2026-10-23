@@ -3,7 +3,7 @@ import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
 import type { BarksData } from '../ui/barks';
 import type { Cinematic } from '../ui/cinematicPlayer';
-import type { TutorialStep } from '../ui/tutorialToasts';
+import type { TutorialStep } from './tutorialStep';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
 export interface UiTexts {
@@ -33,6 +33,14 @@ export interface AchievementView {
   reward?: string;
   /** UI art id for its badge (manifest `ui`). */
   icon?: string;
+  /** Earned in an earlier season (the browser's profile), not yet in this one. */
+  earlier?: boolean;
+  /** Earned again this season: no prize this time. */
+  again?: boolean;
+  /** What the narrator says about it, shown on its banner. */
+  line?: string;
+  /** A minor one: counted in the list, no banner. */
+  silent?: boolean;
 }
 
 export interface RewardBoxView {
@@ -218,6 +226,13 @@ export interface GameDefinition {
   cinematics?: { intro?: Cinematic };
   /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
   tutorial?: TutorialStep[];
+  /**
+   * HUD pieces hidden until the game says otherwise (a tutorial step: «no system appears
+   * unexplained»). `hud` lists their ids; `locked(state, id)` says whether one is still hidden.
+   * The ids are set on <body data-locks="hud-<id> …"> and src/style.css hides what they name
+   * (audiencia, reloj, mochila, grupo). Switching "Consejos" off releases them all.
+   */
+  tutorialLocks?: { hud: string[]; locked(state: GameState, hud: string): boolean };
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */
   barks?: BarksData;
   /** Achievements: a toast when one unlocks and a list from the top bar (Willy). */
@@ -225,7 +240,7 @@ export interface GameDefinition {
     categories: Record<string, string>;
     list(state: GameState): AchievementView[];
     /** The achievement an event announces, if it is an unlock. */
-    unlocked(event: GameEvent): AchievementView | null;
+    unlocked(event: GameEvent, state?: GameState): AchievementView | null;
   };
   /** Reward boxes waiting to be opened (Willy's loot boxes): a 🎁 counter and the opening moment. */
   rewardBoxes?: {
@@ -272,6 +287,20 @@ export interface GameDefinition {
    * sprite — Willy's showier tone; Intereses keeps 'corpse'.
    */
   onDeath?: 'corpse' | 'vanish';
+  /**
+   * The browser's profile: what carries over between seasons (achievements, unlocks, records).
+   * The client stores it (src/game/profile.ts); the game says what goes in and how it shows.
+   */
+  profile?: {
+    /** A new season starts: the state gets what the rules need from the profile. */
+    inject(state: GameState, profile: Record<string, unknown>): GameState;
+    /** The profile after a command (its events and the state it left). `today` is YYYY-MM-DD. */
+    update(profile: Record<string, unknown>, events: GameEvent[], state: GameState, today: string): Record<string, unknown>;
+    /** The «Perfil / Récords» screen. */
+    screen(profile: Record<string, unknown>): { title: string; sections: { title: string; rows: { label: string; value: string }[] }[] };
+    /** A mark for the title screen, if any («🔴 EN DIRECTO»). */
+    badge?(profile: Record<string, unknown>): string | null;
+  };
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

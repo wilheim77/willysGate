@@ -76,7 +76,7 @@ const BLOCKED_TINT = 0x8a8a8a;
 /** Longest any one event may animate before playback moves on regardless. */
 const EVENT_WATCHDOG_MS = 10_000;
 /** Longest the walk/animation counter may hold input before it is reset. */
-const BUSY_LIMIT_MS = 15_000;
+const BUSY_LIMIT_MS = 20_000;
 const TAP_SLOP = 8;
 /** Zoom limits and defaults are expressed as on-screen pixels per tile, whatever the art's tile size. */
 const MIN_TILE_PX = 24;
@@ -455,10 +455,18 @@ export class MapScene extends Phaser.Scene {
     if (!busy) this.busySince = 0;
     else if (!this.busySince) this.busySince = Date.now();
     else if (Date.now() - this.busySince > BUSY_LIMIT_MS) {
-      console.warn('busy for too long; releasing input', { playing: this.playing, animating: this.animating });
+      // Playtest: abilities could still be picked but taps on enemies did nothing, because
+      // playback never finished. Drop the stuck run, snap the sprites to the state and let the
+      // player (and the AI) act again.
+      console.warn('busy for too long; releasing input', { playing: this.playing, animating: this.animating, queued: this.queue.length });
       this.animating = 0;
       this.busySince = 0;
-      return this.playing;
+      this.playGen++;
+      this.playing = false;
+      this.queue = [];
+      this.syncWithState(this.store.state);
+      queueMicrotask(() => this.hooks.onIdle?.());
+      return false;
     }
     return busy;
   }
@@ -468,8 +476,24 @@ export class MapScene extends Phaser.Scene {
   private async playQueue(): Promise<void> {
     if (this.playing) return;
     this.playing = true;
-    this.pathPreview.clear();
-    while (this.queue.length > 0) {
+    // The watchdog measures this run, not an older one.
+    this.busySince = Date.now();
+    const gen = ++this.playGen;
+    try {
+      this.pathPreview.clear();
+      await this.drainQueue(gen);
+    } finally {
+      // Only the run that still owns playback may hand it back (see the busy watchdog).
+      if (gen === this.playGen) {
+        this.playing = false;
+        this.syncWithState(this.store.state);
+        this.hooks.onIdle?.();
+      }
+    }
+  }
+
+  private async drainQueue(gen: number): Promise<void> {
+    while (this.queue.length > 0 && gen === this.playGen) {
       const event = this.queue.shift()!;
       if (isRedundantRebuild(event, this.queue[0])) continue;
       try {
@@ -481,10 +505,9 @@ export class MapScene extends Phaser.Scene {
         console.error('event playback failed', event, err);
       }
     }
-    this.playing = false;
-    this.syncWithState(this.store.state);
-    this.hooks.onIdle?.();
   }
+  /** Bumped when playback is taken over; a stale run stops and leaves the state alone. */
+  private playGen = 0;
 
   private centreOf(id: string): Vec2 | null {
     const s = this.sprites.get(id);
@@ -1323,6 +1346,9 @@ export class MapScene extends Phaser.Scene {
 
   /** Tiles the active creature can reach this turn, and creatures/tiles that are valid targets. */
   setOverlays(moveTiles: Vec2[], targetIds: string[], areaTiles: Vec2[] = [], pickedIds: string[] = []): void {
+    // Before create() has run (or if the renderer failed to boot) there's nothing to draw on;
+    // throwing here would abort controller.refresh and, with it, the whole new-game flow.
+    if (!this.overlay) return;
     const g = this.overlay.clear();
     const T = this.grid.tile;
     const state = this.store.state;

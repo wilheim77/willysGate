@@ -9,61 +9,131 @@ import { uiIcon } from './portraits';
  * «???» and their hint. The rules live in the ruleset; this only shows them.
  */
 export function setupAchievements(store: GameStore, game: GameDefinition, manifest: AssetManifest): void {
+  if (!game.achievements) return;
   const meta = game.achievements;
-  if (!meta) return;
 
   // --- The banner ---
+  //
+  // Pacing (user feedback: too many in a row): one banner at a time, never over a fight, a
+  // conversation, the box screen or another banner. Unlocks wait while something is on, are
+  // gathered for a moment, and several together become one summary banner («🏆 3 logros
+  // nuevos: …», tap to open the list). After a banner, the next waits a while, so a burst of
+  // unlocks becomes one summary instead of a string of banners. Silent achievements (the
+  // trivial ones) never get a banner: they only count in the list.
+  const GATHER_MS = 1500;
+  const GAP_MS = 10_000;
   const banner = document.createElement('div');
   banner.className = 'achievement-toast';
   banner.hidden = true;
   banner.setAttribute('role', 'status');
   document.body.append(banner);
-  const queue: AchievementView[] = [];
+  const pending: AchievementView[] = [];
   let timer = 0;
-  const next = () => {
-    const a = queue.shift();
-    if (!a) {
-      banner.hidden = true;
-      document.body.classList.remove('has-achievement');
-      return;
-    }
+  let flushTimer = 0;
+  let lastClosedAt = -Infinity;
+  let opensList = false;
+
+  const busy = () =>
+    !banner.hidden ||
+    store.state.turn.mode === 'combat' ||
+    document.querySelector<HTMLElement>('#dialogue')?.hidden === false ||
+    document.querySelector<HTMLElement>('.box-overlay')?.hidden === false ||
+    // Other banners (collapse, level up) and tutorial cards go first.
+    [...document.querySelectorAll<HTMLElement>('#announce, .tutorial-toast')].some((el) => !el.hidden && el.offsetParent !== null) ||
+    document.querySelector<HTMLElement>('#title')?.hidden === false ||
+    document.querySelector<HTMLElement>('#creation')?.hidden === false;
+
+  const hide = () => {
+    clearTimeout(timer);
+    banner.hidden = true;
+    document.body.classList.remove('has-achievement');
+    lastClosedAt = performance.now();
+    if (pending.length) schedule(GAP_MS);
+  };
+
+  const schedule = (ms: number) => {
+    clearTimeout(flushTimer);
+    flushTimer = window.setTimeout(flush, ms);
+  };
+
+  const flush = () => {
+    if (!pending.length) return;
+    const wait = GAP_MS - (performance.now() - lastClosedAt);
+    if (busy() || wait > 0) return schedule(Math.max(1000, wait));
+    const shown = pending.splice(0);
     const text = document.createElement('div');
     text.className = 'text';
     const kicker = document.createElement('span');
     kicker.className = 'kicker';
-    kicker.textContent = '¡Logro desbloqueado!';
     const name = document.createElement('strong');
-    name.textContent = a.name;
     const desc = document.createElement('p');
-    desc.textContent = a.description;
-    text.append(kicker, name, desc);
-    if (a.reward) {
-      const reward = document.createElement('p');
-      reward.className = 'reward';
-      reward.textContent = `🎁 ${a.reward}`;
-      text.append(reward);
+    let icon = shown[0]!.icon ?? '';
+    let ms = 4000;
+    if (shown.length === 1) {
+      const a = shown[0]!;
+      kicker.textContent = a.again ? '¡Otra vez! (sin caja: ya la ganaste)' : '¡Logro desbloqueado!';
+      name.textContent = a.name;
+      desc.textContent = a.description;
+      text.append(kicker, name, desc);
+      if (a.line) {
+        const said = document.createElement('p');
+        said.className = 'said';
+        said.textContent = `🎙 ${a.line}`;
+        text.append(said);
+        ms += a.line.length * 45;
+      }
+      if (a.reward) {
+        const reward = document.createElement('p');
+        reward.className = 'reward';
+        reward.textContent = `🎁 ${a.reward}`;
+        text.append(reward);
+      }
+      opensList = false;
+    } else {
+      kicker.textContent = 'Toca para ver la lista';
+      name.textContent = `🏆 ${shown.length} logros nuevos`;
+      const names = shown.slice(0, 4).map((a) => a.name);
+      desc.textContent = `${names.join(', ')}${shown.length > 4 ? ` y ${shown.length - 4} más` : ''}.`;
+      text.append(name, desc, kicker);
+      const boxes = shown.filter((a) => a.reward).length;
+      if (boxes) {
+        const reward = document.createElement('p');
+        reward.className = 'reward';
+        reward.textContent = `🎁 ${boxes} ${boxes === 1 ? 'caja' : 'cajas'}`;
+        text.append(reward);
+      }
+      icon = 'logro-cat-primeros-pasos';
+      opensList = true;
     }
-    banner.replaceChildren(uiIcon(manifest, a.icon ?? '', 48), text);
+    banner.replaceChildren(uiIcon(manifest, icon, 48), text);
     banner.hidden = false;
     document.body.classList.add('has-achievement');
     banner.classList.remove('pop');
     void banner.offsetWidth;
     banner.classList.add('pop');
     clearTimeout(timer);
-    timer = window.setTimeout(next, 4200);
+    timer = window.setTimeout(hide, ms);
   };
+
   banner.addEventListener('click', () => {
-    clearTimeout(timer);
-    next();
+    const list = opensList;
+    hide();
+    if (list) openList();
   });
   store.subscribe((change) => {
-    if (change.kind !== 'events') return;
-    const fresh = change.events.map((e) => meta.unlocked(e)).filter((a): a is AchievementView => !!a);
-    if (!fresh.length) return;
-    const idle = banner.hidden;
-    queue.push(...fresh);
-    if (idle) next();
-    refreshCount();
+    if (change.kind === 'reset') {
+      pending.length = 0;
+      hide();
+      refreshCount();
+      return;
+    }
+    const fresh = change.events.map((e) => meta.unlocked(e, store.state)).filter((a): a is AchievementView => !!a);
+    if (fresh.length) refreshCount();
+    const loud = fresh.filter((a) => !a.silent);
+    if (loud.length) {
+      pending.push(...loud);
+      schedule(GATHER_MS);
+    } else if (pending.length && change.events.some((e) => e.type === 'combatEnded')) schedule(GATHER_MS);
   });
 
   // --- The list ---
@@ -76,9 +146,6 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     const all = meta.list(store.state);
     button.textContent = `🏆${all.filter((a) => a.unlocked).length}`;
   };
-  store.subscribe((change) => {
-    if (change.kind === 'reset') refreshCount();
-  });
   refreshCount();
 
   const panel = document.createElement('div');
@@ -89,7 +156,7 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
   panel.addEventListener('click', (e) => {
     if (e.target === panel) close();
   });
-  button.addEventListener('click', () => {
+  function openList(): void {
     const all = meta.list(store.state);
     const box = document.createElement('div');
     box.className = 'box';
@@ -116,7 +183,7 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
       sec.append(t);
       for (const a of items) {
         const row = document.createElement('div');
-        row.className = `achievement${a.unlocked ? ' got' : ''}`;
+        row.className = `achievement${a.unlocked ? ' got' : ''}${a.earlier ? ' earlier' : ''}`;
         const secret = a.hidden && !a.unlocked;
         const icon = uiIcon(manifest, a.unlocked ? (a.icon ?? '') : 'logro-bloqueado', 32);
         const txt = document.createElement('div');
@@ -125,7 +192,13 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
         const d = document.createElement('p');
         d.textContent = secret ? (a.hint ?? 'Logro oculto.') : a.description;
         txt.append(n, d);
-        if (a.reward && !secret) {
+        if (a.earlier) {
+          const e = document.createElement('p');
+          e.className = 'earlier-note';
+          e.textContent = 'En otra temporada';
+          txt.append(e);
+        }
+        if (a.reward && !secret && !a.earlier) {
           const r = document.createElement('p');
           r.className = 'reward';
           r.textContent = `🎁 ${a.reward}`;
@@ -139,5 +212,6 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     box.append(head, body);
     panel.replaceChildren(box);
     panel.hidden = false;
-  });
+  }
+  button.addEventListener('click', openList);
 }

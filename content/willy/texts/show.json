@@ -54,5 +54,7 @@
   "parrillaTexto": "Cuelga sobre la zona dorada. Desde la cuerda (la luz pequeña) la puedes derribar una vez: 2d6 y Aturdido a quien esté debajo. A quien sea.",
   "parrilla": "¡Parrilla!",
   "regaloEnCaminoTitulo": "Regalo en paracaídas de {patrocinador}",
-  "regaloEnCaminoTexto": "Cae al final de la ronda. El público ya está mirando al techo."
+  "regaloEnCaminoTexto": "Cae al final de la ronda. El público ya está mirando al techo.",
+  "contratoAnulado": "Contrato anulado",
+  "contratoAnuladoTexto": "En esa planta no había ni una trampa. El departamento jurídico de {patrocinador} lo da por no firmado. Sin multa."
 }

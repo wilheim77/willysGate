@@ -1,4 +1,4 @@
-import { WILLY_CREATION, defaultCreation, willy } from '../../rulesets/willy';
+import { WILLY_CREATION, defaultCreation, tutorialUnlocked, willy } from '../../rulesets/willy';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { AudioManifest } from '../../src/audio/types';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
@@ -16,6 +16,7 @@ import { TUTORIAL_STEPS } from './tutorial';
 import { willyHud } from './hud';
 import { achievements, rewardBoxes } from './meta-view';
 import { defeat, ending, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
+import { injectProfile, profileBadge, profileScreen, updateProfile } from './profile';
 import cast from './data/cast.json';
 import texts from './texts/ui.json';
 
@@ -53,6 +54,11 @@ export const game: GameDefinition = {
   leaderId: 'willy',
   // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
   onDeath: 'vanish',
+  // HUD pieces hidden on the first floor until their tutorial step fires; the rules (which step, which floor) are the ruleset's.
+  tutorialLocks: {
+    hud: ['audiencia', 'grupo', 'mochila'],
+    locked: (state, hud) => !tutorialUnlocked(state, `hud.${hud === 'grupo' ? 'atributos' : hud}`),
+  },
   // The prologue (docs/willy/INTRO.md): plays after «Nueva partida», before the casting.
   cinematics: { intro: introCinematic as unknown as Cinematic },
   audio: audio as unknown as AudioManifest,
@@ -72,6 +78,12 @@ export const game: GameDefinition = {
   savePolicy,
   onRestoredCopy,
   defeat,
+  profile: {
+    inject: (state, p) => injectProfile(state, p),
+    update: (p, events, state, today) => updateProfile(p, events, state, today) as unknown as Record<string, unknown>,
+    screen: (p) => profileScreen(p),
+    badge: (p) => profileBadge(p),
+  },
   ending,
   // The season's end: once the final boss is down (rulesets/willy/ending.ts), out of combat.
   triggers: [{ id: 'final-temporada', when: { all: [{ flag: 'willy:presentadorDerrotado', is: true }, { notFlag: 'willy:final' }] }, dialogue: 'final-temporada' }],

@@ -454,6 +454,8 @@ export { COMPANIONS, companionOfClass, companionStats, createCompanion, syncComp
 export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
 export * from './meta';
+export { classOf } from './character';
+export { counterNodes } from './achievements';
 export * from './ending';
 export { DIFFICULTIES, difficultyOf, type DifficultyMods } from './difficulty';
 export { configureTutorial, tutorialFlag, tutorialUnlocked, type TutorialData, type TutorialStepData } from './tutorial';

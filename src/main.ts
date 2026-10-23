@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition, inventoriesOf } from '../engine';
+import { type CheckResult, type GameEvent, createEngine, dialogueOf as dialogueOfState, evaluateCondition, inventoriesOf } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -12,6 +12,7 @@ import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { DialogueBox } from './ui/dialogueBox';
 import { CreationScreen } from './ui/creationScreen';
+import { pickRenderer } from './renderer';
 import { CinematicPlayer } from './ui/cinematicPlayer';
 import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
@@ -23,6 +24,7 @@ import { setupAchievements } from './ui/achievements';
 import { setupRewardBoxes } from './ui/rewardBoxes';
 import './ui/meta.css';
 import { SetupScreen } from './ui/setupScreen';
+import { setupProfile } from './ui/profileScreen';
 import { PermadeathSlot } from './game/permadeath';
 import { CreditsScreen } from './ui/creditsScreen';
 import { setupShowHud } from './ui/showHud';
@@ -143,7 +145,7 @@ controller.onTrapReached = (trap, candidates) => {
           if (ev?.replaced) offerReplaced(ev.replaced, id, onDone);
           else onDone();
         },
-      })),
+      })).concat([{ label: 'Guardarlo en la mochila', onPick: onDone }]),
       false,
     );
   };
@@ -164,16 +166,22 @@ controller.onTrapReached = (trap, candidates) => {
   store.subscribe((change) => {
     if (change.kind !== 'events') return;
     const dropped = new Set(change.events.filter((e) => e.type === 'lootDropped').map((e) => (e as unknown as { item: string }).item));
+    // What comes out of a reward box goes to the bag: the box's own screen shows it, and asking
+    // «who wears it?» there would spoil the reveal (and pile up with many boxes).
+    if (change.events.some((e) => e.type === 'boxOpened')) return;
+    // Swapping gear puts the old piece back in the bag: that is not a new find, and asking about
+    // it again looped forever (playtest: three weapons, no way out).
+    const reshuffle = change.events.some((e) => /^item(Equipped|Unequipped|Used)$/.test(e.type));
     for (const ev of change.events) {
       // Gear found in a chest or handed over in a conversation gets the same "who wears it?" question.
       const found = ev as unknown as { owner?: string; item?: string; from?: number; to?: number };
-      const fromChest = ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
+      const fromChest = !reshuffle && ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
       if (ev.type !== 'lootDropped' && !fromChest) continue;
       const item = (ev as unknown as { item: string }).item;
       // Consumables and misc goods have no slot: they're already in the shared bag (see the
       // combat log line for them), nothing to ask.
       if (!store.engine.ruleset.itemSlot?.(item)) continue;
-      lootQueue.push(item);
+      if (!lootQueue.includes(item)) lootQueue.push(item);
     }
     pumpLootQueue();
   });
@@ -181,6 +189,7 @@ controller.onTrapReached = (trap, candidates) => {
   // The shared bag, one tap away (🎒 in the top bar): what you carry, what it does, and the
   // obvious things to do with it - drink a potion out of combat, put on gear left in the bag.
   const openBag = () => {
+    store.announce({ type: 'inventoryOpened' });
     const ruleset = store.engine.ruleset;
     const entries = Object.entries(inventoriesOf(store.state).party ?? {}).filter(([, n]) => n > 0);
     const worn = new Set(partyMemberIds().flatMap((id) => ruleset.equippedItems?.(store.state.entities[id]!) ?? []));
@@ -221,6 +230,7 @@ controller.onTrapReached = (trap, candidates) => {
   };
   const bagButton = document.createElement('button');
   bagButton.textContent = '🎒';
+  bagButton.dataset.hud = 'mochila'; // hidden until its tutorial step (GameDefinition.tutorialLocks)
   bagButton.title = game.texts.combat?.inventory ?? 'Mochila del grupo';
   bagButton.setAttribute('aria-label', bagButton.title);
   bagButton.addEventListener('click', openBag);
@@ -336,7 +346,8 @@ if (game.ending) {
     const show = () =>
       dialogue.ask(`${summary.title}\n${summary.lines.map((l: string) => `• ${l}`).join('\n')}`, [
         { label: (game.texts.ui as Record<string, string>).credits ?? 'Créditos', onPick: () => { credits.open(); setTimeout(show, 0); } },
-        { label: summary.button, onPick: () => newRun() },
+        // The credits may still be open over the summary: a new run never starts under them.
+        { label: summary.button, onPick: () => { credits.close(); newRun(); } },
       ], false);
     setTimeout(show, 800);
   });
@@ -406,8 +417,24 @@ setupShowHud(store, game, (code) => hud.sayError(code));
 const creation = new CreationScreen(store, game);
 // A new game: the game's questions (difficulty, elimination mode...), then character creation.
 const setupScreen = new SetupScreen(store, game);
-const startNew = () => setupScreen.open(() => creation.open());
+// The title screen first; a new game goes on to character creation. A new season starts with what
+// the browser's profile carries over (achievements, unlocks, rivals already met).
+let profile: ReturnType<typeof setupProfile> = null;
+const startNew = () => {
+  profile?.inject();
+  setupScreen.open(() => creation.open());
+};
 hud.onNewGame = startNew;
+// A minute with no input out of combat: the narrator may notice (client event `playerIdle`).
+let lastInput = performance.now();
+for (const type of ['pointerdown', 'keydown', 'touchstart', 'wheel']) window.addEventListener(type, () => (lastInput = performance.now()), { passive: true });
+window.setInterval(() => {
+  const onNewGameScreens = ['#title', '#creation', '#intro', '#cinematic', '#setup'].some((sel) => document.querySelector<HTMLElement>(sel)?.hidden === false);
+  if (document.hidden || onNewGameScreens || store.state.turn.mode === 'combat' || performance.now() - lastInput < 60_000) return;
+  lastInput = performance.now();
+  store.announce({ type: 'playerIdle', segundos: 60 } as GameEvent);
+}, 5_000);
+
 // The title screen first; a new game plays the intro cinematic (if the game has one), then
 // goes on to the setup screens and character creation. «Ver el prólogo» replays it.
 const cinematic = new CinematicPlayer({
@@ -421,6 +448,7 @@ new TitleScreen(
   () => cinematic.play(intro, startNew),
   intro ? () => cinematic.play(intro, () => undefined) : undefined,
 ).open();
+profile = setupProfile(store, game);
 // A permadeath run in progress: «Continuar» resumes it exactly where it was (no other way in).
 {
   const saved = permadeath.load();
@@ -472,8 +500,8 @@ const scene = new MapScene(
 controller.scene = scene;
 
 new Phaser.Game({
-  // ?canvas forces the 2D renderer (headless browsers and old GPUs where WebGL framebuffers fail).
-  type: new URLSearchParams(location.search).has('canvas') ? Phaser.CANVAS : Phaser.AUTO,
+  // WebGL when its framebuffers work, otherwise the 2D canvas (src/renderer.ts; ?canvas / ?webgl force one).
+  type: pickRenderer(),
   parent: 'game',
   backgroundColor: game.theme.canvas,
   pixelArt: true,

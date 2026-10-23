@@ -1,72 +1,99 @@
 # Willy - in-browser playtest log
 
-QA reviewer pass (cheap Fable stand-in). Phone size 375x812, dev server `GAME=willy npx vite --port 5186`,
-Canvas renderer (`?canvas=1`, see B3). Driving: real clicks for menus/HUD, synthetic taps on the canvas for
-tiles, `window.__game` only to read state or skip walking.
-Order: blocker > confusing > cosmetic. Owner in brackets: W = Willy agent (rules, floors), M = meta (boxes, bag,
-modes, achievements), C = client (UI, tutorial, audio), S = show (audience, sponsors).
-Status: OPEN unless marked FIXED (branch qa).
+QA reviewer pass (cheap stand-in while the Fable reviewer is paused). Phone size 375x812, dev server
+`GAME=willy npx vite --port 5186`, Canvas renderer (`?canvas=1`, see B3). Real clicks for menus/HUD, synthetic taps on
+the canvas for tiles, `window.__game` to read state and to skip long walks/fights (AI-driven, state only).
+Order: blocker > confusing > cosmetic. Owner in brackets: W = Willy agent (rules, floors), M = meta (boxes, bag, modes,
+achievements), C = client (UI, tutorial, audio), S = show (audience, sponsors).
+Status OPEN unless marked FIXED (branch qa) or RETEST (needs a re-test once on main).
+
+Path covered (Turista + Con repetición, then Concursante + Sin repetición): title -> intro (16 slides) -> difficulty ->
+mode -> casting -> Camerino -> floors 1, 2, 3 (cleared; floor 2 boss Centollo beaten) -> rival (Pactar fail ->
+Derrotar) -> boxes (opened, probabilities, reveal) -> bag -> sponsor panel (signed a contract) -> save/load ->
+clock expiry -> death with Con repetición (returns to the last Camerino) and with Sin repetición (permadeath slot
+deleted, season summary).
 
 ## Blockers
 
-1. **[C/W] Clock expiry then walking froze the page for minutes.** FIXED on qa (needs main).
-   Repro: floor 2, set `systems.clock.remaining = 3`, walk ~14 steps. Each room fall emits 130-170 `tileChanged`
-   events and `MapScene.play` rebuilt the whole world per event. Fix: coalesce rebuild-only events
-   (`src/scenes/rebuildEvents.ts`, test `tests/game/rebuildEvents.test.ts`). Rules side suggestion (W): emit one
-   aggregated tiles event per fall.
-2. **[C] Resize/rotate leaves the camera where the old size put it: blank map.** FIXED on qa (MapScene
-   re-centres on `Phaser.Scale.Events.RESIZE`).
-3. **[C] WebGL init failure aborts the whole setup flow silently.** "Framebuffer status: Incomplete Attachment" ->
-   `MapScene.setOverlays` throws (`this.overlay` undefined) inside `controller.refresh`, "A la mazmorra" lands on a
-   blank map and the player never gets the casting screen (default Butanero). Workaround on qa: `?canvas` forces the
-   2D renderer. Real fix: automatic Canvas fallback + guard `setOverlays`.
-4. **[C/W] Tutorial never shows and its gating is not applied.** `content/willy/tutorial.json` (pasos with
-   `disparador`/`texto[]`, `bloqueosIniciales`) has another shape than the client's `TutorialStep` and
-   `game.tutorial` is not set in `content/willy/game.ts`. Result: a new player gets zero guidance, and the HUD the
-   design says is hidden at start (audience, clock, bag, boxes, sponsors) is all visible from the first second.
-5. **[W] Chests do nothing.** `cofre` props (`botin:planta-N`, 6 hp objects) ignore taps in exploration; DESIGN.md
-   says opening costs 3 s and gives 1 item + chips. No feedback either. (Boxes from achievements work.)
+1. **[C/W] Clock expiry then walking froze the page for minutes.** FIXED, RE-TESTED on main: two rooms fell in 10 s, the page stayed responsive, Willy was dragged out (`entityTeleported`).
+   Repro: floor 2, `systems.clock.remaining = 3`, walk ~14 steps. Each room fall emits 130-170 `tileChanged` events
+   and `MapScene.play` rebuilt the whole world per event. Fix: coalesce rebuild-only events
+   (`src/scenes/rebuildEvents.ts`, test `tests/game/rebuildEvents.test.ts`). Re-tested in the browser on qa: the room
+   falls, the page stays responsive. The rules side is cheap (700 ms for 40 steps headless).
+2. **[C] Resize/rotate leaves the camera where the old size put it: blank map.** FIXED on main (MapScene re-centres on
+   `Phaser.Scale.Events.RESIZE`).
+3. **[C] WebGL init failure aborts the whole setup flow silently.** FIXED on main (automatic fallback in `src/renderer.ts`; WebGL initialised fine in the re-test, so the failure path itself was not re-triggered). "Framebuffer status: Incomplete Attachment" ->
+   `MapScene.setOverlays` throws (`this.overlay` undefined) inside `controller.refresh`; "A la mazmorra" lands on a
+   blank map and the player never sees the casting screen (Butanero by default). Workaround on qa: `?canvas` forces
+   the 2D renderer. Real fix: automatic Canvas fallback + guard `setOverlays`.
+4. **[C/W] No tutorial at all, and the HUD is not gated.** FIXED on main, RE-TESTED: toasts show, floor-1 HUD gating works (audience and bag hidden until their step). Left: the first card in a new run is the achievements one (t10) in the Camerino, before "moverse"; the "atributos" card popped up in the middle of a clock collapse and covered the collapse banner (tutorial cards should wait for a calm moment); the clock HUD shows "Reloj 34:30" on floor 1 before its step. Original report: `content/willy/tutorial.json` (pasos with
+   `disparador`/`texto[]`, `bloqueosIniciales`) has another shape than the client's `TutorialStep`; `game.tutorial`
+   is not set in `content/willy/game.ts`. A new player gets zero guidance (no "tap to move", no combat explanation)
+   and everything the design says is hidden at the start (audience, clock, bag, boxes, sponsors) is visible from the
+   first second. Also the tutorial's own script talks about the casting happening after the plaza, but the casting
+   is the first screen.
+5. **[M/C] Box fatigue: 39 unopened boxes and 32 achievements after floor 3.** Every achievement grants a box; each
+   opened gear item raises a "Dárselo a Willy / Jonatan" prompt, and these prompts stack when several are pending
+   (we saw 2 queued at once, one with no way to skip). The box list has no "Abrir todas" and no "Guardar todo en la
+   mochila". Playing a normal session means dozens of taps and prompts. (Not a crash: a flow problem that will make
+   the first impression of the game bad.)
 
 ## Confusing
 
-6. **[M] Box reveal spoils itself and the gear prompt can't be skipped.** Opening a box immediately opens the
-   "Guantes de fregar - Dárselo a Willy / a Jonatan" prompt under the reveal animation (item name faintly visible),
-   and that prompt has no "Luego"/"Dejarlo" option (bag use prompt has "Dejarlo").
-7. **[M] 29 unopened boxes after floor 1.** Every achievement gives a bronze box; the list has no "Abrir todas".
-   (17 achievements by floor 2 in ~10 min.)
-8. **[W] Floor 2 narrator says "Planta 2: el Hipermercado Eterno" but the floor is still Castro (same tiles,
-   gaviotas, ratas).** Narrator uses the floor number as planta; there are two floors per planta now.
-9. **[C] Camerino NPCs (Maripuri, Paco, Xelda, Koldo) are decorative: tapping them does nothing; fichas have no
-   sink (68 chips, no shop).** At least show a line or "no tiene nada que decirte".
-10. **[S] Sponsor contract may be impossible.** Seguros La Prudente offered "descubre 2 trampas" (applies to
-    floor 2) while floor 1 had no traps at all; verify floor 2 generates traps whenever this contract can be
-    offered.
-11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/
+6. **[W] Chests do nothing.** `cofre` props (`botin:planta-N`, 6 hp objects) ignore taps; DESIGN.md says opening
+   costs 3 s and gives 1 item + chips. No feedback either.
+7. **[M] Box reveal spoils itself, and the gear prompt can't always be skipped.** Opening a box immediately opens the
+   "Guantes de fregar - Dárselo a Willy / a Jonatan" prompt under the reveal (item name faintly visible). Some
+   prompts have "Guardarlo en la mochila", the ones from box/sponsor gifts have no "Luego" option.
+8. **[W] The floor intro narrator uses the floor number as the planta.** Entering floor 2 says "Planta 2: el
+   Hipermercado Eterno" while the floor is still Castro (floors 1-2 Castro, 3-4 Hipermercado).
+9. **[C] Camerino NPCs (Maripuri, Paco, Xelda, Koldo) do nothing when tapped; fichas have no sink** (304 chips by
+   floor 3, nothing to buy). At least answer with a line.
+10. **[M/W] Narrator line names a different achievement than the banner.** Banner "Planta limpia" + narrator "Logro
+    desbloqueado, y encima de los raros: «Barbacoa de uno»" (two unlocked in the same command, {logro} resolves to the
+    wrong one). Also «Primer figurante». "el Gaviota de lonja ha caído." (see 17).
+11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/ **FIXED on main** (client): the bar fits, Guardar/Cargar on screen and Exportar peeks out as a swipe cue (re-tested).
     Nueva/sound reachable only by swiping, no hint). Save is hard to find on a phone.
-12. **[C] Initiative strip overlapped by the clock/audience widgets** at 375 px once there are 5+ combatants.
-13. **[M] Rival dialogue says "CD 15", the roll log says "DIF 15"** (and the attack preview says "Defensa").
-    Pick one term.
+12. **[C] Initiative strip overlapped by the clock/audience widgets** at 375 px once there are 5+ combatants. **FIXED on main** (client): the clock sits below the strip (re-tested with 5 combatants, no overlap).
+13. **[W] Rival dialogue says "CD 15", the roll log says "DIF 15"** (and the attack preview says "Defensa"). Pick one.
+14. **[W] When Willy goes down mid-fight nothing happens** for 10+ rounds: the fight continues with the companion
+    only, the player gets no message, and the defeat prompt only appears after Jonatan falls too (or wins). A one-line
+    "Willy está fuera de combate" would help.
+15. **[S] Sponsor contract feasibility.** "Descubre 2 trampas" is offered on floor 1 for floor 2; floor 3 can have 0
+    traps (seeds 3 and 6 headless), so such a contract must only be offered when the target floor has enough.
+16. **[C] Title "Nueva partida" with an existing save** starts at once (the "Continuar" slot is only overwritten by the
+    next "Guardar"); in-game "Nueva" uses a native `confirm()` (fine in a browser, blocked in embedded webviews).
 
 ## Cosmetic
 
-14. **[M] Narrator grammar in an achievement:** "«Primer figurante». el Gaviota de lonja ha caído." (lowercase
-    "el" after a full stop, wrong gender: `{enemigo:el}` ignores the enemy's gender in achievements.json).
-15. **[C] Casting stat line "+8 -> 10 (+0)" has no label; "Puntos libres: 0" with 3 points already spent.**
-16. **[C] Item card description clipped in the box reveal** ("Inmune a Envenenado por superficies." cut).
-17. **[C] Floating "+248 au..." text is huge, overlaps Willy and is clipped at 375 px.**
-18. **[C] HUD (bag, boxes, achievements, save) is clickable over the title/difficulty/mode/casting screens.**
-19. **[C] Achievement toast and narrator bubble repeat the same text; stale gear-prompt buttons stay in the DOM.**
-20. **[S] Sponsor affinity bars are partly filled at "Afinidad 0".**
+17. **[M] Narrator grammar:** "«Primer figurante». el Gaviota de lonja ha caído." (lowercase "el" after a full stop,
+    wrong gender: `{enemigo:el}` in achievements.json ignores the enemy's gender; the rest of the narrator handles it).
+18. **[C] Casting stat line "+8 -> 10 (+0)" has no label; "Puntos libres: 0" with 3 points already spent.** **FIXED on main** (client): sum display "8 + 2 = 10".
+19. **[C] Item card description clipped in the box reveal** ("Inmune a Envenenado por superficies." cut at 375 px). **FIXED on qa/main** (mine): cards grow with their text (re-tested: 162 and 175 px cards, nothing clipped).
+20. **[C] Floating "+248 au..." text is huge, overlaps Willy and is clipped at 375 px.** **FIXED on main** (client): floating text clamped to the view.
+21. **[C] HUD (bag, boxes, achievements, save) is clickable over the title/difficulty/mode/casting screens.** **FIXED on main** (client: setup/casting/intro screens are opaque); also not reachable by real taps before.
+22. **[C] Achievement toasts and narrator bubbles repeat the same text, and toasts draw over the defeat/season summary.** **FIXED on qa** for the z-order (toast now under the dialogue layer); the toast and the narrator line are different texts, left as is.
+23. **[C] Intro slide 6 banner reads "OEN DIRECTO"** (the REC dot is drawn as an "O" glued to "EN DIRECTO"). **FIXED on qa**: the REC dot sits left of "EN DIRECTO" (spec edited, panel PNG rebuilt).
+24. **[S] Sponsor affinity bars are partly filled at "Afinidad 0".**
 
 ## Verified OK
 
-Title -> difficulty -> mode (Sin repetición correctly greyed out on Turista, with the reason) -> casting (9 classes,
-phone layout fine) -> Camerino; bag; box scene (probabilities screen, reveal, "Abrir otra (n)"); sponsor panel in
-Spanish with Firmar/Rechazar; character sheet; combat preview ("95 % · ~6 de daño"), Hacer el ganso raises the
-audience; level-up banner; rival dialogue (Derrotar / Pactar with check / Dejar ir) and fight; lift Camerino ->
-floor 2; save ("Parte de planta firmado"); clock HUD, warning text and room cracking message.
+- Title -> intro (16 slides, all Spanish, "Saltar" works) -> difficulty -> mode (Sin repetición greyed out on Turista
+  with the reason; on Concursante it shows "Una sola vida. Se guarda solo y no se puede volver atrás.") -> casting
+  (9 classes, phone layout fine) -> Camerino -> lift.
+- Bag (asks who, "Dejarlo"), box scene (probabilities screen, tap to open, "Revelar todo", "Abrir otra (n)"), character
+  sheet, sponsor panel in Spanish with Firmar/Rechazar, combat preview ("95 % · ~6 de daño"), Hacer el ganso raises
+  the audience, level-up banner, achievement toasts, save ("Parte de planta firmado") and load ("Partida cargada.
+  Seguimos en antena."), clock HUD + warning text + cracking.
+- Rival (Paqui la Elegante): Derrotar / Pactar (Carisma check shown with %) / Dejar ir; failed Pactar offers Derrotar /
+  Dejar ir; the fight works.
+- Floors 1-3 cleared headlessly in the browser (about 60 fights), boss Centollo on floor 2: no crash, no hang.
+- Con repetición death: "Willy ha caído... 1. Volver al Camerino" -> back in camerino-1 with full HP, attempt counter
+  1, progress after the Camerino gone as the text promises.
+- Sin repetición death: Guardar/Cargar/Exportar/Importar hidden during the run, slot `willysgate.willy.hardcore`
+  exists while playing and is deleted on defeat, summary (planta, nivel, logros, cajas, fichas) and "Nueva temporada".
 
-## Not yet covered
+## Not covered
 
-Floors 3+, boss (jefe-centollo) fight, traps/barrels, death with Con repetición (return to Camerino) and Sin
-repetición (permadeath slot deleted, summary), season ending, audio.
+Floors 4+ beyond the first fight, boss phases (trapdoors, dark phase, vote), season ending, audio, Sin repetición
+reload mid-run (restored-copy rule), traps/barrels by hand, WebGL renderer on a real GPU.

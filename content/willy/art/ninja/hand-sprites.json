@@ -9160,6 +9160,51 @@
     "T": "#ad8a51",
     "H": "#f6b865"
    }
+  },
+  "koldo-congelado": {
+   "extends": "koldo",
+   "note": "Koldo stuck in the freezers: the whole sprite frosted blue-white",
+   "legend": {
+    "k": "#1e1c24",
+    "C": "#1e1c24",
+    "c": "#76899a",
+    "s": "#d4cac4",
+    "S": "#c0b7b4",
+    "e": "#1e1c24",
+    "m": "#848990",
+    "w": "#d4d6a0",
+    "h": "#d4cac4",
+    "O": "#d4d6a0",
+    "o": "#bcbf94",
+    "L": "#d4d6a0",
+    "l": "#bcbf94",
+    "Q": "#7c97bc",
+    "q": "#748cac",
+    "R": "#7c97bc",
+    "r": "#748cac",
+    "b": "#7c8790",
+    "A": "#d4a794",
+    "a": "#b8978e",
+    "g": "#a4baca",
+    "W": "#dae8f0",
+    "P": "#a0deff",
+    "Y": "#d0d2b0",
+    "X": "#c88290",
+    "T": "#b0aaa0",
+    "H": "#dfb298"
+   }
+  },
+  "feriante-tombola": {
+   "extends": "feriante",
+   "note": "The tombola keeper: the feriante in purple and gold, noncombatant",
+   "legend": {
+    "C": "#8a3ac0",
+    "c": "#b45cff",
+    "L": "#ffe04f",
+    "l": "#ffe04f",
+    "X": "#ff4fa0",
+    "Y": "#ffffff"
+   }
   }
  }
 }

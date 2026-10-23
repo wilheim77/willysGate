@@ -48,7 +48,7 @@ const SHOW_EVENTS = new Set([
   'bossPhase', 'bossLine', 'bossQuestion', 'bossInDark', 'bossUnderSpotlight', 'trapdoorOpened', 'spotlightOn', 'rigHung', 'rigDropped',
   'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorGiftIncoming', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
-  'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
+  'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken', 'sponsorDealVoided',
   'boxDelivered', 'itemObtained', 'coinsGranted',
   // Handled by the late pass, after the achievements.
   'achievementUnlocked', 'npcHelped',

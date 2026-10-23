@@ -25,6 +25,15 @@ export class GameStore {
     return result;
   }
 
+  /**
+   * Tells listeners about something that happened in the client rather than in the engine (the
+   * bag was opened, the game was saved, nobody has touched anything for a minute). The state
+   * doesn't change; it's how such moments reach the narrator, audio and tutorial like any event.
+   */
+  announce(...events: GameEvent[]): void {
+    this.emit({ kind: 'events', events });
+  }
+
   /** Replaces the whole state (new game, load, import). */
   load(state: GameState): void {
     this.current = state;

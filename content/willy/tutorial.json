@@ -91,7 +91,7 @@
       "resaltar": "hud.atributos"
     },
     {
-      "id": "t06-combate",
+      "id": "t06-combate", "despues": "t01-moverse",
       "zona": "p1-tutorial-combate",
       "disparador": {
         "evento": "combatStarted"
@@ -103,7 +103,7 @@
       "resaltar": "hud.turnos"
     },
     {
-      "id": "t07-atacar",
+      "id": "t07-atacar", "despues": "t01-moverse",
       "zona": "p1-tutorial-combate",
       "disparador": {
         "evento": "turnStarted",
@@ -118,7 +118,7 @@
       "despues": "t06-combate"
     },
     {
-      "id": "t08-empujar",
+      "id": "t08-empujar", "despues": "t01-moverse",
       "zona": "p1-tutorial-combate",
       "disparador": {
         "evento": "turnStarted",
@@ -134,7 +134,7 @@
       "despues": "t07-atacar"
     },
     {
-      "id": "t09-altura",
+      "id": "t09-altura", "despues": "t01-moverse",
       "zona": "p1-tutorial-combate",
       "disparador": {
         "evento": "fell"
@@ -145,7 +145,7 @@
       ]
     },
     {
-      "id": "t10-logro",
+      "id": "t10-logro", "despues": "t01-moverse",
       "zona": "p1-tutorial-combate",
       "disparador": {
         "evento": "achievementUnlocked"
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "id": "t11-caja",
+      "id": "t11-caja", "despues": "t01-moverse",
       "zona": "p1-tutorial-combate",
       "disparador": {
         "evento": "boxDelivered"
@@ -176,7 +176,7 @@
       "resaltar": "caja"
     },
     {
-      "id": "t12-mochila",
+      "id": "t12-mochila", "despues": "t01-moverse",
       "zona": "p1-tutorial-combate",
       "disparador": {
         "evento": "boxOpened"
@@ -190,7 +190,7 @@
       "resaltar": "hud.mochila"
     },
     {
-      "id": "t13-superficies",
+      "id": "t13-superficies", "despues": "t01-moverse",
       "zona": "p1-callejon-aceite",
       "disparador": {
         "evento": "surfaceReacted"
@@ -202,7 +202,7 @@
       "resaltar": "superficie.aceite"
     },
     {
-      "id": "t14-patrocinador",
+      "id": "t14-patrocinador", "despues": "t01-moverse",
       "zona": "p1-callejon-aceite",
       "disparador": {
         "evento": "sponsorMessage"
@@ -215,7 +215,7 @@
       "resaltar": "hud.patrocinadores"
     },
     {
-      "id": "t15-reloj",
+      "id": "t15-reloj", "despues": "t01-moverse",
       "zona": "salida-tutorial",
       "disparador": {
         "evento": "combatEnded",
@@ -233,7 +233,7 @@
       "resaltar": "hud.reloj"
     },
     {
-      "id": "t16-nivel",
+      "id": "t16-nivel", "despues": "t01-moverse",
       "disparador": {
         "evento": "levelUp"
       },
@@ -243,7 +243,7 @@
       ]
     },
     {
-      "id": "t17-habilidades",
+      "id": "t17-habilidades", "despues": "t01-moverse",
       "disparador": {
         "evento": "skillUsed",
         "donde": {
@@ -256,7 +256,7 @@
       ]
     },
     {
-      "id": "t18-condiciones",
+      "id": "t18-condiciones", "despues": "t01-moverse",
       "disparador": {
         "evento": "conditionApplied",
         "donde": {
@@ -269,7 +269,7 @@
       "resaltar": "hud.condiciones"
     },
     {
-      "id": "t19-curarse",
+      "id": "t19-curarse", "despues": "t01-moverse",
       "disparador": {
         "evento": "resourceChanged",
         "donde": {
@@ -287,7 +287,7 @@
       "resaltar": "hud.mochila"
     },
     {
-      "id": "t20-trampas",
+      "id": "t20-trampas", "despues": "t01-moverse",
       "disparador": {
         "evento": "trapDetected"
       },
@@ -296,7 +296,7 @@
       ]
     },
     {
-      "id": "t20b-trampas-pisada",
+      "id": "t20b-trampas-pisada", "despues": "t01-moverse",
       "disparador": {
         "evento": "trapTriggered",
         "donde": {
@@ -321,7 +321,7 @@
       ]
     },
     {
-      "id": "t22-aburrimiento",
+      "id": "t22-aburrimiento", "despues": "t01-moverse",
       "disparador": {
         "evento": "audienceChanged",
         "donde": {
@@ -334,7 +334,7 @@
       "resaltar": "accion.ganso"
     },
     {
-      "id": "t23-reloj-mitad",
+      "id": "t23-reloj-mitad", "despues": "t01-moverse",
       "disparador": {
         "evento": "clockWarning",
         "donde": {
@@ -346,7 +346,7 @@
       ]
     },
     {
-      "id": "t24-jefe",
+      "id": "t24-jefe", "despues": "t01-moverse",
       "disparador": {
         "evento": "bossFight"
       },
@@ -368,11 +368,9 @@
     },
     {
       "id": "t26-glosario",
+      "despues": "t01-moverse",
       "disparador": {
-        "evento": "tutorialDone",
-        "donde": {
-          "id": "t25-camerino"
-        }
+        "evento": "safeZoneEntered"
       },
       "texto": [
         "Un último consejo y me callo (es mentira): en el menú de pausa tienes «Cómo se juega» y un glosario con todo. Y si los consejos te molestan, se pueden apagar en Opciones. Yo no. Yo sigo."

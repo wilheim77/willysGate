@@ -1,7 +1,7 @@
 import { type ActionOutcome, type Effect, type Entity, type GameEvent, type GameState, type JsonValue, type RngCursor, type Ruleset, OBJECT_TAG, gridDistance, hasCondition, hasTag, tileAt } from '../../engine';
 import { classOf, skillLevel } from './character';
 import { CLASSES } from './data';
-import { type AchievementDef, type CombatStats, type Condition, type EventPattern, type Match, type MetaState, type Rarity, type Scope, cloneMeta, metaOf, setMeta, willyContent } from './meta';
+import { type AchievementDef, type CombatStats, type Condition, type EventPattern, type Match, type MetaState, type Rarity, type Scope, cloneMeta, metaOf, profileOf, setMeta, willyContent } from './meta';
 import { grantBox } from './loot';
 import { pushedByFlag, standing } from './resolve';
 
@@ -295,8 +295,19 @@ export function datum(state: GameState, meta: MetaState, path: string, ctx: { co
     case 'partida.razasDeRivales':
       return new Set(metRivals(state).map((r) => r.raza).filter(Boolean)).size;
     case 'partida.logros':
-    case 'perfil.logros':
       return meta.logros.length;
+    case 'perfil.logros':
+      return new Set([...profileOf(state).logros, ...meta.logros]).size;
+    case 'perfil.clasesJugadas':
+      return new Set([...profileOf(state).clasesJugadas, ...(w && classOf(w) ? [classOf(w)!] : [])]).size;
+    case 'perfil.clasesConVictoria': {
+      const won = state.flags['willy:resultado'] === 'victoria' && w && classOf(w) ? [classOf(w)!] : [];
+      return new Set([...profileOf(state).clasesConVictoria, ...won]).size;
+    }
+    case 'perfil.rivalesDistintosVistos':
+      return profileOf(state).rivalesVistos + meta.rivalesVistos.length;
+    case 'perfil.razasDeRivalesVistas':
+      return new Set([...profileOf(state).razasRivales, ...meta.razasRivales]).size;
     case 'partida.plantasLimpias':
       return meta.plantasLimpias.length;
     case 'partida.resultado':
@@ -319,7 +330,7 @@ function metRivals(state: GameState): { raza?: string }[] {
 // --- Evaluation ---------------------------------------------------------------------------------
 
 /** Counter nodes of a condition, in walk order (their index keys the counter). */
-function counterNodes(c: Condition, out: (Condition & { ambito: Scope })[] = []): (Condition & { ambito: Scope })[] {
+export function counterNodes(c: Condition, out: (Condition & { ambito: Scope })[] = []): (Condition & { ambito: Scope })[] {
   if ('contar' in c || 'sumar' in c) out.push(c);
   else if ('al' in c) counterNodes(c.si, out);
   else if ('todas' in c) c.todas.forEach((x) => counterNodes(x, out));
@@ -370,11 +381,13 @@ function hasCounter(c: Condition): boolean {
 /** Details for the narrator's line ({enemigo:el}, {objeto}, {habilidad}). */
 function contextOf(ev: MetaEvent | undefined): Record<string, JsonValue> {
   if (!ev) return {};
-  const target = (ev.objetivo ?? ev.entidad) as { nombre?: string; genero?: string } | undefined;
+  const target = (ev.objetivo ?? ev.entidad) as { id?: string; nombre?: string; genero?: string } | undefined;
   const out: Record<string, JsonValue> = {};
   if (target?.nombre) {
     out.enemigo = target.nombre;
     out.enemigoGenero = target.genero ?? 'm';
+    // The Narrador reads the real grammatical gender off this entity (monsters' come from floors.json).
+    if (target.id) out.enemigoId = target.id;
   }
   if (typeof ev.item === 'string') out.objeto = ev.item;
   if (typeof ev.habilidad === 'string') out.habilidad = ev.habilidad;
@@ -387,7 +400,10 @@ function contextOf(ev: MetaEvent | undefined): Record<string, JsonValue> {
 function unlock(def: AchievementDef, meta: MetaState, ev: MetaEvent | undefined, effects: Effect[], events: GameEvent[], state: GameState): MetaEvent {
   meta.logros.push(def.id);
   const boxes: Rarity[] = [];
-  for (const r of def.recompensas) {
+  // Earned in an earlier season (the browser's profile): celebrated again, without its prize
+  // (DESIGN §8: an achievement's box comes once per browser).
+  const again = profileOf(state).logros.includes(def.id);
+  for (const r of again ? [] : def.recompensas) {
     if (r.tipo === 'caja' && r.nivel) {
       boxes.push(r.nivel);
       const g = grantBox(meta, r.nivel, 'logro', def.nombre);
@@ -405,6 +421,7 @@ function unlock(def: AchievementDef, meta: MetaState, ev: MetaEvent | undefined,
     frase: def.narrador,
     contexto: contextOf(ev),
     cajas: boxes,
+    repetido: again,
     ...(boxes.length ? { recompensa: { caja: boxes[0]! } } : {}),
   };
   // The unlock goes before its box delivery, so the toast reads in order.
@@ -462,6 +479,12 @@ export function achievementsHook(_ruleset: Ruleset, state: GameState, events: Ga
     }
   }
 
+  for (const raw of events as unknown as Record<string, unknown>[]) {
+    if (raw.type !== 'rivalEncountered' || typeof raw.rival !== 'string') continue;
+    if (!meta.rivalesVistos.includes(raw.rival)) meta.rivalesVistos.push(raw.rival);
+    const race = typeof raw.rivalRazaId === 'string' ? raw.rivalRazaId : '';
+    if (race && !meta.razasRivales.includes(race)) meta.razasRivales.push(race);
+  }
   queue.push(...translate(state, events));
   if (eliminated) {
     queue.push(eliminated);
@@ -499,7 +522,9 @@ export function achievementsHook(_ruleset: Ruleset, state: GameState, events: Ga
         const k = scopeKey(state, meta, n.ambito);
         const prev = meta.cont[key];
         const add = 'sumar' in n ? Number(lookup(ev, n.campo)) || 0 : 1;
-        meta.cont[key] = { k, n: (prev && prev.k === k ? prev.n : 0) + add };
+        // «siempre» counts across seasons: the first count of a run starts from the profile's.
+        const base = prev && prev.k === k ? prev.n : n.ambito === 'siempre' ? (profileOf(state).contadores[key] ?? 0) : 0;
+        meta.cont[key] = { k, n: base + add };
         touched = true;
       });
       const at = trigger(def.condicion);

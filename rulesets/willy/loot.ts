@@ -1,5 +1,5 @@
 import { type ActionOutcome, type CommandHandler, type Effect, type GameEvent, type GameState, type RngCursor, type Ruleset, OBJECT_TAG, RngCursor as Cursor, applyEffects, fail, hasTag } from '../../engine';
-import { type ItemDef, type MetaState, type PendingBox, RARITIES, type Rarity, cloneMeta, hasEquipped, itemDef, metaOf, setMeta, willyContent } from './meta';
+import { type ItemDef, type MetaState, type PendingBox, RARITIES, type Rarity, cloneMeta, hasEquipped, itemDef, metaOf, profileOf, setMeta, willyContent } from './meta';
 
 /**
  * Loot boxes (docs/willy/DESIGN.md §8): a box is granted (an achievement, a boss, an elite…) and
@@ -84,12 +84,14 @@ function eligible(state: GameState, meta: MetaState, def: ItemDef, picked: strin
   const content = willyContent()!;
   if (def.inicial || def.tipo === 'cosmetico' || picked.includes(def.id)) return false;
   if (content.loot.fueraDeCajas?.includes(def.id)) return false;
-  if (def.desbloqueo?.startsWith('logro:') && !meta.logros.includes(def.desbloqueo.slice(6)) && !meta.desbloqueos.includes(def.id)) return false;
+  // Unlocked by an achievement, this season or an earlier one (the browser's profile).
+  const profile = profileOf(state);
+  const unlockedBy = def.desbloqueo?.startsWith('logro:') ? def.desbloqueo.slice(6) : undefined;
+  if (unlockedBy && !meta.logros.includes(unlockedBy) && !profile.logros.includes(unlockedBy) && !meta.desbloqueos.includes(def.id) && !profile.desbloqueos.includes(def.id)) return false;
   const owned = meta.obtenidos[def.id] ?? 0;
   if (def.unico && owned > 0) return false;
   const max = content.loot.piedad.maxCopiasPorPartida[def.tipo];
   if (max !== undefined && owned >= max) return false;
-  void state;
   return true;
 }
 

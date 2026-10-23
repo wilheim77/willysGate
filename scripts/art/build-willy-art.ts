@@ -406,6 +406,7 @@ const tiles: [string, Image][] = [
   // Floor 4: Balneario Glaciar
   ['azulejo_1', show.poolTiles(121)], ['azulejo_2', show.poolTiles(122)],
   ['piscina_1', show.poolWater(0)], ['piscina_2', show.poolWater(3)],
+  ['madera_sauna_1', show.saunaPlanks(131)], ['madera_sauna_2', show.saunaPlanks(132)], ['madera_sauna_cara', show.saunaFace()],
   ['hielo_1', show.icyTiles(123)], ['hielo_2', show.icyTiles(124)],
   ['nieve_techo_1', show.snowTop(125)], ['nieve_techo_2', show.snowTop(126)], ['balneario_pared', show.spaWall()],
   // Floor-collapse clock (every floor): the sunken pit left once a room falls.
@@ -447,6 +448,7 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   // Death feedback (played directly by MapScene, not through the ability fx table; Intereses-style id)
   fx_eliminado: { frames: [0, 1, 2, 3, 4].map(show.eliminatedBanner), fps: 8, loop: false, anchor: 'centre' },
   // Xelda's office: the contract, drawn over the desk
+  'bolsa-guisantes': { frames: [show.peaBag()], fps: 0, loop: false, anchor: 'floor' },
   contrato: { frames: [show.contractStack()], fps: 0, loop: false, anchor: 'floor' },
   // Floor-collapse clock
   'fx-polvo-derrumbe': { frames: [0, 1, 2, 3, 4, 5].map(show.collapseDust), fps: 10, loop: false, anchor: 'floor' },
@@ -533,6 +535,13 @@ const objects: Record<string, Record<string, Image[]>> = {
   'retrato-ganador-3': { idle: [show.winnerPortrait(2)] },
   'vitrina-trofeos': { idle: [show.trophyCabinet()] },
   archivador: { idle: [show.archiveShelf()] },
+  // Scene rooms (frozen aisle, tombola, sauna branch)
+  'arcon-congelador': { idle: [show.chestFreezer()] },
+  'bombo-tombola': { idle: [show.raffleDrum()] },
+  'peluche-gigante': { idle: [show.giantPlush()] },
+  'barra-sauna': { idle: [show.saunaBar()] },
+  'cubo-sauna': { idle: [show.saunaBucket()] },
+  'banco-sauna': { idle: [show.saunaBench()] },
 };
 const ui: Record<string, Image> = {
   'carta-bronce': cardFrame('bronce'), 'carta-plata': cardFrame('plata'), 'carta-oro': cardFrame('oro'), 'carta-legendaria': cardFrame('legendaria'),
