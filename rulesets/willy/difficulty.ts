@@ -18,7 +18,9 @@ export interface DifficultyMods {
 export const DIFFICULTIES: Record<string, DifficultyMods> = {
   turista: { reloj: 1.5, danoRecibido: 0.6, danoEnemigos: 1 },
   concursante: { reloj: 1, danoRecibido: 1, danoEnemigos: 1 },
-  primetime: { reloj: 0.8, danoRecibido: 1, danoEnemigos: 0.8 },
+  // Softened on 2026-10-23 (the user: «suaviza un poquillo»; it was clock ×0.8, enemies 80 %):
+  // tougher enemies also make fights longer, so both levers moved a little (BALANCE.md → «Reloj»).
+  primetime: { reloj: 0.95, danoRecibido: 1, danoEnemigos: 0.85 },
 };
 
 export function difficultyOf(state: GameState): DifficultyMods {
