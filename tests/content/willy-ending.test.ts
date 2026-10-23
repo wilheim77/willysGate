@@ -81,9 +81,43 @@ describe('the season ending', () => {
     expect(c.events).toContainEqual(expect.objectContaining({ type: 'runEnded', final: 'C' }));
   });
 
-  it('Xelda shows the contract in the last Camerinos', () => {
-    const cam = maps['camerino-9']!();
-    expect(cam.entities.find((e) => e.id === 'xelda')!.tags).toContain('dialogue:xelda-contrato');
-    expect(maps['camerino-3']!().entities.find((e) => e.id === 'xelda')!.tags).not.toContain('dialogue:xelda-contrato');
+  it('Xelda\'s office: on the critical path of the last floor (never the one before), with Xelda and her props', () => {
+    for (const seed of [1, 2, 3, 4, 5, 6, 7, 8]) {
+      const s = applyCasting(newWillyGame(engine, seed), { clase: 'butanero', puntos: {} });
+      const plan = (st: GameState) => (st.systems.planta as unknown as { salas: { role: string; critical: boolean }[] }).salas;
+      const ten = buildFloor(10, s);
+      const at10 = { ...s, systems: { ...s.systems, ...ten.systems } };
+      const scenes = plan(at10 as GameState).filter((r) => r.role === 'escena');
+      expect(scenes, `seed ${seed}`).toHaveLength(1);
+      expect(scenes[0]!.critical).toBe(true);
+      const xelda = ten.entities.find((e) => e.id === 'xelda-despacho')!;
+      expect(xelda.tags).toContain('dialogue:xelda-despacho');
+      expect(ten.entities.filter((e) => e.spriteId === 'archivador')).toHaveLength(4);
+      expect(ten.entities.some((e) => e.spriteId === 'mesa-xelda')).toBe(true);
+      const nine = buildFloor(9, s);
+      expect(nine.entities.some((e) => e.id === 'xelda-despacho')).toBe(false);
+    }
+    // The Camerinos' Xelda no longer has the contract (the office replaced that).
+    expect(maps['camerino-9']!().entities.find((e) => e.id === 'xelda')!.tags.some((t) => t.startsWith('dialogue:'))).toBe(false);
+  });
+
+  it('talking to Xelda in her office: the reveal, then reading the contract sets the flag; the ending remembers the visit', () => {
+    const s = applyCasting(newWillyGame(engine, 7), { clase: 'butanero', puntos: {} });
+    const office = DIALOGUES['xelda-despacho']!;
+    let r = engine.apply(s, { type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: 'xelda-despacho', actorId: 'willy' } as BaseCommand);
+    for (let i = 0; i < 12 && r.ok && dialogueOf(r.state); i++) {
+      const node = office.nodes[dialogueOf(r.state)!.nodeId]!;
+      const index = node.choices ? node.choices.findIndex((c) => c.id === 'leer') : 0;
+      r = engine.apply(r.state, { type: 'chooseOption', issuer: 'player:1', index } as BaseCommand);
+    }
+    if (!r.ok) throw new Error(r.error.code);
+    expect(r.state.flags['willy:contratoLeido']).toBe(true);
+    expect(r.state.flags['willy:despachoVisto']).toBe(true);
+    const won = { ...r.state, flags: { ...r.state.flags, [DEFEATED_FLAG]: true, [SECRET_FLAG]: false } };
+    const started = engine.apply(won, { type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: 'final-temporada', actorId: 'willy' } as BaseCommand);
+    if (!started.ok) throw new Error(started.error.code);
+    const next = engine.apply(started.state, { type: 'chooseOption', issuer: 'player:1', index: 0 } as BaseCommand);
+    if (!next.ok) throw new Error(next.error.code);
+    expect(dialogueOf(next.state)!.nodeId).toBe('xelda1visto');
   });
 });
