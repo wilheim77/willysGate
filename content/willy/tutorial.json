@@ -1,5 +1,5 @@
 {
-  "$comment": "Tutorial integrado de la Planta 1. Borrador pendiente de aprobación; diseño en docs/willy/DESIGN.md → «Tutorial integrado». Cada paso se muestra una sola vez por partida (flag tutorial:<id>). 'disparador' usa los patrones de evento de los logros; 'completar' indica qué evento lo da por hecho. 'hud' revela elementos de la interfaz que estaban ocultos. 'bloqueos' lista sistemas que no pueden aparecer hasta que el paso se completa. Ningún sistema aparece sin explicarse antes.",
+  "$comment": "Pasos del tutorial integrado. Los dispara el ruleset (rulesets/willy/tutorial.ts) con el vocabulario de eventos de logros y patrocinadores, más tutorialDone {id} (el comando siguiente a ese paso), combatEnded {resultado} y bossFight. despues: solo tras ese paso; noSiHecho: se salta si ese paso ya salió. Cada paso sale una vez por partida (bandera tutorial:<id>).",
   "version": 1,
   "bloqueosIniciales": {
     "$comment": "Lo que está apagado al empezar la Planta 1 y qué paso lo enciende.",
@@ -15,241 +15,378 @@
   },
   "pasos": [
     {
-      "id": "t01-moverse", "zona": "p1-calle-de-willy",
-      "disparador": { "evento": "floorEntered", "donde": { "planta": 1 } },
+      "id": "t01-moverse",
+      "zona": "p1-calle-de-willy",
+      "disparador": {
+        "evento": "floorEntered",
+        "donde": {
+          "planta": 1,
+          "visita": 1
+        }
+      },
       "texto": [
         "Bienvenido a la Planta 1. Es tu calle. Bueno, una copia. Con agua. Y sin tu casa.",
         "Toca una casilla para que Willy vaya andando. Sí, así de fácil. No te acostumbres."
       ],
-      "resaltar": "mapa",
-      "completar": { "evento": "entityMoved", "donde": { "entityId": "willy" } }
+      "resaltar": "mapa"
     },
     {
-      "id": "t02-camara", "zona": "p1-calle-de-willy",
-      "disparador": { "evento": "tutorialDone", "donde": { "id": "t01-moverse" } },
-      "texto": ["Arrastra el dedo para mover la cámara y pellizca para acercarla. En ordenador: arrastra con el ratón y usa la rueda. La cámara es nuestra, pero te la dejamos."],
-      "completar": { "evento": "cameraMoved" },
+      "id": "t02-camara",
+      "zona": "p1-calle-de-willy",
+      "disparador": {
+        "evento": "tutorialDone",
+        "donde": {
+          "id": "t01-moverse"
+        }
+      },
+      "texto": [
+        "Arrastra el dedo para mover la cámara y pellizca para acercarla. En ordenador: arrastra con el ratón y usa la rueda. La cámara es nuestra, pero te la dejamos."
+      ],
       "autoCerrarSegundos": 8
     },
     {
-      "id": "t03-audiencia", "zona": "p1-calle-de-willy",
-      "disparador": { "evento": "markerReached", "donde": { "marcador": "plaza" } },
-      "hud": ["hud.audiencia"],
+      "id": "t03-audiencia",
+      "zona": "p1-calle-de-willy",
+      "disparador": {
+        "evento": "tutorialDone",
+        "donde": {
+          "id": "t02-camara"
+        }
+      },
+      "hud": [
+        "hud.audiencia"
+      ],
       "texto": [
         "¿Ves ese número de arriba? Son los espectadores. Gente de catorce galaxias mirándote en pijama.",
         "Si haces cosas emocionantes, sube. Si te aburres, se aburren. Nunca te va a hacer daño, pero da premios. Y a mí me suben el sueldo."
       ],
-      "resaltar": "hud.audiencia",
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "hud.audiencia"
     },
     {
-      "id": "t04-casting", "zona": "p1-calle-de-willy",
-      "disparador": { "evento": "tutorialDone", "donde": { "id": "t03-audiencia" } },
+      "id": "t04-casting",
+      "zona": "p1-calle-de-willy",
       "texto": [
         "Y ahora, el momento favorito del público: ¡el cásting! El Sistema del concurso te deja elegir a qué te dedicas. Lo que eres ya está decidido: humano, de Castro y con bigote.",
         "Cada opción tiene ventajas de verdad y desventajas ridículas, también de verdad. Si no sabes qué coger, «Lo que es Willy de verdad»: butanero. Nadie te juzgará. Yo sí, pero en privado."
       ],
       "accion": "abrirCreacionPersonaje",
-      "completar": { "evento": "characterCreated" }
+      "$nota": "Sin disparador: el cásting es la pantalla de creación, antes de empezar."
     },
     {
-      "id": "t05-atributos", "zona": "p1-calle-de-willy",
-      "disparador": { "evento": "characterCreated" },
-      "hud": ["hud.atributos"],
+      "id": "t05-atributos",
+      "zona": "p1-calle-de-willy",
+      "disparador": {
+        "evento": "tutorialDone",
+        "donde": {
+          "id": "t03-audiencia"
+        }
+      },
+      "hud": [
+        "hud.atributos"
+      ],
       "texto": [
         "Esos números son tus atributos. Cuanto más altos, mejor. Así de sencillo es todo aquí.",
         "Casi todo se decide tirando un dado de veinte caras y sumando el atributo que toque. Antes de cada cosa arriesgada verás qué probabilidad tienes, en porcentaje. Sin letra pequeña. Bueno, con poca."
       ],
-      "resaltar": "hud.atributos",
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "hud.atributos"
     },
     {
-      "id": "t06-combate", "zona": "p1-tutorial-combate",
-      "disparador": { "evento": "combatStarted" },
+      "id": "t06-combate",
+      "zona": "p1-tutorial-combate",
+      "disparador": {
+        "evento": "combatStarted"
+      },
       "texto": [
         "¡Ratas! Esto es un combate, y va por turnos: arriba ves el orden. Nadie se mueve hasta que le toca. Ni siquiera tú.",
         "En tu turno tienes un movimiento y dos acciones. Atacar gasta una. Pensar no gasta nada: tómate tu tiempo, la tele puede esperar."
       ],
-      "resaltar": "hud.turnos",
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "hud.turnos"
     },
     {
-      "id": "t07-atacar", "zona": "p1-tutorial-combate",
-      "disparador": { "evento": "turnStarted", "donde": { "entityId": "willy" } },
-      "condicion": { "dato": "willy.enemigosAlAlcance", "min": 1 },
-      "texto": ["Toca a una rata. Verás tu probabilidad de acertar y cuánto daño puedes hacer. Si te convence, vuelve a tocar para atacar."],
-      "resaltar": "enemigoMasCercano",
-      "completar": { "evento": "attackResolved", "donde": { "actor.id": "willy" } }
-    },
-    {
-      "id": "t08-empujar", "zona": "p1-tutorial-combate",
-      "disparador": { "evento": "turnStarted", "donde": { "entityId": "willy" } },
-      "condicion": { "dato": "willy.enemigoJuntoABorde", "igual": true },
+      "id": "t07-atacar",
+      "zona": "p1-tutorial-combate",
+      "disparador": {
+        "evento": "turnStarted",
+        "donde": {
+          "entityId": "willy"
+        }
+      },
       "texto": [
-        "Mira esa rata: está al borde del muelle. En este concurso, el suelo es un arma. Y el no suelo, más.",
-        "Selecciona «Empujar» y toca a la rata. Al público le encanta ver caer cosas. A mí también, no te voy a engañar."
+        "Toca a una rata. Verás tu probabilidad de acertar y cuánto daño puedes hacer. Si te convence, vuelve a tocar para atacar."
+      ],
+      "resaltar": "enemigoMasCercano",
+      "despues": "t06-combate"
+    },
+    {
+      "id": "t08-empujar",
+      "zona": "p1-tutorial-combate",
+      "disparador": {
+        "evento": "turnStarted",
+        "donde": {
+          "entityId": "willy"
+        }
+      },
+      "texto": [
+        "Otra cosa: en este concurso, el suelo es un arma. Y el no suelo, más. Si hay un borde, un charco o un barril cerca de una rata, úsalo.",
+        "Selecciona «Empujar» y toca a una rata. Al público le encanta ver caer cosas. A mí también, no te voy a engañar."
       ],
       "resaltar": "accion.empujar",
-      "completar": { "evento": "entityPushed", "donde": { "actor.id": "willy" } }
+      "despues": "t07-atacar"
     },
     {
-      "id": "t09-altura", "zona": "p1-tutorial-combate",
-      "disparador": { "evento": "fell" },
+      "id": "t09-altura",
+      "zona": "p1-tutorial-combate",
+      "disparador": {
+        "evento": "fell"
+      },
       "texto": [
         "¡Caída! Bajar un escalón no hace daño; dos o más, sí. Y quien cae se queda tumbado, mirando al techo y replanteándose su vida.",
         "Desde arriba también se pega mejor: +2 por cada nivel de altura. Fíjate en los bordes oscuros del suelo: marcan dónde se puede caer."
-      ],
-      "completar": { "evento": "dialogAdvanced" }
+      ]
     },
     {
-      "id": "t10-logro", "zona": "p1-tutorial-combate",
-      "disparador": { "evento": "achievementUnlocked" },
+      "id": "t10-logro",
+      "zona": "p1-tutorial-combate",
+      "disparador": {
+        "evento": "achievementUnlocked"
+      },
       "texto": [
         "¿Has oído la fanfarria? Es un logro. Se consiguen haciendo cosas: algunas listas, muchas tontas. Las tontas son mis favoritas.",
         "Los logros se quedan guardados en este navegador para siempre y algunos te regalan una caja. Puedes verlos todos en el menú de pausa. Los ocultos, solo con pista."
-      ],
-      "completar": { "evento": "dialogAdvanced" }
+      ]
     },
     {
-      "id": "t11-caja", "zona": "p1-tutorial-combate",
-      "disparador": { "evento": "boxDelivered" },
+      "id": "t11-caja",
+      "zona": "p1-tutorial-combate",
+      "disparador": {
+        "evento": "boxDelivered"
+      },
       "texto": [
         "¡Una caja! Cae del techo en paracaídas, como debe ser. Hay de bronce, plata, oro y legendarias: el color te dice qué esperar, antes de abrirla.",
         "Tócala para abrirla. Dentro hay objetos y fichas. Las cajas no se compran: se ganan. Ni con dinero de verdad ni con fichas. Esto es un concurso, no una tragaperras."
       ],
-      "cajaGuionizada": { "nivel": "bronce", "objetos": ["mechero-de-gasolinera", "tirita-de-dibujos"], "fichas": 10 },
-      "resaltar": "caja",
-      "completar": { "evento": "boxOpened" }
+      "cajaGuionizada": {
+        "nivel": "bronce",
+        "objetos": [
+          "mechero-de-gasolinera",
+          "tirita-de-dibujos"
+        ],
+        "fichas": 10
+      },
+      "resaltar": "caja"
     },
     {
-      "id": "t12-mochila", "zona": "p1-tutorial-combate",
-      "disparador": { "evento": "boxOpened" },
-      "hud": ["hud.mochila"],
-      "texto": ["Lo que sacas va a la mochila. Tócala para ver qué llevas, equiparte cosas o usarlas. Mirar la mochila no gasta tiempo. Comer sí, pero poco."],
-      "resaltar": "hud.mochila",
-      "completar": { "evento": "inventoryOpened" }
-    },
-    {
-      "id": "t13-superficies", "zona": "p1-callejon-aceite",
-      "disparador": { "evento": "turnStarted", "donde": { "entityId": "willy" } },
-      "condicion": { "todas": [
-        { "dato": "willy.tieneEtiqueta", "igual": "fuego" },
-        { "dato": "sala.enemigosSobre", "igual": "aceite" }
-      ] },
-      "texto": [
-        "¿Ves esa mancha brillante bajo los bocartes? Aceite. Resbala y, sobre todo, arde.",
-        "Tienes un mechero. Úsalo en el charco. Las superficies se combinan: fuego y aceite, agua y rayo, agua y frío. Toca cualquier superficie para ver qué hace."
+      "id": "t12-mochila",
+      "zona": "p1-tutorial-combate",
+      "disparador": {
+        "evento": "boxOpened"
+      },
+      "hud": [
+        "hud.mochila"
       ],
-      "resaltar": "superficie.aceite",
-      "completar": { "evento": "surfaceReacted" }
+      "texto": [
+        "Lo que sacas va a la mochila. Tócala para ver qué llevas, equiparte cosas o usarlas. Mirar la mochila no gasta tiempo. Comer sí, pero poco."
+      ],
+      "resaltar": "hud.mochila"
     },
     {
-      "id": "t14-patrocinador", "zona": "p1-callejon-aceite",
-      "disparador": { "evento": "sponsorMessage", "donde": { "patrocinador": "butanos-perez" } },
+      "id": "t13-superficies",
+      "zona": "p1-callejon-aceite",
+      "disparador": {
+        "evento": "surfaceReacted"
+      },
+      "texto": [
+        "¿Has visto eso? Una superficie ha reaccionado con otra. Aceite y fuego, agua y rayo, agua y frío: se combinan.",
+        "Toca cualquier mancha del suelo para ver qué hace. El escenario pega más fuerte que tú. Y da más audiencia."
+      ],
+      "resaltar": "superficie.aceite"
+    },
+    {
+      "id": "t14-patrocinador",
+      "zona": "p1-callejon-aceite",
+      "disparador": {
+        "evento": "sponsorMessage"
+      },
       "guion": "Tras t13, Butanos Hermanos Pérez manda su primer mensaje y un regalo pase lo que pase.",
       "texto": [
-        "Un patrocinador. Los Hermanos Pérez, nada menos: gas, fuego y explosiones. Te han visto y les has gustado.",
+        "Un patrocinador. Te han visto y les has gustado. O por lo menos les has llamado la atención, que en la tele es lo mismo.",
         "Cada patrocinador tiene sus gustos. Si les das lo que quieren, mandan regalos. Si haces lo que odian, te avisan y, si insistes, se van. Toca su retrato para ver qué les gusta."
       ],
-      "resaltar": "hud.patrocinadores",
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "hud.patrocinadores"
     },
     {
-      "id": "t15-reloj", "zona": "salida-tutorial",
-      "disparador": { "evento": "markerReached", "donde": { "marcador": "fin-tutorial" } },
-      "hud": ["hud.reloj"],
+      "id": "t15-reloj",
+      "zona": "salida-tutorial",
+      "disparador": {
+        "evento": "combatEnded",
+        "donde": {
+          "resultado": "victoria"
+        }
+      },
+      "hud": [
+        "hud.reloj"
+      ],
       "texto": [
-        "Producción acaba de dar la señal. ¿Ves ese reloj? Es lo que le queda a esta planta. Cuando llegue a cero, se derrumba. Sala a sala, empezando por las más lejanas a la salida.",
+        "Primer combate superado. Producción acaba de dar la señal. ¿Ves ese reloj? Es lo que le queda a esta planta. Cuando llegue a cero, se derrumba. Sala a sala, empezando por las más lejanas a la salida.",
         "Tranquilo: el reloj solo corre cuando haces cosas. Andar, pelear, abrir puertas. Pensar, mirar la mochila y abrir cajas es gratis. Busca las escaleras de bajada. Te avisaré cuando quede la mitad."
       ],
-      "resaltar": "hud.reloj",
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "hud.reloj"
     },
     {
-      "id": "t16-nivel", "disparador": { "evento": "levelUp" },
+      "id": "t16-nivel",
+      "disparador": {
+        "evento": "levelUp"
+      },
       "texto": [
         "¡Subes de nivel! Más vida, dos puntos para repartir y te recuperas un poco. Los números suben. Es lo más bonito que hay.",
         "Si no sabes dónde poner los puntos, pulsa «Que elija el Narrador». Prometo no ponértelos todos en Carisma. Casi."
-      ],
-      "completar": { "evento": "levelUpClosed" }
+      ]
     },
     {
-      "id": "t17-habilidades", "disparador": { "evento": "skillUsed", "donde": { "actor.id": "willy" } },
+      "id": "t17-habilidades",
+      "disparador": {
+        "evento": "skillUsed",
+        "donde": {
+          "actor.id": "willy"
+        }
+      },
       "texto": [
         "Eso ha sido una habilidad. Gastan energía, que se recupera entera al acabar cada combate. Así que úsalas, no las guardes para una ocasión especial: esto ES la ocasión especial.",
         "Cuanto más uses una habilidad, más sube de nivel. Hasta el empujón mejora si empujas mucho. La práctica hace al maestro. Y al público."
+      ]
+    },
+    {
+      "id": "t18-condiciones",
+      "disparador": {
+        "evento": "conditionApplied",
+        "donde": {
+          "entityId": "willy"
+        }
+      },
+      "texto": [
+        "Te ha pasado algo: mira el icono junto a tu vida. Tócalo y te explico qué es. Spoiler: casi nunca es bueno."
       ],
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "hud.condiciones"
     },
     {
-      "id": "t18-condiciones", "disparador": { "evento": "conditionApplied", "donde": { "objetivo.id": "willy" } },
-      "texto": ["Te ha pasado algo: mira el icono junto a tu vida. Tócalo y te explico qué es. Spoiler: casi nunca es bueno."],
-      "resaltar": "hud.condiciones",
-      "completar": { "evento": "dialogAdvanced" }
+      "id": "t19-curarse",
+      "disparador": {
+        "evento": "resourceChanged",
+        "donde": {
+          "entityId": "willy",
+          "resource": "vida"
+        }
+      },
+      "condicion": {
+        "dato": "willy.vidaPct",
+        "max": 50
+      },
+      "texto": [
+        "Vas por la mitad de vida. Tienes comida en la mochila: comer gasta una acción y cura. Mamá Clementina, una patrocinadora a la que conocerás, aplaude cada bocado."
+      ],
+      "resaltar": "hud.mochila"
     },
     {
-      "id": "t19-curarse", "disparador": { "evento": "resourceChanged", "donde": { "entityId": "willy", "resource": "vida" } },
-      "condicion": { "dato": "willy.vidaPct", "max": 50 },
-      "texto": ["Vas por la mitad de vida. Tienes comida en la mochila: comer gasta una acción y cura. Mamá Clementina, una patrocinadora a la que conocerás, aplaude cada bocado."],
-      "resaltar": "hud.mochila",
-      "completar": { "evento": "dialogAdvanced" }
+      "id": "t20-trampas",
+      "disparador": {
+        "evento": "trapDetected"
+      },
+      "texto": [
+        "Una trampa. Si la ves a tiempo, aparece marcada en rojo: rodéala o empuja a alguien encima. Si no la ves, la pisas. Es así de simple y así de humillante."
+      ]
     },
     {
-      "id": "t20-trampas", "disparador": { "evento": "trapDetected" },
-      "texto": ["Una trampa. Si la ves a tiempo, aparece marcada en rojo: rodéala o empuja a alguien encima. Si no la ves, la pisas. Es así de simple y así de humillante."],
-      "completar": { "evento": "dialogAdvanced" }
-    },
-    {
-      "id": "t20b-trampas-pisada", "disparador": { "evento": "trapTriggered", "donde": { "entidad.id": "willy" } },
+      "id": "t20b-trampas-pisada",
+      "disparador": {
+        "evento": "trapTriggered",
+        "donde": {
+          "entidad.id": "willy"
+        }
+      },
       "noSiHecho": "t20-trampas",
-      "texto": ["Has pisado una trampa. Las trampas ocultas se descubren a veces solas al acercarte, según tu Maña. Hoy no ha sido el día."],
-      "completar": { "evento": "dialogAdvanced" }
-    },
-    {
-      "id": "t21-cofres", "disparador": { "evento": "entitySeen", "donde": { "objetivo.etiquetas": { "tiene": "cofre" } } },
-      "texto": ["Un cofre. Ábrelo acercándote y tocándolo. A partir de la Planta 2, alguno muerde. No te digo cuál."],
-      "completar": { "evento": "dialogAdvanced" }
-    },
-    {
-      "id": "t22-aburrimiento", "disparador": { "evento": "meterChanged", "donde": { "medidor": "audiencia", "causa": "aburrimiento" } },
-      "texto": ["El público se aburre: la audiencia baja. Prueba algo vistoso: empujar a alguien a donde no debe, usar el escenario o, si no se te ocurre nada, la acción «Hacer el ganso». Funciona. No sé por qué, pero funciona."],
-      "resaltar": "accion.ganso",
-      "completar": { "evento": "dialogAdvanced" }
-    },
-    {
-      "id": "t23-reloj-mitad", "disparador": { "evento": "clockWarning", "donde": { "pct": 50 } },
-      "texto": ["Media planta de reloj. No es para asustarse. Todavía. Si te sobra tiempo, hay salas por explorar; si no, busca las escaleras."],
-      "completar": { "evento": "dialogAdvanced" }
-    },
-    {
-      "id": "t24-jefe", "disparador": { "evento": "roomEntered", "donde": { "rol": "jefe" } },
       "texto": [
-        "La lonja. Aquí vive el jefe de la planta. Durante el combate contra el jefe, el reloj se para: es el plato fuerte y la cadena no quiere prisas.",
-        "Cada jefe tiene un punto débil relacionado con la planta. Este, con la marea. Mira el agua."
+        "Has pisado una trampa. Las trampas ocultas se descubren a veces solas al acercarte, según tu Maña. Hoy no ha sido el día."
+      ]
+    },
+    {
+      "id": "t21-cofres",
+      "disparador": {
+        "evento": "tutorialDone",
+        "donde": {
+          "id": "t15-reloj"
+        }
+      },
+      "texto": [
+        "Y desde ahora hay cofres y trampas de verdad. Los cofres se abren acercándote y tocándolos. A partir de la Planta 2, alguno muerde. No te digo cuál."
+      ]
+    },
+    {
+      "id": "t22-aburrimiento",
+      "disparador": {
+        "evento": "audienceChanged",
+        "donde": {
+          "causa": "aburrimiento"
+        }
+      },
+      "texto": [
+        "El público se aburre: la audiencia baja. Prueba algo vistoso: empujar a alguien a donde no debe, usar el escenario o, si no se te ocurre nada, la acción «Hacer el ganso». Funciona. No sé por qué, pero funciona."
       ],
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "accion.ganso"
     },
     {
-      "id": "t25-camerino", "disparador": { "evento": "safeZoneEntered" },
+      "id": "t23-reloj-mitad",
+      "disparador": {
+        "evento": "clockWarning",
+        "donde": {
+          "pct": 50
+        }
+      },
       "texto": [
-        "El Camerino: zona segura. Aquí no te ataca nadie y el reloj no corre.",
+        "Media planta de reloj. No es para asustarse. Todavía. Si te sobra tiempo, hay salas por explorar; si no, busca las escaleras."
+      ]
+    },
+    {
+      "id": "t24-jefe",
+      "disparador": {
+        "evento": "bossFight"
+      },
+      "texto": [
+        "El jefe de la planta. Durante el combate contra un jefe, el reloj se para: es el plato fuerte y la cadena no quiere prisas.",
+        "Los jefes tienen mucha vida y mala leche. Usa el escenario: lo que no se puede tumbar a golpes, a veces se tumba con un empujón."
+      ]
+    },
+    {
+      "id": "t25-camerino",
+      "disparador": {
+        "evento": "runStarted"
+      },
+      "texto": [
+        "El Camerino: zona segura. Aquí no te ataca nadie y el reloj no corre. Volverás aquí al acabar cada planta.",
         "Maripuri vende y compra. Paco te pone un café y te recupera entero. Xelda, de Producción, guarda la partida. Y Koldo... Koldo habla. Mucho.",
-        "Cuando quieras seguir, el ascensor del fondo te baja a la planta siguiente."
+        "Cuando quieras empezar, el ascensor del fondo te baja a la planta siguiente."
+      ]
+    },
+    {
+      "id": "t26-glosario",
+      "disparador": {
+        "evento": "tutorialDone",
+        "donde": {
+          "id": "t25-camerino"
+        }
+      },
+      "texto": [
+        "Un último consejo y me callo (es mentira): en el menú de pausa tienes «Cómo se juega» y un glosario con todo. Y si los consejos te molestan, se pueden apagar en Opciones. Yo no. Yo sigo."
       ],
-      "completar": { "evento": "dialogAdvanced" }
+      "resaltar": "boton.pausa"
     },
     {
-      "id": "t26-glosario", "disparador": { "evento": "tutorialDone", "donde": { "id": "t25-camerino" } },
-      "texto": ["Un último consejo y me callo (es mentira): en el menú de pausa tienes «Cómo se juega» y un glosario con todo. Y si los consejos te molestan, se pueden apagar en Opciones. Yo no. Yo sigo."],
-      "resaltar": "boton.pausa",
-      "completar": { "evento": "dialogAdvanced" }
-    },
-    {
-      "id": "t27-atasco", "disparador": { "evento": "playerIdle", "donde": { "segundos": { "min": 30 }, "enCombate": true } },
+      "id": "t27-atasco",
       "unaVez": false,
       "maxVeces": 2,
-      "texto": ["¿Atascado? Toca a un enemigo para ver cómo atacarle, o toca a Willy para ver sus acciones. Si no hay nada que hacer, «Terminar turno»."],
-      "completar": { "evento": "dialogAdvanced" }
+      "texto": [
+        "¿Atascado? Toca a un enemigo para ver cómo atacarle, o toca a Willy para ver sus acciones. Si no hay nada que hacer, «Terminar turno»."
+      ],
+      "$nota": "Sin disparador: el cliente no tiene todavía un evento de «jugador parado»."
     }
   ]
 }

@@ -2,7 +2,8 @@ import type { GameStore } from '../game/store';
 
 /**
  * A countdown on screen when the game keeps one in `state.systems.clock`
- * ({ label, remaining, total } in seconds; a game's ruleset or content owns the rest of it).
+ * ({ label, remaining, total } in seconds, `hidden` to keep it off screen; a game's ruleset or
+ * content owns the rest of it).
  * Generic: no clock system, no timer. Amber under 25 %, red under 10 %, flashing at zero.
  */
 export function setupClockHud(store: GameStore): void {
@@ -11,8 +12,8 @@ export function setupClockHud(store: GameStore): void {
   box.hidden = true;
   document.body.append(box);
   const render = () => {
-    const c = store.state.systems.clock as { label?: string; remaining?: number; total?: number } | null | undefined;
-    if (!c || typeof c.remaining !== 'number' || !c.total) {
+    const c = store.state.systems.clock as { label?: string; remaining?: number; total?: number; hidden?: boolean } | null | undefined;
+    if (!c || c.hidden || typeof c.remaining !== 'number' || !c.total) {
       box.hidden = true;
       return;
     }
