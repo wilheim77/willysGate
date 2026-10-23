@@ -19,7 +19,7 @@ import {
 } from '../../engine';
 import { d20Check, resolveRollMode } from '../common/d20';
 import { BARREL_BLAST, listActions, performAction, previewAction, setWillyRef } from './actions';
-import './more-classes';
+import { gTurnFlag } from './more-classes';
 export { throwableItem } from './more-classes';
 import './summons';
 import { syncCompanions } from './companions';
@@ -310,6 +310,8 @@ function onCombatEnd(ruleset: Ruleset, state: GameState): ActionOutcome {
     const en = e.resources.energia;
     if (en && en.current < en.max) r.apply({ type: 'modifyResource', entityId: e.id, resource: 'energia', delta: en.max - en.current });
     for (const c of ['cafe-tomado', 'corriendo', 'salto']) if (hasCondition(e, c)) r.apply({ type: 'removeCondition', entityId: e.id, condition: c });
+    // The 5G line counts once per turn: forget the last turn it counted, so the next fight starts clean.
+    if (state.flags[gTurnFlag(e.id)]) r.apply({ type: 'setFlag', flag: gTurnFlag(e.id), value: '' });
   }
   // Summons and barriers go home when the fight is over.
   for (const e of Object.values(r.state.entities)) if (e.tags.some((t) => t.startsWith('invocado-por:'))) r.apply({ type: 'despawnEntity', entityId: e.id });

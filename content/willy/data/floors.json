@@ -2205,7 +2205,7 @@
       "parte": 1,
       "nombre": "Castro Sumergido: Las calles anegadas",
       "nivelEsperado": 1,
-      "relojSegundos": 1380,
+      "relojSegundos": 420,
       "xpTotal": 78,
       "generacion": {
         "rejilla": {
@@ -2232,7 +2232,7 @@
       "parte": 2,
       "nombre": "Castro Sumergido: La lonja",
       "nivelEsperado": 2,
-      "relojSegundos": 1560,
+      "relojSegundos": 720,
       "xpTotal": 130,
       "generacion": {
         "rejilla": {
@@ -2259,7 +2259,7 @@
       "parte": 1,
       "nombre": "Hipermercado Eterno: Pasillos infinitos",
       "nivelEsperado": 3,
-      "relojSegundos": 1173,
+      "relojSegundos": 735,
       "xpTotal": 208,
       "generacion": {
         "rejilla": {
@@ -2286,7 +2286,7 @@
       "parte": 2,
       "nombre": "Hipermercado Eterno: La trastienda",
       "nivelEsperado": 4,
-      "relojSegundos": 1326,
+      "relojSegundos": 900,
       "xpTotal": 299,
       "generacion": {
         "rejilla": {
@@ -2313,7 +2313,7 @@
       "parte": 1,
       "nombre": "La Verbena Sin Fin: Las barracas",
       "nivelEsperado": 5,
-      "relojSegundos": 1104,
+      "relojSegundos": 750,
       "xpTotal": 390,
       "generacion": {
         "rejilla": {
@@ -2340,7 +2340,7 @@
       "parte": 2,
       "nombre": "La Verbena Sin Fin: La plaza mayor",
       "nivelEsperado": 6,
-      "relojSegundos": 1248,
+      "relojSegundos": 990,
       "xpTotal": 520,
       "generacion": {
         "rejilla": {
@@ -2367,7 +2367,7 @@
       "parte": 1,
       "nombre": "Balneario Glaciar: Los vestuarios",
       "nivelEsperado": 7,
-      "relojSegundos": 1035,
+      "relojSegundos": 735,
       "xpTotal": 650,
       "generacion": {
         "rejilla": {
@@ -2421,7 +2421,7 @@
       "parte": 1,
       "nombre": "El Plató: Los pasillos de producción",
       "nivelEsperado": 9,
-      "relojSegundos": 1035,
+      "relojSegundos": 705,
       "xpTotal": 910,
       "generacion": {
         "rejilla": {
@@ -2448,7 +2448,7 @@
       "parte": 2,
       "nombre": "El Plató: El plató principal",
       "nivelEsperado": 10,
-      "relojSegundos": 1170,
+      "relojSegundos": 960,
       "xpTotal": 1105,
       "generacion": {
         "rejilla": {

@@ -173,7 +173,9 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
   }
 
   // The first floor's clock waits for the tutorial (tutorial.json → sistema.reloj): hidden, not ticking.
-  const locked = !tutorialUnlocked(state, 'sistema.reloj');
+  const wonNow = events.some((e) => e.type === 'combatEnded' && (e as unknown as { winner?: string }).winner === state.entities.willy?.factionId);
+  // The first won fight turns it on (tutorial t15), in the same command, whatever the cards do.
+  const locked = !tutorialUnlocked(state, 'sistema.reloj') && !wonNow;
   if (locked || clock.hidden) {
     if (!!clock.hidden !== locked) set({ ...clock, hidden: locked });
     if (locked) return { effects, events: out };
