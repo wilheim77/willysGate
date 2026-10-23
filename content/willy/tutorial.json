@@ -368,11 +368,9 @@
     },
     {
       "id": "t26-glosario",
+      "despues": "t01-moverse",
       "disparador": {
-        "evento": "tutorialDone",
-        "donde": {
-          "id": "t25-camerino"
-        }
+        "evento": "safeZoneEntered"
       },
       "texto": [
         "Un último consejo y me callo (es mentira): en el menú de pausa tienes «Cómo se juega» y un glosario con todo. Y si los consejos te molestan, se pueden apagar en Opciones. Yo no. Yo sigo."
