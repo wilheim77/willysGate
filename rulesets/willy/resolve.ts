@@ -230,7 +230,7 @@ export function resolveAttack(r: Resolver, spec: AttackSpec): { hit: boolean; cr
   if (hasCondition(attacker, 'afortunado')) r.apply({ type: 'removeCondition', entityId: attacker.id, condition: 'afortunado' });
   const { modifiers, mode } = attackModifiers(r.state, attacker, target, spec);
   const def = defence(target);
-  const roll = d20Check(r.rng, { check: 'ataque', label: spec.label, mode, modifiers, target: def, targetLabel: 'DEF' });
+  const roll = d20Check(r.rng, { check: 'ataque', label: spec.label, mode, modifiers, target: def, targetLabel: 'Defensa' });
   roll.targetTerm = 'def';
   const natural = roll.dice[0]!.kept[0]!;
   const critOn = effectiveCritOn(attacker, target, spec);
