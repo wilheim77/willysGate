@@ -3,7 +3,7 @@ import { HANDLERS, type Handler, areaTiles, attackPreviewOf, dice, extraActionSo
 import { createCreature, level } from './character';
 import data from './data/companions.json';
 import { type Dice, averageDice, rollDice, stepUp } from './dice';
-import { type Resolver, type WillyEvent, chanceD20, dealDamage, defeatHooks, heal, pushEntity, resolveAttack, rollSave, standing } from './resolve';
+import { type Resolver, type WillyEvent, chanceD20, dealDamage, defeat, defeatHooks, heal, pushEntity, resolveAttack, rollSave, standing } from './resolve';
 import type { Attr } from './data';
 
 /**
@@ -354,6 +354,22 @@ export function handlerFor(a: CompanionAbility): Handler {
 for (const c of Object.values(COMPANIONS)) for (const a of c.habilidades) HANDLERS[`comp:${a.id}`] = handlerFor(a);
 extraActionSources.push((state, e) => companionActions(state, e));
 defeatHooks.push(markFallen);
+
+/**
+ * Willy down mid-fight ends it: the show doesn't go on without its contestant. His side leaves
+ * the stage (the companion falls back, as if knocked out, and comes back on the next floor;
+ * allies of his faction step out), so the fight ends as a loss and the game's defeat runs.
+ */
+defeatHooks.push((r, id) => {
+  const w = r.state.entities[id];
+  if (!w || !w.tags.includes('pc') || r.state.turn.mode !== 'combat') return;
+  r.emit({ type: 'willyFueraDeCombate', entityId: id } as unknown as WillyEvent);
+  for (const e of Object.values(r.state.entities)) {
+    if (e.id === id || e.factionId !== w.factionId || !standing(e) || e.tags.includes('object')) continue;
+    if (e.tags.includes(COMPANION_TAG)) defeat(r, e.id, undefined, 'retirada');
+    else r.apply({ type: 'despawnEntity', entityId: e.id });
+  }
+});
 
 /** The companion's own abilities, for listActions. */
 export function companionActions(state: GameState, e: Entity): ActionDef[] {

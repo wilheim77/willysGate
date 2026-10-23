@@ -31,6 +31,22 @@ const byBiome = (prefix: string) => branch(prefix, BIOME.map(([, a, b]) => [a, b
 const say = (speaker: string, text: string, next?: string, extra: Partial<DialogueNode> = {}): DialogueNode => ({ speaker, text, ...(next ? { next } : {}), ...extra });
 const bye = (text = 'Hasta luego.'): DialogueChoice => ({ id: 'adios', text });
 
+/**
+ * Maripuri's shelf, first version (rulesets/willy/shop.ts charges and hands it over): one of each
+ * per Camerino, listed price in tokens (the Tasador pays 20 % less).
+ */
+const SHELF: { item: string; nombre: string; precio: number }[] = [
+  { item: 'tirita-de-dibujos', nombre: 'Tirita de dibujos', precio: 10 },
+  { item: 'pincho-de-tortilla', nombre: 'Pincho de tortilla', precio: 15 },
+  { item: 'lata-de-bonito', nombre: 'Lata de bonito del norte', precio: 15 },
+  { item: 'cafe-de-maquina', nombre: 'Café de máquina', precio: 20 },
+  { item: 'gaseosa-la-revoltosa', nombre: 'Gaseosa La Revoltosa', precio: 25 },
+];
+const shelf = (): DialogueChoice[] => [
+  ...SHELF.map((s): DialogueChoice => ({ id: `comprar-${s.item}`, text: `${s.nombre}: ${s.precio} fichas`, when: { rule: 'tiendaQueda', params: { item: s.item, precio: s.precio } }, tags: [`comprar:${s.item}:${s.precio}`], next: 'tiendaMas' })),
+  { id: 'nada', text: 'Nada más, gracias.', next: 'hola' },
+];
+
 // --- Maripuri: Ultramarinos ----------------------------------------------------------------------
 
 export const maripuri: DialogueTree = {
@@ -39,9 +55,9 @@ export const maripuri: DialogueTree = {
   nodes: {
     hola: {
       speaker: 'maripuri',
-      text: 'Hijo, pasa, pasa, que se me escapa el calor. Hoy el mostrador está cerrado por inventario, pero para charlar siempre hay tiempo.',
+      text: 'Hijo, pasa, pasa, que se me escapa el calor. ¿Qué te pongo? Y si no te pongo nada, charlamos, que también es gratis.',
       choices: [
-        { id: 'comprar', text: 'Quiero comprar.', when: SHOP_OPEN, tags: ['tienda:comprar'] },
+        { id: 'comprar', text: 'Quiero comprar.', next: 'tienda' },
         { id: 'vender', text: 'Quiero vender.', when: SHOP_OPEN, tags: ['tienda:vender'] },
         { id: 'chisme', text: '¿Qué sabes de la planta de abajo?', next: 'chisme' },
         { id: 'negocio', text: '¿Cómo va el negocio?', next: 'negocioRuta' },
@@ -49,6 +65,8 @@ export const maripuri: DialogueTree = {
         bye('Nada, gracias.'),
       ],
     },
+    tienda: { speaker: 'maripuri', text: 'Lo que tengo hoy, hijo. Una de cada, que esto no es el hiper. Si no lo ves es que no te llega o que ya te lo has llevado.', choices: shelf() },
+    tiendaMas: { speaker: 'maripuri', text: 'Apuntado. ¿Algo más?', choices: shelf() },
     chisme: { speaker: 'maripuri', text: 'Maripuri se asoma por encima del mostrador y baja la voz.', next: byBiome('chisme') },
     chisme0: say('maripuri', 'Pues que te vas a mojar los pies, hijo. Es Castro, pero con goteras. Y las gaviotas son las mismas de siempre: no les des el bocadillo, que luego no se van.', 'hola'),
     chisme1: say('maripuri', 'Dicen que abajo hay un hiper abierto las veinticuatro horas. Cuidado con los carritos: tienen mala leche y peor dirección. Y no te fíes de las ofertas, que el «dos por uno» te sale por un brazo.', 'hola'),

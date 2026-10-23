@@ -786,7 +786,8 @@ function guardian(g: Gen, spec: FloorSpec, at: Vec2, enemies: [string, EnemyDef]
 }
 
 function chest(id: string, at: Vec2, spriteId: string, floor: number): Entity {
-  return prop(id, 'Caja de botín', spriteId, at, ['cofre', `botin:planta-${floor}`]);
+  // Tap it to open it (rulesets/willy/chests.ts fills the `cofre` conversation).
+  return prop(id, 'Caja de botín', spriteId, at, ['cofre', `botin:planta-${floor}`, 'dialogue:cofre']);
 }
 
 // --- Validation -----------------------------------------------------------------------------------------
