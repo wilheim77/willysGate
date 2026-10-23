@@ -35,7 +35,7 @@
     { "id": "explosion", "patron": { "evento": "objectDestroyed", "donde": { "explota": true } }, "base": 200, "porCampo": { "enemigosAfectados": 200 } },
     { "id": "al-filo", "patron": { "evento": "combatEnded", "donde": { "resultado": "victoria", "vidaPct": { "max": 10 } } }, "base": 1000 },
     { "id": "caer-tu", "patron": { "evento": "fell", "donde": { "entidad.id": "willy" } }, "base": 200 },
-    { "id": "ganso", "patron": { "evento": "showOff" }, "base": 150, "decrecientePorCombate": 0.5 },
+    { "id": "ganso", "patron": { "evento": "showOff" }, "base": 150, "decrecientePorCombate": 0.5, "soloEnCombate": true, "comentario": "Decisión del usuario (2026-10-23): fuera de combate no da audiencia, para que no se pueda farmear." },
     { "id": "caja-oro", "patron": { "evento": "boxOpened", "donde": { "caja": "oro" } }, "base": 500 },
     { "id": "caja-legendaria", "patron": { "evento": "boxOpened", "donde": { "caja": "legendaria" } }, "base": 2000 },
     { "id": "logro", "patron": { "evento": "achievementUnlocked" }, "base": 300 },
@@ -58,6 +58,13 @@
     "pct": 1
   },
   "multSinRepeticion": 1.25,
+  "especialAudiencia": { "$comment": "Aviso de Producción «especial de audiencia» (items.json): al recogerlo pone esta bandera; la planta siguiente, todo lo que ganas vale 'mult' veces.", "flag": "mod:especialAudiencia", "mult": 1.5 },
+  "clases": {
+    "$comment": "Habilidades de clase que mueven la audiencia (classes.json). repertorioCorto: lo que pierde el Bardo al repetir canción (× multiplicador de planta). unboxingPorObjeto: lo que gana la Influencer por cada objeto de plata o mejor al abrir una caja (+25 % a nivel 2, +50 % a nivel 4). mateDelConcursoMaestria: el turno del Mate del concurso a nivel 5 vale ×3.",
+    "repertorioCorto": 200,
+    "unboxingPorObjeto": 200,
+    "mateDelConcursoMaestria": 3
+  },
   "expectacionAlEntrarEnPlanta": { "pct": 10 },
   "tramos": [
     { "desde": 0, "nombre": "Cuatro gatos" },

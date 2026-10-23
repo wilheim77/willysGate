@@ -71,6 +71,18 @@ describe('Willy show: audience', () => {
   });
 });
 
+describe('Willy show: «Hacer el ganso»', () => {
+  const ganso = (s: GameState) => engine.apply(s, { type: 'act', issuer: 'player:1', entityId: 'willy', actionId: 'basic:ganso', target: {} } as BaseCommand);
+
+  it('gives audience in combat, but not out of combat (no farming)', () => {
+    const calm = game([W('willy', 'butanero', 0, 0), rat('r', 6, 0)], ['........']);
+    const out = ganso(calm);
+    expect(out.ok && of(out.events, 'audienceChanged').filter((c) => c.causa === 'ganso')).toEqual([]);
+    const fighting = ganso(inCombat(calm, 'willy'));
+    expect(fighting.ok && of(fighting.events, 'audienceChanged').some((c) => c.causa === 'ganso')).toBe(true);
+  });
+});
+
 describe('Willy show: other systems', () => {
   it('an achievement unlocked in the same command gives audience (late pass, after the achievements)', () => {
     const s = game([W('willy', 'butanero', 1, 0)]);

@@ -16,6 +16,8 @@ export interface AudienceRule {
   porCampo?: Record<string, number>;
   multiplicador?: number;
   decrecientePorCombate?: number;
+  /** Only counts during a fight («Hacer el ganso»). */
+  soloEnCombate?: boolean;
   pct?: number;
 }
 
@@ -35,6 +37,12 @@ export interface AudienceData {
   prima: { audienciaMin: number; caja: string }[];
   /** Run multiplier for Sin repetición (DESIGN.md §12). */
   multSinRepeticion: number;
+  /** «Al filo» (loot-tables.json → fuentes.salidaConPocoReloj): leaving with little clock left. */
+  primaAlFilo: { relojRestanteMaxPct: number; caja: string };
+  /** Aviso «Especial de audiencia»: the flag it sets and the multiplier on the next floor. */
+  especialAudiencia: { flag: string; mult: number };
+  /** Class abilities that move the audience (classes.json texts). */
+  clases: { repertorioCorto: number; unboxingPorObjeto: number; mateDelConcursoMaestria: number };
 }
 
 export interface SponsorLine {
