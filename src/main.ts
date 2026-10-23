@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { game } from '@game';
-import { type CheckResult, createEngine, dialogueOf as dialogueOfState, evaluateCondition, inventoriesOf } from '../engine';
+import { type CheckResult, type GameEvent, createEngine, dialogueOf as dialogueOfState, evaluateCondition, inventoriesOf } from '../engine';
 import { GameController } from './game/controller';
 import { GameStore } from './game/store';
 import { MapScene } from './scenes/MapScene';
@@ -182,6 +182,7 @@ controller.onTrapReached = (trap, candidates) => {
   // The shared bag, one tap away (🎒 in the top bar): what you carry, what it does, and the
   // obvious things to do with it - drink a potion out of combat, put on gear left in the bag.
   const openBag = () => {
+    store.announce({ type: 'inventoryOpened' });
     const ruleset = store.engine.ruleset;
     const entries = Object.entries(inventoriesOf(store.state).party ?? {}).filter(([, n]) => n > 0);
     const worn = new Set(partyMemberIds().flatMap((id) => ruleset.equippedItems?.(store.state.entities[id]!) ?? []));
@@ -410,6 +411,16 @@ const creation = new CreationScreen(store, game);
 const setupScreen = new SetupScreen(store, game);
 const startNew = () => setupScreen.open(() => creation.open());
 hud.onNewGame = startNew;
+// A minute with no input out of combat: the narrator may notice (client event `playerIdle`).
+let lastInput = performance.now();
+for (const type of ['pointerdown', 'keydown', 'touchstart', 'wheel']) window.addEventListener(type, () => (lastInput = performance.now()), { passive: true });
+window.setInterval(() => {
+  const onNewGameScreens = ['#title', '#creation', '#intro', '#cinematic', '#setup'].some((sel) => document.querySelector<HTMLElement>(sel)?.hidden === false);
+  if (document.hidden || onNewGameScreens || store.state.turn.mode === 'combat' || performance.now() - lastInput < 60_000) return;
+  lastInput = performance.now();
+  store.announce({ type: 'playerIdle', segundos: 60 } as GameEvent);
+}, 5_000);
+
 // The title screen first; a new game plays the intro cinematic (if the game has one), then
 // goes on to the setup screens and character creation. «Ver el prólogo» replays it.
 const cinematic = new CinematicPlayer({
