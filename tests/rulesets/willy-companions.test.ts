@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { type BaseCommand, type Entity, type GameState, SYSTEM_ISSUER, hasCondition } from '../../engine';
 import { CLASSES, COMPANIONS, companionStats, createCompanion, willy } from '../../rulesets/willy';
+import { RngCursor } from '../../engine';
+import { Resolver, dealDamage } from '../../rulesets/willy/resolve';
 import { W, engine, game, rat } from './willy-helpers';
 
 function party(classId: string, lvl = 1, foes: Entity[] = [rat('r', 2, 1, { vida: 60 }), rat('r2', 5, 1, { vida: 60 })]): GameState {
@@ -92,5 +94,17 @@ describe('Willy: companions', () => {
     expect(after.resources.energia!.current).toBe(after.resources.energia!.max);
     expect(hasCondition(after, 'animado')).toBe(true);
     expect(Object.keys(r.state.entities).some((id) => id.startsWith('chencho-el-base#'))).toBe(false);
+  });
+  it('Willy down mid-fight ends it: the companion falls back and the fight is lost', () => {
+    let s = party('butanero');
+    const started = engine.apply(s, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants: Object.keys(s.entities) } as never);
+    if (!started.ok) throw new Error(started.error.code);
+    s = started.state;
+    const r = new Resolver(willy, s, new RngCursor(s.rng));
+    dealDamage(r, 'w', 99, 'golpe');
+    const out = r.outcome();
+    expect(out.events).toContainEqual(expect.objectContaining({ type: 'willyFueraDeCombate', entityId: 'w' }));
+    const after = engine.applyEffects(s, out.effects).state;
+    expect(willy.isStanding(mateOf(after))).toBe(false);
   });
 });

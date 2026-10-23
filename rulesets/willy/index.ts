@@ -40,6 +40,7 @@ import { bossAfterCommand, showAfterCommand, showCommands, showLateAfterCommand 
 import { achievementsHook } from './achievements';
 import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
+import { chestsAfterCommand } from './chests';
 import { regenHook } from './regen';
 import { monsterAiProfile } from './monsters';
 import { camerinoConditions, onRest as camerinoRest } from './camerino';
@@ -336,6 +337,7 @@ export function registerAfterCommand(hook: AfterCommandHook, order = 50): void {
 }
 
 registerAfterCommand(dropsHook, 10);
+registerAfterCommand(chestsAfterCommand, 15);
 registerAfterCommand(itemsHook, 20);
 // The floor clock and the collapse (clock.ts), before the show reacts to the turn.
 registerAfterCommand(clockAfterCommand, 40);
