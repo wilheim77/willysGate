@@ -52,9 +52,9 @@ deleted, season summary).
 10. **[M/W] Narrator line names a different achievement than the banner.** Banner "Planta limpia" + narrator "Logro
     desbloqueado, y encima de los raros: «Barbacoa de uno»" (two unlocked in the same command, {logro} resolves to the
     wrong one). Also «Primer figurante». "el Gaviota de lonja ha caído." (see 17).
-11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/
+11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/ **FIXED on qa**: at <=560 px the title is hidden so Guardar/Cargar are on screen and Exportar peeks out as a swipe cue.
     Nueva/sound reachable only by swiping, no hint). Save is hard to find on a phone.
-12. **[C] Initiative strip overlapped by the clock/audience widgets** at 375 px once there are 5+ combatants.
+12. **[C] Initiative strip overlapped by the clock/audience widgets** at 375 px once there are 5+ combatants. **FIXED on qa**: in combat at <=560 px the clock drops below the strip (verified: no overlap with 5 combatants).
 13. **[W] Rival dialogue says "CD 15", the roll log says "DIF 15"** (and the attack preview says "Defensa"). Pick one.
 14. **[W] When Willy goes down mid-fight nothing happens** for 10+ rounds: the fight continues with the companion
     only, the player gets no message, and the defeat prompt only appears after Jonatan falls too (or wins). A one-line
@@ -68,12 +68,12 @@ deleted, season summary).
 
 17. **[M] Narrator grammar:** "«Primer figurante». el Gaviota de lonja ha caído." (lowercase "el" after a full stop,
     wrong gender: `{enemigo:el}` in achievements.json ignores the enemy's gender; the rest of the narrator handles it).
-18. **[C] Casting stat line "+8 -> 10 (+0)" has no label; "Puntos libres: 0" with 3 points already spent.**
-19. **[C] Item card description clipped in the box reveal** ("Inmune a Envenenado por superficies." cut at 375 px).
-20. **[C] Floating "+248 au..." text is huge, overlaps Willy and is clipped at 375 px.**
-21. **[C] HUD (bag, boxes, achievements, save) is clickable over the title/difficulty/mode/casting screens.**
-22. **[C] Achievement toasts and narrator bubbles repeat the same text, and toasts draw over the defeat/season summary.**
-23. **[C] Intro slide 6 banner reads "OEN DIRECTO"** (the REC dot is drawn as an "O" glued to "EN DIRECTO").
+18. **[C] Casting stat line "+8 -> 10 (+0)" has no label; "Puntos libres: 0" with 3 points already spent.** **FIXED on qa**: stat rows read "10 (base 8 + 2)" (new optional `format` on the points step; Intereses keeps its 5e style), help text says the points are already spread like the Narrator would.
+19. **[C] Item card description clipped in the box reveal** ("Inmune a Envenenado por superficies." cut at 375 px). **FIXED on qa**: cards grow with their text.
+20. **[C] Floating "+248 au..." text is huge, overlaps Willy and is clipped at 375 px.** **FIXED on qa**: long floats shrink with their length (min 0.26 of a tile) - visual re-check pending.
+21. **[C] HUD (bag, boxes, achievements, save) is clickable over the title/difficulty/mode/casting screens.** **Not a bug**: the setup/title overlays cover the bar for real taps; it was reachable only through scripted DOM clicks.
+22. **[C] Achievement toasts and narrator bubbles repeat the same text, and toasts draw over the defeat/season summary.** **FIXED on qa** for the z-order (toast now under the dialogue layer); the toast and the narrator line are different texts, left as is.
+23. **[C] Intro slide 6 banner reads "OEN DIRECTO"** (the REC dot is drawn as an "O" glued to "EN DIRECTO"). **FIXED on qa**: the REC dot sits left of "EN DIRECTO" (spec edited, panel PNG rebuilt).
 24. **[S] Sponsor affinity bars are partly filled at "Afinidad 0".**
 
 ## Verified OK

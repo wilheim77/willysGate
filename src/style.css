@@ -354,6 +354,10 @@ canvas.portrait { image-rendering: pixelated; display: block; }
   :root { --top-h: 44px; --strip-h: 48px; }
   html, body { font-size: 18px; }
   .title { font-size: var(--fs-m); letter-spacing: 1px; }
+  /* The game's name is on the title screen: on a phone the room is worth more to the menu, so that
+     Guardar and Cargar are on screen and the next button peeks out to say "swipe for more". */
+  .hud-top .title { display: none; }
+  .hud-top { justify-content: flex-start; }
   nav button { padding: 2px 6px; min-height: 40px; }
   button { padding: 2px 7px; }
   #tile-info { display: none; }
@@ -557,6 +561,12 @@ body:has(#combat:not([hidden])) #narrator { top: calc(var(--top-h) + var(--safe-
 #clock-hud.critical { border-color: #ff5577; color: #ff8899; }
 #clock-hud.expired { border-color: #ff5577; color: #ff5577; animation: clock-flash 0.8s steps(2) infinite; }
 @keyframes clock-flash { 50% { opacity: 0.35; } }
+
+/* In combat the initiative strip runs the full width at the clock's height: on a phone the clock
+   would sit on top of its last chips, so it drops below the strip like #meters does. */
+@media (max-width: 560px) {
+  body:has(#combat:not([hidden])) #clock-hud { top: calc(var(--top-h) + var(--safe-top) + var(--strip-h) + 2 * var(--gap)); }
+}
 
 /* --- Game HUD extension: counters (top right), bubbles, panel (src/ui/showHud.ts) --- */
 #meters {

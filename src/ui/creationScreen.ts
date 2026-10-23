@@ -150,7 +150,7 @@ export class CreationScreen {
       final.className = 'final';
       const total = v + (bonuses[s.id] ?? 0);
       const mod = Math.floor((total - 10) / 2);
-      final.textContent = `${bonuses[s.id] ? `+${bonuses[s.id]} → ` : ''}${total} (${mod >= 0 ? '+' : ''}${mod})`;
+      final.textContent = step.format ? step.format(total, bonuses[s.id] ?? 0, v) : `${bonuses[s.id] ? `+${bonuses[s.id]} → ` : ''}${total} (${mod >= 0 ? '+' : ''}${mod})`;
       row.append(label, minus, value, plus, final);
       wrap.append(row);
     }

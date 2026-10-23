@@ -30,6 +30,8 @@ export type CreationStep =
       recommended(choices: CreationChoices): Record<string, number>;
       /** What the final value will be after bonuses (e.g. racial), shown next to each stat. */
       bonuses?(choices: CreationChoices): Record<string, number>;
+      /** How the final value reads next to each stat; default is the 5e style "+2 → 14 (+2)". */
+      format?(total: number, bonus: number, points: number): string;
     };
 
 export interface CreationSpec {
