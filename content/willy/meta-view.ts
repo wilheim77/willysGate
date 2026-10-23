@@ -45,7 +45,7 @@ export const achievements: NonNullable<GameDefinition['achievements']> = {
     if (!a) return null;
     const again = !!(event as GameEvent & { repetido?: boolean }).repetido;
     const line = state ? narrate(event, state) : null;
-    const v = { ...view(a, true), ...(line ? { line } : {}) };
+    const v = { ...view(a, true), ...(line ? { line } : {}), ...((a as { silencioso?: boolean }).silencioso ? { silent: true } : {}) };
     return again ? { ...v, again: true, reward: undefined } : v;
   },
 };
