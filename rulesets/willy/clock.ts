@@ -1,5 +1,6 @@
 import { type ActionOutcome, type Effect, type Entity, type GameEvent, type GameState, type JsonValue, type RngCursor, type Ruleset, type Vec2, hasTag, zonesOf } from '../../engine';
 import { seasonDecided } from './ending';
+import { tutorialUnlocked } from './tutorial';
 import { standing } from './resolve';
 
 /**
@@ -38,6 +39,8 @@ export interface ClockState {
   label: string;
   remaining: number;
   total: number;
+  /** Not shown (and not ticking) yet: the tutorial hasn't introduced it. */
+  hidden?: boolean;
   /** Map the clock belongs to. */
   mapa: string;
   planta: number;
@@ -159,6 +162,13 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
     return { effects, events: out };
   }
 
+  // The first floor's clock waits for the tutorial (tutorial.json → sistema.reloj): hidden, not ticking.
+  const locked = !tutorialUnlocked(state, 'sistema.reloj');
+  if (locked || clock.hidden) {
+    if (!!clock.hidden !== locked) set({ ...clock, hidden: locked });
+    if (locked) return { effects, events: out };
+    clock = { ...clock, hidden: false };
+  }
   const cost = spent(state, clock, events, p);
   if (cost.seconds <= 0 && cost.ronda === clock.ultimaRonda) return { effects, events: out };
   const next: ClockState = { ...clock, ultimaRonda: cost.ronda, remaining: clock.remaining - cost.seconds, avisados: [...clock.avisados], agrietadas: [...clock.agrietadas], caidas: [...clock.caidas] };

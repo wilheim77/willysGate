@@ -1,4 +1,4 @@
-import { WILLY_CREATION, defaultCreation, willy } from '../../rulesets/willy';
+import { WILLY_CREATION, defaultCreation, tutorialUnlocked, willy } from '../../rulesets/willy';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { AudioManifest } from '../../src/audio/types';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
@@ -12,12 +12,12 @@ import meta from './meta.json';
 import { PLAYER, applyCasting, maps, newWillyGame } from './setup';
 import { narrate, narrateEvents } from './narrator';
 import { announce } from './announce';
+import { TUTORIAL_STEPS } from './tutorial';
 import { willyHud } from './hud';
 import { achievements, rewardBoxes } from './meta-view';
 import { defeat, ending, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
 import cast from './data/cast.json';
 import texts from './texts/ui.json';
-import { tutorial, tutorialLocks } from './tutorial';
 
 /**
  * «Willy el mazmorrero», first playable: the casting (class + free points), then the Camerino
@@ -53,9 +53,11 @@ export const game: GameDefinition = {
   leaderId: 'willy',
   // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
   onDeath: 'vanish',
-  // The integrated tutorial: tips by event, and the HUD pieces each one introduces (content/willy/tutorial.ts).
-  tutorial,
-  tutorialLocks,
+  // HUD pieces hidden on the first floor until their tutorial step fires; the rules (which step, which floor) are the ruleset's.
+  tutorialLocks: {
+    hud: ['audiencia', 'grupo', 'mochila'],
+    locked: (state, hud) => !tutorialUnlocked(state, `hud.${hud === 'grupo' ? 'atributos' : hud}`),
+  },
   // The prologue (docs/willy/INTRO.md): plays after «Nueva partida», before the casting.
   cinematics: { intro: introCinematic as unknown as Cinematic },
   audio: audio as unknown as AudioManifest,
@@ -80,6 +82,7 @@ export const game: GameDefinition = {
   triggers: [{ id: 'final-temporada', when: { all: [{ flag: 'willy:presentadorDerrotado', is: true }, { notFlag: 'willy:final' }] }, dialogue: 'final-temporada' }],
   cast: { xelda: { name: 'Xelda', spriteId: 'xelda' }, presentador: { name: cast.presentador.nombre, spriteId: 'jefe-presentador' } },
   announce,
+  tutorial: TUTORIAL_STEPS,
   hud: willyHud,
   // The service lift needs the engine to know the floors (travel builds them on arrival).
   maps,

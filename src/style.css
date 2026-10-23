@@ -457,7 +457,7 @@ body:has(#combat:not([hidden])) .tutorial-toast { top: calc(var(--top-h) + var(-
   body:has(#clock-hud:not([hidden])):not(:has(#combat:not([hidden]))) .tutorial-toast { top: calc(var(--top-h) + var(--safe-top) + 108px); }
 }
 .tutorial-toast .body { flex: 1 1 auto; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.tutorial-toast p { margin: 0; font-size: var(--fs-s); line-height: 1.3; }
+.tutorial-toast p { margin: 0; font-size: var(--fs-s); line-height: 1.3; white-space: pre-line; }
 /* HUD pieces a tutorial step introduces (GameDefinition.tutorialLocks → <body data-locks>). */
 body[data-locks~="hud-audiencia"] #meters .meter[data-id="audiencia"],
 body[data-locks~="hud-reloj"] #clock-hud,

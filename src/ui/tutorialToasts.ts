@@ -142,15 +142,15 @@ export class TutorialToasts {
   }
 
   /**
-   * HUD pieces a step introduces stay hidden until it has been shown («no system appears
-   * unexplained»): `GameDefinition.tutorialLocks` maps a HUD id to that step. The ids are
-   * set on <body data-locks="…"> and the stylesheet hides what they name. Turning the
-   * tutorial off ("Consejos") releases every lock.
+   * HUD pieces a step introduces stay hidden until the game unlocks them («no system appears
+   * unexplained», `GameDefinition.tutorialLocks`). The ids are set on <body data-locks="…"> and
+   * the stylesheet hides what they name. Turning the tutorial off ("Consejos") releases every lock.
    */
   applyLocks(): void {
-    const locks = this.game.tutorialLocks ?? {};
-    const locked = isEnabled() ? Object.entries(locks).filter(([, step]) => !this.shown.has(step)).map(([hud]) => hud) : [];
-    document.body.dataset.locks = locked.join(' ');
+    const locks = this.game.tutorialLocks;
+    const state = this.store.state;
+    const locked = locks && isEnabled() ? locks.hud.filter((id) => locks.locked(state, id)) : [];
+    document.body.dataset.locks = locked.map((id) => `hud-${id}`).join(' ');
   }
 
   private steps(): TutorialStep[] {

@@ -219,11 +219,12 @@ export interface GameDefinition {
   /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
   tutorial?: TutorialStep[];
   /**
-   * HUD pieces hidden until their tutorial step has been shown: HUD id -> step id. The ids are
-   * set on <body data-locks="…"> and src/style.css hides what they name (hud-audiencia,
-   * hud-reloj, hud-mochila, hud-grupo). Releasing all of them: switch "Consejos" off.
+   * HUD pieces hidden until the game says otherwise (a tutorial step: «no system appears
+   * unexplained»). `hud` lists their ids; `locked(state, id)` says whether one is still hidden.
+   * The ids are set on <body data-locks="hud-<id> …"> and src/style.css hides what they name
+   * (audiencia, reloj, mochila, grupo). Switching "Consejos" off releases them all.
    */
-  tutorialLocks?: Record<string, string>;
+  tutorialLocks?: { hud: string[]; locked(state: GameState, hud: string): boolean };
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */
   barks?: BarksData;
   /** Achievements: a toast when one unlocks and a list from the top bar (Willy). */
