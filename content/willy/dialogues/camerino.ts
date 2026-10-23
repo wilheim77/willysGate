@@ -114,14 +114,14 @@ function xeldaNodes(): Record<string, DialogueNode> {
       speaker: 'xelda',
       text: 'Producción, dígame. Tengo cuatro manos libres y ninguna disponible. ¿Qué necesitas?',
       choices: [
-        { id: 'parte', text: 'Firmar el parte de planta (guardar).', effects: [{ type: 'rest', kind: 'parte' }], next: 'parte' },
+        { id: 'parte', text: 'Firmar el parte de planta.', effects: [{ type: 'rest', kind: 'parte' }], next: 'parte' },
         { id: 'reglamento', text: 'Explícame el reglamento.', next: 'reglamento' },
         { id: 'cajas', text: '¿Qué probabilidades tienen las cajas?', next: 'cajas' },
         { id: 'estado', text: '¿Cómo estás, Xelda?', next: 'estadoRuta' },
         bye('Gracias, Xelda.'),
       ],
     },
-    parte: say('xelda', 'Parte firmado, sellado y archivado por cuadruplicado. Si te eliminan, vuelves a este punto. Es lo más parecido a un abrazo que me permite el reglamento.', 'hola'),
+    parte: say('xelda', 'Parte firmado, sellado y archivado por cuadruplicado. Es lo más parecido a un abrazo que me permite el reglamento.', 'hola'),
     reglamento: {
       speaker: 'xelda',
       text: 'Hay cuatro cosas que nadie se lee. ¿Cuál quieres?',
