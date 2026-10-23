@@ -93,6 +93,10 @@ function toast(event: GameEvent, _state: GameState): ToastView | null {
       const sp = show.sponsorData(String(e.patrocinadorId));
       return { title: fill(T.regaloTitulo, { patrocinador: sp?.nombre ?? '' }), text: fill(T.regaloTexto, { regalo: giftName(e as { item?: string; caja?: string }) }), color: sp?.color ?? '#ffd24a', badge: '🎁' };
     }
+    case 'sponsorGiftIncoming': {
+      const sp = show.sponsorData(String(e.patrocinadorId));
+      return { title: fill(T.regaloEnCaminoTitulo, { patrocinador: sp?.nombre ?? '' }), text: T.regaloEnCaminoTexto, color: sp?.color ?? '#ffd24a', badge: '🪂' };
+    }
     case 'sponsorDealBroken': {
       const n = Number(e.multa ?? 0);
       if (!n) return null;

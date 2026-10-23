@@ -27,6 +27,7 @@ import { setupProfile } from './ui/profileScreen';
 import { PermadeathSlot } from './game/permadeath';
 import { CreditsScreen } from './ui/creditsScreen';
 import { setupShowHud } from './ui/showHud';
+import { setupNarratorBox } from './ui/narratorBox';
 
 // `@game` resolves to content/<GAME>/game.ts at build time (see vite.config.ts).
 document.title = game.title;
@@ -351,25 +352,11 @@ controller.onLevelUp = (level) => {
   dialogue.ask(`${game.texts.combat?.levelUp ?? 'Subís a nivel'} ${level}. ${lines.narration ?? ''}\n\n${said.join('\n')}`, [], game.texts.combat?.ok ?? 'Vale');
 };
 
-// The Narrador (Willy): a line on screen for the moments that deserve one.
-if (game.narrate) {
-  const box = document.createElement('div');
-  box.id = 'narrator';
-  box.hidden = true;
-  document.body.append(box);
-  let timer = 0;
-  store.subscribe((change, state) => {
-    if (change.kind !== 'events') return;
-    const line = game.narrateEvents ? game.narrateEvents(change.events, state) : (change.events.map((e) => game.narrate!(e, state)).find((l) => l) ?? null);
-    if (line) {
-      box.textContent = line;
-      box.hidden = false;
-      clearTimeout(timer);
-      timer = window.setTimeout(() => (box.hidden = true), 3500 + line.length * 40);
-    }
-  });
-  box.addEventListener('click', () => (box.hidden = true));
-}
+// The Narrador (Willy): a line on screen for the moments that deserve one, with its rhythm and
+// a history of the last lines (🎙).
+setupNarratorBox(store, game, (lines) =>
+  dialogue.ask(lines.length ? lines.join('\n\n') : (game.texts.combat?.narratorEmpty ?? 'El Narrador aún no ha dicho nada.'), [], game.texts.combat?.ok ?? 'Vale'),
+);
 
 // Announcements (an ability levelling up...): a toast, or a big banner for the big moments.
 if (game.announce) {

@@ -22,6 +22,7 @@ export const SHOW: ShowConfig = {
     ...(audience as unknown as ShowConfig['audience']),
     hitos: loot.fuentes.hitosAudiencia,
     prima: loot.fuentes.primaFinDePlanta,
+    primaAlFilo: loot.fuentes.salidaConPocoReloj,
   },
   share: {
     jefeId: boss?.id ?? 'jefe-presentador',

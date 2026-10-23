@@ -171,6 +171,7 @@ Datos: `content/willy/data/audience.json`.
 
 - Un **contador de espectadores** siempre visible desde el paso t03 del tutorial.
 - **Sube** con lo espectacular: eliminaciones con el entorno (caídas, fuera de plano, superficies, choques, decorados), varias eliminaciones a la vez, críticos e incluso pifias, reacciones de superficies, riesgo (ganar con poca vida, salir con poco reloj), cajas de oro y legendarias, logros y «Hacer el ganso».
+- «Hacer el ganso» solo da audiencia **en combate** (decisión del usuario, 2026-10-23: fuera de combate se podía farmear).
 - **Baja** (en %) con lo aburrido: esperar, turnos sin efecto, repetir la misma acción 3 veces seguidas, huir, y 30 s de reloj sin nada interesante fuera de combate.
 - **Novedad:** lo primero de cada tipo en la partida vale ×2; repetir lo mismo en 5 turnos baja a ×0,7, ×0,5, ×0,3.
 - **Escala por planta** (×1, ×4, ×12, ×35, ×100) y **mínimo por planta**: nunca baja de ahí.
@@ -187,6 +188,7 @@ Datos: `content/willy/data/sponsors.json`. Seis personalidades: Butanos Hermanos
 - **Interfaz:** fila de retratos pequeños con un medidor; tocar uno muestra lo que le gusta y lo que no. Los mensajes llegan como un bocadillo con su color y su retrato, sin pausar el juego.
 - **Regalos:** objetos de su lista o cajas, que caen en paracaídas (en combate, al final de la ronda).
 - **Carisma** multiplica la afinidad ganada (+5 % por punto).
+- **Contratos** (aprobados por el usuario, 2026-10-23): un patrocinador interesado ofrece un contrato concreto al llegar al Camerino o la primera vez que se interesa por Willy (datos: `sponsors.json → contratos`). Como mucho 2 a la vez. Aceptado («Firmar» en el panel de patrocinadores), dura hasta salir de la planta siguiente. Cumplido: su premio (caja, objeto o fichas) y +10 de afinidad. Roto o sin cumplir: multa en fichas, −10 de afinidad y un mensaje con retintín. Nunca quita vida ni objetos.
 
 ## 8. Cajas de botín
 
@@ -196,7 +198,7 @@ Datos: `content/willy/data/loot-tables.json`.
 
 1. **Solo dentro del juego.** No hay dinero real, ni tienda, ni moneda premium. **Las cajas no se compran ni siquiera con fichas**: solo se ganan jugando.
 2. **Transparencia:** el nivel de la caja se ve antes de abrirla y «Ver probabilidades» muestra los porcentajes exactos de la tabla.
-3. **Sin trampas psicológicas:** sin falsos «casi», sin temporizadores, sin ofertas, sin recompensas diarias, sin notificaciones. La animación se puede acelerar y saltar.
+3. **Sin trampas psicológicas:** sin falsos «casi», sin temporizadores, sin recompensas diarias, sin notificaciones. La animación se puede acelerar y saltar. (Las «ofertas» de este punto se refieren a vender cajas; los **contratos de patrocinadores** de §7 están aprobados: decisión del usuario, 2026-10-23.)
 4. **Garantía (piedad) visible:** el contador «Garantía de oro: 5/8» está en la pantalla de apertura.
 5. **Deterministas:** el contenido se tira con el RNG de la partida al abrir. Recargar no cambia el resultado, así que no compensa «guardar y recargar».
 
