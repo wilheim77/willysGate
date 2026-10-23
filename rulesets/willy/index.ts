@@ -44,6 +44,7 @@ import { chestsAfterCommand } from './chests';
 import { regenHook } from './regen';
 import { monsterAiProfile } from './monsters';
 import { camerinoConditions, onRest as camerinoRest } from './camerino';
+import { shopAfterCommand, shopConditions } from './shop';
 import { roomsAfterCommand } from './rooms';
 import { traitsAfterCommand } from './traits';
 
@@ -338,6 +339,7 @@ export function registerAfterCommand(hook: AfterCommandHook, order = 50): void {
 
 registerAfterCommand(dropsHook, 10);
 registerAfterCommand(chestsAfterCommand, 15);
+registerAfterCommand(shopAfterCommand, 18);
 registerAfterCommand(itemsHook, 20);
 // The floor clock and the collapse (clock.ts), before the show reacts to the turn.
 registerAfterCommand(clockAfterCommand, 40);
@@ -395,6 +397,7 @@ export const willy: Ruleset = {
     habilidadAlMenos: (s, id, p) => skillLevel(s.entities[id]!, String(p.habilidad)) >= Number(p.min),
     rasgo: (s, id, p) => hasTrait(s.entities[id]!, String(p.is)),
     ...camerinoConditions,
+    ...shopConditions,
   },
   onRest: (state, party, kind, rng) => camerinoRest(state, party, kind, rng),
   commands: { ...showCommands, openBox: openBox as never, equipItem: equipItem as never, unequipItem: unequipItem as never },

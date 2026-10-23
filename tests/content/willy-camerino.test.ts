@@ -92,19 +92,20 @@ describe('Camerino NPCs: structure', () => {
 });
 
 describe('Camerino NPCs: play', () => {
-  it('the shop and the errands are parked: their choices stay hidden until the game opens them', () => {
+  it('selling and the errands are parked: their choices stay hidden until the game opens them', () => {
     const m = talk(inCamerino(2, 'maripuri'), 'maripuri');
-    expect(dialogueChoices(willy, m, DIALOGUES.maripuri!).map((c) => c.text)).not.toContain('Quiero comprar.');
+    // Buying is open (a small shelf, tests/content/willy-shop.test.ts); selling is not yet.
+    expect(dialogueChoices(willy, m, DIALOGUES.maripuri!).map((c) => c.text)).not.toContain('Quiero vender.');
     const k = talk(inCamerino(2, 'koldo'), 'koldo');
     expect(dialogueChoices(willy, k, DIALOGUES.koldo!).map((c) => c.text)).not.toContain('¿Hay algo que hacer abajo?');
   });
 
-  it('Maripuri tags the shop choices for the shop panel and ends the talk', () => {
+  it('Maripuri tags the selling choice for the future shop panel and ends the talk', () => {
     const s0 = inCamerino(2, 'maripuri');
     const s = talk({ ...s0, flags: { ...s0.flags, 'tienda:abierta': true } }, 'maripuri');
-    const buy = choose(s, 'Quiero comprar.');
-    expect(buy.events.some((e) => e.type === 'dialogueChoice' && (e as unknown as { tags?: string[] }).tags?.includes('tienda:comprar'))).toBe(true);
-    expect(dialogueOf(buy.state)).toBeNull();
+    const sell = choose(s, 'Quiero vender.');
+    expect(sell.events.some((e) => e.type === 'dialogueChoice' && (e as unknown as { tags?: string[] }).tags?.includes('tienda:vender'))).toBe(true);
+    expect(dialogueOf(sell.state)).toBeNull();
   });
 
   it('Maripuri tells you about the biome below', () => {
