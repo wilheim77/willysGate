@@ -96,7 +96,8 @@
     "fell": "¡Caída!",
     "slipped": "¡Resbala!",
     "retryFight": "Volver a empezar la temporada",
-    "defeatText": "Willy ha sido eliminado. El público aplaude por educación."
+    "defeatText": "Willy ha sido eliminado. El público aplaude por educación.",
+    "dcShort": "DIF"
   },
   "creation": {
     "title": "El cásting",
