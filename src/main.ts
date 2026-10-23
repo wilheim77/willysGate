@@ -473,7 +473,8 @@ const scene = new MapScene(
 controller.scene = scene;
 
 new Phaser.Game({
-  type: Phaser.AUTO,
+  // ?canvas forces the 2D renderer (headless browsers and old GPUs where WebGL framebuffers fail).
+  type: new URLSearchParams(location.search).has('canvas') ? Phaser.CANVAS : Phaser.AUTO,
   parent: 'game',
   backgroundColor: game.theme.canvas,
   pixelArt: true,
