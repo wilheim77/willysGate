@@ -33,18 +33,59 @@ Dos pisos por planta. El primero acaba en un **guardián** (el enemigo más duro
 
 | Piso | Planta | Nivel al entrar | Salas | Reloj | Experiencia del piso |
 |---|---|---|---|---|---|
-| 1 | Castro Sumergido: Las calles anegadas | 1 | 7-9 | 23:00 | 78 |
-| 2 | Castro Sumergido: La lonja | 2 | 11-14 | 26:00 | 130 |
-| 3 | Hipermercado Eterno: Pasillos infinitos | 3 | 9-11 | 19:33 | 208 |
-| 4 | Hipermercado Eterno: La trastienda | 4 | 11-14 | 22:06 | 299 |
-| 5 | La Verbena Sin Fin: Las barracas | 5 | 9-11 | 18:24 | 390 |
-| 6 | La Verbena Sin Fin: La plaza mayor | 6 | 11-14 | 20:48 | 520 |
-| 7 | Balneario Glaciar: Los vestuarios | 7 | 9-11 | 17:15 | 650 |
+| 1 | Castro Sumergido: Las calles anegadas | 1 | 7-9 | 7:00 | 78 |
+| 2 | Castro Sumergido: La lonja | 2 | 11-14 | 12:00 | 130 |
+| 3 | Hipermercado Eterno: Pasillos infinitos | 3 | 9-11 | 12:15 | 208 |
+| 4 | Hipermercado Eterno: La trastienda | 4 | 11-14 | 15:00 | 299 |
+| 5 | La Verbena Sin Fin: Las barracas | 5 | 9-11 | 12:30 | 390 |
+| 6 | La Verbena Sin Fin: La plaza mayor | 6 | 11-14 | 16:30 | 520 |
+| 7 | Balneario Glaciar: Los vestuarios | 7 | 9-11 | 12:15 | 650 |
 | 8 | Balneario Glaciar: Las termas | 8 | 11-14 | 19:30 | 780 |
-| 9 | El Plató: Los pasillos de producción | 9 | 9-11 | 17:15 | 910 |
-| 10 | El Plató: El plató principal | 10 | 11-14 | 19:30 | 1105 |
+| 9 | El Plató: Los pasillos de producción | 9 | 9-11 | 11:45 | 910 |
+| 10 | El Plató: El plató principal | 10 | 11-14 | 16:00 | 1105 |
 
 **Curva de nivel:** se entra en el piso N a nivel N y se sale a nivel N+1. La experiencia de cada piso es lo que falta para el siguiente nivel, ×1,3 (no hace falta limpiar todas las salas). Las habilidades de clase de nivel 9 llegan en el piso 8-9, así que se usan en el último tercio de la temporada.
+
+## Reloj (recalibrado el 2026-10-23)
+
+Petición del usuario: «hay demasiado tiempo por planta». Antes, una partida normal salía de casi cualquier piso con más de la mitad del reloj, y el derrumbe no llegaba nunca.
+
+**Cómo se mide** (`tests/content/willy-clock-probe.test.ts`, `SIM_CLOCK=30`: 30 pisos generados por piso, en Concursante). El simulador de combate salta de sala en sala, así que el reloj se reconstruye:
+- Andar: 1 s por casilla, el camino más corto entre salas en el mapa real.
+- Combate: 15 s por ronda. Las rondas se miden jugando cada combate con la IA (de 1,5 a 3,8 rondas por pelea, según el piso). Los combates de guardián y jefe paran el reloj.
+- 3 s por cofre abierto.
+- En el piso 1, el reloj empieza tras la primera victoria (el tutorial).
+
+Tres jugadores:
+- **Directo:** el camino crítico hasta la escalera, peleando lo que hay en él.
+- **Normal:** todas las salas con combate y sus cofres.
+- **Completo:** todas las salas y todos los cofres.
+
+La IA anda en línea recta y sin dudar; una persona da más vueltas. Los números de «ahora» suman un 15 % de tiempo a cada recorrido para tenerlo en cuenta.
+
+**Reloj que queda al bajar la escalera** (antes → ahora, Concursante; p50 = mediana, p90 = el 10 % más lento):
+
+| Piso | Reloj antes → ahora | Directo p90 | Normal p50 | Normal p90 | Completo p50 | Completo p90 |
+|---|---|---|---|---|---|---|
+| 1 | 23:00 → 7:00 | 88 % → 54 % | 84 % → 39 % | 77 % → 14 % | 78 % → 18 % | 74 % → 3 % |
+| 2 | 26:00 → 12:00 | 82 % → 55 % | 71 % → 28 % | 65 % → 14 % | 68 % → 20 % | 63 % → 9 % |
+| 3 | 19:33 → 12:15 | 68 % → 42 % | 59 % → 25 % | 48 % → 5 % | 52 % → 11 % | 44 % → -2 % |
+| 4 | 22:06 → 15:00 | 68 % → 45 % | 56 % → 26 % | 43 % → 4 % | 47 % → 10 % | 35 % → -10 % |
+| 5 | 18:24 → 12:30 | 66 % → 43 % | 55 % → 24 % | 42 % → 1 % | 50 % → 15 % | 39 % → -2 % |
+| 6 | 20:48 → 16:30 | 62 % → 44 % | 50 % → 28 % | 30 % → -1 % | 42 % → 16 % | 28 % → -4 % |
+| 7 | 17:15 → 12:15 | 64 % → 42 % | 53 % → 24 % | 38 % → 0 % | 47 % → 14 % | 37 % → -2 % |
+| 8 | 19:30 → 19:30 | 49 % → 41 % | 34 % → 25 % | 11 % → -3 % | 27 % → 16 % | 8 % → -5 % |
+| 9 | 17:15 → 11:45 | 68 % → 47 % | 53 % → 21 % | 39 % → -3 % | 51 % → 16 % | 36 % → -7 % |
+| 10 | 19:30 → 16:00 | 62 % → 47 % | 44 % → 22 % | 31 % → 3 % | 38 % → 13 % | 25 % → -4 % |
+
+Lectura:
+- **Directo:** siempre llega con margen. Queda entre el 41 y el 55 % del reloj en el 90 % de los casos, así que ningún piso es imposible.
+- **Normal:** sale con un 21-28 % en la mediana (39 % en el piso 1 y 28 % en el 2, más suaves para aprender). El 10 % más lento de los pisos 5-9 roza el derrumbe.
+- **Completo:** queda un 10-16 % en la mediana y el 10 % más lento se derrumba (pisos 3-10). En los pisos 1 y 2, explorarlo todo cabe por poco (3 % y 9 % en el p90).
+- **Turista** (×1,5): queda un 31-43 % incluso en el 10 % más lento de las partidas normales, y un 40-47 % explorándolo todo. Nunca va con prisa.
+- **Prime time** (×0,8): el directo sigue sobrado (un 27-43 % en el p90), pero la partida normal llega con un 2-10 %, y un 24 % en el piso 1. Es lo que promete.
+
+El piso 8 se queda en 19:30: sus combates son los más largos (3,8 rondas por pelea) y ya iba justo.
 
 ## Curva de habilidades (subida por uso)
 

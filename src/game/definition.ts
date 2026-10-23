@@ -39,6 +39,8 @@ export interface AchievementView {
   again?: boolean;
   /** What the narrator says about it, shown on its banner. */
   line?: string;
+  /** A minor one: counted in the list, no banner. */
+  silent?: boolean;
 }
 
 export interface RewardBoxView {

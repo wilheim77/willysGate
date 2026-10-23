@@ -35,7 +35,7 @@ export interface FloorRun {
   /** Willy's health left at the end, as a share of the maximum. */
   hpLeft: number;
   /** Per fight: the foes, and Willy's health before and after. */
-  log: { foes: string[]; before: number; after: number; boss: boolean }[];
+  log: { foes: string[]; before: number; after: number; boss: boolean; room: number; rounds: number }[];
   /** Audience when the floor ends. */
   audiencia: number;
   /** The presenter's Share when his fight ends (floor 10), and how often it kept him at 1 health. */
@@ -104,25 +104,27 @@ function standingIds(state: GameState, ids: string[]): string[] {
 }
 
 /** One fight to the end. Returns the state after it and whether it ended normally. */
-function fight(state: GameState, party: string[], foes: string[]): { state: GameState; stalled: boolean; enAntena: number } {
+function fight(state: GameState, party: string[], foes: string[]): { state: GameState; stalled: boolean; enAntena: number; rounds: number } {
   const e = engine();
   const started = e.apply(state, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants: [...party, ...foes] } as BaseCommand);
-  if (!started.ok) return { state, stalled: false, enAntena: 0 };
+  if (!started.ok) return { state, stalled: false, enAntena: 0, rounds: 0 };
   let s = started.state;
   let enAntena = 0;
+  let rounds = 1;
   for (let i = 0; i < MAX_COMMANDS && s.turn.mode === 'combat'; i++) {
     const id = s.turn.activeEntityId!;
     const r = e.apply(s, nextAiCommand(willy, s, id));
     if (r.ok) {
       s = r.state;
       enAntena += r.events.filter((ev) => ev.type === 'enAntena').length;
+      for (const ev of r.events) if (ev.type === 'turnStarted') rounds = Math.max(rounds, Number((ev as unknown as { round?: number }).round ?? 0));
     } else {
       const skip = e.apply(s, { type: 'endTurn', issuer: SYSTEM_ISSUER, entityId: id } as BaseCommand);
       if (!skip.ok) break;
       s = skip.state;
     }
   }
-  return { state: s, stalled: s.turn.mode === 'combat', enAntena };
+  return { state: s, stalled: s.turn.mode === 'combat', enAntena, rounds };
 }
 
 const audienceOf = (s: GameState) => (s.systems.audiencia as unknown as { valor?: number } | undefined)?.valor ?? SHOW.audience.inicial;
@@ -177,7 +179,7 @@ export function simulateFloor(seed: number, floor: number, classId: string, audi
     const inRoom = Object.fromEntries(Object.entries(state.entities).filter(([id]) => !aside[id]));
     const result = fight({ ...state, entities: inRoom }, party, foes);
     state = { ...result.state, entities: { ...aside, ...result.state.entities } };
-    run.log.push({ foes: foes.map((id) => state.entities[id]!.spriteId), before, after: state.entities.willy!.resources.vida!.current, boss });
+    run.log.push({ foes: foes.map((id) => state.entities[id]!.spriteId), before, after: state.entities.willy!.resources.vida!.current, boss, room: Number(zone.name.split('-')[1]), rounds: result.rounds });
     if (foes.includes(SHOW.share.jefeId)) {
       run.share = (state.systems.share as unknown as { valor?: number } | undefined)?.valor;
       run.enAntena = result.enAntena;

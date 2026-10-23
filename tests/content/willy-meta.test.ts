@@ -68,6 +68,10 @@ describe('Willy meta: content', () => {
     const achIds = achievementsData.logros.map((a) => a.id);
     expect(new Set(achIds).size).toBe(achIds.length);
     for (const a of achievementsData.logros) for (const r of a.recompensas as { tipo: string }[]) expect(r.tipo).not.toBe('xp');
+    // Pacing: the trivial ones are silent (no banner); the memorable ones never are.
+    const silent = new Set((achievementsData.logros as { id: string; silencioso?: boolean }[]).filter((a) => a.silencioso).map((a) => a.id));
+    expect(silent.has('en-antena')).toBe(true);
+    for (const loud of ['primer-figurante', 'primera-victoria', 'pum', 'intocable', 'despido-procedente', 'planta-limpia', 'critico']) expect(silent.has(loud), loud).toBe(false);
   });
 });
 

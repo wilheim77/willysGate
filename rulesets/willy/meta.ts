@@ -98,6 +98,8 @@ export interface AchievementDef {
   nombre: string;
   categoria: string;
   oculto: boolean;
+  /** A minor one: it counts (list, profile), but the client shows no banner for it. */
+  silencioso?: boolean;
   pista?: string;
   descripcion: string;
   condicion: Condition;

@@ -510,7 +510,7 @@ const reviveFlag = (id: string, mapId: string) => `willy:reanimacion:${id}:${map
 /** Tag on an engineer who has pressed the 5G button at least once. */
 export const G_TRIED = 'estrenado:red-g';
 const tenGFlag = (id: string, mapId: string) => `willy:10g:${id}:${mapId}`;
-const gTurnFlag = (id: string) => `willy:g-turno:${id}`;
+export const gTurnFlag = (id: string) => `willy:g-turno:${id}`;
 
 function arcLength(a: Entity): number {
   return skillLevel(a, 'arco-voltaico') >= 2 ? 5 : 4;
@@ -563,7 +563,8 @@ function performG(r: Resolver, id: string, t: ActionTarget): void {
       break;
     }
   }
-  // Counts in combat, once per turn (even at 5G, where it does nothing).
+  // Counts in combat, once per turn (even at 5G, where it does nothing). The flag is cleared when
+  // the fight ends (index.ts → onCombatEnd), or the next fight's round 1 wouldn't count.
   const turnKey = `${r.state.turn.round}`;
   if (r.state.turn.mode === 'combat' && r.state.flags[gTurnFlag(id)] !== turnKey) {
     r.apply({ type: 'setFlag', flag: gTurnFlag(id), value: turnKey });
