@@ -147,6 +147,8 @@ export interface FloorOptions {
   rivals?: RivalRecord[];
   /** Map id; default `planta-<n>`. */
   mapId?: string;
+  /** Unique keys of the last rivals met in this browser (the profile): new rivals avoid them. */
+  recentRivals?: string[];
 }
 
 const DIRS: Record<Side, Vec2> = { N: { x: 0, y: -1 }, S: { x: 0, y: 1 }, E: { x: 1, y: 0 }, W: { x: -1, y: 0 } };
@@ -446,7 +448,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
 
   const mapId = options.mapId ?? `planta-${n}`;
   const map: GridMap = { id: mapId, width, height, tiles };
-  const populated = populate(g, runSeed, n, spec, biome, rooms, markers, earlier, rivalRoom);
+  const populated = populate(g, runSeed, n, spec, biome, rooms, markers, earlier, rivalRoom, options.recentRivals);
   const error = validate(map, populated, spec);
   if (error) return error;
 
@@ -579,7 +581,7 @@ function enemy(entityId: string, id: string, def: EnemyDef, at: Vec2, n: number,
   return e;
 }
 
-function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Biome, rooms: RoomInfo[], markers: { ch: string; at: Vec2; room: number }[], earlier: RivalRecord[], rivalRoom: boolean): Populated {
+function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Biome, rooms: RoomInfo[], markers: { ch: string; at: Vec2; room: number }[], earlier: RivalRecord[], rivalRoom: boolean, recentRivals: string[] = []): Populated {
   const entities: Entity[] = [];
   const foesByRoom: string[][] = rooms.map(() => []);
   const traps: Trap[] = [];
@@ -636,7 +638,7 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
     const enemySlots = slots(i, 'e');
     if (room.role === 'rival' && rivalRoom && enemySlots.length) {
       const at = enemySlots.shift()!;
-      const profiles = rebuildProfiles(runSeed, earlier);
+      const profiles = rebuildProfiles(runSeed, earlier, recentRivals);
       // Someone you made a pact with, or who ran away, may come back (with memory of it).
       const returning = g.shuffle(earlier.filter((r) => r.desenlace === 'pacto' || r.desenlace === 'huida'));
       const back = returning.length && g.chance(RIVAL_RULES.returnChance) ? returning[0] : undefined;
@@ -666,7 +668,7 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
           e = legendaryEntity(legendary, spec.plantaId, at);
           rival = { id: e.id, planta: n, ranura: i, legendario: legendary.id, raza: legendary.raza.id, plantas: [n] };
         } else {
-          const taken = new Set([...profiles.values()].flatMap(rivalKeys));
+          const taken = new Set([...(recentRivals), ...[...profiles.values()].flatMap(rivalKeys)]);
           const profile = generateRival(runSeed, n, i, taken);
           e = rivalEntity(profile, spec.plantaId, at);
           rival = { id: e.id, planta: n, ranura: i, raza: profile.raza, plantas: [n] };

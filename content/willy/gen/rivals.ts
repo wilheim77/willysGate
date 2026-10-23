@@ -124,9 +124,9 @@ export function generateRival(runSeed: number, floor: number, slot: number, take
  * The generated rivals of a run, rebuilt from their records in the order they were met (each
  * one was generated avoiding the ones before it, so the order matters).
  */
-export function rebuildProfiles(runSeed: number, records: readonly RivalRecord[]): Map<string, RivalProfile> {
+export function rebuildProfiles(runSeed: number, records: readonly RivalRecord[], recent: readonly string[] = []): Map<string, RivalProfile> {
   const out = new Map<string, RivalProfile>();
-  const taken = new Set<string>();
+  const taken = new Set<string>(recent);
   for (const r of records) {
     if (r.legendario) continue;
     const p = generateRival(runSeed, r.planta, r.ranura, taken);

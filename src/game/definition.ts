@@ -33,6 +33,12 @@ export interface AchievementView {
   reward?: string;
   /** UI art id for its badge (manifest `ui`). */
   icon?: string;
+  /** Earned in an earlier season (the browser's profile), not yet in this one. */
+  earlier?: boolean;
+  /** Earned again this season: no prize this time. */
+  again?: boolean;
+  /** What the narrator says about it, shown on its banner. */
+  line?: string;
 }
 
 export interface RewardBoxView {
@@ -232,7 +238,7 @@ export interface GameDefinition {
     categories: Record<string, string>;
     list(state: GameState): AchievementView[];
     /** The achievement an event announces, if it is an unlock. */
-    unlocked(event: GameEvent): AchievementView | null;
+    unlocked(event: GameEvent, state?: GameState): AchievementView | null;
   };
   /** Reward boxes waiting to be opened (Willy's loot boxes): a 🎁 counter and the opening moment. */
   rewardBoxes?: {
@@ -279,6 +285,20 @@ export interface GameDefinition {
    * sprite — Willy's showier tone; Intereses keeps 'corpse'.
    */
   onDeath?: 'corpse' | 'vanish';
+  /**
+   * The browser's profile: what carries over between seasons (achievements, unlocks, records).
+   * The client stores it (src/game/profile.ts); the game says what goes in and how it shows.
+   */
+  profile?: {
+    /** A new season starts: the state gets what the rules need from the profile. */
+    inject(state: GameState, profile: Record<string, unknown>): GameState;
+    /** The profile after a command (its events and the state it left). `today` is YYYY-MM-DD. */
+    update(profile: Record<string, unknown>, events: GameEvent[], state: GameState, today: string): Record<string, unknown>;
+    /** The «Perfil / Récords» screen. */
+    screen(profile: Record<string, unknown>): { title: string; sections: { title: string; rows: { label: string; value: string }[] }[] };
+    /** A mark for the title screen, if any («🔴 EN DIRECTO»). */
+    badge?(profile: Record<string, unknown>): string | null;
+  };
   /** `start` picks another starting map (?mapa=<id> in the URL, for testing). */
   newGame(engine: Engine, seed: number, options?: { start?: string }): GameState;
 }

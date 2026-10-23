@@ -58,7 +58,7 @@ describe('Willy narrator', () => {
   it('lines carry their bank priority, so the client can let the big moments win', () => {
     const s = game([W('willy', 'butanero', 0, 0)]);
     let line: { text: string; priority: number } | null = null;
-    for (let i = 0; i < 10 && !line; i++) line = narrateEvents([{ type: 'achievementUnlocked', logro: 'X', frase: '' } as never], s);
+    for (let i = 0; i < 30 && !line; i++) line = narrateEvents([{ type: 'boxDelivered', caja: 'bronce', origen: 'logro' } as never], s);
     expect(line?.priority).toBeGreaterThanOrEqual(3);
   });
 });

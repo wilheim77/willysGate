@@ -185,7 +185,7 @@ function pick(event: GameEvent, state: GameState): { text: string; priority: num
       // naming what the unlocking event was about (its `contexto`).
       if (event.type === 'achievementUnlocked' && typeof view.frase === 'string') {
         const own = fill(view.frase, { ...ctx, ...achievementContext(view.contexto, state) });
-        if (own) text = `${text} ${own}`;
+        if (own) text = `${text} ${own.charAt(0).toUpperCase()}${own.slice(1)}`;
       }
       if (bank.memoria) recent.set(bank.id, [...seen, line.id].slice(-bank.memoria));
       spokeAt.set(bank.id, turns);
@@ -221,6 +221,8 @@ export function narrateEvents(events: GameEvent[], state: GameState): { text: st
   turns += events.filter((e) => e.type === 'turnStarted' && (e as unknown as { entityId?: string }).entityId === 'willy').length;
   let best: { text: string; priority: number } | null = null;
   for (const e of events) {
+    // An unlock's line goes on its own banner (meta-view.ts), in step with it.
+    if (e.type === 'achievementUnlocked') continue;
     const p = pick(e, state);
     if (p && (!best || p.priority > best.priority)) best = p;
   }

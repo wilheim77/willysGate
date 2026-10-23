@@ -24,6 +24,7 @@ import { setupAchievements } from './ui/achievements';
 import { setupRewardBoxes } from './ui/rewardBoxes';
 import './ui/meta.css';
 import { SetupScreen } from './ui/setupScreen';
+import { setupProfile } from './ui/profileScreen';
 import { PermadeathSlot } from './game/permadeath';
 import { CreditsScreen } from './ui/creditsScreen';
 import { setupShowHud } from './ui/showHud';
@@ -165,6 +166,9 @@ controller.onTrapReached = (trap, candidates) => {
   store.subscribe((change) => {
     if (change.kind !== 'events') return;
     const dropped = new Set(change.events.filter((e) => e.type === 'lootDropped').map((e) => (e as unknown as { item: string }).item));
+    // What comes out of a reward box goes to the bag: the box's own screen shows it, and asking
+    // «who wears it?» there would spoil the reveal (and pile up with many boxes).
+    if (change.events.some((e) => e.type === 'boxOpened')) return;
     // Swapping gear puts the old piece back in the bag: that is not a new find, and asking about
     // it again looped forever (playtest: three weapons, no way out).
     const reshuffle = change.events.some((e) => /^item(Equipped|Unequipped|Used)$/.test(e.type));
@@ -412,7 +416,13 @@ setupShowHud(store, game, (code) => hud.sayError(code));
 const creation = new CreationScreen(store, game);
 // A new game: the game's questions (difficulty, elimination mode...), then character creation.
 const setupScreen = new SetupScreen(store, game);
-const startNew = () => setupScreen.open(() => creation.open());
+// The title screen first; a new game goes on to character creation. A new season starts with what
+// the browser's profile carries over (achievements, unlocks, rivals already met).
+let profile: ReturnType<typeof setupProfile> = null;
+const startNew = () => {
+  profile?.inject();
+  setupScreen.open(() => creation.open());
+};
 hud.onNewGame = startNew;
 // A minute with no input out of combat: the narrator may notice (client event `playerIdle`).
 let lastInput = performance.now();
@@ -437,6 +447,7 @@ new TitleScreen(
   () => cinematic.play(intro, startNew),
   intro ? () => cinematic.play(intro, () => undefined) : undefined,
 ).open();
+profile = setupProfile(store, game);
 // A permadeath run in progress: «Continuar» resumes it exactly where it was (no other way in).
 {
   const saved = permadeath.load();
