@@ -134,3 +134,47 @@ describe('Willy rivals: lines resolved when the rival is made', () => {
     }
   });
 });
+
+describe('Willy narrator: the floor intro names the biome of that floor', () => {
+  const state = { entities: {}, systems: {} } as unknown as GameState;
+  const biomes: [number[], RegExp][] = [
+    [[1, 2], /Castro|lonja|gaviotas/],
+    [[3, 4], /Hipermercado|trastienda|ofertas/],
+    [[5, 6], /Verbena|orquesta|plaza mayor/],
+    [[7, 8], /Balneario|termas/],
+    [[9, 10], /Plató|plató|cámaras/],
+  ];
+  it('floors 1-10 each get a line of their own biome, never of another', () => {
+    for (const [floors, re] of biomes) {
+      for (const planta of floors) {
+        for (let visita = 1; visita <= 2; visita++) {
+          const seen = new Set<string>();
+          for (let i = 0; i < 40; i++) {
+            const line = narrate({ type: 'floorEntered', planta, nombrePlanta: 'x', visita } as unknown as GameEvent, state);
+            if (line) seen.add(line);
+          }
+          expect(seen.size, `floor ${planta}`).toBeGreaterThan(0);
+          for (const l of seen) expect(l, `floor ${planta}: ${l}`).toMatch(re);
+        }
+      }
+    }
+  });
+});
+
+describe('Willy narrator: achievement lines agree with the enemy', () => {
+  it('«Primer figurante» on a gull says «La Gaviota de lonja ha caído», with capital and gender', () => {
+    const gull = { id: 'g', name: 'Gaviota de lonja', spriteId: 'gaviota-de-lonja', tags: [], controllerId: 'ai', factionId: 'monstruos', position: { x: 0, y: 0 }, stats: {}, resources: {}, conditions: [] };
+    const state = { entities: { g: gull }, systems: {} } as unknown as GameState;
+    const frase = (achievements.logros as { id: string; narrador: string }[]).find((l) => l.id === 'primer-figurante')!.narrador;
+    const seen = new Set<string>();
+    for (let i = 0; i < 40; i++) {
+      const line = narrate({ type: 'achievementUnlocked', logro: 'Primer figurante', logroId: 'primer-figurante', frase, contexto: { enemigo: 'Gaviota de lonja', enemigoId: 'g' } } as unknown as GameEvent, state);
+      if (line) seen.add(line);
+    }
+    expect(seen.size).toBeGreaterThan(0);
+    for (const l of seen) {
+      expect(l).toContain('La Gaviota de lonja ha caído');
+      expect(l).not.toMatch(/[.!?»] [a-záéíóú]/);
+    }
+  });
+});
