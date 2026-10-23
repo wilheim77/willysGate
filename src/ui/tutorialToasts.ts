@@ -99,6 +99,10 @@ function matchesIdle(step: TutorialStep, state: GameState, game: GameDefinition)
   return evaluateCondition(game.ruleset, state, game.leaderId, t.when);
 }
 
+/** Banners and conversations a tip must not cover (#announce: collapse/level-up banners). */
+const BLOCKERS = '#announce, .achievement-toast, #dialogue, .box-overlay';
+const blocked = (): boolean => [...document.querySelectorAll<HTMLElement>(BLOCKERS)].some((el) => !el.hidden && getComputedStyle(el).display !== 'none');
+
 const covered = (): boolean => [...document.querySelectorAll<HTMLElement>(COVERING_OVERLAYS)].some((el) => !el.hidden);
 
 /**
@@ -115,6 +119,9 @@ export class TutorialToasts {
   private card = document.createElement('div');
   private closeTimer = 0;
   private retryTimer = 0;
+  private flushTimer = 0;
+  /** Cards waiting for a banner or a conversation to clear (and for the previous card to be read). */
+  private queue: TutorialStep[] = [];
 
   constructor(
     private store: GameStore,
@@ -189,10 +196,28 @@ export class TutorialToasts {
     }
   }
 
+  /** Counts the step as shown (so it can't fire twice) and puts its card in the queue. */
   private show(step: TutorialStep): void {
     this.shown.add(step.id);
     saveShown(this.game, this.seed, this.shown);
+    this.queue.push(step);
+    this.flush();
+  }
 
+  /** A card never lands on top of a banner (collapse, achievement…) or a conversation: it waits. */
+  private flush(): void {
+    window.clearTimeout(this.flushTimer);
+    if (this.queue.length === 0) return;
+    if (blocked()) {
+      this.flushTimer = window.setTimeout(() => this.flush(), 600);
+      return;
+    }
+    this.display(this.queue.shift()!);
+    // The next card, if any, gives this one time to be read.
+    if (this.queue.length > 0) this.flushTimer = window.setTimeout(() => this.flush(), 7000);
+  }
+
+  private display(step: TutorialStep): void {
     const body = document.createElement('div');
     body.className = 'body';
     for (const paragraph of Array.isArray(step.text) ? step.text : [step.text]) {
