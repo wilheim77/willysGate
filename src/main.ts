@@ -169,16 +169,19 @@ controller.onTrapReached = (trap, candidates) => {
     // What comes out of a reward box goes to the bag: the box's own screen shows it, and asking
     // «who wears it?» there would spoil the reveal (and pile up with many boxes).
     if (change.events.some((e) => e.type === 'boxOpened')) return;
+    // Swapping gear puts the old piece back in the bag: that is not a new find, and asking about
+    // it again looped forever (playtest: three weapons, no way out).
+    const reshuffle = change.events.some((e) => /^item(Equipped|Unequipped|Used)$/.test(e.type));
     for (const ev of change.events) {
       // Gear found in a chest or handed over in a conversation gets the same "who wears it?" question.
       const found = ev as unknown as { owner?: string; item?: string; from?: number; to?: number };
-      const fromChest = ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
+      const fromChest = !reshuffle && ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
       if (ev.type !== 'lootDropped' && !fromChest) continue;
       const item = (ev as unknown as { item: string }).item;
       // Consumables and misc goods have no slot: they're already in the shared bag (see the
       // combat log line for them), nothing to ask.
       if (!store.engine.ruleset.itemSlot?.(item)) continue;
-      lootQueue.push(item);
+      if (!lootQueue.includes(item)) lootQueue.push(item);
     }
     pumpLootQueue();
   });
@@ -343,7 +346,8 @@ if (game.ending) {
     const show = () =>
       dialogue.ask(`${summary.title}\n${summary.lines.map((l: string) => `• ${l}`).join('\n')}`, [
         { label: (game.texts.ui as Record<string, string>).credits ?? 'Créditos', onPick: () => { credits.open(); setTimeout(show, 0); } },
-        { label: summary.button, onPick: () => newRun() },
+        // The credits may still be open over the summary: a new run never starts under them.
+        { label: summary.button, onPick: () => { credits.close(); newRun(); } },
       ], false);
     setTimeout(show, 800);
   });
