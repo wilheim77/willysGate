@@ -32,7 +32,7 @@ deleted, season summary).
    and everything the design says is hidden at the start (audience, clock, bag, boxes, sponsors) is visible from the
    first second. Also the tutorial's own script talks about the casting happening after the plaza, but the casting
    is the first screen.
-5. **[M/C] Box fatigue: 39 unopened boxes and 32 achievements after floor 3.** Every achievement grants a box; each
+5. **[M/C] Box fatigue: 39 unopened boxes and 32 achievements after floor 3.** FIXED on willy-meta (ce172d3), RE-TESTED: the box list has "Abrir todas (15)" and one result screen ("15 cajas abiertas", items and +261 fichas, "A la mochila", "Abrir las nuevas (1)"); floor 1 now gives 15 boxes for 18 achievements (minor achievements give no box). Original report: Every achievement grants a box; each
    opened gear item raises a "Dárselo a Willy / Jonatan" prompt, and these prompts stack when several are pending
    (we saw 2 queued at once, one with no way to skip). The box list has no "Abrir todas" and no "Guardar todo en la
    mochila". Playing a normal session means dozens of taps and prompts. (Not a crash: a flow problem that will make
@@ -42,14 +42,14 @@ deleted, season summary).
 
 6. **[W] Chests do nothing.** `cofre` props (`botin:planta-N`, 6 hp objects) ignore taps; DESIGN.md says opening
    costs 3 s and gives 1 item + chips. No feedback either.
-7. **[M] Box reveal spoils itself, and the gear prompt can't always be skipped.** Opening a box immediately opens the
+7. **[M] Box reveal spoils itself, and the gear prompt can't always be skipped.** FIXED on willy-meta, RE-TESTED (no prompt under the reveal; the sponsor-gift "Casco de obra" prompt now offers "3. Guardarlo en la mochila"). Original report: Opening a box immediately opens the
    "Guantes de fregar - Dárselo a Willy / a Jonatan" prompt under the reveal (item name faintly visible). Some
    prompts have "Guardarlo en la mochila", the ones from box/sponsor gifts have no "Luego" option.
 8. **[W] The floor intro narrator uses the floor number as the planta.** Entering floor 2 says "Planta 2: el
    Hipermercado Eterno" while the floor is still Castro (floors 1-2 Castro, 3-4 Hipermercado).
 9. **[C] Camerino NPCs (Maripuri, Paco, Xelda, Koldo) do nothing when tapped; fichas have no sink** (304 chips by
    floor 3, nothing to buy). At least answer with a line.
-10. **[M/W] Narrator line names a different achievement than the banner.** Banner "Planta limpia" + narrator "Logro
+10. **[M/W] Narrator line names a different achievement than the banner.** FIXED on willy-meta (the narrator line is now part of the achievement banner; not re-verified in a double unlock). Banner "Planta limpia" + narrator "Logro
     desbloqueado, y encima de los raros: «Barbacoa de uno»" (two unlocked in the same command, {logro} resolves to the
     wrong one). Also «Primer figurante». "el Gaviota de lonja ha caído." (see 17).
 11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/ **FIXED on main** (client): the bar fits, Guardar/Cargar on screen and Exportar peeks out as a swipe cue (re-tested).
@@ -66,7 +66,7 @@ deleted, season summary).
 
 ## Cosmetic
 
-17. **[M] Narrator grammar:** "«Primer figurante». el Gaviota de lonja ha caído." (lowercase "el" after a full stop,
+17. **[M] Narrator grammar:** FIXED on willy-meta (gender + capital; not re-verified). "«Primer figurante». el Gaviota de lonja ha caído." (lowercase "el" after a full stop,
     wrong gender: `{enemigo:el}` in achievements.json ignores the enemy's gender; the rest of the narrator handles it).
 18. **[C] Casting stat line "+8 -> 10 (+0)" has no label; "Puntos libres: 0" with 3 points already spent.** **FIXED on main** (client): sum display "8 + 2 = 10".
 19. **[C] Item card description clipped in the box reveal** ("Inmune a Envenenado por superficies." cut at 375 px). **FIXED on qa/main** (mine): cards grow with their text (re-tested: 162 and 175 px cards, nothing clipped).
