@@ -221,6 +221,8 @@ Datos: `content/willy/data/loot-tables.json`.
 
 ### Fuentes de cajas
 
+**Decisión del usuario (2026-10-23):** un logro ya conseguido en una temporada anterior (perfil del navegador) vuelve a salir en la nueva con el aviso «¡Otra vez! (sin caja: ya la ganaste)», pero no da caja otra vez.
+
 Logros (la primera vez), hitos de audiencia, patrocinadores, jefes (plata, plata, oro, oro, legendaria), prima de fin de planta según audiencia y la prima «Al filo» (salir con menos del 10 % del reloj). Los **cofres** del mapa son otra cosa: 1 objeto + fichas, sin animación especial, y a partir de la Planta 2 alguno es un **mímico**.
 
 ### La apertura (el momento)
