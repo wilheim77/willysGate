@@ -12,6 +12,7 @@ import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { DialogueBox } from './ui/dialogueBox';
 import { CreationScreen } from './ui/creationScreen';
+import { pickRenderer } from './renderer';
 import { CinematicPlayer } from './ui/cinematicPlayer';
 import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
@@ -473,8 +474,8 @@ const scene = new MapScene(
 controller.scene = scene;
 
 new Phaser.Game({
-  // ?canvas forces the 2D renderer (headless browsers and old GPUs where WebGL framebuffers fail).
-  type: new URLSearchParams(location.search).has('canvas') ? Phaser.CANVAS : Phaser.AUTO,
+  // WebGL when its framebuffers work, otherwise the 2D canvas (src/renderer.ts; ?canvas / ?webgl force one).
+  type: pickRenderer(),
   parent: 'game',
   backgroundColor: game.theme.canvas,
   pixelArt: true,

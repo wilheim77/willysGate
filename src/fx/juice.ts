@@ -41,6 +41,11 @@ export class Juice {
       .setOrigin(0.5, 1)
       .setResolution(4)
       .setDepth(depth);
+    // Keep it on screen: on a phone a long «+248 audiencia» over someone near an edge is cut off.
+    const view = this.scene.cameras.main.worldView;
+    if (view.width > 0 && t.width > view.width * 0.8) t.setScale((view.width * 0.8) / t.width);
+    const half = (t.width * t.scaleX) / 2 + 4;
+    if (view.width > half * 2) t.x = Math.min(Math.max(t.x, view.left + half), view.right - half);
     return tween(this.scene, { targets: t, y: t.y - this.tile * 0.8, alpha: { from: 1, to: 0 }, duration: 900, ease: 'Cubic.easeOut' }).then(() => {
       t.destroy();
     });
