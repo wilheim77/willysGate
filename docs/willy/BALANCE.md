@@ -86,7 +86,7 @@ Valores actuales (2026-10-18):
 | 5 | ×0,75 | ×1 | 25 % | guardián | — |
 | 6 | ×0,65 | ×1,25 | 30 % | ×0,32 (Gigantón, 38) | 1d10 |
 | 7 | ×0,8 | ×1 | 35 % | guardián | — |
-| 8 | ×0,8 | ×1,25 | 40 % | ×0,33 (Socorrista, 50) | 1d10 |
+| 8 | ×0,8 | ×1,25 | 40 % | ×0,33 (Socorrista, 50) | 1d8 |
 | 9 | ×0,55 | ×1 | 45 % | guardián | — |
 | 10 | ×0,55 | ×1,25 | 50 % | ×0,27 (Presentador, 59) + Share | 2d6 |
 
@@ -128,7 +128,7 @@ Con todo junto: Golpe de valor, el piso 2 ajustado, las fases del Presentador y 
 
 **Curva de habilidades:** la principal llega a la Maestría en el piso 9. El 64 % de las temporadas la tienen al final.
 
-**El jefe del piso 8 (la Socorrista Mayor):** en el simulador de un solo piso, a nivel esperado, cae el 94 % de las veces. Pero en 4 de las 27 temporadas costó 10 repeticiones o más, y las dos temporadas perdidas se perdieron ahí. Es un muro para algunos grupos más que un jefe difícil en general. Si en partida real se nota, el primer ajuste es bajarle el daño en `jefes['8']` (1d10 → 1d8).
+**El jefe del piso 8 (la Socorrista Mayor):** en el simulador de un solo piso, a nivel esperado, cae el 94 % de las veces. Pero en 4 de las 27 temporadas costó 10 repeticiones o más, y las dos temporadas perdidas se perdieron ahí. Es un muro para algunos grupos más que un jefe difícil en general. **Ajustado (2026-10-23, aprobado por el usuario):** su daño baja de 1d10 a 1d8 en `jefes['8']`.
 
 ## Pendiente
 

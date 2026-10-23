@@ -12,6 +12,7 @@ import { CharacterSheet, PartyBar } from './ui/characterSheet';
 import { CombatHud } from './ui/combatHud';
 import { DialogueBox } from './ui/dialogueBox';
 import { CreationScreen } from './ui/creationScreen';
+import { CinematicPlayer } from './ui/cinematicPlayer';
 import { TitleScreen } from './ui/titleScreen';
 import { Hud, randomSeed } from './ui/hud';
 import { applyTheme } from './ui/theme';
@@ -427,7 +428,19 @@ const startNew = () => {
   setupScreen.open(() => creation.open());
 };
 hud.onNewGame = startNew;
-new TitleScreen(store, game, startNew).open();
+// The title screen first; a new game plays the intro cinematic (if the game has one), then
+// goes on to the setup screens and character creation. «Ver el prólogo» replays it.
+const cinematic = new CinematicPlayer({
+  // The cinematic's cues are played through the game's own sfx (a missing id is a no-op).
+  sound: (cue) => audio.playSfx(cue === 'jingle' ? 'tvJingle' : 'gameshowDing'),
+});
+const intro = game.cinematics?.intro;
+new TitleScreen(
+  store,
+  game,
+  () => cinematic.play(intro, startNew),
+  intro ? () => cinematic.play(intro, () => undefined) : undefined,
+).open();
 profile = setupProfile(store, game);
 // A permadeath run in progress: «Continuar» resumes it exactly where it was (no other way in).
 {

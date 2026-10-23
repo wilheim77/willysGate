@@ -57,6 +57,9 @@ const MAX_FLOORS_CLEARED = DEEP ? Infinity : 2;
 // floor's boss (jefe-presentador, kept above 0 HP by Share) can make a full 10-floor run take
 // several minutes for some classes - "jugador-de-basket" took ~300-410s against a 180s budget.
 const TEST_TIMEOUT = DEEP ? 600_000 : 120_000;
+// The survivor run (its own bounded run, then every box opened) takes ~100 s alone on an idle
+// machine and goes past 120 s when the machine is busy; it gets more room than the rest.
+const SURVIVOR_TIMEOUT = DEEP ? 600_000 : 360_000;
 
 const MAX_SKILL_LEVEL = SKILL_THRESHOLDS.length;
 
@@ -387,7 +390,7 @@ describe('loot boxes open and grant a usable item', () => {
       }
       expect(triedOne, `none of the ${granted.length} granted item(s) were usable or equippable - got [${granted.map((g) => g.item).join(', ')}]`).toBe(true);
     },
-    TEST_TIMEOUT,
+    SURVIVOR_TIMEOUT,
   );
 });
 

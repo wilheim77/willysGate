@@ -25,7 +25,7 @@ import { RIVAL_RULES, type RivalRecord, generateRival, legendaryById, legendaryE
  */
 
 type Side = 'N' | 'S' | 'E' | 'W';
-type Role = 'inicio' | 'jefe' | 'combate' | 'tesoro' | 'trampa' | 'vacia' | 'rival';
+type Role = 'inicio' | 'jefe' | 'combate' | 'tesoro' | 'trampa' | 'vacia' | 'rival' | 'escena';
 
 interface TerrainDef {
   terrain: string;
@@ -41,6 +41,26 @@ interface RoomChunk {
   peso: number;
   minFloor?: number;
   filas: string[];
+  /** A story room's own chunk (the fixed scene's id in floors.json → generacion.fijas). */
+  escena?: string;
+}
+
+/**
+ * A fixed story room (floors.json → generacion.fijas, rol 'escena'): on one floor of its planta
+ * (parte, default 1), somewhere along the critical path, with a hand-made chunk whose `escena`
+ * names it. Markers: N, the scene's character (talk to it: `dialogo`); d, its props in reading order.
+ */
+export interface SceneSpec {
+  id: string;
+  rol: string;
+  parte?: number;
+  posicion: unknown;
+  pnj?: { id: string; nombre: string; sprite: string; dialogo: string };
+  decorado?: { sprite: string; nombre: string }[];
+}
+
+export function sceneFor(spec: FloorSpec): SceneSpec | undefined {
+  return (spec.generacion.fijas as unknown as SceneSpec[]).find((f) => f.rol === 'escena' && (f.parte ?? 1) === spec.parte && (f.pnj || f.decorado));
 }
 
 interface Biome {
@@ -87,7 +107,7 @@ const BIOME_PROPS: Record<string, { sprite: string; nombre: string; tags?: strin
 };
 
 /** Marker characters: always base-height floor of the biome's '.' terrain. */
-const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X']);
+const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X', 'N', 'd']);
 const MAX_ATTEMPTS = 20;
 
 /** Difficulty levers (floors.json → equilibrio), tuned with the balance simulations. */
@@ -267,8 +287,17 @@ function assignRoles(g: Gen, spec: FloorSpec, nodes: Node[], rivalRoom: boolean)
   // Never two empty rooms in a row on the critical path.
   const byPath = nodes.map((n, i) => ({ n, i })).filter(({ n }) => n.critical).sort((a, b) => a.n.pathIndex - b.n.pathIndex);
   for (let k = 1; k < byPath.length; k++) if (roles[byPath[k]!.i] === 'vacia' && roles[byPath[k - 1]!.i] === 'vacia') roles[byPath[k]!.i] = 'combate';
+  // The planta's story room, if this floor has one: a critical room in the stated stretch of the path.
+  const scene = sceneFor(spec);
+  if (scene) {
+    const span = (scene.posicion as { caminoCriticoPct?: [number, number] }).caminoCriticoPct ?? [0.3, 0.7];
+    const inner = byPath.filter(({ n }) => n.pathIndex > 0 && n.pathIndex < last);
+    const fit = inner.filter(({ n }) => n.pathIndex / last >= span[0] && n.pathIndex / last <= span[1]);
+    const chosen = fit.length ? g.pick(fit) : inner[Math.floor(inner.length / 2)];
+    if (chosen) roles[chosen.i] = 'escena';
+  }
   if (rivalRoom) {
-    const candidates = nodes.map((n, i) => ({ n, i })).filter(({ i }) => roles[i] !== 'inicio' && roles[i] !== 'jefe');
+    const candidates = nodes.map((n, i) => ({ n, i })).filter(({ i }) => roles[i] !== 'inicio' && roles[i] !== 'jefe' && roles[i] !== 'escena');
     if (candidates.length) roles[g.pick(candidates).i] = 'rival';
   }
   return roles;
@@ -315,7 +344,7 @@ export function usableSides(biome: Biome, rows: string[]): Side[] {
   const sy = Math.floor((h - 3) / 2);
   const ok = (x: number, y: number) => {
     const ch = rows[y]![x]!;
-    if (MARKERS.has(ch)) return !['t', 'b', 'B', 'c', 'X'].includes(ch);
+    if (MARKERS.has(ch)) return !['t', 'b', 'B', 'c', 'X', 'N', 'd'].includes(ch);
     const t = biome.terreno[ch];
     return !!t && t.walkable !== false && (t.height ?? 0) === 0;
   };
@@ -335,10 +364,11 @@ const flipRows = (rows: string[]) => rows.map((r) => [...r].reverse().map((c) =>
 const BELT_DIRS: Record<string, Vec2> = { '>': { x: 1, y: 0 }, '<': { x: -1, y: 0 }, '^': { x: 0, y: -1 }, v: { x: 0, y: 1 } };
 const flipSide = (s: Side): Side => (s === 'E' ? 'W' : s === 'W' ? 'E' : s);
 
-function pickChunk(g: Gen, biome: Biome, floor: number, role: Role, needed: Side[], usedIds: Set<string>): { chunk: RoomChunk; flipped: boolean } | undefined {
+function pickChunk(g: Gen, biome: Biome, floor: number, role: Role, needed: Side[], usedIds: Set<string>, scene?: string): { chunk: RoomChunk; flipped: boolean } | undefined {
   const options: { chunk: RoomChunk; flipped: boolean }[] = [];
   for (const chunk of biome.salas) {
     if (!chunk.roles.includes(role) || (chunk.minFloor ?? 1) > floor) continue;
+    if (role === 'escena' && chunk.escena !== scene) continue;
     const sides = usableSides(biome, chunk.filas);
     if (needed.every((s) => sides.includes(s))) options.push({ chunk, flipped: false });
     if (needed.every((s) => sides.includes(flipSide(s)))) options.push({ chunk, flipped: true });
@@ -380,7 +410,7 @@ function tryFloor(runSeed: number, n: number, attempt: number, options: FloorOpt
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]!;
     const role = roles[i]!;
-    const picked = pickChunk(g, biome, n, role, [...node.links], usedIds);
+    const picked = pickChunk(g, biome, n, role, [...node.links], usedIds, sceneFor(spec)?.id);
     if (!picked) return `no ${role} chunk with doors ${[...node.links].join('')}`;
     usedIds.add(picked.chunk.id);
     const base = heights[i]!;
@@ -579,6 +609,19 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
       if (m.ch === 'X') stairs = m.at;
       if (m.ch === 'l') lights.push({ id: `${prefix}-luz-${lights.length}`, position: m.at, radius: 5, intensity: 0.8, color: '#ffd27a', flicker: 0.06 });
     }
+    // The story room: its character (talk to it) and its props.
+    if (room.role === 'escena') {
+      const scene = sceneFor(spec);
+      const who = scene?.pnj;
+      const at = slots(i, 'N')[0];
+      if (who && at) entities.push(sceneCharacter(who, at));
+      const props = markers.filter((m) => m.room === i && m.ch === 'd').sort((a, b) => a.at.y - b.at.y || a.at.x - b.at.x);
+      const decor = scene?.decorado ?? [];
+      props.forEach((m, k) => {
+        const d = decor[k % Math.max(1, decor.length)];
+        if (d) entities.push(prop(`${prefix}-${d.sprite}-${k}`, d.nombre, d.sprite, m.at));
+      });
+    }
     // Boss.
     if (room.role === 'jefe') {
       const at = slots(i, 'J')[0];
@@ -703,6 +746,12 @@ function scaleXp(entities: Entity[], total: number): Entity[] {
   const sum = entities.reduce((s, e) => s + base(e), 0);
   if (!sum) return entities;
   return entities.map((e) => (base(e) ? { ...e, tags: [...e.tags.filter((t) => !t.startsWith('xp:')), `xp:${Math.max(1, Math.round((base(e) * total) / sum))}`] } : e));
+}
+
+/** A story room's character: doesn't fight, doesn't move; talking to it opens its conversation. */
+function sceneCharacter(who: NonNullable<SceneSpec['pnj']>, at: Vec2): Entity {
+  const e = createCreature({ id: who.id, name: who.nombre, controllerId: 'ai', factionId: 'camerino', position: at, spriteId: who.sprite, vida: 20, def: 10, ataque: 0, dano: '1d2', movimiento: 0, tags: ['noncombatant', 'pnj', `dialogue:${who.dialogo}`] });
+  return e;
 }
 
 /** The planta's boss, at the end of its second floor. The last floor's ends the season (rulesets/willy/ending.ts). */
