@@ -135,7 +135,7 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
   const changed = events.find((e) => e.type === 'mapChanged') as unknown as { from: string; to: string } | undefined;
   if (changed) {
     if (clock && clock.mapa === changed.from) {
-      out.push({ type: 'floorExited', metodo: clock.expulsado ? 'derrumbe' : 'escalera', relojRestantePct: Math.round((100 * Math.max(0, clock.remaining)) / clock.total), planta: clock.planta } as GameEvent);
+      out.push({ type: 'floorExited', metodo: clock.expulsado ? 'derrumbe' : 'escalera', reloj: mmss(Math.max(0, clock.remaining)), relojRestantePct: Math.round((100 * Math.max(0, clock.remaining)) / clock.total), planta: clock.planta } as GameEvent);
       clock = undefined;
       set(null);
     }

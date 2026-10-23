@@ -534,7 +534,7 @@
     },
     {
       "id": "casting",
-      "evento": "characterCreated",
+      "evento": "runStarted",
       "probabilidad": 1,
       "prioridad": 4,
       "memoria": 0,
