@@ -79,6 +79,20 @@ deleted, season summary).
 27. **[M] Maripuri shop hides what you cannot afford** ("Si no lo ves es que no te llega"): with 0 fichas the shop shows only
     "Nada más, gracias." Works as written, but a first visit looks like a broken shop. Suggest listing prices greyed out.
 
+28. **[C] Taps ignored while HUD actions still select ("half-hung" after several fights, user report).** Investigated 2026-10-23
+    with a real-input driver (headless Chrome, 375x812, real mouse events, rAF running): 13 consecutive real fights over
+    floors 1-2 (tapping foes, abilities, items; boxes opened with "Abrir todas" between floors; one death) gave zero
+    "busy for too long" / "event playback timed out" warnings, `animating` always back to 0, no leaked tweens/timers, and
+    `elementsFromPoint` over every foe was always the canvas (no invisible overlay). The symptom was reproduced only when
+    the frame loop stops (pane/tab hidden; simulated with `game.loop.sleep()`): `event playback timed out entityMoved`
+    fires after 10 s, `animating` stays 1 and `busy` stays true until the loop wakes. `controller.onTileSelected` returns
+    at once on `scene.busy` (no message), while `selectAction` (HUD buttons) does not check busy: that asymmetry is exactly
+    "abilities can be selected, tapping enemies does nothing". Recovers on wake in my runs, so the real hang needs another
+    trigger; most likely cause is still a promise that never settles. Suggestions: on `visibilitychange` visible, settle
+    all `moveFinish` callbacks and `syncWithState`; make `selectAction`/`aim` show "espera" when busy instead of failing
+    silently; log the event type + entity + queue on every watchdog hit. Also seen: 14 boxes after floor 1 (20 achievements
+    after ~7 fights) - still many.
+
 ## Cosmetic
 
 17. **[M] Narrator grammar:** FIXED on willy-meta (gender + capital; not re-verified). "«Primer figurante». el Gaviota de lonja ha caído." (lowercase "el" after a full stop,
