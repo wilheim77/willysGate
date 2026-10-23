@@ -1,4 +1,4 @@
-import { type BaseCommand, type CommandHandler, type GameState, type JsonValue, RngCursor, fail } from '../../../engine';
+import { type BaseCommand, type CommandHandler, type GameState, type JsonValue, RngCursor, fail, trapsOf } from '../../../engine';
 import { attr } from '../character';
 import { Resolver, type WillyEvent } from '../resolve';
 import { audienceOf } from './audience';
@@ -48,6 +48,8 @@ export interface Deal {
   cantidad: number;
   /** Floor whose exit closes it (undefined while signed in the Camerino: the next floor). */
   piso?: number;
+  /** Its floor had what the deal needs (traps, for a «descubre trampas» deal). */
+  posible?: boolean;
 }
 
 export interface SponsorsState {
@@ -294,10 +296,24 @@ export function runSponsors(r: Resolver, views: View[], events: { type: string }
     }
     if (d.progreso >= d.cantidad) closeDeal(r, s, d, true, 'cumplido');
   }
+  // Deals that need something the floor may not have (traps): note whether it had it.
+  for (const d of s.contratos) {
+    const need = dealData(d.patrocinadorId, d.contratoId)?.requiere;
+    if (need === 'trampas' && floor !== undefined && d.piso === floor && trapsOf(r.state).length) d.posible = true;
+  }
   const exit = views.find((v) => v.evento === 'floorExited');
   if (exit) {
     const left = Number(exit.planta ?? floor ?? 0);
-    for (const d of [...s.contratos]) if (d.piso !== undefined && d.piso <= left) closeDeal(r, s, d, false, 'plazo');
+    for (const d of [...s.contratos]) {
+      if (d.piso === undefined || d.piso > left) continue;
+      // The floor never gave the chance (no traps at all): the deal is void, no fine.
+      if (dealData(d.patrocinadorId, d.contratoId)?.requiere && !d.posible) {
+        s.contratos = s.contratos.filter((x) => x !== d);
+        r.emit({ type: 'sponsorDealVoided', patrocinadorId: d.patrocinadorId, contratoId: d.contratoId } as unknown as WillyEvent);
+        continue;
+      }
+      closeDeal(r, s, d, false, 'plazo');
+    }
   }
 
   // Arriving at a Camerino: the interested sponsors put deals on the table.

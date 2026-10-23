@@ -326,13 +326,13 @@ Detalle de guardado y reacciones en `DESIGN.md` §12.
 
 ## Dificultad
 
-`GameState.settings.difficulty` (propuesta del `DESIGN.md` general):
+Bandera de la partida `dificultad`, elegida antes del cásting; las reglas en `rulesets/willy/difficulty.ts` (2026-10-23):
 
 | Modo | Para quién | Qué cambia |
 |---|---|---|
-| **Turista** | Quien no ha jugado nunca o quiere la historia | Reloj ×1,5; vida ×1,5; los enemigos hacen −25 % de daño; si caes, vuelves al inicio de la planta con el botín que llevabas |
+| **Turista** | Quien no ha jugado nunca o quiere la historia | Reloj ×1,5; el grupo recibe el 60 % del daño (equivale más o menos a vida ×1,5 y −25 % de daño enemigo). *Pendiente: al caer, volver al inicio de la planta con el botín.* |
 | **Concursante** (normal) | Por defecto | Números de este documento |
-| **Prime time** | Quien quiere sufrir | Reloj ×0,8; enemigos +25 % de vida; patrocinadores más exigentes; audiencia ×1,25 |
+| **Prime time** | Quien quiere sufrir | Reloj ×0,8; los enemigos reciben el 80 % del daño (equivale a +25 % de vida). *Pendiente: patrocinadores más exigentes y audiencia ×1,25 (agente del espectáculo).* |
 
 ## Implementación (`rulesets/willy/`)
 

@@ -1,5 +1,7 @@
 import { type ActionOutcome, type Effect, type Entity, type GameEvent, type GameState, type JsonValue, type RngCursor, type Ruleset, type Vec2, hasTag, zonesOf } from '../../engine';
 import { seasonDecided } from './ending';
+import { tutorialUnlocked } from './tutorial';
+import { difficultyOf } from './difficulty';
 import { standing } from './resolve';
 
 /**
@@ -38,6 +40,8 @@ export interface ClockState {
   label: string;
   remaining: number;
   total: number;
+  /** Not shown (and not ticking) yet: the tutorial hasn't introduced it. */
+  hidden?: boolean;
   /** Map the clock belongs to. */
   mapa: string;
   planta: number;
@@ -135,7 +139,7 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
   const changed = events.find((e) => e.type === 'mapChanged') as unknown as { from: string; to: string } | undefined;
   if (changed) {
     if (clock && clock.mapa === changed.from) {
-      out.push({ type: 'floorExited', metodo: clock.expulsado ? 'derrumbe' : 'escalera', relojRestantePct: Math.round((100 * Math.max(0, clock.remaining)) / clock.total), planta: clock.planta } as GameEvent);
+      out.push({ type: 'floorExited', metodo: clock.expulsado ? 'derrumbe' : 'escalera', reloj: mmss(Math.max(0, clock.remaining)), relojRestantePct: Math.round((100 * Math.max(0, clock.remaining)) / clock.total), planta: clock.planta } as GameEvent);
       clock = undefined;
       set(null);
     }
@@ -151,7 +155,9 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
   if (seasonDecided(state)) return { effects, events: out };
   if (!clock || clock.mapa !== state.map.id) {
     const visitas = Number(state.flags[visitFlag(p.mapa)] ?? 0) + 1;
-    clock = { label: 'Reloj', remaining: p.reloj.segundos, total: p.reloj.segundos, mapa: p.mapa, planta: p.numero, ultimaRonda: 0, avisados: [], pasado: 0, agrietadas: [], caidas: [], expulsado: false };
+    // Turista ×1,5, Prime time ×0,8 (difficulty.ts).
+    const segundos = Math.round(p.reloj.segundos * difficultyOf(state).reloj);
+    clock = { label: 'Reloj', remaining: segundos, total: segundos, mapa: p.mapa, planta: p.numero, ultimaRonda: 0, avisados: [], pasado: 0, agrietadas: [], caidas: [], expulsado: false };
     effects.push({ type: 'setFlag', flag: visitFlag(p.mapa), value: visitas });
     out.push({ type: 'floorEntered', planta: p.numero, nombrePlanta: p.nombre, visita: visitas } as GameEvent);
     out.push({ type: 'clockStarted', planta: p.numero, nombrePlanta: p.nombre, reloj: mmss(clock.remaining) } as GameEvent);
@@ -159,6 +165,13 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
     return { effects, events: out };
   }
 
+  // The first floor's clock waits for the tutorial (tutorial.json → sistema.reloj): hidden, not ticking.
+  const locked = !tutorialUnlocked(state, 'sistema.reloj');
+  if (locked || clock.hidden) {
+    if (!!clock.hidden !== locked) set({ ...clock, hidden: locked });
+    if (locked) return { effects, events: out };
+    clock = { ...clock, hidden: false };
+  }
   const cost = spent(state, clock, events, p);
   if (cost.seconds <= 0 && cost.ronda === clock.ultimaRonda) return { effects, events: out };
   const next: ClockState = { ...clock, ultimaRonda: cost.ronda, remaining: clock.remaining - cost.seconds, avisados: [...clock.avisados], agrietadas: [...clock.agrietadas], caidas: [...clock.caidas] };

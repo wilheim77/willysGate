@@ -530,4 +530,4 @@ Todo con `deriveSeed(semillaPartida, 'rival', planta, ranura)` (R12), nunca `Mat
 ### Logros y Narrador
 
 - Banco `rivalAparece` (plantas.json): presentaciones de los 5 legendarios y 9 plantillas para generados (por comportamiento), más vueltas, alianza y traición.
-- Logros: «Competencia directa», «Alianza estratégica», «Fauna local» (un rival de cada raza), «Agenda de contactos» (50 rivales distintos), «Viejos conocidos» (vuelve como aliado), «La letra pequeña del pacto» (traición, oculto) y «Edición limitada» (legendario, oculto).
+- Logros: «Competencia directa», «Alianza estratégica», «Fauna local» (un rival de cada raza), «Agenda de contactos» (6 rivales distintos en una partida), «Viejos conocidos» (vuelve como aliado), «La letra pequeña del pacto» (traición, oculto) y «Edición limitada» (legendario, oculto).

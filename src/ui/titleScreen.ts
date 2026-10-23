@@ -59,6 +59,8 @@ export class TitleScreen {
     fresh.textContent = t.newGameButton ?? 'Nueva partida';
     if (!saved) fresh.className = 'confirm';
     fresh.addEventListener('click', () => {
+      // A save exists: starting over would leave it behind the next one — ask, like the in-game «Nueva» does.
+      if (saved && !confirm(t.confirmNew ?? '¿Empezar de nuevo? Lo que no hayas guardado se pierde.')) return;
       this.close();
       this.onNewGame();
     });

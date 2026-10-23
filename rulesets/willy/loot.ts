@@ -118,7 +118,7 @@ export function rollItem(state: GameState, meta: MetaState, rng: RngCursor, tabl
   return undefined;
 }
 
-export function rollBox(state: GameState, meta: MetaState, rng: RngCursor, tier: Rarity): { items: ItemDef[]; fichas: number } {
+export function rollBox(state: GameState, meta: MetaState, rng: RngCursor, tier: Rarity): { items: ItemDef[]; fichas: number; garantia?: Rarity } {
   const box = willyContent()!.loot.cajas[tier];
   const pity = willyContent()!.loot.piedad;
   const picked: string[] = [];
@@ -136,13 +136,17 @@ export function rollBox(state: GameState, meta: MetaState, rng: RngCursor, tier:
   let owed: Rarity | null = box.garantia && best() < rank(box.garantia) ? box.garantia : null;
   if (meta.piedad.legendaria + 1 >= pity.legendaria.cajasSin && best() < rank('legendaria')) owed = 'legendaria';
   else if (meta.piedad.oro + 1 >= pity.oro.cajasSin && best() < rank('oro') && (!owed || rank(owed) < rank('oro'))) owed = 'oro';
+  let applied: Rarity | undefined;
   if (owed && items.length) {
     const swapped = rollItem(state, meta, rng, box.tabla, owed, picked.slice(0, -1).concat(items[items.length - 1]!.id));
-    if (swapped && rank(swapped.rareza) > rank(items[items.length - 1]!.rareza)) items[items.length - 1] = swapped;
+    if (swapped && rank(swapped.rareza) > rank(items[items.length - 1]!.rareza)) {
+      items[items.length - 1] = swapped;
+      applied = owed;
+    }
   }
   meta.piedad.oro = best() >= rank('oro') ? 0 : meta.piedad.oro + 1;
   meta.piedad.legendaria = best() >= rank('legendaria') ? 0 : meta.piedad.legendaria + 1;
-  return { items, fichas: between(rng, box.fichas) };
+  return { items, fichas: between(rng, box.fichas), ...(applied ? { garantia: applied } : {}) };
 }
 
 interface OpenBoxCommand {
@@ -161,7 +165,8 @@ export const openBox: CommandHandler<OpenBoxCommand & { type: string }> = (state
   meta.cajas = meta.cajas.filter((b) => b.id !== box.id);
   meta.cajasAbiertas++;
   const rng = new Cursor(state.rng);
-  const { items, fichas } = rollBox(state, meta, rng, box.nivel);
+  const { items, fichas, garantia } = rollBox(state, meta, rng, box.nivel);
+  const repeated = items.some((d) => (meta.obtenidos[d.id] ?? 0) > 0);
   const effects: Effect[] = [];
   for (const d of items) {
     meta.obtenidos[d.id] = (meta.obtenidos[d.id] ?? 0) + 1;
@@ -182,6 +187,12 @@ export const openBox: CommandHandler<OpenBoxCommand & { type: string }> = (state
     objeto: items[0]?.nombre ?? '',
     enCombate: state.turn.mode === 'combat',
     origen: box.origen,
+    // What the Narrador can remark on (narrator/logros-y-cajas.json → cajaResultado).
+    ...(garantia ? { garantia } : {}),
+    ...(items.some((d) => d.maldito) ? { hayMaldito: true } : {}),
+    ...(items.some((d) => d.tipo === 'aviso') ? { hayAviso: true } : {}),
+    ...(items.length > 0 && items.every((d) => d.tipo === 'consumible') ? { soloConsumibles: true } : {}),
+    ...(repeated ? { hayRepetido: true } : {}),
   };
   const obtained = items.map((d) => ({ type: 'itemObtained', item: d.id, nombre: d.nombre, rareza: d.rareza, origen: 'caja' }) as GameEvent);
   return { ok: true, state: applied.state, events: [{ type: 'boxOpening', boxId: box.id, caja: box.nivel } as GameEvent, opened, ...obtained, ...applied.events] };

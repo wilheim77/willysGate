@@ -97,6 +97,10 @@ function toast(event: GameEvent, _state: GameState): ToastView | null {
       const sp = show.sponsorData(String(e.patrocinadorId));
       return { title: fill(T.regaloEnCaminoTitulo, { patrocinador: sp?.nombre ?? '' }), text: T.regaloEnCaminoTexto, color: sp?.color ?? '#ffd24a', badge: '🪂' };
     }
+    case 'sponsorDealVoided': {
+      const sp = show.sponsorData(String(e.patrocinadorId));
+      return { title: `${T.contratoAnulado} · ${sp?.nombre ?? ''}`, text: fill(T.contratoAnuladoTexto, { patrocinador: sp?.nombre ?? '' }), color: sp?.color ?? '#ffd24a', badge: '📄' };
+    }
     case 'sponsorDealBroken': {
       const n = Number(e.multa ?? 0);
       if (!n) return null;
@@ -167,7 +171,7 @@ function sections(state: GameState, issuer: string): PanelSection[] {
       subtitle: `${sp.lema} · ${estado}`,
       badge: initials(sp.nombre),
       color: sp.color,
-      bar: { fill: (afinidad - rules.min) / (rules.max - rules.min), label: fill(T.afinidad, { valor: Math.round(afinidad) }), color: sp.color },
+      bar: { fill: Math.max(0, afinidad) / rules.max, label: fill(T.afinidad, { valor: Math.round(afinidad) }), color: afinidad < 0 ? '#ff5577' : sp.color },
       lines,
       actions,
     });

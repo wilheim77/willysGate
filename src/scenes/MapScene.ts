@@ -30,6 +30,7 @@ import { LightingLayer } from '../fx/LightingLayer';
 import type { Theme } from '../game/definition';
 import type { GameStore } from '../game/store';
 import { GridProjection } from '../projection';
+import { isRedundantRebuild } from './rebuildEvents';
 
 export interface MapSceneHooks {
   /**
@@ -193,6 +194,11 @@ export class MapScene extends Phaser.Scene {
     const T = this.grid.tile;
     this.cameras.main.setZoom((this.scale.width < 700 ? DEFAULT_TILE_PX.mobile : DEFAULT_TILE_PX.desktop) / T);
     this.focusOn(this.hooks.controlledEntityId());
+    // A resize (rotating a phone, resizing the window) leaves the camera where the old size put it:
+    // the map can end up off screen. Re-centre on whoever the player controls.
+    const onResize = () => this.focusOn(this.hooks.controlledEntityId());
+    this.scale.on(Phaser.Scale.Events.RESIZE, onResize);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.scale.off(Phaser.Scale.Events.RESIZE, onResize));
   }
 
   /** One camera-wide colour filter unifies the palette of every art pack (WebGL only). */
@@ -465,6 +471,7 @@ export class MapScene extends Phaser.Scene {
     this.pathPreview.clear();
     while (this.queue.length > 0) {
       const event = this.queue.shift()!;
+      if (isRedundantRebuild(event, this.queue[0])) continue;
       try {
         // No single event may hold the game: an animation whose tween died (its sprite was
         // rebuilt mid-way) would otherwise leave input and AI waiting forever.
@@ -1316,6 +1323,9 @@ export class MapScene extends Phaser.Scene {
 
   /** Tiles the active creature can reach this turn, and creatures/tiles that are valid targets. */
   setOverlays(moveTiles: Vec2[], targetIds: string[], areaTiles: Vec2[] = [], pickedIds: string[] = []): void {
+    // Before create() has run (or if the renderer failed to boot) there's nothing to draw on;
+    // throwing here would abort controller.refresh and, with it, the whole new-game flow.
+    if (!this.overlay) return;
     const g = this.overlay.clear();
     const T = this.grid.tile;
     const state = this.store.state;

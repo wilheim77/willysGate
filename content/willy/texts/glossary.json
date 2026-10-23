@@ -8,7 +8,7 @@
         { "id": "d20", "nombre": "Tirada (d20)", "texto": "Casi todo se decide tirando un dado de 20 caras y sumando un atributo. Si igualas o superas el número objetivo, lo consigues. Antes de tirar ves la probabilidad en %.", "narrador": "Es como la vida, pero con las cuentas a la vista." },
         { "id": "critico", "nombre": "Crítico", "texto": "Si el dado saca un 20, aciertas siempre y haces el doble de daño.", "narrador": "El público grita. Yo hago como que no." },
         { "id": "pifia", "nombre": "Pifia", "texto": "Si el dado saca un 1, fallas siempre y pasa algo un poco ridículo.", "narrador": "Al público le gusta casi tanto como un crítico." },
-        { "id": "dif", "nombre": "DIF (dificultad)", "texto": "El número que hay que igualar en una prueba: 10 es fácil, 16 normal, 20 difícil.", "narrador": "Lo pone Producción. Producción es mala." },
+        { "id": "dif", "nombre": "DIF (dificultad)", "texto": "El número que hay que igualar en una prueba (un empujón, una resistencia, una conversación): 10 es fácil, 16 normal, 20 difícil. Para atacar, el número es la Defensa del objetivo.", "narrador": "Lo pone Producción. Producción es mala." },
         { "id": "def", "nombre": "Defensa", "texto": "Lo difícil que es acertarle a alguien. Tu tirada de ataque tiene que igualarla o superarla.", "narrador": "Los cangrejos la tienen alta. Los fantasmas, rara." },
         { "id": "turno", "nombre": "Turno", "texto": "En combate, cada uno actúa cuando le toca, en el orden de la barra de arriba. En tu turno tienes movimiento y 2 acciones.", "narrador": "Puedes pensar todo lo que quieras. El reloj no corre mientras piensas." },
         { "id": "accion", "nombre": "Acciones", "texto": "Atacar, usar un objeto, empujar o una habilidad gastan acciones (normalmente 1). Tienes 2 por turno.", "narrador": "El café de máquina da una más. No es un consejo médico." },
@@ -19,7 +19,7 @@
       "id": "personaje", "titulo": "Tu personaje",
       "terminos": [
         { "id": "atributos", "nombre": "Atributos", "texto": "Fuerza (pegar y empujar), Agilidad (disparar, esquivar, moverse), Maña (habilidades, trampas), Aguante (vida, resistir), Carisma (audiencia, patrocinadores, precios) y Suerte (azar y botín).", "narrador": "Seis números que te definen. A Willy le define más el bigote." },
-        { "id": "vida", "nombre": "Vida", "texto": "Si llega a 0, quedas eliminado y vuelves al último Camerino. Se recupera con comida, subiendo de nivel y descansando en el Bar Paco.", "narrador": "Cuídala. Es la única que tienes, aunque la tele diga lo contrario." },
+        { "id": "vida", "nombre": "Vida", "texto": "Si llega a 0, quedas eliminado: en Con repetición vuelves al último Camerino; en Sin repetición, se acaba la temporada. Se recupera con comida, subiendo de nivel y descansando en el Bar Paco.", "narrador": "Cuídala. Es la única que tienes, aunque la tele diga lo contrario." },
         { "id": "energia", "nombre": "Energía", "texto": "La gastan las habilidades. Se recupera entera al acabar cada combate.", "narrador": "Úsala sin miedo. Guardarla es de cobardes y de ahorradores." },
         { "id": "nivel", "nombre": "Nivel", "texto": "Al ganar experiencia subes de nivel: más vida, 2 puntos de atributo y, en niveles pares, una ventaja a elegir.", "narrador": "Pasa a menudo. Es lo que tiene la televisión: todo sube rápido." },
         { "id": "habilidad-nivel", "nombre": "Nivel de habilidad", "texto": "Cada habilidad sube del 1 al 5 a base de usarla con efecto. A nivel 3 y 5 gana algo especial.", "narrador": "Empuja mucho y empujarás mejor. Filosofía oriental de mercadillo." },
@@ -43,7 +43,7 @@
         { "id": "expedientes", "nombre": "Expedientes", "texto": "Papeles por el suelo (los lanza el Funcionario). Quien entra o empieza el turno dentro queda Enredado. Arden muy bien.", "narrador": "El arma más temida del universo: el trámite." },
         { "id": "salto", "nombre": "Salto", "texto": "Algunas habilidades (las del Jugador de basket) permiten saltar: cruzar huecos y subir más de un nivel de golpe. En las salas de techo bajo no se puede saltar.", "narrador": "La gravedad es una sugerencia. Para algunos." },
         { "id": "cinta", "nombre": "Cintas y escaleras mecánicas", "texto": "Al final de cada ronda mueven 1 casilla a todo lo que tengan encima, también hacia el peligro.", "narrador": "El Hipermercado Eterno: llegar es fácil, salir no." },
-        { "id": "foco", "nombre": "Focos", "texto": "Bajo un foco (Planta 5) ganas el doble de audiencia y +2 a atacar, pero te atacan con +2.", "narrador": "La fama tiene un precio. Este." }
+        { "id": "foco", "nombre": "Focos", "texto": "Bajo un foco (plantas 9 y 10) ganas el doble de audiencia y +2 a atacar, pero te atacan con +2.", "narrador": "La fama tiene un precio. Este." }
       ]
     },
     {

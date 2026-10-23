@@ -27,6 +27,7 @@ function roomCentre(p: PlantaInfo, i: number): Vec2 {
 describe('Willy: the floor clock and the collapse', () => {
   it('starts on arrival, charges a second per step and warns at 50 / 25 / 10 %', () => {
     let s = newWillyGame(engine, 3, { start: 'planta-1' });
+    s = { ...s, flags: { ...s.flags, 'tutorial:t15-reloj': true } }; // past the tutorial: the clock is on
     let r = step(s);
     expect(r.events.some((e) => e.type === 'clockStarted')).toBe(true);
     expect(r.events.some((e) => e.type === 'floorEntered')).toBe(true);
@@ -43,6 +44,7 @@ describe('Willy: the floor clock and the collapse', () => {
 
   it('at zero, rooms crack and then fall, furthest from the stairs first; Willy is dragged out', () => {
     let s = newWillyGame(engine, 5, { start: 'planta-1' });
+    s = { ...s, flags: { ...s.flags, 'tutorial:t15-reloj': true } }; // past the tutorial: the clock is on
     s = step(s).state;
     const p = s.systems.planta as unknown as PlantaInfo;
     const order = collapseOrder(p);
@@ -80,6 +82,7 @@ describe('Willy: the floor clock and the collapse', () => {
 
   it('combat rounds cost 15 s, but not while a boss is on stage', () => {
     let s = newWillyGame(engine, 3, { start: 'planta-1' });
+    s = { ...s, flags: { ...s.flags, 'tutorial:t15-reloj': true } }; // past the tutorial: the clock is on
     s = step(s).state;
     const zone = zonesOf(s, 'encounters').find((z) => !String(z.properties.participants).includes('jefe') && !String(z.properties.participants).includes('guardian'))!;
     const foes = String(zone.properties.participants).split(',');

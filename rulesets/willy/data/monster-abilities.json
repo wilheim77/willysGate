@@ -117,7 +117,7 @@
     },
     "placaje": {
       "nombre": "Placaje",
-      "texto": "Placa a alguien al lado: 1d6, Tumbado y Enredado 1 turno.",
+      "texto": "Placa a alguien al lado: 1d6 y Enredado 1 turno.",
       "tipo": "ataque",
       "coste": {
         "acciones": 1,
@@ -144,7 +144,7 @@
     },
     "linea": {
       "nombre": "¡LÍNEA!",
-      "texto": "Grita tan fuerte que los enemigos a 3 casillas quedan Asustados 2 turnos si no resisten con CAR (DIF 12).",
+      "texto": "Grita tan fuerte que quienes estén a 3 casillas quedan Asustados 2 turnos si no resisten con CAR (DIF 12).",
       "tipo": "area",
       "coste": {
         "acciones": 1,
@@ -161,7 +161,7 @@
     },
     "bajo-de-la-carpa": {
       "nombre": "Bajo de la carpa",
-      "texto": "Un bajo que tumba: los enemigos al lado quedan Tumbados si no resisten con FUE (DIF 12), y 1d4.",
+      "texto": "Un bajo que tumba: quienes estén al lado reciben 1d4 y quedan Tumbados si no resisten con FUE (DIF 12).",
       "tipo": "area",
       "coste": {
         "acciones": 1,
@@ -311,7 +311,7 @@
     },
     "foco-cegador": {
       "nombre": "Foco cegador",
-      "texto": "Un fogonazo a 4 casillas: Cegados 2 turnos a 1 casilla si no resisten con AGI (DIF 12).",
+      "texto": "Un fogonazo a 4 casillas: quienes estén a 1 casilla del foco quedan Cegados 2 turnos si no resisten con AGI (DIF 12).",
       "tipo": "area",
       "coste": {
         "acciones": 1,

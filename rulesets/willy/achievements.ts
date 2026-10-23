@@ -287,6 +287,13 @@ export function datum(state: GameState, meta: MetaState, path: string, ctx: { co
       return Object.values(((state.systems.inventory as Record<string, Record<string, number>> | undefined) ?? {}).party ?? {}).reduce((s, n) => s + n, 0);
     case 'partida.objetosEquipados':
       return Object.values(meta.equipo).reduce((s, slots) => s + Object.keys(slots).length, 0);
+    case 'partida.misionKoldo':
+      // The errand Koldo gave in the last Camerino (dialogues/camerino.ts sets the flag).
+      return state.flags['koldo:mision'];
+    case 'partida.rivalesEncontrados':
+      return metRivals(state).length;
+    case 'partida.razasDeRivales':
+      return new Set(metRivals(state).map((r) => r.raza).filter(Boolean)).size;
     case 'partida.logros':
       return meta.logros.length;
     case 'perfil.logros':
@@ -313,6 +320,11 @@ export function datum(state: GameState, meta: MetaState, path: string, ctx: { co
     default:
       return undefined;
   }
+}
+
+/** Rivals Willy has dealt with this run (fought, pacted with or let go): systems.rivals records with an outcome. */
+function metRivals(state: GameState): { raza?: string }[] {
+  return ((state.systems.rivals as unknown as { raza?: string; desenlace?: string }[] | undefined) ?? []).filter((r) => r.desenlace);
 }
 
 // --- Evaluation ---------------------------------------------------------------------------------
@@ -374,10 +386,14 @@ function contextOf(ev: MetaEvent | undefined): Record<string, JsonValue> {
   if (target?.nombre) {
     out.enemigo = target.nombre;
     out.enemigoGenero = target.genero ?? 'm';
+    // The Narrador reads the real grammatical gender off this entity (monsters' come from floors.json).
     if (target.id) out.enemigoId = target.id;
   }
   if (typeof ev.item === 'string') out.objeto = ev.item;
   if (typeof ev.habilidad === 'string') out.habilidad = ev.habilidad;
+  // Who the unlock was about: a sponsor's name, a rival's fields (rivalNombre, rivalApodo, rivalGenero...).
+  if (typeof ev.patrocinador === 'string') out.patrocinador = ev.patrocinador;
+  for (const [k, v] of Object.entries(ev)) if (k.startsWith('rival') && typeof v === 'string') out[k] = v;
   return out;
 }
 

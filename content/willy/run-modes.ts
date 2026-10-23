@@ -22,9 +22,9 @@ export const newGameSetup: { questions: { id: string; title: string; options: Se
       id: 'dificultad',
       title: 'Dificultad',
       options: [
-        { id: 'turista', label: 'Turista', text: 'Más reloj por planta y menos prisas. Para ver el programa sin sudar la camiseta.', recommended: true },
+        { id: 'turista', label: 'Turista', text: 'Reloj ×1,5 y los enemigos te hacen menos daño. Para ver el programa sin sudar la camiseta.', recommended: true },
         { id: 'concursante', label: 'Concursante', text: 'El concurso tal y como lo emite Canal Abismo.' },
-        { id: 'primetime', label: 'Prime time', text: 'Menos reloj y la audiencia exige más. Para los que ya se saben las trampas.' },
+        { id: 'primetime', label: 'Prime time', text: 'Reloj ×0,8 y los enemigos aguantan más golpes. Para los que ya se saben las trampas.' },
       ],
     },
     {
