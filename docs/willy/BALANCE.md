@@ -115,9 +115,28 @@ Con enemigos que usan sus habilidades especiales (IA de monstruos del agente met
 
 Antes de esta pasada (la misma temporada sin calibrar): los pisos de jefe (2, 4 y 6) se pasaban sin perder solo el 44-56 % de las veces, y el Tasador no terminaba ninguna temporada.
 
+### Segunda pasada (27 temporadas, 2026-10-18)
+
+Con todo junto: Golpe de valor, el piso 2 ajustado, las fases del Presentador y el final.
+
+| Piso | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Piso sin perder | 93 % | 89 % | 85 % | 96 % | 89 % | 93 % | 100 % | 85 % | 100 % | 76 % |
+| Jefe a la primera | 100 % | 96 % | 100 % | 96 % | 100 % | 96 % | 100 % | 85 % | 100 % | 76 % |
+
+**Temporadas terminadas:** 25 de 27 (93 %). El Bardo y el Funcionario terminaron 2 de 3; las demás clases, 3 de 3. El Tasador pasa de 2 de 3 a 3 de 3.
+
+**Curva de habilidades:** la principal llega a la Maestría en el piso 9. El 64 % de las temporadas la tienen al final.
+
+**El jefe del piso 8 (la Socorrista Mayor):** en el simulador de un solo piso, a nivel esperado, cae el 94 % de las veces. Pero en 4 de las 27 temporadas costó 10 repeticiones o más, y las dos temporadas perdidas se perdieron ahí. Es un muro para algunos grupos más que un jefe difícil en general. Si en partida real se nota, el primer ajuste es bajarle el daño en `jefes['8']` (1d10 → 1d8).
+
 ## Pendiente
 
-- **Las fases del Presentador** (el agente del espectáculo las está haciendo) endurecerán el piso 10. Al llegar, volver a medir y ajustar `equilibrio.jefes['10']`.
+- **Las fases del Presentador, medidas (2026-10-18):** ya están todas (Ronda de preguntas, Pausa publicitaria, Gran final con la parrilla de focos y «Sin reflejo»).
+  - Se midió solo el piso 10, a nivel esperado (9 clases × 6 semillas, `simulateFloor`): el jefe cae el 76 % de las veces, sin combates atascados, y Willy acaba con el 68 % de la vida.
+  - Está dentro del objetivo, así que `jefes['10']` se queda como estaba (vida ×0,27, daño 2d6).
+  - Las clases que más sufren contra él son el Tasador (2 de 6; en el simulador no lleva objetos, así que no usa el Golpe de valor), el Ingeniero (3 de 6) y el Funcionario (3 de 6).
+  - La parrilla de focos solo la usa un jugador, no la IA: en partida el jefe será algo más fácil.
 - **El piso 2, ajustado (2026-10-18):** la causa eran el Influencer (5 de 16 pisos sin perder) y el Mimo (9 de 16), que llegan al Centollo casi sin daño; las demás clases pasaban de largo. Se reforzaron sus compañeros y se bajó un poco el presupuesto (×0,4). Con 144 temporadas cortas (pisos 1-2, 9 clases × 16 semillas), el piso 2 se pasa sin perder el 86 % de las veces (antes el 81 %, y el 74 % con 27) y el jefe cae a la primera el 94 %. Ninguna clase baja del 75 %. Los compañeros más fuertes facilitan algo los pisos siguientes, que ya iban sobrados.
 - **Pisos 4, 7 y 9:** al 100 %, quizá se pueden endurecer. Primero hay que ver las partidas reales.
 - **Golpe de valor del Tasador** ya funciona (2026-10-18): 1d6 más la mitad del valor del objeto lanzado. Falta medir cuánto ayuda al Tasador en la temporada.
