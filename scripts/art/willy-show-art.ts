@@ -1319,6 +1319,134 @@ export function archiveShelf(): Image {
   return outline(img);
 }
 
+// --- Scene rooms: frozen aisle (P2), tombola (P3), sauna branch of Bar Paco (P4) --------------------
+
+/** Chest freezer (16x16): white body, frosted lid with a handle, a frosty window. */
+export function chestFreezer(): Image {
+  const img = blank(T, T);
+  fill(img, 1, 5, 14, 10, '#e8f0f4');
+  fill(img, 1, 5, 14, 1, '#ffffff');
+  fill(img, 1, 14, 14, 1, '#a8b6c2');
+  fill(img, 0, 3, 16, 3, '#c8dce8');
+  fill(img, 0, 3, 16, 1, '#ffffff');
+  fill(img, 6, 1, 4, 2, '#8a9098');
+  fill(img, 3, 8, 10, 4, '#9ad0e8');
+  for (const x of [4, 7, 10]) px(img, x, 9, '#ffffff');
+  fill(img, 3, 12, 10, 1, '#d8f0ff');
+  for (const [x, y] of [[1, 4], [13, 3], [5, 4]]) px(img, x, y, '#ffffff');
+  px(img, 13, 6, '#e0302a');
+  return outline(img);
+}
+
+/** Bag of frozen peas (8x8), decoration for the top of a freezer. */
+export function peaBag(): Image {
+  const img = blank(8, 8);
+  fill(img, 0, 2, 7, 5, '#40c060');
+  fill(img, 0, 1, 7, 1, '#e8f0f4');
+  fill(img, 1, 3, 3, 2, '#e8f0f4');
+  for (const [x, y] of [[4, 4], [5, 5], [2, 6], [5, 3]]) px(img, x, y, '#a8f0a0');
+  return outline(img);
+}
+
+/** Raffle drum (16x16): a red cage on a stand with a crank and coloured tickets. */
+export function raffleDrum(): Image {
+  const img = blank(T, T);
+  fill(img, 4, 12, 8, 3, '#6e4428');
+  fill(img, 2, 14, 12, 1, '#4a2c1c');
+  disc(img, 7.5, 6.5, 5.5, '#c8dce8');
+  disc(img, 7.5, 6.5, 4.5, '#e0302a');
+  ring(img, 7.5, 6.5, 5, '#ffe04f', 1);
+  for (const [x, y, c] of [[5, 5, '#ffe04f'], [8, 4, '#ffffff'], [9, 7, '#40c060'], [6, 8, '#3a8fd9'], [8, 9, '#ffffff']] as const) fill(img, x, y, 2, 2, c);
+  fill(img, 12, 6, 3, 1, '#8a9098');
+  fill(img, 14, 5, 1, 3, '#ffe04f');
+  return outline(img);
+}
+
+/** Giant plush prize (16x24): a lopsided pink bear on a shelf, with a price ticket. */
+export function giantPlush(): Image {
+  const img = blank(T, 24);
+  fill(img, 0, 20, 16, 3, '#6e4428');
+  fill(img, 0, 20, 16, 1, '#a07040');
+  disc(img, 4, 3, 2.4, '#ff8fc8');
+  disc(img, 12, 3, 2.4, '#ff8fc8');
+  disc(img, 8, 6, 5.5, '#ff8fc8');
+  disc(img, 8, 15, 6, '#ff8fc8');
+  disc(img, 8, 8, 2.5, '#ffe0f0');
+  px(img, 6, 5, OUT);
+  px(img, 10, 5, OUT);
+  fill(img, 7, 7, 2, 1, '#a02050');
+  fill(img, 5, 12, 6, 4, '#ffe0f0');
+  fill(img, 1, 13, 3, 4, '#ff6aa8');
+  fill(img, 12, 13, 3, 4, '#ff6aa8');
+  fill(img, 11, 17, 5, 3, '#ffffff');
+  px(img, 12, 18, '#e0302a');
+  return outline(img);
+}
+
+/** Sauna bar counter (16x16): pale wood with a folded towel and a cold drink. */
+export function saunaBar(): Image {
+  const img = blank(T, T);
+  fill(img, 0, 6, 16, 9, '#c8905a');
+  fill(img, 0, 6, 16, 2, '#e8b078');
+  for (const x of [4, 9, 13]) fill(img, x, 9, 1, 5, '#a8703c');
+  fill(img, 1, 3, 6, 3, '#f4f4f0');
+  fill(img, 1, 5, 6, 1, '#3a8fd9');
+  fill(img, 10, 2, 3, 4, '#9ad0e8');
+  fill(img, 10, 2, 3, 1, '#ffffff');
+  px(img, 11, 0, '#e0302a');
+  px(img, 12, 1, '#e0302a');
+  return outline(img);
+}
+
+/** Sauna bucket and ladle (16x16): a banded wooden bucket with a steaming ladle. */
+export function saunaBucket(): Image {
+  const img = blank(T, T);
+  fill(img, 3, 6, 10, 9, '#a8703c');
+  fill(img, 3, 6, 10, 2, '#c8905a');
+  fill(img, 4, 7, 8, 2, '#4aa0d8');
+  for (const x of [5, 8, 11]) fill(img, x, 8, 1, 7, '#8a5a2c');
+  fill(img, 3, 10, 10, 1, '#5a5e66');
+  fill(img, 3, 13, 10, 1, '#5a5e66');
+  fill(img, 11, 1, 1, 6, '#c8905a');
+  fill(img, 10, 0, 3, 2, '#c8905a');
+  for (const [x, y] of [[5, 3], [7, 2], [8, 4]]) px(img, x, y, '#ffffff', 160);
+  return outline(img);
+}
+
+/** Sauna bench (16x16): two tiers of pale slatted wood. */
+export function saunaBench(): Image {
+  const img = blank(T, T);
+  fill(img, 0, 5, 16, 3, '#e8b078');
+  fill(img, 0, 5, 16, 1, '#f4d0a0');
+  fill(img, 0, 11, 16, 3, '#c8905a');
+  fill(img, 0, 11, 16, 1, '#e8b078');
+  for (const x of [2, 7, 12]) { fill(img, x, 8, 2, 3, '#8a5a2c'); fill(img, x, 14, 2, 2, '#8a5a2c'); }
+  for (const x of [4, 9, 13]) { px(img, x, 6, '#c8905a'); px(img, x, 12, '#a8703c'); }
+  return outline(img);
+}
+
+/** Sauna floor (top, 16x16): warm wooden slats with dark gaps and a damp sheen. */
+export function saunaPlanks(seed: number): Image {
+  const img = blank(T, T);
+  const r = rng(seed);
+  for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
+    const slat = Math.floor(y / 4);
+    px(img, x, y, y % 4 === 3 ? '#6e4428' : (x + slat * 5) % 16 === 0 ? '#8a5a2c' : r() < 0.15 ? '#d09a62' : '#c08850');
+  }
+  for (let i = 0; i < 3; i++) px(img, Math.floor(r() * T), Math.floor(r() * 12), '#e8c890');
+  return img;
+}
+
+/** Sauna face (16x16): vertical wooden cladding. */
+export function saunaFace(): Image {
+  const img = blank(T, T);
+  fill(img, 0, 0, T, T, '#a8703c');
+  for (let x = 0; x < T; x += 4) fill(img, x, 0, 1, T, '#6e4428');
+  for (let x = 2; x < T; x += 4) fill(img, x, 0, 1, T, '#c08850');
+  fill(img, 0, 0, T, 1, '#e8b078');
+  return img;
+}
+
 /** The contract (8x8): a thick stapled stack of pages, drawn over Xelda's desk. */
 export function contractStack(): Image {
   const img = blank(8, 8);
