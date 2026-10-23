@@ -2,6 +2,8 @@ import { WILLY_CREATION, defaultCreation, willy } from '../../rulesets/willy';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { AudioManifest } from '../../src/audio/types';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
+import type { Cinematic } from '../../src/ui/cinematicPlayer';
+import introCinematic from './cinematics/intro.json';
 import audio from './assets/audio.json';
 import ninja from './assets/ninja.json';
 import { DIALOGUES } from './dialogues';
@@ -51,6 +53,8 @@ export const game: GameDefinition = {
   leaderId: 'willy',
   // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
   onDeath: 'vanish',
+  // The prologue (docs/willy/INTRO.md): plays after «Nueva partida», before the casting.
+  cinematics: { intro: introCinematic as unknown as Cinematic },
   audio: audio as unknown as AudioManifest,
   items: Object.fromEntries(itemsData.items.map((i) => [i.id, { label: i.nombre, text: i.regla }])),
   dialogues: DIALOGUES,

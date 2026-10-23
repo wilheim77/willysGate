@@ -46,7 +46,7 @@ const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
   'meterChanged', 'shareCero', 'enAntena', 'turnEnded', 'audienceVote',
   'bossPhase', 'bossLine', 'bossQuestion', 'bossInDark', 'bossUnderSpotlight', 'trapdoorOpened', 'spotlightOn', 'rigHung', 'rigDropped',
-  'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorWatching',
+  'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorGiftIncoming', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
   'boxDelivered', 'itemObtained', 'coinsGranted',

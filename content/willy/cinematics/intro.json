@@ -155,7 +155,7 @@
       "id": "p12-regla-baja",
       "image": "p12-regla-baja.png",
       "lines": [
-        "Las reglas son tres. Una: baja. Hay cinco plantas, y cada una tiene un reloj. Cuando llega a cero, la planta se derrumba. Contigo dentro, si eres lento."
+        "Las reglas son tres. Una: baja. Hay diez plantas, y cada una tiene un reloj. Cuando llega a cero, la planta se derrumba. Contigo dentro, si eres lento."
       ],
       "durationMs": 9000,
       "effect": "crumble"

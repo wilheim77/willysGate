@@ -16,6 +16,8 @@ export class TitleScreen {
     private store: GameStore,
     private game: GameDefinition,
     private onNewGame: () => void,
+    /** Replays the game's intro cinematic, if it has one (adds a «Ver el prólogo» button). */
+    private onWatchIntro?: () => void,
   ) {
     this.credits = new CreditsScreen(game);
   }
@@ -61,6 +63,12 @@ export class TitleScreen {
       this.onNewGame();
     });
     buttons.append(fresh);
+    if (this.onWatchIntro) {
+      const intro = document.createElement('button');
+      intro.textContent = t.watchIntro ?? 'Ver el prólogo';
+      intro.addEventListener('click', () => this.onWatchIntro!());
+      buttons.append(intro);
+    }
     const credits = document.createElement('button');
     credits.textContent = t.credits ?? 'Créditos';
     credits.addEventListener('click', () => this.credits.open());

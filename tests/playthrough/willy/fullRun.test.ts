@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { type BaseCommand, type GameEvent, type GameState, createEngine } from '../../../engine';
-import { itemDef, metaOf, show, skillLevel, slotOf, willy, type WillyEvent } from '../../../rulesets/willy';
+import { type BaseCommand, type GameEvent, type GameState, SYSTEM_ISSUER, createEngine, dialogueOf } from '../../../engine';
+import { FINAL_FLAG, itemDef, metaOf, show, skillLevel, slotOf, willy, type WillyEvent } from '../../../rulesets/willy';
 import { SKILL_THRESHOLDS, WILLY } from '../../../rulesets/willy/data';
 import { clockOf } from '../../../rulesets/willy/clock';
+import { DIALOGUES } from '../../../content/willy/dialogues';
 import { applyCasting, maps, newWillyGame } from '../../../content/willy/setup';
-import { defeat, newGameSetup, savePolicy } from '../../../content/willy/run-modes';
+import { defeat, ending as endingSummary, newGameSetup, savePolicy } from '../../../content/willy/run-modes';
 import { CLASS_IDS } from './setup';
 import { runFullGame, takeExit, theExit } from './fullRunDriver';
 
@@ -37,7 +38,25 @@ import { runFullGame, takeExit, theExit } from './fullRunDriver';
  * `QA_DEEP=1 npm run test:qa`.
  */
 
-const engine = createEngine(willy, 'willy-qa-fullrun', { dialogues: {}, maps });
+const engine = createEngine(willy, 'willy-qa-fullrun', { dialogues: DIALOGUES, maps });
+
+/** Plays the season-ending conversation (content/willy/dialogues/final.ts's 'final-temporada'
+ *  tree) to its end, always picking the first offered choice - any valid ending does, this
+ *  just needs the run to actually reach runEnded. Mirrors tests/content/willy-ending.test.ts's
+ *  own playEnding helper. */
+function playEnding(state: GameState): { state: GameState; events: GameEvent[] } {
+  let r = engine.apply(state, { type: 'startDialogue', issuer: SYSTEM_ISSUER, treeId: 'final-temporada', actorId: 'willy' } as BaseCommand);
+  if (!r.ok) throw new Error(`startDialogue('final-temporada') failed: ${JSON.stringify(r.error)}`);
+  let s = r.state;
+  const events: GameEvent[] = [...r.events];
+  for (let i = 0; i < 40 && dialogueOf(s); i++) {
+    r = engine.apply(s, { type: 'chooseOption', issuer: 'player:1', index: 0 } as BaseCommand);
+    if (!r.ok) throw new Error(`choosing at "${dialogueOf(s)!.nodeId}" failed: ${JSON.stringify(r.error)}`);
+    s = r.state;
+    events.push(...r.events);
+  }
+  return { state: s, events };
+}
 
 function startRun(seed: number, classId: string): ReturnType<typeof applyCasting> {
   const fresh = newWillyGame(engine, seed);
@@ -316,18 +335,23 @@ describe('achievements unlock on the expected events', () => {
   );
 
   it(
-    'clearing all 10 floors unlocks the season-complete achievement ("fin-de-temporada")',
+    'clearing all 10 floors and playing the season ending unlocks "fin-de-temporada"',
     () => {
-      // "fin-de-temporada" needs a runEnded{resultado:'victoria'} that nothing emits yet - the
-      // Willy agent flagged this directly (camerino-10 has no lift, the season has no ending
-      // wired in). Reported, not asserted hard, until that lands - revisit once it does.
+      // Defeating the floor-10 boss (tagged FINAL_BOSS_TAG) sets the flags that open the
+      // 'final-temporada' dialogue (rulesets/willy/ending.ts's endingAfterCommand, which the
+      // normal combat in the run already triggers) - camerino-10 itself is still a dead end
+      // (no lift), so the harness starts that conversation itself, same as a player would from
+      // its trigger. Picking any ending (playEnding always takes the first choice) is enough:
+      // this is testing that the achievement unlocks, not which of the three endings fires.
       for (const classId of CLASSES_TO_RUN) {
         const run = runFor(classId);
         if (!DEEP || run.floorsCleared !== 10 || !willy.isStanding(run.state.entities.willy!)) continue;
-        const result = runWithBoxesFor(classId);
-        const unlockIds = result.events.filter((e) => e.type === 'achievementUnlocked').map((e) => (e as unknown as { logroId: string }).logroId);
-        // eslint-disable-next-line no-console
-        if (!unlockIds.includes('fin-de-temporada')) console.warn(`"${classId}" cleared all 10 floors but "fin-de-temporada" never unlocked - the season has no ending event yet (known, the Willy agent is implementing it)`);
+        const played = playEnding(run.state);
+        expect(played.events, `"${classId}": the season ending never produced a runEnded victory`).toContainEqual(expect.objectContaining({ type: 'runEnded', resultado: 'victoria' }));
+        expect(played.state.flags[FINAL_FLAG], `"${classId}": no final ending flag was set`).toBeDefined();
+        const unlockIds = played.events.filter((e) => e.type === 'achievementUnlocked').map((e) => (e as unknown as { logroId: string }).logroId);
+        expect(unlockIds, `"${classId}" cleared all 10 floors and played the ending but "fin-de-temporada" never unlocked`).toContain('fin-de-temporada');
+        expect(endingSummary(played.state), 'content/willy/run-modes.ts\'s ending() should return the summary once the season is decided').not.toBeNull();
       }
     },
     TEST_TIMEOUT,

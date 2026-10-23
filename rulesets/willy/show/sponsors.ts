@@ -58,6 +58,8 @@ export interface SponsorsState {
   contratos: Deal[];
   cumplidos: number;
   rotos: number;
+  /** Gifts waiting for the end of the round (in combat they drop at the end of it). */
+  pendientes?: { patrocinadorId: string; gift: SponsorGift; grande: boolean; origen: string; ronda: number }[];
 }
 
 export const MAX_ACTIVE_DEALS = 2;
@@ -118,7 +120,21 @@ function say(r: Resolver, sp: SponsorData, st: SponsorState, tipo: string, lines
   r.emit({ type: 'sponsorMessage', patrocinadorId: sp.id, patrocinador: sp.nombre, tipo, lineaId: line.id, texto: line.texto, color: sp.color, primeraVez, ...extra } as unknown as WillyEvent);
 }
 
-function give(r: Resolver, sp: SponsorData, gift: SponsorGift, grande: boolean, origen: string): void {
+/**
+ * A gift arrives (sponsors.json → reglas.regalos.entrega): out of combat it drops in by
+ * parachute next to Willy at once; in combat it waits for the end of the round. `s` is the
+ * sponsors' state being built, where waiting gifts are kept.
+ */
+function give(r: Resolver, sp: SponsorData, gift: SponsorGift, grande: boolean, origen: string, s?: SponsorsState): void {
+  if (s && r.state.turn.mode === 'combat') {
+    s.pendientes = [...(s.pendientes ?? []), { patrocinadorId: sp.id, gift, grande, origen, ronda: r.state.turn.round }];
+    r.emit({ type: 'sponsorGiftIncoming', patrocinadorId: sp.id, ...(gift.item ? { item: gift.item } : {}), ...(gift.caja ? { caja: gift.caja } : {}) } as unknown as WillyEvent);
+    return;
+  }
+  deliver(r, sp, gift, grande, origen);
+}
+
+function deliver(r: Resolver, sp: SponsorData, gift: SponsorGift, grande: boolean, origen: string): void {
   r.emit({ type: 'sponsorGift', patrocinadorId: sp.id, ...(gift.item ? { item: gift.item } : {}), ...(gift.caja ? { caja: gift.caja } : {}), grande } as unknown as WillyEvent);
   if (gift.item) grantItem(r, gift.item, origen);
   if (gift.caja) grantBox(r, gift.caja, origen);
@@ -188,7 +204,7 @@ function changeAffinity(r: Resolver, s: SponsorsState, sp: SponsorData, delta: n
     const gift = grande ? sp.regaloGrande : pickGift(r, sp.regalos);
     if (!gift) continue;
     say(r, sp, st, 'regalo', sp.mensajes.regalo);
-    give(r, sp, gift, grande, `patrocinador:${sp.id}`);
+    give(r, sp, gift, grande, `patrocinador:${sp.id}`, s);
   }
 }
 
@@ -214,7 +230,7 @@ function closeDeal(r: Resolver, s: SponsorsState, d: Deal, met: boolean, why: st
     r.emit({ type: 'sponsorDealCompleted', patrocinadorId: sp.id, contratoId: deal.id } as unknown as WillyEvent);
     const line = pick(r, deal.mensajes.cumplido);
     if (line) r.emit({ type: 'sponsorMessage', patrocinadorId: sp.id, patrocinador: sp.nombre, tipo: 'cumplido', lineaId: line.id, texto: line.texto, color: sp.color, primeraVez: false } as unknown as WillyEvent);
-    give(r, sp, deal.recompensa, false, `contrato:${deal.id}`);
+    give(r, sp, deal.recompensa, false, `contrato:${deal.id}`, s);
     if (deal.recompensa.fichas) grantCoins(r, deal.recompensa.fichas, `contrato:${deal.id}`);
     changeAffinity(r, s, sp, 10);
   } else {
@@ -234,6 +250,17 @@ export function runSponsors(r: Resolver, views: View[], events: { type: string }
   const audience = audienceOf(r.state)?.valor ?? 0;
   const willy = r.state.entities[WILLY_ID];
   const charisma = willy ? 1 + 0.05 * attr(willy, 'car') : 1;
+
+  // Gifts waiting since an earlier round (or a fight that is over) drop now.
+  if (s.pendientes?.length) {
+    const now = r.state.turn.mode === 'combat' ? r.state.turn.round : Infinity;
+    const due = s.pendientes.filter((g) => g.ronda < now);
+    s.pendientes = s.pendientes.filter((g) => g.ronda >= now);
+    for (const g of due) {
+      const sp = sponsorData(g.patrocinadorId);
+      if (sp) deliver(r, sp, g.gift, g.grande, g.origen);
+    }
+  }
 
   for (const sp of cfg.patrocinadores) {
     const st = s.porId[sp.id] ?? (s.porId[sp.id] = { afinidad: 0, estado: 'neutral', mirando: false, retirado: false, avisado: false, pagados: [], dichos: [] });
