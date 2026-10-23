@@ -37,12 +37,12 @@ interface Biome {
 
 const dir = join(import.meta.dirname, '..', '..', 'content', 'willy', 'data', 'rooms');
 const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.json')) : [];
-const MARKERS = 'ecbtBlPJX';
-const OBSTACLES = 'cbBJX';
+const MARKERS = 'ecbtBlPJXNd';
+const OBSTACLES = 'cbBJXNd';
 const PLANTAS = (floors as unknown as { plantas: { bioma: string; generacion: { celda: { ancho: number; alto: number }; trampas: { tipos: string[] } } }[] }).plantas;
 const RULES = { maxStep: 1, climbCost: 1 };
 const MINIMUMS: Record<string, number> = { inicio: 1, jefe: 1, combate: 4, rival: 2, tesoro: 2, trampa: 2, vacia: 2 };
-const ROLES = ['inicio', 'jefe', 'combate', 'tesoro', 'trampa', 'vacia', 'rival'];
+const ROLES = ['inicio', 'jefe', 'combate', 'tesoro', 'trampa', 'vacia', 'rival', 'escena'];
 const cheb = (a: Vec2, b: Vec2): number => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 
 function sockets(w: number, h: number): Record<string, { ring: Vec2[]; inside: Vec2[] }> {

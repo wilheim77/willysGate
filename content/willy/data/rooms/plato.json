@@ -392,6 +392,30 @@
         "#.............#",
         "###############"
       ]
+    },
+    {
+      "id": "plato-despacho-xelda",
+      "nombre": "Despacho de Xelda",
+      "roles": [
+        "escena"
+      ],
+      "escena": "p5-despacho-de-xelda",
+      "peso": 1,
+      "filas": [
+        "###############",
+        "#d.d.d...d.d.d#",
+        "#.............#",
+        "#d..mmmmmmm..d#",
+        "#d..mmmmmmm..d#",
+        "#...mmmmmmm...#",
+        "#...mmmNmmm...#",
+        "#...mmmdmmm...#",
+        "#...mmmmmmm...#",
+        "#d...........d#",
+        "#.............#",
+        "#....l........#",
+        "###############"
+      ]
     }
   ]
 }
