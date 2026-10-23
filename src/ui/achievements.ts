@@ -38,6 +38,8 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     store.state.turn.mode === 'combat' ||
     document.querySelector<HTMLElement>('#dialogue')?.hidden === false ||
     document.querySelector<HTMLElement>('.box-overlay')?.hidden === false ||
+    // Other banners (collapse, level up) and tutorial cards go first.
+    [...document.querySelectorAll<HTMLElement>('#announce, .tutorial-toast')].some((el) => !el.hidden && el.offsetParent !== null) ||
     document.querySelector<HTMLElement>('#title')?.hidden === false ||
     document.querySelector<HTMLElement>('#creation')?.hidden === false;
 
