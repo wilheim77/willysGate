@@ -172,6 +172,15 @@ Revisión de `DESIGN.md`, `STORY.md` y `RULESET.md` contra el código. La audien
 
 **Hecho en esta ronda:** el despacho de Xelda (sala de historia) y el jefe del piso 8 con daño 1d8.
 
+**Hecho después (2026-10-23), para una primera partida sin tropiezos:**
+- El tutorial lo dispara el ruleset (`rulesets/willy/tutorial.ts`, punto 1 a medias: faltan ocultar piezas del HUD y los resaltados, agente del cliente).
+- La dificultad ya cambia el reloj y el daño (punto 2: `rulesets/willy/difficulty.ts`).
+- Los cofres se abren al tocarlos (`rulesets/willy/chests.ts`; faltan los mímicos).
+- Si Willy cae en un combate, el combate se acaba.
+- Maripuri vende cinco consumibles por fichas, uno de cada por Camerino (`rulesets/willy/shop.ts`; falta vender).
+- Hablar o abrir un cofre cuesta 3 s de reloj.
+- Aparcado por el coordinador: las ventajas, las mecánicas de las Plantas 2-5 y las otras tres salas de historia (el arte ya está en `art-willy`).
+
 ## Siguiente paso
 
 - Después: mecánicas de planta (marea, cintas: R20 `onRoundEnd`), salas fijas de historia, cajas de botín al abrirlas, reloj de planta, audiencia y patrocinadores, Narrador y valor de los objetos (Golpe de valor).

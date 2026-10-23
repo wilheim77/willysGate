@@ -11,8 +11,9 @@ import { type Pattern, type View, eventViews, matchPattern } from './show/patter
  * `despues` (a step id) only lets a step fire after that one; `noSiHecho` skips it if that one
  * already fired; `condicion.dato` supports `willy.vidaPct` (with min/max).
  *
- * One step per command, in file order; the event `tutorialStep { id, texto }` is what the client
- * shows (GameDefinition.tutorial). Locks (`bloqueosIniciales`: a system or HUD piece → the step
+ * Every step whose trigger happens is done at once (its flag, so the locks never wait on a card);
+ * the cards (`tutorialStep { id, texto }`, what the client shows: GameDefinition.tutorial) come
+ * out one per command, in file order. Locks (`bloqueosIniciales`: a system or HUD piece → the step
  * that turns it on) only apply on the first floor: `tutorialUnlocked(state, key)`.
  */
 
@@ -39,6 +40,8 @@ export function configureTutorial(data: TutorialData): void {
 export const tutorialFlag = (id: string) => `tutorial:${id}`;
 /** Steps fired by the previous command, for `tutorialDone` triggers. */
 const LAST_FLAG = 'tutorial:ultimo';
+/** Steps already done whose card hasn't been shown yet (one per command). */
+const QUEUE_FLAG = 'tutorial:cola';
 
 /** Is this system or HUD piece on? Everything is, outside the first floor or without a tutorial. */
 export function tutorialUnlocked(state: GameState, key: string): boolean {
@@ -78,14 +81,25 @@ export function tutorialAfterCommand(_ruleset: Ruleset, state: GameState, events
   const out: GameEvent[] = [];
   if (last) effects.push({ type: 'setFlag', flag: LAST_FLAG, value: '' });
   const done = (id: string) => state.flags[tutorialFlag(id)] === true;
+  // Every step whose moment it is counts as done now (the locks depend on it, not on the card);
+  // their cards come out one per command, in file order.
+  const queued = String(state.flags[QUEUE_FLAG] ?? '').split(',').filter(Boolean);
+  const fired: string[] = [];
   for (const step of DATA.pasos) {
     if (!step.disparador || done(step.id)) continue;
-    if (step.despues && !done(step.despues)) continue;
-    if (step.noSiHecho && done(step.noSiHecho)) continue;
+    if (step.despues && !done(step.despues) && !fired.includes(step.despues)) continue;
+    if (step.noSiHecho && (done(step.noSiHecho) || fired.includes(step.noSiHecho))) continue;
     if (!views.some((v) => matchPattern(v, step.disparador!)) || !conditionHolds(state, step.condicion)) continue;
-    effects.push({ type: 'setFlag', flag: tutorialFlag(step.id), value: true }, { type: 'setFlag', flag: LAST_FLAG, value: step.id });
-    out.push({ type: 'tutorialStep', id: step.id, texto: step.texto.join('\n\n') } as GameEvent);
-    break;
+    fired.push(step.id);
+    effects.push({ type: 'setFlag', flag: tutorialFlag(step.id), value: true });
   }
+  const cards = [...queued, ...fired];
+  const show = cards.shift();
+  if (show) {
+    const step = DATA.pasos.find((p) => p.id === show);
+    effects.push({ type: 'setFlag', flag: LAST_FLAG, value: show });
+    if (step) out.push({ type: 'tutorialStep', id: step.id, texto: step.texto.join('\n\n') } as GameEvent);
+  }
+  if (cards.length || queued.length) effects.push({ type: 'setFlag', flag: QUEUE_FLAG, value: cards.join(',') });
   return { effects, events: out };
 }

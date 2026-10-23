@@ -185,6 +185,12 @@ describe('Ingeniero', () => {
     expect(first.state.entities.r).toEqual(s.entities.r);
     const again = act(first.state, 'e', 'hab:red-g', {});
     expect(again.state.entities.e!.resources['uso:red-g']!.current).toBe(1);
+    // The next fight's first round counts again (the user saw 5 uses and no 6G).
+    const over = engine.applyEffects(again.state, willy.onCombatEnd!(again.state, again.state.entities.e!.factionId).effects).state;
+    const next = inCombat({ ...over, turn: { ...over.turn, mode: 'exploration', order: [], activeEntityId: null, round: 0 } }, 'e');
+    const third = act(next, 'e', 'hab:red-g', {});
+    expect(third.state.entities.e!.resources['uso:red-g']!.current).toBe(2);
+    expect(willy.listActions(third.state, 'e').find((x) => x.id === 'hab:red-g')!.description).toContain('usos 2/6');
   });
 
   it('the G line levels 5G → 6G → … → 10G at 6/16/30/50/75 uses and each level does more', () => {
