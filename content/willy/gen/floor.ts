@@ -664,12 +664,12 @@ function populate(g: Gen, runSeed: number, n: number, spec: FloorSpec, biome: Bi
         const legendary = g.chance(RIVAL_RULES.legendaryChance) ? legendaryFor(g, spec.plantaId, usedLegendaries) : undefined;
         if (legendary) {
           e = legendaryEntity(legendary, spec.plantaId, at);
-          rival = { id: e.id, planta: n, ranura: i, legendario: legendary.id, plantas: [n] };
+          rival = { id: e.id, planta: n, ranura: i, legendario: legendary.id, raza: legendary.raza.id, plantas: [n] };
         } else {
           const taken = new Set([...profiles.values()].flatMap(rivalKeys));
           const profile = generateRival(runSeed, n, i, taken);
           e = rivalEntity(profile, spec.plantaId, at);
-          rival = { id: e.id, planta: n, ranura: i, plantas: [n] };
+          rival = { id: e.id, planta: n, ranura: i, raza: profile.raza, plantas: [n] };
         }
         e = { ...e, tags: [...e.tags, 'dialogue:rivalEncuentro'] };
         ambush = false;

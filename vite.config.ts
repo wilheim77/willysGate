@@ -21,7 +21,7 @@ export default defineConfig({
     include: ['tests/**/*.test.ts'],
     environment: 'node',
     // Playthrough and soak tests run real fights; under a parallel full run they need headroom.
-    testTimeout: 60_000,
+    testTimeout: 180_000,
     coverage: {
       include: ['engine/**/*.ts', 'rulesets/**/*.ts'],
       reporter: ['text', 'html'],

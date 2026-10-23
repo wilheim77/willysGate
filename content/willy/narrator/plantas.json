@@ -40,14 +40,14 @@
           "id": "ep-2a",
           "texto": "Planta {planta}: el Hipermercado Eterno. Abierto veinticuatro horas, trescientos sesenta y cinco días, desde hace once mil años. Las colas de la caja también.",
           "si": {
-            "planta": 2
+            "planta": 3
           }
         },
         {
           "id": "ep-2b",
           "texto": "El Hipermercado Eterno. Suena el hilo musical. Es la misma canción desde la Temporada 3. Nadie sabe cómo se llama.",
           "si": {
-            "planta": 2,
+            "planta": 3,
             "visita": {
               "min": 2
             }
@@ -57,14 +57,14 @@
           "id": "ep-3a",
           "texto": "Planta {planta}: la Verbena Sin Fin. Farolillos, orquesta, olor a churros y a pólvora. Las fiestas de tu pueblo, pero para siempre. Suena bonito hasta que lo piensas.",
           "si": {
-            "planta": 3
+            "planta": 5
           }
         },
         {
           "id": "ep-3b",
           "texto": "La Verbena. La orquesta toca «Paquito el Chocolatero» por cuarta vez. No será la última.",
           "si": {
-            "planta": 3,
+            "planta": 5,
             "visita": {
               "min": 2
             }
@@ -74,14 +74,14 @@
           "id": "ep-4a",
           "texto": "Planta {planta}: el Balneario Glaciar. Termas, saunas y piscinas heladas. Trae toalla. Y ganas de vivir.",
           "si": {
-            "planta": 4
+            "planta": 7
           }
         },
         {
           "id": "ep-4b",
           "texto": "El Balneario. Aquí se viene a relajarse. Nadie se ha relajado aquí jamás.",
           "si": {
-            "planta": 4,
+            "planta": 7,
             "visita": {
               "min": 2
             }
@@ -91,14 +91,14 @@
           "id": "ep-5a",
           "texto": "Planta {planta}: el Plató. Bienvenido a la casa de ¡Mazmorreros! Mira bien: todo es de cartón piedra. Menos los monstruos.",
           "si": {
-            "planta": 5
+            "planta": 9
           }
         },
         {
           "id": "ep-5b",
           "texto": "El Plató, otra vez. Los técnicos te saludan con la mano. Y luego intentan matarte. Es el oficio.",
           "si": {
-            "planta": 5,
+            "planta": 9,
             "visita": {
               "min": 2
             }
@@ -322,19 +322,42 @@
       "lineas": [
         {
           "id": "sd-01",
-          "texto": "Otra sala que se va. Adiós, sala. No te conocíamos mucho."
+          "texto": "Otra sala que se va. Adiós, sala. No te conocíamos mucho.",
+          "si": {
+            "fase": "caida"
+          }
         },
         {
           "id": "sd-02",
-          "texto": "Esa sala ya no existe. Si había algo dentro, ahora está más abajo."
+          "texto": "Esa sala ya no existe. Si había algo dentro, ahora está más abajo.",
+          "si": {
+            "fase": "caida"
+          }
         },
         {
           "id": "sd-03",
           "texto": "¡Cuidado! La sala en la que estás está temblando. Muévete. Ya.",
           "si": {
-            "willyDentro": true
+            "willyDentro": true,
+            "fase": "grieta"
           },
           "prioridadExtra": 2
+        },
+        {
+          "id": "sd-04",
+          "texto": "Se oye un crujido en el techo de una sala. En diez segundos, esa sala es un recuerdo. Si no estás dentro, mejor.",
+          "si": {
+            "fase": "grieta",
+            "willyDentro": false
+          }
+        },
+        {
+          "id": "sd-05",
+          "texto": "Una sala menos. La planta se come a sí misma, sala a sala. Es lo más parecido a una dieta que se ha visto aquí.",
+          "si": {
+            "fase": "caida",
+            "willyDentro": false
+          }
         }
       ]
     },
@@ -375,19 +398,23 @@
           }
         },
         {
-          "id": "sp-05",
-          "texto": "Fuera, y sin haber visto ni la mitad de la planta. Los guionistas lloran por las salas que nadie ha visto.",
+          "id": "sp-07",
+          "texto": "Planta superada con calma. Hay quien baja como quien sale a por el pan. Tú, por lo menos, has cerrado la puerta.",
           "si": {
-            "exploradoPct": {
-              "max": 50
+            "relojRestantePct": {
+              "min": 25,
+              "max": 49
             }
           }
         },
         {
-          "id": "sp-06",
-          "texto": "Has visto toda la planta. Todas las salas. Eres un explorador o un cotilla. En Castro no hay diferencia.",
+          "id": "sp-08",
+          "texto": "Escaleras al fondo y {reloj} en el marcador. Ni vencedor ni vencido: funcionario.",
           "si": {
-            "exploradoPct": 100
+            "relojRestantePct": {
+              "min": 11,
+              "max": 24
+            }
           }
         }
       ]
@@ -542,7 +569,8 @@
           "id": "rg-01",
           "texto": "Competencia: {rivalNombre}, {rivalApodo}. {rivalRaza:Mayus}, de {rivalLugar}. Antes del fin del mundo era {rivalOficio}. Ahora es un problema.",
           "si": {
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": false
           }
         },
         {
@@ -550,21 +578,24 @@
           "texto": "Otra concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
           "si": {
             "primeraVez": true,
-            "rivalGenero": "f"
+            "rivalGenero": "f",
+            "legendario": false
           }
         },
         {
           "id": "rg-03",
           "texto": "Ojo con {rivalNombre}: {rivalApodo}. Los apodos aquí no se ponen por capricho. Bueno, a veces sí.",
           "si": {
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": false
           }
         },
         {
           "id": "rg-04",
           "texto": "{rivalNombre} ha venido desde {rivalLugar} para ganar. Tú has venido desde Castro para sobrevivir. Veamos quién tiene más ganas.",
           "si": {
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": false
           }
         },
         {
@@ -628,7 +659,7 @@
         },
         {
           "id": "rg-10",
-          "texto": "{rivalNombre} vuelve. La última vez se fue con el botín. Esta vez viene a por ti. Y con el botín puesto.",
+          "texto": "Vuelve {rivalNombre}. La última vez, tú dijiste «puedes irte». Ha estado pensando en esa frase desde entonces.",
           "si": {
             "primeraVez": false,
             "desenlaceAnterior": "huida"
@@ -646,14 +677,16 @@
           "texto": "Otro concursante en tu camino: {rivalNombre}, {rivalRaza} y {rivalOficio}. Dato curioso: {rivalMania}. Producción me lo ha pasado en una tarjeta y yo te lo leo, que para eso me pagan.",
           "si": {
             "primeraVez": true,
-            "rivalGenero": "m"
+            "rivalGenero": "m",
+            "legendario": false
           }
         },
         {
           "id": "rg-12",
           "texto": "{rivalNombre} {rivalApellido}. Antes del apocalipsis, {rivalOficio} en {rivalLugar}. Después del apocalipsis, lo mismo, pero con más gritos.",
           "si": {
-            "primeraVez": true
+            "primeraVez": true,
+            "legendario": false
           }
         },
         {
@@ -667,7 +700,8 @@
                 "semigaviota",
                 "fantasma-en-practicas"
               ]
-            }
+            },
+            "legendario": false
           }
         },
         {
@@ -675,6 +709,88 @@
           "texto": "{rivalNombre} ha cambiado su rol de rival a aliad{rival:o}. En la sala de guionistas se oye un «¿y ahora qué hacemos?».",
           "si": {
             "comoAliado": true
+          }
+        },
+        {
+          "id": "rp-01",
+          "texto": "Trato hecho con {rivalNombre}. Un apretón de manos, una sonrisa de oreja a oreja y la letra pequeña sin leer. Como Dios manda.",
+          "si": {
+            "momento": "pacto",
+            "comoAliado": {
+              "existe": false
+            }
+          }
+        },
+        {
+          "id": "rp-02",
+          "texto": "{rivalNombre} y Willy, en buena armonía. Los guionistas están desconcertados: nadie había escrito esta escena.",
+          "si": {
+            "momento": "pacto",
+            "comoAliado": {
+              "existe": false
+            }
+          }
+        },
+        {
+          "id": "rp-03",
+          "texto": "Un pacto. Sin sangre. El público ha pedido el reembolso y Producción lo ha denegado, que algo hay que hacer con la nómina.",
+          "si": {
+            "momento": "pacto",
+            "comoAliado": {
+              "existe": false
+            }
+          }
+        },
+        {
+          "id": "rp-04",
+          "texto": "¡Menudo diplomático! {rivalNombre} se marcha tan content{rival:o}. Al público le ha parecido bien. A Koldo no, pero a Koldo nada le parece bien.",
+          "si": {
+            "momento": "pacto",
+            "comoAliado": {
+              "existe": false
+            }
+          }
+        },
+        {
+          "id": "rh-01",
+          "texto": "Willy deja marchar a {rivalNombre}. Ni un golpe. Ni una fuga digna. El público no sabe si aplaudir o pedir que le devuelvan el dinero.",
+          "si": {
+            "momento": "huida"
+          }
+        },
+        {
+          "id": "rh-02",
+          "texto": "Y se va {rivalNombre}, de rositas. Queda anotado en el libro de deudas de la mazmorra: tarde o temprano, todo vuelve.",
+          "si": {
+            "momento": "huida"
+          }
+        },
+        {
+          "id": "rh-03",
+          "texto": "Perdonar al rival: lo más noble que se puede hacer y lo menos televisivo. Pregunta a cualquier guionista.",
+          "si": {
+            "momento": "huida"
+          }
+        },
+        {
+          "id": "rd-01",
+          "texto": "{rivalNombre} queda eliminad{rival:o} del concurso. Producción ya ha borrado su nombre del cartel. Lleva una goma muy gastada.",
+          "si": {
+            "momento": "derrota"
+          }
+        },
+        {
+          "id": "rd-02",
+          "texto": "Un concursante menos. La competencia, en este programa, se resuelve de la forma tradicional.",
+          "si": {
+            "momento": "derrota"
+          }
+        },
+        {
+          "id": "rd-03",
+          "texto": "Adiós, {rivalNombre}. Dile a {rivalLugar} que lo intentó. Que lo intentó mal, pero lo intentó.",
+          "si": {
+            "momento": "derrota"
           }
         }
       ],

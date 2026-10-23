@@ -9,7 +9,7 @@
         { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
       ] },
       "etiquetas": ["explosivo", "redondo"], "valor": 0 },
-    { "id": "llave-inglesa", "nombre": "Llave inglesa", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
+    { "id": "llave-inglesa", "genero": "f", "nombre": "Llave inglesa", "rareza": "bronce", "tipo": "herramienta", "ranura": "mano", "inicial": true,
       "descripcion": "Para apretar reguladores y aflojar mandíbulas.",
       "regla": "Golpe de 1d6.",
       "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
@@ -66,7 +66,7 @@
       "regla": "En agua, +2 DEF y nunca quedas Tumbado.",
       "pasivo": [{ "stat": "defEnAgua", "delta": 2 }],
       "inmunidades": [{ "condicion": "tumbado", "origen": "agua" }], "valor": 3 },
-    { "id": "crema-solar", "nombre": "Crema solar factor 50", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 2,
+    { "id": "crema-solar", "genero": "f", "nombre": "Crema solar factor 50", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 2,
       "descripcion": "Protege del sol, de las llamas y, según el bote, «del envejecimiento prematuro». Aquí abajo, lo prematuro es otra cosa.",
       "regla": "Inmune a Ardiendo durante 3 turnos.",
       "usar": { "objetivo": "aliado", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
@@ -83,14 +83,14 @@
       "usar": { "objetivo": "enemigo", "alcance": 1, "coste": { "acciones": 1 }, "efectos": [
         { "type": "damage", "entityId": "$target", "amount": "1d6", "element": "golpe" }
       ] }, "valor": 6 },
-    { "id": "pastillas-juanola", "nombre": "Pastillas Juanola", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 5,
+    { "id": "pastillas-juanola", "genero": "f", "plural": true, "nombre": "Pastillas Juanola", "rareza": "bronce", "tipo": "consumible", "inicial": true, "usos": 5,
       "descripcion": "La lata metálica de toda la vida. Aclaran la garganta y, misteriosamente, la mente.",
       "regla": "Gratis: te quita Mareado y recuperas 1 de energía.",
       "usar": { "objetivo": "self", "coste": {}, "efectos": [
         { "type": "removeCondition", "entityId": "$self", "condition": "mareado" },
         { "type": "modifyResource", "entityId": "$self", "resource": "energia", "delta": 1 }
       ] }, "valor": 3 },
-    { "id": "guantes-blancos", "nombre": "Guantes blancos", "rareza": "bronce", "tipo": "equipo", "ranura": "manos", "inicial": true,
+    { "id": "guantes-blancos", "genero": "m", "plural": true, "nombre": "Guantes blancos", "rareza": "bronce", "tipo": "equipo", "ranura": "manos", "inicial": true,
       "descripcion": "Impolutos. Nadie sabe cómo los mantiene así un mimo que duerme en una mazmorra.",
       "regla": "+1 Agilidad.",
       "pasivo": [{ "stat": "agi", "delta": 1 }], "valor": 3 },
@@ -151,7 +151,7 @@
         { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "golpe" }
       ] },
       "etiquetas": ["redondo"], "valor": 0 },
-    { "id": "zapatillas-de-baloncesto", "nombre": "Zapatillas de bota alta", "rareza": "bronce", "tipo": "equipo", "ranura": "pies", "inicial": true,
+    { "id": "zapatillas-de-baloncesto", "genero": "f", "plural": true, "nombre": "Zapatillas de bota alta", "rareza": "bronce", "tipo": "equipo", "ranura": "pies", "inicial": true,
       "descripcion": "Talla 49. Chirrían en cualquier suelo, incluso en la arena.",
       "regla": "+1 Agilidad. Gran salto llega 1 casilla más lejos.",
       "pasivo": [{ "stat": "agi", "delta": 1 }, { "stat": "alcanceSalto", "delta": 1 }], "valor": 4 },
@@ -226,7 +226,7 @@
       "usar": { "objetivo": "casilla", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
         { "type": "spawnSurface", "at": "$tile", "surface": "canicas", "radius": 1 }
       ] }, "valor": 4 },
-    { "id": "red-de-pesca", "nombre": "Red de pesca", "rareza": "bronce", "tipo": "consumible",
+    { "id": "red-de-pesca", "genero": "f", "nombre": "Red de pesca", "rareza": "bronce", "tipo": "consumible",
       "descripcion": "Remendada por la abuela de alguien en el muelle. Ha pescado bocartes, chicharros y un guardia civil.",
       "regla": "Lanza (alcance 3): el objetivo queda Enredado.",
       "usar": { "objetivo": "enemigo", "alcance": 3, "coste": { "acciones": 1 }, "efectos": [
@@ -261,7 +261,7 @@
       "descripcion": "Amarillo, abollado y con una pegatina: «Yo sobreviví a la Temporada 31».",
       "regla": "+3 de vida máxima.",
       "pasivo": [{ "stat": "vidaMax", "delta": 3 }], "valor": 8 },
-    { "id": "guantes-de-fregar", "nombre": "Guantes de fregar", "rareza": "bronce", "tipo": "equipo", "ranura": "manos",
+    { "id": "guantes-de-fregar", "genero": "m", "plural": true, "nombre": "Guantes de fregar", "rareza": "bronce", "tipo": "equipo", "ranura": "manos",
       "descripcion": "Rosas, talla única. Protegen de lo que hay en la lonja y de saber qué es.",
       "regla": "Inmune a Envenenado por superficies.",
       "inmunidades": [{ "condicion": "envenenado", "origen": "superficie" }], "valor": 7 },
@@ -310,7 +310,7 @@
         { "type": "damage", "entityId": "$target", "amount": "1d4", "element": "golpe" },
         { "type": "applyCondition", "entityId": "$target", "condition": "enredado" }
       ] }, "valor": 14 },
-    { "id": "botas-de-agua", "nombre": "Botas de agua", "rareza": "plata", "tipo": "equipo", "ranura": "pies",
+    { "id": "botas-de-agua", "genero": "f", "plural": true, "nombre": "Botas de agua", "rareza": "plata", "tipo": "equipo", "ranura": "pies",
       "descripcion": "Verdes, de las de toda la vida. En la Planta 1 son traje de gala.",
       "regla": "No resbalas en agua, aceite ni hielo, y nunca quedas Empapado.",
       "inmunidades": [{ "condicion": "empapado" }, { "condicion": "tumbado", "origen": "superficie" }], "valor": 12 },
@@ -369,7 +369,7 @@
       "descripcion": "Precioso. Se mueve un poco cuando no lo miras. Te mira cuando no lo mueves.",
       "regla": "MALDITO. Los cofres de la planta dan 1 objeto más, pero uno de cada cuatro es un mímico. No te lo puedes quitar hasta el Camerino.",
       "pasivo": [{ "stat": "objetosPorCofre", "delta": 1 }, { "stat": "mimicosPct", "delta": 25 }], "valor": 10 },
-    { "id": "gafas-de-sol-nocturnas", "nombre": "Gafas de sol nocturnas", "rareza": "plata", "tipo": "equipo", "ranura": "cabeza", "maldito": true,
+    { "id": "gafas-de-sol-nocturnas", "genero": "f", "plural": true, "nombre": "Gafas de sol nocturnas", "rareza": "plata", "tipo": "equipo", "ranura": "cabeza", "maldito": true,
       "descripcion": "Te hacen sentir increíblemente competente y casi completamente ciego.",
       "regla": "MALDITO. +2 Maña y +2 Carisma, pero tu luz pierde 2 de radio.",
       "pasivo": [{ "stat": "man", "delta": 2 }, { "stat": "car", "delta": 2 }, { "stat": "radioLuz", "delta": -2 }], "valor": 10 },
@@ -534,7 +534,7 @@
     { "id": "chaleco-de-operadora", "nombre": "Chaleco de operadora", "rareza": "oro", "tipo": "cosmetico", "ranura": "aspecto",
       "descripcion": "Con muchos bolsillos y el logo de una compañía telefónica que ya no existe. Como ninguna, ahora.",
       "regla": "Cosmético.", "desbloqueo": "logro:despliegue-nacional", "valor": 0 },
-    { "id": "manguitos-de-oficina", "nombre": "Manguitos de oficina", "rareza": "plata", "tipo": "cosmetico", "ranura": "aspecto",
+    { "id": "manguitos-de-oficina", "genero": "m", "plural": true, "nombre": "Manguitos de oficina", "rareza": "plata", "tipo": "cosmetico", "ranura": "aspecto",
       "descripcion": "Para no mancharse de tinta las mangas. En la mazmorra, de otras cosas.",
       "regla": "Cosmético.", "desbloqueo": "logro:vuelva-usted-manana", "valor": 0 },
     { "id": "visera-de-ventanilla", "nombre": "Visera verde de ventanilla", "rareza": "oro", "tipo": "cosmetico", "ranura": "aspecto",
@@ -548,7 +548,7 @@
       "regla": "Cosmético.", "desbloqueo": "logro:anillo-de-campeon", "valor": 0 },
     {"id": "gaseosa-la-revoltosa", "nombre": "Gaseosa La Revoltosa", "rareza": "bronce", "tipo": "consumible", "descripcion": "Botella de cristal con chapa. Burbujas suficientes para levantar a un muerto, o al menos para que eructe.", "regla": "Poción: recuperas 8 de vida.", "usar": {"objetivo": "aliado", "alcance": 1, "coste": {"acciones": 1}, "efectos": [{"type": "heal", "entityId": "$target", "amount": "8"}]}, "etiquetas": ["pocion", "curacion"], "valor": 5},
     {"id": "caldo-de-la-abuela", "nombre": "Caldo de la abuela", "rareza": "plata", "tipo": "consumible", "descripcion": "En termo de los de antes. Cura el resfriado, el desamor y, según la abuela, el cáncer de las espadas.", "regla": "Poción: recuperas el 40 % de tu vida máxima y se quita Envenenado.", "usar": {"objetivo": "aliado", "alcance": 1, "coste": {"acciones": 1}, "efectos": [{"type": "heal", "entityId": "$target", "amount": "40%vidaMax"}, {"type": "removeCondition", "entityId": "$target", "condition": "envenenado"}]}, "etiquetas": ["pocion", "curacion", "comida"], "valor": 12},
-    {"id": "agua-de-la-fuente-santa", "nombre": "Agua de la Fuente Santa", "rareza": "oro", "tipo": "consumible", "descripcion": "Garrafa de cinco litros de un manantial milagroso de Liébana. La etiqueta la ha escrito a mano un señor con boina.", "regla": "Poción: recuperas toda la vida y se quitan Ardiendo, Envenenado y Mareado.", "usar": {"objetivo": "aliado", "alcance": 1, "coste": {"acciones": 1}, "efectos": [{"type": "heal", "entityId": "$target", "amount": "100%vidaMax"}, {"type": "removeCondition", "entityId": "$target", "condition": "ardiendo"}, {"type": "removeCondition", "entityId": "$target", "condition": "envenenado"}, {"type": "removeCondition", "entityId": "$target", "condition": "mareado"}]}, "etiquetas": ["pocion", "curacion"], "valor": 30},
+    {"id": "agua-de-la-fuente-santa", "genero": "f", "articuloMasculino": true, "nombre": "Agua de la Fuente Santa", "rareza": "oro", "tipo": "consumible", "descripcion": "Garrafa de cinco litros de un manantial milagroso de Liébana. La etiqueta la ha escrito a mano un señor con boina.", "regla": "Poción: recuperas toda la vida y se quitan Ardiendo, Envenenado y Mareado.", "usar": {"objetivo": "aliado", "alcance": 1, "coste": {"acciones": 1}, "efectos": [{"type": "heal", "entityId": "$target", "amount": "100%vidaMax"}, {"type": "removeCondition", "entityId": "$target", "condition": "ardiendo"}, {"type": "removeCondition", "entityId": "$target", "condition": "envenenado"}, {"type": "removeCondition", "entityId": "$target", "condition": "mareado"}]}, "etiquetas": ["pocion", "curacion"], "valor": 30},
     {"id": "chupito-de-orujo", "nombre": "Chupito de orujo de hierbas", "rareza": "plata", "tipo": "consumible", "descripcion": "Verde fosforito. Quema la garganta, quita el miedo y, durante un rato, la vergüenza.", "regla": "Poción de valor: quedas Animado 3 turnos (+1 al daño) y Afortunado en tu próxima tirada.", "usar": {"objetivo": "self", "coste": {"acciones": 1}, "efectos": [{"type": "applyCondition", "entityId": "$self", "condition": "animado", "remainingTurns": 3}, {"type": "applyCondition", "entityId": "$self", "condition": "afortunado"}]}, "etiquetas": ["pocion", "bebida"], "valor": 10},
     {"id": "bebida-energetica-vortax", "nombre": "Bebida energética VÓRTAX", "rareza": "plata", "tipo": "consumible", "patrocinador": "vortax", "descripcion": "Lata negra con la cara de Lord Vórtax mirándote. «Contiene 400 % de la dosis diaria de entretenimiento.»", "regla": "Gratis: ganas 1 acción este turno, pero quedas Mareado 1 turno.", "usar": {"objetivo": "self", "coste": {}, "efectos": [{"type": "modifyResource", "entityId": "$self", "resource": "acciones", "delta": 1}, {"type": "applyCondition", "entityId": "$self", "condition": "mareado", "remainingTurns": 1}]}, "etiquetas": ["bebida", "patrocinio"], "valor": 9},
     {"id": "bomba-fetida-glorp", "nombre": "Bomba fétida ecológica de Glorp", "rareza": "plata", "tipo": "consumible", "patrocinador": "glorp", "descripcion": "Cien por cien biodegradable. Huele a pantano de su planeta, que es exactamente a lo que huele una bomba fétida.", "regla": "Granada (alcance 4): los enemigos en radio 1 quedan Mareados 2 turnos y Envenenados.", "usar": {"objetivo": "area", "alcance": 4, "radio": 1, "filtro": "enemigos", "coste": {"acciones": 1}, "efectos": [{"type": "applyCondition", "entityId": "$each", "condition": "mareado", "remainingTurns": 2}, {"type": "applyCondition", "entityId": "$each", "condition": "envenenado", "remainingTurns": 3}]}, "etiquetas": ["granada", "patrocinio"], "valor": 10},

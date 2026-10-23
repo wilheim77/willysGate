@@ -2,6 +2,7 @@ import type { Entity, Vec2 } from '../../../engine';
 import { createCreature } from '../../../rulesets/willy';
 import generator from '../data/rival-generator.json';
 import legendaries from '../data/rivals.json';
+import ninja from '../assets/ninja.json';
 import { Gen } from './random';
 
 /**
@@ -43,6 +44,8 @@ export interface RivalRecord {
   planta: number;
   ranura: number;
   legendario?: string;
+  /** Race id, for the «Fauna local» achievement. */
+  raza?: string;
   plantas: number[];
   desenlace?: 'derrotado' | 'pacto' | 'huida';
 }
@@ -156,6 +159,15 @@ export function rivalScale(floor: number): { vida: number; ataque: number; def: 
 }
 
 /**
+ * Body sprite id: `<cuerpoBase>--<paleta>`, or `<cuerpoBase>-f--<paleta>` for a woman when the
+ * art preset has that variant (falls back to the shared body otherwise).
+ */
+export function bodySprite(cuerpoBase: string, genero: Gender, paleta: string): string {
+  const female = `${cuerpoBase}-f--${paleta}`;
+  return genero === 'f' && female in (ninja.sprites as Record<string, unknown>) ? female : `${cuerpoBase}--${paleta}`;
+}
+
+/**
  * The rival as a creature: kit numbers scaled by floor (1-10, rivalScale) and the race's
  * attributes. `opening` picks the first line of the encounter dialogue: a fresh presentación, or
  * vueltaHuida for one who fled before and is back (docs/willy/DESIGN.md §17).
@@ -173,7 +185,7 @@ export function rivalEntity(p: RivalProfile, floor: number, position: Vec2, open
     controllerId: 'ai',
     factionId: 'rivales',
     position,
-    spriteId: `${raza.cuerpoBase}--${p.paleta}`,
+    spriteId: bodySprite(raza.cuerpoBase, p.genero, p.paleta),
     vida: Math.round(kit.vidaBase * scale.vida),
     def: kit.def + scale.def,
     ataque: kit.ataque + bonus,
