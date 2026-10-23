@@ -179,7 +179,11 @@ export class MapScene extends Phaser.Scene {
     const unsubscribe = this.store.subscribe((change, state) => {
       if (change.kind === 'reset') {
         this.queue = [];
+        // The camera may still follow a sprite of the world being thrown away (dying on a floor
+        // and going back to the Camerino, or loading a save from another map): a black screen.
+        this.cameras.main.stopFollow();
         this.buildWorld(state);
+        this.focusOn(this.hooks.controlledEntityId());
         // A save loaded on an enemy's turn: nothing else would wake the AI up.
         this.hooks.onIdle?.();
       } else {

@@ -38,6 +38,13 @@ deleted, season summary).
    mochila". Playing a normal session means dozens of taps and prompts. (Not a crash: a flow problem that will make
    the first impression of the game bad.)
 
+25. **[C] Black screen after dying on a floor and returning to the Camerino (Con repetición).** FIXED on qa (mine, 4 lines in
+    `MapScene` reset handler). Found in the 2026-10-23 re-test on main: the `reset` rebuild did not stop the camera
+    follow, so it kept chasing a destroyed sprite of the floor just left (cam scroll 534,-302; only floating
+    "+122 audiencia" text visible). Same for «Cargar» of a save from another map. Same-map returns (floor 1 -> Camerino 1
+    in earlier runs) hid it. Fix: `stopFollow()` + `focusOn(controlled)` after `buildWorld` on `reset`; re-tested with a
+    Camerino save loaded from planta-1 (Willy centred).
+
 ## Confusing
 
 6. **[W] Chests do nothing.** `cofre` props (`botin:planta-N`, 6 hp objects) ignore taps; DESIGN.md says opening
@@ -63,6 +70,14 @@ deleted, season summary).
     traps (seeds 3 and 6 headless), so such a contract must only be offered when the target floor has enough.
 16. **[C] Title "Nueva partida" with an existing save** starts at once (the "Continuar" slot is only overwritten by the
     next "Guardar"); in-game "Nueva" uses a native `confirm()` (fine in a browser, blocked in embedded webviews).
+
+26. **[C] Tutorial timing (re-test 2026-10-23).** (a) "Bienvenido a la Planta 1" card appears in the Camerino at run
+    start, before the player has seen the floor; (b) the combat card ("¡Ratas!") covers the whole arena during the first
+    enemy turn, so the first fight is not visible until it is closed; (c) the "Vas por la mitad de vida" card fires at
+    the instant of death (HP 0) and stays over the defeat/return screen; (d) clock HUD already shown on floor 1 before
+    its step. Sent to the client agent.
+27. **[M] Maripuri shop hides what you cannot afford** ("Si no lo ves es que no te llega"): with 0 fichas the shop shows only
+    "Nada más, gracias." Works as written, but a first visit looks like a broken shop. Suggest listing prices greyed out.
 
 ## Cosmetic
 
@@ -92,6 +107,14 @@ deleted, season summary).
   1, progress after the Camerino gone as the text promises.
 - Sin repetición death: Guardar/Cargar/Exportar/Importar hidden during the run, slot `willysgate.willy.hardcore`
   exists while playing and is deleted on defeat, summary (planta, nivel, logros, cajas, fichas) and "Nueva temporada".
+
+- Re-test on main 2026-10-23 (375x812, Prime time + Con repetición, then Turista): casting rows "6 + 2 = 8", difficulty
+  text describes effects; Maripuri shop works (200 fichas: 5 items, buying a pincho took 15 fichas and put it in the bag);
+  equipping 4 hand weapons in a row from the bag (Llave inglesa, Palo de selfie, Teclado Casio, Bastón con pomo) swaps
+  correctly each time, the displaced weapon goes back to the bag or to Iker/Jonatan, no "who wears it?" loop and no stale
+  prompt (the hidden #dialogue DOM keeps old buttons: do not read it without checking `hidden`); floor 1 fight won with
+  the companion, "Caja de oro" reward; Con repetición death -> "Volver al Camerino" -> full HP, checkpoint gear, boxes
+  back to the checkpoint count (see #25 for the camera).
 
 ## Not covered
 
