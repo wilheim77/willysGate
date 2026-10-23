@@ -22,6 +22,7 @@ import { setupAchievements } from './ui/achievements';
 import { setupRewardBoxes } from './ui/rewardBoxes';
 import './ui/meta.css';
 import { SetupScreen } from './ui/setupScreen';
+import { setupProfile } from './ui/profileScreen';
 import { PermadeathSlot } from './game/permadeath';
 import { CreditsScreen } from './ui/creditsScreen';
 import { setupShowHud } from './ui/showHud';
@@ -418,10 +419,16 @@ setupShowHud(store, game, (code) => hud.sayError(code));
 const creation = new CreationScreen(store, game);
 // A new game: the game's questions (difficulty, elimination mode...), then character creation.
 const setupScreen = new SetupScreen(store, game);
-const startNew = () => setupScreen.open(() => creation.open());
+// The title screen first; a new game goes on to character creation. A new season starts with what
+// the browser's profile carries over (achievements, unlocks, rivals already met).
+let profile: ReturnType<typeof setupProfile> = null;
+const startNew = () => {
+  profile?.inject();
+  setupScreen.open(() => creation.open());
+};
 hud.onNewGame = startNew;
-// The title screen first; a new game goes on to character creation.
 new TitleScreen(store, game, startNew).open();
+profile = setupProfile(store, game);
 // A permadeath run in progress: «Continuar» resumes it exactly where it was (no other way in).
 {
   const saved = permadeath.load();

@@ -13,6 +13,7 @@ import { announce } from './announce';
 import { willyHud } from './hud';
 import { achievements, rewardBoxes } from './meta-view';
 import { defeat, ending, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
+import { injectProfile, profileBadge, profileScreen, updateProfile } from './profile';
 import cast from './data/cast.json';
 import texts from './texts/ui.json';
 
@@ -67,6 +68,12 @@ export const game: GameDefinition = {
   savePolicy,
   onRestoredCopy,
   defeat,
+  profile: {
+    inject: (state, p) => injectProfile(state, p),
+    update: (p, events, state, today) => updateProfile(p, events, state, today) as unknown as Record<string, unknown>,
+    screen: (p) => profileScreen(p),
+    badge: (p) => profileBadge(p),
+  },
   ending,
   // The season's end: once the final boss is down (rulesets/willy/ending.ts), out of combat.
   triggers: [{ id: 'final-temporada', when: { all: [{ flag: 'willy:presentadorDerrotado', is: true }, { notFlag: 'willy:final' }] }, dialogue: 'final-temporada' }],

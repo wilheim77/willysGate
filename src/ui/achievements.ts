@@ -31,7 +31,7 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     text.className = 'text';
     const kicker = document.createElement('span');
     kicker.className = 'kicker';
-    kicker.textContent = '¡Logro desbloqueado!';
+    kicker.textContent = a.again ? '¡Otra vez! (sin caja: ya la ganaste)' : '¡Logro desbloqueado!';
     const name = document.createElement('strong');
     name.textContent = a.name;
     const desc = document.createElement('p');
@@ -116,7 +116,7 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
       sec.append(t);
       for (const a of items) {
         const row = document.createElement('div');
-        row.className = `achievement${a.unlocked ? ' got' : ''}`;
+        row.className = `achievement${a.unlocked ? ' got' : ''}${a.earlier ? ' earlier' : ''}`;
         const secret = a.hidden && !a.unlocked;
         const icon = uiIcon(manifest, a.unlocked ? (a.icon ?? '') : 'logro-bloqueado', 32);
         const txt = document.createElement('div');
@@ -125,7 +125,13 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
         const d = document.createElement('p');
         d.textContent = secret ? (a.hint ?? 'Logro oculto.') : a.description;
         txt.append(n, d);
-        if (a.reward && !secret) {
+        if (a.earlier) {
+          const e = document.createElement('p');
+          e.className = 'earlier-note';
+          e.textContent = 'En otra temporada';
+          txt.append(e);
+        }
+        if (a.reward && !secret && !a.earlier) {
           const r = document.createElement('p');
           r.className = 'reward';
           r.textContent = `🎁 ${a.reward}`;

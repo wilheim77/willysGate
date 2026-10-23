@@ -112,6 +112,7 @@ export const ending = (state: GameState): { title: string; lines: string[]; butt
       `Logros: ${meta.logros.length}`,
       `Cajas abiertas: ${meta.cajasAbiertas}`,
       `Fichas: ${w?.resources.fichas?.current ?? 0}`,
+      ...(hardcore(state) ? ['🔴 Marca «en directo» guardada en tu perfil'] : []),
     ],
     button: 'Nueva temporada',
   };

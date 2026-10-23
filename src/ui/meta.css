@@ -106,3 +106,11 @@ canvas.ui-icon { image-rendering: pixelated; }
 .box-art canvas.burst { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: -1; pointer-events: none; animation: burst-spin 6s linear infinite; }
 @keyframes burst-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .box-art canvas.burst { animation: none; } }
+
+/* --- Profile and records --- */
+.profile-panel dl { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; margin: 0; font-size: var(--fs-s); }
+.profile-panel dt { color: var(--muted); }
+.profile-panel dd { margin: 0; text-align: right; color: var(--text); }
+#title .profile-badge { margin: 8px 0 0; text-align: center; color: #ff4a4a; font-size: var(--fs-l); letter-spacing: 2px; text-shadow: 0 0 8px rgba(255, 60, 60, 0.7); animation: blink 1.6s step-end infinite; }
+.meta-panel .achievement.earlier { opacity: 0.8; }
+.meta-panel .achievement .earlier-note { color: var(--muted); font-size: var(--fs-xs); }

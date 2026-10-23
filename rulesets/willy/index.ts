@@ -438,6 +438,8 @@ export { COMPANIONS, companionOfClass, companionStats, createCompanion, syncComp
 export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progression';
 export { SURFACES } from './environment';
 export * from './meta';
+export { classOf } from './character';
+export { counterNodes } from './achievements';
 export * from './ending';
 export { BAG, itemActionId, itemActions, slotOf, startingItemEffects } from './items';
 export { grantItem, grantLootBox, rollBox } from './loot';

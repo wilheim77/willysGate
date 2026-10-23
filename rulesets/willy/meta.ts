@@ -192,6 +192,9 @@ export interface MetaState {
   gastados: string[];
   /** Floors cleared (every enemy down), by map id. */
   plantasLimpias: string[];
+  /** Rivals met this run (ids) and their races. */
+  rivalesVistos: string[];
+  razasRivales: string[];
 }
 
 export const META = 'willyMeta';
@@ -216,6 +219,8 @@ export function emptyMeta(): MetaState {
     habilidadesUsadas: [],
     gastados: [],
     plantasLimpias: [],
+    rivalesVistos: [],
+    razasRivales: [],
   };
 }
 
@@ -227,6 +232,39 @@ export function metaOf(state: GameState): MetaState {
 /** A deep copy to edit (the meta state is plain JSON). */
 export function cloneMeta<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
+}
+
+/**
+ * What the browser's profile says at the start of this run (state.systems.perfil), put there by
+ * the game when a season starts; read only. Achievements already earned in earlier seasons, the
+ * lifetime counters of «siempre» achievements, items unlocked for the boxes, and the rivals met.
+ */
+export interface ProfileSnapshot {
+  logros: string[];
+  contadores: Record<string, number>;
+  desbloqueos: string[];
+  clasesJugadas: string[];
+  clasesConVictoria: string[];
+  rivalesVistos: number;
+  razasRivales: string[];
+  /** Unique keys of the last rivals met (the generator avoids them). */
+  rivalesRecientes: string[];
+}
+
+export const PROFILE_SYSTEM = 'perfil';
+
+export function profileOf(state: GameState): ProfileSnapshot {
+  const p = (state.systems[PROFILE_SYSTEM] as unknown as Partial<ProfileSnapshot> | undefined) ?? {};
+  return {
+    logros: p.logros ?? [],
+    contadores: p.contadores ?? {},
+    desbloqueos: p.desbloqueos ?? [],
+    clasesJugadas: p.clasesJugadas ?? [],
+    clasesConVictoria: p.clasesConVictoria ?? [],
+    rivalesVistos: p.rivalesVistos ?? 0,
+    razasRivales: p.razasRivales ?? [],
+    rivalesRecientes: p.rivalesRecientes ?? [],
+  };
 }
 
 export function hasMeta(state: GameState): boolean {
