@@ -175,6 +175,22 @@ export class MapScene extends Phaser.Scene {
     this.overlay = this.add.graphics().setDepth(999_000);
     this.juice = new Juice(this, this.grid.tile, DEFAULT_FX);
     this.buildWorld(this.store.state);
+    // A tab that was hidden stops the frame loop, so walks in flight never finish and input stays
+    // "busy"; on coming back, settle them and put every sprite where the state says it is.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden || !this.busy) return;
+      for (const finish of [...this.moveFinish.values()]) finish();
+      this.tweens.killAll();
+      // Hand playback back: the stale run (waiting on tweens that just died) stops, what was
+      // still queued is dropped — the state is the truth — and the AI is woken.
+      this.playGen++;
+      this.queue = [];
+      this.playing = false;
+      this.animating = 0;
+      this.busySince = 0;
+      this.syncWithState(this.store.state);
+      this.hooks.onIdle?.();
+    });
 
     const unsubscribe = this.store.subscribe((change, state) => {
       if (change.kind === 'reset') {
@@ -504,7 +520,10 @@ export class MapScene extends Phaser.Scene {
         // No single event may hold the game: an animation whose tween died (its sprite was
         // rebuilt mid-way) would otherwise leave input and AI waiting forever.
         const stuck = new Promise<'stuck'>((r) => setTimeout(() => r('stuck'), EVENT_WATCHDOG_MS));
-        if ((await Promise.race([this.play(event), stuck])) === 'stuck') console.warn('event playback timed out', event.type);
+        if ((await Promise.race([this.play(event), stuck])) === 'stuck') {
+          const who = (event as unknown as { entityId?: string }).entityId;
+          console.warn('event playback timed out', { type: event.type, entityId: who, queued: this.queue.length, animating: this.animating, hidden: document.hidden });
+        }
       } catch (err) {
         console.error('event playback failed', event, err);
       }
