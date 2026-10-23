@@ -34,7 +34,7 @@ import { rivalAfterCommand } from './rivals';
 import { describeEntity } from './sheet';
 import { clockAfterCommand } from './clock';
 import { endingAfterCommand } from './ending';
-import { bossAfterCommand, showAfterCommand, showCommands, showLateAfterCommand } from './show';
+import { bossAfterCommand, bossesAfterCommand, showAfterCommand, showCommands, showLateAfterCommand } from './show';
 import { achievementsHook } from './achievements';
 import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
 import { dropsHook, openBox } from './loot';
@@ -335,6 +335,7 @@ registerAfterCommand(dropsHook, 10);
 registerAfterCommand(itemsHook, 20);
 // The floor clock and the collapse (clock.ts), before the show reacts to the turn.
 registerAfterCommand(clockAfterCommand, 40);
+registerAfterCommand(bossesAfterCommand, 44);
 registerAfterCommand(bossAfterCommand, 45);
 // The final boss down and the ending chosen (ending.ts): the season is over.
 registerAfterCommand(endingAfterCommand, 46);

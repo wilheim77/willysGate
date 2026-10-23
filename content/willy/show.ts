@@ -4,6 +4,7 @@ import floors from './data/floors.json';
 import loot from './data/loot-tables.json';
 import sponsors from './data/sponsors.json';
 import finalBoss from './data/jefe-final.json';
+import plantaBosses from './data/jefes.json';
 import cast from './data/cast.json';
 
 /**
@@ -35,6 +36,12 @@ export const SHOW: ShowConfig = {
     drenajeEnAntena: 10,
   },
   sponsors: sponsors as unknown as ShowConfig['sponsors'],
+  bosses: Object.fromEntries(
+    (floors.plantas as unknown as { jefe?: { id: string; fases?: { hasta: number }[] } }[])
+      .map((p) => p.jefe)
+      .filter((j): j is { id: string; fases?: { hasta: number }[] } => !!j && j.id in plantaBosses)
+      .map((j) => [j.id, { ...(plantaBosses as unknown as Record<string, object>)[j.id], fases: (j.fases ?? []).map((f) => f.hasta) }]),
+  ),
   boss: {
     jefeId: boss?.id ?? 'jefe-presentador',
     nombre: cast.presentador.nombre,

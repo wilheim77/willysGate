@@ -46,6 +46,7 @@ const SHOW_EVENTS = new Set([
   'audienceChanged', 'audienceMilestone', 'audienceTier', 'audienceBonus',
   'meterChanged', 'shareCero', 'enAntena', 'turnEnded', 'audienceVote',
   'bossPhase', 'bossLine', 'bossQuestion', 'bossInDark', 'bossUnderSpotlight', 'trapdoorOpened', 'spotlightOn', 'rigHung', 'rigDropped',
+  'bossShell', 'bossStranded', 'beltsReversed', 'bossShelfFell', 'bossSpin', 'frameBurning', 'bossToppled', 'bossRescue', 'bossFrozen', 'bossDived',
   'sponsorAffinityChanged', 'sponsorStateChanged', 'sponsorMessage', 'sponsorGift', 'sponsorGiftIncoming', 'sponsorWatching',
   'sponsorWithdrew', 'sponsorReturned', 'sponsorDealOffered', 'sponsorDealAccepted', 'sponsorDealDeclined',
   'sponsorDealProgress', 'sponsorDealCompleted', 'sponsorDealBroken',
@@ -61,4 +62,5 @@ export { audienceOf, floorMinimum, freshAudience, type AudienceState } from './a
 export { sponsorsOf, sponsorData, dealData, MAX_ACTIVE_DEALS, type SponsorsState } from './sponsors';
 export { shareOf, type ShareState } from './share';
 export { bossAfterCommand, bossFightOf, bossLit, type BossConfig, type BossFight } from './boss';
+export { bossesAfterCommand, plantaBossFightOf, type PlantaBossConfig } from './bosses';
 export { eventViews, matchPattern, type Pattern, type View } from './patterns';

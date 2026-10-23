@@ -1,0 +1,31 @@
+{
+  "$comment": "Fases y puntos débiles de los jefes de las Plantas 1-4 (floors.json → plantas[].jefe.fases y debilidad). Aquí van los números; el comportamiento está en rulesets/willy/show/bosses.ts. Las fases cambian por vida (floors.json → fases[].hasta, en %). El jefe final tiene su propio fichero (jefe-final.json).",
+  "version": 1,
+  "jefe-centollo": {
+    "$comment": "Con agua bajo sus patas, el caparazón le da 'caparazon' de armadura. Sin agua (marea baja) queda varado: sin caparazón, y un empujón contra un muro o un pilar le hace el doble ('choqueVarado'). Desde la fase 2 llama a 'refuerzos.cantidad' cangrejos cada 'refuerzos.cadaRondas' rondas.",
+    "caparazon": 6,
+    "choqueVarado": 2,
+    "refuerzos": { "desdeFase": 2, "cadaRondas": 3, "cantidad": 2, "criatura": { "nombre": "Cangrejo con casco", "sprite": "cangrejo-con-casco", "vida": 10, "def": 14, "ataque": 3, "dano": "1d6", "movimiento": 3, "xp": 0 } }
+  },
+  "jefe-encargada": {
+    "$comment": "Fase 2 («¡Liquidación total!»): todas las cintas de su sala apuntan hacia el centro de la sala. Fase 3: si choca contra un muro o una estantería, se le cae encima: Aturdida 'aturdidaRondas'.",
+    "liquidacionDesdeFase": 2,
+    "embestidaDesdeFase": 3,
+    "aturdidaRondas": 1
+  },
+  "jefe-giganton": {
+    "$comment": "Cada 'giro.cadaRondas' rondas gira al empezar su turno: su daño a todos en 'giro.radio' y empujón 'giro.empuje'. Desde la fase 2, si le alcanza el fuego el armazón arde: pierde 'ardiendo.perdidaPorRonda' de vida cada ronda y sus golpes hacen 'ardiendo.danoExtra' más. En la fase 3 se tambalea: un empujón con éxito lo tumba ('tumbado.dobleRondas' rondas de daño doble) y aplasta lo que haya donde cae ('tumbado.aplastar').",
+    "giro": { "cadaRondas": 2, "radio": 2, "empuje": 2 },
+    "ardiendo": { "desdeFase": 2, "perdidaPorRonda": 5, "danoExtra": "1d6" },
+    "tumbado": { "desdeFase": 3, "dobleRondas": 1, "aplastar": "2d6" }
+  },
+  "jefe-socorrista": {
+    "$comment": "Cada 'rescate.cadaRondas' rondas «rescata» con tentáculos: atrae 'rescate.distancia' casillas al concursante más cercano y el silbato Aturde a quien esté en el agua si no resiste (AGU contra 'rescate.dif'). Desde la fase 2 se tira a la piscina: en el agua recibe ×'enElAgua' de daño; si su casilla se congela, queda Congelada 'congeladaRondas'. Fase 3: la piscina hierve y todo se llena de vapor ('vaporRondas').",
+    "rescate": { "cadaRondas": 2, "distancia": 3, "dif": 13 },
+    "piscinaDesdeFase": 2,
+    "enElAgua": 0.25,
+    "congeladaRondas": 2,
+    "vaporDesdeFase": 3,
+    "vaporRondas": 2
+  }
+}

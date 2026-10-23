@@ -1,5 +1,6 @@
 import type { GameState } from '../../../engine';
 import type { BossConfig } from './boss';
+import type { PlantaBossConfig } from './bosses';
 import type { Pattern } from './patterns';
 
 /**
@@ -125,6 +126,8 @@ export interface ShowConfig {
   share: ShareConfig;
   /** The final boss's phases (absent: the boss is a plain fight with his Share). */
   boss?: BossConfig;
+  /** The planta 1-4 bosses' phases and weak points, by boss id. */
+  bosses?: Record<string, PlantaBossConfig>;
   sponsors: { reglas: SponsorRules; patrocinadores: SponsorData[] };
 }
 
