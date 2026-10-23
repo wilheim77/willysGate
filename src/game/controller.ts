@@ -143,7 +143,7 @@ export class GameController {
 
   /** A tap that lands while things are still animating isn't ignored in silence: that reads as a frozen game. */
   private waitFeedback(): void {
-    this.hud.say(this.game.texts.combat?.busy ?? 'Un momento…');
+    this.hud.say(this.game.texts.combat?.busy ?? 'Espera…');
   }
 
   selectAction(action: ActionDef | null): void {

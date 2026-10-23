@@ -180,7 +180,16 @@ export class MapScene extends Phaser.Scene {
     document.addEventListener('visibilitychange', () => {
       if (document.hidden || !this.busy) return;
       for (const finish of [...this.moveFinish.values()]) finish();
+      this.tweens.killAll();
+      // Hand playback back: the stale run (waiting on tweens that just died) stops, what was
+      // still queued is dropped — the state is the truth — and the AI is woken.
+      this.playGen++;
+      this.queue = [];
+      this.playing = false;
+      this.animating = 0;
+      this.busySince = 0;
       this.syncWithState(this.store.state);
+      this.hooks.onIdle?.();
     });
 
     const unsubscribe = this.store.subscribe((change, state) => {
