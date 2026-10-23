@@ -1251,6 +1251,86 @@ export function tidalWave(frame: number): Image { return groundPulse(frame, '#3a
 export function whistleBlast(frame: number): Image { return coneWash(frame, '#ffe04f'); }
 export function invisibleTug(frame: number): Image { return reachBeam(frame, '#d8d8d8', '#ffffff'); }
 
+// --- Xelda's office (Planta 5): wall of winners, trophy cabinet, archive, contract -------------------
+
+/**
+ * Framed portrait of a past winner (16x20, `retrato-ganador-1..3`): the same smile every time,
+ * fading with age (variant 1 freshest, 3 almost gone). Gold frame, tiny plaque.
+ */
+export function winnerPortrait(variant: number): Image {
+  const img = blank(T, 20);
+  const fade = [0, 0.4, 0.75][variant]!;
+  const mixc = (hex: string, to: string): string => {
+    const a = hexToRgb(hex), b = hexToRgb(to);
+    return '#' + a.map((v, i) => Math.round(v + (b[i]! - v) * fade).toString(16).padStart(2, '0')).join('');
+  };
+  const skins = ['#f0c8a0', '#e8b088', '#d0a078'];
+  const hairs = ['#2a2018', '#8a5a34', '#c0c6ce'];
+  fill(img, 1, 1, 14, 16, '#a8781e');
+  fill(img, 2, 2, 12, 14, mixc('#3a4a7a', '#8a8478'));
+  fill(img, 5, 5, 6, 6, mixc(skins[variant]!, '#bfb6a4'));
+  fill(img, 4, 4, 8, 2, mixc(hairs[variant]!, '#bfb6a4'));
+  fill(img, 3, 12, 10, 4, mixc('#1e1c24', '#7a7468'));
+  px(img, 6, 7, OUT);
+  px(img, 9, 7, OUT);
+  line(img, 6, 9, 9, 9, '#c02030'); // the smile, identical in every portrait
+  px(img, 5, 8, '#c02030');
+  px(img, 10, 8, '#c02030');
+  fill(img, 5, 18, 6, 1, '#e8d890');
+  return outline(img);
+}
+
+/** Trophy cabinet (16x24): glass front, three shelves of dusty golden cups. */
+export function trophyCabinet(): Image {
+  const img = blank(T, 24);
+  fill(img, 1, 1, 14, 22, '#4a2c1c');
+  fill(img, 2, 2, 12, 20, '#a8d8f0');
+  fill(img, 2, 2, 3, 20, '#d8f0ff');
+  for (let s = 0; s < 3; s++) {
+    const y = 2 + s * 7;
+    fill(img, 2, y + 6, 12, 1, '#6e4428');
+    for (const x of [4, 8, 11]) {
+      art(img, x, y + 1, ['ccc', '.c.', '.c.', 'ccc'], { c: s === 2 ? '#8a7a40' : '#e8b830' });
+      px(img, x + 1, y + 1, '#fff0a0');
+    }
+  }
+  for (let i = 0; i < 6; i++) px(img, 3 + i * 2, 21, '#8a8478'); // dust
+  return outline(img);
+}
+
+/** Archive shelf (16x24): rows of tapes and file boxes with red season labels. */
+export function archiveShelf(): Image {
+  const img = blank(T, 24);
+  fill(img, 1, 1, 14, 22, '#5a5e66');
+  fill(img, 2, 2, 12, 20, '#2a2e36');
+  const r = rng(650);
+  const cols = ['#c0c6ce', '#e8d890', '#8a9098', '#c8a070', '#9ab0c8'];
+  for (let s = 0; s < 4; s++) {
+    const y = 2 + s * 5;
+    let x = 2;
+    while (x < 14) {
+      const w = 1 + Math.floor(r() * 2);
+      fill(img, x, y, Math.min(w + 1, 14 - x), 4, cols[Math.floor(r() * cols.length)]!);
+      px(img, x, y + 1, '#e0302a');
+      x += w + 2;
+    }
+    fill(img, 2, y + 4, 12, 1, '#8a9098');
+  }
+  return outline(img);
+}
+
+/** The contract (8x8): a thick stapled stack of pages, drawn over Xelda's desk. */
+export function contractStack(): Image {
+  const img = blank(8, 8);
+  fill(img, 0, 1, 7, 6, '#e8e0c8');
+  fill(img, 0, 6, 7, 1, '#b0a888');
+  fill(img, 1, 2, 5, 1, '#8a8478');
+  fill(img, 1, 4, 4, 1, '#8a8478');
+  px(img, 0, 1, '#c0c6ce');
+  px(img, 1, 1, '#c0c6ce');
+  return outline(img);
+}
+
 /**
  * The game-show "¡ELIMINADO!" banner (requested by the client agent for `onDeath: 'vanish'`):
  * one cohesive graphic (banner + baked text), not text drawn over a separate burst. 64x24,
