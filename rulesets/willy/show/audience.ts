@@ -1,5 +1,6 @@
-import { type GameEvent, type GameState, type JsonValue, hasCondition, stat } from '../../../engine';
-import { attr, hasTrait } from '../character';
+import { type Entity, type GameEvent, type GameState, type JsonValue, hasCondition, stat } from '../../../engine';
+import { attr, hasTrait, skillLevel } from '../character';
+import { itemDef } from '../meta';
 import type { Resolver, WillyEvent } from '../resolve';
 import { type AudienceRule, WILLY_ID, clone, currentFloor, currentPlanta, showConfig } from './config';
 import { type View, entityView, eventViews, matchPattern } from './patterns';
@@ -51,6 +52,10 @@ export interface AudienceState {
   viral: { mult: number; momentos: number } | null;
   /** Current tier index (audience.json → tramos). */
   tramo: number;
+  /** Clock seconds left when last seen (boredom counts the clock that runs out). */
+  reloj?: number | null;
+  /** «Especial de audiencia» (aviso): where it was picked up, and the floor it multiplies. */
+  especial?: { desde: number | null; piso: number | null } | null;
 }
 
 export function audienceOf(state: GameState): AudienceState | undefined {
@@ -102,9 +107,12 @@ export function gainMultiplier(state: GameState): number {
   if (!w) return 1;
   let m = 1 + 0.05 * attr(w, 'car');
   if (hasTrait(w, 'directo')) m *= 1.5;
+  for (const [perk, mult] of Object.entries(showConfig()!.audience.ventajas ?? {})) if (hasTrait(w, perk)) m *= mult;
   const items = stat(w, 'multAudiencia', 0);
   if (items) m *= 1 + items / 100;
   if (isHardcore(state)) m *= showConfig()!.audience.multSinRepeticion;
+  const especial = audienceOf(state)?.especial;
+  if (especial?.piso !== undefined && especial?.piso !== null && especial.piso === currentFloor(state)) m *= showConfig()!.audience.especialAudiencia.mult;
   return m;
 }
 
@@ -205,6 +213,9 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
     }
   }
   const views = eventViews(events, state, { firstSkillUse: firstUse });
+  for (const v of views) {
+    if (v.evento === 'cancionDelVerano' && v.nivel === undefined && willy) v.nivel = skillLevel(willy, 'cancion-del-verano');
+  }
 
   // Willy's turn bookkeeping: a wait or a dull turn costs viewers.
   for (const e of events) {
@@ -261,6 +272,36 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
     a.turnoWilly = { activo: false, actuo: false, interesante: false };
   }
 
+  // «Mate del concurso» at Maestría: the audience votes, everything this turn ×3 (here: this command).
+  const maestriaVote = !!willy && events.some((e) => {
+    const f = e as unknown as { type: string; entityId?: string; habilidad?: string };
+    return f.type === 'skillUsed' && f.entityId === WILLY_ID && f.habilidad === 'mate-del-concurso';
+  }) && skillLevel(willy, 'mate-del-concurso') >= 5;
+
+  for (const e of events) {
+    const f = e as unknown as Record<string, unknown>;
+    // «Repertorio corto» (Bardo): the same song twice in a row bores people.
+    if (e.type === 'traitTriggered' && f.rasgo === 'repertorio-corto' && f.entityId === WILLY_ID) {
+      lost += -changeAudience(r, a, -cfg.clases.repertorioCorto * plantaMult(state), 'repertorio-corto');
+    }
+    // «Unboxing» (Influencer): extra audience for each silver-or-better item out of a box.
+    if (e.type === 'boxOpened' && willy && hasTrait(willy, 'unboxing')) {
+      const good = ((f.objetos as { rareza?: string }[] | undefined) ?? []).filter((o) => o.rareza && o.rareza !== 'bronce').length;
+      if (good) {
+        const lvl = skillLevel(willy, 'unboxing');
+        const bonus = 1 + (lvl >= 4 ? 0.5 : lvl >= 2 ? 0.25 : 0);
+        gained += changeAudience(r, a, good * cfg.clases.unboxingPorObjeto * bonus * plantaMult(state) * gainMultiplier(state), 'unboxing', WILLY_ID);
+      }
+    }
+    // Items that move the meter (Share embotellado: +25 %).
+    if (e.type === 'itemUsed') {
+      const def = itemDef(String(f.item));
+      for (const fx of (def?.usar?.efectos ?? []) as { type: string; meter?: string; pct?: number; cause?: string }[]) {
+        if (fx.type === 'modifyMeter' && fx.meter === 'audiencia' && fx.pct) gained += changeAudience(r, a, (a.valor * fx.pct) / 100, fx.cause ?? 'objeto', WILLY_ID);
+      }
+    }
+  }
+
   // Gains. «Sin reflejo» (the presenter): the drones don't film him, so nothing he does gives
   // anyone audience (his crits on Willy, his shoves, his trapdoors).
   const unfilmed = showConfig()!.share.jefeId;
@@ -268,11 +309,13 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
   for (const v of views) {
     if (byHim(v)) continue;
     for (const rule of cfg.ganancias) {
-      if (!rule.base || !matchPattern(v, rule.patron)) continue;
+      if (!rule.base || (rule.soloEnCombate && !inCombat) || !matchPattern(v, rule.patron)) continue;
       if (rule.id === 'ganso') a.gansos += 1;
       const key = noveltyKey(rule, v);
       let amount = (rule.base + perField(rule, v)) * plantaMult(state) * gainMultiplier(state) * novelty(a, key);
       if (rule.id === 'ganso' && rule.decrecientePorCombate) amount *= rule.decrecientePorCombate ** Math.max(0, a.gansos - 1);
+      if (rule.id === 'ganso' && willy) amount *= gansoMultiplier(willy);
+      if (maestriaVote) amount *= cfg.clases.mateDelConcursoMaestria;
       if (a.viral && inCombat) {
         amount *= a.viral.mult;
         a.viral.momentos -= 1;
@@ -318,12 +361,43 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
     }
   }
 
-  // Out of combat, walking about with nothing happening: 30 s of clock lose 1 %.
+  // «Al filo»: leaving by the stairs with less than 10 % of the clock left pays a box too.
+  for (const v of views) {
+    if (v.evento !== 'floorExited' || v.metodo !== 'escalera') continue;
+    const p = cfg.primaAlFilo;
+    if (Number(v.relojRestantePct ?? 100) <= p.relojRestanteMaxPct) {
+      r.emit({ type: 'audienceBonus', planta: currentPlanta(r.state), caja: p.caja, espectadores: a.valor, alFilo: true } as unknown as WillyEvent);
+      grantBox(r, p.caja, `al-filo:${String(v.planta ?? '')}`);
+    }
+  }
+
+  // «Especial de audiencia» (aviso): picked up, it multiplies the next floor; spent when that floor ends.
+  const flag = r.state.flags[cfg.especialAudiencia.flag];
+  if (flag && !a.especial) a.especial = { desde: currentFloor(r.state) ?? null, piso: null };
+  if (a.especial) {
+    const floor = currentFloor(r.state);
+    const arrived = events.some((e) => e.type === 'mapChanged');
+    if (a.especial.piso === null && arrived && floor !== undefined && floor !== a.especial.desde) a.especial.piso = floor;
+    if (a.especial.piso !== null && views.some((v) => v.evento === 'floorExited')) {
+      a.especial = null;
+      r.apply({ type: 'setFlag', flag: cfg.especialAudiencia.flag, value: 0 });
+    }
+  }
+
+  // Out of combat, walking about with nothing happening: 30 s of clock lose 1 %. The floor clock
+  // (systems.clock) says how much time went by; without it, 1 s per tile walked and 3 per interaction.
   if (!inCombat) {
-    for (const e of events) {
-      const f = e as unknown as { entityId?: string; path?: unknown[] };
-      if (e.type === 'entityMoved' && f.entityId === WILLY_ID) a.aburrido += f.path?.length ?? 0;
-      if (e.type === 'dialogueStarted' || e.type === 'interact') a.aburrido += 3;
+    const clock = r.state.systems.clock as unknown as { remaining?: number } | undefined;
+    if (typeof clock?.remaining === 'number') {
+      if (typeof a.reloj === 'number' && clock.remaining < a.reloj) a.aburrido += a.reloj - clock.remaining;
+      a.reloj = clock.remaining;
+    } else {
+      a.reloj = null;
+      for (const e of events) {
+        const f = e as unknown as { entityId?: string; path?: unknown[] };
+        if (e.type === 'entityMoved' && f.entityId === WILLY_ID) a.aburrido += f.path?.length ?? 0;
+        if (e.type === 'dialogueStarted' || e.type === 'interact') a.aburrido += 3;
+      }
     }
     if (a.aburrido >= cfg.aburrimiento.segundosDeReloj && currentFloor(r.state) !== undefined) {
       a.aburrido = 0;
@@ -337,6 +411,13 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
   function ruleLoss(id: string): number {
     return cfg.perdidas.find((p) => p.id === id)?.pct ?? 0;
   }
+}
+
+/** «Hacer el ganso»: the Mimo only mimes (half, unless «Público de calle»); items like the Pandereta add. */
+function gansoMultiplier(willy: Entity): number {
+  let m = 1 + stat(willy, 'bonoGanso', 0) / 100;
+  if (hasTrait(willy, 'voto-de-silencio') && !hasTrait(willy, 'publico-de-calle')) m *= 0.5;
+  return m;
 }
 
 function isLastFloorOfPlanta(state: GameState): boolean {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { narrate } from '../../content/willy/narrator';
+import { narrate, narrateEvents } from '../../content/willy/narrator';
 import type { GameState } from '../../engine';
 import { W, game, rat } from '../rulesets/willy-helpers';
 
@@ -33,5 +33,32 @@ describe('Willy narrator', () => {
     for (let i = 0; i < 20 && !line; i++) line = narrate({ type: 'attackRolled', attackerId: 'willy', targetId: 'r', hit: true, crit: true, natural: 20 } as never, s);
     expect(line).toBeTruthy();
     expect(line).not.toMatch(/[{}]/);
+  });
+
+  it('a bank with enfriamientoTurnos stays quiet for that many of Willy\'s turns after speaking', () => {
+    const s = game([W('willy', 'butanero', 0, 0)]);
+    const up = { type: 'audienceChanged', delta: 900, deltaPct: 60, espectadores: 2400, causa: 'eliminar' } as never;
+    const willyTurn = { type: 'turnStarted', entityId: 'willy' } as never;
+    // Speaks at some point (probability 0.5)…
+    let spoke = false;
+    for (let i = 0; i < 40 && !spoke; i++) {
+      spoke = !!narrateEvents([willyTurn, up], s);
+    }
+    expect(spoke).toBe(true);
+    // …then not on the next turn (enfriamientoTurnos 2), whatever the dice.
+    for (let i = 0; i < 20; i++) expect(narrateEvents([up], s)).toBeNull();
+    // Two turns later it can talk again.
+    narrateEvents([willyTurn], s);
+    narrateEvents([willyTurn], s);
+    let again = false;
+    for (let i = 0; i < 40 && !again; i++) again = !!narrateEvents([up], s);
+    expect(again).toBe(true);
+  });
+
+  it('lines carry their bank priority, so the client can let the big moments win', () => {
+    const s = game([W('willy', 'butanero', 0, 0)]);
+    let line: { text: string; priority: number } | null = null;
+    for (let i = 0; i < 10 && !line; i++) line = narrateEvents([{ type: 'achievementUnlocked', logro: 'X', frase: '' } as never], s);
+    expect(line?.priority).toBeGreaterThanOrEqual(3);
   });
 });
