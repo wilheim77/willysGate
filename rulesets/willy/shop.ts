@@ -26,6 +26,12 @@ export const shopConditions = {
     if (s.flags[soldFlag(s.map.id, item)] || !itemDef(item)) return false;
     return (s.entities.willy?.resources.fichas?.current ?? 0) >= shopPrice(s, Number(p.precio ?? 0));
   },
+  /** On the shelf, but Willy can't afford it: shown with its price, so the shop never looks empty. */
+  tiendaNoLlega: (s: GameState, _id: string, p: Record<string, JsonValue>): boolean => {
+    const item = String(p.item);
+    if (s.flags[soldFlag(s.map.id, item)] || !itemDef(item)) return false;
+    return (s.entities.willy?.resources.fichas?.current ?? 0) < shopPrice(s, Number(p.precio ?? 0));
+  },
 };
 
 export function shopAfterCommand(_ruleset: Ruleset, state: GameState, events: GameEvent[], _rng: RngCursor): ActionOutcome {

@@ -46,9 +46,14 @@ describe('Willy: Ultramarinos Maripuri (first version)', () => {
     expect(dialogueOf(s)!.nodeId).toBe('hola');
   });
 
-  it('with no tokens the shelf only offers to leave (never a dead end)', () => {
+  it('with no tokens the shelf still shows its prices, says it is out of reach, and lets you leave', () => {
     let s = withChips(applyCasting(newWillyGame(engine, 3), { clase: 'butanero', puntos: {} }), 0);
     s = pick(talk(s), 'comprar');
-    expect(offered(s)).toEqual(['nada']);
+    const choices = offered(s);
+    expect(choices).toContain('nada');
+    expect(choices.filter((c) => !!c?.startsWith('nollega-')).length).toBe(5);
+    expect(choices.some((c) => !!c?.startsWith('comprar-'))).toBe(false);
+    s = pick(s, 'nollega-pincho-de-tortilla');
+    expect(offered(s)).toContain('nada');
   });
 });

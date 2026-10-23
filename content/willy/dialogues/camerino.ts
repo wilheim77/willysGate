@@ -44,6 +44,8 @@ const SHELF: { item: string; nombre: string; precio: number }[] = [
 ];
 const shelf = (): DialogueChoice[] => [
   ...SHELF.map((s): DialogueChoice => ({ id: `comprar-${s.item}`, text: `${s.nombre}: ${s.precio} fichas`, when: { rule: 'tiendaQueda', params: { item: s.item, precio: s.precio } }, tags: [`comprar:${s.item}:${s.precio}`], next: 'tiendaMas' })),
+  // What Willy can't afford stays on the shelf, with its price, so an empty purse doesn't look like an empty shop.
+  ...SHELF.map((s): DialogueChoice => ({ id: `nollega-${s.item}`, text: `${s.nombre}: ${s.precio} fichas (no te llega)`, when: { rule: 'tiendaNoLlega', params: { item: s.item, precio: s.precio } }, next: 'noTeLlega' })),
   { id: 'nada', text: 'Nada más, gracias.', next: 'hola' },
 ];
 
@@ -65,7 +67,8 @@ export const maripuri: DialogueTree = {
         bye('Nada, gracias.'),
       ],
     },
-    tienda: { speaker: 'maripuri', text: 'Lo que tengo hoy, hijo. Una de cada, que esto no es el hiper. Si no lo ves es que no te llega o que ya te lo has llevado.', choices: shelf() },
+    tienda: { speaker: 'maripuri', text: 'Lo que tengo hoy, hijo. Una de cada, que esto no es el hiper. Si no lo ves es que ya te lo has llevado.', choices: shelf() },
+    noTeLlega: { speaker: 'maripuri', text: 'No te llega, hijo. Vuelve con fichas, que esto no es una ONG. Los figurantes de abajo sueltan alguna, y las cajas también.', choices: shelf() },
     tiendaMas: { speaker: 'maripuri', text: 'Apuntado. ¿Algo más?', choices: shelf() },
     chisme: { speaker: 'maripuri', text: 'Maripuri se asoma por encima del mostrador y baja la voz.', next: byBiome('chisme') },
     chisme0: say('maripuri', 'Pues que te vas a mojar los pies, hijo. Es Castro, pero con goteras. Y las gaviotas son las mismas de siempre: no les des el bocadillo, que luego no se van.', 'hola'),
