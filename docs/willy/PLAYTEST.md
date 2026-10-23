@@ -15,18 +15,18 @@ deleted, season summary).
 
 ## Blockers
 
-1. **[C/W] Clock expiry then walking froze the page for minutes.** FIXED on qa, RETEST on main (3744304).
+1. **[C/W] Clock expiry then walking froze the page for minutes.** FIXED, RE-TESTED on main: two rooms fell in 10 s, the page stayed responsive, Willy was dragged out (`entityTeleported`).
    Repro: floor 2, `systems.clock.remaining = 3`, walk ~14 steps. Each room fall emits 130-170 `tileChanged` events
    and `MapScene.play` rebuilt the whole world per event. Fix: coalesce rebuild-only events
    (`src/scenes/rebuildEvents.ts`, test `tests/game/rebuildEvents.test.ts`). Re-tested in the browser on qa: the room
    falls, the page stays responsive. The rules side is cheap (700 ms for 40 steps headless).
-2. **[C] Resize/rotate leaves the camera where the old size put it: blank map.** FIXED on qa (MapScene re-centres on
+2. **[C] Resize/rotate leaves the camera where the old size put it: blank map.** FIXED on main (MapScene re-centres on
    `Phaser.Scale.Events.RESIZE`).
-3. **[C] WebGL init failure aborts the whole setup flow silently.** "Framebuffer status: Incomplete Attachment" ->
+3. **[C] WebGL init failure aborts the whole setup flow silently.** FIXED on main (automatic fallback in `src/renderer.ts`; WebGL initialised fine in the re-test, so the failure path itself was not re-triggered). "Framebuffer status: Incomplete Attachment" ->
    `MapScene.setOverlays` throws (`this.overlay` undefined) inside `controller.refresh`; "A la mazmorra" lands on a
    blank map and the player never sees the casting screen (Butanero by default). Workaround on qa: `?canvas` forces
    the 2D renderer. Real fix: automatic Canvas fallback + guard `setOverlays`.
-4. **[C/W] No tutorial at all, and the HUD is not gated.** `content/willy/tutorial.json` (pasos with
+4. **[C/W] No tutorial at all, and the HUD is not gated.** FIXED on main, RE-TESTED: toasts show, floor-1 HUD gating works (audience and bag hidden until their step). Left: the first card in a new run is the achievements one (t10) in the Camerino, before "moverse"; the "atributos" card popped up in the middle of a clock collapse and covered the collapse banner (tutorial cards should wait for a calm moment); the clock HUD shows "Reloj 34:30" on floor 1 before its step. Original report: `content/willy/tutorial.json` (pasos with
    `disparador`/`texto[]`, `bloqueosIniciales`) has another shape than the client's `TutorialStep`; `game.tutorial`
    is not set in `content/willy/game.ts`. A new player gets zero guidance (no "tap to move", no combat explanation)
    and everything the design says is hidden at the start (audience, clock, bag, boxes, sponsors) is visible from the
@@ -52,9 +52,9 @@ deleted, season summary).
 10. **[M/W] Narrator line names a different achievement than the banner.** Banner "Planta limpia" + narrator "Logro
     desbloqueado, y encima de los raros: «Barbacoa de uno»" (two unlocked in the same command, {logro} resolves to the
     wrong one). Also «Primer figurante». "el Gaviota de lonja ha caído." (see 17).
-11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/
+11. **[C] Top bar at phone width:** only 174 px of the nav is visible (Guardar clipped, Cargar/Exportar/Importar/ **FIXED on main** (client): the bar fits, Guardar/Cargar on screen and Exportar peeks out as a swipe cue (re-tested).
     Nueva/sound reachable only by swiping, no hint). Save is hard to find on a phone.
-12. **[C] Initiative strip overlapped by the clock/audience widgets** at 375 px once there are 5+ combatants.
+12. **[C] Initiative strip overlapped by the clock/audience widgets** at 375 px once there are 5+ combatants. **FIXED on main** (client): the clock sits below the strip (re-tested with 5 combatants, no overlap).
 13. **[W] Rival dialogue says "CD 15", the roll log says "DIF 15"** (and the attack preview says "Defensa"). Pick one.
 14. **[W] When Willy goes down mid-fight nothing happens** for 10+ rounds: the fight continues with the companion
     only, the player gets no message, and the defeat prompt only appears after Jonatan falls too (or wins). A one-line
@@ -68,12 +68,12 @@ deleted, season summary).
 
 17. **[M] Narrator grammar:** "«Primer figurante». el Gaviota de lonja ha caído." (lowercase "el" after a full stop,
     wrong gender: `{enemigo:el}` in achievements.json ignores the enemy's gender; the rest of the narrator handles it).
-18. **[C] Casting stat line "+8 -> 10 (+0)" has no label; "Puntos libres: 0" with 3 points already spent.**
-19. **[C] Item card description clipped in the box reveal** ("Inmune a Envenenado por superficies." cut at 375 px).
-20. **[C] Floating "+248 au..." text is huge, overlaps Willy and is clipped at 375 px.**
-21. **[C] HUD (bag, boxes, achievements, save) is clickable over the title/difficulty/mode/casting screens.**
-22. **[C] Achievement toasts and narrator bubbles repeat the same text, and toasts draw over the defeat/season summary.**
-23. **[C] Intro slide 6 banner reads "OEN DIRECTO"** (the REC dot is drawn as an "O" glued to "EN DIRECTO").
+18. **[C] Casting stat line "+8 -> 10 (+0)" has no label; "Puntos libres: 0" with 3 points already spent.** **FIXED on main** (client): sum display "8 + 2 = 10".
+19. **[C] Item card description clipped in the box reveal** ("Inmune a Envenenado por superficies." cut at 375 px). **FIXED on qa/main** (mine): cards grow with their text (re-tested: 162 and 175 px cards, nothing clipped).
+20. **[C] Floating "+248 au..." text is huge, overlaps Willy and is clipped at 375 px.** **FIXED on main** (client): floating text clamped to the view.
+21. **[C] HUD (bag, boxes, achievements, save) is clickable over the title/difficulty/mode/casting screens.** **FIXED on main** (client: setup/casting/intro screens are opaque); also not reachable by real taps before.
+22. **[C] Achievement toasts and narrator bubbles repeat the same text, and toasts draw over the defeat/season summary.** **FIXED on qa** for the z-order (toast now under the dialogue layer); the toast and the narrator line are different texts, left as is.
+23. **[C] Intro slide 6 banner reads "OEN DIRECTO"** (the REC dot is drawn as an "O" glued to "EN DIRECTO"). **FIXED on qa**: the REC dot sits left of "EN DIRECTO" (spec edited, panel PNG rebuilt).
 24. **[S] Sponsor affinity bars are partly filled at "Afinidad 0".**
 
 ## Verified OK
