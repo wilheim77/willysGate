@@ -41,8 +41,12 @@ function chain(prefix: string, nodes: DialogueNode[], last: string | undefined):
 }
 
 const nodes: Record<string, DialogueNode> = {
-  inicio: { text: 'Se apagan los focos. Por primera vez en once mil años, el plató está en silencio. Se oye un ventilador. A lo lejos, Paco friega un vaso.', next: 'xelda1' },
-  xelda1: { speaker: 'xelda', text: 'Willy, tengo que contarte una cosa. He estado en el despacho de producción. Los ganadores de las otras temporadas no se fueron a casa con un cheque.', next: 'xelda2' },
+  inicio: {
+    text: 'Se apagan los focos. Por primera vez en once mil años, el plató está en silencio. Se oye un ventilador. A lo lejos, Paco friega un vaso.',
+    next: [{ when: { flag: 'willy:despachoVisto', is: true }, next: 'xelda1visto' }, { next: 'xelda1' }],
+  },
+  xelda1: { speaker: 'xelda', text: 'Willy, tengo que contarte una cosa. He estado en el archivo de producción. Los ganadores de las otras temporadas no se fueron a casa con un cheque.', next: 'xelda2' },
+  xelda1visto: { speaker: 'xelda', text: 'Ya viste los retratos de mi despacho, Willy. Ahora viene la parte en la que te lo ofrece a ti.', next: 'oferta' },
   xelda2: { speaker: 'xelda', text: 'Se quedaron. De copresentadores, en otros planetas, en otros canales. Y él les ha sobrevivido a todos. La audiencia siempre acaba volviendo a él.', next: 'oferta' },
   oferta: { speaker: 'presentador', text: 'Bravo. Bravísimo. Hacía siglos que nadie me hacía sudar. Te ofrezco el puesto, Willy: copresentador. Cabina, lentejuelas y la eternidad. ¿Qué me dices?', next: 'eleccion' },
   eleccion: {
@@ -66,24 +70,55 @@ for (const k of ['A', 'B', 'C'] as const) {
 
 export const finalTemporada: DialogueTree = { id: 'final-temporada', start: 'inicio', nodes };
 
-/** Xelda in the last Camerinos: the contract's small print (a condition of the secret ending). */
-export const xeldaContrato: DialogueTree = {
-  id: 'xelda-contrato',
+/**
+ * Xelda's office (the fixed story room on the last floor, floors.json → p5-despacho-de-xelda):
+ * what became of the winners of earlier seasons, and the contract's small print (reading it is
+ * one of the secret ending's conditions). Speaker: whoever we talk to ($partner).
+ */
+export const xeldaDespacho: DialogueTree = {
+  id: 'xelda-despacho',
   start: 'inicio',
   nodes: {
     inicio: {
-      speaker: 'xelda',
-      text: '¿Sabías que el contrato del concurso tiene catorce páginas de letra pequeña? Nadie se lo lee. Tengo una copia en la mesa.',
+      speaker: '$partner',
+      text: 'Willy. Cierra la puerta. Aquí no hay cámaras: es el único sitio del plató donde no graban.',
+      next: [{ when: { flag: 'willy:despachoVisto', is: true }, next: 'otraVez' }, { next: 'retratos' }],
+    },
+    retratos: {
+      effects: [{ type: 'setFlag', flag: 'willy:despachoVisto', value: true }],
+      text: 'Las paredes están llenas de retratos. Cuarenta ganadores, uno por temporada, todos con la misma sonrisa. Los más antiguos están tan descoloridos que solo se distingue la sonrisa.',
+      next: 'archivo',
+    },
+    archivo: {
+      speaker: '$partner',
+      text: 'Ninguno volvió a casa. Están en el archivo: «Copresentador, Canal Abismo Andrómeda». «Copresentadora, Abismo Kepler». Todos en otros planetas, todos en otros canales. Y todos se jubilaron, o se murieron, o se apagaron. Él sigue aquí. La audiencia siempre acaba volviendo a él.',
+      next: 'contrato',
+    },
+    contrato: {
+      speaker: '$partner',
+      text: 'Y esto es el contrato que firmaste en el cásting. Catorce páginas de letra pequeña. Nadie se lo lee. Nadie.',
       choices: [
-        { id: 'leer', text: 'Leer el contrato.', when: { notFlag: 'willy:contratoLeido' }, next: 'leido' },
+        { id: 'leer', text: 'Leer el contrato.', next: 'leido' },
+        { id: 'luego', text: 'Ahora no. Hay un programa que ganar.', next: 'luego' },
+      ],
+    },
+    otraVez: {
+      speaker: '$partner',
+      text: 'El contrato sigue en la mesa. Los retratos siguen sonriendo.',
+      choices: [
+        { id: 'leer2', text: 'Leer el contrato.', when: { notFlag: 'willy:contratoLeido' }, next: 'leido' },
         { id: 'recordar', text: '¿Qué decía la cláusula catorce?', when: { flag: 'willy:contratoLeido', is: true }, next: 'leido' },
-        { id: 'adios', text: 'Otro día.' },
+        { id: 'adios', text: 'Me voy, que se cae el plató.' },
       ],
     },
     leido: {
-      speaker: 'xelda',
-      text: 'Cláusula catorce: «El concursante podrá adquirir la cadena con los premios acumulados, si el público y los patrocinadores lo respaldan». Curioso, ¿eh? Yo que tú me lo guardaba. Y me hacía muy famoso.',
+      speaker: '$partner',
+      text: 'Cláusula catorce: «El concursante podrá adquirir la cadena con los premios acumulados, si el público y los patrocinadores lo respaldan». La firmó él hace once mil años, sin leerla. Haz mucho ruido ahí fuera, Willy. Muchísimo. Y hazte amigo de los patrocinadores.',
       effects: [{ type: 'setFlag', flag: 'willy:contratoLeido', value: true }],
+    },
+    luego: {
+      speaker: '$partner',
+      text: 'Como quieras. Aquí lo dejo. El reloj no espera, y él tampoco.',
     },
   },
 };

@@ -1567,7 +1567,68 @@
                 0.7
               ]
             },
-            "comentario": "Revelación: qué pasa con los ganadores de otras temporadas."
+            "comentario": "Revelación: qué pasa con los ganadores de otras temporadas. Xelda enseña el contrato (condición del final secreto). En el segundo piso de la planta (el del jefe final), en el camino crítico. Sala hecha a mano en rooms/plato.json (escena: p5-despacho-de-xelda); marcadores N (Xelda) y d (decorado, en orden de lectura).",
+            "parte": 2,
+            "pnj": {
+              "id": "xelda-despacho",
+              "nombre": "Xelda",
+              "sprite": "xelda",
+              "dialogo": "xelda-despacho"
+            },
+            "decorado": [
+              {
+                "sprite": "retrato-ganador-1",
+                "nombre": "Retrato de un ganador"
+              },
+              {
+                "sprite": "retrato-ganador-2",
+                "nombre": "Retrato de un ganador"
+              },
+              {
+                "sprite": "retrato-ganador-3",
+                "nombre": "Retrato de un ganador"
+              },
+              {
+                "sprite": "retrato-ganador-1",
+                "nombre": "Retrato de un ganador"
+              },
+              {
+                "sprite": "retrato-ganador-2",
+                "nombre": "Retrato de un ganador"
+              },
+              {
+                "sprite": "retrato-ganador-3",
+                "nombre": "Retrato de un ganador"
+              },
+              {
+                "sprite": "archivador",
+                "nombre": "Archivo de temporadas"
+              },
+              {
+                "sprite": "archivador",
+                "nombre": "Archivo de temporadas"
+              },
+              {
+                "sprite": "archivador",
+                "nombre": "Archivo de temporadas"
+              },
+              {
+                "sprite": "archivador",
+                "nombre": "Archivo de temporadas"
+              },
+              {
+                "sprite": "mesa-xelda",
+                "nombre": "Mesa de producción"
+              },
+              {
+                "sprite": "vitrina-trofeos",
+                "nombre": "Vitrina de trofeos"
+              },
+              {
+                "sprite": "vitrina-trofeos",
+                "nombre": "Vitrina de trofeos"
+              }
+            ]
           },
           {
             "id": "p5-plato-principal",
@@ -2050,7 +2111,7 @@
       },
       "8": {
         "multVida": 0.33,
-        "dano": "1d10"
+        "dano": "1d8"
       },
       "10": {
         "multVida": 0.27,

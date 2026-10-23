@@ -8,7 +8,7 @@ import { type RivalRecord, generateRival, rivalEntity, rivalKeys, rivalLine } fr
 import { buildFloor, maps, newWillyGame, rivalsOf } from '../../content/willy/setup';
 
 const key = (p: { x: number; y: number }) => `${p.x},${p.y}`;
-const MARKERS = 'ectbBlPJX';
+const MARKERS = 'ectbBlPJXNd';
 
 describe('Willy: room chunks', () => {
   for (const [id, biome] of Object.entries(BIOMES)) {
@@ -69,7 +69,8 @@ describe('Willy: procedural floors', () => {
       expect(f.rooms.filter((r) => r.role === 'jefe')).toHaveLength(1);
       expect(entities.filter((e) => e.tags.includes('jefe'))).toHaveLength(1);
       expect(new Set(entities.map((e) => e.id)).size).toBe(entities.length);
-      for (const e of entities) expect((ninja.sprites as Record<string, unknown>)[e.spriteId], e.spriteId).toBeDefined();
+      // Sprites, or props (the client draws a prop for an entity with no sprite: desks, counters).
+      for (const e of entities) expect((ninja.sprites as Record<string, unknown>)[e.spriteId] ?? (ninja.props as Record<string, unknown>)[e.spriteId], e.spriteId).toBeDefined();
       if (f.rival) rivals++;
     }
     // A rival room half of the time in the first planta (floors 1-2), 80 % below.
