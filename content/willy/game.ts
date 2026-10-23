@@ -12,6 +12,7 @@ import meta from './meta.json';
 import { PLAYER, applyCasting, maps, newWillyGame } from './setup';
 import { narrate, narrateEvents } from './narrator';
 import { announce } from './announce';
+import { TUTORIAL_STEPS } from './tutorial';
 import { willyHud } from './hud';
 import { achievements, rewardBoxes } from './meta-view';
 import { defeat, ending, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
@@ -76,6 +77,7 @@ export const game: GameDefinition = {
   triggers: [{ id: 'final-temporada', when: { all: [{ flag: 'willy:presentadorDerrotado', is: true }, { notFlag: 'willy:final' }] }, dialogue: 'final-temporada' }],
   cast: { xelda: { name: 'Xelda', spriteId: 'xelda' }, presentador: { name: cast.presentador.nombre, spriteId: 'jefe-presentador' } },
   announce,
+  tutorial: TUTORIAL_STEPS,
   hud: willyHud,
   // The service lift needs the engine to know the floors (travel builds them on arrival).
   maps,

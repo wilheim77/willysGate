@@ -134,7 +134,8 @@ let survivorRunCache: { state: GameState; events: GameEvent[] } | undefined;
 function survivorRunWithBoxes(): { state: GameState; events: GameEvent[] } {
   if (!survivorRunCache) {
     const state = startRun(1, 'jugador-de-basket');
-    const run = runFullGame(engine, state, 'willy', 20);
+    // One floor is enough to get boxes (the floor-clear one) and keeps this cheap inside `npm test`.
+    const run = runFullGame(engine, state, 'willy', 20, 1);
     const opened = openPendingBoxes(run.state);
     survivorRunCache = { state: opened.state, events: [...run.events, ...opened.events] };
   }
