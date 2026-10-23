@@ -201,7 +201,10 @@ export class TutorialToasts {
     this.shown.add(step.id);
     saveShown(this.game, this.seed, this.shown);
     this.queue.push(step);
-    this.flush();
+    // Not this very tick: the other listeners of the same event (a banner, an achievement toast)
+    // haven't had their turn yet, and a card shown before them would end up underneath.
+    window.clearTimeout(this.flushTimer);
+    this.flushTimer = window.setTimeout(() => this.flush(), 250);
   }
 
   /** A card never lands on top of a banner (collapse, achievement…) or a conversation: it waits. */
