@@ -1,4 +1,4 @@
-import { WILLY_CREATION, defaultCreation, willy } from '../../rulesets/willy';
+import { WILLY_CREATION, defaultCreation, tutorialUnlocked, willy } from '../../rulesets/willy';
 import type { AssetManifest } from '../../src/assets/manifest';
 import type { AudioManifest } from '../../src/audio/types';
 import type { GameDefinition, UiTexts } from '../../src/game/definition';
@@ -53,6 +53,11 @@ export const game: GameDefinition = {
   leaderId: 'willy',
   // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
   onDeath: 'vanish',
+  // HUD pieces hidden on the first floor until their tutorial step fires; the rules (which step, which floor) are the ruleset's.
+  tutorialLocks: {
+    hud: ['audiencia', 'grupo', 'mochila'],
+    locked: (state, hud) => !tutorialUnlocked(state, `hud.${hud === 'grupo' ? 'atributos' : hud}`),
+  },
   // The prologue (docs/willy/INTRO.md): plays after «Nueva partida», before the casting.
   cinematics: { intro: introCinematic as unknown as Cinematic },
   audio: audio as unknown as AudioManifest,

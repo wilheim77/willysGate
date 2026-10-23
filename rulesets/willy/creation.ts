@@ -12,6 +12,7 @@ const POINTS: Extract<CreationStep, { kind: 'points' }> = {
   min: 0,
   max: 3,
   budget: WILLY.puntosLibres,
+  display: 'sum', // «8 + 2 = 10»: Willy's attributes are used as they are, there's no modifier to show
   cost: { 0: 0, 1: 1, 2: 2, 3: 3 },
   recommended: (choices) => recommendedPoints(String(choices.clase ?? 'butanero')),
   bonuses: (choices) => {

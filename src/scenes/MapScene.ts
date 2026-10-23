@@ -1323,6 +1323,9 @@ export class MapScene extends Phaser.Scene {
 
   /** Tiles the active creature can reach this turn, and creatures/tiles that are valid targets. */
   setOverlays(moveTiles: Vec2[], targetIds: string[], areaTiles: Vec2[] = [], pickedIds: string[] = []): void {
+    // Before create() has run (or if the renderer failed to boot) there's nothing to draw on;
+    // throwing here would abort controller.refresh and, with it, the whole new-game flow.
+    if (!this.overlay) return;
     const g = this.overlay.clear();
     const T = this.grid.tile;
     const state = this.store.state;
