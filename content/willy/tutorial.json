@@ -1,5 +1,5 @@
 {
-  "$comment": "Tutorial integrado de la Planta 1. Borrador pendiente de aprobación; diseño en docs/willy/DESIGN.md → «Tutorial integrado». Cada paso se muestra una sola vez por partida (flag tutorial:<id>). 'disparador' usa los patrones de evento de los logros; 'completar' indica qué evento lo da por hecho. 'hud' revela elementos de la interfaz que estaban ocultos. 'bloqueos' lista sistemas que no pueden aparecer hasta que el paso se completa. Ningún sistema aparece sin explicarse antes.",
+  "$comment": "[Cableado en content/willy/tutorial.ts: los textos y los bloqueos hud.* salen de aquí; los disparadores reales (y qué pasos se descartan) están allí, porque `disparador`/`zona`/`completar` describen una Planta 1 hecha a mano que ya no existe.] Tutorial integrado de la Planta 1. Borrador pendiente de aprobación; diseño en docs/willy/DESIGN.md → «Tutorial integrado». Cada paso se muestra una sola vez por partida (flag tutorial:<id>). 'disparador' usa los patrones de evento de los logros; 'completar' indica qué evento lo da por hecho. 'hud' revela elementos de la interfaz que estaban ocultos. 'bloqueos' lista sistemas que no pueden aparecer hasta que el paso se completa. Ningún sistema aparece sin explicarse antes.",
   "version": 1,
   "bloqueosIniciales": {
     "$comment": "Lo que está apagado al empezar la Planta 1 y qué paso lo enciende.",
@@ -18,8 +18,8 @@
       "id": "t01-moverse", "zona": "p1-calle-de-willy",
       "disparador": { "evento": "floorEntered", "donde": { "planta": 1 } },
       "texto": [
-        "Bienvenido a la Planta 1. Es tu calle. Bueno, una copia. Con agua. Y sin tu casa.",
-        "Toca una casilla para que Willy vaya andando. Sí, así de fácil. No te acostumbres."
+        "Esto es el Camerino: tu zona segura entre planta y planta. Aquí no corre el reloj ni te ataca nadie.",
+        "Toca una casilla para que Willy vaya andando. Sí, así de fácil. No te acostumbres. Cuando estés listo, entra en el ascensor: baja a la mazmorra."
       ],
       "resaltar": "mapa",
       "completar": { "evento": "entityMoved", "donde": { "entityId": "willy" } }
@@ -57,7 +57,7 @@
       "disparador": { "evento": "characterCreated" },
       "hud": ["hud.atributos"],
       "texto": [
-        "Esos números son tus atributos. Cuanto más altos, mejor. Así de sencillo es todo aquí.",
+        "Ese es tu grupo: tócalo y verás tus atributos. Cuanto más altos, mejor. Así de sencillo es todo aquí.",
         "Casi todo se decide tirando un dado de veinte caras y sumando el atributo que toque. Antes de cada cosa arriesgada verás qué probabilidad tienes, en porcentaje. Sin letra pequeña. Bueno, con poca."
       ],
       "resaltar": "hud.atributos",
@@ -67,7 +67,7 @@
       "id": "t06-combate", "zona": "p1-tutorial-combate",
       "disparador": { "evento": "combatStarted" },
       "texto": [
-        "¡Ratas! Esto es un combate, y va por turnos: arriba ves el orden. Nadie se mueve hasta que le toca. Ni siquiera tú.",
+        "¡Combate! Va por turnos: arriba ves el orden. Nadie se mueve hasta que le toca. Ni siquiera tú.",
         "En tu turno tienes un movimiento y dos acciones. Atacar gasta una. Pensar no gasta nada: tómate tu tiempo, la tele puede esperar."
       ],
       "resaltar": "hud.turnos",
@@ -77,7 +77,7 @@
       "id": "t07-atacar", "zona": "p1-tutorial-combate",
       "disparador": { "evento": "turnStarted", "donde": { "entityId": "willy" } },
       "condicion": { "dato": "willy.enemigosAlAlcance", "min": 1 },
-      "texto": ["Toca a una rata. Verás tu probabilidad de acertar y cuánto daño puedes hacer. Si te convence, vuelve a tocar para atacar."],
+      "texto": ["Toca a un enemigo. Verás tu probabilidad de acertar y cuánto daño puedes hacer. Si te convence, vuelve a tocar para atacar."],
       "resaltar": "enemigoMasCercano",
       "completar": { "evento": "attackResolved", "donde": { "actor.id": "willy" } }
     },
@@ -86,8 +86,8 @@
       "disparador": { "evento": "turnStarted", "donde": { "entityId": "willy" } },
       "condicion": { "dato": "willy.enemigoJuntoABorde", "igual": true },
       "texto": [
-        "Mira esa rata: está al borde del muelle. En este concurso, el suelo es un arma. Y el no suelo, más.",
-        "Selecciona «Empujar» y toca a la rata. Al público le encanta ver caer cosas. A mí también, no te voy a engañar."
+        "Un truco: en este concurso, el suelo es un arma. Y el no suelo, más. Un enemigo junto a un borde, un agujero o el agua es un enemigo a medio caer.",
+        "Selecciona «Empujar» y toca al enemigo. Al público le encanta ver caer cosas. A mí también, no te voy a engañar."
       ],
       "resaltar": "accion.empujar",
       "completar": { "evento": "entityPushed", "donde": { "actor.id": "willy" } }
@@ -137,8 +137,8 @@
         { "dato": "sala.enemigosSobre", "igual": "aceite" }
       ] },
       "texto": [
-        "¿Ves esa mancha brillante bajo los bocartes? Aceite. Resbala y, sobre todo, arde.",
-        "Tienes un mechero. Úsalo en el charco. Las superficies se combinan: fuego y aceite, agua y rayo, agua y frío. Toca cualquier superficie para ver qué hace."
+        "¿Ves esa mancha de color en el suelo? Es una superficie: aceite, agua, hielo… Cada una hace lo suyo y algunas arden.",
+        "Las superficies se combinan: fuego y aceite, agua y rayo, agua y frío. Toca cualquier superficie para ver qué hace."
       ],
       "resaltar": "superficie.aceite",
       "completar": { "evento": "surfaceReacted" }
@@ -148,8 +148,8 @@
       "disparador": { "evento": "sponsorMessage", "donde": { "patrocinador": "butanos-perez" } },
       "guion": "Tras t13, Butanos Hermanos Pérez manda su primer mensaje y un regalo pase lo que pase.",
       "texto": [
-        "Un patrocinador. Los Hermanos Pérez, nada menos: gas, fuego y explosiones. Te han visto y les has gustado.",
-        "Cada patrocinador tiene sus gustos. Si les das lo que quieren, mandan regalos. Si haces lo que odian, te avisan y, si insistes, se van. Toca su retrato para ver qué les gusta."
+        "Un patrocinador. Te han visto y les has gustado. Cada uno tiene sus gustos: unos quieren gas y explosiones, otros orden y papeleo.",
+        "Si les das lo que quieren, mandan regalos. Si haces lo que odian, te avisan y, si insistes, se van. Toca su retrato para ver qué les gusta."
       ],
       "resaltar": "hud.patrocinadores",
       "completar": { "evento": "dialogAdvanced" }
@@ -224,8 +224,8 @@
     {
       "id": "t24-jefe", "disparador": { "evento": "roomEntered", "donde": { "rol": "jefe" } },
       "texto": [
-        "La lonja. Aquí vive el jefe de la planta. Durante el combate contra el jefe, el reloj se para: es el plato fuerte y la cadena no quiere prisas.",
-        "Cada jefe tiene un punto débil relacionado con la planta. Este, con la marea. Mira el agua."
+        "Esto huele a jefe. Cada tramo de la mazmorra guarda uno. Durante el combate contra el jefe, el reloj se para: es el plato fuerte y la cadena no quiere prisas.",
+        "Cada jefe tiene un punto débil relacionado con su planta. Mira el escenario: casi siempre es la clave."
       ],
       "completar": { "evento": "dialogAdvanced" }
     },
@@ -240,7 +240,7 @@
     },
     {
       "id": "t26-glosario", "disparador": { "evento": "tutorialDone", "donde": { "id": "t25-camerino" } },
-      "texto": ["Un último consejo y me callo (es mentira): en el menú de pausa tienes «Cómo se juega» y un glosario con todo. Y si los consejos te molestan, se pueden apagar en Opciones. Yo no. Yo sigo."],
+      "texto": ["Un último consejo y me callo (es mentira): en el menú de pausa tienes «Cómo se juega» y un glosario con todo. Y si los consejos te molestan, se apagan con la casilla «Consejos» de la barra de arriba. Yo no. Yo sigo."],
       "resaltar": "boton.pausa",
       "completar": { "evento": "dialogAdvanced" }
     },

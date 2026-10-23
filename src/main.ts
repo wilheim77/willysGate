@@ -221,6 +221,7 @@ controller.onTrapReached = (trap, candidates) => {
   };
   const bagButton = document.createElement('button');
   bagButton.textContent = '🎒';
+  bagButton.dataset.hud = 'mochila'; // hidden until its tutorial step (GameDefinition.tutorialLocks)
   bagButton.title = game.texts.combat?.inventory ?? 'Mochila del grupo';
   bagButton.setAttribute('aria-label', bagButton.title);
   bagButton.addEventListener('click', openBag);

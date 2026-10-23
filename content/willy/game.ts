@@ -17,6 +17,7 @@ import { achievements, rewardBoxes } from './meta-view';
 import { defeat, ending, newGameSetup, onRestoredCopy, savePolicy } from './run-modes';
 import cast from './data/cast.json';
 import texts from './texts/ui.json';
+import { tutorial, tutorialLocks } from './tutorial';
 
 /**
  * «Willy el mazmorrero», first playable: the casting (class + free points), then the Camerino
@@ -52,6 +53,9 @@ export const game: GameDefinition = {
   leaderId: 'willy',
   // TV-gameshow tone: defeated enemies flash "¡ELIMINADO!" and vanish instead of a corpse.
   onDeath: 'vanish',
+  // The integrated tutorial: tips by event, and the HUD pieces each one introduces (content/willy/tutorial.ts).
+  tutorial,
+  tutorialLocks,
   // The prologue (docs/willy/INTRO.md): plays after «Nueva partida», before the casting.
   cinematics: { intro: introCinematic as unknown as Cinematic },
   audio: audio as unknown as AudioManifest,

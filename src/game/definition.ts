@@ -3,7 +3,7 @@ import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
 import type { BarksData } from '../ui/barks';
 import type { Cinematic } from '../ui/cinematicPlayer';
-import type { TutorialStep } from '../ui/tutorialToasts';
+import type { TutorialStep } from './tutorialStep';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
 export interface UiTexts {
@@ -218,6 +218,12 @@ export interface GameDefinition {
   cinematics?: { intro?: Cinematic };
   /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
   tutorial?: TutorialStep[];
+  /**
+   * HUD pieces hidden until their tutorial step has been shown: HUD id -> step id. The ids are
+   * set on <body data-locks="…"> and src/style.css hides what they name (hud-audiencia,
+   * hud-reloj, hud-mochila, hud-grupo). Releasing all of them: switch "Consejos" off.
+   */
+  tutorialLocks?: Record<string, string>;
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */
   barks?: BarksData;
   /** Achievements: a toast when one unlocks and a list from the top bar (Willy). */
