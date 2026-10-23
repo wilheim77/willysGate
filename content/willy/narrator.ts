@@ -24,10 +24,13 @@ import { viewers } from './format';
  * filled is skipped.
  */
 interface Line { id: string; texto: string; si?: Record<string, unknown>; prioridadExtra?: number }
-interface Bank { id: string; evento: string; donde?: Record<string, unknown>; probabilidad?: number; prioridad?: number; memoria?: number; lineas: Line[] }
+interface Bank { id: string; evento: string; donde?: Record<string, unknown>; probabilidad?: number; prioridad?: number; memoria?: number; enfriamientoTurnos?: number; lineas: Line[] }
 
 const BANKS: Bank[] = [combate, logros, miscelanea, plantas].flatMap((f) => (f as unknown as { bancos: Bank[] }).bancos);
 const recent = new Map<string, string[]>();
+/** Willy's turns so far, and the turn each bank last spoke (bank `enfriamientoTurnos`). */
+let turns = 0;
+const spokeAt = new Map<string, number>();
 
 /** Grammatical gender of things the Narrador names: enemies from floors.json; the rest guessed. */
 const GENDER: Record<string, 'm' | 'f'> = {};
@@ -159,9 +162,17 @@ function pick(event: GameEvent, state: GameState): { text: string; priority: num
     const banks = BANKS.filter((b) => b.evento === view.evento && matches(view, b.donde)).sort((a, b) => (b.prioridad ?? 0) - (a.prioridad ?? 0));
     const ctx = context(view, state);
     for (const bank of banks) {
+      const last = spokeAt.get(bank.id);
+      if (bank.enfriamientoTurnos && last !== undefined && turns - last < bank.enfriamientoTurnos) continue;
       if (Math.random() > (bank.probabilidad ?? 1)) continue;
-      const seen = recent.get(bank.id) ?? [];
-      const eligible = bank.lineas.filter((l) => matches(view, l.si) && !seen.includes(l.id));
+      let seen = recent.get(bank.id) ?? [];
+      const fitting = bank.lineas.filter((l) => matches(view, l.si));
+      // All the fitting lines used: forget them, except the very last one (no immediate repeat).
+      if (fitting.length && fitting.every((l) => seen.includes(l.id))) {
+        seen = seen.slice(-1);
+        recent.set(bank.id, seen);
+      }
+      const eligible = fitting.filter((l) => !seen.includes(l.id));
       if (!eligible.length) continue;
       // The most specific line wins (more `si` conditions), then prioridadExtra.
       const score = (l: Line) => (l.prioridadExtra ?? 0) * 100 + Object.keys(l.si ?? {}).length;
@@ -177,6 +188,7 @@ function pick(event: GameEvent, state: GameState): { text: string; priority: num
         if (own) text = `${text} ${own}`;
       }
       if (bank.memoria) recent.set(bank.id, [...seen, line.id].slice(-bank.memoria));
+      spokeAt.set(bank.id, turns);
       return { text, priority: bank.prioridad ?? 0 };
     }
   }
@@ -202,11 +214,12 @@ export function narrate(event: GameEvent, state: GameState): string | null {
 }
 
 /** One line for a whole command: the highest-priority bank wins (an achievement beats a hit). */
-export function narrateEvents(events: GameEvent[], state: GameState): string | null {
+export function narrateEvents(events: GameEvent[], state: GameState): { text: string; priority: number } | null {
+  turns += events.filter((e) => e.type === 'turnStarted' && (e as unknown as { entityId?: string }).entityId === 'willy').length;
   let best: { text: string; priority: number } | null = null;
   for (const e of events) {
     const p = pick(e, state);
     if (p && (!best || p.priority > best.priority)) best = p;
   }
-  return best?.text ?? null;
+  return best;
 }

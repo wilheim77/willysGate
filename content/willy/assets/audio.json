@@ -46,7 +46,18 @@
     "sea": { "src": "assets/audio/sfx/sea.ogg", "volume": 0.5 },
     "critHit": { "src": "assets/audio/sfx/crit_hit.ogg" },
     "deathToll": { "src": "assets/audio/sfx/death_toll.ogg" },
-    "mapWhoosh": { "src": "assets/audio/sfx/map_whoosh.ogg", "volume": 0.8 }
+    "mapWhoosh": { "src": "assets/audio/sfx/map_whoosh.ogg", "volume": 0.8 },
+    "clockWarning": { "src": "assets/audio/sfx/clock_warning.ogg" },
+    "clockUrgent": { "src": "assets/audio/sfx/clock_urgent.ogg" },
+    "roomCrack": { "src": "assets/audio/sfx/room_crack.ogg" },
+    "roomCollapse": { "src": "assets/audio/sfx/room_collapse.ogg" },
+    "boxOpen": { "src": "assets/audio/sfx/box_open.ogg" },
+    "boxOpenRare": { "src": "assets/audio/sfx/box_open_rare.ogg" },
+    "achievement": { "src": "assets/audio/sfx/achievement.ogg" },
+    "eliminated": { "src": "assets/audio/sfx/eliminated.ogg" },
+    "bossPhase": { "src": "assets/audio/sfx/boss_phase.ogg" },
+    "trapdoor": { "src": "assets/audio/sfx/trapdoor.ogg" },
+    "rivalSting": { "src": "assets/audio/sfx/rival.ogg" }
   },
   "events": {
     "combatStarted": { "sfx": "tvJingle", "music": "combat" },
@@ -69,7 +80,7 @@
       },
       { "field": "targetId", "map": { "willy": "crowdBoo" } }
     ],
-    "conditionApplied": { "field": "condition", "map": { "eliminado": "deathToll" } },
+    "conditionApplied": { "field": "condition", "map": { "eliminado": "eliminated" } },
     "exploded": { "sfx": ["explosion", "barrelBreak"] },
     "surfaceChanged": { "arrayField": "changes", "itemField": "to", "map": { "fuego": "surfaceIgnite", "hielo": "surfaceFreeze", "vapor": "surfaceSteam" } },
     "statChanged": { "field": "stat", "map": { "nivel": "levelUp" } },
@@ -80,7 +91,14 @@
     "trapDisarmed": { "sfx": ["diceRoll", "trapClick"] },
     "trapDisarmFailed": { "sfx": ["diceRoll", "trapSpring"] },
     "dialogueCheck": [{ "sfx": "diceRoll" }, { "field": "result.success", "map": { "true": "gameshowDing", "false": "gameshowBuzzer" } }],
-    "dialogueChoice": { "sfx": "uiClick" }
+    "dialogueChoice": { "sfx": "uiClick" },
+    "clockWarning": { "field": "pct", "map": { "50": "clockWarning", "25": "clockWarning", "10": "clockUrgent" }, "fallback": "clockWarning" },
+    "roomCollapsing": { "field": "fase", "map": { "grieta": "roomCrack", "caida": "roomCollapse" } },
+    "boxOpened": { "field": "rarezaMax", "map": { "bronce": "boxOpen", "plata": "boxOpen", "oro": "boxOpenRare", "legendaria": "boxOpenRare" }, "fallback": "boxOpen" },
+    "achievementUnlocked": { "sfx": "achievement" },
+    "bossPhase": { "sfx": "bossPhase" },
+    "trapdoorOpened": { "sfx": "trapdoor" },
+    "rivalEncountered": { "sfx": "rivalSting" }
   },
   "outcomeMusic": { "field": "winner", "map": { "concursantes": "victory" }, "fallback": "defeat" },
   "combatMusicByEntity": {
@@ -100,12 +118,22 @@
     "camerino-3": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
     "camerino-4": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
     "camerino-5": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
-    "planta-1": { "ambience": { "src": "assets/audio/ambience/planta-1.ogg", "volume": 0.7 } },
+    "camerino-6": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
+    "camerino-7": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
+    "camerino-8": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
+    "camerino-9": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
+    "camerino-10": { "ambience": { "src": "assets/audio/ambience/camerino.ogg", "volume": 0.6 } },
     "prueba-castro": { "ambience": { "src": "assets/audio/ambience/planta-1.ogg", "volume": 0.7 } },
-    "planta-2": { "ambience": { "src": "assets/audio/ambience/planta-2.ogg", "volume": 0.6 } },
-    "planta-3": { "ambience": { "src": "assets/audio/ambience/planta-3.ogg", "volume": 0.6 } },
-    "planta-4": { "ambience": { "src": "assets/audio/ambience/planta-4.ogg", "volume": 0.6 } },
-    "planta-5": { "ambience": { "src": "assets/audio/ambience/planta-5.ogg", "volume": 0.7 } }
+    "planta-1": { "ambience": { "src": "assets/audio/ambience/planta-1.ogg", "volume": 0.7 } },
+    "planta-2": { "ambience": { "src": "assets/audio/ambience/planta-1.ogg", "volume": 0.7 } },
+    "planta-3": { "ambience": { "src": "assets/audio/ambience/planta-2.ogg", "volume": 0.6 } },
+    "planta-4": { "ambience": { "src": "assets/audio/ambience/planta-2.ogg", "volume": 0.6 } },
+    "planta-5": { "ambience": { "src": "assets/audio/ambience/planta-3.ogg", "volume": 0.6 } },
+    "planta-6": { "ambience": { "src": "assets/audio/ambience/planta-3.ogg", "volume": 0.6 } },
+    "planta-7": { "ambience": { "src": "assets/audio/ambience/planta-4.ogg", "volume": 0.6 } },
+    "planta-8": { "ambience": { "src": "assets/audio/ambience/planta-4.ogg", "volume": 0.6 } },
+    "planta-9": { "ambience": { "src": "assets/audio/ambience/planta-5.ogg", "volume": 0.7 } },
+    "planta-10": { "ambience": { "src": "assets/audio/ambience/planta-5.ogg", "volume": 0.7 } }
   },
-  "_note": "Map ids per a8057565f4a8e7219 (Willy agent): camerino is the start, camerino-1..5 are the post-floor Camerino (same ambience). planta-1 Castro Sumergido .. planta-5 Plató, plus the hand-made test map prueba-castro (given planta-1's ambience). Boss fights (jefe-* in combatStarted.order, per the same agent) get their own theme via `combatMusicByEntity` rather than a per-map override, since the boss room is a sub-area with no roomId event — this works because the boss's entity id itself is in the fight's roster. jefe-centollo/-encargada/-giganton/-socorrista share a generic boss track; jefe-presentador (the finale) gets its own. Rival fights (rival-pN-M, rival-vanesa...) don't get a sting yet. `conditionApplied`/condition `eliminado` is willy's one-hit elimination (no downed/bleed-out state like dnd5e); `natural` on attackRolled is the raw d20 (1 = pifia/fumble)."
+  "_note": "Map ids: camerino is the start, camerino-1..10 the post-floor Camerino (same ambience), planta-1..10 the ten floors, two per biome (planta-1/2 Castro Sumergido, 3/4 Hipermercado, 5/6 Verbena, 7/8 Balneario, 9/10 Plato), each pair sharing its biome's ambience; prueba-castro is the hand-made test map (planta-1's ambience). Boss fights (jefe-* in combatStarted.order) get their own theme via `combatMusicByEntity`: jefe-centollo/-encargada/-giganton/-socorrista share a generic boss track, jefe-presentador (the finale) its own. Stings (scripts/audio/build-willy-stings.mjs builds them by layering existing CC0 sfx): clockWarning (pct 50/25 = two dings, 10 = urgent triple + buzzer), roomCollapsing (fase grieta = crack, caida = collapse), boxOpened (rarezaMax bronce/plata = chest + ding, oro/legendaria = arpeggio + applause), achievementUnlocked, bossPhase, trapdoorOpened, rivalEncountered. `conditionApplied`/condition `eliminado` is willy's one-hit elimination (the ELIMINADO vanish) and plays the `eliminated` sting; `natural` on attackRolled is the raw d20 (1 = pifia/fumble)."
 }

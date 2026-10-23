@@ -69,14 +69,14 @@ describe('Camerino NPCs: structure', () => {
     });
   }
 
-  it('the four regulars carry their conversation in every Camerino (Xelda shows the contract late)', () => {
+  it('the four regulars carry their conversation in every Camerino', () => {
     for (let n = 0; n <= 9; n++) {
       const es = maps[n === 0 ? 'camerino' : `camerino-${n}`]!().entities;
       const tag = (id: string) => es.find((e) => e.id === id)!.tags.find((t) => t.startsWith('dialogue:'));
       expect(tag('maripuri')).toBe('dialogue:maripuri');
       expect(tag('paco')).toBe('dialogue:paco');
       expect(tag('koldo')).toBe('dialogue:koldo');
-      expect(tag('xelda')).toBe(n >= 8 ? 'dialogue:xelda-contrato' : 'dialogue:xelda');
+      expect(tag('xelda')).toBe('dialogue:xelda');
     }
   });
 
@@ -142,15 +142,6 @@ describe('Camerino NPCs: play', () => {
     const s = talk(inCamerino(3, 'xelda'), 'xelda');
     const r = choose(s, /Firmar el parte/);
     expect(r.events.some((e) => e.type === 'rested')).toBe(true);
-  });
-
-  it('Xelda only talks about the contract in the last Camerinos, and reading it sets the flag', () => {
-    const early = talk(inCamerino(3, 'xelda'), 'xelda');
-    expect(dialogueChoices(willy, early, DIALOGUES.xelda!).some((c) => /contrato/i.test(c.text))).toBe(false);
-    let late = talk(inCamerino(8, 'xelda'), 'xelda');
-    late = choose(late, 'El contrato del concurso.').state;
-    late = choose(late, 'Leer el contrato.').state;
-    expect(late.flags['willy:contratoLeido']).toBe(true);
   });
 
   it('Koldo\'s errand: accepting sets the flag the hidden achievement watches', () => {

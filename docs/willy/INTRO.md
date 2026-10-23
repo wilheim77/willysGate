@@ -1,6 +1,6 @@
 # Willy el mazmorrero: guion del prólogo
 
-> Estado: **borrador pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
+> Estado: **aprobado** por el usuario (2026-10-23). La viñeta de las reglas debe decir diez plantas, no cinco.
 > Lo ilustra la sesión de arte en `content/willy/cinematics/` y `content/willy/public/assets/cinematics/`. Este documento es la fuente del texto; si cambia aquí, se cambia allí.
 
 ## Requisitos
@@ -38,7 +38,7 @@
 | 9 | Negro absoluto. | Se acabó el mundo. Lo siento mucho. Era un mundo majo, con sus cosas. | 5 s | Fundido a negro; silencio |
 | 10 | Willy tirado en un suelo de piedra, en una mazmorra oscura. Un foco cenital lo ilumina. Delante flota una cámara-dron con un piloto rojo. | Buenas noticias: no estás muerto. Malas noticias: estás en la tele. | 6 s | El foco se enciende de golpe |
 | 11 | Plano amplio: la mazmorra es un plató. Gradas en sombra llenas de siluetas con antenas, tentáculos y palomitas. Cartel de neón: ¡MAZMORREROS! | Bienvenido a *¡Mazmorreros!*, el concurso número uno en catorce galaxias. Tú eres el concursante. Ellos, el público. Yo soy el Narrador, y me pagan bastante más que a ti. | 9 s | Paneo por las gradas; flashes de cámara |
-| 12 | Un esquema dibujado como un rótulo de tele: cinco plantas apiladas como una tarta, cada una con un reloj de cuenta atrás. | Las reglas son tres. Una: baja. Hay cinco plantas, y cada una tiene un reloj. Cuando llega a cero, la planta se derrumba. Contigo dentro, si eres lento. | 9 s | Los relojes corren; la planta de arriba se desmorona |
+| 12 | Un esquema dibujado como un rótulo de tele: cinco plantas apiladas como una tarta, cada una con un reloj de cuenta atrás. | Las reglas son tres. Una: baja. Hay diez plantas, y cada una tiene un reloj. Cuando llega a cero, la planta se derrumba. Contigo dentro, si eres lento. | 9 s | Los relojes corren; la planta de arriba se desmorona |
 | 13 | Un contador de espectadores que sube como loco mientras una gaviota explota en confeti. Al lado, una caja dorada con lazo baja en paracaídas. | Dos: da espectáculo. Si el público se aburre, cambia de canal. Si se divierte, los patrocinadores te mandan cajas con regalos. Te van a encantar. A todo el mundo le encantan. | 9 s | Números que suben; confeti; la caja se balancea |
 | 14 | Primer plano de Willy, despeinado, con cara de no estar entendiendo nada. | Tres: sobrevive. Esta es la importante. Las otras dos son para nosotros. | 6 s | Estático; parpadeo de Willy |
 | 15 | Willy se pone de pie, se sacude el mono y se carga la bombona al hombro. La cámara-dron se le acerca demasiado. Willy la aparta con la mano. | ¿Preguntas? No. No hay turno de preguntas. Nunca lo hay. | 6 s | La cámara se acerca; manotazo |

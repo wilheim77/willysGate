@@ -107,8 +107,8 @@ export const paco: DialogueTree = {
 
 // --- Xelda: Producción -----------------------------------------------------------------------------
 
-/** Her menu. `contrato` adds the small print, which she only shows from the last planta on. */
-function xeldaNodes(contrato: boolean): Record<string, DialogueNode> {
+/** Her desk menu (the contract and the winners' portraits are the despacho scene on the last floor: final.ts). */
+function xeldaNodes(): Record<string, DialogueNode> {
   const nodes: Record<string, DialogueNode> = {
     hola: {
       speaker: 'xelda',
@@ -117,7 +117,6 @@ function xeldaNodes(contrato: boolean): Record<string, DialogueNode> {
         { id: 'parte', text: 'Firmar el parte de planta (guardar).', effects: [{ type: 'rest', kind: 'parte' }], next: 'parte' },
         { id: 'reglamento', text: 'Explícame el reglamento.', next: 'reglamento' },
         { id: 'cajas', text: '¿Qué probabilidades tienen las cajas?', next: 'cajas' },
-        ...(contrato ? [{ id: 'contrato', text: 'El contrato del concurso.', next: 'contrato' } as DialogueChoice] : []),
         { id: 'estado', text: '¿Cómo estás, Xelda?', next: 'estadoRuta' },
         bye('Gracias, Xelda.'),
       ],
@@ -150,24 +149,10 @@ function xeldaNodes(contrato: boolean): Record<string, DialogueNode> {
     estado1: say('xelda', 'Hay cosas en los despachos de Producción que no me cuadran, Willy. Listas de ganadores. Fechas. Prefiero no decir más hasta tenerlo claro. Pero si algún día te pido que me escuches, escúchame.', 'hola'),
     estado2: say('xelda', 'Cuanto más cerca estás del final, más papeles me llegan y menos me gustan. Tú sigue. Y cuando acabes, no firmes nada sin leerlo. Ni aunque sea de él. Sobre todo si es de él.', 'hola'),
   };
-  if (contrato) {
-    nodes.contrato = {
-      speaker: 'xelda',
-      text: '¿Sabías que el contrato del concurso tiene catorce páginas de letra pequeña? Nadie se lo lee. Tengo una copia en la mesa.',
-      choices: [
-        { id: 'leer', text: 'Leer el contrato.', when: { notFlag: 'willy:contratoLeido' }, next: 'leido' },
-        { id: 'recordar', text: '¿Qué decía la cláusula catorce?', when: { flag: 'willy:contratoLeido', is: true }, next: 'leido' },
-        { id: 'atras', text: 'Otro día.', next: 'hola' },
-      ],
-    };
-    nodes.leido = say('xelda', 'Cláusula catorce: «El concursante podrá adquirir la cadena con los premios acumulados, si el público y los patrocinadores lo respaldan». Curioso, ¿eh? Yo que tú me lo guardaba. Y me hacía muy famoso.', 'hola', { effects: [{ type: 'setFlag', flag: 'willy:contratoLeido', value: true }] });
-  }
   return nodes;
 }
 
-export const xelda: DialogueTree = { id: 'xelda', start: 'hola', nodes: xeldaNodes(false) };
-/** The same Xelda in the last planta's Camerinos, with the contract on the table (the secret ending needs it). */
-export const xeldaContrato: DialogueTree = { id: 'xelda-contrato', start: 'hola', nodes: xeldaNodes(true) };
+export const xelda: DialogueTree = { id: 'xelda', start: 'hola', nodes: xeldaNodes() };
 
 // --- Koldo: historias y encargos ---------------------------------------------------------------------
 
@@ -238,4 +223,4 @@ ENCARGOS.forEach((t, i) => {
 
 export const koldo: DialogueTree = { id: 'koldo', start: 'hola', nodes: koldoNodes };
 
-export const CAMERINO_DIALOGUES: DialogueTree[] = [maripuri, paco, xelda, xeldaContrato, koldo];
+export const CAMERINO_DIALOGUES: DialogueTree[] = [maripuri, paco, xelda, koldo];
