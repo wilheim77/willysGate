@@ -97,8 +97,8 @@ describe('the season ending', () => {
       const nine = buildFloor(9, s);
       expect(nine.entities.some((e) => e.id === 'xelda-despacho')).toBe(false);
     }
-    // The Camerinos' Xelda no longer has the contract (the office replaced that).
-    expect(maps['camerino-9']!().entities.find((e) => e.id === 'xelda')!.tags.some((t) => t.startsWith('dialogue:'))).toBe(false);
+    // The Camerinos' Xelda has her desk menu, not the contract (the office replaced that).
+    expect(maps['camerino-9']!().entities.find((e) => e.id === 'xelda')!.tags.filter((t) => t.startsWith('dialogue:'))).toEqual(['dialogue:xelda']);
   });
 
   it('talking to Xelda in her office: the reveal, then reading the contract sets the flag; the ending remembers the visit', () => {

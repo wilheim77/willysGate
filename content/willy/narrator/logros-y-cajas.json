@@ -321,7 +321,7 @@
         },
         {
           "id": "cr-08",
-          "texto": "{objeto:el:Mayus}. Legendari{objeto:o}. Única en su especie. Bueno, únic{objeto:o}. Lo que sea, es tuy{objeto:o}.",
+          "texto": "{objeto:el:Mayus}. Legendari{objeto:o}. No hay otr{objeto:o} igual en toda la mazmorra. Es tuy{objeto:o}, qué quieres que te diga.",
           "si": {
             "rarezaMax": "legendaria"
           }

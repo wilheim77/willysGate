@@ -1055,7 +1055,7 @@
                 "acciones": 1,
                 "energia": 1
               },
-              "texto": "«Latencia cero»: Willy y sus autómatas tienen +1 de movimiento y +1 a acertar durante 2 turnos.",
+              "texto": "«Latencia cero»: Willy y sus autómatas quedan Animados 2 turnos (+1 al daño).",
               "efectos": [
                 {
                   "type": "applyCondition",

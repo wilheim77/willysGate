@@ -3,6 +3,7 @@ import { show } from '../../rulesets/willy';
 import cast from './data/cast.json';
 import floors from './data/floors.json';
 import itemsData from './data/items.json';
+import classes from '../../rulesets/willy/data/classes.json';
 import combate from './narrator/combate.json';
 import logros from './narrator/logros-y-cajas.json';
 import miscelanea from './narrator/miscelanea.json';
@@ -36,9 +37,16 @@ const GENDER: Record<string, 'm' | 'f'> = {};
 for (const p of floors.plantas as unknown as { enemigos?: Record<string, { genero?: string }> }[]) {
   for (const [id, e] of Object.entries(p.enemigos ?? {})) if (e.genero === 'f' || e.genero === 'm') GENDER[id] = e.genero;
 }
-const ITEMS: Record<string, { nombre: string; genero?: string }> = Object.fromEntries(itemsData.items.map((i) => [i.id, i as { nombre: string; genero?: string }]));
+/** Ability ids → their names, for «{habilidad}» (class abilities and the basic ones). */
+const ABILITY_NAMES: Record<string, string> = Object.fromEntries([
+  ...(classes.habilidadesBasicas as { id: string; nombre: string }[]).map((h) => [h.id, h.nombre]),
+  ...(classes.clases as { habilidades: { id: string; nombre: string }[] }[]).flatMap((c) => c.habilidades.map((h) => [h.id, h.nombre])),
+]);
 
-interface Named { name: string; gender: 'm' | 'f' }
+const ITEMS: Record<string, { nombre: string; genero?: string; plural?: boolean; articuloMasculino?: boolean }> = Object.fromEntries(itemsData.items.map((i) => [i.id, i as { nombre: string; genero?: string; plural?: boolean; articuloMasculino?: boolean }]));
+
+/** Something the Narrador names, with the grammar its articles and endings need. `strongA`: a feminine noun taking el/un (el agua). */
+interface Named { name: string; gender: 'm' | 'f'; plural?: boolean; strongA?: boolean }
 
 function guessGender(name: string): 'm' | 'f' {
   const first = name.trim().split(/\s+/)[0]!.toLowerCase();
@@ -56,7 +64,7 @@ function itemNamed(id: unknown): Named | undefined {
   if (typeof id !== 'string') return undefined;
   const it = ITEMS[id];
   const name = it?.nombre ?? id;
-  return { name, gender: it?.genero === 'f' || it?.genero === 'm' ? it.genero : guessGender(name) };
+  return { name, gender: it?.genero === 'f' || it?.genero === 'm' ? it.genero : guessGender(name), ...(it?.plural ? { plural: true } : {}), ...(it?.articuloMasculino ? { strongA: true } : {}) };
 }
 
 /** Everything a line may name for this event. */
@@ -70,6 +78,14 @@ function context(view: Record<string, unknown>, state: GameState): Record<string
   const obj = itemNamed(view.item ?? view.objeto) ?? entityNamed(idOf(view.objeto) ? state.entities[idOf(view.objeto)!] : undefined);
   if (obj) ctx.objeto = obj;
   if (typeof view.amount === 'number') ctx.dano = view.amount;
+  // Reward boxes: «una caja de {caja}» on an unlock, «{cantidad} objetos» on an opening.
+  const reward = view.recompensa as { caja?: unknown } | undefined;
+  if (typeof reward?.caja === 'string') ctx.caja = reward.caja;
+  if (Array.isArray(view.objetos)) ctx.cantidad = view.objetos.length;
+  if (typeof view.clase === 'string') {
+    const nombre = (classes.clases as { id: string; nombre: string }[]).find((c) => c.id === view.clase)?.nombre;
+    if (nombre) ctx.clase = { name: nombre, gender: 'm' };
+  }
   if (typeof view.espectadores === 'number') ctx.espectadores = viewers(Number(view.espectadores));
   if (typeof view.patrocinador === 'string') ctx.patrocinador = view.patrocinador;
   if (typeof view.logro === 'string') ctx.logro = view.logro;
@@ -89,6 +105,12 @@ const ARTICLES = {
   del: { m: 'del', f: 'de la' },
   al: { m: 'al', f: 'a la' },
 };
+const ARTICLES_PLURAL = {
+  el: { m: 'los', f: 'las' },
+  un: { m: 'unos', f: 'unas' },
+  del: { m: 'de los', f: 'de las' },
+  al: { m: 'a los', f: 'a las' },
+};
 
 function fill(text: string, ctx: Record<string, Named | string | number>): string | null {
   let missing = false;
@@ -103,8 +125,11 @@ function fill(text: string, ctx: Record<string, Named | string | number>): strin
     let capital = false;
     for (const f of filters.split(':').filter(Boolean)) {
       if (f === 'Mayus') capital = true;
-      else if (f === 'o') s = named.gender === 'f' ? 'a' : 'o';
-      else if (f in ARTICLES) s = `${ARTICLES[f as keyof typeof ARTICLES][named.gender]} ${s}`;
+      else if (f === 'o') s = (named.gender === 'f' ? 'a' : 'o') + (named.plural ? 's' : '');
+      else if (f in ARTICLES) {
+        const table = named.plural ? ARTICLES_PLURAL : ARTICLES;
+        s = `${table[f as keyof typeof ARTICLES][named.strongA ? 'm' : named.gender]} ${s}`;
+      }
     }
     return capital ? s.charAt(0).toUpperCase() + s.slice(1) : s;
   });
@@ -115,6 +140,11 @@ function fill(text: string, ctx: Record<string, Named | string | number>): strin
 function viewsOf(event: GameEvent, state: GameState): Record<string, unknown>[] {
   const raw = event as unknown as Record<string, unknown>;
   const views = show.eventViews([event], state).map((v) => ({ ...raw, ...v }));
+  // The casting line: the first command of a run knows which class Willy is.
+  if (event.type === 'runStarted') {
+    const cls = state.entities.willy?.tags.find((t) => t.startsWith('clase:'))?.slice('clase:'.length);
+    if (cls) return [{ ...raw, evento: 'runStarted', clase: cls }];
+  }
   if (event.type === 'combatEnded') {
     const winner = (raw as { winner?: string | null }).winner;
     views.push({ ...raw, evento: 'combatEnded', resultado: winner === state.entities.willy?.factionId ? 'victoria' : winner ? 'derrota' : 'huida' });
@@ -172,7 +202,10 @@ function achievementContext(raw: unknown): Record<string, Named | string | numbe
   if (typeof c.enemigo === 'string') out.enemigo = { name: c.enemigo, gender: c.enemigoGenero === 'f' ? 'f' : 'm' };
   const obj = itemNamed(c.objeto);
   if (obj) out.objeto = obj;
-  if (typeof c.habilidad === 'string') out.habilidad = c.habilidad;
+  if (typeof c.habilidad === 'string') out.habilidad = ABILITY_NAMES[c.habilidad] ?? c.habilidad;
+  if (typeof c.patrocinador === 'string') out.patrocinador = c.patrocinador;
+  for (const [k, v] of Object.entries(c)) if (k.startsWith('rival') && typeof v === 'string') out[k] = v;
+  if (typeof c.rivalGenero === 'string') out.rival = { name: String(c.rivalNombre ?? ''), gender: c.rivalGenero === 'f' ? 'f' : 'm' };
   return out;
 }
 

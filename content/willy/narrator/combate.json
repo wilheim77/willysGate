@@ -35,7 +35,7 @@
         { "id": "ee-06", "texto": "Correcto. Eficaz. Un poco soso. Pero correcto." },
         { "id": "ee-07", "texto": "{enemigo:el:Mayus}, eliminad{enemigo:o}. Producción ya le ha buscado sustituto. Producción siempre tiene sustitutos." },
         { "id": "ee-08", "texto": "Otro para la estadística. Willy no lleva la cuenta. Yo sí. Es mi trabajo." },
-        { "id": "ee-09", "texto": "Ha caído {enemigo:el}. No lo echaremos de menos. No lo conocíamos." },
+        { "id": "ee-09", "texto": "Nadie echará de menos a {enemigo:el}. Nadie sabía ni cómo se llamaba." },
         { "id": "ee-10", "texto": "Eliminación limpia. Mi abuela, que era un ciempiés, lo habría hecho con más gracia. Pero limpia." },
         { "id": "ee-11", "texto": "Con {objeto:el}. Patético, pero efectivo.", "si": { "objeto.etiquetas": { "tiene": "absurdo" } } },
         { "id": "ee-12", "texto": "Eliminad{enemigo:o} con {objeto:un}. Los fabricantes de {objeto:el} no contemplaban este uso en las instrucciones.", "si": { "objeto": { "existe": true } } },

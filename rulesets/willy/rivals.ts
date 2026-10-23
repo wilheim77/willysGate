@@ -12,6 +12,7 @@ interface RivalRecord {
   planta: number;
   ranura: number;
   legendario?: string;
+  raza?: string;
   plantas: number[];
   desenlace?: 'derrotado' | 'pacto' | 'huida';
 }
