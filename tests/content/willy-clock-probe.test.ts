@@ -1,8 +1,8 @@
 import { it } from 'vitest';
 import { type GridMap, type Vec2, posKey, stepCost, zonesOf, type GameState } from '../../engine';
-import { CLASSES } from '../../rulesets/willy';
+import { CLASSES, DIFFICULTIES } from '../../rulesets/willy';
 import { floorSpec, generateFloor, FLOOR_COUNT } from '../../content/willy/gen/floor';
-import { simulateFloor } from '../../content/willy/sim/balance';
+import { simOptions, simulateFloor } from '../../content/willy/sim/balance';
 import floors from '../../content/willy/data/floors.json';
 
 /**
@@ -70,6 +70,10 @@ const pct = (xs: number[], q: number) => {
 
 it.runIf(!!process.env.SIM_CLOCK)('clock probe', () => {
   const seeds = Number(process.env.SIM_CLOCK);
+  // SIM_DIFICULTAD=primetime: fights as hard as Prime time's (the clock multiplier is applied below).
+  const mode = process.env.SIM_DIFICULTAD ?? 'concursante';
+  simOptions.dificultad = mode;
+  const mult = DIFFICULTIES[mode]?.reloj ?? 1;
   const floorList = process.env.SIM_FLOORS ? process.env.SIM_FLOORS.split(',').map(Number) : Array.from({ length: FLOOR_COUNT }, (_, i) => i + 1);
   const classes = Object.keys(CLASSES);
   const rows: string[] = [];
@@ -138,7 +142,7 @@ it.runIf(!!process.env.SIM_CLOCK)('clock probe', () => {
       used.normal.push(normal);
       used.completo.push(full);
     }
-    const R = spec.relojSegundos;
+    const R = Math.round(spec.relojSegundos * mult);
     const left = (xs: number[], q: number) => Math.round(100 * (1 - pct(xs, q) / R));
     rows.push(
       `${floor} reloj=${R} rondas/pelea=${(roundsPerFight.reduce((a, b) => a + b, 0) / Math.max(1, roundsPerFight.length)).toFixed(1)} ` +

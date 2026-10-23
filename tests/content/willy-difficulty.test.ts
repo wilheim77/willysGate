@@ -27,10 +27,10 @@ function hit(s: GameState, id: string, raw: number): number {
 }
 
 describe('Willy: difficulty', () => {
-  it('the clock: Turista ×1.5, Prime time ×0.8', () => {
+  it('the clock: Turista ×1.5, Prime time ×0.95', () => {
     const base = clockOf(firstStep(at('concursante')))!.total;
     expect(clockOf(firstStep(at('turista')))!.total).toBe(Math.round(base * 1.5));
-    expect(clockOf(firstStep(at('primetime')))!.total).toBe(Math.round(base * 0.8));
+    expect(clockOf(firstStep(at('primetime')))!.total).toBe(Math.round(base * 0.95));
   });
 
   it('damage: Turista softens what Willy takes, Prime time hardens the enemies', () => {
@@ -39,7 +39,7 @@ describe('Willy: difficulty', () => {
     expect(hit(s, 'willy', 10)).toBe(10);
     expect(hit({ ...s, flags: { ...s.flags, dificultad: 'turista' } }, 'willy', 10)).toBe(6);
     expect(hit({ ...s, flags: { ...s.flags, dificultad: 'turista' } }, foe.id, 10)).toBe(10);
-    expect(hit({ ...s, flags: { ...s.flags, dificultad: 'primetime' } }, foe.id, 10)).toBe(8);
+    expect(hit({ ...s, flags: { ...s.flags, dificultad: 'primetime' } }, foe.id, 10)).toBe(9);
     expect(hit({ ...s, flags: { ...s.flags, dificultad: 'primetime' } }, 'willy', 10)).toBe(10);
   });
 });

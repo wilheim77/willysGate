@@ -47,7 +47,7 @@ const MAX_COMMANDS = 1500;
 
 // Out-of-combat regen (rulesets/willy/regen.ts): on by default, matching a real run; the
 // balance regression test and tuning probes can turn it off to see the harder floor.
-export const simOptions = { regen: true };
+export const simOptions: { regen: boolean; dificultad?: string } = { regen: true };
 
 /** Willy (and his companion) heal a little walking to the fight, as they would in a real run. */
 function walkTo(state: GameState, to: Vec2 | undefined): GameState {
@@ -149,6 +149,7 @@ export function simulateFloor(seed: number, floor: number, classId: string, audi
   const spot = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }, { x: 1, y: 1 }, { x: -1, y: 1 }].map((d) => ({ x: arrival.x + d.x, y: arrival.y + d.y })).find((p) => free(state, p, new Set()))!;
   const mate = createCompanion(classId, w, spot)!;
   state = withAudience({ ...state, entities: { ...state.entities, [mate.id]: mate } }, audiencia);
+  if (simOptions.dificultad) state = { ...state, flags: { ...state.flags, dificultad: simOptions.dificultad } };
 
   const rooms = (systems.planta as unknown as { salas: { role: string; depth: number }[] }).salas;
   const encounters = zonesOf(state, 'encounters').sort((a, b) => {

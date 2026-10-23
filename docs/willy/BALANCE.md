@@ -83,7 +83,7 @@ Lectura:
 - **Normal:** sale con un 21-28 % en la mediana (39 % en el piso 1 y 28 % en el 2, más suaves para aprender). El 10 % más lento de los pisos 5-9 roza el derrumbe.
 - **Completo:** queda un 10-16 % en la mediana y el 10 % más lento se derrumba (pisos 3-10). En los pisos 1 y 2, explorarlo todo cabe por poco (3 % y 9 % en el p90).
 - **Turista** (×1,5): queda un 31-43 % incluso en el 10 % más lento de las partidas normales, y un 40-47 % explorándolo todo. Nunca va con prisa.
-- **Prime time** (×0,8): el directo sigue sobrado (un 27-43 % en el p90), pero la partida normal llega con un 2-10 %, y un 24 % en el piso 1. Es lo que promete.
+- **Prime time**, suavizado el 2026-10-23 a petición del usuario («suaviza un poquillo»). Ahora tiene reloj ×0,95 y los enemigos reciben el 85 % del daño; antes, ×0,8 y 80 %. Con los dos a la vez: los enemigos más duros alargan los combates y eso también gasta reloj. Medido con los combates de Prime time (`SIM_DIFICULTAD=primetime`) y el 15 % humano: la partida normal llega con un 10-18 % en la mediana en los pisos 3-10 (un 33 % en el piso 1 y un 24 % en el 2), y el directo con un 30-45 % en el p90. Antes, la partida normal llegaba con un 2-10 %.
 
 El piso 8 se queda en 19:30: sus combates son los más largos (3,8 rondas por pelea) y ya iba justo.
 
