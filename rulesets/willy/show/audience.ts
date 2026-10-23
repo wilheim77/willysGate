@@ -107,6 +107,7 @@ export function gainMultiplier(state: GameState): number {
   if (!w) return 1;
   let m = 1 + 0.05 * attr(w, 'car');
   if (hasTrait(w, 'directo')) m *= 1.5;
+  for (const [perk, mult] of Object.entries(showConfig()!.audience.ventajas ?? {})) if (hasTrait(w, perk)) m *= mult;
   const items = stat(w, 'multAudiencia', 0);
   if (items) m *= 1 + items / 100;
   if (isHardcore(state)) m *= showConfig()!.audience.multSinRepeticion;
@@ -212,6 +213,9 @@ export function runAudience(r: Resolver, events: GameEvent[]): { gained: number;
     }
   }
   const views = eventViews(events, state, { firstSkillUse: firstUse });
+  for (const v of views) {
+    if (v.evento === 'cancionDelVerano' && v.nivel === undefined && willy) v.nivel = skillLevel(willy, 'cancion-del-verano');
+  }
 
   // Willy's turn bookkeeping: a wait or a dull turn costs viewers.
   for (const e of events) {

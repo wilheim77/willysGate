@@ -112,3 +112,25 @@ describe('Show audit: sponsor gifts', () => {
     expect(of(dropped.events, 'sponsorGift')).toHaveLength(1);
   });
 });
+
+describe('Show audit: hooks for the Willy agent\'s rules', () => {
+  it('«Charanga» (event from the ruleset) gives audience', () => {
+    const s = inCombat(game([W('willy', 'bardo-de-verbena', 0, 0), rat('r', 6, 0)], ['........']));
+    expect(of(run(s, [{ type: 'charanga', entityId: 'willy' } as GameEvent]).events, 'audienceChanged').some((c) => c.causa === 'charanga')).toBe(true);
+  });
+
+  it('«Canción del verano» only pays at Maestría (level 5)', () => {
+    const s = inCombat(game([W('willy', 'bardo-de-verbena', 0, 0), rat('r', 6, 0)], ['........']));
+    const song = { type: 'cancionDelVerano', entityId: 'willy', enemigos: 2 } as GameEvent;
+    expect(of(run(s, [song]).events, 'audienceChanged').some((c) => c.causa === 'cancion-del-verano-maestria')).toBe(false);
+    const master = { ...s, entities: { ...s.entities, willy: { ...s.entities.willy!, resources: { ...s.entities.willy!.resources, 'uso:cancion-del-verano': { current: 999, max: 99999 } } } } };
+    expect(of(run(master, [song]).events, 'audienceChanged').some((c) => c.causa === 'cancion-del-verano-maestria')).toBe(true);
+  });
+
+  it('the «Carisma televisivo» perk adds 10 % to every gain', () => {
+    const plain = inCombat(game([W('willy', 'butanero', 0, 0), rat('r', 6, 0)], ['........']));
+    const perk = { ...plain, entities: { ...plain.entities, willy: { ...plain.entities.willy!, tags: [...plain.entities.willy!.tags, 'rasgo:carisma-televisivo'] } } };
+    const gain = (s: GameState) => Number(of(run(s, [{ type: 'showOff', entityId: 'willy' } as GameEvent]).events, 'audienceChanged')[0]?.delta ?? 0);
+    expect(gain(perk) / gain(plain)).toBeCloseTo(1.1, 1);
+  });
+});

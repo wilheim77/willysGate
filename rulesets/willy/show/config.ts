@@ -41,6 +41,8 @@ export interface AudienceData {
   primaAlFilo: { relojRestanteMaxPct: number; caja: string };
   /** Aviso «Especial de audiencia»: the flag it sets and the multiplier on the next floor. */
   especialAudiencia: { flag: string; mult: number };
+  /** Perks (rasgo:<id>) that multiply every gain. */
+  ventajas: Record<string, number>;
   /** Class abilities that move the audience (classes.json texts). */
   clases: { repertorioCorto: number; unboxingPorObjeto: number; mateDelConcursoMaestria: number };
 }
