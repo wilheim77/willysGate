@@ -52,5 +52,7 @@
   "bajoFoco": "¡Bajo el foco!",
   "parrillaTitulo": "La parrilla de focos",
   "parrillaTexto": "Cuelga sobre la zona dorada. Desde la cuerda (la luz pequeña) la puedes derribar una vez: 2d6 y Aturdido a quien esté debajo. A quien sea.",
-  "parrilla": "¡Parrilla!"
+  "parrilla": "¡Parrilla!",
+  "regaloEnCaminoTitulo": "Regalo en paracaídas de {patrocinador}",
+  "regaloEnCaminoTexto": "Cae al final de la ronda. El público ya está mirando al techo."
 }

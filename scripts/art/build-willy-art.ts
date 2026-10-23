@@ -446,6 +446,8 @@ const props: Record<string, { frames: Image[]; fps: number; loop: boolean; ancho
   'aura-elite': { frames: [0, 1, 2, 3].map(show.eliteAura), fps: 8, loop: true, anchor: 'floor', light: '#ffc440' },
   // Death feedback (played directly by MapScene, not through the ability fx table; Intereses-style id)
   fx_eliminado: { frames: [0, 1, 2, 3, 4].map(show.eliminatedBanner), fps: 8, loop: false, anchor: 'centre' },
+  // Xelda's office: the contract, drawn over the desk
+  contrato: { frames: [show.contractStack()], fps: 0, loop: false, anchor: 'floor' },
   // Floor-collapse clock
   'fx-polvo-derrumbe': { frames: [0, 1, 2, 3, 4, 5].map(show.collapseDust), fps: 10, loop: false, anchor: 'floor' },
   'fx-cascotes': { frames: [0, 1, 2, 3, 4].map(show.fallingRubble), fps: 10, loop: false, anchor: 'floor' },
@@ -525,6 +527,12 @@ const objects: Record<string, Record<string, Image[]>> = {
   'camara-estudio': { idle: [show.studioCamera(true), show.studioCamera(false)] },
   'monitor-escenario': { idle: [show.floorMonitor()] },
   'silla-director': { idle: [show.directorChair()] },
+  // Xelda's office (Planta 5)
+  'retrato-ganador-1': { idle: [show.winnerPortrait(0)] },
+  'retrato-ganador-2': { idle: [show.winnerPortrait(1)] },
+  'retrato-ganador-3': { idle: [show.winnerPortrait(2)] },
+  'vitrina-trofeos': { idle: [show.trophyCabinet()] },
+  archivador: { idle: [show.archiveShelf()] },
 };
 const ui: Record<string, Image> = {
   'carta-bronce': cardFrame('bronce'), 'carta-plata': cardFrame('plata'), 'carta-oro': cardFrame('oro'), 'carta-legendaria': cardFrame('legendaria'),

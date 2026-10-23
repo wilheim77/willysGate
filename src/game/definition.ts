@@ -2,6 +2,7 @@ import type { BaseCommand, CreationChoices, CreationSpec, DialogueTree, Dialogue
 import type { AssetManifest } from '../assets/manifest';
 import type { AudioManifest } from '../audio/types';
 import type { BarksData } from '../ui/barks';
+import type { Cinematic } from '../ui/cinematicPlayer';
 import type { TutorialStep } from '../ui/tutorialToasts';
 
 /** Player-facing UI text for a game (Spanish). Error keys are engine/ruleset error codes. */
@@ -82,6 +83,9 @@ export interface Theme {
   /** Optional stylesheet URL for the font (Google Fonts). */
   fontUrl?: string;
 }
+
+/** A narrator line: plain text, or text with a priority (higher wins; the top ones queue). */
+export type NarratorLine = string | { text: string; priority?: number };
 
 /** A small always-visible counter in the HUD (Willy's audience, a boss's meter...). */
 export interface MeterView {
@@ -193,7 +197,7 @@ export interface GameDefinition {
   /** A narrator's line for an engine event, if any (Willy's Narrador). Cosmetic. */
   narrate?(event: GameEvent, state: GameState): string | null;
   /** One narrator line for all of a command's events (the most important one), if any. */
-  narrateEvents?(events: GameEvent[], state: GameState): string | null;
+  narrateEvents?(events: GameEvent[], state: GameState): NarratorLine | null;
   /**
    * A short on-screen announcement for an event (an ability levelling up...), if any.
    * `big` shows it large in the middle of the screen. Cosmetic.
@@ -206,6 +210,12 @@ export interface GameDefinition {
    * you're here. `{nombre}` is the protagonist's name; `byClass[<class tag>]` adds a page after the first.
    */
   intro?: { title?: string; pages: string[]; byClass?: Record<string, string>; next?: string; start?: string };
+  /**
+   * Illustrated cinematics (content/<game>/cinematics/*.json, played by src/ui/cinematicPlayer.ts).
+   * `intro` plays after the title screen's «Nueva partida», before the game's setup screens,
+   * and can be replayed from the title screen («Ver el prólogo»).
+   */
+  cinematics?: { intro?: Cinematic };
   /** Integrated tutorial steps, shown once each as dismissable toasts (content/<game>/tutorial.json). */
   tutorial?: TutorialStep[];
   /** Companion speech bubbles on map arrival, flags, and combat events (content/<game>/barks.json). */

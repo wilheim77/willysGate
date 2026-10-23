@@ -22,6 +22,8 @@ interface Race {
   animations: Record<string, Layer[][]>;
   anchors: Record<'cabeza' | 'cara' | 'mano', [number, number]>;
   palettes: Record<string, Record<string, string>>;
+  /** Female variant: small extras painted over the body (relative to the body part), same animations/anchors. */
+  female?: { extra: { rows: string[]; legend: Record<string, string>; x: number; y: number }[] };
 }
 interface Accessory { rows: string[]; legend: Record<string, string>; pivot: [number, number] }
 interface Legendary {
@@ -64,11 +66,15 @@ function paint(img: Image, rows: string[], legend: Record<string, string>, dx: n
 }
 const OUTLINE = { k: '#1e1c24' };
 
-function bodyFrames(race: Race, palette: Record<string, string>): Record<string, Image[]> {
+function bodyFrames(race: Race, palette: Record<string, string>, female = false): Record<string, Image[]> {
   const legend = { ...OUTLINE, ...palette };
   return Object.fromEntries(Object.entries(race.animations).map(([anim, frames]) => [anim, frames.map((layers) => {
     const img = blank(race.size[0], race.size[1]);
     for (const [part, dx, dy] of layers) paint(img, race.parts[part]!, legend, dx, dy, `${race.sprite}.${part}`);
+    if (female) {
+      const body = layers.find((l) => l[0] === 'body') ?? ['body', 0, 0];
+      for (const e of race.female?.extra ?? []) paint(img, e.rows, { ...OUTLINE, ...e.legend }, e.x + body[1], e.y + body[2], `${race.sprite}.female`);
+    }
     return img;
   })]));
 }
@@ -90,7 +96,7 @@ function accessoryImage(a: Accessory): Image {
 
 // --- Compose everything ---------------------------------------------------------------------
 const rows: { id: string; anims: Record<string, Image[]> }[] = [];
-const bodies: Record<string, { sprite: string; palettes: Record<string, string>; anchors: ReturnType<typeof anchorsOf> }> = {};
+const bodies: Record<string, { sprite: string; palettes: Record<string, string>; femalePalettes?: Record<string, string>; anchors: ReturnType<typeof anchorsOf> }> = {};
 for (const [raceId, race] of Object.entries(spec.races)) {
   const palettes: Record<string, string> = {};
   Object.entries(race.palettes).forEach(([pal, legend], i) => {
@@ -100,7 +106,15 @@ for (const [raceId, race] of Object.entries(spec.races)) {
     if (i === 0) rows.push({ id: race.sprite, anims });
     palettes[pal] = id;
   });
-  bodies[raceId] = { sprite: race.sprite, palettes, anchors: anchorsOf(race) };
+  const femalePalettes: Record<string, string> = {};
+  if (race.female) Object.entries(race.palettes).forEach(([pal, legend], i) => {
+    const id = `${race.sprite}-f--${pal}`;
+    const anims = bodyFrames(race, legend, true);
+    rows.push({ id, anims });
+    if (i === 0) rows.push({ id: `${race.sprite}-f`, anims });
+    femalePalettes[pal] = id;
+  });
+  bodies[raceId] = { sprite: race.sprite, palettes, ...(race.female ? { femalePalettes } : {}), anchors: anchorsOf(race) };
 }
 const accImages: Record<string, Record<string, Image>> = Object.fromEntries(
   Object.entries(spec.accessories).map(([slot, list]) => [slot, Object.fromEntries(Object.entries(list).map(([id, a]) => [id, accessoryImage(a)]))]),
@@ -169,6 +183,7 @@ const cell = 26;
 const prevRows: { label: string; imgs: Image[] }[] = [];
 for (const [raceId, race] of Object.entries(spec.races)) {
   prevRows.push({ label: raceId, imgs: Object.values(race.palettes).map((p) => bodyFrames(race, p).idle![0]!) });
+  if (race.female) prevRows.push({ label: `${raceId} (f)`, imgs: Object.values(race.palettes).map((p) => bodyFrames(race, p, true).idle![0]!) });
 }
 prevRows.push({ label: 'legendarios', imgs: Object.keys(spec.legendaries).map((id) => rows.find((r) => r.id === id)!.anims.idle![0]!) });
 // Deterministic sample of random combinations.

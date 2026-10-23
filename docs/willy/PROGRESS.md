@@ -116,6 +116,55 @@ W0 **aprobada** con estos cambios, ya aplicados en los documentos y los datos:
 - Nada de diseño pendiente de aprobación. Quedan las decisiones de detalle que salgan al implementar cada fase.
 - TODO: botón de feedback, si el usuario lo quiere más adelante.
 
+### Auditoría de diseño (2026-10-23): diseñado y sin hacer
+
+Revisión de `DESIGN.md`, `STORY.md` y `RULESET.md` contra el código. La audiencia, los patrocinadores, el Narrador y las cajas que dependen de ellos los audita el agente del espectáculo. Orden de prioridad, de más a menos:
+
+**P1: lo que se nota en la primera partida**
+
+1. **El tutorial no está enganchado.**
+   - `content/willy/tutorial.json` (28 pasos) usa `disparador`/`completar`/`zona`, pero el cliente espera `trigger`/`text`, y `game.ts` no lo pasa.
+   - Tampoco se aplican los `bloqueosIniciales`: HUD de audiencia, reloj, atributos y mochila ocultos, y patrocinadores, cajas, trampas y cofres apagados hasta su paso.
+   - Para los amigos que no conocen el juego es lo más importante.
+2. **La dificultad no cambia nada.**
+   - Turista y Prime time solo se guardan en una bandera.
+   - Diseño: Turista tiene reloj ×1,5, vida ×1,5, −25 % de daño enemigo y al caer vuelve al inicio de la planta. Prime time tiene reloj ×0,8, enemigos con +25 % de vida, patrocinadores más exigentes y audiencia ×1,25.
+3. **El Camerino no hace nada más que curar.** Maripuri, Paco, Xelda y Koldo están de pie sin conversación.
+   - Falta Ultramarinos Maripuri: comprar y vender, con el surtido de `loot-tables.json → mercado` y el Regateo del Tasador.
+   - Falta el descanso de Paco. Ahora la vida entera llega sola al entrar.
+   - Falta Xelda: reglamento y probabilidades de las cajas. Guardar es libre, así que su «parte de planta» sobra o se queda en texto.
+   - Falta Koldo: una conversación nueva cada vez y una misión opcional para la planta siguiente.
+4. **Las ventajas de los niveles pares nunca se ofrecen.** Son 1 de 3 (clase, origen y general), del mazo de `classes.json → ventajas` y `willy.json → ventajasDeOrigen`. Willy solo tiene sus rasgos fijos. Cuatro ventajas ya tienen la parte de audiencia hecha (agente del espectáculo).
+5. **Los jefes de las Plantas 1-4 no tienen fases ni punto débil.**
+   - En `floors.json → jefe.fases` están el Centollo varado con la marea baja, las cintas de Doña Rebeca hacia la trituradora, el Gigantón que gira y arde y la Socorrista que se lanza a la piscina. Ahora son bloques de números.
+   - Solo el Presentador tiene fases.
+6. **Las mecánicas de las Plantas 2-5 están casi todas sin hacer.** Solo existen las cintas (si la plantilla las trae) y la marea (Planta 1).
+   - Planta 2: los carritos que arrollan hasta chocar (ahora son objetos redondos normales) y la «oferta flash».
+   - Planta 3: hogueras, barriles de pólvora, fuegos artificiales que marcan casillas y farolillos rompibles.
+   - Planta 4: piscinas, hielo inicial, rejillas de vapor y corriente fría.
+   - Planta 5: focos móviles (+2 a atacar y a que te ataquen, audiencia ×2), decorados derribables y cables que electrifican el agua.
+   - Planta 1: agua inicial y redes que se cortan.
+7. **Las otras tres salas de historia:** Koldo atrapado en congelados (Planta 2), la tómbola con su prueba de Suerte (Planta 3) y la sucursal de Paco en la sauna, que cura la mitad sin guardar (Planta 4). El generador ya admite salas de historia: falta escribirlas.
+
+**P2: reglas a medias**
+
+8. **El reloj solo cobra pasos y rondas.**
+   - Falta cobrar interactuar (3 s), las pruebas fuera de combate (5 s) y el horario del Funcionario (+1 s).
+   - Falta que el derrumbe se salte el Camerino.
+   - Faltan los objetos de reloj: Cronómetro de regidor (+120 s) y aviso «Pausa publicitaria» (+90 s).
+9. **Las habilidades básicas que suben con el uso:** solo suben Empujar y Esquivar (y Trepar en las pruebas). Faltan Lanzar y Comer en combate.
+10. **Las pifias no tienen su tabla de efectos ridículos.** Solo fallan.
+11. **Faltan detalles de clase:** la Charanga del Bardo, la Maestría de Canción del verano (que sume audiencia mientras dura), Filtro de belleza (+2 DEF con la audiencia alta) y el «50 % más de enemigos» del aviso Especial de audiencia.
+12. **Faltan garantías del generador:** trampas nunca en paso obligatorio, un cofre en el camino crítico y la planta de respaldo. Las salas de inicio y de jefe son plantillas de una celda, no las fijas de 2×2 o 3×2 del diseño.
+13. **Faltan los objetos fuera de las cajas** (`loot-tables.json → fueraDeCajas`): mapa de planta (niebla de guerra), mímicos, avisos de Producción y mochila sin fondo.
+
+**P3: pulido**
+
+14. Las Maestrías vistosas: el fan de confeti, la Torre de telefonía y la Versión beta.
+15. La pantalla de resumen de Sin repetición con patrocinadores y audiencia máxima, y la marca «en directo» en el perfil (agente meta).
+
+**Hecho en esta ronda:** el despacho de Xelda (sala de historia) y el jefe del piso 8 con daño 1d8.
+
 ## Siguiente paso
 
 - Después: mecánicas de planta (marea, cintas: R20 `onRoundEnd`), salas fijas de historia, cajas de botín al abrirlas, reloj de planta, audiencia y patrocinadores, Narrador y valor de los objetos (Golpe de valor).
