@@ -65,25 +65,3 @@ for (const k of ['A', 'B', 'C'] as const) {
 }
 
 export const finalTemporada: DialogueTree = { id: 'final-temporada', start: 'inicio', nodes };
-
-/** Xelda in the last Camerinos: the contract's small print (a condition of the secret ending). */
-export const xeldaContrato: DialogueTree = {
-  id: 'xelda-contrato',
-  start: 'inicio',
-  nodes: {
-    inicio: {
-      speaker: 'xelda',
-      text: '¿Sabías que el contrato del concurso tiene catorce páginas de letra pequeña? Nadie se lo lee. Tengo una copia en la mesa.',
-      choices: [
-        { id: 'leer', text: 'Leer el contrato.', when: { notFlag: 'willy:contratoLeido' }, next: 'leido' },
-        { id: 'recordar', text: '¿Qué decía la cláusula catorce?', when: { flag: 'willy:contratoLeido', is: true }, next: 'leido' },
-        { id: 'adios', text: 'Otro día.' },
-      ],
-    },
-    leido: {
-      speaker: 'xelda',
-      text: 'Cláusula catorce: «El concursante podrá adquirir la cadena con los premios acumulados, si el público y los patrocinadores lo respaldan». Curioso, ¿eh? Yo que tú me lo guardaba. Y me hacía muy famoso.',
-      effects: [{ type: 'setFlag', flag: 'willy:contratoLeido', value: true }],
-    },
-  },
-};

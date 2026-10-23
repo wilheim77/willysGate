@@ -40,6 +40,8 @@ import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, i
 import { dropsHook, openBox } from './loot';
 import { regenHook } from './regen';
 import { monsterAiProfile } from './monsters';
+import { camerinoConditions, onRest as camerinoRest } from './camerino';
+import { roomsAfterCommand } from './rooms';
 import { traitsAfterCommand } from './traits';
 
 /**
@@ -335,6 +337,8 @@ registerAfterCommand(dropsHook, 10);
 registerAfterCommand(itemsHook, 20);
 // The floor clock and the collapse (clock.ts), before the show reacts to the turn.
 registerAfterCommand(clockAfterCommand, 40);
+// roomEntered for a boss's room (rooms.ts): the tutorial and the Narrador's boss introductions.
+registerAfterCommand(roomsAfterCommand, 42);
 registerAfterCommand(bossAfterCommand, 45);
 // The final boss down and the ending chosen (ending.ts): the season is over.
 registerAfterCommand(endingAfterCommand, 46);
@@ -384,7 +388,9 @@ export const willy: Ruleset = {
     nivelAlMenos: (s, id, p) => level(s.entities[id]!) >= Number(p.min),
     habilidadAlMenos: (s, id, p) => skillLevel(s.entities[id]!, String(p.habilidad)) >= Number(p.min),
     rasgo: (s, id, p) => hasTrait(s.entities[id]!, String(p.is)),
+    ...camerinoConditions,
   },
+  onRest: (state, party, kind, rng) => camerinoRest(state, party, kind, rng),
   commands: { ...showCommands, openBox: openBox as never, equipItem: equipItem as never, unequipItem: unequipItem as never },
   rollInitiative: (state, id, rng) => {
     const e = state.entities[id]!;
