@@ -346,7 +346,8 @@ if (game.ending) {
     const show = () =>
       dialogue.ask(`${summary.title}\n${summary.lines.map((l: string) => `• ${l}`).join('\n')}`, [
         { label: (game.texts.ui as Record<string, string>).credits ?? 'Créditos', onPick: () => { credits.open(); setTimeout(show, 0); } },
-        { label: summary.button, onPick: () => newRun() },
+        // The credits may still be open over the summary: a new run never starts under them.
+        { label: summary.button, onPick: () => { credits.close(); newRun(); } },
       ], false);
     setTimeout(show, 800);
   });
