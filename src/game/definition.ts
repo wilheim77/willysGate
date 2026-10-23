@@ -37,6 +37,8 @@ export interface AchievementView {
   earlier?: boolean;
   /** Earned again this season: no prize this time. */
   again?: boolean;
+  /** What the narrator says about it, shown on its banner. */
+  line?: string;
 }
 
 export interface RewardBoxView {
@@ -229,7 +231,7 @@ export interface GameDefinition {
     categories: Record<string, string>;
     list(state: GameState): AchievementView[];
     /** The achievement an event announces, if it is an unlock. */
-    unlocked(event: GameEvent): AchievementView | null;
+    unlocked(event: GameEvent, state?: GameState): AchievementView | null;
   };
   /** Reward boxes waiting to be opened (Willy's loot boxes): a 🎁 counter and the opening moment. */
   rewardBoxes?: {

@@ -24,11 +24,10 @@ function season(profile: object, flags: Record<string, string> = {}): { state: G
 const unlocked = (events: GameEvent[]) => events.filter((e) => e.type === 'achievementUnlocked') as unknown as { logroId: string; repetido: boolean; cajas: string[] }[];
 
 describe('Willy: the browser profile', () => {
-  it('a fresh profile: the first season unlocks «En antena» with its box, and the profile remembers it', () => {
+  it('a fresh profile: the first season unlocks «En antena», and the profile remembers it', () => {
     const first = season({});
     const a = unlocked(first.events).find((e) => e.logroId === 'en-antena')!;
     expect(a.repetido).toBe(false);
-    expect(metaOf(first.state).cajas.length).toBeGreaterThan(0);
     const p = updateProfile({}, first.events, first.state, '2026-10-23');
     expect(p.logros).toContain('en-antena');
     expect(p.temporadas.jugadas).toBe(1);

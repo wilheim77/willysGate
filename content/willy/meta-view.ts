@@ -2,6 +2,7 @@ import type { GameEvent, GameState } from '../../engine';
 import { type Rarity, itemDef, metaOf, profileOf } from '../../rulesets/willy';
 import type { AchievementView, GameDefinition, RewardBoxResult, RewardBoxView } from '../../src/game/definition';
 import { META_CONTENT } from './meta-content';
+import { narrate } from './narrator';
 
 /**
  * How the client shows Willy's achievements and loot boxes (GameDefinition.achievements and
@@ -37,13 +38,14 @@ export const achievements: NonNullable<GameDefinition['achievements']> = {
     const before = new Set(profileOf(state).logros);
     return META_CONTENT.achievements.map((a) => ({ ...view(a, got.has(a.id) || before.has(a.id)), ...(before.has(a.id) && !got.has(a.id) ? { earlier: true } : {}) }));
   },
-  unlocked: (event) => {
+  unlocked: (event, state) => {
     if (event.type !== 'achievementUnlocked') return null;
     const id = (event as GameEvent & { logroId?: string }).logroId;
     const a = META_CONTENT.achievements.find((x) => x.id === id);
     if (!a) return null;
     const again = !!(event as GameEvent & { repetido?: boolean }).repetido;
-    const v = view(a, true);
+    const line = state ? narrate(event, state) : null;
+    const v = { ...view(a, true), ...(line ? { line } : {}) };
     return again ? { ...v, again: true, reward: undefined } : v;
   },
 };

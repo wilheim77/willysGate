@@ -154,8 +154,8 @@ function pick(event: GameEvent, state: GameState): { text: string; priority: num
       // An achievement: the generic header, then its own line (achievements.json → narrador),
       // naming what the unlocking event was about (its `contexto`).
       if (event.type === 'achievementUnlocked' && typeof view.frase === 'string') {
-        const own = fill(view.frase, { ...ctx, ...achievementContext(view.contexto) });
-        if (own) text = `${text} ${own}`;
+        const own = fill(view.frase, { ...ctx, ...achievementContext(view.contexto, state) });
+        if (own) text = `${text} ${own.charAt(0).toUpperCase()}${own.slice(1)}`;
       }
       if (bank.memoria) recent.set(bank.id, [...seen, line.id].slice(-bank.memoria));
       spokeAt.set(bank.id, turns);
@@ -166,10 +166,13 @@ function pick(event: GameEvent, state: GameState): { text: string; priority: num
 }
 
 /** An unlock carries the names of what triggered it: {enemigo} with its gender, {objeto}, {habilidad}. */
-function achievementContext(raw: unknown): Record<string, Named | string | number> {
+function achievementContext(raw: unknown, state: GameState): Record<string, Named | string | number> {
   const c = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
   const out: Record<string, Named | string | number> = {};
   if (typeof c.enemigo === 'string') out.enemigo = { name: c.enemigo, gender: c.enemigoGenero === 'f' ? 'f' : 'm' };
+  // The entity's own gender (floors.json), when it is still on the map.
+  const who = typeof c.enemigoId === 'string' ? entityNamed(state.entities[c.enemigoId]) : undefined;
+  if (who && typeof c.enemigo === 'string') out.enemigo = { name: c.enemigo, gender: who.gender };
   const obj = itemNamed(c.objeto);
   if (obj) out.objeto = obj;
   if (typeof c.habilidad === 'string') out.habilidad = c.habilidad;
@@ -185,6 +188,8 @@ export function narrateEvents(events: GameEvent[], state: GameState): { text: st
   turns += events.filter((e) => e.type === 'turnStarted' && (e as unknown as { entityId?: string }).entityId === 'willy').length;
   let best: { text: string; priority: number } | null = null;
   for (const e of events) {
+    // An unlock's line goes on its own banner (meta-view.ts), in step with it.
+    if (e.type === 'achievementUnlocked') continue;
     const p = pick(e, state);
     if (p && (!best || p.priority > best.priority)) best = p;
   }

@@ -144,7 +144,7 @@ controller.onTrapReached = (trap, candidates) => {
           if (ev?.replaced) offerReplaced(ev.replaced, id, onDone);
           else onDone();
         },
-      })),
+      })).concat([{ label: 'Guardarlo en la mochila', onPick: onDone }]),
       false,
     );
   };
@@ -165,6 +165,9 @@ controller.onTrapReached = (trap, candidates) => {
   store.subscribe((change) => {
     if (change.kind !== 'events') return;
     const dropped = new Set(change.events.filter((e) => e.type === 'lootDropped').map((e) => (e as unknown as { item: string }).item));
+    // What comes out of a reward box goes to the bag: the box's own screen shows it, and asking
+    // «who wears it?» there would spoil the reveal (and pile up with many boxes).
+    if (change.events.some((e) => e.type === 'boxOpened')) return;
     for (const ev of change.events) {
       // Gear found in a chest or handed over in a conversation gets the same "who wears it?" question.
       const found = ev as unknown as { owner?: string; item?: string; from?: number; to?: number };

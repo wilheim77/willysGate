@@ -114,3 +114,13 @@ canvas.ui-icon { image-rendering: pixelated; }
 #title .profile-badge { margin: 8px 0 0; text-align: center; color: #ff4a4a; font-size: var(--fs-l); letter-spacing: 2px; text-shadow: 0 0 8px rgba(255, 60, 60, 0.7); animation: blink 1.6s step-end infinite; }
 .meta-panel .achievement.earlier { opacity: 0.8; }
 .meta-panel .achievement .earlier-note { color: var(--muted); font-size: var(--fs-xs); }
+
+.achievement-toast .said { color: #f3e6c8; font-style: italic; margin-top: 4px; }
+
+/* --- «Abrir todas» --- */
+.box-all .all-items { display: flex; flex-direction: column; gap: 4px; max-height: 60dvh; overflow-y: auto; }
+.box-all .all-item { display: flex; align-items: center; gap: 8px; border-left: 4px solid var(--rar); padding: 2px 6px; }
+.box-all .all-item span { display: flex; flex-direction: column; min-width: 0; }
+.box-all .all-item strong { font-weight: normal; font-size: var(--fs-s); color: #fff; }
+.box-all .all-item small { font-size: var(--fs-xs); color: var(--muted); }
+.box-panel .primary { border-color: var(--gold); color: var(--gold); }

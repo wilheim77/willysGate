@@ -369,11 +369,12 @@ function hasCounter(c: Condition): boolean {
 /** Details for the narrator's line ({enemigo:el}, {objeto}, {habilidad}). */
 function contextOf(ev: MetaEvent | undefined): Record<string, JsonValue> {
   if (!ev) return {};
-  const target = (ev.objetivo ?? ev.entidad) as { nombre?: string; genero?: string } | undefined;
+  const target = (ev.objetivo ?? ev.entidad) as { id?: string; nombre?: string; genero?: string } | undefined;
   const out: Record<string, JsonValue> = {};
   if (target?.nombre) {
     out.enemigo = target.nombre;
     out.enemigoGenero = target.genero ?? 'm';
+    if (target.id) out.enemigoId = target.id;
   }
   if (typeof ev.item === 'string') out.objeto = ev.item;
   if (typeof ev.habilidad === 'string') out.habilidad = ev.habilidad;

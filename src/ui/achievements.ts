@@ -37,6 +37,12 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     const desc = document.createElement('p');
     desc.textContent = a.description;
     text.append(kicker, name, desc);
+    if (a.line) {
+      const said = document.createElement('p');
+      said.className = 'said';
+      said.textContent = `🎙 ${a.line}`;
+      text.append(said);
+    }
     if (a.reward) {
       const reward = document.createElement('p');
       reward.className = 'reward';
@@ -50,7 +56,8 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
     void banner.offsetWidth;
     banner.classList.add('pop');
     clearTimeout(timer);
-    timer = window.setTimeout(next, 4200);
+    // Long enough to read the narrator's line too.
+    timer = window.setTimeout(next, 3500 + (a.line?.length ?? 0) * 45);
   };
   banner.addEventListener('click', () => {
     clearTimeout(timer);
@@ -58,7 +65,7 @@ export function setupAchievements(store: GameStore, game: GameDefinition, manife
   });
   store.subscribe((change) => {
     if (change.kind !== 'events') return;
-    const fresh = change.events.map((e) => meta.unlocked(e)).filter((a): a is AchievementView => !!a);
+    const fresh = change.events.map((e) => meta.unlocked(e, change.kind === 'events' ? store.state : undefined)).filter((a): a is AchievementView => !!a);
     if (!fresh.length) return;
     const idle = banner.hidden;
     queue.push(...fresh);
