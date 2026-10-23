@@ -650,6 +650,18 @@ Pedido por el agente del cliente para `onDeath: 'vanish'` (`src/scenes/MapScene.
 
 A diferencia del resto de `props`, este id usa guión bajo (`fx_eliminado`) en vez de guión medio: el cliente lo busca directamente en `manifest.props.fx_eliminado` (no pasa por la tabla `fx` de habilidades), igual que los `fx_hit_spark`/`fx_dust`/`fx_explosion` de *Intereses*. Si el prop no existe, el cliente sigue funcionando con el texto flotante y las partículas de siempre (fallback ya implementado), así que esto es una mejora, no una dependencia nueva.
 
+### Rivales: variante femenina (`<cuerpoBase>-f--<paleta>`)
+
+El generador de rivales (`content/willy/gen/rivals.ts`) tira `genero: 'm'|'f'` al 50 % para cada rival, independiente de la raza. Cada raza tiene ahora también su versión femenina, el mismo cuerpo con detalles pintados encima (`races.<raza>.female.extra` en `rivals.json`: lazo rosa, coletas o flor, mofletes, pestañas), con las mismas animaciones y anclajes: `rival-cuerpo-<raza>-f--<paleta>` (y `rival-cuerpo-<raza>-f`, la primera paleta). `rivals.bodies.<raza>.femalePalettes` da el `spriteId` de cada paleta. El cliente (`bodySprite()` en `rulesets/willy/rivals.ts`) usa el `-f` solo si existe en `sprites` y, si no, el id de siempre; los legendarios tienen el género y el sprite fijos. Vista previa (filas «(f)»): [`art-previews/willy-rivals.png`](art-previews/willy-rivals.png).
+
+### Despacho de Xelda (Planta 5)
+
+Pedido por el agente de *Willy* para la sala fija `p5-despacho-de-xelda` (suelo `moqueta`, muros `muro-plato`, sin terrenos nuevos). Entidades que ocupan casilla (`sprites`, `idle`): `retrato-ganador-1..3` (16×20, el mismo marco y la misma sonrisa; el 1 es el más reciente y el 3 casi borrado), `vitrina-trofeos` (16×24, copas polvorientas) y `archivador` (16×24, cintas y cajas con etiquetas rojas de temporada). Decoración (`props`, `floor`): `contrato` (8×8, el taco grapado de catorce páginas, para dibujar sobre `mesa-xelda`). `mesa-xelda`, `silla-director`, `monitor-escenario` y `espejo-bombillas` ya existían. Vista previa: [`art-previews/ninja-props.png`](art-previews/ninja-props.png) y [`art-previews/ninja-characters.png`](art-previews/ninja-characters.png).
+
+### Estado de las peticiones al render para *Willy*
+
+El arte de los props grandes (`mostrador-maripuri`, `barra-paco`, `mesa-xelda`, `caseta-feria`), de los marcos `ui` de 9 cortes (`carta-*`, `slice: 8`) y de la caja legendaria (`caja-legendaria-*`, más `caja-legendaria-estrellas`) está completo; dibujarlos en grande, con `border-image` o flotando es trabajo del cliente (ya lo hace el de la meta con CSS). Pantalla de título: `assets/title/title.png` coincide con `title.spec.json` (regenerada con `npm run art`, sin cambios) y `content/willy/game.ts` la declara en `titleImage`, que `src/ui/titleScreen.ts` muestra.
+
 ### Derrumbe (`grieta`, `hundido`, `fx-polvo-derrumbe`, `fx-cascotes`)
 
 Arte para el reloj de derrumbe de planta (`floors.json` → `reloj.derrumbe`): la sala tiembla y se agrieta una ronda antes de caer, luego la casilla queda hundida e intransitable.

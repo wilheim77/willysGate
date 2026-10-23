@@ -1,6 +1,6 @@
 # Willy el mazmorrero: guion del prólogo
 
-> Estado: **borrador pendiente de aprobación** (Fase 0 de *Willy*, 2026-10-17).
+> Estado: **aprobado** por el usuario (2026-10-23). La viñeta de las reglas debe decir diez plantas, no cinco.
 > Lo ilustra la sesión de arte en `content/willy/cinematics/` y `content/willy/public/assets/cinematics/`. Este documento es la fuente del texto; si cambia aquí, se cambia allí.
 
 ## Requisitos
