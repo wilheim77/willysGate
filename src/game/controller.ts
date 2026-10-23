@@ -100,7 +100,7 @@ export class GameController {
   // --- Input --------------------------------------------------------------------
 
   onTileSelected(tile: Vec2, entityId?: string): void {
-    if (this.scene.busy) return;
+    if (this.scene.busy) return this.waitFeedback();
     this.tappedEntity = entityId;
     const { turn } = this.state;
     if (turn.mode !== 'combat') {
@@ -141,7 +141,14 @@ export class GameController {
     this.dispatchMove(active!, tile);
   }
 
+  /** A tap that lands while things are still animating isn't ignored in silence: that reads as a frozen game. */
+  private waitFeedback(): void {
+    this.hud.say(this.game.texts.combat?.busy ?? 'Un momento…');
+  }
+
   selectAction(action: ActionDef | null): void {
+    // Picking an ability mid-animation would look accepted but then every tap on a target is dropped.
+    if (action && this.scene.busy) return this.waitFeedback();
     const active = this.state.turn.activeEntityId;
     this.picks = [];
     if (!action || !active) {
