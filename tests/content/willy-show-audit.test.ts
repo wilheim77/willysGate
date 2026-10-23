@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { type GameEvent, type GameState, type JsonValue, OBJECT_TAG, RngCursor, SYSTEM_ISSUER } from '../../engine';
 import { willy } from '../../rulesets/willy';
-import { audienceOf, showAfterCommand } from '../../rulesets/willy/show';
+import { audienceOf, showAfterCommand, sponsorsOf } from '../../rulesets/willy/show';
 import '../../content/willy/setup';
 import { W, engine, game, rat } from '../rulesets/willy-helpers';
 
@@ -93,3 +93,22 @@ function applied(s: GameState, effects: unknown[]): GameState {
   }
   return out;
 }
+
+describe('Show audit: sponsor gifts', () => {
+  it('in combat a gift waits for the end of the round (parachute); out of combat it arrives at once', () => {
+    let s = inCombat(game([W('willy', 'butanero', 0, 0), rat('r', 6, 0)], ['........']));
+    s = withSystem(s, 'audiencia', { valor: 5000 });
+    const out = run(s, [{ type: 'noop' } as GameEvent]);
+    let st = applied(s, out.effects);
+    const sp = sponsorsOf(st)!;
+    // Colmena at 49: the next fall pushes it past 50 (aFavor → gift).
+    st = withSystem(st, 'patrocinadores', { ...sp, porId: { ...sp.porId, colmena: { ...sp.porId.colmena!, afinidad: 49, estado: 'interesado', mirando: true } } });
+    const fall = run(st, [{ type: 'entityFell', entityId: 'r', levels: 2 } as GameEvent]);
+    expect(of(fall.events, 'sponsorGiftIncoming')).toHaveLength(1);
+    expect(of(fall.events, 'sponsorGift')).toHaveLength(0);
+    let next = applied(st, fall.effects);
+    next = { ...next, turn: { ...next.turn, round: next.turn.round + 1 } };
+    const dropped = run(next, [{ type: 'turnStarted', entityId: 'willy', round: next.turn.round } as GameEvent]);
+    expect(of(dropped.events, 'sponsorGift')).toHaveLength(1);
+  });
+});
