@@ -452,7 +452,12 @@ body:has(#combat:not([hidden])) .tutorial-toast { top: calc(var(--top-h) + var(-
   .tutorial-toast {
     left: 64px; right: 8px; transform: none; width: auto;
     top: calc(var(--top-h) + var(--safe-top) + 64px);
+    /* Smaller, so a two-paragraph tip leaves most of the map in view. */
+    padding: 6px 8px; gap: 6px; border-width: 2px;
   }
+  .tutorial-toast p { font-size: var(--fs-xs); line-height: 1.2; }
+  .tutorial-toast .body { gap: 4px; }
+  .tutorial-toast .close { min-width: 36px; min-height: 36px; }
   /* The countdown pushes #meters down 44px: the toast goes with it. */
   body:has(#clock-hud:not([hidden])):not(:has(#combat:not([hidden]))) .tutorial-toast { top: calc(var(--top-h) + var(--safe-top) + 108px); }
 }
