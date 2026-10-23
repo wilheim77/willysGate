@@ -150,6 +150,7 @@
         },
         {
           "id": "plan-de-prevencion",
+          "requiere": "trampas",
           "texto": "Plan de prevención de riesgos: descubre 2 trampas antes de pisarlas. Pisar una anula el plan.",
           "cuenta": [{"evento": "trapDetected", "donde": {"actor.id": "willy"}}],
           "cantidad": 2,

@@ -184,7 +184,7 @@ function pick(event: GameEvent, state: GameState): { text: string; priority: num
       // An achievement: the generic header, then its own line (achievements.json → narrador),
       // naming what the unlocking event was about (its `contexto`).
       if (event.type === 'achievementUnlocked' && typeof view.frase === 'string') {
-        const own = fill(view.frase, { ...ctx, ...achievementContext(view.contexto) });
+        const own = fill(view.frase, { ...ctx, ...achievementContext(view.contexto, state) });
         if (own) text = `${text} ${own}`;
       }
       if (bank.memoria) recent.set(bank.id, [...seen, line.id].slice(-bank.memoria));
@@ -196,10 +196,13 @@ function pick(event: GameEvent, state: GameState): { text: string; priority: num
 }
 
 /** An unlock carries the names of what triggered it: {enemigo} with its gender, {objeto}, {habilidad}. */
-function achievementContext(raw: unknown): Record<string, Named | string | number> {
+function achievementContext(raw: unknown, state: GameState): Record<string, Named | string | number> {
   const c = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
   const out: Record<string, Named | string | number> = {};
-  if (typeof c.enemigo === 'string') out.enemigo = { name: c.enemigo, gender: c.enemigoGenero === 'f' ? 'f' : 'm' };
+  if (typeof c.enemigo === 'string') {
+    const real = typeof c.enemigoId === 'string' ? entityNamed(state.entities[c.enemigoId]) : undefined;
+    out.enemigo = real ?? { name: c.enemigo, gender: c.enemigoGenero === 'f' ? 'f' : 'm' };
+  }
   const obj = itemNamed(c.objeto);
   if (obj) out.objeto = obj;
   if (typeof c.habilidad === 'string') out.habilidad = ABILITY_NAMES[c.habilidad] ?? c.habilidad;

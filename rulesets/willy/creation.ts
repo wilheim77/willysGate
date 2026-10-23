@@ -7,12 +7,12 @@ const POINTS: Extract<CreationStep, { kind: 'points' }> = {
   id: 'puntos',
   kind: 'points',
   label: 'Puntos libres',
-  help: `Willy empieza con 5 en todo, +1 por ser de Castro y lo que dé su clase. Tienes ${WILLY.puntosLibres} puntos más: ya van repartidos como los repartiría el Narrador; cámbialos a tu gusto.`,
-  format: (total, bonus, points) => `${total} (base ${bonus} + ${points})`,
+  help: `Willy empieza con 5 en todo, +1 por ser de Castro y lo que dé su clase. Reparte ${WILLY.puntosLibres} puntos más donde quieras.`,
   stats: ATTRS.map((a) => ({ id: a, label: ATTR_LABELS[a] })),
   min: 0,
   max: 3,
   budget: WILLY.puntosLibres,
+  display: 'sum', // «8 + 2 = 10»: Willy's attributes are used as they are, there's no modifier to show
   cost: { 0: 0, 1: 1, 2: 2, 3: 3 },
   recommended: (choices) => recommendedPoints(String(choices.clase ?? 'butanero')),
   bonuses: (choices) => {

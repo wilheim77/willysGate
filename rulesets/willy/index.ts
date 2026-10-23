@@ -25,6 +25,7 @@ import './summons';
 import { syncCompanions } from './companions';
 import './xp';
 import './monsters';
+import './difficulty';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
@@ -34,6 +35,7 @@ import { rivalAfterCommand } from './rivals';
 import { describeEntity } from './sheet';
 import { clockAfterCommand } from './clock';
 import { endingAfterCommand } from './ending';
+import { tutorialAfterCommand, tutorialUnlocked } from './tutorial';
 import { bossAfterCommand, showAfterCommand, showCommands, showLateAfterCommand } from './show';
 import { achievementsHook } from './achievements';
 import { equipItem, equippedInSlotOf, equippedOnEntity, itemSlotOf, itemUseOf, itemsHook, unequipItem } from './items';
@@ -350,6 +352,8 @@ registerAfterCommand(traitsAfterCommand, 56);
 registerAfterCommand(regenHook, 60);
 registerAfterCommand(achievementsHook, 100);
 registerAfterCommand(showLateAfterCommand, 110);
+// The tutorial last: it reads everything the command and the other hooks emitted (tutorial.ts).
+registerAfterCommand(tutorialAfterCommand, 120);
 
 /**
  * Runs the hooks in order. Each sees the state left by the ones before and the command's events
@@ -426,7 +430,8 @@ export const willy: Ruleset = {
   dangerAt: (state, _id, p) =>
     Object.values(state.entities).filter((e) => hasTag(e, 'explosivo') && standing(e) && Math.max(Math.abs(e.position.x - p.x), Math.abs(e.position.y - p.y)) <= 1).length * BARREL_BLAST * 0.35,
   noticeTrap: (state, id, trap) => noticeTrap(state, id, trap),
-  triggerTrap: (state, id, trap, rng) => triggerTrap(willy, state, id, trap, rng),
+  // Traps stay harmless on the first floor until the tutorial turns them on (tutorial.ts).
+  triggerTrap: (state, id, trap, rng) => (tutorialUnlocked(state, 'sistema.trampas') ? triggerTrap(willy, state, id, trap, rng) : { effects: [], events: [] }),
   describeEntity: (state, id) => describeEntity(state, id, { conditions }),
   afterCommand: (state, events, rng) => afterCommand(willy, state, events, rng),
   itemSlot: itemSlotOf,
@@ -445,6 +450,8 @@ export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progressi
 export { SURFACES } from './environment';
 export * from './meta';
 export * from './ending';
+export { DIFFICULTIES, difficultyOf, type DifficultyMods } from './difficulty';
+export { configureTutorial, tutorialFlag, tutorialUnlocked, type TutorialData, type TutorialStepData } from './tutorial';
 export { BAG, itemActionId, itemActions, slotOf, startingItemEffects } from './items';
 export { grantItem, grantLootBox, rollBox } from './loot';
 export { explorationHealing } from './regen';

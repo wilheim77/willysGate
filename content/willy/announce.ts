@@ -21,5 +21,10 @@ export function announce(event: GameEvent, state: GameState): { text: string; bi
     const unlocked = ((e.desbloquea as string[] | undefined) ?? []).map((id) => cls?.habilidades.find((h) => h.id === id)?.nombre ?? id);
     return { text: `¡${who.name} sube a nivel ${e.nivel}!${unlocked.length ? ` Nueva habilidad: ${unlocked.join(', ')}` : ''}`, big: unlocked.length > 0 };
   }
+  // The collapse caught Willy: say why he's at the stairs, hurt and on the floor.
+  if (e.type === 'roomCollapsing' && e.fase === 'caida' && e.willyDentro) {
+    return { text: '¡Derrumbe! Producción te saca a rastras hasta la escalera: −30 % de vida y Tumbado. Levántate y baja.', big: true };
+  }
+  if (e.type === 'clockExpired') return { text: '¡Se acabó el reloj! Las salas empiezan a caer, de la más lejana a la escalera.', big: true };
   return null;
 }

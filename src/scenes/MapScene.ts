@@ -502,10 +502,7 @@ export class MapScene extends Phaser.Scene {
     const extra = this.hooks.floatFor?.(event, state);
     if (extra) {
       const s = sprite(extra.entityId) ?? sprite(this.hooks.controlledEntityId());
-      // The text is world-sized (tile x size) and the camera zooms in: a long line ("+248 espectadores")
-      // at the 0.5 of a damage number is wider than a phone screen, so it shrinks with its length.
-      const size = Math.max(0.26, Math.min(0.5, 3.2 / Math.max(1, extra.text.length)));
-      if (s) void this.juice.floatText(s.x, s.y - T * 0.9, extra.text, extra.color ?? '#ffd24a', size);
+      if (s) void this.juice.floatText(s.x, s.y - T * 0.9, extra.text, extra.color ?? '#ffd24a', 0.5);
     }
     if (event.type === castEvent.type) return this.playCastEvent(e, castEvent, state, T);
     switch (event.type) {
@@ -1326,6 +1323,9 @@ export class MapScene extends Phaser.Scene {
 
   /** Tiles the active creature can reach this turn, and creatures/tiles that are valid targets. */
   setOverlays(moveTiles: Vec2[], targetIds: string[], areaTiles: Vec2[] = [], pickedIds: string[] = []): void {
+    // Before create() has run (or if the renderer failed to boot) there's nothing to draw on;
+    // throwing here would abort controller.refresh and, with it, the whole new-game flow.
+    if (!this.overlay) return;
     const g = this.overlay.clear();
     const T = this.grid.tile;
     const state = this.store.state;

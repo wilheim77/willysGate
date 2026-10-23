@@ -30,8 +30,12 @@ export type CreationStep =
       recommended(choices: CreationChoices): Record<string, number>;
       /** What the final value will be after bonuses (e.g. racial), shown next to each stat. */
       bonuses?(choices: CreationChoices): Record<string, number>;
-      /** How the final value reads next to each stat; default is the 5e style "+2 → 14 (+2)". */
-      format?(total: number, bonus: number, points: number): string;
+      /**
+       * How the line next to each stat reads: `modifier` (default) «+2 → 15 (+2)», the bonus,
+       * the total and the d20-style modifier of (total − 10) / 2; `sum` «8 + 2 = 10», for a
+       * ruleset whose numbers are used as they are.
+       */
+      display?: 'modifier' | 'sum';
     };
 
 export interface CreationSpec {

@@ -63,6 +63,7 @@ export class Hud {
       case 'save': {
         const ok = this.slots.save(this.store.state);
         this.say(ok ? t.saved : t.saveFailed, !ok);
+        if (ok) this.store.announce({ type: 'gameSaved' });
         break;
       }
       case 'load':

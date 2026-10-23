@@ -107,6 +107,12 @@ export class GameController {
         this.approachAndInteract(target.id);
         return;
       }
+      // Someone standing there with nothing to say: answer the tap instead of walking onto them
+      // (a tap that does nothing at all reads as a broken game).
+      if (target && target.id !== this.game.leaderId && target.controllerId !== this.game.playerId && target.tags.includes('noncombatant') && !target.tags.includes('object')) {
+        this.hud.say(`${target.name}: ${this.game.texts.combat?.noReply ?? 'no tiene nada que decirte. Por ahora.'}`);
+        return;
+      }
       // A known, armed trap: walk up to it and offer to disarm it.
       const trap = trapAt(this.state, tile);
       if (trap && !trap.hidden && trap.armed && trap.disarm) {

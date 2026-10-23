@@ -5,6 +5,7 @@ import type { RivalRecord } from './gen/rivals';
 import { MAPS } from './maps';
 import './show';
 import './meta-content';
+import './tutorial';
 
 /**
  * The game's start and the casting, without any client imports (so tests and a future server
