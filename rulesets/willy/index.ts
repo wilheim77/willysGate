@@ -25,6 +25,7 @@ import './summons';
 import { syncCompanions } from './companions';
 import './xp';
 import './monsters';
+import './difficulty';
 import { ATTRS, ATTR_LABELS, attr, baseMovement, classOf, hasTrait, level, skillLevel, useResource } from './character';
 import { type Attr, CLASSES, WILLY, allAbilityIds } from './data';
 import { SURFACES, SURFACE_REACTIONS, noticeTrap, onFall, onRoundEnd, onSurface, triggerTrap } from './environment';
@@ -443,6 +444,7 @@ export { MAX_LEVEL, XP_FOR_LEVEL, levelForXp, levelUpEffects } from './progressi
 export { SURFACES } from './environment';
 export * from './meta';
 export * from './ending';
+export { DIFFICULTIES, difficultyOf, type DifficultyMods } from './difficulty';
 export { configureTutorial, tutorialFlag, tutorialUnlocked, type TutorialData, type TutorialStepData } from './tutorial';
 export { BAG, itemActionId, itemActions, slotOf, startingItemEffects } from './items';
 export { grantItem, grantLootBox, rollBox } from './loot';

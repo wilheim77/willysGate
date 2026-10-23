@@ -1,6 +1,7 @@
 import { type ActionOutcome, type Effect, type Entity, type GameEvent, type GameState, type JsonValue, type RngCursor, type Ruleset, type Vec2, hasTag, zonesOf } from '../../engine';
 import { seasonDecided } from './ending';
 import { tutorialUnlocked } from './tutorial';
+import { difficultyOf } from './difficulty';
 import { standing } from './resolve';
 
 /**
@@ -154,7 +155,9 @@ export function clockAfterCommand(_ruleset: Ruleset, state: GameState, events: G
   if (seasonDecided(state)) return { effects, events: out };
   if (!clock || clock.mapa !== state.map.id) {
     const visitas = Number(state.flags[visitFlag(p.mapa)] ?? 0) + 1;
-    clock = { label: 'Reloj', remaining: p.reloj.segundos, total: p.reloj.segundos, mapa: p.mapa, planta: p.numero, ultimaRonda: 0, avisados: [], pasado: 0, agrietadas: [], caidas: [], expulsado: false };
+    // Turista ×1,5, Prime time ×0,8 (difficulty.ts).
+    const segundos = Math.round(p.reloj.segundos * difficultyOf(state).reloj);
+    clock = { label: 'Reloj', remaining: segundos, total: segundos, mapa: p.mapa, planta: p.numero, ultimaRonda: 0, avisados: [], pasado: 0, agrietadas: [], caidas: [], expulsado: false };
     effects.push({ type: 'setFlag', flag: visitFlag(p.mapa), value: visitas });
     out.push({ type: 'floorEntered', planta: p.numero, nombrePlanta: p.nombre, visita: visitas } as GameEvent);
     out.push({ type: 'clockStarted', planta: p.numero, nombrePlanta: p.nombre, reloj: mmss(clock.remaining) } as GameEvent);
