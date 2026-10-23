@@ -144,7 +144,7 @@ controller.onTrapReached = (trap, candidates) => {
           if (ev?.replaced) offerReplaced(ev.replaced, id, onDone);
           else onDone();
         },
-      })),
+      })).concat([{ label: 'Guardarlo en la mochila', onPick: onDone }]),
       false,
     );
   };
@@ -165,16 +165,19 @@ controller.onTrapReached = (trap, candidates) => {
   store.subscribe((change) => {
     if (change.kind !== 'events') return;
     const dropped = new Set(change.events.filter((e) => e.type === 'lootDropped').map((e) => (e as unknown as { item: string }).item));
+    // Swapping gear puts the old piece back in the bag: that is not a new find, and asking about
+    // it again looped forever (playtest: three weapons, no way out).
+    const reshuffle = change.events.some((e) => /^item(Equipped|Unequipped|Used)$/.test(e.type));
     for (const ev of change.events) {
       // Gear found in a chest or handed over in a conversation gets the same "who wears it?" question.
       const found = ev as unknown as { owner?: string; item?: string; from?: number; to?: number };
-      const fromChest = ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
+      const fromChest = !reshuffle && ev.type === 'itemsChanged' && found.owner === 'party' && (found.to ?? 0) > (found.from ?? 0) && !dropped.has(found.item ?? '');
       if (ev.type !== 'lootDropped' && !fromChest) continue;
       const item = (ev as unknown as { item: string }).item;
       // Consumables and misc goods have no slot: they're already in the shared bag (see the
       // combat log line for them), nothing to ask.
       if (!store.engine.ruleset.itemSlot?.(item)) continue;
-      lootQueue.push(item);
+      if (!lootQueue.includes(item)) lootQueue.push(item);
     }
     pumpLootQueue();
   });
