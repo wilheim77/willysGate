@@ -2098,19 +2098,19 @@
     "accionesEnemigo": 1,
     "jefes": {
       "2": {
-        "multVida": 0.3,
+        "multVida": 0.55,
         "dano": "1d6"
       },
       "4": {
-        "multVida": 0.25,
+        "multVida": 0.6,
         "dano": "1d8"
       },
       "6": {
-        "multVida": 0.32,
+        "multVida": 0.55,
         "dano": "1d10"
       },
       "8": {
-        "multVida": 0.33,
+        "multVida": 0.55,
         "dano": "1d8"
       },
       "10": {
@@ -2138,17 +2138,17 @@
     "vidaEnemigos": {
       "1": 0.8,
       "2": 0.8,
-      "3": 1,
-      "4": 1.0,
-      "5": 1,
-      "6": 1.25,
-      "7": 1,
-      "8": 1.25,
-      "9": 1,
-      "10": 1.25
+      "3": 0.9,
+      "4": 0.9,
+      "5": 0.9,
+      "6": 1.0,
+      "7": 0.9,
+      "8": 1.0,
+      "9": 0.9,
+      "10": 1.0
     },
     "guardian": {
-      "multVida": 2.0,
+      "multVida": 4.5,
       "bonoAtaque": 1,
       "bonoDef": 0,
       "xp": 3
@@ -2196,6 +2196,30 @@
           "estalla": "autodestruccion"
         }
       }
+    },
+    "danoExtra": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 1,
+      "8": 1,
+      "9": 2,
+      "10": 1
+    },
+    "ataqueExtra": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 1,
+      "9": 1,
+      "10": 1
     }
   },
   "pisos": [
@@ -2259,7 +2283,7 @@
       "parte": 1,
       "nombre": "Hipermercado Eterno: Pasillos infinitos",
       "nivelEsperado": 3,
-      "relojSegundos": 735,
+      "relojSegundos": 705,
       "xpTotal": 208,
       "generacion": {
         "rejilla": {
@@ -2286,7 +2310,7 @@
       "parte": 2,
       "nombre": "Hipermercado Eterno: La trastienda",
       "nivelEsperado": 4,
-      "relojSegundos": 900,
+      "relojSegundos": 870,
       "xpTotal": 299,
       "generacion": {
         "rejilla": {
@@ -2340,7 +2364,7 @@
       "parte": 2,
       "nombre": "La Verbena Sin Fin: La plaza mayor",
       "nivelEsperado": 6,
-      "relojSegundos": 990,
+      "relojSegundos": 945,
       "xpTotal": 520,
       "generacion": {
         "rejilla": {
@@ -2421,7 +2445,7 @@
       "parte": 1,
       "nombre": "El Plató: Los pasillos de producción",
       "nivelEsperado": 9,
-      "relojSegundos": 705,
+      "relojSegundos": 675,
       "xpTotal": 910,
       "generacion": {
         "rejilla": {
@@ -2448,7 +2472,7 @@
       "parte": 2,
       "nombre": "El Plató: El plató principal",
       "nivelEsperado": 10,
-      "relojSegundos": 960,
+      "relojSegundos": 915,
       "xpTotal": 1105,
       "generacion": {
         "rejilla": {

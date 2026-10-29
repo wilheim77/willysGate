@@ -35,7 +35,7 @@ export interface FloorRun {
   /** Willy's health left at the end, as a share of the maximum. */
   hpLeft: number;
   /** Per fight: the foes, and Willy's health before and after. */
-  log: { foes: string[]; before: number; after: number; boss: boolean; room: number; rounds: number }[];
+  log: { foes: string[]; before: number; after: number; boss: boolean; room: number; rounds: number; stats: FightStats }[];
   /** Audience when the floor ends. */
   audiencia: number;
   /** The presenter's Share when his fight ends (floor 10), and how often it kept him at 1 health. */
@@ -44,6 +44,26 @@ export interface FloorRun {
 }
 
 const MAX_COMMANDS = 1500;
+
+/** What a fight looked like, for tuning the curve (tests/content/willy-fight-probe.test.ts). */
+export interface FightStats {
+  /** Max health at the start: the party's (Willy + companion) and the foes'. */
+  partyHp: number;
+  foeHp: number;
+  /** Damage taken by the party and by the foes. */
+  partyDamage: number;
+  foeDamage: number;
+  /** Foe turns, attacks rolled against the party, and hits. */
+  foeTurns: number;
+  foeAttacks: number;
+  foeHits: number;
+  /** Damage of the foes' hits against the party, as a share of the target's max health, summed. */
+  hitShare: number;
+  /** Willy's attack rolls and hits; party turns. */
+  willyAttacks: number;
+  willyHits: number;
+  partyTurns: number;
+}
 
 // Out-of-combat regen (rulesets/willy/regen.ts): on by default, matching a real run; the
 // balance regression test and tuning probes can turn it off to see the harder floor.
@@ -104,27 +124,63 @@ function standingIds(state: GameState, ids: string[]): string[] {
 }
 
 /** One fight to the end. Returns the state after it and whether it ended normally. */
-function fight(state: GameState, party: string[], foes: string[]): { state: GameState; stalled: boolean; enAntena: number; rounds: number } {
+function fight(state: GameState, party: string[], foes: string[]): { state: GameState; stalled: boolean; enAntena: number; rounds: number; stats: FightStats } {
   const e = engine();
   const started = e.apply(state, { type: 'startCombat', issuer: SYSTEM_ISSUER, participants: [...party, ...foes] } as BaseCommand);
-  if (!started.ok) return { state, stalled: false, enAntena: 0, rounds: 0 };
+  const maxHp = (ids: string[], st: GameState) => ids.reduce((sum, id) => sum + (st.entities[id]?.resources.vida?.max ?? 0), 0);
+  const stats: FightStats = { partyHp: maxHp(party, state), foeHp: maxHp(foes, state), partyDamage: 0, foeDamage: 0, foeTurns: 0, foeAttacks: 0, foeHits: 0, hitShare: 0, willyAttacks: 0, willyHits: 0, partyTurns: 0 };
+  if (!started.ok) return { state, stalled: false, enAntena: 0, rounds: 0, stats };
   let s = started.state;
   let enAntena = 0;
   let rounds = 1;
+  const inParty = (id: string) => s.entities[id]?.controllerId.startsWith('player') ?? false;
   for (let i = 0; i < MAX_COMMANDS && s.turn.mode === 'combat'; i++) {
     const id = s.turn.activeEntityId!;
     const r = e.apply(s, nextAiCommand(willy, s, id));
     if (r.ok) {
       s = r.state;
       enAntena += r.events.filter((ev) => ev.type === 'enAntena').length;
-      for (const ev of r.events) if (ev.type === 'turnStarted') rounds = Math.max(rounds, Number((ev as unknown as { round?: number }).round ?? 0));
+      let lastFoeHitOn: string | undefined;
+      for (const ev of r.events) {
+        const f = ev as unknown as Record<string, unknown>;
+        if (ev.type === 'turnStarted') {
+          rounds = Math.max(rounds, Number(f.round ?? 0));
+          if (inParty(String(f.entityId))) stats.partyTurns++;
+          else stats.foeTurns++;
+        }
+        if (ev.type === 'attackRolled') {
+          const fromParty = inParty(String(f.attackerId));
+          if (!fromParty && inParty(String(f.targetId))) {
+            stats.foeAttacks++;
+            if (f.hit) {
+              stats.foeHits++;
+              lastFoeHitOn = String(f.targetId);
+            }
+          }
+          if (f.attackerId === 'willy' && !inParty(String(f.targetId))) {
+            stats.willyAttacks++;
+            if (f.hit) stats.willyHits++;
+          }
+        }
+        if (ev.type === 'damageDealt') {
+          const target = String(f.targetId);
+          const amount = Number(f.amount ?? 0);
+          if (inParty(target)) {
+            stats.partyDamage += amount;
+            if (lastFoeHitOn === target) {
+              stats.hitShare += amount / Math.max(1, s.entities[target]?.resources.vida?.max ?? 1);
+              lastFoeHitOn = undefined;
+            }
+          } else if (foes.includes(target)) stats.foeDamage += amount;
+        }
+      }
     } else {
       const skip = e.apply(s, { type: 'endTurn', issuer: SYSTEM_ISSUER, entityId: id } as BaseCommand);
       if (!skip.ok) break;
       s = skip.state;
     }
   }
-  return { state: s, stalled: s.turn.mode === 'combat', enAntena, rounds };
+  return { state: s, stalled: s.turn.mode === 'combat', enAntena, rounds, stats };
 }
 
 const audienceOf = (s: GameState) => (s.systems.audiencia as unknown as { valor?: number } | undefined)?.valor ?? SHOW.audience.inicial;
@@ -180,7 +236,7 @@ export function simulateFloor(seed: number, floor: number, classId: string, audi
     const inRoom = Object.fromEntries(Object.entries(state.entities).filter(([id]) => !aside[id]));
     const result = fight({ ...state, entities: inRoom }, party, foes);
     state = { ...result.state, entities: { ...aside, ...result.state.entities } };
-    run.log.push({ foes: foes.map((id) => state.entities[id]!.spriteId), before, after: state.entities.willy!.resources.vida!.current, boss, room: Number(zone.name.split('-')[1]), rounds: result.rounds });
+    run.log.push({ foes: foes.map((id) => state.entities[id]!.spriteId), before, after: state.entities.willy!.resources.vida!.current, boss, room: Number(zone.name.split('-')[1]), rounds: result.rounds, stats: result.stats });
     if (foes.includes(SHOW.share.jefeId)) {
       run.share = (state.systems.share as unknown as { valor?: number } | undefined)?.valor;
       run.enAntena = result.enAntena;

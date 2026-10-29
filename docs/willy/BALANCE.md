@@ -35,14 +35,14 @@ Dos pisos por planta. El primero acaba en un **guardián** (el enemigo más duro
 |---|---|---|---|---|---|
 | 1 | Castro Sumergido: Las calles anegadas | 1 | 7-9 | 7:00 | 78 |
 | 2 | Castro Sumergido: La lonja | 2 | 11-14 | 12:00 | 130 |
-| 3 | Hipermercado Eterno: Pasillos infinitos | 3 | 9-11 | 12:15 | 208 |
-| 4 | Hipermercado Eterno: La trastienda | 4 | 11-14 | 15:00 | 299 |
+| 3 | Hipermercado Eterno: Pasillos infinitos | 3 | 9-11 | 11:45 | 208 |
+| 4 | Hipermercado Eterno: La trastienda | 4 | 11-14 | 14:30 | 299 |
 | 5 | La Verbena Sin Fin: Las barracas | 5 | 9-11 | 12:30 | 390 |
-| 6 | La Verbena Sin Fin: La plaza mayor | 6 | 11-14 | 16:30 | 520 |
+| 6 | La Verbena Sin Fin: La plaza mayor | 6 | 11-14 | 15:45 | 520 |
 | 7 | Balneario Glaciar: Los vestuarios | 7 | 9-11 | 12:15 | 650 |
 | 8 | Balneario Glaciar: Las termas | 8 | 11-14 | 19:30 | 780 |
-| 9 | El Plató: Los pasillos de producción | 9 | 9-11 | 11:45 | 910 |
-| 10 | El Plató: El plató principal | 10 | 11-14 | 16:00 | 1105 |
+| 9 | El Plató: Los pasillos de producción | 9 | 9-11 | 11:15 | 910 |
+| 10 | El Plató: El plató principal | 10 | 11-14 | 15:15 | 1105 |
 
 **Curva de nivel:** se entra en el piso N a nivel N y se sale a nivel N+1. La experiencia de cada piso es lo que falta para el siguiente nivel, ×1,3 (no hace falta limpiar todas las salas). Las habilidades de clase de nivel 9 llegan en el piso 8-9, así que se usan en el último tercio de la temporada.
 
@@ -87,6 +87,55 @@ Lectura:
 
 El piso 8 se queda en 19:30: sus combates son los más largos (3,8 rondas por pelea) y ya iba justo.
 
+## Curva de combate (recalibrada el 2026-10-29)
+
+Petición del usuario: «llega un momento en el que los enemigos hacen muy poco daño y tienen mucha vida, con lo que los combates se vuelven larguísimos».
+
+**El problema:** la vida de Willy se triplica en la temporada (unos 26 de vida a nivel 1, 52-76 a nivel 11), pero el daño de los enemigos casi no cambia.
+- Sus dados (1d4 en Castro, 1d6-1d8 en el Plató) no suman fuerza.
+- A partir del piso 6, un golpe enemigo quitaba solo el 7-10 % de la vida.
+- Encima, `vidaEnemigos` les ponía un 25 % más de vida en los pisos 6, 8 y 10.
+- Resultado: enemigos que aguantan mucho y no asustan.
+- Además, los guardianes y los jefes caían en 2-4 rondas: no parecían jefes.
+
+**Cómo se mide** (`tests/content/willy-fight-probe.test.ts`, `SIM_FIGHTS=4`): cada piso con las 9 clases × 4 semillas, a nivel esperado y jugado por la IA. Para cada combate se cuentan:
+- las rondas;
+- los aciertos enemigos y cuánto quita cada golpe, como % de la vida máxima de quien lo recibe;
+- los aciertos de Willy;
+- la vida enemiga total dividida entre el daño que hace el grupo por ronda.
+
+**Palancas nuevas** (`floors.json → equilibrio`):
+- `danoExtra`: daño fijo que se suma al dado de los enemigos normales y del guardián.
+- `ataqueExtra`: bono para acertar.
+
+**Valores:**
+- Más daño y menos vida. `danoExtra`: +1 en los pisos 7, 8 y 10, y +2 en el 9. `ataqueExtra`: +1 en los pisos 8-10.
+- Vida enemiga: ×0,9 en los pisos 3, 4, 5, 7 y 9, y ×1 en los pisos 6, 8 y 10 (antes ×1 y ×1,25).
+- Guardián: vida ×4,5 (antes ×2).
+- Jefes: vida ×0,55 en el Centollo (33), ×0,6 en la Encargada (55), ×0,55 en el Gigantón (65) y ×0,55 en la Socorrista (83). El Presentador no cambia.
+
+**Antes → ahora** (la IA de los dos lados; una persona tarda más rondas que la IA, así que lo que cuenta es la tendencia):
+
+| Piso | Rondas (normal, p50/p90) | Rondas (guardián/jefe, p50/p90) | Daño por golpe enemigo (% de la vida) | Acierto enemigo | Vida enemiga ÷ daño del grupo por ronda | Jefe ganado | Piso sin caer |
+|---|---|---|---|---|---|---|---|
+| 1 | 2/3 → 2/3 | 2/2 → 3/4 | 19 % → 15 % | 61 % → 66 % | 1.2 → 1.3 | 100 % → 100 % | 100 % → 100 % |
+| 2 | 1/2 → 1/2 | 2/4 → 4/6 | 21 % → 21 % | 67 % → 59 % | 1.0 → 1.0 | 100 % → 91 % | 85 % → 81 % |
+| 3 | 3/5 → 3/4 | 3/4 → 5/7 | 13 % → 13 % | 70 % → 60 % | 2.4 → 2.4 | 96 % → 94 % | 96 % → 94 % |
+| 4 | 3/4 → 3/4 | 4/6 → 6/8 | 14 % → 11 % | 60 % → 67 % | 2.3 → 2.1 | 96 % → 89 % | 96 % → 89 % |
+| 5 | 3/4 → 3/4 | 3/4 → 5/9 | 11 % → 10 % | 61 % → 60 % | 2.7 → 2.6 | 100 % → 100 % | 100 % → 89 % |
+| 6 | 3/5 → 3/4 | 3/6 → 6/8 | 8 % → 9 % | 67 % → 65 % | 3.0 → 2.4 | 94 % → 92 % | 59 % → 61 % |
+| 7 | 3/5 → 3/6 | 4/5 → 5/10 | 12 % → 13 % | 59 % → 68 % | 2.7 → 2.7 | 100 % → 91 % | 100 % → 89 % |
+| 8 | 4/6 → 3/6 | 4/5 → 7/9 | 10 % → 10 % | 69 % → 66 % | 3.4 → 3.0 | 100 % → 97 % | 100 % → 92 % |
+| 9 | 3/4 → 3/4 | 3/4 → 5/11 | 11 % → 11 % | 53 % → 65 % | 2.0 → 2.0 | 100 % → 89 % | 100 % → 86 % |
+| 10 | 3/5 → 3/4 | 7/12 → 8/13 | 7 % → 9 % | 73 % → 57 % | 2.6 → 2.2 | 78 % → 75 % | 78 % → 75 % |
+
+Lectura:
+- **Combates normales:** 3 rondas de mediana y 4-6 en el p90, como antes. Ahora con menos vida enemiga, así que una persona, que no remata tan bien como la IA, debería notarlo más.
+- **Golpe enemigo:** quita un 9-13 % de la vida en los pisos 3-10, dentro del objetivo del 8-15 %. Antes bajaba al 7-8 % en los pisos 6 y 10. El cambio en los combates normales es pequeño: lo que más cambia es la vida enemiga, que baja entre un 10 y un 20 %.
+- **Guardianes y jefes:** duran 5-8 rondas desde el piso 3 (antes 2-4). El Centollo (piso 2, el primer jefe) se queda en 4 rondas a propósito: es el primero.
+- **Victorias:** el jefe se gana un 89-100 % de las veces en los pisos 1-9 y un 75 % en el 10. El «piso sin caer» (un solo intento, sin repetir) baja unos puntos en los pisos con guardián (5, 7 y 9: 86-89 %). En la temporada, con «Volver a intentarlo», esto se nota menos.
+- **Reloj:** se ha vuelto a medir. Los combates algo más cortos dejan un 3-7 % más de reloj, así que se recortan los relojes de los pisos 3 (11:45), 4 (14:30), 6 (15:45), 9 (11:15) y 10 (15:15). La partida normal sigue saliendo con un 23-28 % del reloj en la mediana.
+
 ## Curva de habilidades (subida por uso)
 
 Umbrales: 8 / 24 / 48 / 80 usos para los niveles 2-5 (red-g: 6 / 16 / 30 / 50 / 75). Resultado en la temporada simulada, mediana de las 27 temporadas:
@@ -116,20 +165,20 @@ La IA se apoya casi siempre en una sola habilidad; una persona reparte más. Por
 | Umbrales de las habilidades por uso | `rulesets/willy/data/classes.json → umbralesHabilidad` |
 | El Share del Presentador | `content/willy/show.ts` (`votoPorRonda`, `drenajeEnAntena`, `curacionDivisor`...) |
 
-Valores actuales (2026-10-18):
+Valores actuales (2026-10-29; daño y ataque extra: «Curva de combate»):
 
 | Piso | Presupuesto | Vida enemigos | Élites | Jefe: vida | Jefe: daño |
 |---|---|---|---|---|---|
-| 1 | ×0,6 | ×0,8 | 0 % | guardián ×2 | — |
-| 2 | ×0,4 | ×0,8 | 10 % | ×0,3 (Centollo, 18) | 1d6 |
-| 3 | ×1 | ×1 | 15 % | guardián | — |
-| 4 | ×0,7 | ×1 | 20 % | ×0,25 (Encargada, 23) | 1d8 |
-| 5 | ×0,75 | ×1 | 25 % | guardián | — |
-| 6 | ×0,65 | ×1,25 | 30 % | ×0,32 (Gigantón, 38) | 1d10 |
-| 7 | ×0,8 | ×1 | 35 % | guardián | — |
-| 8 | ×0,8 | ×1,25 | 40 % | ×0,33 (Socorrista, 50) | 1d8 |
-| 9 | ×0,55 | ×1 | 45 % | guardián | — |
-| 10 | ×0,55 | ×1,25 | 50 % | ×0,27 (Presentador, 59) + Share | 2d6 |
+| 1 | ×0,6 | ×0,8 | 0 % | guardián ×4,5 | — |
+| 2 | ×0,4 | ×0,8 | 10 % | ×0,55 (Centollo, 33) | 1d6 |
+| 3 | ×1 | ×0,9 | 15 % | guardián | — |
+| 4 | ×0,7 | ×0,9 | 20 % | ×0,6 (Encargada, 55) | 1d8 |
+| 5 | ×0,75 | ×0,9 | 25 % | guardián | — |
+| 6 | ×0,65 | ×1 | 30 % | ×0,55 (Gigantón, 65) | 1d10 |
+| 7 | ×0,8 | ×0,9 (+1 daño) | 35 % | guardián | — |
+| 8 | ×0,8 | ×1 (+1 daño, +1 ataque) | 40 % | ×0,55 (Socorrista, 83) | 1d8 |
+| 9 | ×0,55 | ×0,9 (+2 daño, +1 ataque) | 45 % | guardián | — |
+| 10 | ×0,55 | ×1 (+1 daño, +1 ataque) | 50 % | ×0,27 (Presentador, 59) + Share | 2d6 |
 
 Compañeros reforzados en esta pasada: Doña Rosario (Tasador: vida 24, +4 por nivel, ataque 6), Iker (Funcionario: vida 18, ataque 5), Kevin (Influencer: vida 22, +4 por nivel, ataque 6, 1d8) y Plata (Mimo: ataque 5, 1d6).
 

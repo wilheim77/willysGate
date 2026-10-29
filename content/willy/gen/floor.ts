@@ -111,7 +111,7 @@ const MARKERS = new Set(['e', 'c', 't', 'b', 'B', 'l', 'P', 'J', 'X', 'N', 'd'])
 const MAX_ATTEMPTS = 20;
 
 /** Difficulty levers (floors.json → equilibrio), tuned with the balance simulations. */
-const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; primeraPelea: { piso: number; presupuestoMax: number }; jefes: Record<string, { multVida?: number; dano?: string }>; vidaEnemigos: Record<string, number>; elites: { probabilidad: Record<string, number>; modificadores: Record<string, unknown> }; guardian: { multVida: number; bonoAtaque: number; bonoDef: number; xp: number } };
+const BALANCE = floorsData.equilibrio as unknown as { accionesEnemigo: number; presupuesto: Record<string, number>; primeraPelea: { piso: number; presupuestoMax: number }; jefes: Record<string, { multVida?: number; dano?: string }>; vidaEnemigos: Record<string, number>; elites: { probabilidad: Record<string, number>; modificadores: Record<string, unknown> }; guardian: { multVida: number; bonoAtaque: number; bonoDef: number; xp: number }; danoExtra?: Record<string, number>; ataqueExtra?: Record<string, number> };
 const SAFE_DISTANCE = 6;
 
 type Planta = (typeof floorsData.plantas)[number];
@@ -548,6 +548,15 @@ type EnemyDef = {
 type EliteMod = { m: string; f: string; def?: number; ataque?: number; acciones?: number; multVida?: number; movimiento?: number; estalla?: string };
 
 /** An ordinary enemy of the floor's table, perhaps an elite (floors.json → equilibrio.elites). */
+/** «1d6» + 2 → «1d6+2» (floors.json → equilibrio.danoExtra: enemies keep up with Willy's health). */
+function withBonus(dice: string, extra: number): string {
+  if (!extra) return dice;
+  const m = /^(\d+d\d+)([+-]\d+)?$/.exec(dice);
+  if (!m) return dice;
+  const total = Number(m[2] ?? 0) + extra;
+  return `${m[1]}${total > 0 ? `+${total}` : total < 0 ? total : ''}`;
+}
+
 function enemy(entityId: string, id: string, def: EnemyDef, at: Vec2, n: number, eliteId?: string): Entity {
   const mod = eliteId ? (BALANCE.elites.modificadores[eliteId] as EliteMod) : undefined;
   const sprites = ninja.sprites as Record<string, unknown>;
@@ -560,8 +569,8 @@ function enemy(entityId: string, id: string, def: EnemyDef, at: Vec2, n: number,
     spriteId: mod && sprites[`${id}--elite`] ? `${id}--elite` : id,
     vida: Math.round(def.vida * (BALANCE.vidaEnemigos[n] ?? 1) * (mod?.multVida ?? 1)),
     def: def.def + (mod?.def ?? 0),
-    ataque: def.ataque + (mod?.ataque ?? 0),
-    dano: def.dano,
+    ataque: def.ataque + (mod?.ataque ?? 0) + (BALANCE.ataqueExtra?.[n] ?? 0),
+    dano: withBonus(def.dano, BALANCE.danoExtra?.[n] ?? 0),
     movimiento: def.movimiento + (mod?.movimiento ?? 0),
     fue: Math.max(3, def.coste * 3),
     ...(def.kite ? { alcance: 4, distancia: true } : {}),
@@ -775,8 +784,8 @@ function guardian(g: Gen, spec: FloorSpec, at: Vec2, enemies: [string, EnemyDef]
     spriteId: (ninja.sprites as Record<string, unknown>)[`${id}--elite`] ? `${id}--elite` : id,
     vida: Math.round(def.vida * t.multVida * (BALANCE.vidaEnemigos[spec.piso] ?? 1)),
     def: def.def + t.bonoDef,
-    ataque: def.ataque + t.bonoAtaque,
-    dano: def.dano,
+    ataque: def.ataque + t.bonoAtaque + (BALANCE.ataqueExtra?.[spec.piso] ?? 0),
+    dano: withBonus(def.dano, BALANCE.danoExtra?.[spec.piso] ?? 0),
     movimiento: def.movimiento,
     fue: 10,
     ...(def.kite ? { alcance: 4, distancia: true } : {}),
