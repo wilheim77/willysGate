@@ -461,8 +461,9 @@ export function onCollision(ruleset: Ruleset, state: GameState, id: string, hit:
   r.emit({ type: 'collided', entityId: id, with: 'entidad', otherId: other } as WillyEvent);
   dealDamage(r, id, rollDice(rng, { count: 1, sides: 4, bonus: 0 }), 'golpe', source, 'choque');
   dealDamage(r, other, rollDice(rng, { count: 1, sides: 4, bonus: 0 }), 'golpe', source, 'choque');
-  const o = r.entity(other);
-  if (push.remaining > 0 && standing(o) && !unmovable(o) && !isBoss(o) && (push.dx || push.dy)) {
+  // The bump may have taken the other one out of play altogether (Willy falling sends his allies off).
+  const o = r.state.entities[other];
+  if (o && push.remaining > 0 && standing(o) && !unmovable(o) && !isBoss(o) && (push.dx || push.dy)) {
     r.emit({ type: 'strike', entityId: id, otherId: other } as WillyEvent);
     if (source) r.apply({ type: 'setFlag', flag: pushedByFlag(other), value: source });
     r.apply({ type: 'push', entityId: other, dx: push.dx, dy: push.dy, distance: push.remaining });

@@ -357,8 +357,8 @@ defeatHooks.push(markFallen);
 
 /**
  * Willy down mid-fight ends it: the show doesn't go on without its contestant. His side leaves
- * the stage (the companion falls back, as if knocked out, and comes back on the next floor;
- * allies of his faction step out), so the fight ends as a loss and the game's defeat runs.
+ * the stage (the companion falls back, as if knocked out, and comes back on the next floor; allies
+ * of his faction are out too), so the fight ends as a loss and the game's defeat runs.
  */
 defeatHooks.push((r, id) => {
   const w = r.state.entities[id];
@@ -366,8 +366,8 @@ defeatHooks.push((r, id) => {
   r.emit({ type: 'willyFueraDeCombate', entityId: id } as unknown as WillyEvent);
   for (const e of Object.values(r.state.entities)) {
     if (e.id === id || e.factionId !== w.factionId || !standing(e) || e.tags.includes('object')) continue;
-    if (e.tags.includes(COMPANION_TAG)) defeat(r, e.id, undefined, 'retirada');
-    else r.apply({ type: 'despawnEntity', entityId: e.id });
+    // Out of the fight, not out of the state: other effects of the same action may still look them up.
+    defeat(r, e.id, undefined, 'retirada');
   }
 });
 
