@@ -2098,15 +2098,15 @@
     "accionesEnemigo": 1,
     "jefes": {
       "2": {
-        "multVida": 0.55,
+        "multVida": 0.45,
         "dano": "1d6"
       },
       "4": {
-        "multVida": 0.6,
+        "multVida": 0.45,
         "dano": "1d8"
       },
       "6": {
-        "multVida": 0.55,
+        "multVida": 0.45,
         "dano": "1d10"
       },
       "8": {
@@ -2148,7 +2148,7 @@
       "10": 1.0
     },
     "guardian": {
-      "multVida": 4.5,
+      "multVida": 3.5,
       "bonoAtaque": 1,
       "bonoDef": 0,
       "xp": 3

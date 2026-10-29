@@ -111,29 +111,33 @@ Petición del usuario: «llega un momento en el que los enemigos hacen muy poco 
 **Valores:**
 - Más daño y menos vida. `danoExtra`: +1 en los pisos 7, 8 y 10, y +2 en el 9. `ataqueExtra`: +1 en los pisos 8-10.
 - Vida enemiga: ×0,9 en los pisos 3, 4, 5, 7 y 9, y ×1 en los pisos 6, 8 y 10 (antes ×1 y ×1,25).
-- Guardián: vida ×4,5 (antes ×2).
-- Jefes: vida ×0,55 en el Centollo (33), ×0,6 en la Encargada (55), ×0,55 en el Gigantón (65) y ×0,55 en la Socorrista (83). El Presentador no cambia.
+- Guardián: vida ×3,5 (antes ×2).
+- Jefes: vida ×0,45 en el Centollo (27), la Encargada (41) y el Gigantón (54), y ×0,55 en la Socorrista (83). Antes: 18, 23, 38 y 50. El Presentador no cambia.
+- Con más vida que esto (guardián ×4,5, jefes ×0,55-0,6), el Funcionario y el Influencer se atascaban en la Encargada y el Gigantón. Se probó y se descartó.
 
 **Antes → ahora** (la IA de los dos lados; una persona tarda más rondas que la IA, así que lo que cuenta es la tendencia):
 
 | Piso | Rondas (normal, p50/p90) | Rondas (guardián/jefe, p50/p90) | Daño por golpe enemigo (% de la vida) | Acierto enemigo | Vida enemiga ÷ daño del grupo por ronda | Jefe ganado | Piso sin caer |
 |---|---|---|---|---|---|---|---|
-| 1 | 2/3 → 2/3 | 2/2 → 3/4 | 19 % → 15 % | 61 % → 66 % | 1.2 → 1.3 | 100 % → 100 % | 100 % → 100 % |
-| 2 | 1/2 → 1/2 | 2/4 → 4/6 | 21 % → 21 % | 67 % → 59 % | 1.0 → 1.0 | 100 % → 91 % | 85 % → 81 % |
-| 3 | 3/5 → 3/4 | 3/4 → 5/7 | 13 % → 13 % | 70 % → 60 % | 2.4 → 2.4 | 96 % → 94 % | 96 % → 94 % |
-| 4 | 3/4 → 3/4 | 4/6 → 6/8 | 14 % → 11 % | 60 % → 67 % | 2.3 → 2.1 | 96 % → 89 % | 96 % → 89 % |
-| 5 | 3/4 → 3/4 | 3/4 → 5/9 | 11 % → 10 % | 61 % → 60 % | 2.7 → 2.6 | 100 % → 100 % | 100 % → 89 % |
-| 6 | 3/5 → 3/4 | 3/6 → 6/8 | 8 % → 9 % | 67 % → 65 % | 3.0 → 2.4 | 94 % → 92 % | 59 % → 61 % |
-| 7 | 3/5 → 3/6 | 4/5 → 5/10 | 12 % → 13 % | 59 % → 68 % | 2.7 → 2.7 | 100 % → 91 % | 100 % → 89 % |
+| 1 | 2/3 → 2/3 | 2/2 → 2/3 | 19 % → 15 % | 61 % → 66 % | 1.2 → 1.3 | 100 % → 100 % | 100 % → 100 % |
+| 2 | 1/2 → 1/2 | 2/4 → 3/5 | 21 % → 21 % | 67 % → 59 % | 1.0 → 1.0 | 100 % → 97 % | 85 % → 86 % |
+| 3 | 3/5 → 3/4 | 3/4 → 4/6 | 13 % → 13 % | 70 % → 60 % | 2.4 → 2.4 | 96 % → 97 % | 96 % → 97 % |
+| 4 | 3/4 → 3/4 | 4/6 → 5/7 | 14 % → 11 % | 60 % → 67 % | 2.3 → 2.1 | 96 % → 94 % | 96 % → 94 % |
+| 5 | 3/4 → 3/4 | 3/4 → 4/7 | 11 % → 10 % | 61 % → 60 % | 2.7 → 2.6 | 100 % → 100 % | 100 % → 89 % |
+| 6 | 3/5 → 3/4 | 3/6 → 5/7 | 8 % → 9 % | 67 % → 65 % | 3.0 → 2.4 | 94 % → 96 % | 59 % → 64 % |
+| 7 | 3/5 → 3/6 | 4/5 → 5/9 | 12 % → 13 % | 59 % → 68 % | 2.7 → 2.7 | 100 % → 91 % | 100 % → 89 % |
 | 8 | 4/6 → 3/6 | 4/5 → 7/9 | 10 % → 10 % | 69 % → 66 % | 3.4 → 3.0 | 100 % → 97 % | 100 % → 92 % |
-| 9 | 3/4 → 3/4 | 3/4 → 5/11 | 11 % → 11 % | 53 % → 65 % | 2.0 → 2.0 | 100 % → 89 % | 100 % → 86 % |
+| 9 | 3/4 → 3/4 | 3/4 → 5/10 | 11 % → 11 % | 53 % → 65 % | 2.0 → 2.0 | 100 % → 97 % | 100 % → 94 % |
 | 10 | 3/5 → 3/4 | 7/12 → 8/13 | 7 % → 9 % | 73 % → 57 % | 2.6 → 2.2 | 78 % → 75 % | 78 % → 75 % |
 
 Lectura:
 - **Combates normales:** 3 rondas de mediana y 4-6 en el p90, como antes. Ahora con menos vida enemiga, así que una persona, que no remata tan bien como la IA, debería notarlo más.
 - **Golpe enemigo:** quita un 9-13 % de la vida en los pisos 3-10, dentro del objetivo del 8-15 %. Antes bajaba al 7-8 % en los pisos 6 y 10. El cambio en los combates normales es pequeño: lo que más cambia es la vida enemiga, que baja entre un 10 y un 20 %.
-- **Guardianes y jefes:** duran 5-8 rondas desde el piso 3 (antes 2-4). El Centollo (piso 2, el primer jefe) se queda en 4 rondas a propósito: es el primero.
-- **Victorias:** el jefe se gana un 89-100 % de las veces en los pisos 1-9 y un 75 % en el 10. El «piso sin caer» (un solo intento, sin repetir) baja unos puntos en los pisos con guardián (5, 7 y 9: 86-89 %). En la temporada, con «Volver a intentarlo», esto se nota menos.
+- **Guardianes y jefes:** duran 4-8 rondas desde el piso 3 (antes 3-4, en el piso 10 ya eran 7). El Centollo (piso 2, el primer jefe) se queda en 3 a propósito: es el primero. Los guardianes quedan en 4-5 rondas, algo por debajo de las 6-10 pedidas: más vida bajaba demasiado las victorias.
+- **Victorias:** el jefe se gana un 91-100 % de las veces en los pisos 1-9 y un 75 % en el 10.
+- **Temporada** (27 temporadas, `SIM_SEASON=3`):
+  - Se terminan 25 de 27, como antes. El Funcionario y el Influencer pierden una cada uno.
+  - Piso sin perder, pisos 1-10: 93 / 81 / 100 / 93 / 85 / 92 / 88 / 100 / 80 / 80 % (antes 93 / 89 / 85 / 96 / 89 / 93 / 100 / 85 / 100 / 76 %).
 - **Reloj:** se ha vuelto a medir. Los combates algo más cortos dejan un 3-7 % más de reloj, así que se recortan los relojes de los pisos 3 (11:45), 4 (14:30), 6 (15:45), 9 (11:15) y 10 (15:15). La partida normal sigue saliendo con un 23-28 % del reloj en la mediana.
 
 ## Curva de habilidades (subida por uso)
@@ -169,12 +173,12 @@ Valores actuales (2026-10-29; daño y ataque extra: «Curva de combate»):
 
 | Piso | Presupuesto | Vida enemigos | Élites | Jefe: vida | Jefe: daño |
 |---|---|---|---|---|---|
-| 1 | ×0,6 | ×0,8 | 0 % | guardián ×4,5 | — |
-| 2 | ×0,4 | ×0,8 | 10 % | ×0,55 (Centollo, 33) | 1d6 |
+| 1 | ×0,6 | ×0,8 | 0 % | guardián ×3,5 | — |
+| 2 | ×0,4 | ×0,8 | 10 % | ×0,45 (Centollo, 27) | 1d6 |
 | 3 | ×1 | ×0,9 | 15 % | guardián | — |
-| 4 | ×0,7 | ×0,9 | 20 % | ×0,6 (Encargada, 55) | 1d8 |
+| 4 | ×0,7 | ×0,9 | 20 % | ×0,45 (Encargada, 41) | 1d8 |
 | 5 | ×0,75 | ×0,9 | 25 % | guardián | — |
-| 6 | ×0,65 | ×1 | 30 % | ×0,55 (Gigantón, 65) | 1d10 |
+| 6 | ×0,65 | ×1 | 30 % | ×0,45 (Gigantón, 54) | 1d10 |
 | 7 | ×0,8 | ×0,9 (+1 daño) | 35 % | guardián | — |
 | 8 | ×0,8 | ×1 (+1 daño, +1 ataque) | 40 % | ×0,55 (Socorrista, 83) | 1d8 |
 | 9 | ×0,55 | ×0,9 (+2 daño, +1 ataque) | 45 % | guardián | — |
