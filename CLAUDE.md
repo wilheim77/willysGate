@@ -19,3 +19,9 @@ Reusable engine for grimdark isometric tactical RPGs in the browser (inspired by
 - If a design request conflicts with the architecture, warn the user instead of working around it.
 - Update `docs/PROGRESS.md` at the end of every session.
 - Art: CC0/CC-BY only. Log every asset in `CREDITS.md` and every placeholder in `TODO-ART.md`.
+
+## Cuaderno de proyectos
+Al terminar una sesión en la que haya cambiado algo, actualiza la página `proyectos/willysgate.md` del repo
+`wilheim77/Notas` (Estado, Siguiente paso y una línea nueva arriba del Diario) y su fila en
+`Inicio.md`. Si `Notas` no está en la sesión, añádelo. Breve, en español sencillo y sin datos
+sensibles (ni cifras de dinero, ni salud, ni claves). Reglas completas en el CLAUDE.md de `Notas`.
